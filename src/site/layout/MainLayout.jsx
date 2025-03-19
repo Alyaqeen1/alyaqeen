@@ -15,7 +15,7 @@ export default function MainLayout() {
     });
   }, []);
   return (
-    <div className="bg-white">
+    <div>
       <TopHeader></TopHeader>
       <Header></Header>
       {/* from here wil be dynamic */}

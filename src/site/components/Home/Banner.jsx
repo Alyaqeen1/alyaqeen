@@ -55,7 +55,6 @@ const Banner = () => {
                   Kindergarten & Baby Care
                 </h5>
                 <h1
-                  className="header-h1"
                   data-aos-duration="800"
                   data-aos="fade-up"
                   data-aos-delay="300"

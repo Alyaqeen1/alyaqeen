@@ -231,7 +231,7 @@ const Header = () => {
                 >
                   <i className="fal fa-search"></i>
                 </button>
-                <div className="header-button">
+                <div className="header-button ms-4">
                   <Link to="contact" className="theme-btn">
                     <span>
                       get A Quote

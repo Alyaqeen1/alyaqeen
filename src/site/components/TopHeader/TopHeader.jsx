@@ -12,27 +12,27 @@ const TopHeader = () => {
           <ul className="contact-list">
             <li>
               <i className="fal fa-map-marker-alt"></i>
-              6391 Elgin St. Celina, USA
+              116 Church Road, Yardley, Birmingham, B25 8UX
             </li>
             <li>
               <i className="far fa-envelope"></i>
-              <Link to="mailto:info@example.com" className="link">
-                info@example.com
+              <Link to="mailto:contact@alyaqeen.co.uk" className="link">
+                contact@alyaqeen.co.uk
               </Link>
             </li>
           </ul>
           <div className="social-icon d-flex align-items-center">
             <span>Follow Us On:</span>
-            <Link to="/">
+            <Link to="https://www.facebook.com/AlyaqeenAcademy">
               <i className="fab fa-facebook-f"></i>
             </Link>
-            <Link to="/">
+            <Link to="https://www.twitter.com">
               <i className="fab fa-twitter"></i>
             </Link>
             <Link to="/">
               <i className="fa-brands fa-linkedin-in"></i>
             </Link>
-            <Link to="/">
+            <Link to="https://www.youtube.com/@alyaqeenacademy5282">
               <i className="fa-brands fa-youtube"></i>
             </Link>
           </div>
