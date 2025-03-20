@@ -10,7 +10,7 @@
   }
 
   @include breakpoint(max-lg) {
-    padding-top: 130px;
+    padding-top: 90px;
     padding-bottom: 0;
   }
 
@@ -19,12 +19,12 @@
   }
 
   @include breakpoint(max-sm) {
-    padding-top: 80px;
+    padding-top: 50px;
   }
 
   .bottom-shape {
-    width: 50%;
-    height: 20%;
+    // width: 50%;
+    // height: 15%;
     position: absolute;
     bottom: 0;
     left: 0;
@@ -45,8 +45,8 @@
   }
 
   .left-shape {
-    width: 50px;
-    height: 50px;
+    // width: 50px;
+    // height: 50px;
     position: absolute;
     bottom: 10%;
     left: 0;
@@ -66,8 +66,6 @@
   }
 
   .pencil-shape {
-    width: 50px;
-    height: 50px;
     position: absolute;
     bottom: 15%;
     right: 5%;
@@ -75,8 +73,6 @@
   }
 
   .bee-shape {
-    width: 50px;
-    height: 50px;
     position: absolute;
     top: 20%;
     right: 5%;
@@ -87,16 +83,12 @@
   }
 
   .right-shape {
-    width: 50px;
-    height: 50px;
     position: absolute;
     top: 17%;
     right: 0;
   }
 
   .star-shape {
-    width: 50px;
-    height: 50px;
     position: absolute;
     bottom: 20%;
     left: 45%;
@@ -124,10 +116,10 @@
         position: absolute;
         right: -30px;
         top: 0;
-        width: 10px;
-        height: 10px;
+        width: 20px;
+        height: 20px;
         content: "";
-        background-image: url("/img/star.svg");
+        background-image: url("../../assets/img/star.svg");
       }
     }
 
@@ -154,6 +146,32 @@
         font-size: 34px;
       }
     }
+
+    //h2 added by arefin on february 02, 2025
+    h2 {
+      margin-bottom: 20px;
+
+      span {
+        color: $theme-color;
+      }
+
+      @include breakpoint(max-xxl) {
+        font-size: 52px; //60px; -8px
+      }
+
+      @include breakpoint(max-xl) {
+        font-size: 48px; //56px;
+      }
+
+      @include breakpoint(max-md) {
+        font-size: 34px; //42px;
+      }
+
+      @include breakpoint(max-sm) {
+        font-size: 26px; //34px;
+      }
+    }
+    //h2 added by arefin on february 02, 2025
 
     p {
       font-size: 20px;
@@ -601,11 +619,11 @@
     }
 
     @include breakpoint(max-xl) {
-      padding: 160px 0;
+      padding: 190px 0;
     }
 
     @include breakpoint(max-lg) {
-      padding: 130px 0;
+      padding: 150px 0;
     }
 
     @include breakpoint(max-md) {

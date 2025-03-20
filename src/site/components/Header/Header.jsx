@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import OffCanvasMenu from "./OffCanvasMenu";
-import logo from "../../assets/img/logo/logo.svg";
+import logo from "../../assets/img/logo/logo.png";
 import grid from "../../assets/img/grid.svg";
 import one from "../../assets/img/header/home-1.jpg";
 import two from "../../assets/img/header/home-2.jpg";
@@ -73,19 +73,21 @@ const Header = () => {
           <div className="mega-menu-wrapper">
             <div className="header-main style-2">
               <div className="header-left">
-                <div className="logo">
-                  <Link to="/" className="header-logo">
-                    <img src={logo} alt="logo-img" />
+                <div className="logo ms-2">
+                  <Link to="/" className="header-logo w-auto">
+                    <img
+                      className="h-auto"
+                      style={{ width: "70px" }}
+                      src={logo}
+                      alt="logo-img"
+                    />
                   </Link>
                 </div>
                 <div className="category-oneadjust flex">
                   <img src={grid} alt="img" className="me-2 inline" />
                   <select name="cate" className="category">
-                    <option value="1">Category</option>
-                    <option value="1">Designer</option>
-                    <option value="1">Developer</option>
-                    <option value="1">Graphic</option>
-                    <option value="1">Software</option>
+                    <option value="1">English</option>
+                    <option value="1">Arabic</option>
                   </select>
                 </div>
               </div>
@@ -226,13 +228,13 @@ const Header = () => {
                   </div>
                 </div>
                 <button
-                  className="search-trigger search-icon"
+                  className="search-trigger search-icon ms-5 me-4"
                   onClick={handleSearch}
                 >
                   <i className="fal fa-search"></i>
                 </button>
-                <div className="header-button ms-4">
-                  <Link to="contact" className="theme-btn">
+                <div className="header-button">
+                  <Link to="/contact" className="theme-btn">
                     <span>
                       get A Quote
                       <i className="fa-solid fa-arrow-right-long"></i>
