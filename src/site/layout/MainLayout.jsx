@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Outlet } from "react-router";
+import { Outlet, ScrollRestoration } from "react-router";
 // import "../styles/scss/main.scss";
 import TopHeader from "../components/TopHeader/TopHeader";
 import Header from "../components/Header/Header";
@@ -16,6 +16,7 @@ export default function MainLayout() {
   }, []);
   return (
     <div>
+      <ScrollRestoration></ScrollRestoration>
       <TopHeader></TopHeader>
       <Header></Header>
       {/* from here wil be dynamic */}

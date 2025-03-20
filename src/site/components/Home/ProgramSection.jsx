@@ -4,8 +4,8 @@ import three from "../../assets/img/program/mask.png";
 import four from "../../assets/img/program/pencil.png";
 import five from "../../assets/img/program/mask-2.png";
 import six from "../../assets/img/program/compass.png";
-import seven from "../../assets/img/program/01.png";
-import eight from "../../assets/img/program/02.png";
+import seven from "../../assets/img/home/photo-5.jpg";
+import eight from "../../assets/img/home/photo-13.jpg";
 import nine from "../../assets/img/program/03.png";
 import { Link } from "react-router";
 
@@ -16,22 +16,22 @@ const ProgramSection = () => {
       id="programs"
     >
       <div className="top-shape">
-        <img src={one} alt="shape-img" />
+        <img className="w-50" src={one} alt="shape-img" />
       </div>
       <div className="bottom-shape">
-        <img src={two} alt="shape-img" />
+        <img className="w-50" src={two} alt="shape-img" />
       </div>
       <div className="mask-shape float-bob-x">
-        <img src={three} alt="shape-img" />
+        <img className="w-50" src={three} alt="shape-img" />
       </div>
       <div className="pencil-shape">
-        <img src={four} alt="shape-img" />
+        <img className="w-50" src={four} alt="shape-img" />
       </div>
       <div className="mask-shape-2">
-        <img src={five} alt="shape-img" />
+        <img className="w-50" src={five} alt="shape-img" />
       </div>
       <div className="compass-shape">
-        <img src={six} alt="shape-img" />
+        <img className="w-50" src={six} alt="shape-img" />
       </div>
       <div className="container">
         <div className="section-title text-center mt-60">
@@ -49,76 +49,163 @@ const ProgramSection = () => {
             data-aos="fade-up"
             data-aos-delay="300"
           >
-            <div className="program-box-items">
-              <div className="program-bg"></div>
-              <div className="program-image">
-                <img src={seven} alt="img" />
-              </div>
-              <div className="program-content text-center">
-                <h4>
-                  <Link to="program-details">Kindergarten</Link>
-                </h4>
-                <span>(4-5 years)</span>
-                <p>
-                  Lorem ipsum dolor consectur the <br /> adipiscing elit
-                  eiusmod.
-                </p>
-                <Link to="program-details" className="arrow-icon">
-                  <i className="fa-solid fa-arrow-right-long"></i>
-                </Link>
-              </div>
+            <div className="classes-items-feb-12 w-full">
+              <Link to="/qaidah-quran-hifdh">
+                <div
+                  className="clases-bg style-2"
+                  style={{
+                    backgroundColor: "var(--bg3)",
+                    borderRadius: "60px",
+                  }}
+                ></div>
+                <div className="clases-image">
+                  <img
+                    style={{ borderRadius: "70px" }}
+                    // className="rounded-5"
+                    src={seven}
+                    alt="img"
+                  />
+                </div>
+                <div className="clases-content">
+                  <h4 style={{ color: "var(--white)" }}>
+                    Arabic Qaidah, Quran & Hifdh
+                  </h4>
+                  <p
+                    style={{
+                      color: "var(--white)",
+                      borderColor: "var(--white)",
+                    }}
+                  >
+                    Allah swt the most says in the Quran : “and recite the Quran
+                    (aloud) in a s...
+                  </p>
+                  <ul
+                    style={{ color: "var(--white)" }}
+                    className="clases-schedule"
+                  >
+                    <li style={{ color: "var(--white)" }}>
+                      <span style={{ color: "var(--white)" }}>age</span> <br />
+                      5-15 years
+                    </li>
+                    <li style={{ color: "var(--white)" }}>
+                      <span style={{ color: "var(--white)" }}>weekly</span>{" "}
+                      <br />
+                      2-4 Days
+                    </li>
+                    <li style={{ color: "var(--white)" }}>
+                      <span style={{ color: "var(--white)" }}>time</span> <br />
+                      4-6 hrs
+                    </li>
+                  </ul>
+                </div>
+              </Link>
             </div>
           </div>
+
           <div
             className="col-xl-4 col-lg-6 col-md-6 "
             data-aos-duration="800"
             data-aos="fade-up"
-            data-aos-delay="500"
+            data-aos-delay="300"
           >
-            <div className="program-box-items">
-              <div className="program-bg bg-2"></div>
-              <div className="program-image">
-                <img src={eight} alt="img" />
-              </div>
-              <div className="program-content text-center">
-                <h4>
-                  <Link to="program-details">Chemistry Class</Link>
-                </h4>
-                <span>(1-2 years)</span>
-                <p>
-                  Lorem ipsum dolor consectur the <br /> adipiscing elit
-                  eiusmod.
-                </p>
-                <Link to="program-details" className="arrow-icon color-2">
-                  <i className="fa-solid fa-arrow-right-long"></i>
-                </Link>
-              </div>
+            <div className="classes-items-feb-12 w-full">
+              <Link to="/maths-english-science">
+                <div
+                  className="clases-bg style-2"
+                  style={{
+                    backgroundColor: "var(--theme)",
+                    borderRadius: "60px",
+                  }}
+                ></div>
+                <div className="clases-image">
+                  <img
+                    style={{ borderRadius: "70px" }}
+                    // className="rounded-5"
+                    src={eight}
+                    alt="img"
+                  />
+                </div>
+                <div className="clases-content">
+                  <h4 style={{ color: "var(--white)" }}>
+                    Maths, English & Science
+                  </h4>
+                  <p
+                    style={{
+                      color: "var(--white)",
+                      borderColor: "var(--white)",
+                    }}
+                  >
+                    At Alyaqeen academy we have a set of dedicated tutors. Our
+                    tutors try to en...
+                  </p>
+                  <ul
+                    style={{ color: "var(--white)" }}
+                    className="clases-schedule"
+                  >
+                    <li style={{ color: "var(--white)" }}>
+                      <span style={{ color: "var(--white)" }}>age</span> <br />
+                      5-15 years
+                    </li>
+                    <li style={{ color: "var(--white)" }}>
+                      <span style={{ color: "var(--white)" }}>weekly</span>{" "}
+                      <br />
+                      2-4 Days
+                    </li>
+                    <li style={{ color: "var(--white)" }}>
+                      <span style={{ color: "var(--white)" }}>time</span> <br />
+                      4-6 hrs
+                    </li>
+                  </ul>
+                </div>
+              </Link>
             </div>
           </div>
+
           <div
             className="col-xl-4 col-lg-6 col-md-6 "
             data-aos-duration="800"
             data-aos="fade-up"
-            data-aos-delay="700"
+            data-aos-delay="300"
           >
-            <div className="program-box-items">
-              <div className="program-bg bg-3"></div>
-              <div className="program-image">
-                <img src={nine} alt="img" />
-              </div>
-              <div className="program-content text-center style-2">
-                <h4>
-                  <Link to="program-details">Drawing Class</Link>
-                </h4>
-                <span>(1-2 years)</span>
-                <p>
-                  Lorem ipsum dolor consectur the <br /> adipiscing elit
-                  eiusmod.
-                </p>
-                <Link to="program-details" className="arrow-icon">
-                  <i className="fa-solid fa-arrow-right-long"></i>
-                </Link>
-              </div>
+            <div className="classes-items-feb-12 w-full">
+              <Link to="/arabic-language">
+                <div
+                  className="clases-bg style-2"
+                  style={{
+                    backgroundColor: "var(--white)",
+                    borderRadius: "60px",
+                  }}
+                ></div>
+                <div className="clases-image">
+                  <img
+                    style={{ borderRadius: "70px" }}
+                    // className="rounded-5"
+                    src={seven}
+                    alt="img"
+                  />
+                </div>
+                <div className="clases-content">
+                  <h4>Arabic Language</h4>
+                  <p>
+                    Islam is just not religion that Muslims follow, but it is a
+                    way of life.
+                  </p>
+                  <ul className="clases-schedule">
+                    <li>
+                      <span>age</span> <br />
+                      5-15 years
+                    </li>
+                    <li>
+                      <span>weekly</span> <br />
+                      2-4 Days
+                    </li>
+                    <li>
+                      <span>time</span> <br />
+                      4-6 hrs
+                    </li>
+                  </ul>
+                </div>
+              </Link>
             </div>
           </div>
         </div>

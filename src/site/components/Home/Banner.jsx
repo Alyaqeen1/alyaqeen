@@ -99,13 +99,11 @@ const Banner = () => {
                 </div>
                 <div className="hero-button-feb3 mt-4">
                   <Link
-                    // href="/contact"
-                    // className="theme-btn"
                     className="theme-btn-feb-4"
                     data-aos-duration="800"
                     data-aos="fade-up"
                     data-aos-delay="600"
-                    href="/prayer-times"
+                    to="/prayer-timetable"
                     // className="theme-btn"
                   >
                     January Prayer Timetable{" "}
