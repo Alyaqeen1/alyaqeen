@@ -10,27 +10,65 @@ import six from "../../assets/img/team/02.jpg";
 import seven from "../../assets/img/team/03.jpg";
 import eight from "../../assets/img/team/04.jpg";
 import { Link } from "react-router";
+import { useEffect, useRef, useState } from "react";
+import axios from "axios";
 
 const Team = () => {
+  const [staffData, setStaffData] = useState([]);
+  const swiperRef = useRef(null);
+  const sliderContainerRef = useRef(null);
+  useEffect(() => {
+    axios("/staff.json")
+      .then((res) => setStaffData(res.data))
+      .catch((error) => console.error("Error fetching staff data:", error));
+  }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          swiperRef.current?.swiper?.autoplay.start();
+        } else {
+          swiperRef.current?.swiper?.autoplay.stop();
+        }
+      },
+      { threshold: 0.5 } // Adjust the threshold as needed
+    );
+
+    if (sliderContainerRef.current) {
+      observer.observe(sliderContainerRef.current);
+    }
+
+    return () => {
+      if (sliderContainerRef.current) {
+        observer.unobserve(sliderContainerRef.current);
+      }
+    };
+  }, []);
+
   return (
-    <section className="team-section fix section-bg section-padding" id="team">
+    <section
+      ref={sliderContainerRef}
+      className="team-section fix section-bg section-padding"
+      id="team"
+    >
       <div className="top-shape">
         <img src={one} alt="shape-img" />
       </div>
       <div className="love-shape float-bob-x">
-        <img src={two} alt="shape-img" />
+        <img className="w-50" src={two} alt="shape-img" />
       </div>
       <div className="frame-shape">
-        <img src={three} alt="shape-img" />
+        <img src={three} className="w-50" alt="shape-img" />
       </div>
       <div className="container">
         <div className="section-title-area">
           <div className="section-title mt-60">
             <span data-aos-duration="800" data-aos="fade-up">
-              Our Experts
+              Our Staff
             </span>
             <h2 data-aos-duration="800" data-aos="fade-up" data-aos-delay="300">
-              Our Expert Instructors
+              Our Staff
             </h2>
           </div>
           <div
@@ -49,6 +87,7 @@ const Team = () => {
         </div>
         <div className="swiper team-slider">
           <Swiper
+            ref={swiperRef}
             slidesPerView={1}
             slidesPerGroup={1}
             freeMode={true}
@@ -58,7 +97,7 @@ const Team = () => {
             roundLengths={true}
             modules={[Autoplay, Navigation]}
             autoplay={{
-              delay: 3000,
+              delay: 2000,
               disableOnInteraction: false,
               pauseOnMouseEnter: true,
             }}
@@ -79,326 +118,64 @@ const Team = () => {
             }}
             className="swiper-wrapper"
           >
-            <SwiperSlide>
-              <div className="swiper-slide">
-                <div className="team-items">
-                  <div className="team-image">
-                    <div className="shape-img">
-                      <img src={four} alt="img" />
+            {staffData.map((state_member) => (
+              <SwiperSlide key={state_member.id}>
+                <div className="swiper-slide">
+                  <div className="team-items">
+                    <div className="team-image">
+                      <div className="shape-img">
+                        <img
+                          src={state_member.image_link}
+                          alt="img"
+                          style={{}}
+                        />
+                      </div>
+                      <img src={five} alt="team-img" />
+                      <div className="social-profile">
+                        <span
+                          className="plus-btn"
+                          style={{ borderColor: "var(--theme)" }}
+                        >
+                          <i
+                            className="fas fa-share-alt"
+                            style={{ color: "var(--theme)" }}
+                          ></i>
+                        </span>
+                        <ul>
+                          <li>
+                            <Link href={state_member.fb_link}>
+                              <i className="fab fa-facebook-f"></i>
+                            </Link>
+                          </li>
+                          <li>
+                            <Link href={state_member.instagram_link}>
+                              <i className="fa-brands fa-instagram"></i>
+                            </Link>
+                          </li>
+                          <li>
+                            <Link href={state_member.linkedin_link}>
+                              <i className="fab fa-linkedin-in"></i>
+                            </Link>
+                          </li>
+                        </ul>
+                      </div>
                     </div>
-                    <img src={five} alt="team-img" />
-                    <div className="social-profile">
-                      <span className="plus-btn">
-                        <i className="fas fa-share-alt"></i>
-                      </span>
-                      <ul>
-                        <li>
-                          <Link to="/">
-                            <i className="fab fa-facebook-f"></i>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link to="/">
-                            <i className="fa-brands fa-instagram"></i>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link to="/">
-                            <i className="fab fa-linkedin-in"></i>
-                          </Link>
-                        </li>
-                      </ul>
+                    <div className="team-content">
+                      <h3>
+                        <Link to={`/staff-details/${state_member.id}`}>
+                          {state_member.name}
+                        </Link>
+                      </h3>
+
+                      <p>
+                        {/*Instructors*/}
+                        {state_member.post_of_staff}
+                      </p>
                     </div>
-                  </div>
-                  <div className="team-content">
-                    <h3>
-                      <Link to="team-details">Brooklyn Simmons</Link>
-                    </h3>
-                    <p>Instructors</p>
                   </div>
                 </div>
-              </div>
-            </SwiperSlide>
-            <SwiperSlide>
-              <div className="swiper-slide">
-                <div className="team-items">
-                  <div className="team-image">
-                    <div className="shape-img">
-                      <img src={four} alt="img" />
-                    </div>
-                    <img src={six} alt="team-img" />
-                    <div className="social-profile">
-                      <span className="plus-btn">
-                        <i className="fas fa-share-alt"></i>
-                      </span>
-                      <ul>
-                        <li>
-                          <Link to="/">
-                            <i className="fab fa-facebook-f"></i>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link to="/">
-                            <i className="fa-brands fa-instagram"></i>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link to="/">
-                            <i className="fab fa-linkedin-in"></i>
-                          </Link>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                  <div className="team-content">
-                    <h3>
-                      <Link to="team-details">Leslie Alexander</Link>
-                    </h3>
-                    <p>Instructors</p>
-                  </div>
-                </div>
-              </div>
-            </SwiperSlide>
-            <SwiperSlide>
-              <div className="swiper-slide">
-                <div className="team-items">
-                  <div className="team-image">
-                    <div className="shape-img">
-                      <img src={four} alt="img" />
-                    </div>
-                    <img src={seven} alt="team-img" />
-                    <div className="social-profile">
-                      <span className="plus-btn">
-                        <i className="fas fa-share-alt"></i>
-                      </span>
-                      <ul>
-                        <li>
-                          <Link to="/">
-                            <i className="fab fa-facebook-f"></i>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link to="/">
-                            <i className="fa-brands fa-instagram"></i>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link to="/">
-                            <i className="fab fa-linkedin-in"></i>
-                          </Link>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                  <div className="team-content">
-                    <h3>
-                      <Link to="team-details">Ronald Richards</Link>
-                    </h3>
-                    <p>Instructors</p>
-                  </div>
-                </div>
-              </div>
-            </SwiperSlide>
-            <SwiperSlide>
-              <div className="swiper-slide">
-                <div className="team-items">
-                  <div className="team-image">
-                    <div className="shape-img">
-                      <img src={four} alt="img" />
-                    </div>
-                    <img src={eight} alt="team-img" />
-                    <div className="social-profile">
-                      <span className="plus-btn">
-                        <i className="fas fa-share-alt"></i>
-                      </span>
-                      <ul>
-                        <li>
-                          <Link to="/">
-                            <i className="fab fa-facebook-f"></i>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link to="/">
-                            <i className="fa-brands fa-instagram"></i>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link to="/">
-                            <i className="fab fa-linkedin-in"></i>
-                          </Link>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                  <div className="team-content">
-                    <h3>
-                      <Link to="team-details">Kristin Watson</Link>
-                    </h3>
-                    <p>Instructors</p>
-                  </div>
-                </div>
-              </div>
-            </SwiperSlide>
-            <SwiperSlide>
-              <div className="swiper-slide">
-                <div className="team-items">
-                  <div className="team-image">
-                    <div className="shape-img">
-                      <img src={four} alt="img" />
-                    </div>
-                    <img src={five} alt="team-img" />
-                    <div className="social-profile">
-                      <span className="plus-btn">
-                        <i className="fas fa-share-alt"></i>
-                      </span>
-                      <ul>
-                        <li>
-                          <Link to="/">
-                            <i className="fab fa-facebook-f"></i>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link to="/">
-                            <i className="fa-brands fa-instagram"></i>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link to="/">
-                            <i className="fab fa-linkedin-in"></i>
-                          </Link>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                  <div className="team-content">
-                    <h3>
-                      <Link to="team-details">Brooklyn Simmons</Link>
-                    </h3>
-                    <p>Instructors</p>
-                  </div>
-                </div>
-              </div>
-            </SwiperSlide>
-            <SwiperSlide>
-              <div className="swiper-slide">
-                <div className="team-items">
-                  <div className="team-image">
-                    <div className="shape-img">
-                      <img src={four} alt="img" />
-                    </div>
-                    <img src={six} alt="team-img" />
-                    <div className="social-profile">
-                      <span className="plus-btn">
-                        <i className="fas fa-share-alt"></i>
-                      </span>
-                      <ul>
-                        <li>
-                          <Link to="/">
-                            <i className="fab fa-facebook-f"></i>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link to="/">
-                            <i className="fa-brands fa-instagram"></i>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link to="/">
-                            <i className="fab fa-linkedin-in"></i>
-                          </Link>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                  <div className="team-content">
-                    <h3>
-                      <Link to="team-details">Leslie Alexander</Link>
-                    </h3>
-                    <p>Instructors</p>
-                  </div>
-                </div>
-              </div>
-            </SwiperSlide>
-            <SwiperSlide>
-              <div className="swiper-slide">
-                <div className="team-items">
-                  <div className="team-image">
-                    <div className="shape-img">
-                      <img src={four} alt="img" />
-                    </div>
-                    <img src={seven} alt="team-img" />
-                    <div className="social-profile">
-                      <span className="plus-btn">
-                        <i className="fas fa-share-alt"></i>
-                      </span>
-                      <ul>
-                        <li>
-                          <Link to="/">
-                            <i className="fab fa-facebook-f"></i>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link to="/">
-                            <i className="fa-brands fa-instagram"></i>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link to="/">
-                            <i className="fab fa-linkedin-in"></i>
-                          </Link>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                  <div className="team-content">
-                    <h3>
-                      <Link to="team-details">Ronald Richards</Link>
-                    </h3>
-                    <p>Instructors</p>
-                  </div>
-                </div>
-              </div>
-            </SwiperSlide>
-            <SwiperSlide>
-              <div className="swiper-slide">
-                <div className="team-items">
-                  <div className="team-image">
-                    <div className="shape-img">
-                      <img src={four} alt="img" />
-                    </div>
-                    <img src={eight} alt="team-img" />
-                    <div className="social-profile">
-                      <span className="plus-btn">
-                        <i className="fas fa-share-alt"></i>
-                      </span>
-                      <ul>
-                        <li>
-                          <Link to="/">
-                            <i className="fab fa-facebook-f"></i>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link to="/">
-                            <i className="fa-brands fa-instagram"></i>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link to="/">
-                            <i className="fab fa-linkedin-in"></i>
-                          </Link>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                  <div className="team-content">
-                    <h3>
-                      <Link to="team-details">Kristin Watson</Link>
-                    </h3>
-                    <p>Instructors</p>
-                  </div>
-                </div>
-              </div>
-            </SwiperSlide>
+              </SwiperSlide>
+            ))}
           </Swiper>
         </div>
       </div>
