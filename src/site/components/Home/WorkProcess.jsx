@@ -5,113 +5,103 @@ import four from "../../assets/img/process/02.svg";
 import five from "../../assets/img/process/03.svg";
 import six from "../../assets/img/process/04.svg";
 import seven from "../../assets/img/process/icon-bg.png";
+import { FaCalendarAlt } from "react-icons/fa";
+import { IoIosCalculator } from "react-icons/io";
+import { IoBusOutline } from "react-icons/io5";
+import { Link } from "react-router";
 
 const WorkProcess = () => {
   return (
     <section className="work-process-section fix section-padding fix">
       <div className="container">
         <div className="process-work-wrapper">
-          <div className="row g-4">
+          <div className="row g-4 justify-content-center">
             <div
-              className="col-xl-3 col-lg-4 col-md-6 "
+              className="col-xl-3 col-lg-3 col-md-6 "
               data-aos-duration="800"
               data-aos="fade-up"
               data-aos-delay="300"
             >
-              <div className="work-process-items text-center">
-                <div className="line-shape">
-                  <img src={one} alt="shape-img" />
+              <Link to="session-timings">
+                <div className="work-process-items text-center">
+                  <div className="line-shape">
+                    <img src={one} alt="shape-img" />
+                  </div>
+                  <div
+                    className="icon bg-cover  flex justify-center items-center"
+                    style={{
+                      backgroundImage: `url(${seven})`,
+                    }}
+                  >
+                    <FaCalendarAlt className="fs-3 text-white" />
+                  </div>
+                  <div className="content">
+                    <h4>Sessions & Timings</h4>
+                    <p>
+                      Our onsite classes are held Monday to Thursday on weekdays
+                      and on Saturday and Sunday during the weekends.{" "}
+                    </p>
+                  </div>
                 </div>
-                <div
-                  className="icon bg-cover  flex justify-center items-center"
-                  style={{
-                    backgroundImage: `url(${seven})`,
-                  }}
-                >
-                  <img src={two} alt="img" />
-                </div>
-                <div className="content">
-                  <h4>Choose A Service</h4>
-                  <p>
-                    In a free hour, when our power of choice is untrammeled and
-                  </p>
-                </div>
-              </div>
+              </Link>
             </div>
             <div
-              className="col-xl-3 col-lg-4 col-md-6 "
+              className="col-xl-3 col-lg-3 col-md-6 "
               data-aos-duration="800"
               data-aos="fade-up"
               data-aos-delay="500"
             >
-              <div className="work-process-items text-center style-2">
-                <div className="line-shape-2">
-                  <img src={three} alt="shape-img" />
+              <Link to="fees">
+                <div className="work-process-items text-center style-2">
+                  <div className="line-shape-2">
+                    <img src={three} alt="shape-img" />
+                  </div>
+                  <div
+                    className="icon bg-cover  flex justify-center items-center"
+                    style={{
+                      backgroundImage: `url(${seven})`,
+                    }}
+                  >
+                    <IoIosCalculator className="fs-2 text-white" />
+                  </div>
+                  <div className="content">
+                    <h4>Fee Structure</h4>
+                    <p>
+                      Fee Structure depends on Course and Session types. We have
+                      two session: weekdays and weekends.
+                    </p>
+                  </div>
                 </div>
-                <div
-                  className="icon bg-cover  flex justify-center items-center"
-                  style={{
-                    backgroundImage: `url(${seven})`,
-                  }}
-                >
-                  <img src={four} alt="img" />
-                </div>
-                <div className="content">
-                  <h4>Expert Teachers</h4>
-                  <p>
-                    In a free hour, when our power of choice is untrammeled and
-                  </p>
-                </div>
-              </div>
+              </Link>
             </div>
             <div
-              className="col-xl-3 col-lg-4 col-md-6 "
+              className="col-xl-3 col-lg-3 col-md-6 "
               data-aos-duration="800"
               data-aos="fade-up"
               data-aos-delay="700"
             >
-              <div className="work-process-items text-center">
-                <div className="line-shape">
+              <Link to="holidays">
+                <div className="work-process-items text-center">
+                  {/* <div className="line-shape">
                   <img src={one} alt="shape-img" />
+                </div> */}
+                  <div
+                    className="icon bg-cover flex justify-center items-center"
+                    style={{
+                      backgroundImage: `url(${seven})`,
+                    }}
+                  >
+                    <IoBusOutline className="fs-2 text-white" />
+                  </div>
+                  <div className="content">
+                    <h4>Holidays & Academic Calendar</h4>
+                    <p>
+                      Holidays & Academic Calendar will depend on Session types.
+                      We have two session: weekdays and weekends.
+                    </p>
+                  </div>
                 </div>
-                <div
-                  className="icon bg-cover flex justify-center items-center"
-                  style={{
-                    backgroundImage: `url(${seven})`,
-                  }}
-                >
-                  <img src={five} alt="img" />
-                </div>
-                <div className="content">
-                  <h4>E-Learning Media</h4>
-                  <p>
-                    In a free hour, when our power of choice is untrammeled and
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div
-              className="col-xl-3 col-lg-4 col-md-6 "
-              data-aos-duration="800"
-              data-aos="fade-up"
-              data-aos-delay="800"
-            >
-              <div className="work-process-items text-center">
-                <div className="content style-two">
-                  <h4>Full Day Programs</h4>
-                  <p>
-                    In a free hour, when our power of choice is untrammeled and
-                  </p>
-                </div>
-                <div
-                  className="icon bg-cover flex justify-center items-center"
-                  style={{
-                    backgroundImage: `url(${seven})`,
-                  }}
-                >
-                  <img src={six} alt="img" />
-                </div>
-              </div>
+              </Link>
             </div>
           </div>
         </div>
