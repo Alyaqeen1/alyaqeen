@@ -56,7 +56,7 @@ const AboutInstagram = () => {
               <div className="swiper-slide">
                 <div className="instagram-banner-items">
                   <div className="banner-image">
-                    <img src={one} alt="insta-img" priority />
+                    <img src={one} alt="insta-img" />
                     <Link to="/" className="icon">
                       <i className="fa-brands fa-instagram"></i>
                     </Link>
@@ -68,7 +68,7 @@ const AboutInstagram = () => {
               <div className="swiper-slide">
                 <div className="instagram-banner-items">
                   <div className="banner-image">
-                    <img src={two} alt="insta-img" priority />
+                    <img src={two} alt="insta-img" />
                     <Link to="/" className="icon">
                       <i className="fa-brands fa-instagram"></i>
                     </Link>
@@ -80,7 +80,7 @@ const AboutInstagram = () => {
               <div className="swiper-slide">
                 <div className="instagram-banner-items">
                   <div className="banner-image">
-                    <img src={three} alt="insta-img" priority />
+                    <img src={three} alt="insta-img" />
                     <Link to="/" className="icon">
                       <i className="fa-brands fa-instagram"></i>
                     </Link>
@@ -92,7 +92,7 @@ const AboutInstagram = () => {
               <div className="swiper-slide">
                 <div className="instagram-banner-items">
                   <div className="banner-image">
-                    <img src={four} alt="insta-img" priority />
+                    <img src={four} alt="insta-img" />
                     <Link to="/" className="icon">
                       <i className="fa-brands fa-instagram"></i>
                     </Link>
@@ -104,7 +104,7 @@ const AboutInstagram = () => {
               <div className="swiper-slide">
                 <div className="instagram-banner-items">
                   <div className="banner-image">
-                    <img src={five} alt="insta-img" priority />
+                    <img src={five} alt="insta-img" />
                     <Link to="/" className="icon">
                       <i className="fa-brands fa-instagram"></i>
                     </Link>
@@ -116,7 +116,7 @@ const AboutInstagram = () => {
               <div className="swiper-slide">
                 <div className="instagram-banner-items">
                   <div className="banner-image">
-                    <img src={six} alt="insta-img" priority />
+                    <img src={six} alt="insta-img" />
                     <Link to="/" className="icon">
                       <i className="fa-brands fa-instagram"></i>
                     </Link>
@@ -128,7 +128,7 @@ const AboutInstagram = () => {
               <div className="swiper-slide">
                 <div className="instagram-banner-items">
                   <div className="banner-image">
-                    <img src={one} alt="insta-img" priority />
+                    <img src={one} alt="insta-img" />
                     <Link to="/" className="icon">
                       <i className="fa-brands fa-instagram"></i>
                     </Link>
@@ -140,7 +140,7 @@ const AboutInstagram = () => {
               <div className="swiper-slide">
                 <div className="instagram-banner-items">
                   <div className="banner-image">
-                    <img src={two} alt="insta-img" priority />
+                    <img src={two} alt="insta-img" />
                     <Link to="/" className="icon">
                       <i className="fa-brands fa-instagram"></i>
                     </Link>
@@ -152,7 +152,7 @@ const AboutInstagram = () => {
               <div className="swiper-slide">
                 <div className="instagram-banner-items">
                   <div className="banner-image">
-                    <img src={three} alt="insta-img" priority />
+                    <img src={three} alt="insta-img" />
                     <Link to="/" className="icon">
                       <i className="fa-brands fa-instagram"></i>
                     </Link>
@@ -164,7 +164,7 @@ const AboutInstagram = () => {
               <div className="swiper-slide">
                 <div className="instagram-banner-items">
                   <div className="banner-image">
-                    <img src={four} alt="insta-img" priority />
+                    <img src={four} alt="insta-img" />
                     <Link to="/" className="icon">
                       <i className="fa-brands fa-instagram"></i>
                     </Link>
@@ -176,7 +176,7 @@ const AboutInstagram = () => {
               <div className="swiper-slide">
                 <div className="instagram-banner-items">
                   <div className="banner-image">
-                    <img src={five} alt="insta-img" priority />
+                    <img src={five} alt="insta-img" />
                     <Link to="/" className="icon">
                       <i className="fa-brands fa-instagram"></i>
                     </Link>
@@ -188,7 +188,7 @@ const AboutInstagram = () => {
               <div className="swiper-slide">
                 <div className="instagram-banner-items">
                   <div className="banner-image">
-                    <img src={six} alt="insta-img" priority />
+                    <img src={six} alt="insta-img" />
                     <Link to="/" className="icon">
                       <i className="fa-brands fa-instagram"></i>
                     </Link>

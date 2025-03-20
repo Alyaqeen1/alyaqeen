@@ -20,7 +20,7 @@ const WorkProcess = () => {
             >
               <div className="work-process-items text-center">
                 <div className="line-shape">
-                  <img src={one} alt="shape-img" priority />
+                  <img src={one} alt="shape-img" />
                 </div>
                 <div
                   className="icon bg-cover  flex justify-center items-center"
@@ -28,7 +28,7 @@ const WorkProcess = () => {
                     backgroundImage: `url(${seven})`,
                   }}
                 >
-                  <img src={two} alt="img" priority />
+                  <img src={two} alt="img" />
                 </div>
                 <div className="content">
                   <h4>Choose A Service</h4>
@@ -46,7 +46,7 @@ const WorkProcess = () => {
             >
               <div className="work-process-items text-center style-2">
                 <div className="line-shape-2">
-                  <img src={three} alt="shape-img" priority />
+                  <img src={three} alt="shape-img" />
                 </div>
                 <div
                   className="icon bg-cover  flex justify-center items-center"
@@ -54,7 +54,7 @@ const WorkProcess = () => {
                     backgroundImage: `url(${seven})`,
                   }}
                 >
-                  <img src={four} alt="img" priority />
+                  <img src={four} alt="img" />
                 </div>
                 <div className="content">
                   <h4>Expert Teachers</h4>
@@ -72,7 +72,7 @@ const WorkProcess = () => {
             >
               <div className="work-process-items text-center">
                 <div className="line-shape">
-                  <img src={one} alt="shape-img" priority />
+                  <img src={one} alt="shape-img" />
                 </div>
                 <div
                   className="icon bg-cover flex justify-center items-center"
@@ -80,7 +80,7 @@ const WorkProcess = () => {
                     backgroundImage: `url(${seven})`,
                   }}
                 >
-                  <img src={five} alt="img" priority />
+                  <img src={five} alt="img" />
                 </div>
                 <div className="content">
                   <h4>E-Learning Media</h4>
@@ -109,7 +109,7 @@ const WorkProcess = () => {
                     backgroundImage: `url(${seven})`,
                   }}
                 >
-                  <img src={six} alt="img" priority />
+                  <img src={six} alt="img" />
                 </div>
               </div>
             </div>

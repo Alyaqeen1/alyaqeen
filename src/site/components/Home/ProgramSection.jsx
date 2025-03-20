@@ -16,22 +16,22 @@ const ProgramSection = () => {
       id="programs"
     >
       <div className="top-shape">
-        <img src={one} alt="shape-img" priority />
+        <img src={one} alt="shape-img" />
       </div>
       <div className="bottom-shape">
-        <img src={two} alt="shape-img" priority />
+        <img src={two} alt="shape-img" />
       </div>
       <div className="mask-shape float-bob-x">
-        <img src={three} alt="shape-img" priority />
+        <img src={three} alt="shape-img" />
       </div>
       <div className="pencil-shape">
-        <img src={four} alt="shape-img" priority />
+        <img src={four} alt="shape-img" />
       </div>
       <div className="mask-shape-2">
-        <img src={five} alt="shape-img" priority />
+        <img src={five} alt="shape-img" />
       </div>
       <div className="compass-shape">
-        <img src={six} alt="shape-img" priority />
+        <img src={six} alt="shape-img" />
       </div>
       <div className="container">
         <div className="section-title text-center mt-60">
@@ -52,7 +52,7 @@ const ProgramSection = () => {
             <div className="program-box-items">
               <div className="program-bg"></div>
               <div className="program-image">
-                <img src={seven} alt="img" priority />
+                <img src={seven} alt="img" />
               </div>
               <div className="program-content text-center">
                 <h4>
@@ -78,7 +78,7 @@ const ProgramSection = () => {
             <div className="program-box-items">
               <div className="program-bg bg-2"></div>
               <div className="program-image">
-                <img src={eight} alt="img" priority />
+                <img src={eight} alt="img" />
               </div>
               <div className="program-content text-center">
                 <h4>
@@ -104,7 +104,7 @@ const ProgramSection = () => {
             <div className="program-box-items">
               <div className="program-bg bg-3"></div>
               <div className="program-image">
-                <img src={nine} alt="img" priority />
+                <img src={nine} alt="img" />
               </div>
               <div className="program-content text-center style-2">
                 <h4>
