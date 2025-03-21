@@ -1,6 +1,6 @@
 import one from "../../assets/img/about/pencil.png";
 import two from "../../assets/img/about/kaaba-svgrepo-com.svg";
-import three from "../../assets/img/home/03.png";
+import three from "../../assets/img/home/new-mask.png";
 import four from "../../assets/img/icon/board-svgrepo-com.svg";
 import five from "../../assets/img/icon/group_focus_2.svg";
 import eight from "../../assets/img/icon/quran_2.svg";

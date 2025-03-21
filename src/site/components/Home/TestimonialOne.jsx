@@ -3,7 +3,7 @@ import { Autoplay, Navigation } from "swiper/modules";
 import "swiper/swiper-bundle.css";
 import one from "../../assets/img/client/pencil.png";
 import two from "../../assets/img/home/quran-quran-svgrepo-com.svg";
-import three from "../../assets/img/home/image3.jpg";
+import three from "../../assets/img/home/testimonial.png";
 import four from "../../assets/img/client/01.png";
 import five from "../../assets/img/client/quote.png";
 
@@ -32,11 +32,13 @@ const TestimonialOne = () => {
             >
               <div className="testimonial-image">
                 <img
-                  style={{
-                    clipPath:
-                      "polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)",
-                    height: "500px",
-                  }}
+                  style={
+                    {
+                      // clipPath:
+                      //   "polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)",
+                      // height: "500px",
+                    }
+                  }
                   className="object-fit-cover"
                   src={three}
                   alt="image"
