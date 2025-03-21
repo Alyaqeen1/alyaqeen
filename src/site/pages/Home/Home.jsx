@@ -13,6 +13,7 @@ import TestimonialTwo from "../../components/Home/TestimonialTwo";
 import CTA from "../../components/Home/CTA";
 import MainCta from "../../components/Home/MainCTA";
 import Instagram from "../../components/Home/Instagram";
+import Blogs from "../../components/Home/Blogs";
 
 export default function Home() {
   return (
@@ -28,7 +29,7 @@ export default function Home() {
       <TestimonialOne></TestimonialOne>
       <TestimonialTwo></TestimonialTwo>
       <CTA></CTA>
-      <News></News>
+      <Blogs></Blogs>
       <MainCta></MainCta>
       <Instagram></Instagram>
       <AboutSection></AboutSection>

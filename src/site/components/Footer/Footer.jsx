@@ -1,10 +1,11 @@
 import one from "../../assets/img/footer-top.png";
 import two from "../../assets/img/frame.png";
-import three from "../../assets/img/about/zebra.png";
-import four from "../../assets/img/logo/logo.svg";
+import three from "../../assets/img/home/pen-svgrepo-com.svg";
+import four from "../../assets/img/logo/logo.png";
 import five from "../../assets/img/news/pp1.jpg";
 import six from "../../assets/img/news/pp2.jpg";
 import seven from "../../assets/img/footer-bottom.png";
+import watsapp from "../../assets/img/home/whatsapp-icon-logo-svgrepo-com.svg";
 import { Link } from "react-router";
 import ScrollTop from "./ScrollTop";
 
@@ -12,14 +13,29 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
   return (
     <footer className="footer-section section-bg fix">
+      <div className="position-relative">
+        <a href="https://wa.me/447869636849" target={"_blank"}>
+          <img
+            className="position-fixed"
+            src={watsapp}
+            style={{
+              width: "50px",
+              bottom: 20,
+              right: 17,
+              zIndex: 999999,
+            }}
+            alt="whatsapp-img"
+          />
+        </a>
+      </div>
       <div className="footer-top-shape">
-        <img src={one} alt="shape-img" />
+        <img src={one} className="w-50" alt="shape-img" />
       </div>
       <div className="frame-shape">
-        <img src={two} alt="shape-img" />
+        <img src={two} className="w-50" alt="shape-img" />
       </div>
-      <div className="zebra-shape float-bob-y">
-        <img src={three} alt="shape-img" />
+      <div className="zebra-shape float-bob-y text-end">
+        <img src={three} style={{ width: "130px" }} alt="shape-img" />
       </div>
       <div className="container">
         <div className="contact-info-area">
@@ -50,7 +66,7 @@ const Footer = () => {
             <div className="content">
               <p>Call Us 7/24</p>
               <h3>
-                <Link to="tel:+2085550112">+208-555-0112</Link>
+                <Link to="tel:+07869636849">+07869636849</Link>
               </h3>
             </div>
           </div>
@@ -83,9 +99,9 @@ const Footer = () => {
               </svg>
             </div>
             <div className="content">
-              <p>Make a Quote</p>
+              <p>Email</p>
               <h3>
-                <Link to="mailto:kidsa@gmail.com">kidsa@gmail.com</Link>
+                <Link to="mailto:kidsa@gmail.com">contact@alyaqeen.co.uk</Link>
               </h3>
             </div>
           </div>
@@ -119,7 +135,7 @@ const Footer = () => {
             </div>
             <div className="content">
               <p>Location</p>
-              <h3>4517 Washington ave.</h3>
+              <h3>116 Church Road, Yardley, Birmingham, B25 8UX</h3>
             </div>
           </div>
         </div>
@@ -134,18 +150,17 @@ const Footer = () => {
               data-aos-delay="300"
             >
               <div className="single-footer-widget">
-                <div className="widget-head">
+                <div className="widget-head w-25">
                   <Link to="/">
-                    <img src={four} alt="logo-img" />
+                    <img src={four} className="w-100" alt="logo-img" />
                   </Link>
                 </div>
                 <div className="footer-content">
                   <p>
-                    Phasellus ultricies aliquam volutpat ullamcorper laoreet
-                    neque, a lacinia curabitur lacinia mollis
+                    “One of the most dedicated Academy in Yardley Birmingham”
                   </p>
                   <div className="social-icon d-flex align-items-center">
-                    <Link to="/">
+                    <Link to="https://www.facebook.com/AlyaqeenAcademy">
                       <i className="fab fa-facebook-f"></i>
                     </Link>
                     <Link to="/">
@@ -154,7 +169,7 @@ const Footer = () => {
                     <Link to="/">
                       <i className="fa-brands fa-linkedin-in"></i>
                     </Link>
-                    <Link to="/">
+                    <Link to="https://www.youtube.com/@alyaqeenacademy5282">
                       <i className="fa-brands fa-youtube"></i>
                     </Link>
                   </div>
@@ -173,27 +188,33 @@ const Footer = () => {
                 </div>
                 <ul className="list-area">
                   <li>
-                    <Link to="program-details">
+                    <Link to="/about">
                       <i className="fa-solid fa-chevron-right"></i>
-                      Our Services
+                      About
                     </Link>
                   </li>
                   <li>
-                    <Link to="news-details">
+                    <Link to="/news">
                       <i className="fa-solid fa-chevron-right"></i>
-                      Our Blogs
+                      News
                     </Link>
                   </li>
                   <li>
-                    <Link to="faq">
+                    <Link to="/photos-videos">
                       <i className="fa-solid fa-chevron-right"></i>
-                      FAQ&apos;S
+                      Photos & Videos
                     </Link>
                   </li>
                   <li>
-                    <Link to="contact">
+                    <Link to="/academic-calendar">
                       <i className="fa-solid fa-chevron-right"></i>
-                      Contact Us
+                      Academic Calendar
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/contact">
+                      <i className="fa-solid fa-chevron-right"></i>
+                      Contact
                     </Link>
                   </li>
                 </ul>
@@ -304,7 +325,7 @@ const Footer = () => {
               className="color-2"
               data-aos-delay="300"
             >
-              &copy; All Copyright {currentYear} by <Link to="/">Kidsa</Link>
+              &copy; All Copyright {currentYear} by <Link to="/">Alyaqeen</Link>
             </p>
             <ul
               className="footer-menu "

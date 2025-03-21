@@ -2,65 +2,133 @@ import one from "../../assets/img/plane.png";
 import two from "../../assets/img/cta/pencil-2.png";
 import three from "../../assets/img/cta/plane.png";
 import four from "../../assets/img/cta/shape.png";
+import teacherOfTheYear from "../../assets/img/team/team02.png";
+import { Link } from "react-router";
 
 const MainCta = () => {
   return (
-    <section className="main-cta-section">
-      <div className="plane-shape float-bob-y">
-        <img src={one} alt="shape-img" />
+    <section className="main-cta-section rounded-5">
+      <div className="plane-shape float-bob-y text-end">
+        <img src={one} className="w-50" alt="shape-img" />
       </div>
       <div className="container">
         <div className="main-cta-wrapper section-padding">
           <div className="pencil-shape">
-            <img src={two} alt="img" />
+            <img src={two} className="w-50" alt="img" />
           </div>
           <div className="plane-shape float-bob-y">
-            <img src={three} alt="img" />
+            <img src={three} className="w-50" alt="img" />
           </div>
           <div className="cta-shape float-bob-x">
-            <img src={four} alt="img" />
+            <img src={four} className="w-50" alt="img" />
           </div>
-          <div className="cta-bg"></div>
-          <div className="section-title text-center">
-            <span
-              className="text-white "
-              data-aos-duration="800"
-              data-aos="fade-up"
-            >
-              Newsletter
-            </span>
-            <h2
-              className="text-white "
-              data-aos-duration="800"
-              data-aos="fade-up"
-              data-aos-delay="300"
-            >
-              Subscribe to our newsletter <br /> for daily updates
-            </h2>
-          </div>
-          <div className="newsletter-items">
-            <div
-              className="form-clt "
-              data-aos-duration="800"
-              data-aos="fade-up"
-              data-aos-delay="500"
-            >
-              <input
-                type="text"
-                name="email"
-                id="email"
-                placeholder="Email Address"
+          <div className="cta-bg" style={{ borderRadius: "100px" }}></div>
+          {/* changed newsletter section from here */}
+          <div className="row g-5 p-5 rounded-5 mt-0 pt-0 pb-0 mb-0">
+            <div className="col-lg-6 flex flex-column flex-lg-row pt-5 pt-lg-0 justify-content-center align-items-center my-auto">
+              <img
+                className="rounded-5 w-100"
+                data-aos-duration="800"
+                data-aos="fade-up"
+                data-aos-delay="500"
+                style={{ height: "500px" }}
+                src={teacherOfTheYear}
+                alt="img"
               />
             </div>
-            <button
-              className="theme-btn "
-              data-aos-duration="800"
-              data-aos="fade-up"
-              data-aos-delay="700"
-              type="submit"
-            >
-              <span>Subscribe Now</span>
-            </button>
+            <div className="col-lg-6 text-white">
+              <div className="about-content">
+                <div className="section-title">
+                  <span
+                    data-aos-duration="800"
+                    data-aos="fade-up"
+                    className="text-white"
+                  >
+                    {/*About Us*/} {/*Best Teacher*/}Shaykh Molana Junaid Usman
+                  </span>
+                  <h2
+                    data-aos-duration="800"
+                    data-aos="fade-up"
+                    data-aos-delay="300"
+                    className="text-white"
+                  >
+                    Why selected as The Best Teacher of the Year.
+                    {/*Learn to play, converse*/} {/*<br />*/}
+                    {/*with confidence.*/}
+                  </h2>
+                </div>
+                <p
+                  className="mt-3 mt-md-0 "
+                  data-aos-duration="800"
+                  data-aos="fade-up"
+                  data-aos-delay="500"
+                >
+                  Luctus. Curabitur nibh justo imperdiet non ex non tempus
+                  faucibus urna Aliquam at elit vitae dui sagittis maximus eget
+                  vitae diam In fermentum
+                </p>
+                <ul
+                  className="list-items "
+                  data-aos-duration="800"
+                  data-aos="fade-up"
+                  data-aos-delay="700"
+                >
+                  <li>
+                    <i className="fa-regular fa-circle-check me-2"></i>
+                    Highly Educated
+                  </li>
+                  <li>
+                    <i className="fa-regular fa-circle-check me-2"></i>
+                    Dedicated Educator
+                  </li>
+                  <li>
+                    <i className="fa-regular fa-circle-check me-2"></i>
+                    Mentor and Guide
+                  </li>
+                  <li>
+                    <i className="fa-regular fa-circle-check me-2"></i>
+                    Community Leader
+                  </li>
+                  <li>
+                    <i className="fa-regular fa-circle-check me-2"></i>
+                    Multilingual
+                  </li>
+                  <li>
+                    <i className="fa-regular fa-circle-check me-2"></i>
+                    Versatile Experience
+                  </li>
+                  <li>
+                    <i className="fa-regular fa-circle-check me-2 "></i>
+                    Empathetic and Supportive{" "}
+                  </li>
+                </ul>
+                <div className="row mt-2 align-items-center">
+                  <div
+                    className="about-button col-lg-6"
+                    data-aos-duration="800"
+                    data-aos="fade-up"
+                    data-aos-delay="300"
+                  >
+                    <Link to="/about" className="theme-btn bg-white">
+                      Explore More{" "}
+                      <i className="fa-solid fa-arrow-right-long"></i>
+                    </Link>
+                  </div>
+                  <div
+                    className="author-image col-lg-6"
+                    data-aos-duration="800"
+                    data-aos="fade-up"
+                    data-aos-delay="500"
+                  >
+                    {/* <Image src={eight} alt="author-img" priority/> */}
+                    <div className="content">
+                      <h6 className="text-white fw-bold">Mohammad Khalid</h6>
+                      <p>Managing Director & Headteacher</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

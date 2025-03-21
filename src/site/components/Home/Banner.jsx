@@ -36,10 +36,10 @@ const Banner = () => {
         <div className="book-shape float-bob-x">
           <img src={four} alt="shape-img" className="w-75" />
         </div>
-        <div className="pencil-shape">
+        <div className="pencil-shape text-end">
           <img src={five} alt="shape-img" className="w-50" />
         </div>
-        <div className="bee-shape float-bob-y">
+        <div className="bee-shape float-bob-y text-end">
           <img src={six} alt="shape-img" className="w-50" />
         </div>
         <div className="right-shape text-end">
