@@ -189,6 +189,118 @@
   }
 }
 
+.program-section-feb-24 {
+  position: relative;
+  padding-bottom: 172px;
+
+  @include breakpoint(max-xl) {
+    padding-bottom: 155px;
+  }
+
+  @include breakpoint(max-lg) {
+    padding-bottom: 120px;
+  }
+
+  .top-shape {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .bottom-shape {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+  }
+
+  .mask-shape {
+    position: absolute;
+    top: 15%;
+    left: 5%;
+  }
+
+  .pencil-shape {
+    position: absolute;
+    bottom: 10%;
+    left: 85px;
+    animation: rounded 5s linear infinite;
+  }
+
+  .mask-shape-2 {
+    position: absolute;
+    top: 18%;
+    right: 5%;
+    animation: rounded 5s linear infinite;
+  }
+
+  .compass-shape {
+    position: absolute;
+    bottom: 10%;
+    right: 85px;
+    animation: rounded 5s linear infinite;
+  }
+
+  .love-shape {
+    position: absolute;
+    top: 40%;
+    left: 0;
+    animation: rounded 5s linear infinite;
+  }
+
+  .zebra-shape {
+    position: absolute;
+    top: 45%;
+    right: 0;
+  }
+
+  /*
+  .table a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+
+  .table a:hover {
+    color: #ff0000;
+  }
+
+
+  .table a {
+    color: #ffffff;
+    text-decoration: none;
+  }
+
+
+  .table a:hover {
+    color: #ff0000;
+    text-decoration: underline;
+  }*/
+
+  /* Target the anchor element inside the table cell */
+  //.table td a {
+  //  color: #ffffff; /* Default color (white, matching your text-white class) */
+  //  text-decoration: none; /* Optional: removes underline by default */
+  //  transition: color 0.3s ease; /* Smooth color transition */
+  //}
+
+  /* Change anchor color on hover */
+  //.table td a:hover {
+  //  color: #ff0000; /* Example: changes to red on hover (adjust as needed) */
+  //}
+
+  /* Target the h5 element inside the anchor */
+  .table td a h5 {
+    margin: 0; /* Optional: removes default margin from h5 */
+    //color: inherit; /* Inherits color from the parent <a> */
+  }
+
+  /* Optional: Change h5 color independently on hover */
+  .table td a:hover h5 {
+    color: $theme-color; /* Matches anchor hover color (adjust as needed) */
+  }
+}
+
 .program-box-items-2 {
   padding: 50px 30px 40px;
   position: relative;

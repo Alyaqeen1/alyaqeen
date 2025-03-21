@@ -54,7 +54,7 @@ const siteRoutes = [
       },
       // courses routes
       {
-        path: "/qaidah-quran-hifdh",
+        path: "/arabic-qaidah-quran-hifdh",
         element: <QaidahQuranHifdh></QaidahQuranHifdh>,
       },
       {

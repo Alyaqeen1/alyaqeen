@@ -131,7 +131,7 @@ const Header = () => {
                           </Link>
                           <ul className="submenu">
                             <li>
-                              <Link to="/qaidah-quran-hifdh">
+                              <Link to="/arabic-qaidah-quran-hifdh">
                                 Qaidah, Quran & Hifdh
                               </Link>
                             </li>

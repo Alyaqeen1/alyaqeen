@@ -14,6 +14,8 @@ import CTA from "../../components/Home/CTA";
 import MainCta from "../../components/Home/MainCTA";
 import Instagram from "../../components/Home/Instagram";
 import Blogs from "../../components/Home/Blogs";
+import FeeStructure from "../../components/Home/FeeStructure";
+import AdditionalServices from "../../components/Home/AdditionalServices";
 
 export default function Home() {
   return (
@@ -32,6 +34,8 @@ export default function Home() {
       <Blogs></Blogs>
       <MainCta></MainCta>
       <Instagram></Instagram>
+      <FeeStructure></FeeStructure>
+      <AdditionalServices></AdditionalServices>
       <AboutSection></AboutSection>
     </div>
   );
