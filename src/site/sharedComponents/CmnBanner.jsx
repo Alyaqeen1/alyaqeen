@@ -16,22 +16,22 @@ const CmnBanner = ({ title }) => {
       }}
     >
       <div className="line-shape">
-        <img src={one} alt="shape-img" />
+        <img src={one} className="w-50" alt="shape-img" />
       </div>
       <div className="plane-shape float-bob-y">
-        <img src={two} alt="shape-img" />
+        <img src={two} className="w-50" alt="shape-img" />
       </div>
       <div className="doll-shape float-bob-x">
-        <img src={three} alt="shape-img" />
+        <img src={three} className="w-50" alt="shape-img" />
       </div>
-      <div className="parasuit-shape float-bob-y">
-        <img src={four} alt="shape-img" />
+      <div className="parasuit-shape float-bob-y text-end">
+        <img src={four} className="w-50" alt="shape-img" />
       </div>
-      <div className="frame-shape">
-        <img src={five} alt="shape-img" />
+      <div className="frame-shape text-end">
+        <img src={five} className="w-50" alt="shape-img" />
       </div>
-      <div className="bee-shape float-bob-x">
-        <img src={six} alt="shape-img" />
+      <div className="bee-shape float-bob-x text-end">
+        <img src={six} className="w-50" alt="shape-img" />
       </div>
       <div className="container">
         <div className="page-heading">

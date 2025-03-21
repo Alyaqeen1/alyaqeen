@@ -11,10 +11,10 @@ const AboutTestimonial = () => {
       <div className="container">
         <div className="testimonial-wrapper style-2 section-padding">
           <div className="shape-1">
-            <img src={three} alt="shape-img" />
+            <img src={three} className="w-50" alt="shape-img" />
           </div>
           <div className="shape-2">
-            <img src={four} alt="shape-img" />
+            <img src={four} className="w-50" alt="shape-img" />
           </div>
           <div className="testimonial-bg"></div>
           <div className="section-title text-center">
@@ -59,8 +59,8 @@ const AboutTestimonial = () => {
                     <div className="client-info">
                       <img src={five} alt="img" />
                       <div className="content">
-                        <h5>Ronald Richards</h5>
-                        <p>Co, Founder</p>
+                        <h5>Mohammad Khalid</h5>
+                        <p>Managing Director & Headteacher</p>
                       </div>
                     </div>
                   </div>
@@ -79,8 +79,8 @@ const AboutTestimonial = () => {
                     <div className="client-info">
                       <img src={five} alt="img" />
                       <div className="content">
-                        <h5>Ronald Richards</h5>
-                        <p>Co, Founder</p>
+                        <h5>Mohammad Khalid</h5>
+                        <p>Managing Director & Headteacher</p>
                       </div>
                     </div>
                   </div>
@@ -99,8 +99,8 @@ const AboutTestimonial = () => {
                     <div className="client-info">
                       <img src={five} alt="img" />
                       <div className="content">
-                        <h5>Ronald Richards</h5>
-                        <p>Co, Founder</p>
+                        <h5>Mohammad Khalid</h5>
+                        <p>Managing Director & Headteacher</p>
                       </div>
                     </div>
                   </div>
@@ -119,8 +119,8 @@ const AboutTestimonial = () => {
                     <div className="client-info">
                       <img src={five} alt="img" />
                       <div className="content">
-                        <h5>Ronald Richards</h5>
-                        <p>Co, Founder</p>
+                        <h5>Mohammad Khalid</h5>
+                        <p>Managing Director & Headteacher</p>
                       </div>
                     </div>
                   </div>
@@ -139,8 +139,8 @@ const AboutTestimonial = () => {
                     <div className="client-info">
                       <img src={five} alt="img" />
                       <div className="content">
-                        <h5>Ronald Richards</h5>
-                        <p>Co, Founder</p>
+                        <h5>Mohammad Khalid</h5>
+                        <p>Managing Director & Headteacher</p>
                       </div>
                     </div>
                   </div>
@@ -159,8 +159,8 @@ const AboutTestimonial = () => {
                     <div className="client-info">
                       <img src={five} alt="img" />
                       <div className="content">
-                        <h5>Ronald Richards</h5>
-                        <p>Co, Founder</p>
+                        <h5>Mohammad Khalid</h5>
+                        <p>Managing Director & Headteacher</p>
                       </div>
                     </div>
                   </div>
