@@ -58,7 +58,7 @@ const Team = () => {
       <div className="love-shape float-bob-x">
         <img className="w-50" src={two} alt="shape-img" />
       </div>
-      <div className="frame-shape">
+      <div className="frame-shape text-end">
         <img src={three} className="w-50" alt="shape-img" />
       </div>
       <div className="container">
