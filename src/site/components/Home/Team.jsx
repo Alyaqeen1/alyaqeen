@@ -123,14 +123,14 @@ const Team = () => {
                 <div className="swiper-slide">
                   <div className="team-items">
                     <div className="team-image">
-                      <div className="shape-img">
+                      {/* <div className="shape-img">
                         <img
                           src={state_member.image_link}
                           alt="img"
                           style={{}}
                         />
-                      </div>
-                      <img src={five} alt="team-img" />
+                      </div> */}
+                      <img src={state_member.image_link} alt="team-img" />
                       <div className="social-profile">
                         <span
                           className="plus-btn"
