@@ -177,7 +177,13 @@ const AboutMain = ({
                     data-aos="fade-up"
                     data-aos-delay="300"
                   >
-                    <img src={ten} style={{ width: "70px" }} alt="author-img" />
+                    <img
+                      src={ten}
+                      className="rounded-circle object-fit-cover"
+                      style={{ width: "60px", height: "60px" }}
+                      alt="author-img"
+                    />
+
                     <div className="content">
                       <h6>Mohammad Khalid</h6>
                       <p>Managing Director & Headteacher</p>
