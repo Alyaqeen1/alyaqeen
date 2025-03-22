@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import ModalVideo from "react-modal-video";
-import one from "../../assets/img/video.jpg";
+import one from "../../assets/img/about/new-pic.jpeg";
 import { Link } from "react-router";
 
 const ContactSection = () => {
@@ -38,7 +38,7 @@ const ContactSection = () => {
                       <div className="content">
                         <p>Call Us 7/24</p>
                         <h3>
-                          <Link to="tel:+2085550112">+208-555-0112</Link>
+                          <Link to="tel:+07869636849">+07869636849</Link>
                         </h3>
                       </div>
                     </div>
@@ -68,8 +68,8 @@ const ContactSection = () => {
                       <div className="content">
                         <p>Make a Quote</p>
                         <h3>
-                          <Link to="mailto:infotech@gmail.com">
-                            Infotech@gmail.com
+                          <Link to="mailto:contact@alyaqeen.co.uk">
+                            contact@alyaqeen.co.uk
                           </Link>
                         </h3>
                       </div>
@@ -99,12 +99,17 @@ const ContactSection = () => {
                       </div>
                       <div className="content">
                         <p>Location</p>
-                        <h3>4517 Washington ave.</h3>
+                        <h3>116 Church Road, Yardley, Birmingham, B25 8UX</h3>
                       </div>
                     </div>
                   </div>
                   <div className="video-image">
-                    <img src={one} alt="img" />
+                    <img
+                      src={one}
+                      className="object-fit-cover"
+                      style={{ height: "350px", objectPosition: "center" }}
+                      alt="img"
+                    />
                     <div className="video-box">
                       <a
                         onClick={() => setOpen(true)}
@@ -120,9 +125,8 @@ const ContactSection = () => {
                 <div className="contact-content">
                   <h2>Ready to Get Started?</h2>
                   <p>
-                    Nullam varius, erat quis iaculis dictum, eros urna varius
-                    eros, ut blandit felis odio in turpis. Quisque rhoncus, eros
-                    in auctor ultrices,
+                    Please Contact for any Queries, Academy Visit, Volunteering
+                    or Feedback.
                   </p>
                   <form
                     action="contact.php"
@@ -202,7 +206,7 @@ const ContactSection = () => {
         <div className="map-items">
           <div className="googpemap">
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6678.7619084840835!2d144.9618311901502!3d-37.81450084255415!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad642b4758afc1d%3A0x3119cc820fdfc62e!2sEnvato!5e0!3m2!1sen!2sbd!4v1641984054261!5m2!1sen!2sbd"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2430.787740880631!2d-1.8123155009975573!3d52.464871450439055!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4870bb1cd67d7d6d%3A0x98cb9c4fcfbf0720!2sAlyaqeen%20Academy!5e0!3m2!1sen!2s!4v1680335457042!5m2!1sen!2s"
               style={{ border: "0px" }}
               allowFullScreen
               loading="lazy"
@@ -214,7 +218,8 @@ const ContactSection = () => {
         channel="youtube"
         youtube={{ mute: 0, autoplay: 0 }}
         isOpen={isOpen}
-        videoId="Cn4G2lZ_g2I"
+        videoId="bEnHsAApltc"
+        // videoId="Cn4G2lZ_g2I"
         onClose={() => setOpen(false)}
       />
     </>

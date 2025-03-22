@@ -45,7 +45,7 @@ const AboutMain = ({
                 <div className="radius-shape">
                   <img src={five} className="w-50" alt="shape-img" />
                 </div>
-                <div className="circle-shape">
+                <div className="circle-shape text-end">
                   <img src={six} className="w-50" alt="shape-img" />
                 </div>
               </div>
@@ -146,7 +146,7 @@ const AboutMain = ({
                       <div className="content">
                         <h5>Sport Program</h5>
                         <p>
-                          Aliquam erat volutpat <br /> nullam imperdiet
+                          Sport program promotes <br /> fun and growth.
                         </p>
                       </div>
                     </div>
@@ -164,7 +164,8 @@ const AboutMain = ({
                       <div className="content">
                         <h5>Easy To Learn</h5>
                         <p>
-                          Ut vehiculadictumst <br /> maecenas ante.
+                          Learning made <br />
+                          simple and quick.
                         </p>
                       </div>
                     </div>
@@ -177,7 +178,13 @@ const AboutMain = ({
                     data-aos="fade-up"
                     data-aos-delay="300"
                   >
-                    <img src={ten} style={{ width: "70px" }} alt="author-img" />
+                    <img
+                      src={ten}
+                      className="rounded-circle object-fit-cover"
+                      style={{ width: "60px", height: "60px" }}
+                      alt="author-img"
+                    />
+
                     <div className="content">
                       <h6>Mohammad Khalid</h6>
                       <p>Managing Director & Headteacher</p>
