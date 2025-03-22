@@ -13,6 +13,9 @@ import TestimonialTwo from "../../components/Home/TestimonialTwo";
 import CTA from "../../components/Home/CTA";
 import MainCta from "../../components/Home/MainCTA";
 import Instagram from "../../components/Home/Instagram";
+import Blogs from "../../components/Home/Blogs";
+import FeeStructure from "../../components/Home/FeeStructure";
+import AdditionalServices from "../../components/Home/AdditionalServices";
 
 export default function Home() {
   return (
@@ -28,9 +31,11 @@ export default function Home() {
       <TestimonialOne></TestimonialOne>
       <TestimonialTwo></TestimonialTwo>
       <CTA></CTA>
-      <News></News>
+      <Blogs></Blogs>
       <MainCta></MainCta>
       <Instagram></Instagram>
+      <FeeStructure></FeeStructure>
+      <AdditionalServices></AdditionalServices>
       <AboutSection></AboutSection>
     </div>
   );

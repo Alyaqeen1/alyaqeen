@@ -12,13 +12,13 @@ const TestimonialTwo = () => {
   return (
     <section className="testimonial-section fix section-padding">
       <div className="tree-shape float-bob-y">
-        <img src={one} alt="shape-img" />
+        <img src={one} className="w-50" alt="shape-img" />
       </div>
-      <div className="right-shape">
-        <img src={two} alt="shape-img" />
+      <div className="right-shape text-end">
+        <img src={two} className="w-50" alt="shape-img" />
       </div>
-      <div className="bee-shape float-bob-y">
-        <img src={three} alt="shape-img" />
+      <div className="bee-shape float-bob-y text-end">
+        <img src={three} className="w-50" alt="shape-img" />
       </div>
       <div className="container">
         <div className="section-title text-center">
@@ -59,16 +59,15 @@ const TestimonialTwo = () => {
               <div className="swiper-slide">
                 <div className="testimonial-items">
                   <div className="icon">
-                    <img src={four} alt="img" />
+                    <img src={four} className="w-50" alt="img" />
                   </div>
                   <div className="testimonial-bg"></div>
                   <div className="testimonial-content">
                     <p>
-                      Corquent per conubia nostra, per inceptos himenaeos.
-                      Suspendisse gravida vitae nisi Class aptent taciti
-                      sociosqu ad litora
+                      I appreciate the flexibility of Alyaqeen Academy. My child
+                      can learn at their own pace, which is very effective.
                     </p>
-                    <h6>Esther Howard</h6>
+                    <h6>Ahmed Ali Al Mansoori</h6>
                   </div>
                 </div>
               </div>
@@ -77,16 +76,15 @@ const TestimonialTwo = () => {
               <div className="swiper-slide">
                 <div className="testimonial-items style-2">
                   <div className="icon">
-                    <img src={five} alt="img" />
+                    <img src={five} className="w-50" alt="img" />
                   </div>
                   <div className="testimonial-bg bg-2"></div>
                   <div className="testimonial-content">
                     <p>
-                      Corquent per conubia nostra, per inceptos himenaeos.
-                      Suspendisse gravida vitae nisi Class aptent taciti
-                      sociosqu ad litora
+                      I am impressed with the quality of education provided. My
+                      child is more engaged and motivated to learn.
                     </p>
-                    <h6>Wade Warren</h6>
+                    <h6>Fatima Mohammed Al Hashmi</h6>
                   </div>
                 </div>
               </div>
@@ -95,16 +93,15 @@ const TestimonialTwo = () => {
               <div className="swiper-slide">
                 <div className="testimonial-items style-3">
                   <div className="icon">
-                    <img src={six} alt="img" />
+                    <img src={six} className="w-50" alt="img" />
                   </div>
                   <div className="testimonial-bg bg-3"></div>
                   <div className="testimonial-content">
                     <p>
-                      Corquent per conubia nostra, per inceptos himenaeos.
-                      Suspendisse gravida vitae nisi Class aptent taciti
-                      sociosqu ad litora
+                      Alyaqeen Academy offers a friendly environment, and the
+                      support team is always helpful. Highly recommended!
                     </p>
-                    <h6>Jenny Wilson</h6>
+                    <h6>Khalid Abdullah Al Zaabi</h6>
                   </div>
                 </div>
               </div>
@@ -113,16 +110,15 @@ const TestimonialTwo = () => {
               <div className="swiper-slide">
                 <div className="testimonial-items">
                   <div className="icon">
-                    <img src={four} alt="img" />
+                    <img src={four} className="w-50" alt="img" />
                   </div>
                   <div className="testimonial-bg"></div>
                   <div className="testimonial-content">
                     <p>
-                      Corquent per conubia nostra, per inceptos himenaeos.
-                      Suspendisse gravida vitae nisi Class aptent taciti
-                      sociosqu ad litora
+                      Alyaqeen Academy is a game-changer for my child's
+                      education. The content is engaging and well-structured.
                     </p>
-                    <h6>Esther Howard</h6>
+                    <h6>Mariam Salem Al Mehairi</h6>
                   </div>
                 </div>
               </div>
@@ -131,16 +127,15 @@ const TestimonialTwo = () => {
               <div className="swiper-slide">
                 <div className="testimonial-items style-2">
                   <div className="icon">
-                    <img src={five} alt="img" />
+                    <img src={five} className="w-50" alt="img" />
                   </div>
                   <div className="testimonial-bg bg-2"></div>
                   <div className="testimonial-content">
                     <p>
-                      Corquent per conubia nostra, per inceptos himenaeos.
-                      Suspendisse gravida vitae nisi Class aptent taciti
-                      sociosqu ad litora
+                      Alyaqeen Academy has exceeded my expectations. It’s a
+                      perfect blend of technology and education for my child.
                     </p>
-                    <h6>Wade Warren</h6>
+                    <h6>Omar Saif Al Nuaimi</h6>
                   </div>
                 </div>
               </div>
@@ -149,16 +144,66 @@ const TestimonialTwo = () => {
               <div className="swiper-slide">
                 <div className="testimonial-items style-3">
                   <div className="icon">
-                    <img src={six} alt="img" />
+                    <img src={six} className="w-50" alt="img" />
                   </div>
                   <div className="testimonial-bg bg-3"></div>
                   <div className="testimonial-content">
                     <p>
-                      Corquent per conubia nostra, per inceptos himenaeos.
-                      Suspendisse gravida vitae nisi Class aptent taciti
-                      sociosqu ad litora
+                      Alyaqeen Academy has made learning fun and interactive for
+                      my child. I can see their confidence growing every day.
                     </p>
-                    <h6>Jenny Wilson</h6>
+                    <h6>Layla Yousuf Al Ketbi</h6>
+                  </div>
+                </div>
+              </div>
+            </SwiperSlide>
+            <SwiperSlide>
+              <div className="swiper-slide">
+                <div className="testimonial-items">
+                  <div className="icon">
+                    <img src={four} className="w-50" alt="img" />
+                  </div>
+                  <div className="testimonial-bg"></div>
+                  <div className="testimonial-content">
+                    <p>
+                      The progress reports are detailed and easy to understand.
+                      It helps me stay updated on my child's performance.
+                    </p>
+                    <h6>Yousef Ibrahim Al Shamsi</h6>
+                  </div>
+                </div>
+              </div>
+            </SwiperSlide>
+            <SwiperSlide>
+              <div className="swiper-slide">
+                <div className="testimonial-items style-2">
+                  <div className="icon">
+                    <img src={five} className="w-50" alt="img" />
+                  </div>
+                  <div className="testimonial-bg bg-2"></div>
+                  <div className="testimonial-content">
+                    <p>
+                      This LMS has transformed my child's learning experience!
+                      Highly recommended! Best Platform for my child.
+                    </p>
+                    <h6>Ahmed Saeed Al-Mansoori</h6>
+                  </div>
+                </div>
+              </div>
+            </SwiperSlide>
+            <SwiperSlide>
+              <div className="swiper-slide">
+                <div className="testimonial-items style-3">
+                  <div className="icon">
+                    <img src={six} className="w-50" alt="img" />
+                  </div>
+                  <div className="testimonial-bg bg-3"></div>
+                  <div className="testimonial-content">
+                    <p>
+                      An amazing platform! My son now enjoys studying, and his
+                      grades have improved significantly. Highly recommend!
+                    </p>
+                    <h6>Saeed Mohammed Al-Dhaheri</h6>
                   </div>
                 </div>
               </div>

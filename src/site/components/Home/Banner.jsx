@@ -22,60 +22,63 @@ const Banner = () => {
         <div className="bottom-shape">
           <img
             src={one}
+            className="w-75"
             alt="shape-img"
             //   className="shape-image"
           />
         </div>
         <div className="parasuit-shape float-bob-y">
-          <img src={two} alt="shape-img" className="shape-image" />
+          <img src={two} alt="shape-img" className="w-75" />
         </div>
         <div className="left-shape">
-          <img src={three} alt="shape-img" className="shape-image" />
+          <img src={three} alt="shape-img" className="w-50" />
         </div>
         <div className="book-shape float-bob-x">
-          <img src={four} alt="shape-img" className="shape-img" />
+          <img src={four} alt="shape-img" className="w-75" />
         </div>
-        <div className="pencil-shape">
-          <img src={five} alt="shape-img" className="shape-img" />
+        <div className="pencil-shape text-end">
+          <img src={five} alt="shape-img" className="w-50" />
         </div>
-        <div className="bee-shape float-bob-y">
-          <img src={six} alt="shape-img" className="shape-img" />
+        <div className="bee-shape float-bob-y text-end">
+          <img src={six} alt="shape-img" className="w-50" />
         </div>
-        <div className="right-shape">
-          <img src={seven} alt="shape-img" className="shape-img" />
+        <div className="right-shape text-end">
+          <img src={seven} alt="shape-img" className="w-50 " />
         </div>
         <div className="star-shape">
-          <img src={eight} alt="shape-img" className="shape-img" />
+          <img src={eight} alt="shape-img" className="w-50" />
         </div>
-        <div className="container ">
-          <div className="row g-4 align-items-center lg:pt-10 pt-24">
+        <div className="container">
+          <div className="row g-4 align-items-center pt-5">
             <div className="col-lg-6">
               <div className="hero-content">
                 <h5 data-aos-duration="800" data-aos="fade-up">
-                  Kindergarten & Baby Care
+                  Alyaqeen Academy
                 </h5>
-                <h1
-                  data-aos-duration="800"
+                <h2
+                  data-aos-duration={800}
                   data-aos="fade-up"
-                  data-aos-delay="300"
+                  data-aos-delay={10}
+                  // className="fs-1"
                 >
-                  Kid&apos;s Promising <br /> <span>Tomorrow</span> Ahead
-                </h1>
+                  Three Interconnected
+                  <br /> <span>Educational</span> Program
+                </h2>
                 <p
-                  data-aos-duration="800"
+                  data-aos-duration={800}
                   data-aos="fade-up"
-                  data-aos-delay="500"
+                  data-aos-delay={10}
                 >
-                  Suspendisse non blandit sapien Nunc eleifend, enim et porta
-                  porta <br /> eros risus tincidunt diam, vel sodales{" "}
+                  Arabic Qaidah & Quran, Islamic Studies , Essential Duas and
+                  Surah Memorization.
                 </p>
                 <div className="hero-button">
                   <Link
                     to="contact"
                     className="theme-btn "
-                    data-aos-duration="800"
+                    data-aos-duration={800}
                     data-aos="fade-up"
-                    data-aos-delay="700"
+                    data-aos-delay={100}
                   >
                     Apply Today <i className="fa-solid fa-arrow-right-long"></i>
                   </Link>
@@ -83,7 +86,7 @@ const Banner = () => {
                     className="button-text "
                     data-aos-duration="800"
                     data-aos="fade-up"
-                    data-aos-delay="800"
+                    data-aos-delay={400}
                   >
                     <a
                       className="video-btn ripple video-popup"
@@ -94,6 +97,19 @@ const Banner = () => {
                     <span className="ms-4 d-line">Play Video</span>
                   </span>
                 </div>
+                <div className="hero-button-feb3 mt-4">
+                  <Link
+                    className="theme-btn-feb-4"
+                    data-aos-duration="800"
+                    data-aos="fade-up"
+                    data-aos-delay="600"
+                    to="/prayer-timetable"
+                    // className="theme-btn"
+                  >
+                    January Prayer Timetable{" "}
+                    {/*<i className="fa-solid fa-arrow-right-long"></i>*/}
+                  </Link>
+                </div>
               </div>
             </div>
             <div className="col-lg-6">
@@ -103,9 +119,16 @@ const Banner = () => {
                 data-aos="fade-up"
                 data-aos-delay="400"
               >
-                <img src={nine} alt="hero-img" />
+                <img
+                  src={nine}
+                  style={{
+                    filter: "drop-shadow(0 0 10px rgba(0, 0, 0, 0.2))",
+                  }}
+                  alt="hero-img"
+                  className="rounded-5"
+                />
                 <div className="hero-shape">
-                  <img src={ten} alt="shape-img" />
+                  <img src={ten} alt="shape-img" className="w-75" />
                 </div>
               </div>
             </div>
@@ -116,7 +139,8 @@ const Banner = () => {
         channel="youtube"
         youtube={{ mute: 0, autoplay: 0 }}
         isOpen={isOpen}
-        videoId="Cn4G2lZ_g2I"
+        videoId="bEnHsAApltc"
+        // videoId="Cn4G2lZ_g2I"
         onClose={() => setOpen(false)}
       />
     </>

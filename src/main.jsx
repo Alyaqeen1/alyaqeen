@@ -1,14 +1,13 @@
-import { StrictMode } from "react";
+import { StrictMode, useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
-import { BrowserRouter } from "react-router";
-import SiteRoutes from "./site/SiteRoutes.jsx";
+import { RouterProvider } from "react-router";
+import router from "./routes/Routes.jsx";
+import InitAnimations from "./site/components/InitAnimations.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <BrowserRouter>
-      <SiteRoutes></SiteRoutes>
-      {/* <DashboardRoutes></DashboardRoutes> */}
-    </BrowserRouter>
+    <RouterProvider router={router} />
+    <InitAnimations />
   </StrictMode>
 );

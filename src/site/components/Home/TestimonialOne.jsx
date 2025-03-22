@@ -2,8 +2,8 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation } from "swiper/modules";
 import "swiper/swiper-bundle.css";
 import one from "../../assets/img/client/pencil.png";
-import two from "../../assets/img/pricing/girl.png";
-import three from "../../assets/img/client/testimonail.png";
+import two from "../../assets/img/home/quran-quran-svgrepo-com.svg";
+import three from "../../assets/img/home/testimonial.png";
 import four from "../../assets/img/client/01.png";
 import five from "../../assets/img/client/quote.png";
 
@@ -11,10 +11,15 @@ const TestimonialOne = () => {
   return (
     <section className="testimonial-section fix section-padding">
       <div className="pencil-shape">
-        <img src={one} alt="shape-img" />
+        <img src={one} className="w-50" alt="shape-img" />
       </div>
-      <div className="girl-shape float-bob-y">
-        <img src={two} alt="shape-img" />
+      <div className="girl-shape float-bob-y text-end">
+        <img
+          src={two}
+          className=""
+          style={{ width: "120px" }}
+          alt="shape-img"
+        />
       </div>
       <div className="container">
         <div className="testimonial-wrapper-2">
@@ -26,7 +31,18 @@ const TestimonialOne = () => {
               data-aos-delay="400"
             >
               <div className="testimonial-image">
-                <img src={three} alt="image" />
+                <img
+                  style={
+                    {
+                      // clipPath:
+                      //   "polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)",
+                      // height: "500px",
+                    }
+                  }
+                  className="object-fit-cover"
+                  src={three}
+                  alt="image"
+                />
               </div>
             </div>
             <div className="col-lg-6">
@@ -91,8 +107,8 @@ const TestimonialOne = () => {
                           <div className="client-info">
                             <img src={four} alt="img" />
                             <div className="content">
-                              <h5>Ronald Richards</h5>
-                              <p>Co, Founder</p>
+                              <h5>Mohammad Khalid</h5>
+                              <p>Managing Director & Headteacher</p>
                             </div>
                           </div>
                           <div className="icon">
@@ -120,8 +136,8 @@ const TestimonialOne = () => {
                           <div className="client-info">
                             <img src={four} alt="img" />
                             <div className="content">
-                              <h5>Ronald Richards</h5>
-                              <p>Co, Founder</p>
+                              <h5>Mohammad Khalid</h5>
+                              <p>Managing Director & Headteacher</p>
                             </div>
                           </div>
                           <div className="icon">
@@ -149,8 +165,8 @@ const TestimonialOne = () => {
                           <div className="client-info">
                             <img src={four} alt="img" />
                             <div className="content">
-                              <h5>Ronald Richards</h5>
-                              <p>Co, Founder</p>
+                              <h5>Mohammad Khalid</h5>
+                              <p>Managing Director & Headteacher</p>
                             </div>
                           </div>
                           <div className="icon">

@@ -3,8 +3,8 @@
 @import "swiper/css/pagination";
 @import "bootstrap/dist/css/bootstrap.min.css";
 @import "./site/styles/scss/main.scss";
-.shape-image {
+/* .shape-image {
   width: 100%;
   height: 100%;
   object-fit: contain;
-}
+} */

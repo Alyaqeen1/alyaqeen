@@ -29,7 +29,7 @@ const TopHeader = () => {
             <Link to="https://www.twitter.com">
               <i className="fab fa-twitter"></i>
             </Link>
-            <Link to="/">
+            <Link to="https://www.linkedin.com/">
               <i className="fa-brands fa-linkedin-in"></i>
             </Link>
             <Link to="https://www.youtube.com/@alyaqeenacademy5282">
