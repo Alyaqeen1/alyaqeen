@@ -24,6 +24,7 @@ import AcademyVisit from "./pages/Contact/AcademyVisit";
 import Volunteering from "./pages/Contact/Volunteering";
 import Feedback from "./pages/Contact/Feedback";
 import Login from "./pages/Authentication/Login";
+import OurSyllabus from "./pages/AdditionalPages/OurSyllabus";
 
 const siteRoutes = [
   {
@@ -73,6 +74,10 @@ const siteRoutes = [
       {
         path: "/news",
         element: <NewsUpdates></NewsUpdates>,
+      },
+      {
+        path: "/our-syllabus",
+        element: <OurSyllabus></OurSyllabus>,
       },
       {
         path: "/weekdays",

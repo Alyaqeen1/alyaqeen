@@ -156,8 +156,11 @@ const Header = () => {
                             <i className="fas fa-angle-down"></i>
                           </Link>
                           <ul className="submenu">
-                            <li className="has-dropdown">
+                            <li>
                               <Link to="/news">News & Updates</Link>
+                            </li>
+                            <li>
+                              <Link to="/our-syllabus">Our Syllabus</Link>
                             </li>
                             <li className="has-dropdown">
                               <Link>
