@@ -2,7 +2,7 @@ import one from "../../assets/img/value/shape-1.png";
 import two from "../../assets/img/value/shape-2.png";
 import three from "../../assets/img/value/icon-1.svg";
 import four from "../../assets/img/value/icon-2.svg";
-import five from "../../assets/img/cta/cta-2.png";
+import five from "../../assets/img/about/about-girl.png";
 import six from "../../assets/img/cta/cta-shape-2.png";
 import seven from "../../assets/img/value/icon-3.svg";
 import eight from "../../assets/img/value/icon-4.svg";
@@ -11,10 +11,10 @@ const OurValues = () => {
   return (
     <section className="feature-value-section fix section-padding section-bg-2">
       <div className="shape-1">
-        <img src={one} alt="shape-img" />
+        <img src={one} className="w-50" alt="shape-img" />
       </div>
       <div className="shape-2 float-bob-x">
-        <img src={two} alt="shape-img" />
+        <img src={two} className="w-50" alt="shape-img" />
       </div>
       <div className="container">
         <div className="section-title text-center">
@@ -74,7 +74,12 @@ const OurValues = () => {
               <div className="feature-value-image">
                 <img src={five} alt="img" />
                 <div className="value-shape">
-                  <img src={six} alt="shape-img" />
+                  <img
+                    src={six}
+                    className=""
+                    style={{ width: "85%" }}
+                    alt="shape-img"
+                  />
                 </div>
               </div>
             </div>

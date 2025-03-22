@@ -10,10 +10,10 @@ const CounterMain = () => {
   return (
     <section className="counter-section fix">
       <div className="line-shape">
-        <img src={one} alt="shape-img" />
+        <img src={one} className="w-50" alt="shape-img" />
       </div>
-      <div className="box-shape float-bob-x">
-        <img src={two} alt="shape-img" />
+      <div className="box-shape float-bob-x text-end">
+        <img src={two} className="w-50" alt="shape-img" />
       </div>
       <div className="counter-bg"></div>
       <div className="container">
