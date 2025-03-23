@@ -1,0 +1,17 @@
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - nvm use 20 # Use Node.js version 20.x
+        - npm ci # Clean install dependencies
+    build:
+      commands:
+        - npm run build # Run the build command
+  artifacts:
+    baseDirectory: dist # Adjust if your build folder is different
+    files:
+      - "**/*"
+  cache:
+    paths:
+      - node_modules/**/*

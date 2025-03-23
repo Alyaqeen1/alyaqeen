@@ -11,7 +11,7 @@ import Team from "../../components/Home/Team";
 import TestimonialOne from "../../components/Home/TestimonialOne";
 import TestimonialTwo from "../../components/Home/TestimonialTwo";
 import CTA from "../../components/Home/CTA";
-import MainCta from "../../components/Home/MainCTA";
+import MainCta from "../../components/Home/MainCta";
 import Instagram from "../../components/Home/Instagram";
 import Blogs from "../../components/Home/Blogs";
 import FeeStructure from "../../components/Home/FeeStructure";
