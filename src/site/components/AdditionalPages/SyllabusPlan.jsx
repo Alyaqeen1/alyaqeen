@@ -1,25 +1,119 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import four from "../../assets/img/pricing/icon.svg";
 import five from "../../assets/img/pricing/element.png";
 import six from "../../assets/img/pricing/element-2.png";
 import { Link } from "react-router";
+import Login from "../../pages/Authentication/Login";
+import SyllabusModal from "./SyllabusModal";
+import axios from "axios";
+import LoadingSpinner from "../LoadingSpinner";
+import SubjectPlan from "./SubjectPlan";
+import TextbookPlan from "./TextbookPlan";
 
 const SyllabusPlan = () => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
+  const [showModal, setShowModal] = useState(false);
+  const [aqidahData, setAqidahData] = useState([]);
+  const [fiqhData, setFiqhData] = useState([]);
+  const [historyData, setHistoryData] = useState([]);
+  const [personalDevData, setPersonalDevData] = useState([]);
+  const [sirahData, setSirahData] = useState([]);
+  const [textbook1Data, setTextbook1Data] = useState([]);
+  const [textbook2Data, setTextbook2Data] = useState([]);
+  const [textbook3Data, setTextbook3Data] = useState([]);
+  const [textbook4Data, setTextbook4Data] = useState([]);
+  const [textbook5Data, setTextbook5Data] = useState([]);
+  const [textbook6Data, setTextbook6Data] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [localLoading, setLocalLoading] = useState(true);
+
+  useEffect(() => {
+    const handleSyllabusData = async () => {
+      const { data } = await axios.get("/syllabus.json");
+      if (data) {
+        setLocalLoading(false);
+      }
+      const aqidahData = data.filter(
+        (single) => single.title === "aqidah" && single.category === "subject"
+      );
+      const fiqhData = data.filter(
+        (single) => single.title === "fiqh" && single.category === "subject"
+      );
+      const historyData = data.filter(
+        (single) => single.title === "history" && single.category === "subject"
+      );
+      const personalDevData = data.filter(
+        (single) =>
+          single.title === "personal development" &&
+          single.category === "subject"
+      );
+      const sirahData = data.filter(
+        (single) => single.title === "sirah" && single.category === "subject"
+      );
+      const textbook1Data = data.filter(
+        (single) =>
+          single.title === "textbook 1" && single.category === "textbook"
+      );
+      const textbook2Data = data.filter(
+        (single) =>
+          single.title === "textbook 2" && single.category === "textbook"
+      );
+      const textbook3Data = data.filter(
+        (single) =>
+          single.title === "textbook 3" && single.category === "textbook"
+      );
+      const textbook4Data = data.filter(
+        (single) =>
+          single.title === "textbook 4" && single.category === "textbook"
+      );
+      const textbook5Data = data.filter(
+        (single) =>
+          single.title === "textbook 5" && single.category === "textbook"
+      );
+      const textbook6Data = data.filter(
+        (single) =>
+          single.title === "textbook 6" && single.category === "textbook"
+      );
+
+      setAqidahData(aqidahData);
+      setFiqhData(fiqhData);
+      setHistoryData(historyData);
+      setPersonalDevData(personalDevData);
+      setSirahData(sirahData);
+      setTextbook1Data(textbook1Data);
+      setTextbook2Data(textbook2Data);
+      setTextbook3Data(textbook3Data);
+      setTextbook4Data(textbook4Data);
+      setTextbook5Data(textbook5Data);
+      setTextbook6Data(textbook6Data);
+    };
+    handleSyllabusData();
+  }, []);
+
+  // Toggle modal visibility
+  const handleShow = (selectedCategory) => {
+    setShowModal(true);
+    setSelectedCategory(selectedCategory);
+  };
+  const handleClose = () => setShowModal(false);
 
   const handleTabClick = (index) => {
     setActiveTabIndex(index);
   };
+  if (localLoading) {
+    return <LoadingSpinner></LoadingSpinner>;
+  }
+
   return (
     <section className="pricing-section section-padding mt-0">
       <div className="container">
         <div className="pricing-wrapper">
           <div className="section-title text-center mb-0">
             <span data-aos-duration="800" data-aos="fade-up">
-              Our pricing
+              Our Syllabus
             </span>
             <h2 data-aos-duration="800" data-aos="fade-up" data-aos-delay="300">
-              Select a plan according to <br /> your requirements
+              Explore the syllabus <br /> and achieve learning goals
             </h2>
           </div>
           <ul className="nav" role="tablist">
@@ -31,12 +125,12 @@ const SyllabusPlan = () => {
               role="presentation"
             >
               <a
-                className={`nav-link box-shadow ${
+                className={`nav-link text-uppercase box-shadow ${
                   activeTabIndex === 0 ? " active" : ""
                 }`}
                 onClick={() => handleTabClick(0)}
               >
-                Monthly
+                By Subject
               </a>
             </li>
             <li
@@ -47,298 +141,80 @@ const SyllabusPlan = () => {
               role="presentation"
             >
               <a
-                className={`nav-link box-shadow ${
+                className={`nav-link text-uppercase box-shadow ${
                   activeTabIndex === 1 ? " active" : ""
                 }`}
                 onClick={() => handleTabClick(1)}
               >
-                Yearly
+                By Textbook
               </a>
             </li>
           </ul>
         </div>
         <div className="tab-content">
           <div
-            id="monthly"
+            id="subject"
             className={`c-tab-single ${
               activeTabIndex === 0 ? "active-tab" : ""
             }`}
           >
-            <div className="row">
-              <div
-                className="col-xl-4 col-lg-6 col-md-6 "
-                data-aos-duration="800"
-                data-aos="fade-up"
-                data-aos-delay="300"
-              >
-                <div className="pricing-items box-shadow">
-                  <div className="icon">
-                    <img src={four} alt="icon-img" />
-                  </div>
-                  <div className="element-shape">
-                    <img src={five} alt="shape-img" />
-                  </div>
-                  <div className="pricing-header">
-                    <h4>Basic Plan</h4>
-                    <h2>
-                      $39 <span>/monthly</span>
-                    </h2>
-                  </div>
-                  <ul className="pricing-list">
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Condimentum porttitor sem
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Condimentum lacinia quisque
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Fusce sagittis est fringilla auctor
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Ligula enim varius lacus et luctus
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Pellentesque non massa sed elit
-                    </li>
-                  </ul>
-                  <Link to="contact" className="theme-btn">
-                    Choose Plan <i className="fa-solid fa-arrow-right-long"></i>
-                  </Link>
-                </div>
-              </div>
-              <div
-                className="col-xl-4 col-lg-6 col-md-6 "
-                data-aos-duration="800"
-                data-aos="fade-up"
-                data-aos-delay="500"
-              >
-                <div className="pricing-items active">
-                  <div className="icon">
-                    <img src={four} alt="icon-img" />
-                  </div>
-                  <div className="element-shape">
-                    <img src={six} alt="shape-img" />
-                  </div>
-                  <div className="pricing-header">
-                    <h4>Premium Plan</h4>
-                    <h2>
-                      $49 <span>/monthly</span>
-                    </h2>
-                  </div>
-                  <ul className="pricing-list">
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Condimentum porttitor sem
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Condimentum lacinia quisque
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Fusce sagittis est fringilla auctor
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Ligula enim varius lacus et luctus
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Pellentesque non massa sed elit
-                    </li>
-                  </ul>
-                  <Link to="contact" className="theme-btn">
-                    Choose Plan <i className="fa-solid fa-arrow-right-long"></i>
-                  </Link>
-                </div>
-              </div>
-              <div
-                className="col-xl-4 col-lg-6 col-md-6 "
-                data-aos-duration="800"
-                data-aos="fade-up"
-                data-aos-delay="700"
-              >
-                <div className="pricing-items box-shadow">
-                  <div className="icon">
-                    <img src={four} alt="icon-img" />
-                  </div>
-                  <div className="element-shape">
-                    <img src={five} alt="shape-img" />
-                  </div>
-                  <div className="pricing-header">
-                    <h4>Advanced</h4>
-                    <h2>
-                      $99 <span>/monthly</span>
-                    </h2>
-                  </div>
-                  <ul className="pricing-list">
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Condimentum porttitor sem
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Condimentum lacinia quisque
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Fusce sagittis est fringilla auctor
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Ligula enim varius lacus et luctus
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Pellentesque non massa sed elit
-                    </li>
-                  </ul>
-                  <Link to="contact" className="theme-btn">
-                    Choose Plan <i className="fa-solid fa-arrow-right-long"></i>
-                  </Link>
-                </div>
-              </div>
-            </div>
+            <SubjectPlan
+              aqidahData={aqidahData}
+              fiqhData={fiqhData}
+              historyData={historyData}
+              personalDevData={personalDevData}
+              sirahData={sirahData}
+              handleShow={handleShow}
+            ></SubjectPlan>
           </div>
           <div
-            id="yearly"
+            id="textbook"
             className={`c-tab-single ${
               activeTabIndex === 1 ? "active-tab" : ""
             }`}
           >
-            <div className="row">
-              <div className="col-xl-4 col-lg-6 col-md-6">
-                <div className="pricing-items box-shadow">
-                  <div className="icon">
-                    <img src={four} alt="icon-img" />
-                  </div>
-                  <div className="element-shape">
-                    <img src={five} alt="shape-img" />
-                  </div>
-                  <div className="pricing-header">
-                    <h4>Basic Plan</h4>
-                    <h2>
-                      $39 <span>/monthly</span>
-                    </h2>
-                  </div>
-                  <ul className="pricing-list">
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Condimentum porttitor sem
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Condimentum lacinia quisque
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Fusce sagittis est fringilla auctor
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Ligula enim varius lacus et luctus
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Pellentesque non massa sed elit
-                    </li>
-                  </ul>
-                  <Link to="contact" className="theme-btn">
-                    Choose Plan <i className="fa-solid fa-arrow-right-long"></i>
-                  </Link>
-                </div>
-              </div>
-              <div className="col-xl-4 col-lg-6 col-md-6">
-                <div className="pricing-items active">
-                  <div className="icon">
-                    <img src={four} alt="icon-img" />
-                  </div>
-                  <div className="element-shape">
-                    <img src={six} alt="shape-img" />
-                  </div>
-                  <div className="pricing-header">
-                    <h4>Premium Plan</h4>
-                    <h2>
-                      $49 <span>/monthly</span>
-                    </h2>
-                  </div>
-                  <ul className="pricing-list">
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Condimentum porttitor sem
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Condimentum lacinia quisque
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Fusce sagittis est fringilla auctor
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Ligula enim varius lacus et luctus
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Pellentesque non massa sed elit
-                    </li>
-                  </ul>
-                  <Link to="contact" className="theme-btn">
-                    Choose Plan <i className="fa-solid fa-arrow-right-long"></i>
-                  </Link>
-                </div>
-              </div>
-              <div className="col-xl-4 col-lg-6 col-md-6">
-                <div className="pricing-items box-shadow">
-                  <div className="icon">
-                    <img src={four} alt="icon-img" />
-                  </div>
-                  <div className="element-shape">
-                    <img src={five} alt="shape-img" />
-                  </div>
-                  <div className="pricing-header">
-                    <h4>Advanced</h4>
-                    <h2>
-                      $99 <span>/monthly</span>
-                    </h2>
-                  </div>
-                  <ul className="pricing-list">
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Condimentum porttitor sem
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Condimentum lacinia quisque
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Fusce sagittis est fringilla auctor
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Ligula enim varius lacus et luctus
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Pellentesque non massa sed elit
-                    </li>
-                  </ul>
-                  <Link to="contact" className="theme-btn">
-                    Choose Plan <i className="fa-solid fa-arrow-right-long"></i>
-                  </Link>
-                </div>
-              </div>
-            </div>
+            <TextbookPlan
+              textbook1Data={textbook1Data}
+              textbook2Data={textbook2Data}
+              textbook3Data={textbook3Data}
+              textbook4Data={textbook4Data}
+              textbook5Data={textbook5Data}
+              textbook6Data={textbook6Data}
+              handleShow={handleShow}
+            ></TextbookPlan>
           </div>
         </div>
       </div>
+      <SyllabusModal
+        selectedCategory={selectedCategory}
+        selectedData={
+          selectedCategory === "aqidah"
+            ? aqidahData
+            : selectedCategory === "fiqh"
+            ? fiqhData
+            : selectedCategory === "history"
+            ? historyData
+            : selectedCategory === "personal development"
+            ? personalDevData
+            : selectedCategory === "sirah"
+            ? sirahData
+            : selectedCategory === "textbook 1"
+            ? textbook1Data
+            : selectedCategory === "textbook 2"
+            ? textbook2Data
+            : selectedCategory === "textbook 3"
+            ? textbook3Data
+            : selectedCategory === "textbook 4"
+            ? textbook4Data
+            : selectedCategory === "textbook 5"
+            ? textbook5Data
+            : selectedCategory === "textbook 6"
+            ? textbook6Data
+            : []
+        }
+        handleClose={handleClose}
+        showModal={showModal}
+      ></SyllabusModal>
     </section>
   );
 };

@@ -16,10 +16,10 @@ const PricingPlan = () => {
         <div className="pricing-wrapper">
           <div className="section-title text-center mb-0">
             <span data-aos-duration="800" data-aos="fade-up">
-              Our pricing
+              Our Shop
             </span>
             <h2 data-aos-duration="800" data-aos="fade-up" data-aos-delay="300">
-              Select a plan according to <br /> your requirements
+              Select a product according to <br /> your requirements
             </h2>
           </div>
           <ul className="nav" role="tablist">
@@ -36,7 +36,7 @@ const PricingPlan = () => {
                 }`}
                 onClick={() => handleTabClick(0)}
               >
-                Monthly
+                Books
               </a>
             </li>
             <li
@@ -52,7 +52,23 @@ const PricingPlan = () => {
                 }`}
                 onClick={() => handleTabClick(1)}
               >
-                Yearly
+                Academy Bags and Stationary
+              </a>
+            </li>
+            <li
+              className="nav-item "
+              data-aos-duration="800"
+              data-aos="fade-up"
+              data-aos-delay="500"
+              role="presentation"
+            >
+              <a
+                className={`nav-link box-shadow ${
+                  activeTabIndex === 2 ? " active" : ""
+                }`}
+                onClick={() => handleTabClick(2)}
+              >
+                Academy Football Shirt
               </a>
             </li>
           </ul>

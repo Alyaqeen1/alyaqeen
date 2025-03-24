@@ -5,7 +5,7 @@ import PricingPlan from "../../components/AdditionalPages/PricingPlan";
 export default function Shop() {
   return (
     <div>
-      <CmnBanner title="AlYaqeen Shop"></CmnBanner>
+      <CmnBanner title="Alyaqeen Shop"></CmnBanner>
       <PricingPlan></PricingPlan>
     </div>
   );
