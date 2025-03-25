@@ -1,5 +1,5 @@
 import { useState } from "react";
-import logo from "../../assets/img/logo/logo.svg";
+import logo from "../../assets/img/logo/logo.png";
 import one from "../../assets/img/header/home-1.jpg";
 import two from "../../assets/img/header/home-2.jpg";
 import three from "../../assets/img/header/home-3.jpg";
@@ -69,119 +69,96 @@ const OffCanvasMenu = ({ toggleMenu, handleToggleMenu }) => {
                 <div className="mean-bar">
                   <nav className="mean-nav mobile-menu">
                     <ul>
-                      <li className="has-dropdown active menu-thumb">
-                        <a
-                          className={`drop ${isSubMenuButton("home")}`}
-                          onClick={() => handleSubmenu("home")}
+                      <li className="active menu-thumb">
+                        <Link
+                          to="/"
+                          // className={`drop ${isSubMenuButton("home")}`}
+                          onClick={() => handleToggleMenu(false)}
                         >
                           Home
-                        </a>
-                        <ul
-                          className={`submenu has-homemenu ${isSubMenuOpen(
-                            "home"
-                          )}`}
-                        >
-                          <li>
-                            <div className="homemenu-items">
-                              <div className="homemenu">
-                                <div className="homemenu-thumb">
-                                  <img src={one} alt="img" />
-                                  <div className="demo-button">
-                                    <Link to="/" className="theme-btn">
-                                      <span>Multi Page</span>
-                                    </Link>
-                                    <Link
-                                      to="index-one-page"
-                                      className="theme-btn"
-                                    >
-                                      <span>One Page</span>
-                                    </Link>
-                                  </div>
-                                </div>
-                                <div className="homemenu-content text-center">
-                                  <h4 className="homemenu-title">Home 01</h4>
-                                </div>
-                              </div>
-                              <div className="homemenu">
-                                <div className="homemenu-thumb mb-15">
-                                  <img src={two} alt="img" />
-                                  <div className="demo-button">
-                                    <Link to="index-2" className="theme-btn">
-                                      <span>Multi Page</span>
-                                    </Link>
-                                    <Link
-                                      to="index-two-page"
-                                      className="theme-btn"
-                                    >
-                                      <span>One Page</span>
-                                    </Link>
-                                  </div>
-                                </div>
-                                <div className="homemenu-content text-center">
-                                  <h4 className="homemenu-title">Home 02</h4>
-                                </div>
-                              </div>
-                              <div className="homemenu">
-                                <div className="homemenu-thumb mb-15">
-                                  <img src={three} alt="img" />
-                                  <div className="demo-button">
-                                    <Link to="index-3" className="theme-btn">
-                                      <span>Multi Page</span>
-                                    </Link>
-                                    <Link
-                                      to="index-three-page"
-                                      className="theme-btn"
-                                    >
-                                      <span>One Page</span>
-                                    </Link>
-                                  </div>
-                                </div>
-                                <div className="homemenu-content text-center">
-                                  <h4 className="homemenu-title">Home 03</h4>
-                                </div>
-                              </div>
-                              <div className="homemenu">
-                                <div className="homemenu-thumb mb-15">
-                                  <img src={four} alt="img" />
-                                  <div className="demo-button">
-                                    <Link to="index-4" className="theme-btn">
-                                      <span>Multi Page</span>
-                                    </Link>
-                                    <Link
-                                      to="index-four-page"
-                                      className="theme-btn"
-                                    >
-                                      <span>One Page</span>
-                                    </Link>
-                                  </div>
-                                </div>
-                                <div className="homemenu-content text-center">
-                                  <h4 className="homemenu-title">Home 04</h4>
-                                </div>
-                              </div>
-                            </div>
-                          </li>
-                        </ul>
+                        </Link>
                       </li>
                       <li>
-                        <Link to="about">About Us</Link>
+                        <a
+                          className={`drop ${isSubMenuButton("about")}`}
+                          onClick={() => handleSubmenu("about")}
+                        >
+                          About Us
+                        </a>
+                        <ul className={`submenu ${isSubMenuOpen("about")}`}>
+                          <li>
+                            <Link
+                              onClick={() => handleToggleMenu(false)}
+                              to="/about-founder"
+                            >
+                              About The Founder
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              onClick={() => handleToggleMenu(false)}
+                              to="/about"
+                            >
+                              Who We Are
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              onClick={() => handleToggleMenu(false)}
+                              to="/our-team"
+                            >
+                              Meet The Team
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              onClick={() => handleToggleMenu(false)}
+                              to="/our-vision"
+                            >
+                              Mission, Vision & Values
+                            </Link>
+                          </li>
+                        </ul>
                       </li>
                       <li>
                         <a
                           className={`drop ${isSubMenuButton("programs")}`}
                           onClick={() => handleSubmenu("programs")}
                         >
-                          Programs
+                          Courses
                         </a>
                         <ul className={`submenu ${isSubMenuOpen("programs")}`}>
                           <li>
-                            <Link to="program">Programs Grid</Link>
+                            <Link
+                              onClick={() => handleToggleMenu(false)}
+                              to="/arabic-qaidah-quran-hifdh"
+                            >
+                              Qaidah, Quran & Hifdh
+                            </Link>
                           </li>
                           <li>
-                            <Link to="program-carousel">Programs Carousel</Link>
+                            <Link
+                              onClick={() => handleToggleMenu(false)}
+                              to="/maths-english-science"
+                            >
+                              Maths, English & Science
+                            </Link>
                           </li>
                           <li>
-                            <Link to="program-details">Programs Details</Link>
+                            <Link
+                              onClick={() => handleToggleMenu(false)}
+                              to="/arabic-language"
+                            >
+                              Arabic Language
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              onClick={() => handleToggleMenu(false)}
+                              to="/modern-foreign-languages"
+                            >
+                              Modern Foreign Languages
+                            </Link>
                           </li>
                         </ul>
                       </li>
@@ -193,60 +170,91 @@ const OffCanvasMenu = ({ toggleMenu, handleToggleMenu }) => {
                           Pages
                         </a>
                         <ul className={`submenu ${isSubMenuOpen("pages")}`}>
+                          <li>
+                            <Link
+                              onClick={() => handleToggleMenu(false)}
+                              to="/news"
+                            >
+                              News & Updates
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              onClick={() => handleToggleMenu(false)}
+                              to="/our-syllabus"
+                            >
+                              Our Syllabus
+                            </Link>
+                          </li>
+
                           <li className="has-dropdown">
                             <a
                               className={`drop ${isNestedMenuButton("event")}`}
                               onClick={() => handleNestedmenu("event")}
                             >
-                              Event
+                              Academic Calendar
                             </a>
                             <ul
                               className={`submenu ${isNestedMenuOpen("event")}`}
                             >
                               <li>
-                                <Link to="event">Event Grid</Link>
+                                <Link
+                                  onClick={() => handleToggleMenu(false)}
+                                  to="/weekdays"
+                                >
+                                  Weekdays
+                                </Link>
                               </li>
                               <li>
-                                <Link to="event-carousel">Event Carousel</Link>
-                              </li>
-                              <li>
-                                <Link to="event-details">Event Details</Link>
+                                <Link
+                                  onClick={() => handleToggleMenu(false)}
+                                  to="/weekends"
+                                >
+                                  Weekends
+                                </Link>
                               </li>
                             </ul>
                           </li>
-                          <li className="has-dropdown">
-                            <a
-                              className={`drop ${isNestedMenuButton(
-                                "teacher"
-                              )}`}
-                              onClick={() => handleNestedmenu("teacher")}
+
+                          <li>
+                            <Link
+                              onClick={() => handleToggleMenu(false)}
+                              to="/prayer-timetable"
                             >
-                              Teacher
-                            </a>
-                            <ul
-                              className={`submenu ${isNestedMenuOpen(
-                                "teacher"
-                              )}`}
+                              Prayer Timetable
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              onClick={() => handleToggleMenu(false)}
+                              to="/vacancies"
                             >
-                              <li>
-                                <Link to="team">Our Teacher</Link>
-                              </li>
-                              <li>
-                                <Link to="team-carousel">Teacher Carousel</Link>
-                              </li>
-                              <li>
-                                <Link to="team-details">Teacher Details</Link>
-                              </li>
-                            </ul>
+                              Vacancies
+                            </Link>
                           </li>
                           <li>
-                            <Link to="pricing">Pricing</Link>
+                            <Link
+                              onClick={() => handleToggleMenu(false)}
+                              to="/faq"
+                            >
+                              FAQ&apos;S
+                            </Link>
                           </li>
                           <li>
-                            <Link to="faq">FAQ&apos;S</Link>
+                            <Link
+                              onClick={() => handleToggleMenu(false)}
+                              to="/shop"
+                            >
+                              Shop
+                            </Link>
                           </li>
                           <li>
-                            <Link to="404">404 Page</Link>
+                            <Link
+                              onClick={() => handleToggleMenu(false)}
+                              to="/photos-videos"
+                            >
+                              Photos & Videos
+                            </Link>
                           </li>
                         </ul>
                       </li>
@@ -255,25 +263,58 @@ const OffCanvasMenu = ({ toggleMenu, handleToggleMenu }) => {
                           className={`drop ${isSubMenuButton("blog")}`}
                           onClick={() => handleSubmenu("blog")}
                         >
-                          Blog
+                          Contact
                         </a>
                         <ul className={`submenu ${isSubMenuOpen("blog")}`}>
                           <li>
-                            <Link to="news-grid">Blog Grid</Link>
+                            <Link
+                              onClick={() => handleToggleMenu(false)}
+                              to="/contact"
+                            >
+                              Contact Us
+                            </Link>
                           </li>
                           <li>
-                            <Link to="news">Blog List</Link>
+                            <Link
+                              target="_blank"
+                              to="https://wa.me/447869636849"
+                            >
+                              Chat
+                            </Link>
                           </li>
                           <li>
-                            <Link to="news-carousel">Blog Carousel</Link>
+                            <Link
+                              onClick={() => handleToggleMenu(false)}
+                              to="/academy-visit"
+                            >
+                              Academy Visit
+                            </Link>
                           </li>
                           <li>
-                            <Link to="news-details">Blog Details</Link>
+                            <Link
+                              onClick={() => handleToggleMenu(false)}
+                              to="/volunteering"
+                            >
+                              Volunteering
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              onClick={() => handleToggleMenu(false)}
+                              to="/feedback"
+                            >
+                              Feedback
+                            </Link>
                           </li>
                         </ul>
                       </li>
                       <li>
-                        <Link to="contact">Contact Us</Link>
+                        <Link
+                          onClick={() => handleToggleMenu(false)}
+                          to="/login"
+                        >
+                          Login
+                        </Link>
                       </li>
                     </ul>
                   </nav>
@@ -288,7 +329,7 @@ const OffCanvasMenu = ({ toggleMenu, handleToggleMenu }) => {
                     </div>
                     <div className="offcanvas__contact-text">
                       <Link target="_blank" to="/">
-                        Main Street, Melbourne, Australia
+                        116 Church Road, Yardley, Birmingham, B25 8UX
                       </Link>
                     </div>
                   </li>
@@ -298,8 +339,8 @@ const OffCanvasMenu = ({ toggleMenu, handleToggleMenu }) => {
                     </div>
                     <div className="offcanvas__contact-text">
                       <Link to="mailto:info@example.com">
-                        <span className="mailto:info@example.com">
-                          info@example.com
+                        <span className="mailto:contact@alyaqeen.co.uk">
+                          contact@alyaqeen.co.uk
                         </span>
                       </Link>
                     </div>
@@ -319,7 +360,7 @@ const OffCanvasMenu = ({ toggleMenu, handleToggleMenu }) => {
                       <i className="far fa-phone"></i>
                     </div>
                     <div className="offcanvas__contact-text">
-                      <Link to="tel:+11002345909">+11002345909</Link>
+                      <Link to="tel:+07869636849">+07869636849</Link>
                     </div>
                   </li>
                 </ul>
@@ -332,16 +373,16 @@ const OffCanvasMenu = ({ toggleMenu, handleToggleMenu }) => {
                   </Link>
                 </div>
                 <div className="social-icon d-flex align-items-center">
-                  <Link to="/">
+                  <Link to="https://www.facebook.com/AlyaqeenAcademy">
                     <i className="fab fa-facebook-f"></i>
                   </Link>
-                  <Link to="/">
+                  <Link to="https://x.com">
                     <i className="fab fa-twitter"></i>
                   </Link>
-                  <Link to="/">
+                  <Link to="https://www.youtube.com/@alyaqeenacademy5282">
                     <i className="fab fa-youtube"></i>
                   </Link>
-                  <Link to="/">
+                  <Link to="https://www.linkedin.com/">
                     <i className="fab fa-linkedin-in"></i>
                   </Link>
                 </div>
