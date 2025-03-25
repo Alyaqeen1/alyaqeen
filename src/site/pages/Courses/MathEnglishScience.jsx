@@ -10,7 +10,7 @@ export default function MathEnglishScience() {
       <CmnBanner title="Maths, English & Science"></CmnBanner>
       <CourseDetails
         image={seven}
-        title="Arabic Qaidah, Quran & Hifdh"
+        title="Maths, English & Science"
         subtitle1="Descriptions"
         descriptionPara1="At Alyaqeen Academy, we have a team of dedicated tutors who are committed to providing quality education. Our tutors ensure that students are taught according to the national curriculum syllabus while also catering to their individual learning needs."
         descriptionPara2="Many students who receive tuition at Alyaqeen Academy have shown significant progress in their school learning, with some even moving up grades. Our personalized approach helps students build confidence and achieve better academic results."
