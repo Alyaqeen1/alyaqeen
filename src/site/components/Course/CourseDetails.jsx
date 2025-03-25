@@ -115,11 +115,10 @@ const CourseDetails = ({
                   <div>
                     <h2>{subtitle2}</h2>
                     <p className="mt-3 mt-md-0 mb-3">{structurePara1}</p>
-                    <p className="mb-4">{structurePara2}</p>
+                    <p className="mb-3">{structurePara2}</p>
+                    <p className="mb-3 mt-3 mt-md-0">{structurePara3}</p>
                     {read_more_btn_structure ? (
                       <>
-                        <p className="mb-3 mt-3 mt-md-0">{structurePara3}</p>
-
                         {/*para 3 of about us page begins here*/}
                         <p className="mb-3 mt-3 mt-md-0">{structurePara4}</p>
                         {/*para 4 of about us page begins here*/}
@@ -130,8 +129,30 @@ const CourseDetails = ({
                     ) : (
                       <></>
                     )}
-
-                    <div
+                    {structurePara4 ? (
+                      <div
+                        className="mb-3"
+                        data-aos-duration="800"
+                        data-aos="fade-up"
+                        data-aos-delay="20"
+                      >
+                        <button
+                          // href="/about"
+                          onClick={() => {
+                            setRead_more_btn_structure(
+                              !read_more_btn_structure
+                            );
+                          }}
+                          className="read-more-btn-feb-4"
+                        >
+                          Read {read_more_btn_structure ? "Less" : "More"}{" "}
+                          <i className="fa-solid fa-arrow-right-long"></i>
+                        </button>
+                      </div>
+                    ) : (
+                      <></>
+                    )}
+                    {/* <div
                       className="mb-3"
                       data-aos-duration="800"
                       data-aos="fade-up"
@@ -147,7 +168,7 @@ const CourseDetails = ({
                         Read {read_more_btn_structure ? "Less" : "More"}{" "}
                         <i className="fa-solid fa-arrow-right-long"></i>
                       </button>
-                    </div>
+                    </div> */}
                   </div>
 
                   <h2>Requirements for The Classes</h2>
