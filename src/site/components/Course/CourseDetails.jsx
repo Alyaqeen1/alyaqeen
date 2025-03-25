@@ -7,9 +7,36 @@ import six from "../../assets/img/program/icon/11.svg";
 import seven from "../../assets/img/program/icon/14.svg";
 import eight from "../../assets/img/program/icon/13.svg";
 import nine from "../../assets/img/program/p-author.jpg";
+import img from "../../assets/img/home/photo-5.jpg";
 import { Link } from "react-router";
+import { useState } from "react";
 
-const CourseDetails = () => {
+const CourseDetails = ({
+  image,
+  title,
+  subtitle1,
+  descriptionPara1,
+  descriptionPara2,
+  descriptionPara3,
+  descriptionPara4,
+  descriptionPara5,
+  descriptionPara6,
+  subtitle2,
+  structurePara1,
+  structurePara2,
+  structurePara3,
+  structurePara4,
+  structurePara5,
+  structurePara6,
+  detailsObj,
+}) => {
+  const [read_more_btn_description, setRead_more_btn_description] =
+    useState(false);
+  const [read_more_btn_structure, setRead_more_btn_structure] = useState(false);
+  const [activeTabIndex, setActiveTabIndex] = useState(0);
+  const handleTabClick = (index) => {
+    setActiveTabIndex(index);
+  };
   return (
     <section className="program-details-section fix section-padding">
       <div className="container">
@@ -18,13 +45,18 @@ const CourseDetails = () => {
             <div className="col-lg-8">
               <div className="program-details-items">
                 <div className="details-image">
-                  <img src={one} alt="img" />
+                  <img
+                    src={image}
+                    className="rounded-4 object-fit-cover"
+                    style={{ height: 450 }}
+                    alt="img"
+                  />
                 </div>
                 <div className="details-content">
                   <div className="post">
                     <span>Kindergarten</span>
                   </div>
-                  <h2 className="mb-0">Drawing Classes</h2>
+                  <h2 className="mb-0">{title}</h2>
                   <div className="details-author-area">
                     <div className="author-items">
                       <img src={two} alt="img" />
@@ -41,21 +73,104 @@ const CourseDetails = () => {
                       </li>
                     </ul>
                   </div>
-                  <h2>Descriptions</h2>
-                  <p className="mb-3">
-                    Consectetur adipisicing elit, sed do eiusmod tempor is
-                    incididunt ut labore et dolore of magna aliqua. Ut enim ad
-                    minim veniam, made of owl the quis nostrud exercitation
-                    ullamco laboris nisi ut aliquip ex ea dolor commodo
-                    consequat. Duis aute irure and dolor in reprehenderit.
-                  </p>
-                  <p className="mb-4">
-                    The is ipsum dolor sit amet consectetur adipiscing elit.
-                    Fusce eleifend porta arcu In hac augu ehabitasse the is
-                    platea augue thelorem turpoi dictumst. In lacus libero
-                    faucibus at malesuada sagittis placerat eros sed istincidunt
-                    augue ac ante rutrum sed the is sodales augue consequat.
-                  </p>
+                  <div>
+                    <h2>{subtitle1}</h2>
+                    <p className="mt-3 mt-md-0 mb-3">{descriptionPara1}</p>
+                    <p className="mb-4">{descriptionPara2}</p>
+                    {read_more_btn_description ? (
+                      <>
+                        <p className="mb-3 mt-3 mt-md-0">{descriptionPara3}</p>
+
+                        {/*para 3 of about us page begins here*/}
+                        <p className="mb-3 mt-3 mt-md-0">{descriptionPara4}</p>
+                        {/*para 4 of about us page begins here*/}
+                        <p className="mb-3 mt-3 mt-md-0">{descriptionPara5}</p>
+
+                        <p className="mb-3 mt-3 mt-md-0">{descriptionPara6}</p>
+                      </>
+                    ) : (
+                      <></>
+                    )}
+
+                    <div
+                      className="mb-3"
+                      data-aos-duration="800"
+                      data-aos="fade-up"
+                      data-aos-delay="20"
+                    >
+                      <button
+                        // href="/about"
+                        onClick={() => {
+                          setRead_more_btn_description(
+                            !read_more_btn_description
+                          );
+                        }}
+                        className="read-more-btn-feb-4"
+                      >
+                        Read {read_more_btn_description ? "Less" : "More"}{" "}
+                        <i className="fa-solid fa-arrow-right-long"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div>
+                    <h2>{subtitle2}</h2>
+                    <p className="mt-3 mt-md-0 mb-3">{structurePara1}</p>
+                    <p className="mb-3">{structurePara2}</p>
+                    <p className="mb-3 mt-3 mt-md-0">{structurePara3}</p>
+                    {read_more_btn_structure ? (
+                      <>
+                        {/*para 3 of about us page begins here*/}
+                        <p className="mb-3 mt-3 mt-md-0">{structurePara4}</p>
+                        {/*para 4 of about us page begins here*/}
+                        <p className="mb-3 mt-3 mt-md-0">{structurePara5}</p>
+
+                        <p className="mb-3 mt-3 mt-md-0">{structurePara6}</p>
+                      </>
+                    ) : (
+                      <></>
+                    )}
+                    {structurePara4 ? (
+                      <div
+                        className="mb-3"
+                        data-aos-duration="800"
+                        data-aos="fade-up"
+                        data-aos-delay="20"
+                      >
+                        <button
+                          // href="/about"
+                          onClick={() => {
+                            setRead_more_btn_structure(
+                              !read_more_btn_structure
+                            );
+                          }}
+                          className="read-more-btn-feb-4"
+                        >
+                          Read {read_more_btn_structure ? "Less" : "More"}{" "}
+                          <i className="fa-solid fa-arrow-right-long"></i>
+                        </button>
+                      </div>
+                    ) : (
+                      <></>
+                    )}
+                    {/* <div
+                      className="mb-3"
+                      data-aos-duration="800"
+                      data-aos="fade-up"
+                      data-aos-delay="20"
+                    >
+                      <button
+                        // href="/about"
+                        onClick={() => {
+                          setRead_more_btn_structure(!read_more_btn_structure);
+                        }}
+                        className="read-more-btn-feb-4"
+                      >
+                        Read {read_more_btn_structure ? "Less" : "More"}{" "}
+                        <i className="fa-solid fa-arrow-right-long"></i>
+                      </button>
+                    </div> */}
+                  </div>
+
                   <h2>Requirements for The Classes</h2>
                   <p>
                     Nulla facilisi. Vestibulum tristique sem in eros eleifend
@@ -86,52 +201,118 @@ const CourseDetails = () => {
               </div>
             </div>
             <div className="col-lg-4">
-              <div className="details-list-area">
+              <div className="details-list-area pricing-wrapper">
                 <h3>Classes includes:</h3>
-                <ul className="details-list">
-                  <li>
-                    <span>
-                      <img src={three} alt="img" className="me-2 inline" />
-                      Age
-                    </span>
-                    3-5 year
+                <ul className="nav gap-2" role="tablist">
+                  <li
+                    className="nav-item "
+                    data-aos-duration="800"
+                    data-aos="fade-up"
+                    data-aos-delay="300"
+                    role="presentation"
+                  >
+                    <a
+                      className={`nav-link text-uppercase box-shadow px-3 ${
+                        activeTabIndex === 0 ? " active" : ""
+                      }`}
+                      onClick={() => handleTabClick(0)}
+                    >
+                      Weekdays
+                    </a>
                   </li>
-                  <li>
-                    <span>
-                      <img src={four} alt="img" className="me-2 inline" />
-                      Duration:
-                    </span>
-                    9:00-11:00
-                  </li>
-                  <li>
-                    <span>
-                      <img src={five} alt="img" className="me-2 inline" />
-                      Lessons:
-                    </span>
-                    15
-                  </li>
-                  <li>
-                    <span>
-                      <img src={six} alt="img" className="me-2 inline" />
-                      Students:
-                    </span>
-                    50
-                  </li>
-                  <li>
-                    <span>
-                      <img src={seven} alt="img" className="me-2 inline" />
-                      Certifications:
-                    </span>
-                    Yes
-                  </li>
-                  <li>
-                    <span>
-                      <img src={eight} alt="img" className="me-2 inline" />
-                      Language
-                    </span>
-                    English
+                  <li
+                    className="nav-item "
+                    data-aos-duration="800"
+                    data-aos="fade-up"
+                    data-aos-delay="500"
+                    role="presentation"
+                  >
+                    <a
+                      className={`nav-link text-uppercase box-shadow px-3 ${
+                        activeTabIndex === 1 ? " active" : ""
+                      }`}
+                      onClick={() => handleTabClick(1)}
+                    >
+                      Weekends
+                    </a>
                   </li>
                 </ul>
+                <div
+                  id="weekdays"
+                  className={`c-tab-single ${
+                    activeTabIndex === 0 ? "active-tab" : ""
+                  }`}
+                >
+                  <ul className="details-list">
+                    <li>
+                      <span>
+                        <img src={three} alt="img" className="me-2 inline" />
+                        Age:
+                      </span>
+                      {detailsObj?.age} year
+                    </li>
+                    <li>
+                      <span>
+                        <img src={four} alt="img" className="me-2 inline" />
+                        Duration:
+                      </span>
+                      {detailsObj?.weekdaysDuration}
+                    </li>
+                    <li>
+                      <span>
+                        <img src={five} alt="img" className="me-2 inline" />
+                        Days:
+                      </span>
+                      {detailsObj?.weeklyDays} days
+                    </li>
+                    <li>
+                      <span>
+                        <img src={six} alt="img" className="me-2 inline" />
+                        Hours:
+                      </span>
+                      {detailsObj?.weeklyHours} hours
+                    </li>
+                  </ul>
+                </div>
+
+                <div
+                  id="weekends"
+                  className={`c-tab-single ${
+                    activeTabIndex === 1 ? "active-tab" : ""
+                  }`}
+                >
+                  <ul className="details-list">
+                    <li>
+                      <span>
+                        <img src={three} alt="img" className="me-2 inline" />
+                        Age:
+                      </span>
+                      {detailsObj?.age} year
+                    </li>
+                    <li>
+                      <span>
+                        <img src={four} alt="img" className="me-2 inline" />
+                        Duration:
+                      </span>
+                      {detailsObj?.weekendsDuration}
+                    </li>
+                    <li>
+                      <span>
+                        <img src={five} alt="img" className="me-2 inline" />
+                        Days:
+                      </span>
+                      {detailsObj?.weekendDays} days
+                    </li>
+                    <li>
+                      <span>
+                        <img src={six} alt="img" className="me-2 inline" />
+                        Hours:
+                      </span>
+                      {detailsObj?.weekendHours} hours
+                    </li>
+                  </ul>
+                </div>
+
                 <Link
                   to="program-details"
                   className="theme-btn w-100 border-style mb-3"
