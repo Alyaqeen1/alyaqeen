@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import CmnBanner from "./CmnBanner";
 import TeacherDetailsBase from "../components/Home/TeacherDetailsBase";
+import Team from "../components/Home/Team";
+import AboutTeam from "../components/About/AboutTeam";
 
 export default function StaffDetails() {
   const [staffData, setStaffData] = useState({});
@@ -22,6 +24,7 @@ export default function StaffDetails() {
     <div>
       <CmnBanner title="Teacher Details"></CmnBanner>
       <TeacherDetailsBase staffData={staffData}></TeacherDetailsBase>
+      <AboutTeam title="Related Teacher" subtitle=""></AboutTeam>
     </div>
   );
 }

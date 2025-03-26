@@ -22,7 +22,10 @@ export default function WhoWeAre() {
       ></AboutMain>
       <OurValues></OurValues>
       <CounterMain></CounterMain>
-      <AboutTeam></AboutTeam>
+      <AboutTeam
+        title="Our Expert Instructors"
+        subtitle="Our Experts"
+      ></AboutTeam>
       <AboutTestimonial></AboutTestimonial>
       <Instagram></Instagram>
     </div>

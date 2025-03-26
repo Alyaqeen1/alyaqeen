@@ -139,7 +139,7 @@ export default function AdditionalServices() {
                         <span>(4-5 years)</span>
                         <p>{one_Service.description.substring(0, 65)}...</p>
                         <Link
-                          to={`/services/${one_Service.category}`}
+                          to={one_Service?.nav_link}
                           className={`arrow-icon ${
                             index === 0
                               ? ""

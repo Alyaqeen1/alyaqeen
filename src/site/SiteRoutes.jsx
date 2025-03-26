@@ -26,6 +26,7 @@ import Feedback from "./pages/Contact/Feedback";
 import Login from "./pages/Authentication/Login";
 import OurSyllabus from "./pages/AdditionalPages/OurSyllabus";
 import StaffDetails from "./sharedComponents/StaffDetails";
+import ServicesDetails from "./sharedComponents/ServicesDetails";
 
 const siteRoutes = [
   {
@@ -132,6 +133,10 @@ const siteRoutes = [
       {
         path: "/staff-details/:id",
         element: <StaffDetails></StaffDetails>,
+      },
+      {
+        path: "/service/:category",
+        element: <ServicesDetails></ServicesDetails>,
       },
     ],
   },
