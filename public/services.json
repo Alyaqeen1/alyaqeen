@@ -28,14 +28,14 @@
     "image_link": "../src/site/assets/img/home/shop.jpg"
   },
   {
-    "id": "4",
+    "id": "5",
     "name": "Online Learning",
     "description": "We all know the impact that Covid-19 has left upon a children's education.",
     "category": "online-learning",
     "image_link": "../src/site/assets/img/home/online-learing.png"
   },
   {
-    "id": "5",
+    "id": "6",
     "name": "Nikah",
     "description": "Shaykh Khalid has conducted many Nikkahs over the last 10 years and offers this service.",
     "category": "nikah-service",

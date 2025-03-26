@@ -25,6 +25,7 @@ import Volunteering from "./pages/Contact/Volunteering";
 import Feedback from "./pages/Contact/Feedback";
 import Login from "./pages/Authentication/Login";
 import OurSyllabus from "./pages/AdditionalPages/OurSyllabus";
+import StaffDetails from "./sharedComponents/StaffDetails";
 
 const siteRoutes = [
   {
@@ -127,6 +128,10 @@ const siteRoutes = [
       {
         path: "/login",
         element: <Login></Login>,
+      },
+      {
+        path: "/staff-details/:id",
+        element: <StaffDetails></StaffDetails>,
       },
     ],
   },
