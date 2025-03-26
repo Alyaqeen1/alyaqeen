@@ -25,12 +25,20 @@ import Volunteering from "./pages/Contact/Volunteering";
 import Feedback from "./pages/Contact/Feedback";
 import Login from "./pages/Authentication/Login";
 import OurSyllabus from "./pages/AdditionalPages/OurSyllabus";
+import StaffDetails from "./sharedComponents/StaffDetails";
+import ServicesDetails from "./sharedComponents/ServicesDetails";
+import Announcements from "./pages/AdditionalPages/Announcements";
+import ErrorPage from "./pages/ErrorPage";
+import Fees from "./pages/AdditionalPages/Fees";
+import Holidays from "./pages/AdditionalPages/Holidays";
+import Session from "./pages/AdditionalPages/Session";
+import ApplyNow from "./pages/AdditionalPages/ApplyNow";
 
 const siteRoutes = [
   {
     path: "/",
     element: <MainLayout></MainLayout>,
-    //   errorElement: <ErrorPage></ErrorPage>,
+    // errorElement: <ErrorPage></ErrorPage>,
     children: [
       {
         path: "/",
@@ -127,6 +135,38 @@ const siteRoutes = [
       {
         path: "/login",
         element: <Login></Login>,
+      },
+      {
+        path: "/staff-details/:id",
+        element: <StaffDetails></StaffDetails>,
+      },
+      {
+        path: "/service/:category",
+        element: <ServicesDetails></ServicesDetails>,
+      },
+      {
+        path: "/announcements",
+        element: <Announcements></Announcements>,
+      },
+      {
+        path: "/fees",
+        element: <Fees></Fees>,
+      },
+      {
+        path: "/holidays",
+        element: <Holidays></Holidays>,
+      },
+      {
+        path: "/session-timings",
+        element: <Session></Session>,
+      },
+      {
+        path: "/apply-now",
+        element: <ApplyNow></ApplyNow>,
+      },
+      {
+        path: "*",
+        element: <ErrorPage></ErrorPage>,
       },
     ],
   },

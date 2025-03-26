@@ -23,11 +23,14 @@ export default function BestStudent() {
           width: "100%",
         }}
       >
-        <Link to="/best-student">
-          <span className={"span_small_Blog_Header"}>
+        <p>
+          <span
+            style={{ cursor: "default" }}
+            className={"span_small_Blog_Header"}
+          >
             Best Student of the Month
           </span>
-        </Link>
+        </p>
         <div
           style={{
             // position: "absolute",
@@ -110,18 +113,16 @@ export default function BestStudent() {
               </ul>
             </div>
           </div>
-          <Link
+          {/* <Link
             to={"/best-student"}
             className=""
-
-            // href="/news-details"
-          >
-            <p className={"paragraph_span pt-3"}>
-              Brilliant child, no absence in the entire month. Always best in
-              the class, respect the teachers and staff, very supportive student
-              at Alyaqeen...
-            </p>
-          </Link>
+          > */}
+          <p className={"paragraph_span pt-3"} style={{ cursor: "default" }}>
+            Brilliant child, no absence in the entire month. Always best in the
+            class, respect the teachers and staff, very supportive student at
+            Alyaqeen.
+          </p>
+          {/* </Link> */}
         </div>
       </div>
     </div>

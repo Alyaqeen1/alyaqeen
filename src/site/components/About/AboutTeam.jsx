@@ -13,7 +13,7 @@ import { Link } from "react-router";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const AboutTeam = () => {
+const AboutTeam = ({ title, subtitle }) => {
   const [staffData, setStaffData] = useState([]);
   useEffect(() => {
     axios("/staff.json")
@@ -37,10 +37,10 @@ const AboutTeam = () => {
         <div className="section-title-area">
           <div className="section-title mt-60">
             <span data-aos-duration="800" data-aos="fade-up">
-              Our Experts
+              {subtitle}
             </span>
             <h2 data-aos-duration="800" data-aos="fade-up" data-aos-delay="300">
-              Our Expert Instructors
+              {title}
             </h2>
           </div>
           <div
@@ -131,9 +131,9 @@ const AboutTeam = () => {
                       </div>
                       <div className="team-content">
                         <h3>
-                          <Link to={`/staff-details/${state_member.id}`}>
+                          <a href={`/staff-details/${state_member?.id}`}>
                             {state_member.name}
-                          </Link>
+                          </a>
                         </h3>
 
                         <p>{state_member.post_of_staff}</p>

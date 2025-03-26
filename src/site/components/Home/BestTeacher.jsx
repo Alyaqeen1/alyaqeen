@@ -23,11 +23,14 @@ export default function BestTeacher() {
           width: "100%",
         }}
       >
-        <Link to="/best-teacher">
-          <span className={"span_small_Blog_Header"}>
+        <p>
+          <span
+            style={{ cursor: "default" }}
+            className={"span_small_Blog_Header"}
+          >
             Best Teacher of the Month
           </span>
-        </Link>
+        </p>
         <div
           style={{
             // position: "absolute",
@@ -110,19 +113,18 @@ export default function BestTeacher() {
               </ul>
             </div>
           </div>
-          <Link
+          {/* <Link
             to={"/best-teacher"}
             className=""
-
-            // href="/news-details"
-          >
-            <p className={"paragraph_span pt-3"}>
-              Maulana Junaid Usman is the best teacher of the month as he always
-              make sure to come before the starting time and set the class
-              organize everything before children arriving, he also helps after
-              the lessons and discuss the importance of the day ...
-            </p>
-          </Link>
+          > */}
+          <p className={"paragraph_span pt-3"} style={{ cursor: "default" }}>
+            Maulana Junaid Usman is the best teacher of the month as he always
+            make sure to come before the starting time and set the class
+            organise everything before children arriving, he also helps after
+            the lessons and discuss the importance of the day with the
+            headteacher. we appreciate his contribution and thoughts.
+          </p>
+          {/* </Link> */}
         </div>
       </div>
     </div>

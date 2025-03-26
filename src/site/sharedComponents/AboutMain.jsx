@@ -11,6 +11,7 @@ import { Link } from "react-router";
 import { useState } from "react";
 
 const AboutMain = ({
+  image,
   title,
   subtitle,
   mainPara,
@@ -41,7 +42,7 @@ const AboutMain = ({
               data-aos-delay="300"
             >
               <div className="activities-image-items">
-                <img src={four} alt="img" />
+                <img src={image || four} alt="img" />
                 <div className="radius-shape">
                   <img src={five} className="w-50" alt="shape-img" />
                 </div>
