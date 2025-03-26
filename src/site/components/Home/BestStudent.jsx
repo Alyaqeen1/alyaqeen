@@ -23,11 +23,14 @@ export default function BestStudent() {
           width: "100%",
         }}
       >
-        <Link to="/best-student">
-          <span className={"span_small_Blog_Header"}>
+        <p>
+          <span
+            style={{ cursor: "default" }}
+            className={"span_small_Blog_Header"}
+          >
             Best Student of the Month
           </span>
-        </Link>
+        </p>
         <div
           style={{
             // position: "absolute",

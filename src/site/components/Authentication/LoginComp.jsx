@@ -15,7 +15,7 @@ const LoginComp = () => {
         <img src={two} className="w-50" alt="shape-img" />
       </div>
       <div className="container">
-        <div className="contact-wrapper">
+        <div className="contact-wrapper py-5">
           <div className="row align-items-center">
             <div className="col-lg-6">
               <div className="contact-content">
@@ -63,7 +63,7 @@ const LoginComp = () => {
                       className="col-lg-12"
                       data-aos-duration="800"
                       data-aos="fade-up"
-                      data-aos-delay="500"
+                      data-aos-delay="300"
                     >
                       <div className="form-clt">
                         <span>Password*</span>
@@ -80,7 +80,7 @@ const LoginComp = () => {
                       className="col-lg-7 "
                       data-aos-duration="800"
                       data-aos="fade-up"
-                      data-aos-delay="900"
+                      data-aos-delay="100"
                     >
                       <button type="submit" className="theme-btn bg-white">
                         Login

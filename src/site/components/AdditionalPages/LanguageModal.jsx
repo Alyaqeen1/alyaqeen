@@ -44,7 +44,7 @@ export default function LanguageModal() {
           // style={{ backgroundColor: "#ffffe0" }}
         >
           <div
-            className="modal-content w-75 mx-auto"
+            className="modal-content w-75 mx-auto rounded-4"
             style={{ backgroundColor: "#ffffe0" }}
           >
             <div className="d-flex justify-content-center align-items-center py-3">
