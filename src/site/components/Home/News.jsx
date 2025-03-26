@@ -86,9 +86,9 @@ const News = () => {
                   data-aos="fade-up"
                   data-aos-delay="300"
                 >
-                  <a href="/news-details" className="theme-btn">
+                  <Link to="/announcements" className="theme-btn">
                     Read More <i className="fa-solid fa-arrow-right-long"></i>
-                  </a>
+                  </Link>
                 </div>
 
                 <p

@@ -29,6 +29,10 @@ import StaffDetails from "./sharedComponents/StaffDetails";
 import ServicesDetails from "./sharedComponents/ServicesDetails";
 import Announcements from "./pages/AdditionalPages/Announcements";
 import ErrorPage from "./pages/ErrorPage";
+import Fees from "./pages/AdditionalPages/Fees";
+import Holidays from "./pages/AdditionalPages/Holidays";
+import Session from "./pages/AdditionalPages/Session";
+import ApplyNow from "./pages/AdditionalPages/ApplyNow";
 
 const siteRoutes = [
   {
@@ -143,6 +147,22 @@ const siteRoutes = [
       {
         path: "/announcements",
         element: <Announcements></Announcements>,
+      },
+      {
+        path: "/fees",
+        element: <Fees></Fees>,
+      },
+      {
+        path: "/holidays",
+        element: <Holidays></Holidays>,
+      },
+      {
+        path: "/session-timings",
+        element: <Session></Session>,
+      },
+      {
+        path: "/apply-now",
+        element: <ApplyNow></ApplyNow>,
       },
       {
         path: "*",

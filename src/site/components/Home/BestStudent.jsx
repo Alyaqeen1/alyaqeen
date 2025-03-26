@@ -110,18 +110,16 @@ export default function BestStudent() {
               </ul>
             </div>
           </div>
-          <Link
+          {/* <Link
             to={"/best-student"}
             className=""
-
-            // href="/news-details"
-          >
-            <p className={"paragraph_span pt-3"}>
-              Brilliant child, no absence in the entire month. Always best in
-              the class, respect the teachers and staff, very supportive student
-              at Alyaqeen...
-            </p>
-          </Link>
+          > */}
+          <p className={"paragraph_span pt-3"} style={{ cursor: "default" }}>
+            Brilliant child, no absence in the entire month. Always best in the
+            class, respect the teachers and staff, very supportive student at
+            Alyaqeen.
+          </p>
+          {/* </Link> */}
         </div>
       </div>
     </div>
