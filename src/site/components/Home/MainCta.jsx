@@ -120,7 +120,7 @@ const MainCta = () => {
                     data-aos="fade-up"
                     data-aos-delay="500"
                   >
-                    {/* <Image src={eight} alt="author-img" priority/> */}
+                    {/* <Image src={eight} alt="author-img" /> */}
                     <div className="content">
                       <h6 className="text-white fw-bold">Mohammad Khalid</h6>
                       <p>Managing Director & Headteacher</p>

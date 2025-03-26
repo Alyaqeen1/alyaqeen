@@ -27,12 +27,14 @@ import Login from "./pages/Authentication/Login";
 import OurSyllabus from "./pages/AdditionalPages/OurSyllabus";
 import StaffDetails from "./sharedComponents/StaffDetails";
 import ServicesDetails from "./sharedComponents/ServicesDetails";
+import Announcements from "./pages/AdditionalPages/Announcements";
+import ErrorPage from "./pages/ErrorPage";
 
 const siteRoutes = [
   {
     path: "/",
     element: <MainLayout></MainLayout>,
-    //   errorElement: <ErrorPage></ErrorPage>,
+    // errorElement: <ErrorPage></ErrorPage>,
     children: [
       {
         path: "/",
@@ -137,6 +139,14 @@ const siteRoutes = [
       {
         path: "/service/:category",
         element: <ServicesDetails></ServicesDetails>,
+      },
+      {
+        path: "/announcements",
+        element: <Announcements></Announcements>,
+      },
+      {
+        path: "*",
+        element: <ErrorPage></ErrorPage>,
       },
     ],
   },
