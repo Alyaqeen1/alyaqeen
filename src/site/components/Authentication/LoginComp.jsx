@@ -4,8 +4,28 @@ import three from "../../assets/img/contact.png";
 import four from "../../assets/img/circle-2.png";
 import Lottie from "lottie-react";
 import loginAnimation from "../../assets/animation/login.json";
+import { useNavigate } from "react-router";
+import { useEffect } from "react";
 
 const LoginComp = () => {
+  const navigate = useNavigate();
+  const handleLogin = (e) => {
+    e.preventDefault();
+    // Store login status in localStorage
+    localStorage.setItem("isLoggedIn", "true");
+
+    // Redirect to dashboard
+    navigate("/dashboard");
+  };
+
+  useEffect(() => {
+    // Redirect if already logged in
+    if (JSON.parse(localStorage.getItem("isLoggedIn")) === true) {
+      navigate("/dashboard");
+    } else {
+      navigate("/login");
+    }
+  }, [navigate]);
   return (
     <section className="contact-section py-5">
       <div className="line-1">
@@ -82,7 +102,11 @@ const LoginComp = () => {
                       data-aos="fade-up"
                       data-aos-delay="100"
                     >
-                      <button type="submit" className="theme-btn bg-white">
+                      <button
+                        onClick={handleLogin}
+                        type="submit"
+                        className="theme-btn bg-white"
+                      >
                         Login
                         <i className="fa-solid fa-arrow-right-long"></i>
                       </button>
