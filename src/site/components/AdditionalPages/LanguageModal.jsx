@@ -22,8 +22,6 @@ export default function LanguageModal() {
 
   return (
     <div>
-      {/* Dark Background (Backdrop) */}
-      {/* <button onClick={handleShow}>hello</button> */}
       {showModal && <div className="modal-backdrop fade show"></div>}
 
       {/* Modal */}
@@ -44,7 +42,7 @@ export default function LanguageModal() {
           // style={{ backgroundColor: "#ffffe0" }}
         >
           <div
-            className="modal-content w-75 mx-auto rounded-4"
+            className="modal-content w-75 mx-auto rounded-5"
             style={{ backgroundColor: "#ffffe0" }}
           >
             <div className="d-flex justify-content-center align-items-center py-3">

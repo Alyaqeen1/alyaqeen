@@ -16,11 +16,14 @@ import Instagram from "../../components/Home/Instagram";
 import Blogs from "../../components/Home/Blogs";
 import FeeStructure from "../../components/Home/FeeStructure";
 import AdditionalServices from "../../components/Home/AdditionalServices";
+import LanguageModal from "../../components/AdditionalPages/LanguageModal";
 
 export default function Home() {
   return (
     <div>
       <Banner></Banner>
+      <LanguageModal></LanguageModal>
+
       <News></News>
       <AboutActivities></AboutActivities>
       <ProgramSection></ProgramSection>
