@@ -4,6 +4,7 @@ import "./index.css";
 import { RouterProvider } from "react-router";
 import router from "./routes/Routes.jsx";
 import InitAnimations from "./site/components/InitAnimations.jsx";
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
