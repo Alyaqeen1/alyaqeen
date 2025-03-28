@@ -3,6 +3,7 @@ import { Outlet } from "react-router";
 import Sidebar from "../components/Sidebar/Sidebar";
 import OffCanvasMenu from "../components/Sidebar/OffCanvasMenu";
 import Navbar from "../components/Navbar/Navbar";
+import Footer from "../components/Footer/Footer";
 
 export default function DashboardLayout() {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -32,9 +33,10 @@ export default function DashboardLayout() {
 
         {/* Content Area */}
         <Navbar></Navbar>
-        <div style={{ backgroundColor: "#F1F1F6" }}>
+        <div className="container-fluid" style={{ backgroundColor: "#F1F1F6" }}>
           <Outlet />
         </div>
+        <Footer></Footer>
       </div>
     </div>
   );

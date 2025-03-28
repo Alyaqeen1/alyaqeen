@@ -94,7 +94,7 @@ export default function Navbar() {
               style={{ width: "40px", height: "40px" }}
               alt=""
             />
-            <div>
+            <div className="d-none d-lg-block">
               <h6 style={{ fontSize: "14px" }} className="fw-bold">
                 Json Taylor
               </h6>
