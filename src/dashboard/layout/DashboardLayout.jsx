@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Outlet } from "react-router";
 import Sidebar from "../components/Sidebar/Sidebar";
 import OffCanvasMenu from "../components/Sidebar/OffCanvasMenu";
+import Navbar from "../components/Navbar/Navbar";
 
 export default function DashboardLayout() {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -26,11 +27,12 @@ export default function DashboardLayout() {
       <Sidebar></Sidebar>
 
       {/* Main Content Area */}
-      <div className="col-md-9 col-lg-10">
-        {isMobile && <OffCanvasMenu></OffCanvasMenu>}
+      <div className="col-md-9 col-xl-10 p-0">
+        {/* {isMobile && <OffCanvasMenu></OffCanvasMenu>} */}
 
         {/* Content Area */}
-        <div className="container mt-3">
+        <Navbar></Navbar>
+        <div style={{ backgroundColor: "#F1F1F6" }}>
           <Outlet />
         </div>
       </div>

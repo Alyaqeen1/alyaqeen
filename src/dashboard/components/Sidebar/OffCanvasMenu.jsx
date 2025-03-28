@@ -4,6 +4,7 @@ import logo from "../../../site/assets/img/logo/logo.png";
 import { FaChevronDown, FaChevronRight, FaRegCircle } from "react-icons/fa";
 import { TiHomeOutline } from "react-icons/ti";
 import { GiHamburgerMenu } from "react-icons/gi";
+import { FaRegWindowClose } from "react-icons/fa";
 
 export default function OffCanvasMenu() {
   const [openSubMenu, setOpenSubMenu] = useState("pages");
@@ -58,7 +59,8 @@ export default function OffCanvasMenu() {
           {!showSidebar ? (
             <GiHamburgerMenu className="fs-2" />
           ) : (
-            <span className="fs-1">x</span>
+            <FaRegWindowClose className="fs-2" />
+            // <span className="fs-1">x</span>
           )}
         </button>
       </div>

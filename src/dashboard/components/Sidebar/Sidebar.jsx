@@ -42,11 +42,14 @@ export default function Sidebar() {
 
   return (
     <div
-      className={`col-sm-4 col-xl-2 p-0 d-none d-md-block`}
+      className={`col-md-3 col-xl-2 p-0 d-none d-md-block`}
       style={{ minHeight: "100vh", backgroundColor: "#101C42" }}
       id="sidebar"
     >
-      <div className="d-flex flex-column h-100 ">
+      <div
+        className="d-flex flex-column fixed-top"
+        style={{ width: "inherit" }}
+      >
         {/* Sidebar Header */}
         <Link to="/" className="py-2 text-white text-center">
           <img src={logo} style={{ width: "60px" }} alt="" />
