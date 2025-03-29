@@ -1,15 +1,12 @@
 import React from "react";
 import CmnBanner from "../../sharedComponents/CmnBanner";
 import CourseDetails from "../../components/Course/CourseDetails";
-import seven from "../../assets/img/home/photo-5.jpg";
-import eight from "../../assets/img/home/photo-13.jpg";
-
 export default function QaidahQuranHifdh() {
   return (
     <div>
       <CmnBanner title="Arabic Qaidah, Quran & Hifdh"></CmnBanner>
       <CourseDetails
-        image={seven}
+        image="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/home/photo-5.jpg"
         title="Arabic Qaidah, Quran & Hifdh"
         subtitle1="Descriptions"
         descriptionPara1="Allah swt the most says in the Quran : “and recite the Quran (aloud) in a slow , (Pleasent tone and) style - Sura Al Muzzamil - 73:1-4"
