@@ -1,8 +1,4 @@
 import { useState } from "react";
-import one from "../../assets/img/header/home-1.jpg";
-import two from "../../assets/img/header/home-2.jpg";
-import three from "../../assets/img/header/home-3.jpg";
-import four from "../../assets/img/header/home-4.jpg";
 import { Link } from "react-router";
 
 const OffCanvasMenu = ({ toggleMenu, handleToggleMenu }) => {

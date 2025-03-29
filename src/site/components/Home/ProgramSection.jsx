@@ -65,7 +65,7 @@ const ProgramSection = () => {
             data-aos-delay="300"
           >
             <div className="classes-items-feb-12 w-full">
-              <Link to="/qaidah-quran-hifdh">
+              <Link to="/arabic-qaidah-quran-hifdh">
                 <div
                   className="clases-bg style-2"
                   style={{
