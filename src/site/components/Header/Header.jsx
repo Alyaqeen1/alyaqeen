@@ -1,13 +1,6 @@
 import { useState, useEffect } from "react";
 import OffCanvasMenu from "./OffCanvasMenu";
-import logo from "../../assets/img/logo/logo.png";
-import grid from "../../assets/img/grid.svg";
-import one from "../../assets/img/header/home-1.jpg";
-import two from "../../assets/img/header/home-2.jpg";
-import three from "../../assets/img/header/home-3.jpg";
-import four from "../../assets/img/header/home-4.jpg";
 import { Link } from "react-router";
-// import "../../styles/scss/main.module.scss";
 
 const Header = () => {
   const [openSubMenu, setOpenSubMenu] = useState(null);
@@ -86,13 +79,17 @@ const Header = () => {
                     <img
                       className="h-auto"
                       style={{ width: "70px" }}
-                      src={logo}
+                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/logo/logo.png"
                       alt="logo-img"
                     />
                   </Link>
                 </div>
                 <div className="category-oneadjust flex">
-                  <img src={grid} alt="img" className="me-2 inline" />
+                  <img
+                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/grid.svg"
+                    alt="img"
+                    className="me-2 inline"
+                  />
                   <select name="cate" className="category">
                     <option value="1">English</option>
                     <option value="1">Arabic</option>

@@ -1,12 +1,3 @@
-import one from "../assets/img/about/kaaba-svgrepo-com.svg";
-import two from "../assets/img/section-top-shape-2.png";
-import three from "../assets/img/client/shape-2.png";
-import four from "../assets/img/about/academy.png";
-import five from "../assets/img/about/radius-shape.png";
-import six from "../assets/img/about/circle.png";
-import eight from "../assets/img/about/icon-5.svg";
-import nine from "../assets/img/about/icon-6.svg";
-import ten from "../assets/img/team/team01.jpeg";
 import { Link } from "react-router";
 import { useState } from "react";
 
@@ -24,13 +15,24 @@ const AboutMain = ({
   return (
     <section className="about-activities-section-2 style-2 section-padding">
       <div className="zebra-shape float-bob-y w-25 text-end">
-        <img src={one} style={{ width: "35%" }} alt="shape-img" />
+        <img
+          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/about/kaaba-svgrepo-com.svg"
+          style={{ width: "35%" }}
+          alt="shape-img"
+        />
       </div>
       <div className="bottom-shape">
-        <img src={two} alt="shape-img" />
+        <img
+          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/section-top-shape-2.png"
+          alt="shape-img"
+        />
       </div>
       <div className="sun-shape">
-        <img src={three} className="w-50" alt="shape-img" />
+        <img
+          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/client/shape-2.png"
+          className="w-50"
+          alt="shape-img"
+        />
       </div>
       <div className="container">
         <div className="about-activities-wrapper style-2">
@@ -42,12 +44,26 @@ const AboutMain = ({
               data-aos-delay="300"
             >
               <div className="activities-image-items">
-                <img src={image || four} alt="img" />
+                <img
+                  src={
+                    image ||
+                    "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/about/academy.png"
+                  }
+                  alt="img"
+                />
                 <div className="radius-shape">
-                  <img src={five} className="w-50" alt="shape-img" />
+                  <img
+                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/about/radius-shape.png"
+                    className="w-50"
+                    alt="shape-img"
+                  />
                 </div>
                 <div className="circle-shape text-end">
-                  <img src={six} className="w-50" alt="shape-img" />
+                  <img
+                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/about/circle.png"
+                    className="w-50"
+                    alt="shape-img"
+                  />
                 </div>
               </div>
             </div>
@@ -142,7 +158,10 @@ const AboutMain = ({
                   >
                     <div className="icon-items">
                       <div className="icon">
-                        <img src={eight} alt="img" />
+                        <img
+                          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/about/icon-5.svg"
+                          alt="img"
+                        />
                       </div>
                       <div className="content">
                         <h5>Sport Program</h5>
@@ -160,7 +179,10 @@ const AboutMain = ({
                   >
                     <div className="icon-items">
                       <div className="icon">
-                        <img src={nine} alt="img" />
+                        <img
+                          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/about/icon-6.svg"
+                          alt="img"
+                        />
                       </div>
                       <div className="content">
                         <h5>Easy To Learn</h5>
@@ -180,7 +202,7 @@ const AboutMain = ({
                     data-aos-delay="300"
                   >
                     <img
-                      src={ten}
+                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/team/team01.jpeg"
                       className="rounded-circle object-fit-cover"
                       style={{ width: "60px", height: "60px" }}
                       alt="author-img"

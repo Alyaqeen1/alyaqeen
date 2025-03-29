@@ -1,9 +1,6 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation } from "swiper/modules";
 import "swiper/swiper-bundle.css";
-import three from "../../assets/img/client/shape-1.png";
-import four from "../../assets/img/client/shape-2.png";
-import five from "../../assets/img/client/01.png";
 
 const AboutTestimonial = () => {
   return (
@@ -11,10 +8,18 @@ const AboutTestimonial = () => {
       <div className="container">
         <div className="testimonial-wrapper style-2 section-padding">
           <div className="shape-1">
-            <img src={three} className="w-50" alt="shape-img" />
+            <img
+              src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/client/shape-1.png"
+              className="w-50"
+              alt="shape-img"
+            />
           </div>
           <div className="shape-2">
-            <img src={four} className="w-50" alt="shape-img" />
+            <img
+              src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/client/shape-2.png"
+              className="w-50"
+              alt="shape-img"
+            />
           </div>
           <div className="testimonial-bg"></div>
           <div className="section-title text-center">
@@ -57,7 +62,10 @@ const AboutTestimonial = () => {
                       mi ullamcorper id sapien ac elementum
                     </p>
                     <div className="client-info">
-                      <img src={five} alt="img" />
+                      <img
+                        src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/client/01.png"
+                        alt="img"
+                      />
                       <div className="content">
                         <h5>Mohammad Khalid</h5>
                         <p>Managing Director & Headteacher</p>
@@ -77,7 +85,10 @@ const AboutTestimonial = () => {
                       mi ullamcorper id sapien ac elementum
                     </p>
                     <div className="client-info">
-                      <img src={five} alt="img" />
+                      <img
+                        src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/client/01.png"
+                        alt="img"
+                      />
                       <div className="content">
                         <h5>Mohammad Khalid</h5>
                         <p>Managing Director & Headteacher</p>
@@ -97,7 +108,10 @@ const AboutTestimonial = () => {
                       mi ullamcorper id sapien ac elementum
                     </p>
                     <div className="client-info">
-                      <img src={five} alt="img" />
+                      <img
+                        src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/client/01.png"
+                        alt="img"
+                      />
                       <div className="content">
                         <h5>Mohammad Khalid</h5>
                         <p>Managing Director & Headteacher</p>
@@ -117,7 +131,10 @@ const AboutTestimonial = () => {
                       mi ullamcorper id sapien ac elementum
                     </p>
                     <div className="client-info">
-                      <img src={five} alt="img" />
+                      <img
+                        src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/client/01.png"
+                        alt="img"
+                      />
                       <div className="content">
                         <h5>Mohammad Khalid</h5>
                         <p>Managing Director & Headteacher</p>
@@ -137,7 +154,10 @@ const AboutTestimonial = () => {
                       mi ullamcorper id sapien ac elementum
                     </p>
                     <div className="client-info">
-                      <img src={five} alt="img" />
+                      <img
+                        src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/client/01.png"
+                        alt="img"
+                      />
                       <div className="content">
                         <h5>Mohammad Khalid</h5>
                         <p>Managing Director & Headteacher</p>
@@ -157,7 +177,10 @@ const AboutTestimonial = () => {
                       mi ullamcorper id sapien ac elementum
                     </p>
                     <div className="client-info">
-                      <img src={five} alt="img" />
+                      <img
+                        src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/client/01.png"
+                        alt="img"
+                      />
                       <div className="content">
                         <h5>Mohammad Khalid</h5>
                         <p>Managing Director & Headteacher</p>

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Outlet, Link, NavLink } from "react-router";
-import logo from "../../../site/assets/img/logo/logo.png";
 import { FaChevronDown, FaChevronRight, FaRegCircle } from "react-icons/fa";
 import { TiHomeOutline } from "react-icons/ti";
 
@@ -52,7 +51,11 @@ export default function Sidebar() {
       >
         {/* Sidebar Header */}
         <Link to="/" className="py-2 text-white text-center">
-          <img src={logo} style={{ width: "60px" }} alt="" />
+          <img
+            src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/logo/logo.png"
+            style={{ width: "60px" }}
+            alt=""
+          />
         </Link>
         <hr className="text-white" />
         {/* Sidebar Links */}

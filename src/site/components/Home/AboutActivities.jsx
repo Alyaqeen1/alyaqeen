@@ -1,19 +1,19 @@
-import one from "../../assets/img/about/pencil.png";
-import two from "../../assets/img/about/kaaba-svgrepo-com.svg";
-import three from "../../assets/img/home/new-mask.png";
-import four from "../../assets/img/icon/board-svgrepo-com.svg";
-import five from "../../assets/img/icon/group_focus_2.svg";
-import eight from "../../assets/img/icon/quran_2.svg";
-import nine from "../../assets/img/icon/earth-globe-geography-svgrepo-com.svg";
-
 const AboutActivities = () => {
   return (
     <section className="about-activities-section section-padding pt-0">
       <div className="pencil-shape">
-        <img src={one} className="w-50" alt="shape-img" />
+        <img
+          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/about/pencil.png"
+          className="w-50"
+          alt="shape-img"
+        />
       </div>
       <div className="zebra-shape float-bob-y w-25 text-end">
-        <img src={two} style={{ width: "35%" }} alt="shape-img" />
+        <img
+          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/about/kaaba-svgrepo-com.svg"
+          style={{ width: "35%" }}
+          alt="shape-img"
+        />
       </div>
       <div className="container">
         <div className="about-activities-wrapper">
@@ -26,15 +26,7 @@ const AboutActivities = () => {
             >
               <div className="activities-image">
                 <img
-                  src={three}
-                  style={
-                    {
-                      // clipPath:
-                      //   "polygon(50% 0%, 83% 12%, 100% 43%, 94% 78%, 68% 100%, 32% 100%, 6% 78%, 0% 43%, 17% 12%)",
-                      // maxHeight: "460px",
-                    }
-                  }
-                  // className="object-fit-contain"
+                  src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/home/new-mask.png"
                   alt="img"
                 />
               </div>
@@ -62,7 +54,11 @@ const AboutActivities = () => {
                   >
                     <div className="icon-items">
                       <div className="icon box-color-1">
-                        <img className="w-50" src={four} alt="img" />
+                        <img
+                          className="w-50"
+                          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/icon/board-svgrepo-com.svg"
+                          alt="img"
+                        />
                       </div>
                       <div className="content">
                         <h5>Modern teaching tools</h5>
@@ -77,7 +73,11 @@ const AboutActivities = () => {
                   >
                     <div className="icon-items">
                       <div className="icon box-color-3">
-                        <img className="w-50" src={five} alt="img" />
+                        <img
+                          className="w-50"
+                          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/icon/group_focus_2.svg"
+                          alt="img"
+                        />
                       </div>
                       <div className="content">
                         <h5>Small groups, better focus</h5>
@@ -289,7 +289,11 @@ const AboutActivities = () => {
                   >
                     <div className="icon-items">
                       <div className="icon box-color-1">
-                        <img className="w-50" src={eight} alt="img" />
+                        <img
+                          className="w-50"
+                          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/icon/quran_2.svg"
+                          alt="img"
+                        />
                       </div>
                       <div className="content">
                         <h5>Quran taught with tajweed</h5>
@@ -304,7 +308,11 @@ const AboutActivities = () => {
                   >
                     <div className="icon-items">
                       <div className="icon box-color-2">
-                        <img className="w-50" src={nine} alt="img" />
+                        <img
+                          className="w-50"
+                          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/icon/earth-globe-geography-svgrepo-com.svg"
+                          alt="img"
+                        />
                       </div>
                       <div className="content">
                         <h5>Fun & friendly environment</h5>

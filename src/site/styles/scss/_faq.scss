@@ -47,14 +47,14 @@
           // background: transparent;
           font-weight: 500;
           transition: all 0.3s ease-in-out !important;
-          background-image: url("../../assets/img/chevron-right.svg");
+          background-image: url("https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/chevron-right.svg");
           color: $theme-color-2;
         }
         &:not(.collapsed)::after {
           // content: "\f068";
           // font-family: "Font Awesome 6 Free";
           // background: transparent;
-          background-image: url("../../assets/img/chevron-down.svg");
+          background-image: url("https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/chevron-down.svg");
           font-weight: 500;
           color: $theme-color;
           transform: rotate(0);

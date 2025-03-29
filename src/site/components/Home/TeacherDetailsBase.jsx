@@ -1,5 +1,4 @@
 import { Link } from "react-router";
-import one from "../../assets/img/program/p-author.jpg";
 import { useState } from "react";
 
 const TeacherDetailsBase = ({ staffData }) => {

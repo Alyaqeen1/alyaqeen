@@ -1,7 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { FaRegPlayCircle } from "react-icons/fa";
-import ukImg from "../../assets/img/home/uk_svg_repo.svg";
-import uaeImg from "../../assets/img/home/uae__svg_repo.svg";
 
 export default function LanguageModal() {
   const [showModal, setShowModal] = useState(false);
@@ -27,7 +24,6 @@ export default function LanguageModal() {
       {/* Modal */}
       <div
         className={`modal fade ${showModal ? "show" : ""}`}
-        // style={{ backgroundColor: "#ffffe0" }}
         tabIndex="-1"
         aria-labelledby="exampleModalLabel"
         aria-hidden={!showModal}
@@ -37,10 +33,7 @@ export default function LanguageModal() {
         }}
         onMouseDown={handleBackdropClick} // Detect click outside
       >
-        <div
-          className="modal-dialog modal-dialog-scrollable modal-dialog-centered"
-          // style={{ backgroundColor: "#ffffe0" }}
-        >
+        <div className="modal-dialog modal-dialog-scrollable modal-dialog-centered">
           <div
             className="modal-content w-75 mx-auto rounded-5"
             style={{ backgroundColor: "#ffffe0" }}
@@ -78,7 +71,7 @@ export default function LanguageModal() {
                 }}
               >
                 <img
-                  src={ukImg}
+                  src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/home/uk_svg_repo.svg"
                   onClick={handleClose}
                   style={{
                     width: "100px",
@@ -101,7 +94,7 @@ export default function LanguageModal() {
                 }}
               >
                 <img
-                  src={uaeImg}
+                  src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/home/uae__svg_repo.svg"
                   onClick={handleClose}
                   style={{
                     width: "100px",

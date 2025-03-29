@@ -1,10 +1,4 @@
 import { Link } from "react-router";
-import one from "../../assets/img/news/04.jpg";
-import two from "../../assets/img/news/05.jpg";
-import three from "../../assets/img/news/06.jpg";
-import four from "../../assets/img/news/08.jpg";
-import five from "../../assets/img/news/09.jpg";
-import six from "../../assets/img/news/10.jpg";
 
 const VacanciesGrid = () => {
   return (
@@ -19,30 +13,37 @@ const VacanciesGrid = () => {
           >
             <div className="news-card-items mt-0">
               <div className="news-image">
-                <img src={one} alt="img" />
+                <img
+                  src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/04.jpg"
+                  alt="img"
+                />
                 <div className="news-layer-wrapper">
                   <div
                     className="news-layer-image"
                     style={{
-                      backgroundImage: "url(/img/news/04.jpg)",
+                      backgroundImage:
+                        "url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/04.jpg)",
                     }}
                   ></div>
                   <div
                     className="news-layer-image"
                     style={{
-                      backgroundImage: "url(/img/news/04.jpg)",
+                      backgroundImage:
+                        "url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/04.jpg)",
                     }}
                   ></div>
                   <div
                     className="news-layer-image"
                     style={{
-                      backgroundImage: "url(/img/news/04.jpg)",
+                      backgroundImage:
+                        "url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/04.jpg)",
                     }}
                   ></div>
                   <div
                     className="news-layer-image"
                     style={{
-                      backgroundImage: "url(/img/news/04.jpg)",
+                      backgroundImage:
+                        "url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/04.jpg)",
                     }}
                   ></div>
                 </div>
@@ -81,30 +82,37 @@ const VacanciesGrid = () => {
           >
             <div className="news-card-items mt-0">
               <div className="news-image">
-                <img src={two} alt="img" />
+                <img
+                  src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/05.jpg"
+                  alt="img"
+                />
                 <div className="news-layer-wrapper">
                   <div
                     className="news-layer-image"
                     style={{
-                      backgroundImage: "url(/img/news/05.jpg)",
+                      backgroundImage:
+                        "url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/05.jpg)",
                     }}
                   ></div>
                   <div
                     className="news-layer-image"
                     style={{
-                      backgroundImage: "url(/img/news/05.jpg)",
+                      backgroundImage:
+                        "url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/05.jpg)",
                     }}
                   ></div>
                   <div
                     className="news-layer-image"
                     style={{
-                      backgroundImage: "url(/img/news/05.jpg)",
+                      backgroundImage:
+                        "url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/05.jpg)",
                     }}
                   ></div>
                   <div
                     className="news-layer-image"
                     style={{
-                      backgroundImage: "url(/img/news/05.jpg)",
+                      backgroundImage:
+                        "url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/05.jpg)",
                     }}
                   ></div>
                 </div>
@@ -143,30 +151,37 @@ const VacanciesGrid = () => {
           >
             <div className="news-card-items mt-0">
               <div className="news-image">
-                <img src={three} alt="img" />
+                <img
+                  src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/06.jpg"
+                  alt="img"
+                />
                 <div className="news-layer-wrapper">
                   <div
                     className="news-layer-image"
                     style={{
-                      backgroundImage: "url(/img/news/06.jpg)",
+                      backgroundImage:
+                        "url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/06.jpg)",
                     }}
                   ></div>
                   <div
                     className="news-layer-image"
                     style={{
-                      backgroundImage: "url(/img/news/06.jpg)",
+                      backgroundImage:
+                        "url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/06.jpg)",
                     }}
                   ></div>
                   <div
                     className="news-layer-image"
                     style={{
-                      backgroundImage: "url(/img/news/06.jpg)",
+                      backgroundImage:
+                        "url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/06.jpg)",
                     }}
                   ></div>
                   <div
                     className="news-layer-image"
                     style={{
-                      backgroundImage: "url(/img/news/06.jpg)",
+                      backgroundImage:
+                        "url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/06.jpg)",
                     }}
                   ></div>
                 </div>
@@ -204,30 +219,37 @@ const VacanciesGrid = () => {
           >
             <div className="news-card-items mt-0">
               <div className="news-image">
-                <img src={four} alt="img" />
+                <img
+                  src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/08.jpg"
+                  alt="img"
+                />
                 <div className="news-layer-wrapper">
                   <div
                     className="news-layer-image"
                     style={{
-                      backgroundImage: "url(/img/news/08.jpg)",
+                      backgroundImage:
+                        "url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/08.jpg)",
                     }}
                   ></div>
                   <div
                     className="news-layer-image"
                     style={{
-                      backgroundImage: "url(/img/news/08.jpg)",
+                      backgroundImage:
+                        "url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/08.jpg)",
                     }}
                   ></div>
                   <div
                     className="news-layer-image"
                     style={{
-                      backgroundImage: "url(/img/news/08.jpg)",
+                      backgroundImage:
+                        "url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/08.jpg)",
                     }}
                   ></div>
                   <div
                     className="news-layer-image"
                     style={{
-                      backgroundImage: "url(/img/news/08.jpg)",
+                      backgroundImage:
+                        "url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/08.jpg)",
                     }}
                   ></div>
                 </div>
@@ -265,30 +287,37 @@ const VacanciesGrid = () => {
           >
             <div className="news-card-items mt-0">
               <div className="news-image">
-                <img src={five} alt="img" />
+                <img
+                  src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/09.jpg"
+                  alt="img"
+                />
                 <div className="news-layer-wrapper">
                   <div
                     className="news-layer-image"
                     style={{
-                      backgroundImage: "url(/img/news/09.jpg)",
+                      backgroundImage:
+                        "url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/09.jpg)",
                     }}
                   ></div>
                   <div
                     className="news-layer-image"
                     style={{
-                      backgroundImage: "url(/img/news/09.jpg)",
+                      backgroundImage:
+                        "url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/09.jpg)",
                     }}
                   ></div>
                   <div
                     className="news-layer-image"
                     style={{
-                      backgroundImage: "url(/img/news/09.jpg)",
+                      backgroundImage:
+                        "url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/09.jpg)",
                     }}
                   ></div>
                   <div
                     className="news-layer-image"
                     style={{
-                      backgroundImage: "url(/img/news/09.jpg)",
+                      backgroundImage:
+                        "url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/09.jpg)",
                     }}
                   ></div>
                 </div>
@@ -326,30 +355,37 @@ const VacanciesGrid = () => {
           >
             <div className="news-card-items mt-0">
               <div className="news-image">
-                <img src={six} alt="img" />
+                <img
+                  src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/10.jpg"
+                  alt="img"
+                />
                 <div className="news-layer-wrapper">
                   <div
                     className="news-layer-image"
                     style={{
-                      backgroundImage: "url(/img/news/10.jpg)",
+                      backgroundImage:
+                        "url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/10.jpg)",
                     }}
                   ></div>
                   <div
                     className="news-layer-image"
                     style={{
-                      backgroundImage: "url(/img/news/10.jpg)",
+                      backgroundImage:
+                        "url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/10.jpg)",
                     }}
                   ></div>
                   <div
                     className="news-layer-image"
                     style={{
-                      backgroundImage: "url(/img/news/10.jpg)",
+                      backgroundImage:
+                        "url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/10.jpg)",
                     }}
                   ></div>
                   <div
                     className="news-layer-image"
                     style={{
-                      backgroundImage: "url(/img/news/10.jpg)",
+                      backgroundImage:
+                        "url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/10.jpg)",
                     }}
                   ></div>
                 </div>

@@ -1,7 +1,6 @@
 import { useState } from "react";
 
 import ModalVideo from "react-modal-video";
-import one from "../../assets/img/about/new-pic.jpeg";
 import { Link } from "react-router";
 
 const ContactSection = () => {
@@ -105,7 +104,7 @@ const ContactSection = () => {
                   </div>
                   <div className="video-image">
                     <img
-                      src={one}
+                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/about/new-pic.jpeg"
                       className="object-fit-cover"
                       style={{ height: "350px", objectPosition: "center" }}
                       alt="img"

@@ -1,11 +1,12 @@
 import { Link } from "react-router";
-import shape from "../../assets/img/header-top-shape.png";
-
 const TopHeader = () => {
   return (
     <div className="header-top-section">
       <div className="header-top-shape">
-        <img src={shape} alt="shape-img" />
+        <img
+          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/header-top-shape.png"
+          alt="shape-img"
+        />
       </div>
       <div className="container-fluid">
         <div className="header-top-wrapper">

@@ -1,14 +1,6 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation } from "swiper/modules";
 import "swiper/swiper-bundle.css";
-import one from "../../assets/img/section-top-shape.png";
-import two from "../../assets/img/team/love.png";
-import three from "../../assets/img/team/frame.png";
-import four from "../../assets/img/team/team-shape.png";
-import five from "../../assets/img/team/01.jpg";
-import six from "../../assets/img/team/02.jpg";
-import seven from "../../assets/img/team/03.jpg";
-import eight from "../../assets/img/team/04.jpg";
 import { Link } from "react-router";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
@@ -53,13 +45,24 @@ const Team = () => {
       id="team"
     >
       <div className="top-shape">
-        <img src={one} alt="shape-img" />
+        <img
+          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/section-top-shape.png"
+          alt="shape-img"
+        />
       </div>
       <div className="love-shape float-bob-x">
-        <img className="w-50" src={two} alt="shape-img" />
+        <img
+          className="w-50"
+          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/team/love.png"
+          alt="shape-img"
+        />
       </div>
       <div className="frame-shape text-end">
-        <img src={three} className="w-50" alt="shape-img" />
+        <img
+          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/team/frame.png"
+          className="w-50"
+          alt="shape-img"
+        />
       </div>
       <div className="container">
         <div className="section-title-area">

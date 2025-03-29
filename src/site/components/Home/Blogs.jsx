@@ -1,9 +1,4 @@
 import { Link } from "react-router";
-import one from "../../assets/img/news/01.jpg";
-import two from "../../assets/img/news/02.jpg";
-import three from "../../assets/img/news/03.jpg";
-import five from "../../assets/img/news/author-3.png";
-import author from "../../assets/img/news/author.png";
 
 const Blogs = () => {
   return (
@@ -38,7 +33,10 @@ const Blogs = () => {
             >
               <div className="news-single-items">
                 <div className="news-image">
-                  <img src={one} alt="news-img" />
+                  <img
+                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/01.jpg"
+                    alt="news-img"
+                  />
                 </div>
                 <div className="news-content">
                   <ul>
@@ -91,7 +89,10 @@ const Blogs = () => {
                   <div className="post-author-items">
                     <div className="post-items">
                       <div className="thumb">
-                        <img src={author} alt="img" />
+                        <img
+                          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/author.png"
+                          alt="img"
+                        />
                       </div>
                       <div className="content">
                         <span>By Admin</span>
@@ -113,7 +114,10 @@ const Blogs = () => {
                 data-aos-delay="400"
               >
                 <div className="news-thumb">
-                  <img src={two} alt="img" />
+                  <img
+                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/02.jpg"
+                    alt="img"
+                  />
                 </div>
                 <div className="news-content">
                   <ul>
@@ -160,7 +164,10 @@ const Blogs = () => {
                   </h3>
                   <div className="post-items">
                     <div className="thumb">
-                      <img src={author} alt="img" />
+                      <img
+                        src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/author.png"
+                        alt="img"
+                      />
                     </div>
                     <div className="content">
                       <span>By Admin</span>
@@ -176,7 +183,10 @@ const Blogs = () => {
                 data-aos-delay="600"
               >
                 <div className="news-thumb">
-                  <img src={three} alt="img" />
+                  <img
+                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/03.jpg"
+                    alt="img"
+                  />
                 </div>
                 <div className="news-content">
                   <ul>
@@ -223,7 +233,10 @@ const Blogs = () => {
                   </h3>
                   <div className="post-items">
                     <div className="thumb">
-                      <img src={five} alt="img" />
+                      <img
+                        src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/author-3.png"
+                        alt="img"
+                      />
                     </div>
                     <div className="content">
                       <span>By Admin</span>

@@ -1,9 +1,4 @@
 import { useState } from "react";
-import logo from "../../assets/img/logo/logo.png";
-import one from "../../assets/img/header/home-1.jpg";
-import two from "../../assets/img/header/home-2.jpg";
-import three from "../../assets/img/header/home-3.jpg";
-import four from "../../assets/img/header/home-4.jpg";
 import { Link } from "react-router";
 
 const OffCanvasMenu = ({ toggleMenu, handleToggleMenu }) => {
@@ -51,7 +46,10 @@ const OffCanvasMenu = ({ toggleMenu, handleToggleMenu }) => {
               <div className="offcanvas__top mb-5 d-flex justify-content-between align-items-center">
                 <div className="offcanvas__logo">
                   <Link to="/">
-                    <img src={logo} alt="logo-img" />
+                    <img
+                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/logo/logo.png"
+                      alt="logo-img"
+                    />
                   </Link>
                 </div>
                 <div className="offcanvas__close">

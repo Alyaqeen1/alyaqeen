@@ -3,11 +3,6 @@ import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation } from "swiper/modules";
 import "swiper/swiper-bundle.css";
-
-import three from "../../assets/img/program/mask.png";
-import four from "../../assets/img/program/pencil.png";
-import five from "../../assets/img/program/mask-2.png";
-import six from "../../assets/img/program/compass.png";
 import { Link } from "react-router";
 import axios from "axios";
 
@@ -24,17 +19,32 @@ export default function AdditionalServices() {
       id="programs"
     >
       <div className="mask-shape float-bob-x">
-        <img src={three} className="w-50" alt="shape-img" />
+        <img
+          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/mask.png"
+          className="w-50"
+          alt="shape-img"
+        />
       </div>
       <div className="pencil-shape">
-        <img src={four} className="w-50" />
+        <img
+          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/pencil.png"
+          className="w-50"
+        />
       </div>
       <div className="mask-shape-2 text-end">
-        <img src={five} className="w-50" alt="shape-img" />
+        <img
+          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/mask-2.png"
+          className="w-50"
+          alt="shape-img"
+        />
       </div>
 
       <div className="compass-shape text-end">
-        <img src={six} className="w-50" alt="shape-img" />
+        <img
+          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/compass.png"
+          className="w-50"
+          alt="shape-img"
+        />
       </div>
       <div className="container">
         <div className="section-title-area">

@@ -1,32 +1,47 @@
-import one from "../../assets/img/section-top-shape.png";
-import three from "../../assets/img/program/mask.png";
-import four from "../../assets/img/program/pencil.png";
-import five from "../../assets/img/program/mask-2.png";
-import six from "../../assets/img/program/compass.png";
 import React from "react";
 
 const PrayerComp = () => {
   return (
     <section
-      className="program-section-feb-24 section-padding section-bg-2 fix"
+      className="program-section-feb-24 section-padding section-bg-2 fix bg-white"
       id="programs"
     >
       <div className="top-shape">
-        <img src={one} className="w-75" alt="shape-img" />
+        <img
+          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/section-top-shape.png"
+          className="w-75"
+          alt="shape-img"
+        />
       </div>
 
       <div className="mask-shape float-bob-x">
-        <img src={three} className="w-50" alt="shape-img" />
+        <img
+          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/mask.png"
+          className="w-50"
+          alt="shape-img"
+        />
       </div>
       <div className="pencil-shape">
-        <img src={four} className="w-50" alt="shape-img" />
+        <img
+          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/pencil.png"
+          className="w-50"
+          alt="shape-img"
+        />
       </div>
       <div className="mask-shape-2 text-end">
-        <img src={five} className="w-50" alt="shape-img" />
+        <img
+          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/mask-2.png"
+          className="w-50"
+          alt="shape-img"
+        />
       </div>
 
       <div className="compass-shape text-end">
-        <img src={six} className="w-50" alt="shape-img" />
+        <img
+          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/compass.png"
+          className="w-50"
+          alt="shape-img"
+        />
       </div>
       <div className="container">
         <div className="section-title text-center mt-60">

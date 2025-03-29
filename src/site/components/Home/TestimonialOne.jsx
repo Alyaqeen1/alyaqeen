@@ -1,21 +1,20 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation } from "swiper/modules";
 import "swiper/swiper-bundle.css";
-import one from "../../assets/img/client/pencil.png";
-import two from "../../assets/img/home/quran-quran-svgrepo-com.svg";
-import three from "../../assets/img/home/testimonial.png";
-import four from "../../assets/img/client/01.png";
-import five from "../../assets/img/client/quote.png";
 
 const TestimonialOne = () => {
   return (
     <section className="testimonial-section fix section-padding">
       <div className="pencil-shape">
-        <img src={one} className="w-50" alt="shape-img" />
+        <img
+          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/client/pencil.png"
+          className="w-50"
+          alt="shape-img"
+        />
       </div>
       <div className="girl-shape float-bob-y text-end">
         <img
-          src={two}
+          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/home/quran-quran-svgrepo-com.svg"
           className=""
           style={{ width: "120px" }}
           alt="shape-img"
@@ -32,15 +31,8 @@ const TestimonialOne = () => {
             >
               <div className="testimonial-image">
                 <img
-                  style={
-                    {
-                      // clipPath:
-                      //   "polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)",
-                      // height: "500px",
-                    }
-                  }
                   className="object-fit-cover"
-                  src={three}
+                  src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/home/testimonial.png"
                   alt="image"
                 />
               </div>
@@ -105,14 +97,21 @@ const TestimonialOne = () => {
                             Aliquam pellentesque.
                           </p>
                           <div className="client-info">
-                            <img src={four} alt="img" />
+                            <img
+                              src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/client/01.png"
+                              alt="img"
+                            />
                             <div className="content">
                               <h5>Mohammad Khalid</h5>
                               <p>Managing Director & Headteacher</p>
                             </div>
                           </div>
-                          <div className="icon">
-                            <img src={five} alt="img" />
+                          <div className="icon text-end">
+                            <img
+                              className="w-50"
+                              src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/client/quote.png"
+                              alt="img"
+                            />
                           </div>
                         </div>
                       </div>
@@ -134,14 +133,21 @@ const TestimonialOne = () => {
                             Aliquam pellentesque.
                           </p>
                           <div className="client-info">
-                            <img src={four} alt="img" />
+                            <img
+                              src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/client/01.png"
+                              alt="img"
+                            />
                             <div className="content">
                               <h5>Mohammad Khalid</h5>
                               <p>Managing Director & Headteacher</p>
                             </div>
                           </div>
-                          <div className="icon">
-                            <img src={five} alt="img" />
+                          <div className="icon text-end">
+                            <img
+                              className="w-50"
+                              src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/client/quote.png"
+                              alt="img"
+                            />
                           </div>
                         </div>
                       </div>
@@ -163,14 +169,21 @@ const TestimonialOne = () => {
                             Aliquam pellentesque.
                           </p>
                           <div className="client-info">
-                            <img src={four} alt="img" />
+                            <img
+                              src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/client/01.png"
+                              alt="img"
+                            />
                             <div className="content">
                               <h5>Mohammad Khalid</h5>
                               <p>Managing Director & Headteacher</p>
                             </div>
                           </div>
-                          <div className="icon">
-                            <img src={five} alt="img" />
+                          <div className="icon text-end">
+                            <img
+                              className="w-50"
+                              src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/client/quote.png"
+                              alt="img"
+                            />
                           </div>
                         </div>
                       </div>

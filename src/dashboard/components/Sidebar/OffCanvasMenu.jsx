@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Outlet, Link, NavLink } from "react-router";
-import logo from "../../../site/assets/img/logo/logo.png";
 import { FaChevronDown, FaChevronRight, FaRegCircle } from "react-icons/fa";
 import { TiHomeOutline } from "react-icons/ti";
 import { GiHamburgerMenu } from "react-icons/gi";
@@ -90,7 +89,7 @@ export default function OffCanvasMenu() {
             <div className="text-center py-2">
               <Link to="/" className="py-2 text-white text-center">
                 <img
-                  src={logo}
+                  src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/logo/logo.png"
                   className="mx-auto"
                   style={{ width: "60px" }}
                   alt=""

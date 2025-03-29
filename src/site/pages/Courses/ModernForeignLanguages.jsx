@@ -1,15 +1,13 @@
 import React from "react";
 import CmnBanner from "../../sharedComponents/CmnBanner";
 import CourseDetails from "../../components/Course/CourseDetails";
-import seven from "../../assets/img/home/photo-5.jpg";
-import eight from "../../assets/img/home/photo-13.jpg";
 
 export default function ModernForeignLanguages() {
   return (
     <div>
       <CmnBanner title="Modern Foreign Languages"></CmnBanner>
       <CourseDetails
-        image={seven}
+        image="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/home/photo-5.jpg"
         title="Modern Foreign Languages"
         subtitle1="Descriptions"
         descriptionPara1="Allah the Master of the universe states in the Quran: “O mankind, We created you from one man and one woman, and then divided you into nations and tribes so that you may recognize one another”."

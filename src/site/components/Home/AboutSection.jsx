@@ -1,21 +1,28 @@
-import one from "../../assets/img/about/bus.png";
-import two from "../../assets/img/home/quran-quran-svgrepo-com.svg";
-import three from "../../assets/img/about/dot.png";
-import four from "../../assets/img/home/review01.png";
-import five from "../../assets/img/home/review02.png";
 import { Link } from "react-router";
 
 const AboutSection = () => {
   return (
     <section className="about-section section-padding" id="about">
       <div className="bus-shape float-bob-x">
-        <img src={one} className="w-50" alt="shape-img" />
+        <img
+          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/about/bus.png"
+          className="w-50"
+          alt="shape-img"
+        />
       </div>
       <div className="girl-shape float-bob-y text-end">
-        <img src={two} style={{ width: "120px" }} alt="shape-img" />
+        <img
+          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/home/quran-quran-svgrepo-com.svg"
+          style={{ width: "120px" }}
+          alt="shape-img"
+        />
       </div>
       <div className="dot-shape">
-        <img src={three} className="w-50" alt="shape-img" />
+        <img
+          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/about/dot.png"
+          className="w-50"
+          alt="shape-img"
+        />
       </div>
       <div className="container">
         <div className="about-wrapper mb-40">
@@ -27,10 +34,13 @@ const AboutSection = () => {
                 data-aos="fade-up"
                 data-aos-delay="300"
               >
-                <img src={four} alt="about-img" />
+                <img
+                  src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/home/review01.png"
+                  alt="about-img"
+                />
                 <div className="about-image-2 text-end">
                   <img
-                    src={five}
+                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/home/review02.png"
                     className=""
                     style={{ width: "57%" }}
                     alt="about-img"

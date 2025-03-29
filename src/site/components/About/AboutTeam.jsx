@@ -1,14 +1,6 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation } from "swiper/modules";
 import "swiper/swiper-bundle.css";
-import one from "../../assets/img/tree-shape.png";
-import two from "../../assets/img/testi-r-shape.png";
-import three from "../../assets/img/testi-bee-shape.png";
-import four from "../../assets/img/team/team-shape.png";
-import five from "../../assets/img/team/01.jpg";
-import six from "../../assets/img/team/02.jpg";
-import seven from "../../assets/img/team/03.jpg";
-import eight from "../../assets/img/team/04.jpg";
 import { Link } from "react-router";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -25,13 +17,25 @@ const AboutTeam = ({ title, subtitle }) => {
   return (
     <section className="team-section-3 fix  section-padding pt-1 mt-60">
       <div className="tree-shape float-bob-x">
-        <img src={one} className="w-50" alt="shape-img" />
+        <img
+          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/tree-shape.png"
+          className="w-50"
+          alt="shape-img"
+        />
       </div>
       <div className="right-shape text-end">
-        <img src={two} className="w-50" alt="shape-img" />
+        <img
+          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/testi-r-shape.png"
+          className="w-50"
+          alt="shape-img"
+        />
       </div>
       <div className="bee-shape float-bob-y text-end">
-        <img src={three} className="w-50" alt="shape-img" />
+        <img
+          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/testi-bee-shape.png"
+          className="w-50"
+          alt="shape-img"
+        />
       </div>
       <div className="container">
         <div className="section-title-area">
@@ -92,14 +96,17 @@ const AboutTeam = ({ title, subtitle }) => {
             {" "}
             {staffData.map((state_member) => (
               <>
-                <SwiperSlide key={state_member.id}>
+                <SwiperSlide key={state_member?.id}>
                   <div className="swiper-slide">
                     <div className="team-items">
                       <div className="team-image">
                         <div className="shape-img">
-                          <img src={four} alt="img" />
+                          <img
+                            src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/team/team-shape.png"
+                            alt="img"
+                          />
                         </div>
-                        <img src={state_member.image_link} alt="team-img" />
+                        <img src={state_member?.image_link} alt="team-img" />
                         <div className="social-profile">
                           <span
                             className="plus-btn"
@@ -132,11 +139,11 @@ const AboutTeam = ({ title, subtitle }) => {
                       <div className="team-content">
                         <h3>
                           <a href={`/staff-details/${state_member?.id}`}>
-                            {state_member.name}
+                            {state_member?.name}
                           </a>
                         </h3>
 
-                        <p>{state_member.post_of_staff}</p>
+                        <p>{state_member?.post_of_staff}</p>
                       </div>
                     </div>
                   </div>

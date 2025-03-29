@@ -1,9 +1,3 @@
-import one from "../../assets/img/section-top-shape.png";
-import two from "../../assets/img/section-bottom-shape.png";
-import three from "../../assets/img/program/mask.png";
-import four from "../../assets/img/program/pencil.png";
-import five from "../../assets/img/program/mask-2.png";
-import six from "../../assets/img/program/compass.png";
 import React from "react";
 import { Link } from "react-router";
 
@@ -14,21 +8,41 @@ const FeeStructure = () => {
       id="programs"
     >
       <div className="top-shape">
-        <img src={one} className="" alt="shape-img" />
+        <img
+          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/section-top-shape.png"
+          className=""
+          alt="shape-img"
+        />
       </div>
 
       <div className="mask-shape float-bob-x">
-        <img src={three} className="w-50" alt="shape-img" />
+        <img
+          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/mask.png"
+          className="w-50"
+          alt="shape-img"
+        />
       </div>
       <div className="pencil-shape">
-        <img src={four} className="w-50" alt="shape-img" />
+        <img
+          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/pencil.png"
+          className="w-50"
+          alt="shape-img"
+        />
       </div>
       <div className="mask-shape-2 text-end">
-        <img src={five} className="w-50" alt="shape-img" />
+        <img
+          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/mask-2.png"
+          className="w-50"
+          alt="shape-img"
+        />
       </div>
 
       <div className="compass-shape text-end">
-        <img src={six} className="w-50" alt="shape-img" />
+        <img
+          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/compass.png"
+          className="w-50"
+          alt="shape-img"
+        />
       </div>
       <div className="container">
         <div className="section-title text-center mt-60">

@@ -1,15 +1,7 @@
-import one from "../../assets/img/program/details-1.jpg";
-import two from "../../assets/img/program/author.png";
-import three from "../../assets/img/program/icon/08.svg";
-import four from "../../assets/img/program/icon/09.svg";
-import five from "../../assets/img/program/icon/10.svg";
-import six from "../../assets/img/program/icon/11.svg";
-import seven from "../../assets/img/program/icon/14.svg";
-import eight from "../../assets/img/program/icon/13.svg";
-import nine from "../../assets/img/program/p-author.jpg";
-import img from "../../assets/img/home/photo-5.jpg";
 import { Link } from "react-router";
 import { useState } from "react";
+import { FaRegHourglass } from "react-icons/fa";
+import { IoTodayOutline } from "react-icons/io5";
 
 const CourseDetails = ({
   image,
@@ -59,7 +51,10 @@ const CourseDetails = ({
                   <h2 className="mb-0">{title}</h2>
                   <div className="details-author-area">
                     <div className="author-items">
-                      <img src={two} alt="img" />
+                      <img
+                        src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/author.png"
+                        alt="img"
+                      />
                       <p>Savannah Nguyen</p>
                     </div>
                     <ul className="class-list">
@@ -246,28 +241,42 @@ const CourseDetails = ({
                   <ul className="details-list">
                     <li>
                       <span>
-                        <img src={three} alt="img" className="me-2 inline" />
+                        <img
+                          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/icon/08.svg"
+                          alt="img"
+                          className="me-2 inline"
+                        />
                         Age:
                       </span>
                       {detailsObj?.age} year
                     </li>
                     <li>
                       <span>
-                        <img src={four} alt="img" className="me-2 inline" />
+                        <img
+                          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/icon/09.svg"
+                          alt="img"
+                          className="me-2 inline"
+                        />
                         Duration:
                       </span>
                       {detailsObj?.weekdaysDuration}
                     </li>
                     <li>
                       <span>
-                        <img src={five} alt="img" className="me-2 inline" />
+                        <IoTodayOutline
+                          className="me-2 fs-5"
+                          style={{ color: "var(--theme)" }}
+                        />
                         Days:
                       </span>
                       {detailsObj?.weeklyDays} days
                     </li>
                     <li>
                       <span>
-                        <img src={six} alt="img" className="me-2 inline" />
+                        <FaRegHourglass
+                          className="me-2 fs-5"
+                          style={{ color: "var(--theme)" }}
+                        />
                         Hours:
                       </span>
                       {detailsObj?.weeklyHours} hours
@@ -284,28 +293,44 @@ const CourseDetails = ({
                   <ul className="details-list">
                     <li>
                       <span>
-                        <img src={three} alt="img" className="me-2 inline" />
+                        <img
+                          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/icon/08.svg"
+                          alt="img"
+                          className="me-2 inline"
+                        />
                         Age:
                       </span>
                       {detailsObj?.age} year
                     </li>
                     <li>
                       <span>
-                        <img src={four} alt="img" className="me-2 inline" />
+                        <img
+                          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/icon/09.svg"
+                          alt="img"
+                          className="me-2 inline"
+                        />
                         Duration:
                       </span>
                       {detailsObj?.weekendsDuration}
                     </li>
                     <li>
                       <span>
-                        <img src={five} alt="img" className="me-2 inline" />
+                        <img
+                          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/icon/10.svg"
+                          alt="img"
+                          className="me-2 inline"
+                        />
                         Days:
                       </span>
                       {detailsObj?.weekendDays} days
                     </li>
                     <li>
                       <span>
-                        <img src={six} alt="img" className="me-2 inline" />
+                        <img
+                          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/icon/11.svg"
+                          alt="img"
+                          className="me-2 inline"
+                        />
                         Hours:
                       </span>
                       {detailsObj?.weekendHours} hours
@@ -343,7 +368,10 @@ const CourseDetails = ({
             <div className="col-lg-12">
               <div className="program-author-items">
                 <div className="thumb">
-                  <img src={nine} alt="img" />
+                  <img
+                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/p-author.jpg"
+                    alt="img"
+                  />
                 </div>
                 <div className="content">
                   <h2>Savannah Nguyen</h2>

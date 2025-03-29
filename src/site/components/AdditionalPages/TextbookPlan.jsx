@@ -1,7 +1,5 @@
 import React from "react";
-import four from "../../assets/img/pricing/icon.svg";
-import five from "../../assets/img/pricing/element.png";
-import six from "../../assets/img/pricing/element-2.png";
+
 export default function TextbookPlan({
   textbook1Data,
   textbook2Data,
@@ -22,10 +20,17 @@ export default function TextbookPlan({
       >
         <div className="pricing-items box-shadow">
           <div className="icon">
-            <img src={four} alt="icon-img" />
+            <img
+              src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/pricing/icon.svg"
+              alt="icon-img"
+            />
           </div>
           <div className="element-shape text-end">
-            <img src={five} className="w-75" alt="shape-img" />
+            <img
+              src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/pricing/element.png"
+              className="w-75"
+              alt="shape-img"
+            />
           </div>
           <div className="pricing-header mt-3 pb-5">
             <h4 className="text-uppercase">Textbook 1</h4>
@@ -62,10 +67,17 @@ export default function TextbookPlan({
       >
         <div className="pricing-items active">
           <div className="icon">
-            <img src={four} alt="icon-img" />
+            <img
+              src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/pricing/icon.svg"
+              alt="icon-img"
+            />
           </div>
           <div className="element-shape text-end">
-            <img src={six} className="w-75" alt="shape-img" />
+            <img
+              src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/pricing/element-2.png"
+              className="w-75"
+              alt="shape-img"
+            />
           </div>
           <div className="pricing-header mt-3 pb-5">
             <h4 className="text-uppercase">Textbook 2</h4>
@@ -101,10 +113,17 @@ export default function TextbookPlan({
       >
         <div className="pricing-items active">
           <div className="icon">
-            <img src={four} alt="icon-img" />
+            <img
+              src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/pricing/icon.svg"
+              alt="icon-img"
+            />
           </div>
           <div className="element-shape text-end">
-            <img src={six} className="w-75" alt="shape-img" />
+            <img
+              src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/pricing/element-2.png"
+              className="w-75"
+              alt="shape-img"
+            />
           </div>
           <div className="pricing-header mt-3 pb-5">
             <h4 className="text-uppercase">Textbook 3</h4>
@@ -140,10 +159,17 @@ export default function TextbookPlan({
       >
         <div className="pricing-items box-shadow">
           <div className="icon">
-            <img src={four} alt="icon-img" />
+            <img
+              src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/pricing/icon.svg"
+              alt="icon-img"
+            />
           </div>
           <div className="element-shape text-end">
-            <img src={five} className="w-75" alt="shape-img" />
+            <img
+              src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/pricing/element.png"
+              className="w-75"
+              alt="shape-img"
+            />
           </div>
           <div className="pricing-header mt-3 pb-5">
             <h4 className="text-uppercase">Textbook 4</h4>
@@ -180,10 +206,17 @@ export default function TextbookPlan({
       >
         <div className="pricing-items box-shadow">
           <div className="icon">
-            <img src={four} alt="icon-img" />
+            <img
+              src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/pricing/icon.svg"
+              alt="icon-img"
+            />
           </div>
           <div className="element-shape text-end">
-            <img src={five} className="w-75" alt="shape-img" />
+            <img
+              src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/pricing/element.png"
+              className="w-75"
+              alt="shape-img"
+            />
           </div>
           <div className="pricing-header mt-3 pb-5">
             <h4 className="text-uppercase">Textbook 5</h4>
@@ -220,10 +253,17 @@ export default function TextbookPlan({
       >
         <div className="pricing-items active">
           <div className="icon">
-            <img src={four} alt="icon-img" />
+            <img
+              src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/pricing/icon.svg"
+              alt="icon-img"
+            />
           </div>
           <div className="element-shape text-end">
-            <img src={six} className="w-75" alt="shape-img" />
+            <img
+              src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/pricing/element-2.png"
+              className="w-75"
+              alt="shape-img"
+            />
           </div>
           <div className="pricing-header mt-3 pb-5">
             <h4 className="text-uppercase">Textbook 6</h4>
