@@ -1,18 +1,19 @@
 import { Link } from "react-router";
-import one from "../../assets/img/line-1.png";
-import two from "../../assets/img/line-3.png";
-import three from "../../assets/img/program/icon/05.svg";
-import four from "../../assets/img/program/icon/06.svg";
-import five from "../../assets/img/program/icon/07.svg";
 
 const AllThree = () => {
   return (
     <section className="service-section fix section-padding">
       <div className="line-1">
-        <img src={one} alt="shape-img" />
+        <img
+          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/line-1.png"
+          alt="shape-img"
+        />
       </div>
       <div className="line-2">
-        <img src={two} alt="shape-img" />
+        <img
+          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/line-3.png"
+          alt="shape-img"
+        />
       </div>
       <div className="container">
         <div className="service-wrapper">
@@ -82,7 +83,10 @@ const AllThree = () => {
                   data-aos-delay="300"
                 >
                   <div className="icon">
-                    <img src={three} alt="icon-img" />
+                    <img
+                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/icon/05.svg"
+                      alt="icon-img"
+                    />
                   </div>
                   <div className="content">
                     <h5>Our Mission</h5>
@@ -99,7 +103,10 @@ const AllThree = () => {
                   data-aos-delay="500"
                 >
                   <div className="icon color-2">
-                    <img src={four} alt="icon-img" />
+                    <img
+                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/icon/06.svg"
+                      alt="icon-img"
+                    />
                   </div>
                   <div className="content">
                     <h5>Our Vision</h5>
@@ -116,7 +123,10 @@ const AllThree = () => {
                   data-aos-delay="700"
                 >
                   <div className="icon color-3">
-                    <img src={five} alt="icon-img" />
+                    <img
+                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/icon/07.svg"
+                      alt="icon-img"
+                    />
                   </div>
                   <div className="content">
                     <h5>Our Values</h5>
