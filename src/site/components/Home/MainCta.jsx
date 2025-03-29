@@ -12,13 +12,6 @@ const MainCta = () => {
       </div>
       <div className="container">
         <div className="main-cta-wrapper section-padding">
-          <div className="pencil-shape">
-            <img
-              src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/cta/pencil.png"
-              className="w-50"
-              alt="img"
-            />
-          </div>
           <div className="plane-shape float-bob-y">
             <img
               src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/cta/plane.png"
