@@ -21,25 +21,29 @@ const VacanciesGrid = () => {
                   <div
                     className="news-layer-image"
                     style={{
-                      backgroundImage: "url(/img/news/04.jpg)",
+                      backgroundImage:
+                        "url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/04.jpg)",
                     }}
                   ></div>
                   <div
                     className="news-layer-image"
                     style={{
-                      backgroundImage: "url(/img/news/04.jpg)",
+                      backgroundImage:
+                        "url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/04.jpg)",
                     }}
                   ></div>
                   <div
                     className="news-layer-image"
                     style={{
-                      backgroundImage: "url(/img/news/04.jpg)",
+                      backgroundImage:
+                        "url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/04.jpg)",
                     }}
                   ></div>
                   <div
                     className="news-layer-image"
                     style={{
-                      backgroundImage: "url(/img/news/04.jpg)",
+                      backgroundImage:
+                        "url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/04.jpg)",
                     }}
                   ></div>
                 </div>
@@ -86,25 +90,29 @@ const VacanciesGrid = () => {
                   <div
                     className="news-layer-image"
                     style={{
-                      backgroundImage: "url(/img/news/05.jpg)",
+                      backgroundImage:
+                        "url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/05.jpg)",
                     }}
                   ></div>
                   <div
                     className="news-layer-image"
                     style={{
-                      backgroundImage: "url(/img/news/05.jpg)",
+                      backgroundImage:
+                        "url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/05.jpg)",
                     }}
                   ></div>
                   <div
                     className="news-layer-image"
                     style={{
-                      backgroundImage: "url(/img/news/05.jpg)",
+                      backgroundImage:
+                        "url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/05.jpg)",
                     }}
                   ></div>
                   <div
                     className="news-layer-image"
                     style={{
-                      backgroundImage: "url(/img/news/05.jpg)",
+                      backgroundImage:
+                        "url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/05.jpg)",
                     }}
                   ></div>
                 </div>
@@ -151,25 +159,29 @@ const VacanciesGrid = () => {
                   <div
                     className="news-layer-image"
                     style={{
-                      backgroundImage: "url(/img/news/06.jpg)",
+                      backgroundImage:
+                        "url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/06.jpg)",
                     }}
                   ></div>
                   <div
                     className="news-layer-image"
                     style={{
-                      backgroundImage: "url(/img/news/06.jpg)",
+                      backgroundImage:
+                        "url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/06.jpg)",
                     }}
                   ></div>
                   <div
                     className="news-layer-image"
                     style={{
-                      backgroundImage: "url(/img/news/06.jpg)",
+                      backgroundImage:
+                        "url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/06.jpg)",
                     }}
                   ></div>
                   <div
                     className="news-layer-image"
                     style={{
-                      backgroundImage: "url(/img/news/06.jpg)",
+                      backgroundImage:
+                        "url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/06.jpg)",
                     }}
                   ></div>
                 </div>
@@ -215,25 +227,29 @@ const VacanciesGrid = () => {
                   <div
                     className="news-layer-image"
                     style={{
-                      backgroundImage: "url(/img/news/08.jpg)",
+                      backgroundImage:
+                        "url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/08.jpg)",
                     }}
                   ></div>
                   <div
                     className="news-layer-image"
                     style={{
-                      backgroundImage: "url(/img/news/08.jpg)",
+                      backgroundImage:
+                        "url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/08.jpg)",
                     }}
                   ></div>
                   <div
                     className="news-layer-image"
                     style={{
-                      backgroundImage: "url(/img/news/08.jpg)",
+                      backgroundImage:
+                        "url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/08.jpg)",
                     }}
                   ></div>
                   <div
                     className="news-layer-image"
                     style={{
-                      backgroundImage: "url(/img/news/08.jpg)",
+                      backgroundImage:
+                        "url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/08.jpg)",
                     }}
                   ></div>
                 </div>
@@ -279,25 +295,29 @@ const VacanciesGrid = () => {
                   <div
                     className="news-layer-image"
                     style={{
-                      backgroundImage: "url(/img/news/09.jpg)",
+                      backgroundImage:
+                        "url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/09.jpg)",
                     }}
                   ></div>
                   <div
                     className="news-layer-image"
                     style={{
-                      backgroundImage: "url(/img/news/09.jpg)",
+                      backgroundImage:
+                        "url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/09.jpg)",
                     }}
                   ></div>
                   <div
                     className="news-layer-image"
                     style={{
-                      backgroundImage: "url(/img/news/09.jpg)",
+                      backgroundImage:
+                        "url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/09.jpg)",
                     }}
                   ></div>
                   <div
                     className="news-layer-image"
                     style={{
-                      backgroundImage: "url(/img/news/09.jpg)",
+                      backgroundImage:
+                        "url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/09.jpg)",
                     }}
                   ></div>
                 </div>
@@ -343,25 +363,29 @@ const VacanciesGrid = () => {
                   <div
                     className="news-layer-image"
                     style={{
-                      backgroundImage: "url(/img/news/10.jpg)",
+                      backgroundImage:
+                        "url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/10.jpg)",
                     }}
                   ></div>
                   <div
                     className="news-layer-image"
                     style={{
-                      backgroundImage: "url(/img/news/10.jpg)",
+                      backgroundImage:
+                        "url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/10.jpg)",
                     }}
                   ></div>
                   <div
                     className="news-layer-image"
                     style={{
-                      backgroundImage: "url(/img/news/10.jpg)",
+                      backgroundImage:
+                        "url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/10.jpg)",
                     }}
                   ></div>
                   <div
                     className="news-layer-image"
                     style={{
-                      backgroundImage: "url(/img/news/10.jpg)",
+                      backgroundImage:
+                        "url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/10.jpg)",
                     }}
                   ></div>
                 </div>
