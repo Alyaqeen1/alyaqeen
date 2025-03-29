@@ -1,7 +1,4 @@
 import { useState } from "react";
-import four from "../../assets/img/pricing/icon.svg";
-import five from "../../assets/img/pricing/element.png";
-import six from "../../assets/img/pricing/element-2.png";
 import { Link } from "react-router";
 
 const PricingPlan = () => {
@@ -89,10 +86,16 @@ const PricingPlan = () => {
               >
                 <div className="pricing-items box-shadow">
                   <div className="icon">
-                    <img src={four} alt="icon-img" />
+                    <img
+                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/pricing/icon.svg"
+                      alt="icon-img"
+                    />
                   </div>
                   <div className="element-shape">
-                    <img src={five} alt="shape-img" />
+                    <img
+                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/pricing/element.png"
+                      alt="shape-img"
+                    />
                   </div>
                   <div className="pricing-header">
                     <h4>Basic Plan</h4>
@@ -135,10 +138,16 @@ const PricingPlan = () => {
               >
                 <div className="pricing-items active">
                   <div className="icon">
-                    <img src={four} alt="icon-img" />
+                    <img
+                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/pricing/icon.svg"
+                      alt="icon-img"
+                    />
                   </div>
                   <div className="element-shape">
-                    <img src={six} alt="shape-img" />
+                    <img
+                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/pricing/element-2.png"
+                      alt="shape-img"
+                    />
                   </div>
                   <div className="pricing-header">
                     <h4>Premium Plan</h4>
@@ -181,10 +190,16 @@ const PricingPlan = () => {
               >
                 <div className="pricing-items box-shadow">
                   <div className="icon">
-                    <img src={four} alt="icon-img" />
+                    <img
+                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/pricing/icon.svg"
+                      alt="icon-img"
+                    />
                   </div>
                   <div className="element-shape">
-                    <img src={five} alt="shape-img" />
+                    <img
+                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/pricing/element.png"
+                      alt="shape-img"
+                    />
                   </div>
                   <div className="pricing-header">
                     <h4>Advanced</h4>
@@ -231,10 +246,16 @@ const PricingPlan = () => {
               <div className="col-xl-4 col-lg-6 col-md-6">
                 <div className="pricing-items box-shadow">
                   <div className="icon">
-                    <img src={four} alt="icon-img" />
+                    <img
+                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/pricing/icon.svg"
+                      alt="icon-img"
+                    />
                   </div>
                   <div className="element-shape">
-                    <img src={five} alt="shape-img" />
+                    <img
+                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/pricing/element.png"
+                      alt="shape-img"
+                    />
                   </div>
                   <div className="pricing-header">
                     <h4>Basic Plan</h4>
@@ -272,10 +293,16 @@ const PricingPlan = () => {
               <div className="col-xl-4 col-lg-6 col-md-6">
                 <div className="pricing-items active">
                   <div className="icon">
-                    <img src={four} alt="icon-img" />
+                    <img
+                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/pricing/icon.svg"
+                      alt="icon-img"
+                    />
                   </div>
                   <div className="element-shape">
-                    <img src={six} alt="shape-img" />
+                    <img
+                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/pricing/element-2.png"
+                      alt="shape-img"
+                    />
                   </div>
                   <div className="pricing-header">
                     <h4>Premium Plan</h4>
@@ -313,10 +340,16 @@ const PricingPlan = () => {
               <div className="col-xl-4 col-lg-6 col-md-6">
                 <div className="pricing-items box-shadow">
                   <div className="icon">
-                    <img src={four} alt="icon-img" />
+                    <img
+                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/pricing/icon.svg"
+                      alt="icon-img"
+                    />
                   </div>
                   <div className="element-shape">
-                    <img src={five} alt="shape-img" />
+                    <img
+                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/pricing/element.png"
+                      alt="shape-img"
+                    />
                   </div>
                   <div className="pricing-header">
                     <h4>Advanced</h4>

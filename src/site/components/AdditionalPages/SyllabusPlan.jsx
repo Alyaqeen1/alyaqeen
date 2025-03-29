@@ -1,9 +1,4 @@
 import { useEffect, useState } from "react";
-import four from "../../assets/img/pricing/icon.svg";
-import five from "../../assets/img/pricing/element.png";
-import six from "../../assets/img/pricing/element-2.png";
-import { Link } from "react-router";
-import Login from "../../pages/Authentication/Login";
 import SyllabusModal from "./SyllabusModal";
 import axios from "axios";
 import LoadingSpinner from "../LoadingSpinner";

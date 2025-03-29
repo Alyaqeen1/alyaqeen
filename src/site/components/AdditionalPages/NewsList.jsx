@@ -1,10 +1,4 @@
 import { Link } from "react-router";
-import one from "../../assets/img/news/post-1.jpg";
-import two from "../../assets/img/news/post-2.jpg";
-import three from "../../assets/img/news/post-3.jpg";
-import four from "../../assets/img/news/pp3.jpg";
-import five from "../../assets/img/news/pp4.jpg";
-import six from "../../assets/img/news/pp5.jpg";
 
 const NewsList = () => {
   return (
@@ -15,7 +9,10 @@ const NewsList = () => {
             <div className="news-standard-wrapper">
               <div className="news-standard-items">
                 <div className="news-thumb">
-                  <img src={one} alt="img" />
+                  <img
+                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/post-1.jpg"
+                    alt="img"
+                  />
                   <div className="post">
                     <span>Activities</span>
                   </div>
@@ -51,7 +48,10 @@ const NewsList = () => {
               </div>
               <div className="news-standard-items">
                 <div className="news-thumb">
-                  <img src={two} alt="img" />
+                  <img
+                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/post-2.jpg"
+                    alt="img"
+                  />
                   <div className="post">
                     <span>Activities</span>
                   </div>
@@ -87,7 +87,10 @@ const NewsList = () => {
               </div>
               <div className="news-standard-items">
                 <div className="news-thumb">
-                  <img src={three} alt="img" />
+                  <img
+                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/post-3.jpg"
+                    alt="img"
+                  />
                   <div className="post">
                     <span>Activities</span>
                   </div>
@@ -204,7 +207,10 @@ const NewsList = () => {
                 <div className="recent-post-area">
                   <div className="recent-items">
                     <div className="recent-thumb">
-                      <img src={four} alt="img" />
+                      <img
+                        src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/pp3.jpg"
+                        alt="img"
+                      />
                     </div>
                     <div className="recent-content">
                       <ul>
@@ -223,7 +229,10 @@ const NewsList = () => {
                   </div>
                   <div className="recent-items">
                     <div className="recent-thumb">
-                      <img src={five} alt="img" />
+                      <img
+                        src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/pp4.jpg"
+                        alt="img"
+                      />
                     </div>
                     <div className="recent-content">
                       <ul>
@@ -242,7 +251,10 @@ const NewsList = () => {
                   </div>
                   <div className="recent-items">
                     <div className="recent-thumb">
-                      <img src={six} alt="img" />
+                      <img
+                        src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/pp5.jpg"
+                        alt="img"
+                      />
                     </div>
                     <div className="recent-content">
                       <ul>
