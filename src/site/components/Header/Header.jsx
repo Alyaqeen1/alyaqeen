@@ -12,6 +12,14 @@ import { Link } from "react-router";
 const Header = () => {
   const [openSubMenu, setOpenSubMenu] = useState(null);
   const [toggleMenu, setToggleMenu] = useState(false);
+  const [logout, setLogout] = useState(
+    JSON.parse(localStorage.getItem("isLoggedIn"))
+  );
+
+  const handleLogout = () => {
+    localStorage.setItem("isLoggedIn", "false");
+    setLogout(false); // Update the state immediately to trigger a re-render
+  };
 
   const handleToggleMenu = () => {
     setToggleMenu(!toggleMenu);
@@ -223,9 +231,18 @@ const Header = () => {
                             </li>
                           </ul>
                         </li>
-                        <li>
+                        {!logout ? (
+                          <li>
+                            <Link to="/login">Login</Link>
+                          </li>
+                        ) : (
+                          <li>
+                            <button onClick={handleLogout}>Logout</button>
+                          </li>
+                        )}
+                        {/* <li>
                           <Link to="/login">Login</Link>
-                        </li>
+                        </li> */}
                       </ul>
                     </nav>
                   </div>
