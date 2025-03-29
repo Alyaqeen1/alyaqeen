@@ -1,24 +1,30 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
 import "swiper/swiper-bundle.css";
-import one from "../../assets/img/tree-shape.png";
-import two from "../../assets/img/testi-r-shape.png";
-import three from "../../assets/img/testi-bee-shape.png";
-import four from "../../assets/img/quote.png";
-import five from "../../assets/img/quote-2.png";
-import six from "../../assets/img/quote-3.png";
 
 const TestimonialTwo = () => {
   return (
     <section className="testimonial-section fix section-padding">
       <div className="tree-shape float-bob-y">
-        <img src={one} className="w-50" alt="shape-img" />
+        <img
+          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/tree-shape.png"
+          className="w-50"
+          alt="shape-img"
+        />
       </div>
       <div className="right-shape text-end">
-        <img src={two} className="w-50" alt="shape-img" />
+        <img
+          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/testi-r-shape.png"
+          className="w-50"
+          alt="shape-img"
+        />
       </div>
       <div className="bee-shape float-bob-y text-end">
-        <img src={three} className="w-50" alt="shape-img" />
+        <img
+          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/testi-bee-shape.png"
+          className="w-50"
+          alt="shape-img"
+        />
       </div>
       <div className="container">
         <div className="section-title text-center">
@@ -59,7 +65,11 @@ const TestimonialTwo = () => {
               <div className="swiper-slide">
                 <div className="testimonial-items">
                   <div className="icon">
-                    <img src={four} className="w-50" alt="img" />
+                    <img
+                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/quote.png"
+                      className="w-50"
+                      alt="img"
+                    />
                   </div>
                   <div className="testimonial-bg"></div>
                   <div className="testimonial-content">
@@ -76,7 +86,11 @@ const TestimonialTwo = () => {
               <div className="swiper-slide">
                 <div className="testimonial-items style-2">
                   <div className="icon">
-                    <img src={five} className="w-50" alt="img" />
+                    <img
+                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/quote-2.png"
+                      className="w-50"
+                      alt="img"
+                    />
                   </div>
                   <div className="testimonial-bg bg-2"></div>
                   <div className="testimonial-content">
@@ -93,7 +107,11 @@ const TestimonialTwo = () => {
               <div className="swiper-slide">
                 <div className="testimonial-items style-3">
                   <div className="icon">
-                    <img src={six} className="w-50" alt="img" />
+                    <img
+                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/quote-3.png"
+                      className="w-50"
+                      alt="img"
+                    />
                   </div>
                   <div className="testimonial-bg bg-3"></div>
                   <div className="testimonial-content">
@@ -110,7 +128,11 @@ const TestimonialTwo = () => {
               <div className="swiper-slide">
                 <div className="testimonial-items">
                   <div className="icon">
-                    <img src={four} className="w-50" alt="img" />
+                    <img
+                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/quote.png"
+                      className="w-50"
+                      alt="img"
+                    />
                   </div>
                   <div className="testimonial-bg"></div>
                   <div className="testimonial-content">
@@ -127,7 +149,11 @@ const TestimonialTwo = () => {
               <div className="swiper-slide">
                 <div className="testimonial-items style-2">
                   <div className="icon">
-                    <img src={five} className="w-50" alt="img" />
+                    <img
+                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/quote-2.png"
+                      className="w-50"
+                      alt="img"
+                    />
                   </div>
                   <div className="testimonial-bg bg-2"></div>
                   <div className="testimonial-content">
@@ -144,7 +170,11 @@ const TestimonialTwo = () => {
               <div className="swiper-slide">
                 <div className="testimonial-items style-3">
                   <div className="icon">
-                    <img src={six} className="w-50" alt="img" />
+                    <img
+                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/quote-3.png"
+                      className="w-50"
+                      alt="img"
+                    />
                   </div>
                   <div className="testimonial-bg bg-3"></div>
                   <div className="testimonial-content">
@@ -161,7 +191,11 @@ const TestimonialTwo = () => {
               <div className="swiper-slide">
                 <div className="testimonial-items">
                   <div className="icon">
-                    <img src={four} className="w-50" alt="img" />
+                    <img
+                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/quote.png"
+                      className="w-50"
+                      alt="img"
+                    />
                   </div>
                   <div className="testimonial-bg"></div>
                   <div className="testimonial-content">
@@ -178,7 +212,11 @@ const TestimonialTwo = () => {
               <div className="swiper-slide">
                 <div className="testimonial-items style-2">
                   <div className="icon">
-                    <img src={five} className="w-50" alt="img" />
+                    <img
+                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/quote-2.png"
+                      className="w-50"
+                      alt="img"
+                    />
                   </div>
                   <div className="testimonial-bg bg-2"></div>
                   <div className="testimonial-content">
@@ -195,7 +233,11 @@ const TestimonialTwo = () => {
               <div className="swiper-slide">
                 <div className="testimonial-items style-3">
                   <div className="icon">
-                    <img src={six} className="w-50" alt="img" />
+                    <img
+                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/quote-3.png"
+                      className="w-50"
+                      alt="img"
+                    />
                   </div>
                   <div className="testimonial-bg bg-3"></div>
                   <div className="testimonial-content">

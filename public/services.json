@@ -9,7 +9,7 @@
     "para4": "Students can improve on their Maths, Science and English as each and every student is provided with assistance according to his/her academic needs.",
     "description": "We all know the impact that Covid-19 has left upon a children's education.",
     "category": "online-learning",
-    "image_link": "../src/site/assets/img/home/online-learing.png",
+    "image_link": "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/home/online-learing.png",
     "nav_link": "/service/online-learning",
     "details_img": ""
   },
@@ -24,9 +24,9 @@
     "para5": "Therefore if you would have your Nikkah conducted by Shaykh Khalid, please contact us on our contact page or click on the button below",
     "description": "Shaykh Khalid has conducted many Nikkahs over the last 10 years and offers this service.",
     "category": "nikah-service",
-    "image_link": "../src/site/assets/img/home/nikaah_bg.jpg",
+    "image_link": "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/home/nikaah_bg.jpg",
     "nav_link": "/service/nikah-service",
-    "details_img": "../src/site/assets/img/about/flower2.png"
+    "details_img": "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/about/flower2.png"
   },
   {
     "id": "3",
@@ -38,7 +38,7 @@
     "para4": "At Alyaqeen academy we have a football club whereby students play football with one another and also get the opportunity to join the Alyaqeen football team to play in league against other teams. We Also have Cricket Club whereby students play Cricket in summer time",
     "description": "At Alyaqeen academy students play football. We also have a Cricket Club where students play in summer time.",
     "category": "sports",
-    "image_link": "../src/site/assets/img/home/sports-club.jpg",
+    "image_link": "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/home/sports-club.jpg",
     "nav_link": "/service/sports",
     "details_img": ""
   },
@@ -48,7 +48,7 @@
     "title": "",
     "description": "We provide you the best platform to get books, shirts, bags, all kinds of stationary items and sportswear items.",
     "category": "alyaqeen-shop",
-    "image_link": "../src/site/assets/img/home/shop.jpg",
+    "image_link": "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/home/shop.jpg",
     "nav_link": "/shop",
     "details_img": ""
   },
@@ -62,7 +62,7 @@
     "para4": "Students can improve on their Maths, Science and English as each and every student is provided with assistance according to his/her academic needs.",
     "description": "We all know the impact that Covid-19 has left upon a children's education.",
     "category": "online-learning",
-    "image_link": "../src/site/assets/img/home/online-learing.png",
+    "image_link": "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/home/online-learing.png",
     "nav_link": "/service/online-learning",
     "details_img": ""
   },
@@ -77,8 +77,8 @@
     "para5": "Therefore if you would have your Nikkah conducted by Shaykh Khalid, please contact us on our contact page or click on the button below",
     "description": "Shaykh Khalid has conducted many Nikkahs over the last 10 years and offers this service.",
     "category": "nikah-service",
-    "image_link": "../src/site/assets/img/home/nikaah_bg.jpg",
+    "image_link": "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/home/nikaah_bg.jpg",
     "nav_link": "/service/nikah-service",
-    "details_img": "../src/site/assets/img/about/flower2.png"
+    "details_img": "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/about/flower2.png"
   }
 ]

@@ -1,12 +1,6 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import "swiper/swiper-bundle.css";
-import one from "../../assets/img/instagram/01.jpg";
-import two from "../../assets/img/instagram/02.jpg";
-import three from "../../assets/img/instagram/03.jpg";
-import four from "../../assets/img/instagram/04.jpg";
-import five from "../../assets/img/instagram/05.jpg";
-import six from "../../assets/img/instagram/06.jpg";
 import { Link } from "react-router";
 
 const Instagram = () => {
@@ -56,7 +50,10 @@ const Instagram = () => {
               <div className="swiper-slide">
                 <div className="instagram-banner-items">
                   <div className="banner-image">
-                    <img src={one} alt="insta-img" />
+                    <img
+                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/instagram/01.jpg"
+                      alt="insta-img"
+                    />
                     <Link to="/" className="icon">
                       <i className="fa-brands fa-instagram"></i>
                     </Link>
@@ -68,7 +65,10 @@ const Instagram = () => {
               <div className="swiper-slide">
                 <div className="instagram-banner-items">
                   <div className="banner-image">
-                    <img src={two} alt="insta-img" />
+                    <img
+                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/instagram/02.jpg"
+                      alt="insta-img"
+                    />
                     <Link to="/" className="icon">
                       <i className="fa-brands fa-instagram"></i>
                     </Link>
@@ -80,7 +80,10 @@ const Instagram = () => {
               <div className="swiper-slide">
                 <div className="instagram-banner-items">
                   <div className="banner-image">
-                    <img src={three} alt="insta-img" />
+                    <img
+                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/instagram/03.jpg"
+                      alt="insta-img"
+                    />
                     <Link to="/" className="icon">
                       <i className="fa-brands fa-instagram"></i>
                     </Link>
@@ -92,7 +95,10 @@ const Instagram = () => {
               <div className="swiper-slide">
                 <div className="instagram-banner-items">
                   <div className="banner-image">
-                    <img src={four} alt="insta-img" />
+                    <img
+                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/instagram/04.jpg"
+                      alt="insta-img"
+                    />
                     <Link to="/" className="icon">
                       <i className="fa-brands fa-instagram"></i>
                     </Link>
@@ -104,7 +110,10 @@ const Instagram = () => {
               <div className="swiper-slide">
                 <div className="instagram-banner-items">
                   <div className="banner-image">
-                    <img src={five} alt="insta-img" />
+                    <img
+                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/instagram/05.jpg"
+                      alt="insta-img"
+                    />
                     <Link to="/" className="icon">
                       <i className="fa-brands fa-instagram"></i>
                     </Link>
@@ -116,7 +125,10 @@ const Instagram = () => {
               <div className="swiper-slide">
                 <div className="instagram-banner-items">
                   <div className="banner-image">
-                    <img src={six} alt="insta-img" />
+                    <img
+                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/instagram/06.jpg"
+                      alt="insta-img"
+                    />
                     <Link to="/" className="icon">
                       <i className="fa-brands fa-instagram"></i>
                     </Link>
@@ -128,7 +140,10 @@ const Instagram = () => {
               <div className="swiper-slide">
                 <div className="instagram-banner-items">
                   <div className="banner-image">
-                    <img src={one} alt="insta-img" />
+                    <img
+                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/instagram/01.jpg"
+                      alt="insta-img"
+                    />
                     <Link to="/" className="icon">
                       <i className="fa-brands fa-instagram"></i>
                     </Link>
@@ -140,7 +155,10 @@ const Instagram = () => {
               <div className="swiper-slide">
                 <div className="instagram-banner-items">
                   <div className="banner-image">
-                    <img src={two} alt="insta-img" />
+                    <img
+                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/instagram/02.jpg"
+                      alt="insta-img"
+                    />
                     <Link to="/" className="icon">
                       <i className="fa-brands fa-instagram"></i>
                     </Link>
@@ -152,7 +170,10 @@ const Instagram = () => {
               <div className="swiper-slide">
                 <div className="instagram-banner-items">
                   <div className="banner-image">
-                    <img src={three} alt="insta-img" />
+                    <img
+                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/instagram/03.jpg"
+                      alt="insta-img"
+                    />
                     <Link to="/" className="icon">
                       <i className="fa-brands fa-instagram"></i>
                     </Link>
@@ -164,7 +185,10 @@ const Instagram = () => {
               <div className="swiper-slide">
                 <div className="instagram-banner-items">
                   <div className="banner-image">
-                    <img src={four} alt="insta-img" />
+                    <img
+                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/instagram/04.jpg"
+                      alt="insta-img"
+                    />
                     <Link to="/" className="icon">
                       <i className="fa-brands fa-instagram"></i>
                     </Link>
@@ -176,7 +200,10 @@ const Instagram = () => {
               <div className="swiper-slide">
                 <div className="instagram-banner-items">
                   <div className="banner-image">
-                    <img src={five} alt="insta-img" />
+                    <img
+                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/instagram/05.jpg"
+                      alt="insta-img"
+                    />
                     <Link to="/" className="icon">
                       <i className="fa-brands fa-instagram"></i>
                     </Link>
@@ -188,7 +215,10 @@ const Instagram = () => {
               <div className="swiper-slide">
                 <div className="instagram-banner-items">
                   <div className="banner-image">
-                    <img src={six} alt="insta-img" />
+                    <img
+                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/instagram/06.jpg"
+                      alt="insta-img"
+                    />
                     <Link to="/" className="icon">
                       <i className="fa-brands fa-instagram"></i>
                     </Link>

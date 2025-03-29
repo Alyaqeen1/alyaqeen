@@ -1,7 +1,3 @@
-import one from "../../assets/img/news/01.jpg";
-
-import five from "../../assets/img/news/author-3.png";
-import author from "../../assets/img/news/author.png";
 import { Link } from "react-router";
 import BestTeacher from "./BestTeacher";
 import BestStudent from "./BestStudent";

@@ -1,8 +1,3 @@
-import one from "../../assets/img/cta/plane.png";
-import two from "../../assets/img/cta/pencil.png";
-import three from "../../assets/img/home/graduation-mortarboard-svgrepo-com.svg";
-import four from "../../assets/img/cta/cta-shape.png";
-import five from "../../assets/img/cta/cta-bg.jpg";
 import { Link } from "react-router";
 
 const CTA = () => {
@@ -10,14 +5,22 @@ const CTA = () => {
     <section
       className="cta-section fix section-padding bg-cover"
       style={{
-        backgroundImage: `url(${five})`,
+        backgroundImage: `url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/cta/cta-bg.jpg)`,
       }}
     >
       <div className="plane-shape">
-        <img src={one} className="w-50" alt="img" />
+        <img
+          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/cta/plane.png"
+          className="w-50"
+          alt="img"
+        />
       </div>
       <div className="pencil-shape text-end">
-        <img src={two} className="w-50" alt="img" />
+        <img
+          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/cta/pencil.png"
+          className="w-50"
+          alt="img"
+        />
       </div>
       <div className="container">
         <div className="cta-wrapper">
@@ -59,9 +62,17 @@ const CTA = () => {
               data-aos-delay="400"
             >
               <div className="cta-image">
-                <img className="w-50" src={three} alt="cta-img" />
+                <img
+                  className="w-50"
+                  src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/home/graduation-mortarboard-svgrepo-com.svg"
+                  alt="cta-img"
+                />
                 <div className="cta-shape text-start">
-                  <img src={four} style={{ width: "53%" }} alt="img" />
+                  <img
+                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/cta/cta-shape.png"
+                    style={{ width: "53%" }}
+                    alt="img"
+                  />
                 </div>
               </div>
             </div>

@@ -1,6 +1,4 @@
 import React from "react";
-import three from "../../assets/img/home/s.png";
-import { Link } from "react-router";
 
 export default function BestStudent() {
   return (
@@ -72,7 +70,7 @@ export default function BestStudent() {
       >
         <div className="news-thumb col-lg-6 col-sm-6 border-2  px-3">
           <img
-            src={three}
+            src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/home/s.png"
             className="object-fit-cover"
             style={{
               borderRadius: "5%",

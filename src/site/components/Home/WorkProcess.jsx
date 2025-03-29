@@ -1,10 +1,3 @@
-import one from "../../assets/img/process/line.png";
-import two from "../../assets/img/process/01.svg";
-import three from "../../assets/img/process/line-2.png";
-import four from "../../assets/img/process/02.svg";
-import five from "../../assets/img/process/03.svg";
-import six from "../../assets/img/process/04.svg";
-import seven from "../../assets/img/process/icon-bg.png";
 import { FaCalendarAlt } from "react-icons/fa";
 import { IoIosCalculator } from "react-icons/io";
 import { IoBusOutline } from "react-icons/io5";
@@ -25,12 +18,15 @@ const WorkProcess = () => {
               <Link to="session-timings">
                 <div className="work-process-items text-center">
                   <div className="line-shape">
-                    <img src={one} alt="shape-img" />
+                    <img
+                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/process/line.png"
+                      alt="shape-img"
+                    />
                   </div>
                   <div
                     className="icon bg-cover  flex justify-center items-center"
                     style={{
-                      backgroundImage: `url(${seven})`,
+                      backgroundImage: `url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/process/icon-bg.png)`,
                     }}
                   >
                     <FaCalendarAlt className="fs-3 text-white" />
@@ -54,12 +50,15 @@ const WorkProcess = () => {
               <Link to="fees">
                 <div className="work-process-items text-center style-2">
                   <div className="line-shape-2">
-                    <img src={three} alt="shape-img" />
+                    <img
+                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/process/line-2.png"
+                      alt="shape-img"
+                    />
                   </div>
                   <div
                     className="icon bg-cover  flex justify-center items-center"
                     style={{
-                      backgroundImage: `url(${seven})`,
+                      backgroundImage: `url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/process/icon-bg.png)`,
                     }}
                   >
                     <IoIosCalculator className="fs-2 text-white" />
@@ -82,13 +81,10 @@ const WorkProcess = () => {
             >
               <Link to="holidays">
                 <div className="work-process-items text-center">
-                  {/* <div className="line-shape">
-                  <img src={one} alt="shape-img" />
-                </div> */}
                   <div
                     className="icon bg-cover flex justify-center items-center"
                     style={{
-                      backgroundImage: `url(${seven})`,
+                      backgroundImage: `url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/process/icon-bg.png)`,
                     }}
                   >
                     <IoBusOutline className="fs-2 text-white" />
