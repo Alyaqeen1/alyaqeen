@@ -125,8 +125,8 @@ export default function AdditionalServices() {
                           src={one_Service.image_link}
                           alt="img"
                           style={{
-                            width: "290px",
-                            height: "270px",
+                            width: "300px",
+                            height: "300px",
                             borderRadius: "150px",
                           }}
                         />
@@ -146,7 +146,7 @@ export default function AdditionalServices() {
                             {one_Service.name}
                           </Link>
                         </h4>
-                        <span>(4-5 years)</span>
+
                         <p>{one_Service.description.substring(0, 65)}...</p>
                         <Link
                           to={one_Service?.nav_link}

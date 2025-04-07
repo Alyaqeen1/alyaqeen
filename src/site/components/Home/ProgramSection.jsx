@@ -8,14 +8,16 @@ const ProgramSection = () => {
     >
       <div className="top-shape">
         <img
-          className="w-50"
+          className="w-75"
+          style={{ marginTop: "-8px" }}
           src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/section-top-shape.png"
           alt="shape-img"
         />
       </div>
       <div className="bottom-shape">
         <img
-          className="w-50"
+          className="w-75"
+          style={{ marginBottom: "-8px" }}
           src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/section-bottom-shape.png"
           alt="shape-img"
         />

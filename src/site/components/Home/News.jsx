@@ -6,7 +6,7 @@ const News = () => {
   return (
     <section className="news-section section-padding fix" id="blog">
       <div className="container">
-        <div className="section-title-area">
+        {/* <div className="section-title-area">
           <div className="section-title">
             <span data-aos-duration="800" data-aos="fade-up">
               Our Blogs
@@ -24,7 +24,7 @@ const News = () => {
           >
             See All Article <i className="fa-solid fa-arrow-right-long"></i>
           </Link>
-        </div>
+        </div> */}
         <div className="news-wrapper">
           <div className="row align-items-center">
             {/* announcement section */}

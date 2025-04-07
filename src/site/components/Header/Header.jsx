@@ -79,7 +79,7 @@ const Header = () => {
                     <img
                       className="h-auto"
                       style={{ width: "70px" }}
-                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/logo/logo.png"
+                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/logo/logo3.png"
                       alt="logo-img"
                     />
                   </Link>

@@ -24,10 +24,11 @@ export default function Home() {
       <Banner></Banner>
       <LanguageModal></LanguageModal>
 
-      <News></News>
-      <AboutActivities></AboutActivities>
       <ProgramSection></ProgramSection>
       <WorkProcess></WorkProcess>
+      <AboutActivities></AboutActivities>
+      <FeeStructure></FeeStructure>
+      <News></News>
       <Marquee></Marquee>
       <Certificate></Certificate>
       <Team></Team>
@@ -37,7 +38,6 @@ export default function Home() {
       <Blogs></Blogs>
       <MainCta></MainCta>
       <Instagram></Instagram>
-      <FeeStructure></FeeStructure>
       <AdditionalServices></AdditionalServices>
       <AboutSection></AboutSection>
     </div>

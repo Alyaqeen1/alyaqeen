@@ -236,57 +236,7 @@ const FeeStructure = () => {
                 </td>
               </tr>
 
-              {/* 4th row data  */}
-              <tr>
-                <td
-                  // className="text-white p-1 bg-brown font-weight-light border h6 text-center align-middle"
-                  className="text-white p-1 bg-brown font-weight-bold border h6 text-center align-middle"
-                >
-                  <Link
-                    to={"/arabic-qaidah-quran-hifdh"}
-                    // to="https://alyaqeen.co.uk/arabic-qaidah-quran-hifdh"
-                    className="font-14"
-                    // // className="text-danger font-14"
-                  >
-                    <h5>In Centre one to one </h5>
-                    <div className="font-weight-bold mb-0">
-                      <h5>Qaidah/Quran tuition</h5>
-                    </div>
-                    <h5>for adult males &amp; females</h5>
-                  </Link>
-                </td>
-                <td className="text-center p-1 border mb-0">
-                  <div className="d-flex justify-content-around">
-                    <div className="mb-0 w-100 border-right fw-light">
-                      £10<small>/hour</small>
-                    </div>
-                    <div className="mb-0 w-100 border-right fw-light">
-                      £80<small>/month</small>
-                    </div>
-                  </div>
-                  <strong>
-                    Mon - Thu or Wed - Thu
-                    <br />
-                    7:00 - 8:00pm
-                  </strong>
-                </td>
-                <td className="text-center p-1 border mb-0">
-                  <div className="d-flex justify-content-around">
-                    <div className="mb-0 w-100 border-left fw-light">
-                      £12.50<small>/hour</small>
-                    </div>
-                    <div className="mb-0 w-100 border-left fw-light">
-                      £100<small>/month</small>
-                    </div>
-                  </div>
-                  <strong>
-                    Sat - Sun
-                    <br />8 - 9am/9 - 10am
-                  </strong>
-                </td>
-              </tr>
-
-              {/* 5th row data */}
+              {/* 4th row data */}
               <tr>
                 <td
                   // className="text-white p-1 bg-brown font-weight-bold border h6 text-center align-middle"
@@ -334,7 +284,7 @@ const FeeStructure = () => {
                 </td>
               </tr>
 
-              {/* 6th row data  */}
+              {/* 5th row data  */}
               <tr>
                 <td
                   className="text-white p-1 bg-brown font-weight-bold border h6 text-center align-middle"
@@ -375,52 +325,6 @@ const FeeStructure = () => {
                   <strong>
                     Sat - Sun
                     <br />9 - 10am
-                  </strong>
-                </td>
-              </tr>
-
-              {/* 7th row data */}
-              <tr>
-                <td
-                  className="text-white p-1 bg-brown font-weight-bold border h6 text-center align-middle"
-                  // className="text-white p-1 bg-brown font-weight-bold border h6 text-center align-middle"
-                >
-                  <Link
-                    to={"/modern-foreign-languages"}
-                    // to="https://alyaqeen.co.uk/arabic-language"
-                    className="font-14"
-                    // className="text-danger font-14"
-                  >
-                    <h5>Urdu/Bangla Languages</h5>
-                  </Link>
-                </td>
-                <td className="text-center p-1  border mb-0">
-                  <div className="d-flex justify-content-around">
-                    <div className="mb-0 w-100 border-right fw-light">
-                      £3.66<small>/hour</small>
-                    </div>
-                    <div className="mb-0 w-100 border-right fw-light">
-                      £40<small>/month</small>
-                    </div>
-                  </div>
-                  <strong>
-                    Mon-Thu
-                    <br />6 - 7pm
-                  </strong>
-                </td>
-                <td className="text-center p-1 border mb-0">
-                  <div className="d-flex justify-content-around">
-                    <div className="mb-0 w-100 border-left fw-light">
-                      £2.50<small>/hour</small>
-                    </div>
-                    <div className="mb-0 w-100 border-left fw-light">
-                      £50<small>/month</small>
-                    </div>
-                  </div>
-                  <strong>
-                    Sat - Sun
-                    <br />
-                    11am - 1pm
                   </strong>
                 </td>
               </tr>

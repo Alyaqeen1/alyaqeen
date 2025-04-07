@@ -89,7 +89,7 @@ export default function OffCanvasMenu() {
             <div className="text-center py-2">
               <Link to="/" className="py-2 text-white text-center">
                 <img
-                  src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/logo/logo.png"
+                  src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/logo/logo3.png"
                   className="mx-auto"
                   style={{ width: "60px" }}
                   alt=""
