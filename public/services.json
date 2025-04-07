@@ -51,34 +51,5 @@
     "image_link": "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/home/shop.jpg",
     "nav_link": "/shop",
     "details_img": ""
-  },
-  {
-    "id": "5",
-    "name": "Online Learning",
-    "title": "Alyaqeen Online Learning",
-    "mainPara": "Alyaqeen academy was established in September 2020, under the guidance of Shaikh Mohammad Khalid in Birmingham, United Kingdom. The purpose was to benefit the community at large by facilitating a learning centre whereby children and adults can learn the Quran and Islamic Studies.",
-    "para2": "So whether you want to become a Hafiz of the Quran, learn about the religion, brush up on your tajweed or even start from the very beginning, Alyaqeen Academy is the place for you. Rooted with Islamic morals and teachings everyone at Alyaqeen academy is welcome to learn the sacred sciences and become closer to Allah SWT The Most High.",
-    "para3": "In addition to this we at Alyaqeen academy appreciate the balance between deen and dunya and therefore also provide tuition for Maths, Science and English for KS1- KS4. Our teachers and tutors are dedicated to try to ensure that all our students fulfil their full academic potential and obtain the best possible academic results they can.",
-    "para4": "Students can improve on their Maths, Science and English as each and every student is provided with assistance according to his/her academic needs.",
-    "description": "We all know the impact that Covid-19 has left upon a children's education.",
-    "category": "online-learning",
-    "image_link": "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/home/online-learing.png",
-    "nav_link": "/service/online-learning",
-    "details_img": ""
-  },
-  {
-    "id": "6",
-    "name": "Nikah",
-    "title": "Nikah Service",
-    "mainPara": "“And among His signs is this, that He created for you mates from among yourselves that you may dwell in tranquillity with them, and He has put love and mercy between your hearts; verily in that are signs for those who reflect.” [Quran]",
-    "para2": "Allah The Most Merciful says in the Quran:",
-    "para3": "“And we created you in pairs”",
-    "para4": "Shaykh Khalid has conducted many Nikkahs over the last 10 years and offers this service at Alyaqeen Academy.",
-    "para5": "Therefore if you would have your Nikkah conducted by Shaykh Khalid, please contact us on our contact page or click on the button below",
-    "description": "Shaykh Khalid has conducted many Nikkahs over the last 10 years and offers this service.",
-    "category": "nikah-service",
-    "image_link": "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/home/nikaah_bg.jpg",
-    "nav_link": "/service/nikah-service",
-    "details_img": "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/about/flower2.png"
   }
 ]

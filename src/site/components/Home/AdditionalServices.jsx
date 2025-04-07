@@ -1,18 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Navigation } from "swiper/modules";
-import "swiper/swiper-bundle.css";
 import { Link } from "react-router";
-import axios from "axios";
 
 export default function AdditionalServices() {
-  const [services, setServices] = useState([]);
-  useEffect(() => {
-    axios("/services.json")
-      .then((res) => setServices(res.data))
-      .catch((error) => console.error("Error fetching staff data:", error));
-  }, []);
   return (
     <section
       className="program-section section-padding section-bg-2 fix"

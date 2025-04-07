@@ -33,6 +33,7 @@ import Fees from "./pages/AdditionalPages/Fees";
 import Holidays from "./pages/AdditionalPages/Holidays";
 import Session from "./pages/AdditionalPages/Session";
 import ApplyNow from "./pages/AdditionalPages/ApplyNow";
+import AllServices from "./pages/AdditionalPages/AllServices";
 
 const siteRoutes = [
   {
@@ -163,6 +164,10 @@ const siteRoutes = [
       {
         path: "/apply-now",
         element: <ApplyNow></ApplyNow>,
+      },
+      {
+        path: "/all-services",
+        element: <AllServices></AllServices>,
       },
       {
         path: "*",
