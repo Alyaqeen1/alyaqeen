@@ -198,7 +198,7 @@ const CourseDetails = ({
             <div className="col-lg-4">
               <div className="details-list-area pricing-wrapper">
                 <h3>Classes includes:</h3>
-                <ul className="nav gap-2" role="tablist">
+                <ul className="nav gap-2 my-2" role="tablist">
                   <li
                     className="nav-item "
                     data-aos-duration="800"
@@ -253,13 +253,24 @@ const CourseDetails = ({
                     <li>
                       <span>
                         <img
+                          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/icon/08.svg"
+                          alt="img"
+                          className="me-2 inline"
+                        />
+                        Timing:
+                      </span>
+                      {detailsObj?.weeklyTiming}
+                    </li>
+                    <li>
+                      <span>
+                        <img
                           src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/icon/09.svg"
                           alt="img"
                           className="me-2 inline"
                         />
-                        Duration:
+                        Duration Per Day:
                       </span>
-                      {detailsObj?.weekdaysDuration}
+                      {detailsObj?.weekdaysDuration} hours
                     </li>
                     <li>
                       <span>
@@ -269,7 +280,7 @@ const CourseDetails = ({
                         />
                         Days:
                       </span>
-                      {detailsObj?.weeklyDays} days
+                      {detailsObj?.weeklyDays}
                     </li>
                     <li>
                       <span>
@@ -277,7 +288,7 @@ const CourseDetails = ({
                           className="me-2 fs-5"
                           style={{ color: "var(--theme)" }}
                         />
-                        Hours:
+                        Total Hours:
                       </span>
                       {detailsObj?.weeklyHours} hours
                     </li>
@@ -305,13 +316,24 @@ const CourseDetails = ({
                     <li>
                       <span>
                         <img
+                          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/icon/08.svg"
+                          alt="img"
+                          className="me-2 inline"
+                        />
+                        Timing:
+                      </span>
+                      {detailsObj?.weekendTiming}
+                    </li>
+                    <li>
+                      <span>
+                        <img
                           src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/icon/09.svg"
                           alt="img"
                           className="me-2 inline"
                         />
-                        Duration:
+                        Duration Per Day:
                       </span>
-                      {detailsObj?.weekendsDuration}
+                      {detailsObj?.weekendsDuration} hours
                     </li>
                     <li>
                       <span>
@@ -322,7 +344,7 @@ const CourseDetails = ({
                         />
                         Days:
                       </span>
-                      {detailsObj?.weekendDays} days
+                      {detailsObj?.weekendDays}
                     </li>
                     <li>
                       <span>
@@ -331,7 +353,7 @@ const CourseDetails = ({
                           alt="img"
                           className="me-2 inline"
                         />
-                        Hours:
+                        Total Hours:
                       </span>
                       {detailsObj?.weekendHours} hours
                     </li>

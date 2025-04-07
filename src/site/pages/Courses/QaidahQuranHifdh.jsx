@@ -6,7 +6,7 @@ export default function QaidahQuranHifdh() {
     <div>
       <CmnBanner title="Arabic Qaidah, Quran & Hifdh"></CmnBanner>
       <CourseDetails
-        image="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/home/photo-5.jpg"
+        image="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/course2.jpeg"
         title="Arabic Qaidah, Quran & Hifdh"
         subtitle1="Descriptions"
         descriptionPara1="Allah swt the most says in the Quran : “and recite the Quran (aloud) in a slow , (Pleasent tone and) style - Sura Al Muzzamil - 73:1-4"
@@ -24,12 +24,14 @@ export default function QaidahQuranHifdh() {
         structurePara6="All subject matter will be taught with the rules of tajweed and the correct pronunciation"
         detailsObj={{
           age: "5-15",
-          weeklyDays: "4",
-          weekendDays: "2",
-          weekdaysDuration: "4:30 - 6:00pm",
-          weekendsDuration: "10am - 12:30pm",
-          weeklyHours: "2",
-          weekendHours: "4",
+          weeklyTiming: "4:30 - 6:00pm / 5:45 - 7:15pm",
+          weekendTiming: "10am - 12:30pm / 12:30 - 2:30pm",
+          weeklyDays: "Mon-Thu",
+          weekendDays: "Sat-Sun",
+          weekdaysDuration: "1.5",
+          weekendsDuration: "2.5",
+          weeklyHours: "6",
+          weekendHours: "5",
         }}
       ></CourseDetails>
     </div>

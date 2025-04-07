@@ -7,7 +7,7 @@ export default function ModernForeignLanguages() {
     <div>
       <CmnBanner title="Modern Foreign Languages"></CmnBanner>
       <CourseDetails
-        image="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/home/photo-5.jpg"
+        image="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/image22.jpg"
         title="Modern Foreign Languages"
         subtitle1="Descriptions"
         descriptionPara1="Allah the Master of the universe states in the Quran: “O mankind, We created you from one man and one woman, and then divided you into nations and tribes so that you may recognize one another”."
@@ -25,12 +25,14 @@ export default function ModernForeignLanguages() {
         structurePara6=""
         detailsObj={{
           age: "5-15",
-          weeklyDays: "4",
-          weekendDays: "2",
-          weekdaysDuration: "6:00 - 7:00pm",
-          weekendsDuration: "11:00am - 1:00pm",
-          weeklyHours: "1",
-          weekendHours: "2",
+          weeklyTiming: "4:30 - 6:00pm / 5:45 - 7:15pm",
+          weekendTiming: "10am - 12:30pm / 12:30 - 2:30pm",
+          weeklyDays: "Mon-Thu",
+          weekendDays: "Sat-Sun",
+          weekdaysDuration: "1.5",
+          weekendsDuration: "2.5",
+          weeklyHours: "6",
+          weekendHours: "5",
         }}
       ></CourseDetails>
     </div>

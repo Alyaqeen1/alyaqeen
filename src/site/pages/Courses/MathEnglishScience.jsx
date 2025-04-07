@@ -7,7 +7,7 @@ export default function MathEnglishScience() {
     <div>
       <CmnBanner title="Maths, English & Science"></CmnBanner>
       <CourseDetails
-        image="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/home/photo-5.jpg"
+        image="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/image4.jpg"
         title="Maths, English & Science"
         subtitle1="Descriptions"
         descriptionPara1="At Alyaqeen Academy, we have a team of dedicated tutors who are committed to providing quality education. Our tutors ensure that students are taught according to the national curriculum syllabus while also catering to their individual learning needs."
@@ -25,12 +25,14 @@ export default function MathEnglishScience() {
         structurePara6=""
         detailsObj={{
           age: "5-15",
-          weeklyDays: "4",
-          weekendDays: "2",
-          weekdaysDuration: "5:00 - 7:00pm",
-          weekendsDuration: "10:00am - 12:00pm",
-          weeklyHours: "2",
-          weekendHours: "2",
+          weeklyTiming: "4:30 - 6:00pm / 5:45 - 7:15pm",
+          weekendTiming: "10am - 12:30pm / 12:30 - 2:30pm",
+          weeklyDays: "Mon-Thu",
+          weekendDays: "Sat-Sun",
+          weekdaysDuration: "1.5",
+          weekendsDuration: "2.5",
+          weeklyHours: "6",
+          weekendHours: "5",
         }}
       ></CourseDetails>
     </div>

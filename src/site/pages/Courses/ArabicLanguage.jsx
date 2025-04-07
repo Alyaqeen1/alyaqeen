@@ -7,7 +7,7 @@ export default function ArabicLanguage() {
     <div>
       <CmnBanner title="Arabic Language"></CmnBanner>
       <CourseDetails
-        image="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/home/photo-13.jpg"
+        image="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/course1.jpeg"
         title="Arabic Language"
         subtitle1="Descriptions"
         descriptionPara1="Islam is just not religion that Muslims follow, but it is a way of life."
@@ -25,12 +25,14 @@ export default function ArabicLanguage() {
         structurePara6="✔ E) How to overcome challanges in accordance to Islam"
         detailsObj={{
           age: "5-15",
-          weeklyDays: "4",
-          weekendDays: "2",
-          weekdaysDuration: "6:00 - 7:00pm",
-          weekendsDuration: "9:00 - 10:00am",
-          weeklyHours: "1",
-          weekendHours: "1",
+          weeklyTiming: "4:30 - 6:00pm / 5:45 - 7:15pm",
+          weekendTiming: "10am - 12:30pm / 12:30 - 2:30pm",
+          weeklyDays: "Mon-Thu",
+          weekendDays: "Sat-Sun",
+          weekdaysDuration: "1.5",
+          weekendsDuration: "2.5",
+          weeklyHours: "6",
+          weekendHours: "5",
         }}
       ></CourseDetails>
     </div>

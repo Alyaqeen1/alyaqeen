@@ -125,7 +125,7 @@ const SyllabusPlan = () => {
                 }`}
                 onClick={() => handleTabClick(0)}
               >
-                By Subject
+                By Textbook
               </a>
             </li>
             <li
@@ -141,31 +141,16 @@ const SyllabusPlan = () => {
                 }`}
                 onClick={() => handleTabClick(1)}
               >
-                By Textbook
+                By Subject
               </a>
             </li>
           </ul>
         </div>
         <div className="tab-content">
           <div
-            id="subject"
-            className={`c-tab-single ${
-              activeTabIndex === 0 ? "active-tab" : ""
-            }`}
-          >
-            <SubjectPlan
-              aqidahData={aqidahData}
-              fiqhData={fiqhData}
-              historyData={historyData}
-              personalDevData={personalDevData}
-              sirahData={sirahData}
-              handleShow={handleShow}
-            ></SubjectPlan>
-          </div>
-          <div
             id="textbook"
             className={`c-tab-single ${
-              activeTabIndex === 1 ? "active-tab" : ""
+              activeTabIndex === 0 ? "active-tab" : ""
             }`}
           >
             <TextbookPlan
@@ -177,6 +162,21 @@ const SyllabusPlan = () => {
               textbook6Data={textbook6Data}
               handleShow={handleShow}
             ></TextbookPlan>
+          </div>
+          <div
+            id="subject"
+            className={`c-tab-single ${
+              activeTabIndex === 1 ? "active-tab" : ""
+            }`}
+          >
+            <SubjectPlan
+              aqidahData={aqidahData}
+              fiqhData={fiqhData}
+              historyData={historyData}
+              personalDevData={personalDevData}
+              sirahData={sirahData}
+              handleShow={handleShow}
+            ></SubjectPlan>
           </div>
         </div>
       </div>

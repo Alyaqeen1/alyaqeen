@@ -75,9 +75,13 @@ const ProgramSection = () => {
                 ></div>
                 <div className="clases-image">
                   <img
-                    style={{ borderRadius: "70px" }}
+                    style={{
+                      borderRadius: "70px",
+                      minHeight: "220px",
+                      objectFit: "cover",
+                    }}
                     // className="rounded-5"
-                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/home/photo-5.jpg"
+                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/course2.jpeg"
                     alt="img"
                   />
                 </div>
@@ -134,9 +138,12 @@ const ProgramSection = () => {
                 ></div>
                 <div className="clases-image">
                   <img
-                    style={{ borderRadius: "70px" }}
-                    // className="rounded-5"
-                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/home/photo-13.jpg"
+                    style={{
+                      borderRadius: "70px",
+                      minHeight: "220px",
+                      objectFit: "cover",
+                    }}
+                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/image4.jpg"
                     alt="img"
                   />
                 </div>
@@ -193,9 +200,13 @@ const ProgramSection = () => {
                 ></div>
                 <div className="clases-image">
                   <img
-                    style={{ borderRadius: "70px" }}
+                    style={{
+                      borderRadius: "70px",
+                      minHeight: "220px",
+                      objectFit: "cover",
+                    }}
                     // className="rounded-5"
-                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/home/photo-5.jpg"
+                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/course1.jpeg"
                     alt="img"
                   />
                 </div>

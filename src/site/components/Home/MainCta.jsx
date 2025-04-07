@@ -28,8 +28,8 @@ const MainCta = () => {
           </div>
           <div className="cta-bg" style={{ borderRadius: "100px" }}></div>
           {/* changed newsletter section from here */}
-          <div className="row g-5 p-5 rounded-5 mt-0 pt-0 pb-0 mb-0">
-            <div className="col-lg-6 flex flex-column flex-lg-row pt-5 pt-lg-0 justify-content-center align-items-center my-auto">
+          <div className="row g-5 px-lg-5 px-3 pt-0 rounded-5 mt-0 pt-0 pb-0 mb-0">
+            <div className="col-lg-6 flex flex-column flex-lg-row pt-lg-0 justify-content-center align-items-center my-auto">
               <img
                 className="rounded-5 w-100"
                 data-aos-duration="800"
