@@ -157,7 +157,7 @@ const Footer = () => {
                 <div className="widget-head w-25">
                   <Link to="/">
                     <img
-                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/logo/logo3.png"
+                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/logo/logo2.png"
                       className="w-100"
                       alt="logo-img"
                     />

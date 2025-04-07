@@ -70,108 +70,115 @@ export default function AdditionalServices() {
             </button>
           </div>
         </div>
-        <div className="swiper team-slider-2">
-          <Swiper
-            slidesPerView={1}
-            slidesPerGroup={1}
-            freeMode={true}
-            speed={1500}
-            loop={true}
-            spaceBetween={30}
-            roundLengths={true}
-            modules={[Autoplay, Navigation]}
-            autoplay={{
-              // delay: 2000,//original
-              delay: 2000, //original
-              disableOnInteraction: false,
-              pauseOnMouseEnter: true,
-            }}
-            navigation={{
-              nextEl: ".array-next",
-              prevEl: ".array-prev",
-            }}
-            breakpoints={{
-              1199: {
-                slidesPerView: 3,
-              },
-              767: {
-                slidesPerView: 2,
-              },
-            }}
-            className="swiper-wrapper"
+        <div className="row">
+          <div
+            className="col-xl-4 col-lg-6 col-md-6 "
+            data-aos-duration="800"
+            data-aos="fade-up"
+            data-aos-delay="300"
           >
-            {services.map((one_Service, index) => (
-              <SwiperSlide key={one_Service?.id}>
-                <div className="swiper-slide">
-                  <div
-                    // className="col-xl-4 col-lg-6 col-md-6"
-                    data-aos-duration="800"
-                    data-aos="fade-up"
-                    data-aos-delay="300"
-                  >
-                    <div className="program-box-items">
-                      <div
-                        // className="program-bg"
-                        className={`program-bg ${
-                          index === 0 || index === 3
-                            ? "bg-1"
-                            : index === 1 || index === 4
-                            ? "bg-2"
-                            : "bg-3"
-                        }`}
-                      ></div>
-                      <div className="program-image">
-                        <img
-                          src={one_Service.image_link}
-                          alt="img"
-                          style={{
-                            width: "300px",
-                            height: "300px",
-                            borderRadius: "150px",
-                          }}
-                        />
-                      </div>
-                      <div
-                        // className="program-content text-center"
-                        className={`program-content text-center ${
-                          index === 0
-                            ? ""
-                            : index === 1 || index === 4 || index === 3
-                            ? ""
-                            : "style-2"
-                        }`}
-                      >
-                        <h4>
-                          <Link to={`/services/${one_Service.category}`}>
-                            {one_Service.name}
-                          </Link>
-                        </h4>
-
-                        <p>{one_Service.description.substring(0, 65)}...</p>
-                        <Link
-                          to={one_Service?.nav_link}
-                          className={`arrow-icon ${
-                            index === 0
-                              ? ""
-                              : index === 1 || index === 4
-                              ? "color-2"
-                              : ""
-                          }`}
-                        >
-                          <i className="fa-solid fa-arrow-right-long"></i>
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
+            <div className="program-box-items">
+              <div className="program-bg"></div>
+              <div className="program-image">
+                <img
+                  style={{
+                    width: "300px",
+                    height: "300px",
+                    borderRadius: "150px",
+                  }}
+                  src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/home/online-learing.png"
+                  alt="img"
+                />
+              </div>
+              <div className="program-content text-center">
+                <h4>
+                  <Link to="/service/online-learning">Online Learning</Link>
+                </h4>{" "}
+                <p>
+                  We all know the impact that Covid-19 has left upon a
+                  children's education...
+                </p>
+                <Link to="/service/online-learning" className="arrow-icon">
+                  <i className="fa-solid fa-arrow-right-long"></i>
+                </Link>
+              </div>
+            </div>
+          </div>
+          <div
+            className="col-xl-4 col-lg-6 col-md-6 "
+            data-aos-duration="800"
+            data-aos="fade-up"
+            data-aos-delay="500"
+          >
+            <div className="program-box-items">
+              <div className="program-bg bg-2"></div>
+              <div className="program-image">
+                <img
+                  style={{
+                    width: "300px",
+                    height: "300px",
+                    borderRadius: "150px",
+                  }}
+                  src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/home/nikaah_bg.jpg"
+                  alt="img"
+                />
+              </div>
+              <div className="program-content text-center">
+                <h4>
+                  <Link to="/service/nikah-service">Nikah</Link>
+                </h4>
+                <p>
+                  Shaykh Khalid has conducted many Nikkahs over the last 10
+                  years and offers this service....
+                </p>
+                <Link
+                  to="/service/nikah-service"
+                  className="arrow-icon color-2"
+                >
+                  <i className="fa-solid fa-arrow-right-long"></i>
+                </Link>
+              </div>
+            </div>
+          </div>
+          <div
+            className="col-xl-4 col-lg-6 col-md-6 "
+            data-aos-duration="800"
+            data-aos="fade-up"
+            data-aos-delay="700"
+          >
+            <div className="program-box-items">
+              <div className="program-bg bg-3"></div>
+              <div className="program-image">
+                <img
+                  style={{
+                    width: "300px",
+                    height: "300px",
+                    borderRadius: "150px",
+                  }}
+                  src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/home/sports-club.jpg"
+                  alt="img"
+                />
+              </div>
+              <div className="program-content text-center style-2">
+                <h4>
+                  <Link to="/service/sports">Sports Club</Link>
+                </h4>
+                {/* <span>(1-2 years)</span> */}
+                <p>
+                  At Alyaqeen academy students play football. We also have a
+                  Cricket Club...
+                </p>
+                <Link to="/service/sports" className="arrow-icon">
+                  <i className="fa-solid fa-arrow-right-long"></i>
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div className="pricing-wrapper mt-10">
           <div className="section-title text-center mb-0 ">
-            <Link to={"/our-team"} className="theme-btn">
+            <Link to={"/all-services"} className="theme-btn">
               All Services <i className="fa-solid fa-arrow-right-long"></i>
             </Link>
           </div>
