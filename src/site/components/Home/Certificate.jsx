@@ -7,144 +7,111 @@ import { useState } from "react";
 const certificate_list_data = [
   {
     id: "1",
-    index: 1,
-    name: "test_cat_1",
-    navigation_link: "/about-founder",
     image_link:
-      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificate-category-1.png",
+      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificates/girl1.png",
     category_id: 1,
-    category_name: "best_all_rounder",
   },
-
   {
     id: "2",
-    index: 2,
-    name: "test_cat_2",
-    navigation_link: "/about-founder",
     image_link:
-      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificate-category-2.png",
-
-    category_id: 2,
-    category_name: "best_all_batsman",
+      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificates/girl2.png",
+    category_id: 1,
   },
   {
     id: "3",
-    index: 3,
-
-    name: "test_cat_2",
-    navigation_link: "/about-founder",
     image_link:
-      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificate-category-3.png",
-    category_id: 3,
-    category_name: "best_all_bowler",
+      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificates/girl3.png",
+    category_id: 1,
   },
-
-  // p2
-
   {
     id: "4",
-    index: 4,
-
-    name: "test_cat_1",
-    navigation_link: "/about-founder",
     image_link:
-      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificate-category-1.png",
+      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificates/boy1.png",
     category_id: 1,
-    category_name: "best_all_rounder",
   },
-
   {
     id: "5",
-    index: 5,
-
-    name: "test_cat_2",
-    navigation_link: "/about-founder",
     image_link:
-      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificate-category-2.png",
-
-    category_id: 2,
-    category_name: "best_all_batsman",
+      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificates/boy2.png",
+    category_id: 1,
   },
   {
     id: "6",
-    index: 6,
-
-    name: "test_cat_2",
-    navigation_link: "/about-founder",
     image_link:
-      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificate-category-3.png",
-    category_id: 3,
-    category_name: "best_all_bowler",
+      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificates/boy3.png",
+    category_id: 1,
   },
-
-  // p3
   {
     id: "7",
-    index: 7,
-
-    name: "test_cat_1",
-    navigation_link: "/about-founder",
     image_link:
-      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificate-category-1.png",
-    category_id: 1,
-    category_name: "best_all_rounder",
+      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificates/boy4.png",
+    category_id: 2,
   },
-
   {
     id: "8",
-    index: 8,
-    name: "test_cat_2",
-    navigation_link: "/about-founder",
     image_link:
-      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificate-category-2.png",
-
+      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificates/boy5.png",
     category_id: 2,
-    category_name: "best_all_batsman",
   },
   {
     id: "9",
-    index: 9,
-
-    name: "test_cat_2",
-    navigation_link: "/about-founder",
     image_link:
-      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificate-category-3.png",
-    category_id: 3,
-    category_name: "best_all_bowler",
+      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificates/boy6.png",
+    category_id: 2,
   },
-
   {
     id: "10",
-    index: 10,
-    name: "test_cat_2",
-    navigation_link: "/about-founder",
     image_link:
-      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificate-category-1.png",
-
-    category_id: 1,
-    category_name: "best_all_batsman",
+      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificates/girl4.png",
+    category_id: 2,
   },
   {
     id: "11",
-    index: 11,
-
-    name: "test_cat_2",
-    navigation_link: "/about-founder",
     image_link:
-      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificate-category-2.png",
+      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificates/girl5.png",
     category_id: 2,
-    category_name: "best_all_bowler",
   },
   {
     id: "12",
-    index: 12,
-
-    name: "test_cat_2",
-    navigation_link: "/about-founder",
     image_link:
-      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificate-category-3.png",
+      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificates/girl6.png",
+    category_id: 2,
+  },
+  {
+    id: "13",
+    image_link:
+      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificates/girl7.png",
     category_id: 3,
-    category_name: "best_all_bowler",
+  },
+  {
+    id: "14",
+    image_link:
+      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificates/girl8.png",
+    category_id: 3,
+  },
+  {
+    id: "15",
+    image_link:
+      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificates/girl9.png",
+    category_id: 3,
+  },
+  {
+    id: "16",
+    image_link:
+      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificates/boy7.png",
+    category_id: 3,
+  },
+  {
+    id: "17",
+    image_link:
+      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificates/boy8.png",
+    category_id: 3,
+  },
+  {
+    id: "18",
+    image_link:
+      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificates/boy9.png",
+    category_id: 3,
   },
 ];
 
