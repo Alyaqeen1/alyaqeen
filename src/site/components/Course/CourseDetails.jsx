@@ -2,6 +2,7 @@ import { Link } from "react-router";
 import { useState } from "react";
 import { FaRegHourglass } from "react-icons/fa";
 import { IoTodayOutline } from "react-icons/io5";
+import { MdOutlineTimelapse } from "react-icons/md";
 
 const CourseDetails = ({
   image,
@@ -252,10 +253,9 @@ const CourseDetails = ({
                     </li>
                     <li>
                       <span>
-                        <img
-                          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/icon/08.svg"
-                          alt="img"
-                          className="me-2 inline"
+                        <MdOutlineTimelapse
+                          className="me-2 fs-4"
+                          style={{ color: "var(--theme)" }}
                         />
                         Timing:
                       </span>
@@ -315,10 +315,9 @@ const CourseDetails = ({
                     </li>
                     <li>
                       <span>
-                        <img
-                          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/icon/08.svg"
-                          alt="img"
-                          className="me-2 inline"
+                        <MdOutlineTimelapse
+                          className="me-2 fs-4"
+                          style={{ color: "var(--theme)" }}
                         />
                         Timing:
                       </span>

@@ -145,7 +145,7 @@ const ProgramSection = () => {
                       minHeight: "220px",
                       objectFit: "cover",
                     }}
-                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/image4.jpg"
+                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/course4.png"
                     alt="img"
                   />
                 </div>
@@ -208,7 +208,7 @@ const ProgramSection = () => {
                       objectFit: "cover",
                     }}
                     // className="rounded-5"
-                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/course1.jpeg"
+                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/image4.jpg"
                     alt="img"
                   />
                 </div>
@@ -216,7 +216,7 @@ const ProgramSection = () => {
                   <h4>Arabic Language</h4>
                   <p>
                     Islam is just not religion that Muslims follow, but it is a
-                    way of life.
+                    way of life. When a person is born...
                   </p>
                   <ul className="clases-schedule">
                     <li>

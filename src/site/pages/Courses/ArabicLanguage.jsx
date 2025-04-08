@@ -7,7 +7,7 @@ export default function ArabicLanguage() {
     <div>
       <CmnBanner title="Arabic Language"></CmnBanner>
       <CourseDetails
-        image="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/course1.jpeg"
+        image="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/image4.jpg"
         title="Arabic Language"
         subtitle1="Descriptions"
         descriptionPara1="Islam is just not religion that Muslims follow, but it is a way of life."

@@ -47,7 +47,7 @@ const OffCanvasMenu = ({ toggleMenu, handleToggleMenu }) => {
                 <div className="offcanvas__logo">
                   <Link to="/">
                     <img
-                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/logo/logo2.png"
+                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/logo/logo.png"
                       alt="logo-img"
                     />
                   </Link>

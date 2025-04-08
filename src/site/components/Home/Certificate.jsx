@@ -11,7 +11,7 @@ const certificate_list_data = [
     name: "test_cat_1",
     navigation_link: "/about-founder",
     image_link:
-      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certifigate-1.jpg",
+      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificate-category-1.png",
     category_id: 1,
     category_name: "best_all_rounder",
   },
@@ -22,7 +22,7 @@ const certificate_list_data = [
     name: "test_cat_2",
     navigation_link: "/about-founder",
     image_link:
-      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certifigate-2.jpg",
+      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificate-category-2.png",
 
     category_id: 2,
     category_name: "best_all_batsman",
@@ -34,7 +34,7 @@ const certificate_list_data = [
     name: "test_cat_2",
     navigation_link: "/about-founder",
     image_link:
-      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certifigate-3.jpg",
+      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificate-category-3.png",
     category_id: 3,
     category_name: "best_all_bowler",
   },
@@ -48,7 +48,7 @@ const certificate_list_data = [
     name: "test_cat_1",
     navigation_link: "/about-founder",
     image_link:
-      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certifigate-1.jpg",
+      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificate-category-1.png",
     category_id: 1,
     category_name: "best_all_rounder",
   },
@@ -60,7 +60,7 @@ const certificate_list_data = [
     name: "test_cat_2",
     navigation_link: "/about-founder",
     image_link:
-      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certifigate-2.jpg",
+      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificate-category-2.png",
 
     category_id: 2,
     category_name: "best_all_batsman",
@@ -72,7 +72,7 @@ const certificate_list_data = [
     name: "test_cat_2",
     navigation_link: "/about-founder",
     image_link:
-      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certifigate-3.jpg",
+      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificate-category-3.png",
     category_id: 3,
     category_name: "best_all_bowler",
   },
@@ -85,7 +85,7 @@ const certificate_list_data = [
     name: "test_cat_1",
     navigation_link: "/about-founder",
     image_link:
-      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certifigate-1.jpg",
+      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificate-category-1.png",
     category_id: 1,
     category_name: "best_all_rounder",
   },
@@ -96,7 +96,7 @@ const certificate_list_data = [
     name: "test_cat_2",
     navigation_link: "/about-founder",
     image_link:
-      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certifigate-2.jpg",
+      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificate-category-2.png",
 
     category_id: 2,
     category_name: "best_all_batsman",
@@ -108,7 +108,7 @@ const certificate_list_data = [
     name: "test_cat_2",
     navigation_link: "/about-founder",
     image_link:
-      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certifigate-3.jpg",
+      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificate-category-3.png",
     category_id: 3,
     category_name: "best_all_bowler",
   },
@@ -119,7 +119,7 @@ const certificate_list_data = [
     name: "test_cat_2",
     navigation_link: "/about-founder",
     image_link:
-      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certifigate-1.jpg",
+      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificate-category-1.png",
 
     category_id: 1,
     category_name: "best_all_batsman",
@@ -131,7 +131,7 @@ const certificate_list_data = [
     name: "test_cat_2",
     navigation_link: "/about-founder",
     image_link:
-      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certifigate-2.jpg",
+      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificate-category-2.png",
     category_id: 2,
     category_name: "best_all_bowler",
   },
@@ -142,7 +142,7 @@ const certificate_list_data = [
     name: "test_cat_2",
     navigation_link: "/about-founder",
     image_link:
-      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certifigate-3.jpg",
+      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificate-category-3.png",
     category_id: 3,
     category_name: "best_all_bowler",
   },

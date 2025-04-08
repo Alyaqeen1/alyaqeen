@@ -107,7 +107,7 @@ const FeeStructure = () => {
               <tr>
                 <td className="text-white p-1 bg-brown font-weight-bold border h6 text-center align-middle">
                   <Link to={"/arabic-qaidah-quran-hifdh"}>
-                    <h5>Arabic Qaidah, Quran &amp; Islamic Studies</h5>
+                    <h5>Qaidah, Quran &amp; Islamic Studies</h5>
                   </Link>
                 </td>
                 <td className="text-center p-1 border mb-0">
@@ -319,7 +319,7 @@ const FeeStructure = () => {
                       £10<small>/hour</small>
                     </div>
                     <div className="mb-0 w-100 border-left fw-light">
-                      £40<small>/month</small>
+                      £50<small>/month</small>
                     </div>
                   </div>
                   <strong>

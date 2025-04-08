@@ -63,16 +63,18 @@ const CTA = () => {
             >
               <div className="cta-image">
                 <img
-                  className="w-50"
-                  src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/home/graduation-mortarboard-svgrepo-com.svg"
+                  className="w-100"
+                  src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/cta/ctaImg.png"
+                  // src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/home/graduation-mortarboard-svgrepo-com.svg"
                   alt="cta-img"
                 />
+
                 <div className="cta-shape text-start">
-                  <img
+                  {/* <img
                     src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/cta/cta-shape.png"
                     style={{ width: "53%" }}
                     alt="img"
-                  />
+                  /> */}
                 </div>
               </div>
             </div>

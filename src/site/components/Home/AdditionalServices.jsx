@@ -119,7 +119,7 @@ export default function AdditionalServices() {
                 </h4>
                 <p>
                   Shaykh Khalid has conducted many Nikkahs over the last 10
-                  years and offers this service....
+                  years...
                 </p>
                 <Link
                   to="/service/nikah-service"
