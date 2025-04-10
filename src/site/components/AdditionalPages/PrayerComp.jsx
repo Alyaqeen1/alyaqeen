@@ -1,23 +1,12 @@
-import React, { useState } from "react";
-import January from "../Timetables/January";
-import February from "../Timetables/February";
-import March from "../Timetables/March";
-import April from "../Timetables/April";
-import May from "../Timetables/May";
-import June from "../Timetables/June";
-import July from "../Timetables/July";
-import August from "../Timetables/August";
-import September from "../Timetables/September";
-import October from "../Timetables/October";
-import November from "../Timetables/November";
-import December from "../Timetables/December";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 const PrayerComp = () => {
+  const [times, setTimes] = useState([]);
   const currentMonthName = new Date().toLocaleString("default", {
     month: "long",
   });
   const [selectedMonth, setSelectedMonth] = useState(currentMonthName); // Default view
-  console.log(selectedMonth);
   const months = [
     "January",
     "February",
@@ -32,6 +21,15 @@ const PrayerComp = () => {
     "November",
     "December",
   ];
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data } = await axios.get("/prayerTimes.json");
+      setTimes(data);
+    };
+    fetchData();
+  }, []);
+
+  console.log(times[selectedMonth]);
   return (
     <section
       className="program-section-feb-24 section-padding section-bg-2 fix bg-white"
@@ -190,34 +188,57 @@ const PrayerComp = () => {
                     </th>
                   </tr>
                 </thead>
-
-                {selectedMonth === "January" ? (
-                  <January></January>
-                ) : selectedMonth === "February" ? (
-                  <February></February>
-                ) : selectedMonth === "March" ? (
-                  <March></March>
-                ) : selectedMonth === "April" ? (
-                  <April></April>
-                ) : selectedMonth === "May" ? (
-                  <May></May>
-                ) : selectedMonth === "June" ? (
-                  <June></June>
-                ) : selectedMonth === "July" ? (
-                  <July></July>
-                ) : selectedMonth === "August" ? (
-                  <August></August>
-                ) : selectedMonth === "September" ? (
-                  <September></September>
-                ) : selectedMonth === "October" ? (
-                  <October></October>
-                ) : selectedMonth === "November" ? (
-                  <November></November>
-                ) : selectedMonth === "December" ? (
-                  <December></December>
-                ) : (
-                  <p>No Data Found</p>
-                )}
+                <tbody>
+                  {times[selectedMonth]?.length > 0 ? (
+                    times[selectedMonth]?.map((day) => (
+                      <tr key={day?.date}>
+                        <td className="bg-white border h6 text-center align-middle text-nowrap">
+                          {day?.date}
+                        </td>
+                        <td className="bg-white border h6 text-center align-middle">
+                          {day?.fajr?.start}
+                        </td>
+                        <td className="bg-white border h6 text-center align-middle">
+                          {day?.fajr?.jamat}
+                        </td>
+                        <td className="bg-white border h6 text-center align-middle">
+                          {day?.sunrise}
+                        </td>
+                        <td className="bg-white border h6 text-center align-middle">
+                          {day?.zuhr?.start}
+                        </td>
+                        <td className="bg-white border h6 text-center align-middle">
+                          {day?.zuhr?.jamat}
+                        </td>
+                        <td className="bg-white border h6 text-center align-middle">
+                          {day?.asr?.start}
+                        </td>
+                        <td className="bg-white border h6 text-center align-middle">
+                          {day?.asr?.jamat}
+                        </td>
+                        <td className="bg-white border h6 text-center align-middle">
+                          {day?.maghrib?.start}
+                        </td>
+                        <td className="bg-white border h6 text-center align-middle">
+                          {day?.maghrib?.jamat}
+                        </td>
+                        <td className="bg-white border h6 text-center align-middle">
+                          {day?.isha?.start}
+                        </td>
+                        <td className="bg-white border h6 text-center align-middle">
+                          {day?.isha?.start}
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={12}>
+                        <h5>No prayer times available for this month.</h5>
+                      </td>
+                    </tr>
+                  )}
+                  {}
+                </tbody>
               </table>
             </div>
             <hr />

@@ -1,8 +1,73 @@
 import { Link } from "react-router";
 import BestTeacher from "./BestTeacher";
 import BestStudent from "./BestStudent";
+import { WiSunrise } from "react-icons/wi";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { FaCloudSun, FaUssunnah } from "react-icons/fa";
+import { IoMoonOutline, IoSunny, IoSunnyOutline } from "react-icons/io5";
+import { MdSunnySnowing } from "react-icons/md";
 
 const News = () => {
+  const [times, setTimes] = useState([]);
+  const today = new Date();
+  const currentDate = today.getDate();
+  const currentMonthIndex = today.getMonth();
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  const currentMonthName = monthNames[currentMonthIndex];
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data } = await axios.get("/prayerTimes.json");
+      setTimes(data);
+    };
+    fetchData();
+  }, []);
+  const todayTimes = times[currentMonthName]?.find(
+    (day) => day?.date == currentDate
+  );
+  // Function to get the suffix for the date (e.g., 'st', 'nd', 'rd', 'th')
+  const getDateSuffix = (date) => {
+    if (date > 3 && date < 21) return "th"; // For dates 11-13, always use 'th'
+    switch (date % 10) {
+      case 1:
+        return "st";
+      case 2:
+        return "nd";
+      case 3:
+        return "rd";
+      default:
+        return "th";
+    }
+  };
+  const getUKTime = () => {
+    const options = {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true,
+    };
+
+    const ukTime = new Intl.DateTimeFormat("en-GB", {
+      timeZone: "Europe/London",
+      ...options,
+    }).format(new Date());
+
+    return ukTime;
+  };
+
   return (
     <section className="news-section section-padding fix" id="blog">
       <div className="container">
@@ -135,8 +200,176 @@ const News = () => {
             </div>
             {/* best teacher and best student of the month section */}
             <div className="col-xl-6 col-lg-8 mt-5 mt-xl-0">
-              <BestTeacher></BestTeacher>
-              <BestStudent></BestStudent>
+              <div>
+                <div className="d-flex justify-content-between align-items-center">
+                  <h3 className="fs-2">Daily Prayer Times</h3>
+                  <Link to="/prayer-timetable" className="theme-btn">
+                    Prayer Timetable
+                  </Link>
+                </div>
+                <div className="d-flex justify-content-between align-items-center my-2">
+                  <div className="mt-2">
+                    <p className="fw-bolder text-black">Current Date</p>
+                    <p style={{ color: "var(--theme)" }} className="fs-5">
+                      {currentMonthName} {currentDate}
+                      {getDateSuffix(currentDate)}
+                    </p>
+                  </div>
+                  <div className="mt-2">
+                    <p className="fw-bolder text-black">Current Time</p>
+                    <p style={{ color: "var(--theme)" }} className="fs-5">
+                      {getUKTime()}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="table-responsive mb-3 border-0">
+                  <table className="table mb-0 border-0">
+                    <thead>
+                      <tr>
+                        <th className="font-danger text-white fw-bolder h6 text-center align-middle"></th>
+                        <th className="font-danger text-white fw-bolder h6 text-center align-middle"></th>
+
+                        <th
+                          className="font-danger text-white fw-bolder text-center align-middle"
+                          style={{ backgroundColor: "var(--theme)" }}
+                        >
+                          Start
+                        </th>
+                        <th
+                          className="font-danger text-white fw-bolder text-center align-middle"
+                          style={{ backgroundColor: "var(--theme)" }}
+                        >
+                          Jamat
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr className="border border-white">
+                        <td
+                          style={{ color: "var(--theme)" }}
+                          className="bg-white h6 text-center align-middle text-uppercase py-3 fw-bolder"
+                        >
+                          Fajr
+                        </td>
+                        <td className="bg-white h6 text-center align-middle">
+                          <FaUssunnah
+                            className="fs-3"
+                            style={{ color: "var(--theme)" }}
+                          />
+                        </td>
+                        <td className="bg-white h6 text-center align-middle">
+                          {todayTimes?.fajr?.start}
+                        </td>
+                        <td className="bg-white h6 text-center align-middle">
+                          {todayTimes?.fajr?.jamat}
+                        </td>
+                      </tr>
+                      <tr className="border border-white">
+                        <td
+                          style={{ color: "var(--theme)" }}
+                          className="bg-white h6 text-center align-middle text-uppercase py-3 fw-bolder"
+                        >
+                          Sunrise
+                        </td>
+                        <td className="bg-white h6 text-center align-middle">
+                          <WiSunrise
+                            className="fs-3"
+                            style={{ color: "var(--theme)" }}
+                          />
+                        </td>
+                        <td className="bg-white h6 text-center align-middle">
+                          {todayTimes?.sunrise}
+                        </td>
+                        <td className="bg-white h6 text-center align-middle"></td>
+                      </tr>
+                      <tr className="border border-white">
+                        <td
+                          style={{ color: "var(--theme)" }}
+                          className="bg-white h6 text-center align-middle text-uppercase py-3 fw-bolder"
+                        >
+                          zuhr
+                        </td>
+                        <td className="bg-white h6 text-center align-middle">
+                          <IoSunnyOutline
+                            className="fs-3"
+                            style={{ color: "var(--theme)" }}
+                          />
+                        </td>
+                        <td className="bg-white h6 text-center align-middle">
+                          {todayTimes?.zuhr?.start}
+                        </td>
+                        <td className="bg-white h6 text-center align-middle">
+                          {todayTimes?.zuhr?.jamat}
+                        </td>
+                      </tr>
+                      <tr className="border border-white">
+                        <td
+                          style={{ color: "var(--theme)" }}
+                          className="bg-white h6 text-center align-middle text-uppercase py-3 fw-bolder"
+                        >
+                          asr
+                        </td>
+                        <td className="bg-white h6 text-center align-middle">
+                          <IoSunny
+                            className="fs-3"
+                            style={{ color: "var(--theme)" }}
+                          />
+                        </td>
+                        <td className="bg-white h6 text-center align-middle">
+                          {todayTimes?.asr?.start}
+                        </td>
+                        <td className="bg-white h6 text-center align-middle">
+                          {todayTimes?.asr?.jamat}
+                        </td>
+                      </tr>
+                      <tr className="border border-white">
+                        <td
+                          style={{ color: "var(--theme)" }}
+                          className="bg-white h6 text-center align-middle text-uppercase py-3 fw-bolder"
+                        >
+                          maghrib
+                        </td>
+                        <td className="bg-white h6 text-center align-middle">
+                          <MdSunnySnowing
+                            className="fs-3"
+                            style={{ color: "var(--theme)" }}
+                          />
+                        </td>
+                        <td className="bg-white h6 text-center align-middle">
+                          {todayTimes?.maghrib?.start}
+                        </td>
+                        <td className="bg-white h6 text-center align-middle">
+                          {todayTimes?.maghrib?.jamat}
+                        </td>
+                      </tr>
+                      <tr className="border border-white">
+                        <td
+                          style={{ color: "var(--theme)" }}
+                          className="bg-white h6 text-center align-middle text-uppercase py-3 fw-bolder"
+                        >
+                          isha
+                        </td>
+                        <td className="bg-white h6 text-center align-middle">
+                          <IoMoonOutline
+                            className="fs-3"
+                            style={{ color: "var(--theme)" }}
+                          />
+                        </td>
+                        <td className="bg-white h6 text-center align-middle">
+                          {todayTimes?.isha?.start}
+                        </td>
+                        <td className="bg-white h6 text-center align-middle">
+                          {todayTimes?.isha?.jamat}
+                        </td>
+                      </tr>
+                    </tbody>
+                    <tbody></tbody>
+                  </table>
+                </div>
+              </div>
+              {/* <BestTeacher></BestTeacher>
+              <BestStudent></BestStudent> */}
             </div>
           </div>
         </div>
