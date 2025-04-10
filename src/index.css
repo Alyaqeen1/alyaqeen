@@ -9,3 +9,12 @@
   height: 100%;
   object-fit: contain;
 } */
+.month-btn {
+  width: auto;
+}
+
+@media (min-width: 992px) {
+  .month-btn {
+    width: 100%;
+  }
+}
