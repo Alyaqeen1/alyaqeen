@@ -3,9 +3,17 @@ import axios from "axios";
 
 const PrayerComp = () => {
   const [times, setTimes] = useState([]);
-  const currentMonthName = new Date().toLocaleString("default", {
+  const date = new Date();
+  const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const currentDate = new Intl.DateTimeFormat("en-US", {
+    timeZone: userTimeZone,
+    day: "2-digit",
+  }).format(date);
+  const currentMonthName = new Intl.DateTimeFormat("en-US", {
+    timeZone: userTimeZone,
     month: "long",
-  });
+  }).format(date);
+
   const [selectedMonth, setSelectedMonth] = useState(currentMonthName); // Default view
   const months = [
     "January",
@@ -29,7 +37,6 @@ const PrayerComp = () => {
     fetchData();
   }, []);
 
-  console.log(times[selectedMonth]);
   return (
     <section
       className="program-section-feb-24 section-padding section-bg-2 fix bg-white"
@@ -192,40 +199,124 @@ const PrayerComp = () => {
                   {times[selectedMonth]?.length > 0 ? (
                     times[selectedMonth]?.map((day) => (
                       <tr key={day?.date}>
-                        <td className="bg-white border h6 text-center align-middle text-nowrap">
+                        <td
+                          className={`${
+                            currentDate == day?.date &&
+                            currentMonthName === selectedMonth
+                              ? "bg-body-secondary"
+                              : "bg-white"
+                          } border h6 text-center align-middle text-nowrap`}
+                        >
                           {day?.date}
                         </td>
-                        <td className="bg-white border h6 text-center align-middle">
+                        <td
+                          className={`${
+                            currentDate == day?.date &&
+                            currentMonthName === selectedMonth
+                              ? "bg-body-secondary"
+                              : "bg-white"
+                          } border h6 text-center align-middle text-nowrap`}
+                        >
                           {day?.fajr?.start}
                         </td>
-                        <td className="bg-white border h6 text-center align-middle">
+                        <td
+                          className={`${
+                            currentDate == day?.date &&
+                            currentMonthName === selectedMonth
+                              ? "bg-body-secondary"
+                              : "bg-white"
+                          } border h6 text-center align-middle text-nowrap`}
+                        >
                           {day?.fajr?.jamat}
                         </td>
-                        <td className="bg-white border h6 text-center align-middle">
+                        <td
+                          className={`${
+                            currentDate == day?.date &&
+                            currentMonthName === selectedMonth
+                              ? "bg-body-secondary"
+                              : "bg-white"
+                          } border h6 text-center align-middle text-nowrap`}
+                        >
                           {day?.sunrise}
                         </td>
-                        <td className="bg-white border h6 text-center align-middle">
+                        <td
+                          className={`${
+                            currentDate == day?.date &&
+                            currentMonthName === selectedMonth
+                              ? "bg-body-secondary"
+                              : "bg-white"
+                          } border h6 text-center align-middle text-nowrap`}
+                        >
                           {day?.zuhr?.start}
                         </td>
-                        <td className="bg-white border h6 text-center align-middle">
+                        <td
+                          className={`${
+                            currentDate == day?.date &&
+                            currentMonthName === selectedMonth
+                              ? "bg-body-secondary"
+                              : "bg-white"
+                          } border h6 text-center align-middle text-nowrap`}
+                        >
                           {day?.zuhr?.jamat}
                         </td>
-                        <td className="bg-white border h6 text-center align-middle">
+                        <td
+                          className={`${
+                            currentDate == day?.date &&
+                            currentMonthName === selectedMonth
+                              ? "bg-body-secondary"
+                              : "bg-white"
+                          } border h6 text-center align-middle text-nowrap`}
+                        >
                           {day?.asr?.start}
                         </td>
-                        <td className="bg-white border h6 text-center align-middle">
+                        <td
+                          className={`${
+                            currentDate == day?.date &&
+                            currentMonthName === selectedMonth
+                              ? "bg-body-secondary"
+                              : "bg-white"
+                          } border h6 text-center align-middle text-nowrap`}
+                        >
                           {day?.asr?.jamat}
                         </td>
-                        <td className="bg-white border h6 text-center align-middle">
+                        <td
+                          className={`${
+                            currentDate == day?.date &&
+                            currentMonthName === selectedMonth
+                              ? "bg-body-secondary"
+                              : "bg-white"
+                          } border h6 text-center align-middle text-nowrap`}
+                        >
                           {day?.maghrib?.start}
                         </td>
-                        <td className="bg-white border h6 text-center align-middle">
+                        <td
+                          className={`${
+                            currentDate == day?.date &&
+                            currentMonthName === selectedMonth
+                              ? "bg-body-secondary"
+                              : "bg-white"
+                          } border h6 text-center align-middle text-nowrap`}
+                        >
                           {day?.maghrib?.jamat}
                         </td>
-                        <td className="bg-white border h6 text-center align-middle">
+                        <td
+                          className={`${
+                            currentDate == day?.date &&
+                            currentMonthName === selectedMonth
+                              ? "bg-body-secondary"
+                              : "bg-white"
+                          } border h6 text-center align-middle text-nowrap`}
+                        >
                           {day?.isha?.start}
                         </td>
-                        <td className="bg-white border h6 text-center align-middle">
+                        <td
+                          className={`${
+                            currentDate == day?.date &&
+                            currentMonthName === selectedMonth
+                              ? "bg-body-secondary"
+                              : "bg-white"
+                          } border h6 text-center align-middle text-nowrap`}
+                        >
                           {day?.isha?.start}
                         </td>
                       </tr>
@@ -262,93 +353,6 @@ const PrayerComp = () => {
           </div>
         </div>
       </div>
-      {/* <div className="table-responsive">
-              <table
-                className="table mb-0"
-                // style="min-width:700px;"
-
-                style={{
-                  minWidth: 700,
-
-                  // backgroundColor: "#E7CAD0",
-                  // "background-color:rgba(5, 69, 35, 0.7);"
-
-                  //   style="background-color:rgba(193, 193, 193, 0.7);"
-                }}
-              >
-                <thead>
-                  <tr>
-                    <td
-                      colSpan={5}
-                      // className="border bg-danger text-white border-left-0 border-right-0 h6 text-center font-weight-bold"
-                      className="border text-white border-left-0 border-right-0 h6 text-center font-weight-bold"
-                      style={{
-                        backgroundColor: "var(--theme)",
-                      }}
-                    >
-                      Weekend Classes
-                    </td>
-                  </tr>
-                </thead>
-
-                <tbody>
-                  <tr>
-                    <td className="font-danger bg-white font-weight-bold border h6 text-center align-middle">
-                      Name
-                    </td>
-                    <td className="font-danger bg-white font-weight-bold border h6 text-center align-middle">
-                      Year Group
-                    </td>
-                    <td className="font-danger bg-white font-weight-bold border h6 text-center align-middle">
-                      Days
-                    </td>
-                    <td className="font-danger bg-white font-weight-bold border h6 text-center align-middle">
-                      Time
-                    </td>
-                    <td className="font-danger bg-white font-weight-bold border h6 text-center align-middle">
-                      Fee Per Month
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="bg-white border h6 text-center align-middle">
-                      Qaidah/Quran
-                    </td>
-                    <td className="bg-white border h6 text-center align-middle">
-                      6 to 15 Years Old
-                    </td>
-                    <td className="bg-white border h6 text-center align-middle">
-                      Saturday & Sunday
-                    </td>
-                    <td className="bg-white border h6 text-center align-middle">
-                      10:00 to 1:00pm
-                    </td>
-                    <td className="bg-white border h6 text-center align-middle">
-                      £40
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="bg-white border h6 text-center align-middle">
-                      Hifdh (Memorisation)
-                    </td>
-                    <td className="bg-white border h6 text-center align-middle">
-                      6 to 15 Years Old
-                    </td>
-                    <td className="bg-white border h6 text-center align-middle">
-                      Saturday & Sunday
-                    </td>
-                    <td className="bg-white border h6 text-center align-middle">
-                      10:00 to 2:00pm
-                    </td>
-                    <td className="bg-white border h6 text-center align-middle">
-                      £60
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div> */}
-      {/*     </div>
-            </div>
-        </div>*/}
     </section>
   );
 };

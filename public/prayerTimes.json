@@ -759,7 +759,7 @@
       },
       "asr": {
         "start": "5:41 PM",
-        "jamat": "8:00 PM"
+        "jamat": "6:00 PM"
       },
       "maghrib": {
         "start": "7:42 PM",
@@ -783,10 +783,10 @@
       },
       "asr": {
         "start": "5:42 PM",
-        "jamat": "8:00 PM"
+        "jamat": "6:00 PM"
       },
       "maghrib": {
-        "start": "7:48 PM",
+        "start": "7:43 PM",
         "jamat": "7:48 PM"
       },
       "isha": {
@@ -800,14 +800,14 @@
         "start": "5:01 AM",
         "jamat": "5:30 AM"
       },
-      "sunrise": "6:39 AM",
+      "sunrise": "6:36 AM",
       "zuhr": {
         "start": "1:15 PM",
         "jamat": "1:30 PM"
       },
       "asr": {
         "start": "5:43 PM",
-        "jamat": "8:00 PM"
+        "jamat": "6:00 PM"
       },
       "maghrib": {
         "start": "7:45 PM",
@@ -831,7 +831,7 @@
       },
       "asr": {
         "start": "5:44 PM",
-        "jamat": "8:15 PM"
+        "jamat": "6:15 PM"
       },
       "maghrib": {
         "start": "7:47 PM",
@@ -855,7 +855,7 @@
       },
       "asr": {
         "start": "5:45 PM",
-        "jamat": "8:15 PM"
+        "jamat": "6:15 PM"
       },
       "maghrib": {
         "start": "7:49 PM",
@@ -879,7 +879,7 @@
       },
       "asr": {
         "start": "5:47 PM",
-        "jamat": "8:15 PM"
+        "jamat": "6:15 PM"
       },
       "maghrib": {
         "start": "7:50 PM",
@@ -903,7 +903,7 @@
       },
       "asr": {
         "start": "5:48 PM",
-        "jamat": "8:15 PM"
+        "jamat": "6:15 PM"
       },
       "maghrib": {
         "start": "7:52 PM",
@@ -927,7 +927,7 @@
       },
       "asr": {
         "start": "5:49 PM",
-        "jamat": "8:15 PM"
+        "jamat": "6:15 PM"
       },
       "maghrib": {
         "start": "7:54 PM",
@@ -951,10 +951,10 @@
       },
       "asr": {
         "start": "5:50 PM",
-        "jamat": "8:15 PM"
+        "jamat": "6:15 PM"
       },
       "maghrib": {
-        "start": "7:58 PM",
+        "start": "7:56 PM",
         "jamat": "8:01 PM"
       },
       "isha": {
@@ -975,7 +975,7 @@
       },
       "asr": {
         "start": "5:51 PM",
-        "jamat": "8:15 PM"
+        "jamat": "6:15 PM"
       },
       "maghrib": {
         "start": "7:57 PM",
@@ -999,7 +999,7 @@
       },
       "asr": {
         "start": "5:52 PM",
-        "jamat": "8:30 PM"
+        "jamat": "6:30 PM"
       },
       "maghrib": {
         "start": "7:59 PM",
@@ -1023,7 +1023,7 @@
       },
       "asr": {
         "start": "5:54 PM",
-        "jamat": "8:30 PM"
+        "jamat": "6:30 PM"
       },
       "maghrib": {
         "start": "8:01 PM",
@@ -1047,7 +1047,7 @@
       },
       "asr": {
         "start": "5:55 PM",
-        "jamat": "8:30 PM"
+        "jamat": "6:30 PM"
       },
       "maghrib": {
         "start": "8:03 PM",
@@ -1071,7 +1071,7 @@
       },
       "asr": {
         "start": "5:56 PM",
-        "jamat": "8:30 PM"
+        "jamat": "6:30 PM"
       },
       "maghrib": {
         "start": "8:03 PM",
@@ -1095,7 +1095,7 @@
       },
       "asr": {
         "start": "5:57 PM",
-        "jamat": "8:30 PM"
+        "jamat": "6:30 PM"
       },
       "maghrib": {
         "start": "8:04 PM",
@@ -1119,14 +1119,14 @@
       },
       "asr": {
         "start": "5:58 PM",
-        "jamat": "8:30 PM"
+        "jamat": "6:30 PM"
       },
       "maghrib": {
         "start": "8:06 PM",
         "jamat": "8:11 PM"
       },
       "isha": {
-        "start": "9:28 PM",
+        "start": "9:26 PM",
         "jamat": "9:40 PM"
       }
     },
@@ -1138,12 +1138,12 @@
       },
       "sunrise": "6:06 AM",
       "zuhr": {
-        "start": "1:09 AM",
+        "start": "1:12 AM",
         "jamat": "1:30 PM"
       },
       "asr": {
         "start": "5:59 PM",
-        "jamat": "8:30 PM"
+        "jamat": "6:30 PM"
       },
       "maghrib": {
         "start": "8:08 PM",
@@ -1167,7 +1167,7 @@
       },
       "asr": {
         "start": "6:00 PM",
-        "jamat": "8:30 PM"
+        "jamat": "6:30 PM"
       },
       "maghrib": {
         "start": "8:10 PM",
@@ -1215,7 +1215,7 @@
       },
       "asr": {
         "start": "6:02 PM",
-        "jamat": "8:30 PM"
+        "jamat": "6:30 PM"
       },
       "maghrib": {
         "start": "8:13 PM",
@@ -1239,7 +1239,7 @@
       },
       "asr": {
         "start": "6:03 PM",
-        "jamat": "8:30 PM"
+        "jamat": "6:30 PM"
       },
       "maghrib": {
         "start": "8:15 PM",
@@ -1256,14 +1256,14 @@
         "start": "4:18 AM",
         "jamat": "5:15 AM"
       },
-      "sunrise": "5:58 AM",
+      "sunrise": "5:56 AM",
       "zuhr": {
         "start": "1:11 PM",
         "jamat": "1:30 PM"
       },
       "asr": {
-        "start": "6:06 PM",
-        "jamat": "8:30 PM"
+        "start": "6:05 PM",
+        "jamat": "6:30 PM"
       },
       "maghrib": {
         "start": "8:17 PM",
@@ -1287,7 +1287,7 @@
       },
       "asr": {
         "start": "6:16 PM",
-        "jamat": "8:30 PM"
+        "jamat": "6:30 PM"
       },
       "maghrib": {
         "start": "8:20 PM",
@@ -1311,7 +1311,7 @@
       },
       "asr": {
         "start": "6:17 PM",
-        "jamat": "8:30 PM"
+        "jamat": "6:30 PM"
       },
       "maghrib": {
         "start": "8:22 PM",
@@ -1335,7 +1335,7 @@
       },
       "asr": {
         "start": "6:18 PM",
-        "jamat": "8:30 PM"
+        "jamat": "6:30 PM"
       },
       "maghrib": {
         "start": "8:22 PM",
@@ -1359,7 +1359,7 @@
       },
       "asr": {
         "start": "6:19 PM",
-        "jamat": "8:30 PM"
+        "jamat": "6:30 PM"
       },
       "maghrib": {
         "start": "8:24 PM",
@@ -1373,7 +1373,7 @@
     {
       "date": 27,
       "fajr": {
-        "start": "4:09 AM",
+        "start": "4:06 AM",
         "jamat": "5:00 AM"
       },
       "sunrise": "5:45 AM",
@@ -1383,7 +1383,7 @@
       },
       "asr": {
         "start": "6:20 PM",
-        "jamat": "8:30 PM"
+        "jamat": "6:30 PM"
       },
       "maghrib": {
         "start": "8:25 PM",
@@ -1407,7 +1407,7 @@
       },
       "asr": {
         "start": "6:21 PM",
-        "jamat": "8:30 PM"
+        "jamat": "6:30 PM"
       },
       "maghrib": {
         "start": "8:27 PM",
@@ -1431,7 +1431,7 @@
       },
       "asr": {
         "start": "6:22 PM",
-        "jamat": "8:30 PM"
+        "jamat": "6:30 PM"
       },
       "maghrib": {
         "start": "8:29 PM",
@@ -1455,10 +1455,10 @@
       },
       "asr": {
         "start": "6:23 PM",
-        "jamat": "8:30 PM"
+        "jamat": "6:30 PM"
       },
       "maghrib": {
-        "start": "8:39 PM",
+        "start": "8:30 PM",
         "jamat": "8:35 PM"
       },
       "isha": {
@@ -1481,7 +1481,7 @@
       },
       "asr": {
         "start": "6:24 PM",
-        "jamat": "8:30 PM"
+        "jamat": "6:30 PM"
       },
       "maghrib": {
         "start": "8:34 PM",
@@ -1505,7 +1505,7 @@
       },
       "asr": {
         "start": "6:25 PM",
-        "jamat": "8:30 PM"
+        "jamat": "6:30 PM"
       },
       "maghrib": {
         "start": "8:36 PM",
@@ -1519,7 +1519,7 @@
     {
       "date": 3,
       "fajr": {
-        "start": "3:50 AM",
+        "start": "3:49 AM",
         "jamat": "5:00 AM"
       },
       "sunrise": "5:31 AM",
@@ -1529,7 +1529,7 @@
       },
       "asr": {
         "start": "6:26 PM",
-        "jamat": "8:30 PM"
+        "jamat": "6:30 PM"
       },
       "maghrib": {
         "start": "8:38 PM",
@@ -1553,7 +1553,7 @@
       },
       "asr": {
         "start": "6:27 PM",
-        "jamat": "8:30 PM"
+        "jamat": "6:30 PM"
       },
       "maghrib": {
         "start": "8:39 PM",
@@ -1577,7 +1577,7 @@
       },
       "asr": {
         "start": "6:28 PM",
-        "jamat": "8:30 PM"
+        "jamat": "6:30 PM"
       },
       "maghrib": {
         "start": "8:41 PM",
@@ -1585,7 +1585,7 @@
       },
       "isha": {
         "start": "9:52 PM",
-        "jamat": "10:02 PM"
+        "jamat": "10:12 PM"
       }
     },
     {
@@ -1601,7 +1601,7 @@
       },
       "asr": {
         "start": "6:29 PM",
-        "jamat": "8:30 PM"
+        "jamat": "6:30 PM"
       },
       "maghrib": {
         "start": "8:43 PM",
@@ -1625,7 +1625,7 @@
       },
       "asr": {
         "start": "6:30 PM",
-        "jamat": "8:30 PM"
+        "jamat": "6:30 PM"
       },
       "maghrib": {
         "start": "8:44 PM",
@@ -1649,7 +1649,7 @@
       },
       "asr": {
         "start": "6:31 PM",
-        "jamat": "8:30 PM"
+        "jamat": "6:30 PM"
       },
       "maghrib": {
         "start": "8:46 PM",
@@ -1673,7 +1673,7 @@
       },
       "asr": {
         "start": "6:32 PM",
-        "jamat": "8:45 PM"
+        "jamat": "6:45 PM"
       },
       "maghrib": {
         "start": "8:48 PM",
@@ -1697,7 +1697,7 @@
       },
       "asr": {
         "start": "6:33 PM",
-        "jamat": "8:45 PM"
+        "jamat": "6:45 PM"
       },
       "maghrib": {
         "start": "8:49 PM",
@@ -1721,7 +1721,7 @@
       },
       "asr": {
         "start": "6:34 PM",
-        "jamat": "8:45 PM"
+        "jamat": "6:45 PM"
       },
       "maghrib": {
         "start": "8:51 PM",
@@ -1745,7 +1745,7 @@
       },
       "asr": {
         "start": "6:35 PM",
-        "jamat": "8:45 PM"
+        "jamat": "6:45 PM"
       },
       "maghrib": {
         "start": "8:53 PM",
@@ -1769,7 +1769,7 @@
       },
       "asr": {
         "start": "6:36 PM",
-        "jamat": "8:45 PM"
+        "jamat": "6:45 PM"
       },
       "maghrib": {
         "start": "8:54 PM",
@@ -1788,12 +1788,12 @@
       },
       "sunrise": "5:12 AM",
       "zuhr": {
-        "start": "1:12 PM",
+        "start": "1:13 PM",
         "jamat": "1:30 PM"
       },
       "asr": {
         "start": "6:37 PM",
-        "jamat": "8:45 PM"
+        "jamat": "6:45 PM"
       },
       "maghrib": {
         "start": "8:56 PM",
@@ -1817,7 +1817,7 @@
       },
       "asr": {
         "start": "6:38 PM",
-        "jamat": "8:45 PM"
+        "jamat": "6:45 PM"
       },
       "maghrib": {
         "start": "8:57 PM",
@@ -1841,7 +1841,7 @@
       },
       "asr": {
         "start": "6:39 PM",
-        "jamat": "8:45 PM"
+        "jamat": "6:45 PM"
       },
       "maghrib": {
         "start": "8:59 PM",
@@ -1865,7 +1865,7 @@
       },
       "asr": {
         "start": "6:40 PM",
-        "jamat": "8:45 PM"
+        "jamat": "6:45 PM"
       },
       "maghrib": {
         "start": "9:00 PM",
@@ -1889,7 +1889,7 @@
       },
       "asr": {
         "start": "6:41 PM",
-        "jamat": "8:45 PM"
+        "jamat": "6:45 PM"
       },
       "maghrib": {
         "start": "9:02 PM",
@@ -1913,7 +1913,7 @@
       },
       "asr": {
         "start": "6:42 PM",
-        "jamat": "8:45 PM"
+        "jamat": "6:45 PM"
       },
       "maghrib": {
         "start": "9:03 PM",
@@ -1937,7 +1937,7 @@
       },
       "asr": {
         "start": "6:43 PM",
-        "jamat": "8:45 PM"
+        "jamat": "6:45 PM"
       },
       "maghrib": {
         "start": "9:05 PM",
@@ -1961,7 +1961,7 @@
       },
       "asr": {
         "start": "6:44 PM",
-        "jamat": "8:45 PM"
+        "jamat": "6:45 PM"
       },
       "maghrib": {
         "start": "9:06 PM",
@@ -1985,7 +1985,7 @@
       },
       "asr": {
         "start": "6:45 PM",
-        "jamat": "8:45 PM"
+        "jamat": "6:45 PM"
       },
       "maghrib": {
         "start": "9:08 PM",
@@ -2064,8 +2064,8 @@
         "jamat": "9:17 PM"
       },
       "isha": {
-        "start": "10:28 PM",
-        "jamat": "10:38 PM"
+        "start": "10:29 PM",
+        "jamat": "10:39 PM"
       }
     },
     {
@@ -2074,7 +2074,7 @@
         "start": "3:03 AM",
         "jamat": "4:15 AM"
       },
-      "sunrise": "4:55 AM",
+      "sunrise": "4:56 AM",
       "zuhr": {
         "start": "1:10 PM",
         "jamat": "1:30 PM"
@@ -2209,7 +2209,7 @@
       },
       "isha": {
         "start": "10:38 PM",
-        "jamat": "10:48 PM"
+        "jamat": "10:43 PM"
       }
     }
   ],
@@ -2244,7 +2244,7 @@
         "start": "2:52 AM",
         "jamat": "4:00 AM"
       },
-      "sunrise": "4:49 AM",
+      "sunrise": "4:50 AM",
       "zuhr": {
         "start": "1:10 PM",
         "jamat": "1:30 PM"
@@ -2340,7 +2340,7 @@
         "start": "2:48 AM",
         "jamat": "4:00 AM"
       },
-      "sunrise": "4:48 AM",
+      "sunrise": "4:47 AM",
       "zuhr": {
         "start": "1:11 PM",
         "jamat": "1:30 PM"
@@ -2426,8 +2426,8 @@
         "jamat": "9:33 PM"
       },
       "isha": {
-        "start": "10:49 PM",
-        "jamat": "10:56 PM"
+        "start": "10:50 PM",
+        "jamat": "10:55 PM"
       }
     },
     {
@@ -2442,7 +2442,7 @@
         "jamat": "1:30 PM"
       },
       "asr": {
-        "start": "6:46 PM",
+        "start": "6:45 PM",
         "jamat": "7:30 PM"
       },
       "maghrib": {
@@ -2470,8 +2470,8 @@
         "jamat": "7:30 PM"
       },
       "maghrib": {
-        "start": "9:29 PM",
-        "jamat": "9:34 PM"
+        "start": "9:30 PM",
+        "jamat": "9:35 PM"
       },
       "isha": {
         "start": "10:53 PM",
@@ -2566,8 +2566,8 @@
         "jamat": "7:30 PM"
       },
       "maghrib": {
-        "start": "9:32 PM",
-        "jamat": "9:37 PM"
+        "start": "9:31 PM",
+        "jamat": "9:36 PM"
       },
       "isha": {
         "start": "10:56 PM",
@@ -2638,8 +2638,8 @@
         "jamat": "7:30 PM"
       },
       "maghrib": {
-        "start": "9:33 PM",
-        "jamat": "9:38 PM"
+        "start": "9:34 PM",
+        "jamat": "9:39 PM"
       },
       "isha": {
         "start": "10:56 PM",
@@ -2682,7 +2682,7 @@
         "jamat": "1:30 PM"
       },
       "asr": {
-        "start": "6:48 PM",
+        "start": "6:49 PM",
         "jamat": "7:30 PM"
       },
       "maghrib": {
@@ -2948,7 +2948,7 @@
         "jamat": "1:30 PM"
       },
       "asr": {
-        "start": "6:47 PM",
+        "start": "6:49 PM",
         "jamat": "7:30 PM"
       },
       "maghrib": {
@@ -2972,7 +2972,7 @@
         "jamat": "1:30 PM"
       },
       "asr": {
-        "start": "6:48 PM",
+        "start": "6:49PM",
         "jamat": "7:30 PM"
       },
       "maghrib": {
@@ -3017,7 +3017,7 @@
       "sunrise": "4:51 AM",
       "zuhr": {
         "start": "1:17 PM",
-        "jamat": "1:45 PM"
+        "jamat": "1:30"
       },
       "asr": {
         "start": "6:49 PM",
@@ -3120,8 +3120,8 @@
         "jamat": "7:30 PM"
       },
       "maghrib": {
-        "start": "9:28 PM",
-        "jamat": "9:33 PM"
+        "start": "9:29 PM",
+        "jamat": "9:34 PM"
       },
       "isha": {
         "start": "10:43 PM",
@@ -3209,7 +3209,7 @@
       "sunrise": "5:00 AM",
       "zuhr": {
         "start": "1:18 PM",
-        "jamat": "1:30 PM"
+        "jamat": "1:45 PM"
       },
       "asr": {
         "start": "6:47 PM",
@@ -3251,7 +3251,7 @@
     {
       "date": 14,
       "fajr": {
-        "start": "3:06 AM",
+        "start": "3:09 AM",
         "jamat": "4:15 AM"
       },
       "sunrise": "5:02 AM",
@@ -3452,7 +3452,7 @@
         "jamat": "1:30 PM"
       },
       "asr": {
-        "start": "6:42 PM",
+        "start": "6:43 PM",
         "jamat": "7:30 PM"
       },
       "maghrib": {
@@ -3467,7 +3467,7 @@
     {
       "date": 23,
       "fajr": {
-        "start": "3:25 AM",
+        "start": "3:26 AM",
         "jamat": "4:30 AM"
       },
       "sunrise": "5:14 AM",
@@ -3500,7 +3500,7 @@
         "jamat": "1:30 PM"
       },
       "asr": {
-        "start": "6:41 PM",
+        "start": "6:42 PM",
         "jamat": "7:30 PM"
       },
       "maghrib": {
@@ -3508,8 +3508,8 @@
         "jamat": "9:16 PM"
       },
       "isha": {
-        "start": "10:16 PM",
-        "jamat": "10:21 PM"
+        "start": "10:18 PM",
+        "jamat": "10:23 PM"
       }
     },
     {
@@ -3532,8 +3532,8 @@
         "jamat": "9:14 PM"
       },
       "isha": {
-        "start": "10:14 PM",
-        "jamat": "10:19 PM"
+        "start": "10:16 PM",
+        "jamat": "10:21 PM"
       }
     },
     {
@@ -3676,7 +3676,7 @@
         "jamat": "9:05 PM"
       },
       "isha": {
-        "start": "10:06 PM",
+        "start": "10:08 PM",
         "jamat": "10:13 PM"
       }
     }
@@ -3746,8 +3746,8 @@
         "jamat": "7:30 PM"
       },
       "maghrib": {
-        "start": "8:56 PM",
-        "jamat": "9:03 PM"
+        "start": "8:55 PM",
+        "jamat": "9:02 PM"
       },
       "isha": {
         "start": "10:03 PM",
@@ -3790,12 +3790,12 @@
         "jamat": "1:30 PM"
       },
       "asr": {
-        "start": "6:27 PM",
+        "start": "6:25 PM",
         "jamat": "7:30 PM"
       },
       "maghrib": {
-        "start": "8:53 PM",
-        "jamat": "9:00 PM"
+        "start": "8:51 PM",
+        "jamat": "8:59 PM"
       },
       "isha": {
         "start": "10:00 PM",
@@ -3814,12 +3814,12 @@
         "jamat": "1:30 PM"
       },
       "asr": {
-        "start": "6:26 PM",
+        "start": "6:24 PM",
         "jamat": "7:30 PM"
       },
       "maghrib": {
-        "start": "8:51 PM",
-        "jamat": "8:58 PM"
+        "start": "8:49 PM",
+        "jamat": "8:56 PM"
       },
       "isha": {
         "start": "9:59 PM",
@@ -3842,8 +3842,8 @@
         "jamat": "7:30 PM"
       },
       "maghrib": {
-        "start": "8:49 PM",
-        "jamat": "8:56 PM"
+        "start": "8:47 PM",
+        "jamat": "8:54 PM"
       },
       "isha": {
         "start": "9:57 PM",
@@ -3866,8 +3866,8 @@
         "jamat": "7:30 PM"
       },
       "maghrib": {
-        "start": "8:47 PM",
-        "jamat": "8:54 PM"
+        "start": "8:45 PM",
+        "jamat": "8:52 PM"
       },
       "isha": {
         "start": "9:55 PM",
@@ -3890,8 +3890,8 @@
         "jamat": "7:30 PM"
       },
       "maghrib": {
-        "start": "8:45 PM",
-        "jamat": "8:52 PM"
+        "start": "8:43 PM",
+        "jamat": "8:50 PM"
       },
       "isha": {
         "start": "9:53 PM",
@@ -3914,8 +3914,8 @@
         "jamat": "7:30 PM"
       },
       "maghrib": {
-        "start": "8:43 PM",
-        "jamat": "8:50 PM"
+        "start": "8:41 PM",
+        "jamat": "8:48 PM"
       },
       "isha": {
         "start": "9:51 PM",
@@ -3962,8 +3962,8 @@
         "jamat": "7:30 PM"
       },
       "maghrib": {
-        "start": "8:40 PM",
-        "jamat": "8:47 PM"
+        "start": "8:38 PM",
+        "jamat": "8:44 PM"
       },
       "isha": {
         "start": "9:48 PM",
@@ -3986,8 +3986,8 @@
         "jamat": "7:30 PM"
       },
       "maghrib": {
-        "start": "8:38 PM",
-        "jamat": "8:45 PM"
+        "start": "8:35 PM",
+        "jamat": "8:42 PM"
       },
       "isha": {
         "start": "9:46 PM",
@@ -4010,8 +4010,8 @@
         "jamat": "7:30 PM"
       },
       "maghrib": {
-        "start": "8:36 PM",
-        "jamat": "8:43 PM"
+        "start": "8:33 PM",
+        "jamat": "8:41 PM"
       },
       "isha": {
         "start": "9:44 PM",
@@ -4055,7 +4055,7 @@
       },
       "asr": {
         "start": "6:11 PM",
-        "jamat": "8:30 PM"
+        "jamat": "6:30 PM"
       },
       "maghrib": {
         "start": "8:31 PM",
@@ -4079,7 +4079,7 @@
       },
       "asr": {
         "start": "6:09 PM",
-        "jamat": "8:30 PM"
+        "jamat": "6:30 PM"
       },
       "maghrib": {
         "start": "8:29 PM",
@@ -4093,7 +4093,7 @@
     {
       "date": 18,
       "fajr": {
-        "start": "4:15 AM",
+        "start": "4:16 AM",
         "jamat": "5:15 AM"
       },
       "sunrise": "5:55 AM",
@@ -4103,7 +4103,7 @@
       },
       "asr": {
         "start": "6:08 PM",
-        "jamat": "8:30 PM"
+        "jamat": "6:30 PM"
       },
       "maghrib": {
         "start": "8:27 PM",
@@ -4127,7 +4127,7 @@
       },
       "asr": {
         "start": "6:06 PM",
-        "jamat": "8:30 PM"
+        "jamat": "6:30 PM"
       },
       "maghrib": {
         "start": "8:25 PM",
@@ -4146,12 +4146,12 @@
       },
       "sunrise": "5:58 AM",
       "zuhr": {
-        "start": "1:14 PM",
+        "start": "1:15 PM",
         "jamat": "1:30 PM"
       },
       "asr": {
         "start": "6:05 PM",
-        "jamat": "8:30 PM"
+        "jamat": "6:30 PM"
       },
       "maghrib": {
         "start": "8:22 PM",
@@ -4175,7 +4175,7 @@
       },
       "asr": {
         "start": "6:03 PM",
-        "jamat": "8:30 PM"
+        "jamat": "6:30 PM"
       },
       "maghrib": {
         "start": "8:20 PM",
@@ -4199,7 +4199,7 @@
       },
       "asr": {
         "start": "6:02 PM",
-        "jamat": "8:30 PM"
+        "jamat": "6:30 PM"
       },
       "maghrib": {
         "start": "8:18 PM",
@@ -4223,7 +4223,7 @@
       },
       "asr": {
         "start": "6:00 PM",
-        "jamat": "8:30 PM"
+        "jamat": "6:30 PM"
       },
       "maghrib": {
         "start": "8:16 PM",
@@ -4247,7 +4247,7 @@
       },
       "asr": {
         "start": "5:58 PM",
-        "jamat": "8:30 PM"
+        "jamat": "6:30 PM"
       },
       "maghrib": {
         "start": "8:14 PM",
@@ -4271,10 +4271,10 @@
       },
       "asr": {
         "start": "5:57 PM",
-        "jamat": "8:30 PM"
+        "jamat": "6:30 PM"
       },
       "maghrib": {
-        "start": "8:14 PM",
+        "start": "8:09 PM",
         "jamat": "8:18 PM"
       },
       "isha": {
@@ -4295,7 +4295,7 @@
       },
       "asr": {
         "start": "5:55 PM",
-        "jamat": "8:30 PM"
+        "jamat": "6:30 PM"
       },
       "maghrib": {
         "start": "8:09 PM",
@@ -4319,7 +4319,7 @@
       },
       "asr": {
         "start": "5:53 PM",
-        "jamat": "7:30 PM"
+        "jamat": "6:30 PM"
       },
       "maghrib": {
         "start": "8:07 PM",
@@ -4343,10 +4343,10 @@
       },
       "asr": {
         "start": "5:52 PM",
-        "jamat": "8:30 PM"
+        "jamat": "6:30 PM"
       },
       "maghrib": {
-        "start": "8:06 PM",
+        "start": "8:05 PM",
         "jamat": "8:11 PM"
       },
       "isha": {
@@ -4367,7 +4367,7 @@
       },
       "asr": {
         "start": "5:50 PM",
-        "jamat": "8:30 PM"
+        "jamat": "6:30 PM"
       },
       "maghrib": {
         "start": "8:03 PM",
@@ -4391,11 +4391,11 @@
       },
       "asr": {
         "start": "5:48 PM",
-        "jamat": "8:30 PM"
+        "jamat": "6:30 PM"
       },
       "maghrib": {
         "start": "8:00 PM",
-        "jamat": "8:05 PM"
+        "jamat": "8:06 PM"
       },
       "isha": {
         "start": "9:14 PM",
@@ -4415,7 +4415,7 @@
       },
       "asr": {
         "start": "5:47 PM",
-        "jamat": "8:30 PM"
+        "jamat": "6:30 PM"
       },
       "maghrib": {
         "start": "7:58 PM",

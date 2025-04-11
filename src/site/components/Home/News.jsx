@@ -10,24 +10,27 @@ import { MdSunnySnowing } from "react-icons/md";
 
 const News = () => {
   const [times, setTimes] = useState([]);
-  const today = new Date();
-  const currentDate = today.getDate();
-  const currentMonthIndex = today.getMonth();
-  const monthNames = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-  const currentMonthName = monthNames[currentMonthIndex];
+  const date = new Date();
+  const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const currentDate = new Intl.DateTimeFormat("en-US", {
+    timeZone: userTimeZone,
+    day: "2-digit",
+  }).format(date);
+
+  // Get the full month name (e.g., April)
+  const currentMonthName = new Intl.DateTimeFormat("en-US", {
+    timeZone: userTimeZone,
+    month: "long",
+  }).format(date);
+
+  const formattedTime = new Intl.DateTimeFormat("en-US", {
+    timeZone: userTimeZone,
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true,
+  }).format(date);
+
   useEffect(() => {
     const fetchData = async () => {
       const { data } = await axios.get("/prayerTimes.json");
@@ -51,21 +54,6 @@ const News = () => {
       default:
         return "th";
     }
-  };
-  const getUKTime = () => {
-    const options = {
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      hour12: true,
-    };
-
-    const ukTime = new Intl.DateTimeFormat("en-GB", {
-      timeZone: "Europe/London",
-      ...options,
-    }).format(new Date());
-
-    return ukTime;
   };
 
   return (
@@ -218,7 +206,7 @@ const News = () => {
                   <div className="mt-2">
                     <p className="fw-bolder text-black">Current Time</p>
                     <p style={{ color: "var(--theme)" }} className="fs-5">
-                      {getUKTime()}
+                      {formattedTime}
                     </p>
                   </div>
                 </div>
@@ -368,8 +356,6 @@ const News = () => {
                   </table>
                 </div>
               </div>
-              {/* <BestTeacher></BestTeacher>
-              <BestStudent></BestStudent> */}
             </div>
           </div>
         </div>
