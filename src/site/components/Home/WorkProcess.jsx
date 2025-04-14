@@ -1,9 +1,14 @@
+import { useTranslation } from "react-i18next";
 import { FaCalendarAlt } from "react-icons/fa";
 import { IoIosCalculator } from "react-icons/io";
 import { IoBusOutline } from "react-icons/io5";
 import { Link } from "react-router";
 
 const WorkProcess = () => {
+  const { t } = useTranslation(["home"]);
+  const { title1, description1, title2, description2, title3, description3 } =
+    t("workProcess");
+
   return (
     <section className="work-process-section fix section-padding fix">
       <div className="container">
@@ -32,11 +37,8 @@ const WorkProcess = () => {
                     <FaCalendarAlt className="fs-3 text-white" />
                   </div>
                   <div className="content">
-                    <h4>Sessions & Timings</h4>
-                    <p>
-                      Our onsite classes are held Monday to Thursday on weekdays
-                      and on Saturday and Sunday during the weekends.{" "}
-                    </p>
+                    <h4>{title1} </h4>
+                    <p>{description1}</p>
                   </div>
                 </div>
               </Link>
@@ -64,11 +66,8 @@ const WorkProcess = () => {
                     <IoIosCalculator className="fs-2 text-white" />
                   </div>
                   <div className="content">
-                    <h4>Fee Structure</h4>
-                    <p>
-                      Fee Structure depends on Course and Session types. We have
-                      two session: weekdays and weekends.
-                    </p>
+                    <h4>{title2}</h4>
+                    <p>{description2}</p>
                   </div>
                 </div>
               </Link>
@@ -90,11 +89,8 @@ const WorkProcess = () => {
                     <IoBusOutline className="fs-2 text-white" />
                   </div>
                   <div className="content">
-                    <h4>Holidays & Academic Calendar</h4>
-                    <p>
-                      Holidays & Academic Calendar will depend on Session types.
-                      We have two session: weekdays and weekends.
-                    </p>
+                    <h4>{title3}</h4>
+                    <p>{description3}</p>
                   </div>
                 </div>
               </Link>

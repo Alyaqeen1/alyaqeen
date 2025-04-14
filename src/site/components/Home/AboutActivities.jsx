@@ -1,4 +1,18 @@
+import { useTranslation } from "react-i18next";
+
 const AboutActivities = () => {
+  const { t } = useTranslation(["home"]);
+  const {
+    heading1,
+    heading2,
+    feature1,
+    feature2,
+    feature3,
+    feature4,
+    feature5,
+    feature6,
+  } = t("whyChooseUs");
+
   return (
     <section className="about-activities-section section-padding pt-0">
       <div className="pencil-shape">
@@ -35,14 +49,14 @@ const AboutActivities = () => {
               <div className="activities-content">
                 <div className="section-title">
                   <span data-aos-duration="800" data-aos="fade-up">
-                    WHY CHOOSE US
+                    {heading2}
                   </span>
                   <h2
                     data-aos-duration="800"
                     data-aos="fade-up"
                     data-aos-delay="300"
                   >
-                    Top Choice for Children
+                    {heading1}
                   </h2>
                 </div>
                 <div className="row g-4 mt-4">
@@ -61,7 +75,7 @@ const AboutActivities = () => {
                         />
                       </div>
                       <div className="content">
-                        <h5>Modern teaching tools</h5>
+                        <h5>{feature1}</h5>
                       </div>
                     </div>
                   </div>
@@ -80,7 +94,7 @@ const AboutActivities = () => {
                         />
                       </div>
                       <div className="content">
-                        <h5>Small groups, better focus</h5>
+                        <h5>{feature2}</h5>
                       </div>
                     </div>
                   </div>
@@ -233,7 +247,7 @@ const AboutActivities = () => {
                         </svg>
                       </div>
                       <div className="content">
-                        <h5>Regular progress updates</h5>
+                        <h5>{feature3}</h5>
                       </div>
                     </div>
                   </div>
@@ -277,7 +291,7 @@ const AboutActivities = () => {
                         </svg>
                       </div>
                       <div className="content">
-                        <h5>Termly reports for parents</h5>
+                        <h5>{feature4}</h5>
                       </div>
                     </div>
                   </div>
@@ -296,7 +310,7 @@ const AboutActivities = () => {
                         />
                       </div>
                       <div className="content">
-                        <h5>Quran taught with tajweed</h5>
+                        <h5>{feature5}</h5>
                       </div>
                     </div>
                   </div>
@@ -315,7 +329,7 @@ const AboutActivities = () => {
                         />
                       </div>
                       <div className="content">
-                        <h5>Fun & friendly environment</h5>
+                        <h5>{feature6}</h5>
                       </div>
                     </div>
                   </div>
