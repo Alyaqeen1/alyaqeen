@@ -1,6 +1,17 @@
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
 
 const MainCta = () => {
+  const { t } = useTranslation(["home", "common"]);
+  const {
+    name,
+    title,
+    description,
+    exploreBtn,
+    skills: { one, two, three, four, five, six, seven },
+  } = t("teacherOfTheYear") || {};
+  const { name: directorName, post } = t("director", { ns: "common" }) || {};
+
   return (
     <section className="main-cta-section rounded-5">
       <div className="plane-shape float-bob-y text-end">
@@ -48,7 +59,8 @@ const MainCta = () => {
                     data-aos="fade-up"
                     className="text-white"
                   >
-                    {/*About Us*/} {/*Best Teacher*/}Shaykh Molana Junaid Usman
+                    {/*About Us*/} {/*Best Teacher*/}
+                    {name}
                   </span>
                   <h2
                     data-aos-duration="800"
@@ -56,7 +68,7 @@ const MainCta = () => {
                     data-aos-delay="300"
                     className="text-white"
                   >
-                    Why selected as The Best Teacher of the Year.
+                    {title}
                     {/*Learn to play, converse*/} {/*<br />*/}
                     {/*with confidence.*/}
                   </h2>
@@ -67,9 +79,7 @@ const MainCta = () => {
                   data-aos="fade-up"
                   data-aos-delay="500"
                 >
-                  Luctus. Curabitur nibh justo imperdiet non ex non tempus
-                  faucibus urna Aliquam at elit vitae dui sagittis maximus eget
-                  vitae diam In fermentum
+                  {description}
                 </p>
                 <ul
                   className="list-items "
@@ -77,33 +87,33 @@ const MainCta = () => {
                   data-aos="fade-up"
                   data-aos-delay="700"
                 >
-                  <li>
+                  <li className="d-flex align-items-center">
                     <i className="fa-regular fa-circle-check me-2"></i>
-                    Highly Educated
+                    {one}
                   </li>
-                  <li>
+                  <li className="d-flex align-items-center">
                     <i className="fa-regular fa-circle-check me-2"></i>
-                    Dedicated Educator
+                    {two}
                   </li>
-                  <li>
+                  <li className="d-flex align-items-center">
                     <i className="fa-regular fa-circle-check me-2"></i>
-                    Mentor and Guide
+                    {three}
                   </li>
-                  <li>
+                  <li className="d-flex align-items-center">
                     <i className="fa-regular fa-circle-check me-2"></i>
-                    Community Leader
+                    {four}
                   </li>
-                  <li>
+                  <li className="d-flex align-items-center">
                     <i className="fa-regular fa-circle-check me-2"></i>
-                    Multilingual
+                    {five}
                   </li>
-                  <li>
+                  <li className="d-flex align-items-center">
                     <i className="fa-regular fa-circle-check me-2"></i>
-                    Versatile Experience
+                    {six}
                   </li>
-                  <li>
+                  <li className="d-flex align-items-center">
                     <i className="fa-regular fa-circle-check me-2 "></i>
-                    Empathetic and Supportive{" "}
+                    {seven}
                   </li>
                 </ul>
                 <div className="row mt-2 align-items-center">
@@ -114,7 +124,7 @@ const MainCta = () => {
                     data-aos-delay="300"
                   >
                     <Link to="/about" className="theme-btn bg-white">
-                      Explore More{" "}
+                      {exploreBtn}
                       <i className="fa-solid fa-arrow-right-long"></i>
                     </Link>
                   </div>
@@ -126,8 +136,8 @@ const MainCta = () => {
                   >
                     {/* <Image src={eight} alt="author-img" /> */}
                     <div className="content">
-                      <h6 className="text-white fw-bold">Mohammad Khalid</h6>
-                      <p>Managing Director & Headteacher</p>
+                      <h6 className="text-white fw-bold">{directorName}</h6>
+                      <p>{post}</p>
                     </div>
                   </div>
                 </div>

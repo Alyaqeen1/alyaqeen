@@ -1,6 +1,9 @@
+import { Trans, useTranslation } from "react-i18next";
 import { Link } from "react-router";
 
 const CTA = () => {
+  const { t } = useTranslation(["home"]);
+  const { heading1, heading2, applyBtn } = t("cta") || {};
   return (
     <section
       className="cta-section fix section-padding bg-cover"
@@ -32,7 +35,7 @@ const CTA = () => {
                   data-aos-duration="800"
                   data-aos="fade-up"
                 >
-                  Get your quality
+                  {heading2}
                 </span>
                 <h2
                   className="text-white "
@@ -40,8 +43,7 @@ const CTA = () => {
                   data-aos="fade-up"
                   data-aos-delay="300"
                 >
-                  Come and be Part of <br /> Our Latest Session. <br />{" "}
-                  Admissions are open.
+                  <Trans i18nKey={heading1} components={{ break: <br /> }} />
                 </h2>
               </div>
               <div
@@ -51,7 +53,7 @@ const CTA = () => {
                 data-aos-delay="500"
               >
                 <Link to="/apply-now" className="theme-btn bg-white">
-                  Apply Now <i className="fa-solid fa-arrow-right-long"></i>
+                  {applyBtn} <i className="fa-solid fa-arrow-right-long"></i>
                 </Link>
               </div>
             </div>

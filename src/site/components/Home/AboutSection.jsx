@@ -1,6 +1,9 @@
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
 
 const AboutSection = () => {
+  const { t } = useTranslation(["home"]);
+  const { heading1, heading2, exploreBtn, call } = t("activities");
   return (
     <section className="about-section section-padding" id="about">
       <div className="bus-shape float-bob-x">
@@ -52,14 +55,14 @@ const AboutSection = () => {
               <div className="about-content">
                 <div className="section-title">
                   <span data-aos-duration="800" data-aos="fade-up">
-                    Our Best Activities
+                    {heading2}
                   </span>
                   <h2
                     data-aos-duration="800"
                     data-aos="fade-up"
                     data-aos-delay="300"
                   >
-                    Let Us Know About Our Reading And Cultural{" "}
+                    {heading1}
                   </h2>
                 </div>
                 <p
@@ -118,7 +121,7 @@ const AboutSection = () => {
                     data-aos-delay="300"
                   >
                     <Link to="about" className="theme-btn">
-                      Explore More{" "}
+                      {exploreBtn}
                       <i className="fa-solid fa-arrow-right-long"></i>
                     </Link>
                   </div>
@@ -132,7 +135,7 @@ const AboutSection = () => {
                       <i className="fa-solid fa-phone"></i>
                     </div>
                     <div className="content">
-                      <span>Call Us Now</span>
+                      <span>{call}</span>
                       <h5>
                         <Link to="tel:+07869636849">+07869636849</Link>
                       </h5>

@@ -41,5 +41,36 @@
       "english": "English",
       "arabic": "Arabic"
     }
+  },
+  "footer": {
+    "call": "Call Us 7/24",
+    "email": "Email",
+    "location": "Location",
+    "address": "116 Church Road, Yardley, Birmingham, B25 8UX",
+    "slogan": "“One of the most dedicated Academy in Yardley Birmingham”",
+    "terms": "Terms & Condition",
+    "policy": "Privacy Policy",
+    "quickLinks": {
+      "title1": "Quick Links",
+      "link1": "About",
+      "link2": "News",
+      "link3": "Photos & Videos",
+      "link4": "Academic Calendar",
+      "link5": "Contact"
+    },
+    "categories": {
+      "title2": "Categories",
+      "link6": "Qaidah, Quran & Hifdth",
+      "link7": "Math, English & Science",
+      "link8": "Arabic Language",
+      "link9": "Modern Foreign Languages"
+    },
+    "recentPosts": {
+      "title3": "Recent Posts"
+    }
+  },
+  "director": {
+    "name": "Mohammad Khalid",
+    "post": "Managing Director & Headteacher"
   }
 }

@@ -220,5 +220,68 @@
       "review9": "An amazing platform! My son now enjoys studying, and his grades have improved significantly. Highly recommend!",
       "author9": "Saeed Mohammed Al-Dhaheri"
     }
+  },
+  "cta": {
+    "heading1": "Come and be Part of <break /> Our Latest Session. <break /> Admissions are open.",
+    "heading2": "Get your quality",
+    "applyBtn": "Apply Now"
+  },
+  "blogs": {
+    "heading1": "Explore blogs and news",
+    "heading2": "Our Blogs",
+    "seeArticleBtn": "See All Article",
+    "bestTeacher": {
+      "title": "Best Teacher of the Month",
+      "name": "Maulana Junaid Usman",
+      "post": "Arabic and Islamic Studies",
+      "description": "Maulana Junaid Usman is the best teacher of the month as he always make sure to come before the starting time and set the class organise everything before children arriving, he also helps after the lessons and discuss the importance of the day with the headteacher. we appreciate his contribution and thoughts."
+    },
+    "bestStudent": {
+      "title": "Best Student of the Month",
+      "name": "Junaid Qadir",
+      "post": "Weekdays Class B5",
+      "description": "Brilliant child, no absence in the entire month. Always best in the class, respect the teachers and staff, very supportive student at Alyaqeen."
+    }
+  },
+  "teacherOfTheYear": {
+    "name": "Shaykh Molana Junaid Usman",
+    "title": "Why selected as The Best Teacher of the Year.",
+    "description": "Maulana Junaid Usman is the best teacher of the year as he always make sure to come before the starting time and set the class organise everything before children arriving, he also helps after the lessons and discuss the importance of the day with the headteacher. we appreciate his contribution and thoughts.",
+    "exploreBtn": "Explore More",
+    "skills": {
+      "one": "Highly Educated",
+      "two": "Dedicated Educator",
+      "three": "Mentor and Guide",
+      "four": "Community Leader",
+      "five": "Multilingual",
+      "six": "Versatile Experience",
+      "seven": "Empathetic and Supportive"
+    }
+  },
+  "instagram": {
+    "follow": "Follow Instagram"
+  },
+  "services": {
+    "heading1": "Alyaqeen Academy more Services",
+    "heading2": "Additional Services",
+    "AllServiceBtn": "All Services",
+    "service1": {
+      "title1": "Online Learning",
+      "description1": "We all know the impact that Covid-19 has left upon a children's education..."
+    },
+    "service2": {
+      "title2": "Nikah",
+      "description2": "Shaykh Khalid has conducted many Nikkahs over the last 10 years..."
+    },
+    "service3": {
+      "title3": "Sports Club",
+      "description3": "At Alyaqeen academy students play football. We also have a Cricket Club..."
+    }
+  },
+  "activities": {
+    "heading1": "Let Us Know About Our Reading And Cultural",
+    "heading2": "Our Best Activities",
+    "exploreBtn": "Explore More",
+    "call": "Call Us Now"
   }
 }

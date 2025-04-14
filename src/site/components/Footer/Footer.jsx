@@ -1,8 +1,26 @@
 import { Link } from "react-router";
 import ScrollTop from "./ScrollTop";
+import { useTranslation } from "react-i18next";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const { t } = useTranslation(["common"]);
+  const {
+    call,
+    location,
+    email,
+    address,
+    slogan,
+    quickLinks,
+    categories,
+    terms,
+    policy,
+    recentPosts: { title3 },
+  } = t("footer") || {};
+
+  const { title1, link1, link2, link3, link4, link5 } = quickLinks || {};
+  const { title2, link6, link7, link8, link9 } = categories || {};
+
   return (
     <footer className="footer-section section-bg fix">
       <div className="position-relative">
@@ -68,7 +86,7 @@ const Footer = () => {
               </svg>
             </div>
             <div className="content">
-              <p>Call Us 7/24</p>
+              <p>{call}</p>
               <h3>
                 <Link to="tel:+07869636849">+07869636849</Link>
               </h3>
@@ -103,7 +121,7 @@ const Footer = () => {
               </svg>
             </div>
             <div className="content">
-              <p>Email</p>
+              <p>{email}</p>
               <h3>
                 <Link to="mailto:kidsa@gmail.com">contact@alyaqeen.co.uk</Link>
               </h3>
@@ -138,8 +156,8 @@ const Footer = () => {
               </svg>
             </div>
             <div className="content">
-              <p>Location</p>
-              <h3>116 Church Road, Yardley, Birmingham, B25 8UX</h3>
+              <p>{location}</p>
+              <h3>{address}</h3>
             </div>
           </div>
         </div>
@@ -164,9 +182,7 @@ const Footer = () => {
                   </Link>
                 </div>
                 <div className="footer-content">
-                  <p>
-                    “One of the most dedicated Academy in Yardley Birmingham”
-                  </p>
+                  <p>{slogan}</p>
                   <div className="social-icon d-flex align-items-center">
                     <Link to="https://www.facebook.com/AlyaqeenAcademy">
                       <i className="fab fa-facebook-f"></i>
@@ -192,37 +208,37 @@ const Footer = () => {
             >
               <div className="single-footer-widget">
                 <div className="widget-head">
-                  <h3>Quick Links</h3>
+                  <h3>{title1}</h3>
                 </div>
                 <ul className="list-area">
                   <li>
                     <Link to="/about">
                       <i className="fa-solid fa-chevron-right"></i>
-                      About
+                      {link1}
                     </Link>
                   </li>
                   <li>
                     <Link to="/news">
                       <i className="fa-solid fa-chevron-right"></i>
-                      News
+                      {link2}
                     </Link>
                   </li>
                   <li>
                     <Link to="/photos-videos">
                       <i className="fa-solid fa-chevron-right"></i>
-                      Photos & Videos
+                      {link3}
                     </Link>
                   </li>
                   <li>
                     <Link to="/academic-calendar">
                       <i className="fa-solid fa-chevron-right"></i>
-                      Academic Calendar
+                      {link4}
                     </Link>
                   </li>
                   <li>
                     <Link to="/contact">
                       <i className="fa-solid fa-chevron-right"></i>
-                      Contact
+                      {link5}
                     </Link>
                   </li>
                 </ul>
@@ -236,31 +252,31 @@ const Footer = () => {
             >
               <div className="single-footer-widget style-margin">
                 <div className="widget-head">
-                  <h3>Categories</h3>
+                  <h3>{title2}</h3>
                 </div>
                 <ul className="list-area">
                   <li>
-                    <Link to="program-details">
+                    <Link to="/arabic-qaidah-quran-hifdh">
                       <i className="fa-solid fa-chevron-right"></i>
-                      Music Learning
+                      {link6}
                     </Link>
                   </li>
                   <li>
-                    <Link to="program-details">
+                    <Link to="/maths-english-science">
                       <i className="fa-solid fa-chevron-right"></i>
-                      Sports, Games
+                      {link7}
                     </Link>
                   </li>
                   <li>
-                    <Link to="program-details">
+                    <Link to="/arabic-language">
                       <i className="fa-solid fa-chevron-right"></i>
-                      Science Class
+                      {link8}
                     </Link>
                   </li>
                   <li>
-                    <Link to="program-details">
+                    <Link to="/modern-foreign-languages">
                       <i className="fa-solid fa-chevron-right"></i>
-                      Drawing
+                      {link9}
                     </Link>
                   </li>
                 </ul>
@@ -274,7 +290,7 @@ const Footer = () => {
             >
               <div className="single-footer-widget style-margin">
                 <div className="widget-head">
-                  <h3>Recent Posts</h3>
+                  <h3>{title3}</h3>
                 </div>
                 <div className="recent-post-area">
                   <div className="recent-post-items">
@@ -351,10 +367,10 @@ const Footer = () => {
               data-aos-delay="500"
             >
               <li>
-                <Link to="contact">Terms & Condition</Link>
+                <Link to="contact">{terms}</Link>
               </li>
               <li>
-                <Link to="contact">Privacy Policy</Link>
+                <Link to="contact">{policy}</Link>
               </li>
             </ul>
           </div>
