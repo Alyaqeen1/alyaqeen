@@ -1,8 +1,23 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
 import "swiper/swiper-bundle.css";
+import { Trans, useTranslation } from "react-i18next";
 
 const TestimonialTwo = () => {
+  const { t } = useTranslation(["home"]);
+  const {
+    heading1,
+    heading2,
+    testimonial1: { review1, author1 },
+    testimonial2: { review2, author2 },
+    testimonial3: { review3, author3 },
+    testimonial4: { review4, author4 },
+    testimonial5: { review5, author5 },
+    testimonial6: { review6, author6 },
+    testimonial7: { review7, author7 },
+    testimonial8: { review8, author8 },
+    testimonial9: { review9, author9 },
+  } = t("testimonialTwo") || {};
   return (
     <section className="testimonial-section fix section-padding">
       <div className="tree-shape float-bob-y">
@@ -29,10 +44,10 @@ const TestimonialTwo = () => {
       <div className="container">
         <div className="section-title text-center">
           <span data-aos-duration="800" data-aos="fade-up">
-            testimonials
+            {heading2}
           </span>
           <h2 data-aos-duration="800" data-aos="fade-up" data-aos-delay="300">
-            Parent&apos;s words are the key <br /> to happy kids
+            <Trans i18nKey={heading1} components={{ break: <br /> }} />
           </h2>
         </div>
         <div className="swiper testimonial-slider">
@@ -73,11 +88,8 @@ const TestimonialTwo = () => {
                   </div>
                   <div className="testimonial-bg"></div>
                   <div className="testimonial-content">
-                    <p>
-                      I appreciate the flexibility of Alyaqeen Academy. My child
-                      can learn at their own pace, which is very effective.
-                    </p>
-                    <h6>Ahmed Ali Al Mansoori</h6>
+                    <p>{review1}</p>
+                    <h6>{author1}</h6>
                   </div>
                 </div>
               </div>
@@ -94,11 +106,8 @@ const TestimonialTwo = () => {
                   </div>
                   <div className="testimonial-bg bg-2"></div>
                   <div className="testimonial-content">
-                    <p>
-                      I am impressed with the quality of education provided. My
-                      child is more engaged and motivated to learn.
-                    </p>
-                    <h6>Fatima Mohammed Al Hashmi</h6>
+                    <p>{review2}</p>
+                    <h6>{author2}</h6>
                   </div>
                 </div>
               </div>
@@ -115,11 +124,8 @@ const TestimonialTwo = () => {
                   </div>
                   <div className="testimonial-bg bg-3"></div>
                   <div className="testimonial-content">
-                    <p>
-                      Alyaqeen Academy offers a friendly environment, and the
-                      support team is always helpful. Highly recommended!
-                    </p>
-                    <h6>Khalid Abdullah Al Zaabi</h6>
+                    <p>{review3}</p>
+                    <h6>{author3}</h6>
                   </div>
                 </div>
               </div>
@@ -136,11 +142,8 @@ const TestimonialTwo = () => {
                   </div>
                   <div className="testimonial-bg"></div>
                   <div className="testimonial-content">
-                    <p>
-                      Alyaqeen Academy is a game-changer for my child's
-                      education. The content is engaging and well-structured.
-                    </p>
-                    <h6>Mariam Salem Al Mehairi</h6>
+                    <p>{review4}</p>
+                    <h6>{author4}</h6>
                   </div>
                 </div>
               </div>
@@ -157,11 +160,8 @@ const TestimonialTwo = () => {
                   </div>
                   <div className="testimonial-bg bg-2"></div>
                   <div className="testimonial-content">
-                    <p>
-                      Alyaqeen Academy has exceeded my expectations. It’s a
-                      perfect blend of technology and education for my child.
-                    </p>
-                    <h6>Omar Saif Al Nuaimi</h6>
+                    <p>{review5}</p>
+                    <h6>{author5}</h6>
                   </div>
                 </div>
               </div>
@@ -178,11 +178,8 @@ const TestimonialTwo = () => {
                   </div>
                   <div className="testimonial-bg bg-3"></div>
                   <div className="testimonial-content">
-                    <p>
-                      Alyaqeen Academy has made learning fun and interactive for
-                      my child. I can see their confidence growing every day.
-                    </p>
-                    <h6>Layla Yousuf Al Ketbi</h6>
+                    <p>{review6}</p>
+                    <h6>{author6}</h6>
                   </div>
                 </div>
               </div>
@@ -199,11 +196,8 @@ const TestimonialTwo = () => {
                   </div>
                   <div className="testimonial-bg"></div>
                   <div className="testimonial-content">
-                    <p>
-                      The progress reports are detailed and easy to understand.
-                      It helps me stay updated on my child's performance.
-                    </p>
-                    <h6>Yousef Ibrahim Al Shamsi</h6>
+                    <p>{review7}</p>
+                    <h6>{author7}</h6>
                   </div>
                 </div>
               </div>
@@ -220,11 +214,8 @@ const TestimonialTwo = () => {
                   </div>
                   <div className="testimonial-bg bg-2"></div>
                   <div className="testimonial-content">
-                    <p>
-                      This LMS has transformed my child's learning experience!
-                      Highly recommended! Best Platform for my child.
-                    </p>
-                    <h6>Ahmed Saeed Al-Mansoori</h6>
+                    <p>{review8}</p>
+                    <h6>{author8}</h6>
                   </div>
                 </div>
               </div>
@@ -241,11 +232,8 @@ const TestimonialTwo = () => {
                   </div>
                   <div className="testimonial-bg bg-3"></div>
                   <div className="testimonial-content">
-                    <p>
-                      An amazing platform! My son now enjoys studying, and his
-                      grades have improved significantly. Highly recommend!
-                    </p>
-                    <h6>Saeed Mohammed Al-Dhaheri</h6>
+                    <p>{review9}</p>
+                    <h6>{author9}</h6>
                   </div>
                 </div>
               </div>

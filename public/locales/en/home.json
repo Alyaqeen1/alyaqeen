@@ -176,5 +176,49 @@
 
     "teamName11": "Hafsa Ahmed",
     "teamPost11": "Arabic Tutor"
+  },
+  "testimonialOne": {
+    "heading1": "Parent's words are the<break />key to happy kids",
+    "heading2": "Testimonials"
+  },
+  "testimonialTwo": {
+    "heading1": "Parent's words are the<break />key to happy kids",
+    "heading2": "Testimonials",
+    "testimonial1": {
+      "review1": " I appreciate the flexibility of Alyaqeen Academy. My child can learn at their own pace, which is very effective.",
+      "author1": "Ahmed Ali Al Mansoori"
+    },
+    "testimonial2": {
+      "review2": " I am impressed with the quality of education provided. My child is more engaged and motivated to learn.",
+      "author2": "Fatima Mohammed Al Hashmi"
+    },
+    "testimonial3": {
+      "review3": "Alyaqeen Academy offers a friendly environment, and the support team is always helpful. Highly recommended!",
+      "author3": "Khalid Abdullah Al Zaabi"
+    },
+    "testimonial4": {
+      "review4": "Alyaqeen Academy is a game-changer for my child's education. The content is engaging and well-structured.",
+      "author4": "Mariam Salem Al Mehairi"
+    },
+    "testimonial5": {
+      "review5": "Alyaqeen Academy has exceeded my expectations. It’s a perfect blend of technology and education for my child.",
+      "author5": "Omar Saif Al Nuaimi"
+    },
+    "testimonial6": {
+      "review6": "Alyaqeen Academy has made learning fun and interactive for my child. I can see their confidence growing every day.",
+      "author6": "Layla Yousuf Al Ketbi"
+    },
+    "testimonial7": {
+      "review7": " The progress reports are detailed and easy to understand. It helps me stay updated on my child's performance.",
+      "author7": "Yousef Ibrahim Al Shamsi"
+    },
+    "testimonial8": {
+      "review8": "This LMS has transformed my child's learning experience! Highly recommended! Best Platform for my child.",
+      "author8": "Ahmed Saeed Al-Mansoori"
+    },
+    "testimonial9": {
+      "review9": "An amazing platform! My son now enjoys studying, and his grades have improved significantly. Highly recommend!",
+      "author9": "Saeed Mohammed Al-Dhaheri"
+    }
   }
 }
