@@ -50,5 +50,87 @@
     "feature4": "Termly reports for parents",
     "feature5": "Quran taught with tajweed",
     "feature6": "Fun & friendly environment"
+  },
+  "feeStructure": {
+    "heading1": "Alyaqeen Academy<break />Classes & Fee Structure",
+    "heading2": "Classes & Fee Structure",
+    "title1": "Subject",
+    "title2": "Weekdays Classes",
+    "title3": "Weekends Classes",
+    "subject1": {
+      "sub1Title": "Qaidah, Quran & Islamic Studies",
+      "weekdays1": {
+        "dayPerHour1": "£1.85<sm>/hour</sm>",
+        "dayPerMonth1": "£50<sm>/month</sm>",
+        "dayDays1": "Mon - Thu",
+        "dayDuration1": "4:30 - 6:00pm / 5:45 - 7:15pm"
+      },
+      "weekends1": {
+        "endPerHour1": "£1.70<sm>/hour</sm>",
+        "endPerMonth1": "£50<sm>/month</sm>",
+        "endDays1": "Sat - Sun",
+        "endDuration1": "10am - 12:30pm/12:30 - 2:30pm"
+      }
+    },
+    "subject2": {
+      "sub2Title": "Primary Maths & English Tuition",
+      "weekdays2": {
+        "dayPerHour2": "£5<sm>/hour</sm>",
+        "dayPerMonth2": "£100<sm>/month</sm>",
+        "dayDays2": "Mon - Tue",
+        "dayDuration2": "5 - 7pm"
+      },
+      "weekends2": {
+        "endPerHour2": "£4.44<sm>/hour</sm>",
+        "endPerMonth2": "£80<sm>/month</sm>",
+        "endDays2": "Sat - Sun",
+        "endDuration2": "10am - 12pm"
+      }
+    },
+    "subject3": {
+      "sub3Title": "GCSE Maths English & Science Tuition",
+      "weekdays3": {
+        "dayPerHour3": "£6.25<sm>/hour</sm>",
+        "dayPerMonth3": "£120<sm>/month</sm>",
+        "dayDays3": "Wed - Thu",
+        "dayDuration3": "5 - 7pm"
+      },
+      "weekends3": {
+        "endPerHour3": "£5<sm>/hour</sm>",
+        "endPerMonth3": "£100<sm>/month</sm>",
+        "endDays3": "Sat - Sun",
+        "endDuration3": "10am - 12pm / 10am - 1pm"
+      }
+    },
+    "subject4": {
+      "sub4Title": "Hifz Memorisation",
+      "weekdays4": {
+        "dayPerHour4": "£1.85<sm>/hour</sm>",
+        "dayPerMonth4": "£90<sm>/month</sm>",
+        "dayDays4": "Mon - Thu",
+        "dayDuration4": "4:30 - 7:00pm/5 - 7pm"
+      },
+      "weekends4": {
+        "endPerHour4": "£2<sm>/hour</sm>",
+        "endPerMonth4": "£60<sm>/month</sm>",
+        "endDays4": "Sat - Sun",
+        "endDuration4": "10am - 1pm/12 - 2:30pm"
+      }
+    },
+    "subject5": {
+      "sub5Title": "Arabic Language",
+      "weekdays5": {
+        "dayPerHour5": "£1.66<sm>/hour</sm>",
+        "dayPerMonth5": "£60<sm>/month</sm>",
+        "dayDays5": "Mon - Thu",
+        "dayDuration5": "6 - 7pm"
+      },
+      "weekends5": {
+        "endPerHour5": "£10<sm>/hour</sm>",
+        "endPerMonth5": "£50<sm>/month</sm>",
+        "endDays5": "Sat - Sun",
+        "endDuration5": "10am - 12:30pm/12:30 - 2:30pm"
+      }
+    }
   }
 }

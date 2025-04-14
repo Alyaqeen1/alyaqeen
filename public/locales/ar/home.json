@@ -50,5 +50,87 @@
     "feature4": "تقارير فصلية للآباء",
     "feature5": "تعليم القرآن مع التجويد",
     "feature6": "بيئة ممتعة وودية"
+  },
+  "feeStructure": {
+    "heading1": "أكاديمية اليقين<break />الصفوف وهيكل الرسوم",
+    "heading2": "الصفوف وهيكل الرسوم",
+    "title1": "المادة",
+    "title2": "صفوف أيام الأسبوع",
+    "title3": "صفوف عطلة نهاية الأسبوع",
+    "subject1": {
+      "sub1Title": "القاعدة، القرآن والدراسات الإسلامية",
+      "weekdays1": {
+        "dayPerHour1": "£1.85<sm>/في الساعة</sm>",
+        "dayPerMonth1": "£50<sm>/في الشهر</sm>",
+        "dayDays1": "الاثنين - الخميس",
+        "dayDuration1": "٤:٣٠ - ٦:٠٠م / ٥:٤٥ - ٧:١٥م"
+      },
+      "weekends1": {
+        "endPerHour1": "£1.70<sm>/في الساعة</sm>",
+        "endPerMonth1": "£50<sm>/في الشهر</sm>",
+        "endDays1": "السبت - الأحد",
+        "endDuration1": "١٠ص - ١٢:٣٠م / ١٢:٣٠ - ٢:٣٠م"
+      }
+    },
+    "subject2": {
+      "sub2Title": "دروس رياضيات وإنجليزي للمرحلة الابتدائية",
+      "weekdays2": {
+        "dayPerHour2": "£5<sm>/في الساعة</sm>",
+        "dayPerMonth2": "£100<sm>/في الشهر</sm>",
+        "dayDays2": "الاثنين - الثلاثاء",
+        "dayDuration2": "٥ - ٧م"
+      },
+      "weekends2": {
+        "endPerHour2": "£4.44<sm>/في الساعة</sm>",
+        "endPerMonth2": "£80<sm>/في الشهر</sm>",
+        "endDays2": "السبت - الأحد",
+        "endDuration2": "١٠ص - ١٢م"
+      }
+    },
+    "subject3": {
+      "sub3Title": "GCSE دروس رياضيات وإنجليزي وعلوم",
+      "weekdays3": {
+        "dayPerHour3": "£6.25<sm>/في الساعة</sm>",
+        "dayPerMonth3": "£120<sm>/في الشهر</sm>",
+        "dayDays3": "الأربعاء - الخميس",
+        "dayDuration3": "٥ - ٧م"
+      },
+      "weekends3": {
+        "endPerHour3": "£5<sm>/في الساعة</sm>",
+        "endPerMonth3": "£100<sm>/في الشهر</sm>",
+        "endDays3": "السبت - الأحد",
+        "endDuration3": "١٠ص - ١٢م / ١٠ص - ١م"
+      }
+    },
+    "subject4": {
+      "sub4Title": "تحفيظ (حفظ القرآن)",
+      "weekdays4": {
+        "dayPerHour4": "£1.85<sm>/في الساعة</sm>",
+        "dayPerMonth4": "£90<sm>/في الشهر</sm>",
+        "dayDays4": "الاثنين - الخميس",
+        "dayDuration4": "٤:٣٠ - ٧م / ٥ - ٧م"
+      },
+      "weekends4": {
+        "endPerHour4": "£2<sm>/في الساعة</sm>",
+        "endPerMonth4": "£60<sm>/في الشهر</sm>",
+        "endDays4": "السبت - الأحد",
+        "endDuration4": "١٠ص - ١م / ١٢ - ٢:٣٠م"
+      }
+    },
+    "subject5": {
+      "sub5Title": "اللغة العربية",
+      "weekdays5": {
+        "dayPerHour5": "£1.66<sm>/في الساعة</sm>",
+        "dayPerMonth5": "£60<sm>/في الشهر</sm>",
+        "dayDays5": "الاثنين - الخميس",
+        "dayDuration5": "٦ - ٧م"
+      },
+      "weekends5": {
+        "endPerHour5": "£10<sm>/في الساعة</sm>",
+        "endPerMonth5": "£50<sm>/في الشهر</sm>",
+        "endDays5": "السبت - الأحد",
+        "endDuration5": "١٠ص - ١٢:٣٠م / ١٢:٣٠ - ٢:٣٠م"
+      }
+    }
   }
 }
