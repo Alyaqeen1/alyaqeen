@@ -132,5 +132,49 @@
         "endDuration5": "10am - 12:30pm/12:30 - 2:30pm"
       }
     }
+  },
+  "marquee": {
+    "text1": "Award-winning",
+    "text2": "nominated certificates",
+    "text3": "Mid Term Exam 2025"
+  },
+  "certificate": {
+    "category1": "Category 1",
+    "category2": "Category 2",
+    "category3": "Category 3"
+  },
+  "staff": {
+    "heading": "Our Staff",
+    "teamName1": "Mohammad Khalid",
+    "teamPost1": "Managing Director & Headteacher",
+
+    "teamName2": "Shaikh Junaid Usman",
+    "teamPost2": "Arabic &  RE Tutor",
+
+    "teamName3": "Hameedullah",
+    "teamPost3": "Head of online courses",
+
+    "teamName4": "Mohammad Saad",
+    "teamPost4": "Teacher",
+
+    "teamName5": "Mr M Jabir Ludhi",
+    "teamPost5": "KS1 and KS2 Tutor",
+
+    "teamName6": "Muhammad Saleem",
+    "teamPost6": "Developer",
+
+    "teamName7": "Noreen",
+    "teamPost7": "Head of Arabic and Quran female Department",
+
+    "teamName8": "Abo Jesh khetam Abo",
+    "teamPost8": "KS3 &  GCSE English and Islamic StudiesTutor",
+
+    "teamName9": "Amina Akhter",
+    "teamPost9": "KS3 &  GCSE Chemistry &  Biology Tutor",
+    "teamName10": "Hafsa Khadar",
+    "teamPost10": "Arabic Basic Book & RE Tutor",
+
+    "teamName11": "Hafsa Ahmed",
+    "teamPost11": "Arabic Tutor"
   }
 }
