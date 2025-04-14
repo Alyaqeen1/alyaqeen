@@ -22,7 +22,7 @@ export default function Home() {
   return (
     <div>
       <Banner></Banner>
-      <LanguageModal></LanguageModal>
+      {/* <LanguageModal></LanguageModal> */}
 
       <ProgramSection></ProgramSection>
       <WorkProcess></WorkProcess>
