@@ -1,6 +1,12 @@
 import { useState, useEffect } from "react";
 import OffCanvasMenu from "./OffCanvasMenu";
 import { Link } from "react-router";
+import { useTranslation } from "react-i18next";
+
+const languages = [
+  { code: "en", lang: "English" },
+  { code: "ar", lang: "Arabic" },
+];
 
 const Header = () => {
   const [openSubMenu, setOpenSubMenu] = useState(null);
@@ -8,6 +14,7 @@ const Header = () => {
   const [logout, setLogout] = useState(
     JSON.parse(localStorage.getItem("isLoggedIn"))
   );
+  const { i18n } = useTranslation();
 
   const handleLogout = () => {
     localStorage.setItem("isLoggedIn", "false");
@@ -63,6 +70,47 @@ const Header = () => {
   const handleClick = (e) => {
     e.stopPropagation();
   };
+  const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+  };
+  useEffect(() => {
+    document.body.style.textAlign = i18n.dir() === "rtl" ? "right" : "left";
+  }, [i18n, i18n.language]);
+  const { t } = useTranslation(["common"]);
+  const { nav, discountBtn, options } = t("header") || {};
+  const { english, arabic } = options || {};
+  const {
+    home,
+    aboutUs,
+    aboutTheFounder,
+    whoWeAre,
+    meetTheTeam,
+    missionVision,
+    courses,
+    qaidahQuran,
+    mathEnglish,
+    arabicLanguage,
+    modernForeign,
+    pages,
+    news,
+    ourSyllabus,
+    academicCalendar,
+    weekdays,
+    weekend,
+    prayerTimetable,
+    vacancies,
+    faq,
+    shop,
+    photosVideos,
+    contact,
+    contactUs,
+    chat,
+    academyVisit,
+    volunteering,
+    feedback,
+    login,
+    logOut,
+  } = nav || {};
 
   return (
     <>
@@ -90,9 +138,14 @@ const Header = () => {
                     alt="img"
                     className="me-2 inline"
                   />
-                  <select name="cate" className="category">
-                    <option value="1">English</option>
-                    <option value="1">Arabic</option>
+                  <select
+                    name="cate"
+                    onChange={(e) => changeLanguage(e.target.value)}
+                    className="category"
+                  >
+                    <option value="en">{english}</option>
+
+                    <option value="ar">{arabic}</option>
                   </select>
                 </div>
               </div>
@@ -103,138 +156,138 @@ const Header = () => {
                       <ul className="text-base">
                         <li className="active menu-thumb">
                           <Link className="text-sm" to="/">
-                            Home
+                            {home}
                           </Link>
                         </li>
                         <li>
                           <Link>
-                            About Us
+                            {aboutUs}
                             <i className="fas fa-angle-down"></i>
                           </Link>
                           <ul className="submenu">
                             <li>
-                              <Link to="/about-founder">About The Founder</Link>
+                              <Link to="/about-founder">{aboutTheFounder}</Link>
                             </li>
                             <li>
-                              <Link to="/about">Who We Are</Link>
+                              <Link to="/about">{whoWeAre}</Link>
                             </li>
                             <li>
-                              <Link to="/our-team">Meet The Team</Link>
+                              <Link to="/our-team">{meetTheTeam}</Link>
                             </li>
                             <li>
-                              <Link to="/our-vision">
-                                Mission, Vision & Values
-                              </Link>
+                              <Link to="/our-vision">{missionVision}</Link>
                             </li>
                           </ul>
                         </li>
 
                         <li>
                           <Link>
-                            Courses
+                            {courses}
                             <i className="fas fa-angle-down"></i>
                           </Link>
                           <ul className="submenu">
                             <li>
                               <Link to="/arabic-qaidah-quran-hifdh">
-                                Qaidah, Quran & Hifdh
+                                {qaidahQuran}
                               </Link>
                             </li>
                             <li>
                               <Link to="/maths-english-science">
-                                Maths, English &amp; Science
+                                {mathEnglish}
                               </Link>
                             </li>
                             <li>
-                              <Link to="/arabic-language">Arabic Language</Link>
+                              <Link to="/arabic-language">
+                                {arabicLanguage}
+                              </Link>
                             </li>
                             <li>
                               <Link to="/modern-foreign-languages">
-                                Modern Foreign Languages
+                                {modernForeign}
                               </Link>
                             </li>
                           </ul>
                         </li>
                         <li className="has-dropdown">
                           <Link>
-                            Pages
+                            {pages}
                             <i className="fas fa-angle-down"></i>
                           </Link>
                           <ul className="submenu">
                             <li>
-                              <Link to="/news">News & Updates</Link>
+                              <Link to="/news">{news}</Link>
                             </li>
                             <li>
-                              <Link to="/our-syllabus">Our Syllabus</Link>
+                              <Link to="/our-syllabus">{ourSyllabus}</Link>
                             </li>
                             <li className="has-dropdown">
                               <Link>
-                                Academic Calendar
+                                {academicCalendar}
                                 <i className="fas fa-angle-down"></i>
                               </Link>
                               <ul className="submenu">
                                 <li>
-                                  <Link to="/weekdays">Weekdays</Link>
+                                  <Link to="/weekdays">{weekdays}</Link>
                                 </li>
                                 <li>
-                                  <Link to="/weekends">Weekend</Link>
+                                  <Link to="/weekends">{weekend}</Link>
                                 </li>
                               </ul>
                             </li>
                             <li>
                               <Link to="/prayer-timetable">
-                                Prayer Timetable
+                                {prayerTimetable}
                               </Link>
                             </li>
                             <li>
-                              <Link to="/vacancies">Vacancies</Link>
+                              <Link to="/vacancies">{vacancies}</Link>
                             </li>
                             <li>
-                              <Link to="/faq">FAQ&apos;S</Link>
+                              <Link to="/faq">{faq}</Link>
                             </li>
                             <li>
-                              <Link to="/shop">Shop</Link>
+                              <Link to="/shop">{shop}</Link>
                             </li>
                             <li>
-                              <Link to="/photos-videos">Photos & Videos</Link>
+                              <Link to="/photos-videos">{photosVideos}</Link>
                             </li>
                           </ul>
                         </li>
                         <li>
                           <Link>
-                            Contact
+                            {contact}
                             <i className="fas fa-angle-down"></i>
                           </Link>
                           <ul className="submenu">
                             <li>
-                              <Link to="/contact">Contact Us</Link>
+                              <Link to="/contact">{contactUs}</Link>
                             </li>
                             <li>
                               <Link
                                 target="_blank"
                                 to="https://wa.me/447869636849"
                               >
-                                Chat
+                                {chat}
                               </Link>
                             </li>
                             <li>
-                              <Link to="/academy-visit">Academy Visit</Link>
+                              <Link to="/academy-visit">{academyVisit}</Link>
                             </li>
                             <li>
-                              <Link to="/volunteering">Volunteering</Link>
+                              <Link to="/volunteering">{volunteering}</Link>
                             </li>
                             <li>
-                              <Link to="/feedback">Feedback</Link>
+                              <Link to="/feedback">{feedback}</Link>
                             </li>
                           </ul>
                         </li>
                         {!logout ? (
                           <li>
-                            <Link to="/login">Login</Link>
+                            <Link to="/login">{login}</Link>
                           </li>
                         ) : (
                           <li>
-                            <button onClick={handleLogout}>Logout</button>
+                            <button onClick={handleLogout}>{logOut}</button>
                           </li>
                         )}
                         {/* <li>
@@ -253,7 +306,7 @@ const Header = () => {
                 <div className="header-button">
                   <Link to="/fees" className="theme-btn">
                     <span>
-                      get a discount
+                      {discountBtn}
                       <i className="fa-solid fa-arrow-right-long"></i>
                     </span>
                   </Link>

@@ -1,12 +1,29 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import ModalVideo from "react-modal-video";
 import { Link } from "react-router";
 
 const Banner = () => {
   const [isOpen, setOpen] = useState(false);
+  const { t, i18n } = useTranslation(["home"]);
+  // const { i18n } = useTranslation();
+  const {
+    heading1: { span1, span2, span3 },
+    heading2,
+    description,
+    applyBtn,
+    timetableBtn,
+    videoPlayBtn,
+  } = t("banner") || {};
+  // const description = t("description");
   return (
     <>
-      <section className="hero-section hero-1 fix">
+      <section
+        style={{
+          textAlign: i18n.language === "ar" ? "right" : "left",
+        }}
+        className="hero-section hero-1 fix"
+      >
         <div className="bottom-shape">
           <img
             src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/hero/bottom.png"
@@ -69,7 +86,7 @@ const Banner = () => {
             <div className="col-lg-6">
               <div className="hero-content">
                 <h5 data-aos-duration="800" data-aos="fade-up">
-                  Alyaqeen Academy
+                  {heading2}
                 </h5>
                 <h2
                   data-aos-duration={800}
@@ -77,16 +94,15 @@ const Banner = () => {
                   data-aos-delay={10}
                   // className="fs-1"
                 >
-                  Three Interconnected
-                  <br /> <span>Educational</span> Program
+                  {span1}
+                  <br /> <span>{span2}</span> {span3}
                 </h2>
                 <p
                   data-aos-duration={800}
                   data-aos="fade-up"
                   data-aos-delay={10}
                 >
-                  Arabic Qaidah & Quran, Islamic Studies , Essential Duas and
-                  Surah Memorization.
+                  {description}
                 </p>
                 <div className="hero-button">
                   <Link
@@ -96,7 +112,7 @@ const Banner = () => {
                     data-aos="fade-up"
                     data-aos-delay={100}
                   >
-                    Apply Today <i className="fa-solid fa-arrow-right-long"></i>
+                    {applyBtn} <i className="fa-solid fa-arrow-right-long"></i>
                   </Link>
                   <span
                     className="button-text "
@@ -110,10 +126,10 @@ const Banner = () => {
                     >
                       <i className="fa-solid fa-play"></i>
                     </a>
-                    <span className="ms-4 d-line">Play Video</span>
+                    <span className="ms-4 d-line">{videoPlayBtn}</span>
                   </span>
                 </div>
-                <div className="hero-button-feb3 mt-4">
+                <div className="hero-button-feb3 mt-4 text-start">
                   <Link
                     className="theme-btn-feb-4"
                     data-aos-duration="800"
@@ -122,7 +138,7 @@ const Banner = () => {
                     to="/prayer-timetable"
                     // className="theme-btn"
                   >
-                    January Prayer Timetable{" "}
+                    {timetableBtn}
                     {/*<i className="fa-solid fa-arrow-right-long"></i>*/}
                   </Link>
                 </div>

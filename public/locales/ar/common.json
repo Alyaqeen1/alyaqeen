@@ -1,0 +1,45 @@
+{
+  "topHeader": {
+    "address": "١١٦ طريق تشيرش، ياردلي، برمنغهام، B25 8UX",
+    "follow": "تابعنا على:"
+  },
+  "header": {
+    "nav": {
+      "home": "الرئيسية",
+      "aboutUs": "من نحن",
+      "aboutTheFounder": "عن المؤسس",
+      "whoWeAre": "من نحن",
+      "meetTheTeam": "تعرف على الفريق",
+      "missionVision": "الرؤية، الرسالة والقيم",
+      "courses": "الدورات",
+      "qaidahQuran": "القاعدة، القرآن والحفظ",
+      "mathEnglish": "الرياضيات، الإنجليزية والعلوم",
+      "arabicLanguage": "اللغة العربية",
+      "modernForeign": "اللغات الأجنبية الحديثة",
+      "pages": "الصفحات",
+      "news": "الأخبار والتحديثات",
+      "ourSyllabus": "منهجنا",
+      "academicCalendar": "التقويم الأكاديمي",
+      "weekdays": "أيام الأسبوع",
+      "weekend": "عطلة نهاية الأسبوع",
+      "prayerTimetable": "جدول الصلاة",
+      "vacancies": "الوظائف الشاغرة",
+      "faq": "الأسئلة الشائعة",
+      "shop": "المتجر",
+      "photosVideos": "الصور والفيديوهات",
+      "contact": "الاتصال",
+      "contactUs": "اتصل بنا",
+      "chat": "الدردشة",
+      "academyVisit": "زيارة الأكاديمية",
+      "volunteering": "التطوع",
+      "feedback": "ملاحظات",
+      "login": "تسجيل الدخول",
+      "logOut": "تسجيل الخروج"
+    },
+    "discountBtn": "احصل على خصم",
+    "options": {
+      "english": "الإنجليزية",
+      "arabic": "العربية"
+    }
+  }
+}

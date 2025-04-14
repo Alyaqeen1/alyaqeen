@@ -1,5 +1,8 @@
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
 const TopHeader = () => {
+  const { t } = useTranslation(["common"]);
+  const { address, follow } = t("topHeader") || {};
   return (
     <div className="header-top-section">
       <div className="header-top-shape">
@@ -13,7 +16,7 @@ const TopHeader = () => {
           <ul className="contact-list">
             <li>
               <i className="fal fa-map-marker-alt"></i>
-              116 Church Road, Yardley, Birmingham, B25 8UX
+              {address}
             </li>
             <li>
               <i className="far fa-envelope"></i>
@@ -23,7 +26,7 @@ const TopHeader = () => {
             </li>
           </ul>
           <div className="social-icon d-flex align-items-center">
-            <span>Follow Us On:</span>
+            <span>{follow}</span>
             <Link to="https://www.facebook.com/AlyaqeenAcademy">
               <i className="fab fa-facebook-f"></i>
             </Link>

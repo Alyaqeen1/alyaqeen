@@ -1,0 +1,45 @@
+{
+  "topHeader": {
+    "address": "116 Church Road, Yardley, Birmingham, B25 8UX",
+    "follow": "Follow Us On:"
+  },
+  "header": {
+    "nav": {
+      "home": "home",
+      "aboutUs": "About Us",
+      "aboutTheFounder": "About The Founder",
+      "whoWeAre": "Who We Are",
+      "meetTheTeam": "Meet The Team",
+      "missionVision": "Mission, Vision & Values",
+      "courses": "Courses",
+      "qaidahQuran": "Qaidah, Quran & Hifdh",
+      "mathEnglish": "Math, English & Science",
+      "arabicLanguage": "Arabic Language",
+      "modernForeign": "Modern Foreign Languages",
+      "pages": "Pages",
+      "news": "News & Updates",
+      "ourSyllabus": "Our Syllabus",
+      "academicCalendar": "Academic Calendar",
+      "weekdays": "Weekdays",
+      "weekend": "weekend",
+      "prayerTimetable": "Prayer Timetable",
+      "vacancies": "Vacancies",
+      "faq": "FAQ'S",
+      "shop": "Shop",
+      "photosVideos": "Photos & Videos",
+      "contact": "Contact",
+      "contactUs": "Contact Us",
+      "chat": "Chat",
+      "academyVisit": "Academy Visit",
+      "volunteering": "Volunteering",
+      "feedback": "Feedback",
+      "login": "Login",
+      "logOut": "Logout"
+    },
+    "discountBtn": "Get A Discount",
+    "options": {
+      "english": "English",
+      "arabic": "Arabic"
+    }
+  }
+}

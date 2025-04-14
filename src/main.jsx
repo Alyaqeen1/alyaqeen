@@ -7,12 +7,17 @@ import InitAnimations from "./site/components/InitAnimations.jsx";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import { Provider } from "react-redux";
 import store from "./redux/store.js";
+import "./site/i18n.js";
+import LoadingSpinner from "./site/components/LoadingSpinner.jsx";
+import React from "react";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <Provider store={store}>
-      <RouterProvider router={router} />
-      <InitAnimations />
-    </Provider>
+    <React.Suspense fallback={<LoadingSpinner></LoadingSpinner>}>
+      <Provider store={store}>
+        <RouterProvider router={router} />
+        <InitAnimations />
+      </Provider>
+    </React.Suspense>
   </StrictMode>
 );
