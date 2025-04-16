@@ -1,8 +1,11 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation } from "swiper/modules";
 import "swiper/swiper-bundle.css";
+import { Trans, useTranslation } from "react-i18next";
 
 const TestimonialOne = () => {
+  const { t } = useTranslation(["home"]);
+  const { mainHeading, sectionTitle } = t("testimonialOne") || {};
   return (
     <section className="testimonial-section fix section-padding">
       <div className="pencil-shape">
@@ -41,14 +44,17 @@ const TestimonialOne = () => {
               <div className="testimonial-right">
                 <div className="section-title">
                   <span data-aos-duration="800" data-aos="fade-up">
-                    Testimonials
+                    {sectionTitle}
                   </span>
                   <h2
                     data-aos-duration="800"
                     data-aos="fade-up"
                     data-aos-delay="300"
                   >
-                    Parent&apos;s words are the <br /> key to happy kids
+                    <Trans
+                      i18nKey={mainHeading}
+                      components={{ break: <br /> }}
+                    />{" "}
                   </h2>
                 </div>
                 <div className="array-button">

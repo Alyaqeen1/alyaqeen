@@ -1,6 +1,7 @@
 import React from "react";
 
-export default function BestTeacher() {
+export default function BestTeacher({ bestTeacher }) {
+  const { name, post, description, title } = bestTeacher || {};
   return (
     <div
       className="news-right-items-feb22 mb-0"
@@ -26,7 +27,7 @@ export default function BestTeacher() {
             style={{ cursor: "default" }}
             className={"span_small_Blog_Header"}
           >
-            Best Teacher of the Month
+            {title}
           </span>
         </p>
         <div
@@ -95,7 +96,7 @@ export default function BestTeacher() {
                 }}
               >
                 {/* dynamic name */}
-                Maulana Junaid Usman
+                {name}
               </span>
 
               <ul>
@@ -106,7 +107,7 @@ export default function BestTeacher() {
                   }}
                 >
                   {/* dynamic subject or designation */}
-                  Arabic and Islamic Studies
+                  {post}
                 </li>
               </ul>
             </div>
@@ -116,11 +117,7 @@ export default function BestTeacher() {
             className=""
           > */}
           <p className={"paragraph_span pt-3"} style={{ cursor: "default" }}>
-            Maulana Junaid Usman is the best teacher of the month as he always
-            make sure to come before the starting time and set the class
-            organise everything before children arriving, he also helps after
-            the lessons and discuss the importance of the day with the
-            headteacher. we appreciate his contribution and thoughts.
+            {description}
           </p>
           {/* </Link> */}
         </div>

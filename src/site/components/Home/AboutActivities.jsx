@@ -1,4 +1,20 @@
+import { useTranslation } from "react-i18next";
+
 const AboutActivities = () => {
+  const { t } = useTranslation(["home"]);
+  const {
+    mainHeading,
+    sectionTitle,
+    features: {
+      teachingTools,
+      smallGroups,
+      progressUpdates,
+      termlyReports,
+      quranTajweed,
+      friendlyEnvironment,
+    },
+  } = t("whyChooseUs") || {};
+
   return (
     <section className="about-activities-section section-padding pt-0">
       <div className="pencil-shape">
@@ -35,14 +51,14 @@ const AboutActivities = () => {
               <div className="activities-content">
                 <div className="section-title">
                   <span data-aos-duration="800" data-aos="fade-up">
-                    WHY CHOOSE US
+                    {sectionTitle}
                   </span>
                   <h2
                     data-aos-duration="800"
                     data-aos="fade-up"
                     data-aos-delay="300"
                   >
-                    Top Choice for Children
+                    {mainHeading}
                   </h2>
                 </div>
                 <div className="row g-4 mt-4">
@@ -61,7 +77,7 @@ const AboutActivities = () => {
                         />
                       </div>
                       <div className="content">
-                        <h5>Modern teaching tools</h5>
+                        <h5>{teachingTools}</h5>
                       </div>
                     </div>
                   </div>
@@ -80,7 +96,7 @@ const AboutActivities = () => {
                         />
                       </div>
                       <div className="content">
-                        <h5>Small groups, better focus</h5>
+                        <h5>{smallGroups}</h5>
                       </div>
                     </div>
                   </div>
@@ -233,7 +249,7 @@ const AboutActivities = () => {
                         </svg>
                       </div>
                       <div className="content">
-                        <h5>Regular progress updates</h5>
+                        <h5>{progressUpdates}</h5>
                       </div>
                     </div>
                   </div>
@@ -277,7 +293,7 @@ const AboutActivities = () => {
                         </svg>
                       </div>
                       <div className="content">
-                        <h5>Termly reports for parents</h5>
+                        <h5>{termlyReports}</h5>
                       </div>
                     </div>
                   </div>
@@ -296,7 +312,7 @@ const AboutActivities = () => {
                         />
                       </div>
                       <div className="content">
-                        <h5>Quran taught with tajweed</h5>
+                        <h5>{quranTajweed}</h5>
                       </div>
                     </div>
                   </div>
@@ -315,7 +331,7 @@ const AboutActivities = () => {
                         />
                       </div>
                       <div className="content">
-                        <h5>Fun & friendly environment</h5>
+                        <h5>{friendlyEnvironment}</h5>
                       </div>
                     </div>
                   </div>

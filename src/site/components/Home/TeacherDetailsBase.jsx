@@ -1,7 +1,9 @@
 import { Link } from "react-router";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const TeacherDetailsBase = ({ staffData }) => {
+  const { t } = useTranslation(["home"]);
   const {
     name,
     description_short_or_educational_info,
@@ -41,8 +43,8 @@ const TeacherDetailsBase = ({ staffData }) => {
               <img src={image_link} alt="img" />
             </div>
             <div className="content">
-              <h2>{name}</h2>
-              <span>{post_of_staff}</span>
+              <h2>{t(name)}</h2>
+              <span>{t(post_of_staff)}</span>
               <p>
                 {show_read_more_EDUCATIONAL__CONTENT &&
                 description_short_or_educational_info?.length >

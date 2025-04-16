@@ -1,6 +1,9 @@
+import { useTranslation } from "react-i18next";
 import Counter from "./Counter";
 
 const CounterMain = () => {
+  const { t } = useTranslation(["about"]);
+  const { experience, completed, instructors, enroll } = t("counter") || {};
   return (
     <section className="counter-section fix">
       <div className="line-shape">
@@ -41,7 +44,7 @@ const CounterMain = () => {
                     </span>
                     +
                   </h2>
-                  <p>Year of Experience</p>
+                  <p>{experience}</p>
                 </div>
               </div>
             </div>
@@ -65,7 +68,7 @@ const CounterMain = () => {
                     </span>
                     +
                   </h2>
-                  <p>Class Completed</p>
+                  <p>{completed}</p>
                 </div>
               </div>
             </div>
@@ -89,7 +92,7 @@ const CounterMain = () => {
                     </span>
                     +
                   </h2>
-                  <p>Experts Instructors</p>
+                  <p>{instructors}</p>
                 </div>
               </div>
             </div>
@@ -113,7 +116,7 @@ const CounterMain = () => {
                     </span>
                     +
                   </h2>
-                  <p>Students Enroll</p>
+                  <p>{enroll}</p>
                 </div>
               </div>
             </div>

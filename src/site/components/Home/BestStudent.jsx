@@ -1,6 +1,7 @@
 import React from "react";
 
-export default function BestStudent() {
+export default function BestStudent({ bestStudent }) {
+  const { name, post, description, title } = bestStudent || {};
   return (
     <div
       className="news-right-items-feb22 mb-0"
@@ -26,7 +27,7 @@ export default function BestStudent() {
             style={{ cursor: "default" }}
             className={"span_small_Blog_Header"}
           >
-            Best Student of the Month
+            {title}
           </span>
         </p>
         <div
@@ -95,7 +96,7 @@ export default function BestStudent() {
                 }}
               >
                 {/* dynamic name */}
-                Weekdays Class B5
+                {name}
               </span>
 
               <ul>
@@ -106,7 +107,7 @@ export default function BestStudent() {
                   }}
                 >
                   {/* dynamic subject or designation */}
-                  Weekdays Class B5
+                  {post}
                 </li>
               </ul>
             </div>
@@ -116,9 +117,7 @@ export default function BestStudent() {
             className=""
           > */}
           <p className={"paragraph_span pt-3"} style={{ cursor: "default" }}>
-            Brilliant child, no absence in the entire month. Always best in the
-            class, respect the teachers and staff, very supportive student at
-            Alyaqeen.
+            {description}
           </p>
           {/* </Link> */}
         </div>

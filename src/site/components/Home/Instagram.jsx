@@ -2,8 +2,11 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import "swiper/swiper-bundle.css";
 import { Link } from "react-router";
+import { useTranslation } from "react-i18next";
 
 const Instagram = () => {
+  const { t } = useTranslation(["home"]);
+  const { follow } = t("instagram") || {};
   return (
     <div className="instagram-banner fix section-padding">
       <div className="instagram-wrapper">
@@ -13,7 +16,7 @@ const Instagram = () => {
           data-aos="fade-up"
           data-aos-delay="300"
         >
-          Follow Instagram
+          {follow}
         </h3>
         <div className="swiper instagram-banner-slider">
           <Swiper

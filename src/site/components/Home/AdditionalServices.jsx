@@ -1,8 +1,13 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 import { Link } from "react-router";
 
 export default function AdditionalServices() {
+  const { t } = useTranslation(["home"]);
+  const { mainHeading, sectionTitle, allServicesButtonText } =
+    t("services") || {};
+  const servicesList = t("services.servicesList", { returnObjects: true });
   return (
     <section
       className="program-section section-padding section-bg-2 fix"
@@ -40,10 +45,10 @@ export default function AdditionalServices() {
         <div className="section-title-area">
           <div className="section-title">
             <span data-aos-duration="800" data-aos="fade-up">
-              Additional Services
+              {sectionTitle}
             </span>
             <h2 data-aos-duration="800" data-aos="fade-up" data-aos-delay="300">
-              Alyaqeen Academy more Services
+              {mainHeading}
             </h2>
           </div>
           <div
@@ -82,12 +87,11 @@ export default function AdditionalServices() {
               </div>
               <div className="program-content text-center">
                 <h4>
-                  <Link to="/service/online-learning">Online Learning</Link>
+                  <Link to="/service/online-learning">
+                    {servicesList[0]?.title}
+                  </Link>
                 </h4>{" "}
-                <p>
-                  We all know the impact that Covid-19 has left upon a
-                  children's education...
-                </p>
+                <p>{servicesList[0]?.description}</p>
                 <Link to="/service/online-learning" className="arrow-icon">
                   <i className="fa-solid fa-arrow-right-long"></i>
                 </Link>
@@ -115,12 +119,11 @@ export default function AdditionalServices() {
               </div>
               <div className="program-content text-center">
                 <h4>
-                  <Link to="/service/nikah-service">Nikah</Link>
+                  <Link to="/service/nikah-service">
+                    {servicesList[1]?.title}
+                  </Link>
                 </h4>
-                <p>
-                  Shaykh Khalid has conducted many Nikkahs over the last 10
-                  years...
-                </p>
+                <p>{servicesList[0]?.description}</p>
                 <Link
                   to="/service/nikah-service"
                   className="arrow-icon color-2"
@@ -151,13 +154,10 @@ export default function AdditionalServices() {
               </div>
               <div className="program-content text-center style-2">
                 <h4>
-                  <Link to="/service/sports">Sports Club</Link>
+                  <Link to="/service/sports">{servicesList[2]?.title}</Link>
                 </h4>
                 {/* <span>(1-2 years)</span> */}
-                <p>
-                  At Alyaqeen academy students play football. We also have a
-                  Cricket Club...
-                </p>
+                <p>{servicesList[2]?.description}</p>
                 <Link to="/service/sports" className="arrow-icon">
                   <i className="fa-solid fa-arrow-right-long"></i>
                 </Link>
@@ -169,7 +169,8 @@ export default function AdditionalServices() {
         <div className="pricing-wrapper mt-10">
           <div className="section-title text-center mb-0 ">
             <Link to={"/all-services"} className="theme-btn">
-              All Services <i className="fa-solid fa-arrow-right-long"></i>
+              {allServicesButtonText}{" "}
+              <i className="fa-solid fa-arrow-right-long"></i>
             </Link>
           </div>
         </div>

@@ -1,8 +1,10 @@
 import { Link } from "react-router";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 
 const OurTeacher = () => {
+  const { t } = useTranslation(["home"]);
   const [staffData, setStaffData] = useState([]);
   useEffect(() => {
     axios("/staff.json")
@@ -61,10 +63,10 @@ const OurTeacher = () => {
                 <div className="team-content">
                   <h3>
                     <Link to={`/staff-details/${single_data?.id}`}>
-                      {single_data?.name}
+                      {t(single_data?.name)}
                     </Link>
                   </h3>
-                  <p>{single_data?.post_of_staff}</p>
+                  <p>{t(single_data?.post_of_staff)}</p>
                 </div>
               </div>
             </div>

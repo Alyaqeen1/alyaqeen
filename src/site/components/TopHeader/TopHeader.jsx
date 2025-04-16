@@ -1,5 +1,11 @@
-import { Link } from "react-router";
+import { createPortal } from "react-dom";
+import { useTranslation } from "react-i18next";
+import { Link, useLocation } from "react-router";
+import LanguageModal from "../AdditionalPages/LanguageModal";
 const TopHeader = () => {
+  const { pathname } = useLocation();
+  const { t } = useTranslation(["common"]);
+  const { address, follow } = t("topHeader") || {};
   return (
     <div className="header-top-section">
       <div className="header-top-shape">
@@ -13,7 +19,7 @@ const TopHeader = () => {
           <ul className="contact-list">
             <li>
               <i className="fal fa-map-marker-alt"></i>
-              116 Church Road, Yardley, Birmingham, B25 8UX
+              {address}
             </li>
             <li>
               <i className="far fa-envelope"></i>
@@ -23,7 +29,7 @@ const TopHeader = () => {
             </li>
           </ul>
           <div className="social-icon d-flex align-items-center">
-            <span>Follow Us On:</span>
+            <span>{follow}</span>
             <Link to="https://www.facebook.com/AlyaqeenAcademy">
               <i className="fab fa-facebook-f"></i>
             </Link>
@@ -37,6 +43,14 @@ const TopHeader = () => {
               <i className="fa-brands fa-youtube"></i>
             </Link>
           </div>
+          {pathname === "/"
+            ? createPortal(
+                <div>
+                  <LanguageModal></LanguageModal>
+                </div>,
+                document.body
+              )
+            : null}
         </div>
       </div>
     </div>

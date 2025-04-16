@@ -1,6 +1,9 @@
+import { changeLanguage } from "i18next";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function LanguageModal() {
+  const { i18n } = useTranslation();
   const [showModal, setShowModal] = useState(false);
   useEffect(() => {
     // Show modal when the component mounts (page reloads)
@@ -15,6 +18,10 @@ export default function LanguageModal() {
     if (event.target.classList.contains("modal")) {
       handleClose();
     }
+  };
+
+  const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
   };
 
   return (
@@ -58,6 +65,7 @@ export default function LanguageModal() {
             </div>
             <div className="modal-body d-flex justify-content-around">
               <div
+                onClick={() => changeLanguage("en")}
                 className="d-flex flex-column justify-content-center align-content-center text-center"
                 onMouseEnter={(e) => {
                   e.currentTarget.querySelector("img").style.transform =
@@ -81,6 +89,7 @@ export default function LanguageModal() {
                 <p>English</p>
               </div>
               <div
+                onClick={() => changeLanguage("ar")}
                 className="d-flex flex-column justify-content-center align-content-center text-center"
                 onMouseEnter={(e) => {
                   e.currentTarget.querySelector("img").style.transform =

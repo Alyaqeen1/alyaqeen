@@ -1,7 +1,14 @@
 import React from "react";
+import { Trans, useTranslation } from "react-i18next";
 import { Link } from "react-router";
 
 const FeeStructure = () => {
+  const { t } = useTranslation(["home"]);
+  const { mainHeading, sectionTitle, tableHeaders } = t("feeStructure") || {};
+  const subjectList = t("feeStructure.subjects", { returnObjects: true });
+  console.log(subjectList);
+  const { subject, weekdays, weekends } = tableHeaders || {};
+
   return (
     <section
       className="program-section-feb-24 section-padding section-bg-2 fix"
@@ -47,11 +54,10 @@ const FeeStructure = () => {
       <div className="container">
         <div className="section-title text-center mt-60">
           <span data-aos-duration="800" data-aos="fade-up">
-            {/*Our Programs*/}Classes &amp; Fee Structure
+            {sectionTitle}
           </span>
           <h2 data-aos-duration="800" data-aos="fade-up" data-aos-delay="300">
-            {/*We meet kids at their level*/}Alyaqeen Academy <br /> Classes
-            &amp; Fee Structure
+            <Trans i18nKey={mainHeading} components={{ break: <br /> }} />
           </h2>
         </div>
         <div className="row table-responsive">
@@ -76,7 +82,7 @@ const FeeStructure = () => {
 
                   // className={`text-white $var(--theme) font-weight-bold border h6 text-center align-middle`}
                 >
-                  <h3>Subject</h3>
+                  <h3>{subject}</h3>
                 </td>
                 <td
                   width="35%"
@@ -86,7 +92,7 @@ const FeeStructure = () => {
                     backgroundColor: "var(--theme)",
                   }}
                 >
-                  <h3>Weekdays Classes</h3>
+                  <h3>{weekdays}</h3>
                 </td>
                 <td
                   width="35%"
@@ -97,7 +103,7 @@ const FeeStructure = () => {
                     backgroundColor: "var(--theme)",
                   }}
                 >
-                  <h3>Weekends Classes</h3>
+                  <h3>{weekends}</h3>
                 </td>
               </tr>
             </thead>
@@ -107,22 +113,29 @@ const FeeStructure = () => {
               <tr>
                 <td className="text-white p-1 bg-brown font-weight-bold border h6 text-center align-middle">
                   <Link to={"/arabic-qaidah-quran-hifdh"}>
-                    <h5>Qaidah, Quran &amp; Islamic Studies</h5>
+                    <h5>{subjectList[0]?.title}</h5>
                   </Link>
                 </td>
                 <td className="text-center p-1 border mb-0">
                   <div className="d-flex justify-content-around">
                     <div className="mb-0 w-100 border-right fw-light">
-                      £1.85<small>/hour</small>
+                      <Trans
+                        i18nKey={subjectList[0]?.weekdays?.perHour}
+                        components={{ sm: <small /> }}
+                      />
+                      {/* £1.85<small>/hour</small> */}
                     </div>
                     <div className="mb-0 w-100 border-right fw-light">
-                      £50<small>/month</small>
+                      <Trans
+                        i18nKey={subjectList[0]?.weekdays?.perMonth}
+                        components={{ sm: <small /> }}
+                      />
                     </div>
                   </div>
                   <strong>
-                    Mon - Thu
+                    {subjectList[0]?.weekdays?.days}
                     <br />
-                    4:30 - 6:00pm / 5:45 - 7:15pm
+                    {subjectList[0]?.weekdays?.duration}
                   </strong>
                 </td>
 
@@ -130,16 +143,22 @@ const FeeStructure = () => {
                   <div className="d-flex justify-content-around">
                     {/* <h6 class="mb-0 w-100 border-right"><small>/</small></h6> */}
                     <div className="mb-0 w-100 border-left">
-                      £1.70<small>/hour</small>
+                      <Trans
+                        i18nKey={subjectList[0]?.weekends?.perHour}
+                        components={{ sm: <small /> }}
+                      />
                     </div>
                     <div className="mb-0 w-100 border-left">
-                      £50<small>/month</small>
+                      <Trans
+                        i18nKey={subjectList[0]?.weekends?.perMonth}
+                        components={{ sm: <small /> }}
+                      />
                     </div>
                   </div>
                   <strong>
-                    Sat - Sun
+                    {subjectList[0]?.weekends?.days}
                     <br />
-                    10am - 12:30pm/12:30 - 2:30pm
+                    {subjectList[0]?.weekends?.duration}
                   </strong>
                 </td>
               </tr>
@@ -155,36 +174,49 @@ const FeeStructure = () => {
                     // className="text-danger font-14"
                     className="font-14"
                   >
-                    <h5>Primary Maths &amp; English Tuition</h5>
+                    <h5>{subjectList[1]?.title}</h5>
                   </Link>
                 </td>
                 <td className="text-center p-1 border mb-0">
                   <div className="d-flex justify-content-around">
                     <div className="mb-0 w-100 border-right fw-light">
-                      £5<small>/hour</small>
+                      <Trans
+                        i18nKey={subjectList[1]?.weekdays?.perHour}
+                        components={{ sm: <small /> }}
+                      />
                     </div>
                     <div className="mb-0 w-100 border-right fw-light">
-                      £100<small>/month</small>
+                      <Trans
+                        i18nKey={subjectList[1]?.weekdays?.perMonth}
+                        components={{ sm: <small /> }}
+                      />
                     </div>
                   </div>
                   <strong>
-                    Mon - Tue
-                    <br />5 - 7pm
+                    {subjectList[1]?.weekdays?.days}
+                    <br />
+                    {subjectList[1]?.weekdays?.duration}
                   </strong>
                 </td>
                 <td className="text-center p-1 border mb-0">
                   <div className="d-flex justify-content-around">
                     <div className="mb-0 w-100 border-left fw-light">
-                      £4.44<small>/hour</small>
+                      <Trans
+                        i18nKey={subjectList[1]?.weekends?.perHour}
+                        components={{ sm: <small /> }}
+                      />
                     </div>
                     <div className="mb-0 w-100 border-left fw-light">
-                      £80<small>/month</small>
+                      <Trans
+                        i18nKey={subjectList[1]?.weekends?.perMonth}
+                        components={{ sm: <small /> }}
+                      />
                     </div>
                   </div>
                   <strong>
-                    Sat - Sun
+                    {subjectList[1]?.weekends?.days}
                     <br />
-                    10am - 12pm
+                    {subjectList[0]?.weekends?.duration}
                   </strong>
                 </td>
               </tr>
@@ -202,36 +234,49 @@ const FeeStructure = () => {
 
                     className="font-14"
                   >
-                    <h5>GCSE Maths English &amp; Science Tuition</h5>
+                    <h5>{subjectList[2]?.title}</h5>
                   </Link>
                 </td>
                 <td className="text-center p-1 border mb-0">
                   <div className="d-flex justify-content-around">
                     <div className="mb-0 w-100 border-right fw-light">
-                      £6.25<small>/hour</small>
+                      <Trans
+                        i18nKey={subjectList[2]?.weekdays?.perHour}
+                        components={{ sm: <small /> }}
+                      />{" "}
                     </div>
                     <div className="mb-0 w-100 border-right fw-light">
-                      £120<small>/month</small>
+                      <Trans
+                        i18nKey={subjectList[2]?.weekdays?.perMonth}
+                        components={{ sm: <small /> }}
+                      />{" "}
                     </div>
                   </div>
                   <strong>
-                    Wed - Thu
-                    <br />5 - 7pm
+                    {subjectList[2]?.weekdays?.days}
+                    <br />
+                    {subjectList[2]?.weekdays?.duration}
                   </strong>
                 </td>
                 <td className="text-center p-1 border mb-0">
                   <div className="d-flex justify-content-around">
                     <div className="mb-0 w-100 border-left fw-light">
-                      £5<small>/hour</small>
+                      <Trans
+                        i18nKey={subjectList[2]?.weekends?.perHour}
+                        components={{ sm: <small /> }}
+                      />{" "}
                     </div>
                     <div className="mb-0 w-100 border-left fw-light">
-                      £100<small>/month</small>
+                      <Trans
+                        i18nKey={subjectList[2]?.weekends?.perMonth}
+                        components={{ sm: <small /> }}
+                      />{" "}
                     </div>
                   </div>
                   <strong>
-                    Sat - Sun
+                    {subjectList[2]?.weekends?.days}
                     <br />
-                    10am - 12pm / 10am - 1pm
+                    {subjectList[2]?.weekends?.duration}
                   </strong>
                 </td>
               </tr>
@@ -249,37 +294,49 @@ const FeeStructure = () => {
                     className="font-14"
                     // className="text-danger font-14"
                   >
-                    <h5>Hifz Memorisation</h5>
+                    <h5>{subjectList[3]?.title}</h5>
                   </Link>
                 </td>
                 <td className="text-center p-1 border mb-0">
                   <div className="d-flex justify-content-around">
                     <div className="mb-0 w-100 border-right fw-light">
-                      £1.85<small>/hour</small>
+                      <Trans
+                        i18nKey={subjectList[3]?.weekdays?.perHour}
+                        components={{ sm: <small /> }}
+                      />{" "}
                     </div>
                     <div className="mb-0 w-100 border-right fw-light">
-                      £90<small>/month</small>
+                      <Trans
+                        i18nKey={subjectList[3]?.weekdays?.perMonth}
+                        components={{ sm: <small /> }}
+                      />{" "}
                     </div>
                   </div>
                   <strong>
-                    Mon-Thu
+                    {subjectList[3]?.weekdays?.days}
                     <br />
-                    4:30 - 7:00pm/5 - 7pm
+                    {subjectList[3]?.weekdays?.duration}
                   </strong>
                 </td>
                 <td className="text-center p-1 border mb-0">
                   <div className="d-flex justify-content-around">
                     <div className="mb-0 w-100 border-left fw-light">
-                      £2<small>/hour</small>
+                      <Trans
+                        i18nKey={subjectList[3]?.weekends?.perHour}
+                        components={{ sm: <small /> }}
+                      />
                     </div>
                     <div className="mb-0 w-100 border-left fw-light">
-                      £60<small>/month</small>
+                      <Trans
+                        i18nKey={subjectList[3]?.weekends?.perMonth}
+                        components={{ sm: <small /> }}
+                      />
                     </div>
                   </div>
                   <strong>
-                    Sat - Sun
+                    {subjectList[3]?.weekends?.days}
                     <br />
-                    10am - 1pm/12 - 2:30pm
+                    {subjectList[3]?.weekends?.duration}
                   </strong>
                 </td>
               </tr>
@@ -296,35 +353,49 @@ const FeeStructure = () => {
                     className="font-14"
                     // className="text-danger font-14"
                   >
-                    <h5>Arabic Language</h5>
+                    <h5>{subjectList[4]?.title}</h5>
                   </Link>
                 </td>
                 <td className="text-center p-1 border mb-0">
                   <div className="d-flex justify-content-around">
                     <div className="mb-0 w-100 border-right fw-light">
-                      £1.66<small>/hour</small>
+                      <Trans
+                        i18nKey={subjectList[4]?.weekdays?.perHour}
+                        components={{ sm: <small /> }}
+                      />
                     </div>
                     <div className="mb-0 w-100 border-right fw-light">
-                      £60<small>/month</small>
+                      <Trans
+                        i18nKey={subjectList[4]?.weekdays?.perMonth}
+                        components={{ sm: <small /> }}
+                      />{" "}
                     </div>
                   </div>
                   <strong>
-                    Mon-Thu
-                    <br />6 - 7pm
+                    {subjectList[4]?.weekdays?.days}
+                    <br />
+                    {subjectList[4]?.weekdays?.duration}
                   </strong>
                 </td>
                 <td className="text-center p-1 border mb-0">
                   <div className="d-flex justify-content-around">
                     <div className="mb-0 w-100 border-left fw-light">
-                      £10<small>/hour</small>
+                      <Trans
+                        i18nKey={subjectList[4]?.weekends?.perHour}
+                        components={{ sm: <small /> }}
+                      />{" "}
                     </div>
                     <div className="mb-0 w-100 border-left fw-light">
-                      £50<small>/month</small>
+                      <Trans
+                        i18nKey={subjectList[4]?.weekends?.perMonth}
+                        components={{ sm: <small /> }}
+                      />{" "}
                     </div>
                   </div>
                   <strong>
-                    Sat - Sun
-                    <br />9 - 10am
+                    {subjectList[4]?.weekends?.days}
+                    <br />
+                    {subjectList[4]?.weekends?.duration}
                   </strong>
                 </td>
               </tr>

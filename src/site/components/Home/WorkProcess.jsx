@@ -1,9 +1,13 @@
+import { useTranslation } from "react-i18next";
 import { FaCalendarAlt } from "react-icons/fa";
 import { IoIosCalculator } from "react-icons/io";
 import { IoBusOutline } from "react-icons/io5";
 import { Link } from "react-router";
 
 const WorkProcess = () => {
+  const { t } = useTranslation(["home"]);
+  const { sessions, feeStructure, holidays } = t("workProcess") || {};
+
   return (
     <section className="work-process-section fix section-padding fix">
       <div className="container">
@@ -32,11 +36,8 @@ const WorkProcess = () => {
                     <FaCalendarAlt className="fs-3 text-white" />
                   </div>
                   <div className="content">
-                    <h4>Sessions & Timings</h4>
-                    <p>
-                      Our onsite classes are held Monday to Thursday on weekdays
-                      and on Saturday and Sunday during the weekends.{" "}
-                    </p>
+                    <h4>{sessions?.title} </h4>
+                    <p>{sessions?.description}</p>
                   </div>
                 </div>
               </Link>
@@ -64,11 +65,8 @@ const WorkProcess = () => {
                     <IoIosCalculator className="fs-2 text-white" />
                   </div>
                   <div className="content">
-                    <h4>Fee Structure</h4>
-                    <p>
-                      Fee Structure depends on Course and Session types. We have
-                      two session: weekdays and weekends.
-                    </p>
+                    <h4>{feeStructure?.title}</h4>
+                    <p>{feeStructure?.description}</p>
                   </div>
                 </div>
               </Link>
@@ -90,11 +88,8 @@ const WorkProcess = () => {
                     <IoBusOutline className="fs-2 text-white" />
                   </div>
                   <div className="content">
-                    <h4>Holidays & Academic Calendar</h4>
-                    <p>
-                      Holidays & Academic Calendar will depend on Session types.
-                      We have two session: weekdays and weekends.
-                    </p>
+                    <h4>{holidays?.title}</h4>
+                    <p>{holidays?.description}</p>
                   </div>
                 </div>
               </Link>

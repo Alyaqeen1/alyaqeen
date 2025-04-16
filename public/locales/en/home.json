@@ -1,0 +1,313 @@
+{
+  "banner": {
+    "mainHeading": {
+      "part1": "Three Interconnected",
+      "part2": "Educational",
+      "part3": "Program"
+    },
+    "subHeading": "Alyaqeen Academy",
+    "description": "Arabic Qaidah & Quran, Islamic Studies, Essential Duas and Surah Memorization.",
+    "buttons": {
+      "apply": "Apply Today",
+      "timetable": "January Prayer Timetable",
+      "playVideo": "Play Video"
+    }
+  },
+  "programs": {
+    "mainHeading": "We meet kids at their level<break />regardless of their age",
+    "sectionTitle": "Our Programs",
+    "details": {
+      "ageLabel": "age",
+      "weeklyLabel": "weekly",
+      "timeLabel": "time",
+      "ageRange": "5-15 years",
+      "daysPerWeek": "2-4 Days",
+      "hoursPerWeek": "4-6 hrs"
+    },
+    "programList": [
+      {
+        "title": "Arabic Qaidah, Quran & Hifdh",
+        "description": "Allah swt the most says in the Quran : “and recite the Quran (aloud) in a s..."
+      },
+      {
+        "title": "Maths, English & Science",
+        "description": "At Alyaqeen academy we have a set of dedicated tutors. Our tutors try to en..."
+      },
+      {
+        "title": "Arabic Language",
+        "description": "Islam is just not religion that Muslims follow, but it is a way of life. When a person is born..."
+      }
+    ]
+  },
+
+  "workProcess": {
+    "sessions": {
+      "title": "Sessions & Timings",
+      "description": "Our onsite classes are held Monday to Thursday on weekdays and on Saturday and Sunday during the weekends."
+    },
+    "feeStructure": {
+      "title": "Fee Structure",
+      "description": "Fee Structure depends on Course and Session types. We have two session: weekdays and weekends."
+    },
+    "holidays": {
+      "title": "Holidays & Academic Calendar",
+      "description": "Holidays & Academic Calendar will depend on Session types. We have two session: weekdays and weekends."
+    }
+  },
+  "whyChooseUs": {
+    "mainHeading": "Top Choice for Children",
+    "sectionTitle": "WHY CHOOSE US",
+    "features": {
+      "teachingTools": "Modern teaching tools",
+      "smallGroups": "Small groups, better focus",
+      "progressUpdates": "Regular progress updates",
+      "termlyReports": "Termly reports for parents",
+      "quranTajweed": "Quran taught with tajweed",
+      "friendlyEnvironment": "Fun & friendly environment"
+    }
+  },
+
+  "feeStructure": {
+    "mainHeading": "أكاديمية اليقين<break />الصفوف وهيكل الرسوم",
+    "sectionTitle": "الصفوف وهيكل الرسوم",
+    "tableHeaders": {
+      "subject": "المادة",
+      "weekdays": "صفوف أيام الأسبوع",
+      "weekends": "صفوف عطلة نهاية الأسبوع"
+    },
+    "subjects": [
+      {
+        "title": "القاعدة، القرآن والدراسات الإسلامية",
+        "weekdays": {
+          "perHour": "£1.85<sm>/في الساعة</sm>",
+          "perMonth": "£50<sm>/في الشهر</sm>",
+          "days": "الاثنين - الخميس",
+          "duration": "٤:٣٠ - ٦:٠٠م / ٥:٤٥ - ٧:١٥م"
+        },
+        "weekends": {
+          "perHour": "£1.70<sm>/في الساعة</sm>",
+          "perMonth": "£50<sm>/في الشهر</sm>",
+          "days": "السبت - الأحد",
+          "duration": "١٠ص - ١٢:٣٠م / ١٢:٣٠ - ٢:٣٠م"
+        }
+      },
+      {
+        "title": "دروس رياضيات وإنجليزي للمرحلة الابتدائية",
+        "weekdays": {
+          "perHour": "£5<sm>/في الساعة</sm>",
+          "perMonth": "£100<sm>/في الشهر</sm>",
+          "days": "الاثنين - الثلاثاء",
+          "duration": "٥ - ٧م"
+        },
+        "weekends": {
+          "perHour": "£4.44<sm>/في الساعة</sm>",
+          "perMonth": "£80<sm>/في الشهر</sm>",
+          "days": "السبت - الأحد",
+          "duration": "١٠ص - ١٢م"
+        }
+      },
+      {
+        "title": "GCSE دروس رياضيات وإنجليزي وعلوم",
+        "weekdays": {
+          "perHour": "£6.25<sm>/في الساعة</sm>",
+          "perMonth": "£120<sm>/في الشهر</sm>",
+          "days": "الأربعاء - الخميس",
+          "duration": "٥ - ٧م"
+        },
+        "weekends": {
+          "perHour": "£5<sm>/في الساعة</sm>",
+          "perMonth": "£100<sm>/في الشهر</sm>",
+          "days": "السبت - الأحد",
+          "duration": "١٠ص - ١٢م / ١٠ص - ١م"
+        }
+      },
+      {
+        "title": "تحفيظ (حفظ القرآن)",
+        "weekdays": {
+          "perHour": "£1.85<sm>/في الساعة</sm>",
+          "perMonth": "£90<sm>/في الشهر</sm>",
+          "days": "الاثنين - الخميس",
+          "duration": "٤:٣٠ - ٧م / ٥ - ٧م"
+        },
+        "weekends": {
+          "perHour": "£2<sm>/في الساعة</sm>",
+          "perMonth": "£60<sm>/في الشهر</sm>",
+          "days": "السبت - الأحد",
+          "duration": "١٠ص - ١م / ١٢ - ٢:٣٠م"
+        }
+      },
+      {
+        "title": "اللغة العربية",
+        "weekdays": {
+          "perHour": "£1.66<sm>/في الساعة</sm>",
+          "perMonth": "£60<sm>/في الشهر</sm>",
+          "days": "الاثنين - الخميس",
+          "duration": "٦ - ٧م"
+        },
+        "weekends": {
+          "perHour": "£10<sm>/في الساعة</sm>",
+          "perMonth": "£50<sm>/في الشهر</sm>",
+          "days": "السبت - الأحد",
+          "duration": "١٠ص - ١٢:٣٠م / ١٢:٣٠ - ٢:٣٠م"
+        }
+      }
+    ]
+  },
+
+  "marquee": {
+    "highlightAchievement": "Award-Winning Education",
+    "certificateRecognition": "Recognized with Nominated Certificates",
+    "examAnnouncement": "Mid-Term Exams 2025 – Get Ready!"
+  },
+
+  "certificate": {
+    "category1": "Category 1",
+    "category2": "Category 2",
+    "category3": "Category 3"
+  },
+  "staff": {
+    "heading": "Our Staff",
+    "teamName1": "Mohammad Khalid",
+    "teamPost1": "Managing Director & Headteacher",
+
+    "teamName2": "Shaikh Junaid Usman",
+    "teamPost2": "Arabic &  RE Tutor",
+
+    "teamName3": "Hameedullah",
+    "teamPost3": "Head of online courses",
+
+    "teamName4": "Mohammad Saad",
+    "teamPost4": "Teacher",
+
+    "teamName5": "Mr M Jabir Ludhi",
+    "teamPost5": "KS1 and KS2 Tutor",
+
+    "teamName6": "Muhammad Saleem",
+    "teamPost6": "Developer",
+
+    "teamName7": "Noreen",
+    "teamPost7": "Head of Arabic and Quran female Department",
+
+    "teamName8": "Abo Jesh khetam Abo",
+    "teamPost8": "KS3 &  GCSE English and Islamic StudiesTutor",
+
+    "teamName9": "Amina Akhter",
+    "teamPost9": "KS3 &  GCSE Chemistry &  Biology Tutor",
+    "teamName10": "Hafsa Khadar",
+    "teamPost10": "Arabic Basic Book & RE Tutor",
+
+    "teamName11": "Hafsa Ahmed",
+    "teamPost11": "Arabic Tutor"
+  },
+  "testimonialOne": {
+    "mainHeading": "Parent's words are the<break />key to happy kids",
+    "sectionTitle": "Testimonials"
+  },
+  "testimonialTwo": {
+    "mainHeading": "Parent's words are the<break />key to happy kids",
+    "sectionTitle": "Testimonials",
+    "testimonial1": {
+      "review1": " I appreciate the flexibility of Alyaqeen Academy. My child can learn at their own pace, which is very effective.",
+      "author1": "Ahmed Ali Al Mansoori"
+    },
+    "testimonial2": {
+      "review2": " I am impressed with the quality of education provided. My child is more engaged and motivated to learn.",
+      "author2": "Fatima Mohammed Al Hashmi"
+    },
+    "testimonial3": {
+      "review3": "Alyaqeen Academy offers a friendly environment, and the support team is always helpful. Highly recommended!",
+      "author3": "Khalid Abdullah Al Zaabi"
+    },
+    "testimonial4": {
+      "review4": "Alyaqeen Academy is a game-changer for my child's education. The content is engaging and well-structured.",
+      "author4": "Mariam Salem Al Mehairi"
+    },
+    "testimonial5": {
+      "review5": "Alyaqeen Academy has exceeded my expectations. It’s a perfect blend of technology and education for my child.",
+      "author5": "Omar Saif Al Nuaimi"
+    },
+    "testimonial6": {
+      "review6": "Alyaqeen Academy has made learning fun and interactive for my child. I can see their confidence growing every day.",
+      "author6": "Layla Yousuf Al Ketbi"
+    },
+    "testimonial7": {
+      "review7": " The progress reports are detailed and easy to understand. It helps me stay updated on my child's performance.",
+      "author7": "Yousef Ibrahim Al Shamsi"
+    },
+    "testimonial8": {
+      "review8": "This LMS has transformed my child's learning experience! Highly recommended! Best Platform for my child.",
+      "author8": "Ahmed Saeed Al-Mansoori"
+    },
+    "testimonial9": {
+      "review9": "An amazing platform! My son now enjoys studying, and his grades have improved significantly. Highly recommend!",
+      "author9": "Saeed Mohammed Al-Dhaheri"
+    }
+  },
+  "cta": {
+    "mainHeading": "Come and be Part of <break /> Our Latest Session. <break /> Admissions are open.",
+    "sectionTitle": "Get your quality",
+    "applyBtn": "Apply Now"
+  },
+  "blogs": {
+    "heading1": "Explore blogs and news",
+    "heading2": "Our Blogs",
+    "seeArticleBtn": "See All Article",
+    "bestTeacher": {
+      "title": "Best Teacher of the Month",
+      "name": "Maulana Junaid Usman",
+      "post": "Arabic and Islamic Studies",
+      "description": "Maulana Junaid Usman is the best teacher of the month as he always make sure to come before the starting time and set the class organise everything before children arriving, he also helps after the lessons and discuss the importance of the day with the headteacher. we appreciate his contribution and thoughts."
+    },
+    "bestStudent": {
+      "title": "Best Student of the Month",
+      "name": "Junaid Qadir",
+      "post": "Weekdays Class B5",
+      "description": "Brilliant child, no absence in the entire month. Always best in the class, respect the teachers and staff, very supportive student at Alyaqeen."
+    }
+  },
+  "teacherOfTheYear": {
+    "name": "Shaykh Molana Junaid Usman",
+    "title": "Why selected as The Best Teacher of the Year.",
+    "description": "Maulana Junaid Usman is the best teacher of the year as he always make sure to come before the starting time and set the class organise everything before children arriving, he also helps after the lessons and discuss the importance of the day with the headteacher. we appreciate his contribution and thoughts.",
+    "exploreBtn": "Explore More",
+    "skills": {
+      "one": "Highly Educated",
+      "two": "Dedicated Educator",
+      "three": "Mentor and Guide",
+      "four": "Community Leader",
+      "five": "Multilingual",
+      "six": "Versatile Experience",
+      "seven": "Empathetic and Supportive"
+    }
+  },
+  "instagram": {
+    "follow": "Follow Instagram"
+  },
+
+  "services": {
+    "mainHeading": "Alyaqeen Academy more Services",
+    "sectionTitle": "Additional Services",
+    "allServicesButtonText": "All Services",
+    "servicesList": [
+      {
+        "title": "Online Learning",
+        "description": "We all know the impact that Covid-19 has left upon a children's education..."
+      },
+      {
+        "title": "Nikah",
+        "description": "Shaykh Khalid has conducted many Nikkahs over the last 10 years..."
+      },
+      {
+        "title": "Sports Club",
+        "description": "At Alyaqeen academy students play football. We also have a Cricket Club..."
+      }
+    ]
+  },
+
+  "activities": {
+    "mainHeading": "Let Us Know About Our Reading And Cultural",
+    "sectionTitle": "Our Best Activities",
+    "exploreBtn": "Explore More",
+    "call": "Call Us Now"
+  }
+}

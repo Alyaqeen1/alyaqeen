@@ -4,8 +4,11 @@ import "swiper/swiper-bundle.css";
 import { Link } from "react-router";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 
 const Team = () => {
+  const { t } = useTranslation(["home"]);
+
   const [staffData, setStaffData] = useState([]);
   const swiperRef = useRef(null);
   const sliderContainerRef = useRef(null);
@@ -14,6 +17,8 @@ const Team = () => {
       .then((res) => setStaffData(res.data))
       .catch((error) => console.error("Error fetching staff data:", error));
   }, []);
+
+  const { heading, teamName1 } = t("staff");
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -68,10 +73,10 @@ const Team = () => {
         <div className="section-title-area">
           <div className="section-title mt-60">
             <span data-aos-duration="800" data-aos="fade-up">
-              Our Staff
+              {heading}
             </span>
             <h2 data-aos-duration="800" data-aos="fade-up" data-aos-delay="300">
-              Our Staff
+              {heading}
             </h2>
           </div>
           <div
@@ -165,14 +170,14 @@ const Team = () => {
                     </div>
                     <div className="team-content">
                       <h3>
-                        <Link to={`/staff-details/${state_member.id}`}>
-                          {state_member.name}
+                        <Link to={`/staff-details/${state_member?.id}`}>
+                          {t(state_member?.name)}
                         </Link>
                       </h3>
 
                       <p>
                         {/*Instructors*/}
-                        {state_member.post_of_staff}
+                        {t(state_member?.post_of_staff)}
                       </p>
                     </div>
                   </div>

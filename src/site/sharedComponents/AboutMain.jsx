@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import { useState } from "react";
+import { Trans, useTranslation } from "react-i18next";
 
 const AboutMain = ({
   image,
@@ -12,6 +13,17 @@ const AboutMain = ({
   para5,
 }) => {
   const [read_more_btn, setRead_more_btn] = useState(false);
+  const { t } = useTranslation(["common"]);
+  const {
+    sportTitle,
+    sportDescription,
+    learnTitle,
+    learnDescription,
+    read,
+    more,
+    less,
+  } = t("aboutMain");
+  const { name, post, call } = t("director");
   return (
     <section className="about-activities-section-2 style-2 section-padding">
       <div className="zebra-shape float-bob-y w-25 text-end">
@@ -144,7 +156,7 @@ const AboutMain = ({
                     }}
                     className="theme-btn"
                   >
-                    Read {read_more_btn ? "Less" : "More"}{" "}
+                    {read} {read_more_btn ? less : more}{" "}
                     <i className="fa-solid fa-arrow-right-long"></i>
                   </button>
                 </div>
@@ -164,9 +176,12 @@ const AboutMain = ({
                         />
                       </div>
                       <div className="content">
-                        <h5>Sport Program</h5>
+                        <h5>{sportTitle}</h5>
                         <p>
-                          Sport program promotes <br /> fun and growth.
+                          <Trans
+                            i18nKey={sportDescription}
+                            components={{ break: <br /> }}
+                          />
                         </p>
                       </div>
                     </div>
@@ -185,10 +200,12 @@ const AboutMain = ({
                         />
                       </div>
                       <div className="content">
-                        <h5>Easy To Learn</h5>
+                        <h5>{learnTitle}</h5>
                         <p>
-                          Learning made <br />
-                          simple and quick.
+                          <Trans
+                            i18nKey={learnDescription}
+                            components={{ break: <br /> }}
+                          />
                         </p>
                       </div>
                     </div>
@@ -209,8 +226,8 @@ const AboutMain = ({
                     />
 
                     <div className="content">
-                      <h6>Mohammad Khalid</h6>
-                      <p>Managing Director & Headteacher</p>
+                      <h6>{name}</h6>
+                      <p>{post}</p>
                     </div>
                   </div>
                   <div
@@ -223,7 +240,7 @@ const AboutMain = ({
                       <i className="fa-solid fa-phone"></i>
                     </div>
                     <div className="content">
-                      <span>Call Us Now</span>
+                      <span>{call}</span>
                       <h5>
                         <Link to="tel:+07869636849">+07869636849</Link>
                       </h5>

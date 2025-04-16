@@ -4,8 +4,10 @@ import "swiper/swiper-bundle.css";
 import { Link } from "react-router";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 
 const AboutTeam = ({ title, subtitle }) => {
+  const { t } = useTranslation(["home"]);
   const [staffData, setStaffData] = useState([]);
   useEffect(() => {
     axios("/staff.json")
@@ -139,11 +141,11 @@ const AboutTeam = ({ title, subtitle }) => {
                       <div className="team-content">
                         <h3>
                           <a href={`/staff-details/${state_member?.id}`}>
-                            {state_member?.name}
+                            {t(state_member?.name)}
                           </a>
                         </h3>
 
-                        <p>{state_member?.post_of_staff}</p>
+                        <p>{t(state_member?.post_of_staff)}</p>
                       </div>
                     </div>
                   </div>

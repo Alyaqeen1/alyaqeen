@@ -3,6 +3,7 @@ import { Autoplay, Navigation } from "swiper/modules";
 import "swiper/swiper-bundle.css";
 
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const certificate_list_data = [
   {
@@ -116,6 +117,8 @@ const certificate_list_data = [
 ];
 
 const Certificate = () => {
+  const { t } = useTranslation(["home"]);
+  const { category1, category2, category3 } = t("certificate");
   const [selected_category_id, setSelected_category] = useState(1);
   return (
     <div className="certificate-section section-padding pt-0">
@@ -136,7 +139,7 @@ const Certificate = () => {
                     setSelected_category(1);
                   }}
                 >
-                  Category 1
+                  {category1}
                 </a>
 
                 <a
@@ -151,7 +154,7 @@ const Certificate = () => {
                     setSelected_category(2);
                   }}
                 >
-                  Category 2
+                  {category2}
                 </a>
 
                 <a
@@ -166,7 +169,7 @@ const Certificate = () => {
                     setSelected_category(3);
                   }}
                 >
-                  Category 3
+                  {category3}
                 </a>
               </div>
             </div>

@@ -1,7 +1,10 @@
+import { Trans, useTranslation } from "react-i18next";
 import { Link } from "react-router";
 import img from "../../assets/img/cta/cta-new.png";
 
 const CTA = () => {
+  const { t } = useTranslation(["home"]);
+  const { mainHeading, sectionTitle, applyBtn } = t("cta") || {};
   return (
     <section
       className="cta-section fix section-padding bg-cover"
@@ -33,7 +36,7 @@ const CTA = () => {
                   data-aos-duration="800"
                   data-aos="fade-up"
                 >
-                  Get your quality
+                  {sectionTitle}
                 </span>
                 <h2
                   className="text-white "
@@ -41,8 +44,7 @@ const CTA = () => {
                   data-aos="fade-up"
                   data-aos-delay="300"
                 >
-                  Come and be Part of <br /> Our Latest Session. <br />{" "}
-                  Admissions are open.
+                  <Trans i18nKey={mainHeading} components={{ break: <br /> }} />
                 </h2>
               </div>
               <div
@@ -52,7 +54,7 @@ const CTA = () => {
                 data-aos-delay="500"
               >
                 <Link to="/apply-now" className="theme-btn bg-white">
-                  Apply Now <i className="fa-solid fa-arrow-right-long"></i>
+                  {applyBtn} <i className="fa-solid fa-arrow-right-long"></i>
                 </Link>
               </div>
             </div>

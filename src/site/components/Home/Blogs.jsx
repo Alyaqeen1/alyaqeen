@@ -1,18 +1,22 @@
 import { Link } from "react-router";
 import BestStudent from "./BestStudent";
 import BestTeacher from "./BestTeacher";
+import { useTranslation } from "react-i18next";
 
 const Blogs = () => {
+  const { t } = useTranslation(["home"]);
+  const { heading1, heading2, seeArticleBtn, bestTeacher, bestStudent } =
+    t("blogs") || {};
   return (
     <section className="news-section section-padding fix" id="blog">
       <div className="container">
         <div className="section-title-area">
           <div className="section-title">
             <span data-aos-duration="800" data-aos="fade-up">
-              Our Blogs
+              {heading2}
             </span>
             <h2 data-aos-duration="800" data-aos="fade-up" data-aos-delay="300">
-              Explore blogs and news
+              {heading1}
             </h2>
           </div>
           <Link
@@ -22,7 +26,7 @@ const Blogs = () => {
             data-aos="fade-up"
             data-aos-delay="500"
           >
-            See All Article <i className="fa-solid fa-arrow-right-long"></i>
+            {seeArticleBtn} <i className="fa-solid fa-arrow-right-long"></i>
           </Link>
         </div>
         <div className="news-wrapper">
@@ -109,8 +113,8 @@ const Blogs = () => {
               </div>
             </div>
             <div className="col-xl-6 col-lg-8 mt-5 mt-xl-0">
-              <BestTeacher></BestTeacher>
-              <BestStudent></BestStudent>
+              <BestTeacher bestTeacher={bestTeacher}></BestTeacher>
+              <BestStudent bestStudent={bestStudent}></BestStudent>
             </div>
           </div>
         </div>

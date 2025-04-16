@@ -1,6 +1,23 @@
+import { Trans, useTranslation } from "react-i18next";
 import { Link } from "react-router";
 
 const ProgramSection = () => {
+  const { t } = useTranslation(["home"]);
+  const {
+    mainHeading,
+    sectionTitle,
+    details: {
+      ageLabel,
+      weeklyLabel,
+      timeLabel,
+      ageRange,
+      daysPerWeek,
+      hoursPerWeek,
+      // programList,
+    },
+  } = t("programs") || {};
+  const programList = t("programs.programList", { returnObjects: true });
+
   return (
     <section
       className="program-section section-padding section-bg-2 fix"
@@ -53,10 +70,11 @@ const ProgramSection = () => {
       <div className="container">
         <div className="section-title text-center mt-60">
           <span data-aos-duration="800" data-aos="fade-up">
-            Our Programs
+            {sectionTitle}
           </span>
           <h2 data-aos-duration="800" data-aos="fade-up" data-aos-delay="300">
-            We meet kids at their level <br /> regardless of their age
+            {/* We meet kids at their level <br /> regardless of their age */}
+            <Trans i18nKey={mainHeading} components={{ break: <br /> }} />
           </h2>
         </div>
         <div className="row">
@@ -89,7 +107,7 @@ const ProgramSection = () => {
                 </div>
                 <div className="clases-content">
                   <h4 style={{ color: "var(--white)" }}>
-                    Arabic Qaidah, Quran & Hifdh
+                    {programList[0]?.title}
                   </h4>
                   <p
                     style={{
@@ -97,25 +115,28 @@ const ProgramSection = () => {
                       borderColor: "var(--white)",
                     }}
                   >
-                    Allah swt the most says in the Quran : “and recite the Quran
-                    (aloud) in a s...
+                    {programList[0]?.description}
                   </p>
                   <ul
                     style={{ color: "var(--white)" }}
                     className="clases-schedule"
                   >
                     <li style={{ color: "var(--white)" }}>
-                      <span style={{ color: "var(--white)" }}>age</span> <br />
-                      5-15 years
-                    </li>
-                    <li style={{ color: "var(--white)" }}>
-                      <span style={{ color: "var(--white)" }}>weekly</span>{" "}
+                      <span style={{ color: "var(--white)" }}>{ageLabel}</span>{" "}
                       <br />
-                      2-4 Days
+                      {ageRange}
                     </li>
                     <li style={{ color: "var(--white)" }}>
-                      <span style={{ color: "var(--white)" }}>time</span> <br />
-                      4-6 hrs
+                      <span style={{ color: "var(--white)" }}>
+                        {weeklyLabel}
+                      </span>{" "}
+                      <br />
+                      {daysPerWeek}
+                    </li>
+                    <li style={{ color: "var(--white)" }}>
+                      <span style={{ color: "var(--white)" }}>{timeLabel}</span>{" "}
+                      <br />
+                      {hoursPerWeek}
                     </li>
                   </ul>
                 </div>
@@ -151,7 +172,7 @@ const ProgramSection = () => {
                 </div>
                 <div className="clases-content">
                   <h4 style={{ color: "var(--white)" }}>
-                    Maths, English & Science
+                    {programList[1]?.title}
                   </h4>
                   <p
                     style={{
@@ -159,25 +180,28 @@ const ProgramSection = () => {
                       borderColor: "var(--white)",
                     }}
                   >
-                    At Alyaqeen academy we have a set of dedicated tutors. Our
-                    tutors try to en...
+                    {programList[1]?.description}
                   </p>
                   <ul
                     style={{ color: "var(--white)" }}
                     className="clases-schedule"
                   >
                     <li style={{ color: "var(--white)" }}>
-                      <span style={{ color: "var(--white)" }}>age</span> <br />
-                      5-15 years
-                    </li>
-                    <li style={{ color: "var(--white)" }}>
-                      <span style={{ color: "var(--white)" }}>weekly</span>{" "}
+                      <span style={{ color: "var(--white)" }}>{ageLabel}</span>{" "}
                       <br />
-                      2-4 Days
+                      {ageRange}
                     </li>
                     <li style={{ color: "var(--white)" }}>
-                      <span style={{ color: "var(--white)" }}>time</span> <br />
-                      4-6 hrs
+                      <span style={{ color: "var(--white)" }}>
+                        {weeklyLabel}
+                      </span>{" "}
+                      <br />
+                      {daysPerWeek}
+                    </li>
+                    <li style={{ color: "var(--white)" }}>
+                      <span style={{ color: "var(--white)" }}>{timeLabel}</span>{" "}
+                      <br />
+                      {hoursPerWeek}
                     </li>
                   </ul>
                 </div>
@@ -213,23 +237,20 @@ const ProgramSection = () => {
                   />
                 </div>
                 <div className="clases-content">
-                  <h4>Arabic Language</h4>
-                  <p>
-                    Islam is just not religion that Muslims follow, but it is a
-                    way of life. When a person is born...
-                  </p>
+                  <h4>{programList[2]?.title}</h4>
+                  <p>{programList[2]?.description}</p>
                   <ul className="clases-schedule">
                     <li>
-                      <span>age</span> <br />
-                      5-15 years
+                      <span>{ageLabel}</span> <br />
+                      {ageRange}
                     </li>
                     <li>
-                      <span>weekly</span> <br />
-                      2-4 Days
+                      <span>{weeklyLabel}</span> <br />
+                      {daysPerWeek}
                     </li>
                     <li>
-                      <span>time</span> <br />
-                      4-6 hrs
+                      <span>{timeLabel}</span> <br />
+                      {hoursPerWeek}
                     </li>
                   </ul>
                 </div>

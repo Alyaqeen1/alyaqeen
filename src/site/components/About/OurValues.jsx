@@ -1,4 +1,8 @@
+import { Trans, useTranslation } from "react-i18next";
+
 const OurValues = () => {
+  const { t } = useTranslation(["about"]);
+  const { mainHeading, sectionTitle } = t("ourValue") || {};
   return (
     <section className="feature-value-section fix section-padding section-bg-2">
       <div className="shape-1">
@@ -18,10 +22,10 @@ const OurValues = () => {
       <div className="container">
         <div className="section-title text-center">
           <span data-aos-duration="800" data-aos="fade-up">
-            Our values
+            {sectionTitle}
           </span>
           <h2 data-aos-duration="800" data-aos="fade-up" data-aos-delay="300">
-            The best playschool <br /> for your kid
+            <Trans i18nKey={mainHeading} components={{ break: <br /> }} />
           </h2>
         </div>
         <div className="row">

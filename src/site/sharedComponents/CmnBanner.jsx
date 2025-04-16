@@ -1,6 +1,11 @@
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
 
 const CmnBanner = ({ title }) => {
+  const { t } = useTranslation(["common"]);
+  const {
+    nav: { home },
+  } = t("header");
   return (
     <div
       className="breadcrumb-wrapper bg-cover"
@@ -62,7 +67,7 @@ const CmnBanner = ({ title }) => {
             data-aos-delay="500"
           >
             <li>
-              <Link to="/">Home</Link>
+              <Link to="/">{home}</Link>
             </li>
             <li>
               <i className="fas fa-chevron-right"></i>
