@@ -3,8 +3,8 @@
     "cmnBannerTitle": "عن المؤسس"
   },
   "ourValue": {
-    "heading1": "أفضل روضة <break /> لطفلك",
-    "heading2": "قيمنا"
+    "mainHeading": "أفضل روضة <break /> لطفلك",
+    "sectionTitle": "قيمنا"
   },
   "counter": {
     "experience": "سنة من الخبرة",

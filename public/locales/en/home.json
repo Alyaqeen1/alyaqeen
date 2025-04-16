@@ -1,143 +1,165 @@
 {
   "banner": {
-    "heading1": {
-      "span1": "Three Interconnected",
-      "span2": "Educational",
-      "span3": "Program"
+    "mainHeading": {
+      "part1": "Three Interconnected",
+      "part2": "Educational",
+      "part3": "Program"
     },
-    "heading2": "Alyaqeen Academy",
-    "description": "Arabic Qaidah & Quran, Islamic Studies , Essential Duas and Surah Memorization.",
-    "applyBtn": "Apply Today",
-    "timetableBtn": "January Prayer Timetable",
-    "videoPlayBtn": "Play Video"
+    "subHeading": "Alyaqeen Academy",
+    "description": "Arabic Qaidah & Quran, Islamic Studies, Essential Duas and Surah Memorization.",
+    "buttons": {
+      "apply": "Apply Today",
+      "timetable": "January Prayer Timetable",
+      "playVideo": "Play Video"
+    }
   },
   "programs": {
-    "heading1": "We meet kids at their level<break />regardless of their age",
-    "heading2": "Our Programs",
-    "age": "age",
-    "weekly": "weekly",
-    "time": "time",
-    "years": "5-15 years",
-    "days": "2-4 Days",
-    "hrs": "4-6 hrs",
-    "program1": {
-      "title1": "Arabic Qaidah, Quran & Hifdh",
-      "description1": "Allah swt the most says in the Quran : “and recite the Quran (aloud) in a s..."
+    "mainHeading": "We meet kids at their level<break />regardless of their age",
+    "sectionTitle": "Our Programs",
+    "details": {
+      "ageLabel": "age",
+      "weeklyLabel": "weekly",
+      "timeLabel": "time",
+      "ageRange": "5-15 years",
+      "daysPerWeek": "2-4 Days",
+      "hoursPerWeek": "4-6 hrs"
     },
-    "program2": {
-      "title2": "Maths, English & Science",
-      "description2": "At Alyaqeen academy we have a set of dedicated tutors. Our tutors try to en..."
-    },
-    "program3": {
-      "title3": "Arabic Language",
-      "description3": "Islam is just not religion that Muslims follow, but it is a way of life. When a person is born..."
-    }
+    "programList": [
+      {
+        "title": "Arabic Qaidah, Quran & Hifdh",
+        "description": "Allah swt the most says in the Quran : “and recite the Quran (aloud) in a s..."
+      },
+      {
+        "title": "Maths, English & Science",
+        "description": "At Alyaqeen academy we have a set of dedicated tutors. Our tutors try to en..."
+      },
+      {
+        "title": "Arabic Language",
+        "description": "Islam is just not religion that Muslims follow, but it is a way of life. When a person is born..."
+      }
+    ]
   },
+
   "workProcess": {
-    "title1": "Sessions & Timings",
-    "description1": "Our onsite classes are held Monday to Thursday on weekdays and on Saturday and Sunday during the weekends.",
-    "title2": "Fee Structure",
-    "description2": "Fee Structure depends on Course and Session types. We have two session: weekdays and weekends.",
-    "title3": "Holidays & Academic Calendar",
-    "description3": "Holidays & Academic Calendar will depend on Session types. We have two session: weekdays and weekends."
+    "sessions": {
+      "title": "Sessions & Timings",
+      "description": "Our onsite classes are held Monday to Thursday on weekdays and on Saturday and Sunday during the weekends."
+    },
+    "feeStructure": {
+      "title": "Fee Structure",
+      "description": "Fee Structure depends on Course and Session types. We have two session: weekdays and weekends."
+    },
+    "holidays": {
+      "title": "Holidays & Academic Calendar",
+      "description": "Holidays & Academic Calendar will depend on Session types. We have two session: weekdays and weekends."
+    }
   },
   "whyChooseUs": {
-    "heading1": "Top Choice for Children",
-    "heading2": "WHY CHOOSE US",
-    "feature1": "Modern teaching tools",
-    "feature2": "Small groups, better focus",
-    "feature3": "Regular progress updates",
-    "feature4": "Termly reports for parents",
-    "feature5": "Quran taught with tajweed",
-    "feature6": "Fun & friendly environment"
-  },
-  "feeStructure": {
-    "heading1": "Alyaqeen Academy<break />Classes & Fee Structure",
-    "heading2": "Classes & Fee Structure",
-    "title1": "Subject",
-    "title2": "Weekdays Classes",
-    "title3": "Weekends Classes",
-    "subject1": {
-      "sub1Title": "Qaidah, Quran & Islamic Studies",
-      "weekdays1": {
-        "dayPerHour1": "£1.85<sm>/hour</sm>",
-        "dayPerMonth1": "£50<sm>/month</sm>",
-        "dayDays1": "Mon - Thu",
-        "dayDuration1": "4:30 - 6:00pm / 5:45 - 7:15pm"
-      },
-      "weekends1": {
-        "endPerHour1": "£1.70<sm>/hour</sm>",
-        "endPerMonth1": "£50<sm>/month</sm>",
-        "endDays1": "Sat - Sun",
-        "endDuration1": "10am - 12:30pm/12:30 - 2:30pm"
-      }
-    },
-    "subject2": {
-      "sub2Title": "Primary Maths & English Tuition",
-      "weekdays2": {
-        "dayPerHour2": "£5<sm>/hour</sm>",
-        "dayPerMonth2": "£100<sm>/month</sm>",
-        "dayDays2": "Mon - Tue",
-        "dayDuration2": "5 - 7pm"
-      },
-      "weekends2": {
-        "endPerHour2": "£4.44<sm>/hour</sm>",
-        "endPerMonth2": "£80<sm>/month</sm>",
-        "endDays2": "Sat - Sun",
-        "endDuration2": "10am - 12pm"
-      }
-    },
-    "subject3": {
-      "sub3Title": "GCSE Maths English & Science Tuition",
-      "weekdays3": {
-        "dayPerHour3": "£6.25<sm>/hour</sm>",
-        "dayPerMonth3": "£120<sm>/month</sm>",
-        "dayDays3": "Wed - Thu",
-        "dayDuration3": "5 - 7pm"
-      },
-      "weekends3": {
-        "endPerHour3": "£5<sm>/hour</sm>",
-        "endPerMonth3": "£100<sm>/month</sm>",
-        "endDays3": "Sat - Sun",
-        "endDuration3": "10am - 12pm / 10am - 1pm"
-      }
-    },
-    "subject4": {
-      "sub4Title": "Hifz Memorisation",
-      "weekdays4": {
-        "dayPerHour4": "£1.85<sm>/hour</sm>",
-        "dayPerMonth4": "£90<sm>/month</sm>",
-        "dayDays4": "Mon - Thu",
-        "dayDuration4": "4:30 - 7:00pm/5 - 7pm"
-      },
-      "weekends4": {
-        "endPerHour4": "£2<sm>/hour</sm>",
-        "endPerMonth4": "£60<sm>/month</sm>",
-        "endDays4": "Sat - Sun",
-        "endDuration4": "10am - 1pm/12 - 2:30pm"
-      }
-    },
-    "subject5": {
-      "sub5Title": "Arabic Language",
-      "weekdays5": {
-        "dayPerHour5": "£1.66<sm>/hour</sm>",
-        "dayPerMonth5": "£60<sm>/month</sm>",
-        "dayDays5": "Mon - Thu",
-        "dayDuration5": "6 - 7pm"
-      },
-      "weekends5": {
-        "endPerHour5": "£10<sm>/hour</sm>",
-        "endPerMonth5": "£50<sm>/month</sm>",
-        "endDays5": "Sat - Sun",
-        "endDuration5": "10am - 12:30pm/12:30 - 2:30pm"
-      }
+    "mainHeading": "Top Choice for Children",
+    "sectionTitle": "WHY CHOOSE US",
+    "features": {
+      "teachingTools": "Modern teaching tools",
+      "smallGroups": "Small groups, better focus",
+      "progressUpdates": "Regular progress updates",
+      "termlyReports": "Termly reports for parents",
+      "quranTajweed": "Quran taught with tajweed",
+      "friendlyEnvironment": "Fun & friendly environment"
     }
   },
-  "marquee": {
-    "text1": "Award-winning",
-    "text2": "nominated certificates",
-    "text3": "Mid Term Exam 2025"
+
+  "feeStructure": {
+    "mainHeading": "أكاديمية اليقين<break />الصفوف وهيكل الرسوم",
+    "sectionTitle": "الصفوف وهيكل الرسوم",
+    "tableHeaders": {
+      "subject": "المادة",
+      "weekdays": "صفوف أيام الأسبوع",
+      "weekends": "صفوف عطلة نهاية الأسبوع"
+    },
+    "subjects": [
+      {
+        "title": "القاعدة، القرآن والدراسات الإسلامية",
+        "weekdays": {
+          "perHour": "£1.85<sm>/في الساعة</sm>",
+          "perMonth": "£50<sm>/في الشهر</sm>",
+          "days": "الاثنين - الخميس",
+          "duration": "٤:٣٠ - ٦:٠٠م / ٥:٤٥ - ٧:١٥م"
+        },
+        "weekends": {
+          "perHour": "£1.70<sm>/في الساعة</sm>",
+          "perMonth": "£50<sm>/في الشهر</sm>",
+          "days": "السبت - الأحد",
+          "duration": "١٠ص - ١٢:٣٠م / ١٢:٣٠ - ٢:٣٠م"
+        }
+      },
+      {
+        "title": "دروس رياضيات وإنجليزي للمرحلة الابتدائية",
+        "weekdays": {
+          "perHour": "£5<sm>/في الساعة</sm>",
+          "perMonth": "£100<sm>/في الشهر</sm>",
+          "days": "الاثنين - الثلاثاء",
+          "duration": "٥ - ٧م"
+        },
+        "weekends": {
+          "perHour": "£4.44<sm>/في الساعة</sm>",
+          "perMonth": "£80<sm>/في الشهر</sm>",
+          "days": "السبت - الأحد",
+          "duration": "١٠ص - ١٢م"
+        }
+      },
+      {
+        "title": "GCSE دروس رياضيات وإنجليزي وعلوم",
+        "weekdays": {
+          "perHour": "£6.25<sm>/في الساعة</sm>",
+          "perMonth": "£120<sm>/في الشهر</sm>",
+          "days": "الأربعاء - الخميس",
+          "duration": "٥ - ٧م"
+        },
+        "weekends": {
+          "perHour": "£5<sm>/في الساعة</sm>",
+          "perMonth": "£100<sm>/في الشهر</sm>",
+          "days": "السبت - الأحد",
+          "duration": "١٠ص - ١٢م / ١٠ص - ١م"
+        }
+      },
+      {
+        "title": "تحفيظ (حفظ القرآن)",
+        "weekdays": {
+          "perHour": "£1.85<sm>/في الساعة</sm>",
+          "perMonth": "£90<sm>/في الشهر</sm>",
+          "days": "الاثنين - الخميس",
+          "duration": "٤:٣٠ - ٧م / ٥ - ٧م"
+        },
+        "weekends": {
+          "perHour": "£2<sm>/في الساعة</sm>",
+          "perMonth": "£60<sm>/في الشهر</sm>",
+          "days": "السبت - الأحد",
+          "duration": "١٠ص - ١م / ١٢ - ٢:٣٠م"
+        }
+      },
+      {
+        "title": "اللغة العربية",
+        "weekdays": {
+          "perHour": "£1.66<sm>/في الساعة</sm>",
+          "perMonth": "£60<sm>/في الشهر</sm>",
+          "days": "الاثنين - الخميس",
+          "duration": "٦ - ٧م"
+        },
+        "weekends": {
+          "perHour": "£10<sm>/في الساعة</sm>",
+          "perMonth": "£50<sm>/في الشهر</sm>",
+          "days": "السبت - الأحد",
+          "duration": "١٠ص - ١٢:٣٠م / ١٢:٣٠ - ٢:٣٠م"
+        }
+      }
+    ]
   },
+
+  "marquee": {
+    "highlightAchievement": "Award-Winning Education",
+    "certificateRecognition": "Recognized with Nominated Certificates",
+    "examAnnouncement": "Mid-Term Exams 2025 – Get Ready!"
+  },
+
   "certificate": {
     "category1": "Category 1",
     "category2": "Category 2",
@@ -178,12 +200,12 @@
     "teamPost11": "Arabic Tutor"
   },
   "testimonialOne": {
-    "heading1": "Parent's words are the<break />key to happy kids",
-    "heading2": "Testimonials"
+    "mainHeading": "Parent's words are the<break />key to happy kids",
+    "sectionTitle": "Testimonials"
   },
   "testimonialTwo": {
-    "heading1": "Parent's words are the<break />key to happy kids",
-    "heading2": "Testimonials",
+    "mainHeading": "Parent's words are the<break />key to happy kids",
+    "sectionTitle": "Testimonials",
     "testimonial1": {
       "review1": " I appreciate the flexibility of Alyaqeen Academy. My child can learn at their own pace, which is very effective.",
       "author1": "Ahmed Ali Al Mansoori"
@@ -222,8 +244,8 @@
     }
   },
   "cta": {
-    "heading1": "Come and be Part of <break /> Our Latest Session. <break /> Admissions are open.",
-    "heading2": "Get your quality",
+    "mainHeading": "Come and be Part of <break /> Our Latest Session. <break /> Admissions are open.",
+    "sectionTitle": "Get your quality",
     "applyBtn": "Apply Now"
   },
   "blogs": {
@@ -261,26 +283,30 @@
   "instagram": {
     "follow": "Follow Instagram"
   },
+
   "services": {
-    "heading1": "Alyaqeen Academy more Services",
-    "heading2": "Additional Services",
-    "AllServiceBtn": "All Services",
-    "service1": {
-      "title1": "Online Learning",
-      "description1": "We all know the impact that Covid-19 has left upon a children's education..."
-    },
-    "service2": {
-      "title2": "Nikah",
-      "description2": "Shaykh Khalid has conducted many Nikkahs over the last 10 years..."
-    },
-    "service3": {
-      "title3": "Sports Club",
-      "description3": "At Alyaqeen academy students play football. We also have a Cricket Club..."
-    }
+    "mainHeading": "Alyaqeen Academy more Services",
+    "sectionTitle": "Additional Services",
+    "allServicesButtonText": "All Services",
+    "servicesList": [
+      {
+        "title": "Online Learning",
+        "description": "We all know the impact that Covid-19 has left upon a children's education..."
+      },
+      {
+        "title": "Nikah",
+        "description": "Shaykh Khalid has conducted many Nikkahs over the last 10 years..."
+      },
+      {
+        "title": "Sports Club",
+        "description": "At Alyaqeen academy students play football. We also have a Cricket Club..."
+      }
+    ]
   },
+
   "activities": {
-    "heading1": "Let Us Know About Our Reading And Cultural",
-    "heading2": "Our Best Activities",
+    "mainHeading": "Let Us Know About Our Reading And Cultural",
+    "sectionTitle": "Our Best Activities",
     "exploreBtn": "Explore More",
     "call": "Call Us Now"
   }

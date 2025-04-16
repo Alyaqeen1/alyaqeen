@@ -3,7 +3,7 @@ import { Link } from "react-router";
 
 const AboutSection = () => {
   const { t } = useTranslation(["home"]);
-  const { heading1, heading2, exploreBtn, call } = t("activities");
+  const { mainHeading, sectionTitle, exploreBtn, call } = t("activities");
   return (
     <section className="about-section section-padding" id="about">
       <div className="bus-shape float-bob-x">
@@ -55,14 +55,14 @@ const AboutSection = () => {
               <div className="about-content">
                 <div className="section-title">
                   <span data-aos-duration="800" data-aos="fade-up">
-                    {heading2}
+                    {sectionTitle}
                   </span>
                   <h2
                     data-aos-duration="800"
                     data-aos="fade-up"
                     data-aos-delay="300"
                   >
-                    {heading1}
+                    {mainHeading}
                   </h2>
                 </div>
                 <p

@@ -5,14 +5,9 @@ import { Link } from "react-router";
 
 export default function AdditionalServices() {
   const { t } = useTranslation(["home"]);
-  const {
-    heading1,
-    heading2,
-    allServiceBtn,
-    service1: { title1, description1 },
-    service2: { title2, description2 },
-    service3: { title3, description3 },
-  } = t("services") || {};
+  const { mainHeading, sectionTitle, allServicesButtonText } =
+    t("services") || {};
+  const servicesList = t("services.servicesList", { returnObjects: true });
   return (
     <section
       className="program-section section-padding section-bg-2 fix"
@@ -50,10 +45,10 @@ export default function AdditionalServices() {
         <div className="section-title-area">
           <div className="section-title">
             <span data-aos-duration="800" data-aos="fade-up">
-              {heading2}
+              {sectionTitle}
             </span>
             <h2 data-aos-duration="800" data-aos="fade-up" data-aos-delay="300">
-              {heading1}
+              {mainHeading}
             </h2>
           </div>
           <div
@@ -92,9 +87,11 @@ export default function AdditionalServices() {
               </div>
               <div className="program-content text-center">
                 <h4>
-                  <Link to="/service/online-learning">{title1}</Link>
+                  <Link to="/service/online-learning">
+                    {servicesList[0]?.title}
+                  </Link>
                 </h4>{" "}
-                <p>{description1}</p>
+                <p>{servicesList[0]?.description}</p>
                 <Link to="/service/online-learning" className="arrow-icon">
                   <i className="fa-solid fa-arrow-right-long"></i>
                 </Link>
@@ -122,9 +119,11 @@ export default function AdditionalServices() {
               </div>
               <div className="program-content text-center">
                 <h4>
-                  <Link to="/service/nikah-service">{title2}</Link>
+                  <Link to="/service/nikah-service">
+                    {servicesList[1]?.title}
+                  </Link>
                 </h4>
-                <p>{description2}</p>
+                <p>{servicesList[0]?.description}</p>
                 <Link
                   to="/service/nikah-service"
                   className="arrow-icon color-2"
@@ -155,10 +154,10 @@ export default function AdditionalServices() {
               </div>
               <div className="program-content text-center style-2">
                 <h4>
-                  <Link to="/service/sports">{title3}</Link>
+                  <Link to="/service/sports">{servicesList[2]?.title}</Link>
                 </h4>
                 {/* <span>(1-2 years)</span> */}
-                <p>{description3}</p>
+                <p>{servicesList[2]?.description}</p>
                 <Link to="/service/sports" className="arrow-icon">
                   <i className="fa-solid fa-arrow-right-long"></i>
                 </Link>
@@ -170,7 +169,8 @@ export default function AdditionalServices() {
         <div className="pricing-wrapper mt-10">
           <div className="section-title text-center mb-0 ">
             <Link to={"/all-services"} className="theme-btn">
-              {allServiceBtn} <i className="fa-solid fa-arrow-right-long"></i>
+              {allServicesButtonText}{" "}
+              <i className="fa-solid fa-arrow-right-long"></i>
             </Link>
           </div>
         </div>

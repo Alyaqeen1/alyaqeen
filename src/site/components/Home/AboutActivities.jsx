@@ -3,15 +3,17 @@ import { useTranslation } from "react-i18next";
 const AboutActivities = () => {
   const { t } = useTranslation(["home"]);
   const {
-    heading1,
-    heading2,
-    feature1,
-    feature2,
-    feature3,
-    feature4,
-    feature5,
-    feature6,
-  } = t("whyChooseUs");
+    mainHeading,
+    sectionTitle,
+    features: {
+      teachingTools,
+      smallGroups,
+      progressUpdates,
+      termlyReports,
+      quranTajweed,
+      friendlyEnvironment,
+    },
+  } = t("whyChooseUs") || {};
 
   return (
     <section className="about-activities-section section-padding pt-0">
@@ -49,14 +51,14 @@ const AboutActivities = () => {
               <div className="activities-content">
                 <div className="section-title">
                   <span data-aos-duration="800" data-aos="fade-up">
-                    {heading2}
+                    {sectionTitle}
                   </span>
                   <h2
                     data-aos-duration="800"
                     data-aos="fade-up"
                     data-aos-delay="300"
                   >
-                    {heading1}
+                    {mainHeading}
                   </h2>
                 </div>
                 <div className="row g-4 mt-4">
@@ -75,7 +77,7 @@ const AboutActivities = () => {
                         />
                       </div>
                       <div className="content">
-                        <h5>{feature1}</h5>
+                        <h5>{teachingTools}</h5>
                       </div>
                     </div>
                   </div>
@@ -94,7 +96,7 @@ const AboutActivities = () => {
                         />
                       </div>
                       <div className="content">
-                        <h5>{feature2}</h5>
+                        <h5>{smallGroups}</h5>
                       </div>
                     </div>
                   </div>
@@ -247,7 +249,7 @@ const AboutActivities = () => {
                         </svg>
                       </div>
                       <div className="content">
-                        <h5>{feature3}</h5>
+                        <h5>{progressUpdates}</h5>
                       </div>
                     </div>
                   </div>
@@ -291,7 +293,7 @@ const AboutActivities = () => {
                         </svg>
                       </div>
                       <div className="content">
-                        <h5>{feature4}</h5>
+                        <h5>{termlyReports}</h5>
                       </div>
                     </div>
                   </div>
@@ -310,7 +312,7 @@ const AboutActivities = () => {
                         />
                       </div>
                       <div className="content">
-                        <h5>{feature5}</h5>
+                        <h5>{quranTajweed}</h5>
                       </div>
                     </div>
                   </div>
@@ -329,7 +331,7 @@ const AboutActivities = () => {
                         />
                       </div>
                       <div className="content">
-                        <h5>{feature6}</h5>
+                        <h5>{friendlyEnvironment}</h5>
                       </div>
                     </div>
                   </div>

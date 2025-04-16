@@ -4,43 +4,10 @@ import { Link } from "react-router";
 
 const FeeStructure = () => {
   const { t } = useTranslation(["home"]);
-  const {
-    heading1,
-    heading2,
-    title1,
-    title2,
-    title3,
-    subject1,
-    subject2,
-    subject3,
-    subject4,
-    subject5,
-  } = t("feeStructure") || {};
-  const {
-    sub1Title,
-    weekdays1: { dayPerHour1, dayPerMonth1, dayDays1, dayDuration1 },
-    weekends1: { endPerHour1, endPerMonth1, endDays1, endDuration1 },
-  } = subject1 || {};
-  const {
-    sub2Title,
-    weekdays2: { dayPerHour2, dayPerMonth2, dayDays2, dayDuration2 },
-    weekends2: { endPerHour2, endPerMonth2, endDays2, endDuration2 },
-  } = subject2 || {};
-  const {
-    sub3Title,
-    weekdays3: { dayPerHour3, dayPerMonth3, dayDays3, dayDuration3 },
-    weekends3: { endPerHour3, endPerMonth3, endDays3, endDuration3 },
-  } = subject3 || {};
-  const {
-    sub4Title,
-    weekdays4: { dayPerHour4, dayPerMonth4, dayDays4, dayDuration4 },
-    weekends4: { endPerHour4, endPerMonth4, endDays4, endDuration4 },
-  } = subject4 || {};
-  const {
-    sub5Title,
-    weekdays5: { dayPerHour5, dayPerMonth5, dayDays5, dayDuration5 },
-    weekends5: { endPerHour5, endPerMonth5, endDays5, endDuration5 },
-  } = subject5 || {};
+  const { mainHeading, sectionTitle, tableHeaders } = t("feeStructure") || {};
+  const subjectList = t("feeStructure.subjects", { returnObjects: true });
+  console.log(subjectList);
+  const { subject, weekdays, weekends } = tableHeaders || {};
 
   return (
     <section
@@ -87,10 +54,10 @@ const FeeStructure = () => {
       <div className="container">
         <div className="section-title text-center mt-60">
           <span data-aos-duration="800" data-aos="fade-up">
-            {heading2}
+            {sectionTitle}
           </span>
           <h2 data-aos-duration="800" data-aos="fade-up" data-aos-delay="300">
-            <Trans i18nKey={heading1} components={{ break: <br /> }} />
+            <Trans i18nKey={mainHeading} components={{ break: <br /> }} />
           </h2>
         </div>
         <div className="row table-responsive">
@@ -115,7 +82,7 @@ const FeeStructure = () => {
 
                   // className={`text-white $var(--theme) font-weight-bold border h6 text-center align-middle`}
                 >
-                  <h3>{title1}</h3>
+                  <h3>{subject}</h3>
                 </td>
                 <td
                   width="35%"
@@ -125,7 +92,7 @@ const FeeStructure = () => {
                     backgroundColor: "var(--theme)",
                   }}
                 >
-                  <h3>{title2}</h3>
+                  <h3>{weekdays}</h3>
                 </td>
                 <td
                   width="35%"
@@ -136,7 +103,7 @@ const FeeStructure = () => {
                     backgroundColor: "var(--theme)",
                   }}
                 >
-                  <h3>{title3}</h3>
+                  <h3>{weekends}</h3>
                 </td>
               </tr>
             </thead>
@@ -146,29 +113,29 @@ const FeeStructure = () => {
               <tr>
                 <td className="text-white p-1 bg-brown font-weight-bold border h6 text-center align-middle">
                   <Link to={"/arabic-qaidah-quran-hifdh"}>
-                    <h5>{sub1Title}</h5>
+                    <h5>{subjectList[0]?.title}</h5>
                   </Link>
                 </td>
                 <td className="text-center p-1 border mb-0">
                   <div className="d-flex justify-content-around">
                     <div className="mb-0 w-100 border-right fw-light">
                       <Trans
-                        i18nKey={dayPerHour1}
+                        i18nKey={subjectList[0]?.weekdays?.perHour}
                         components={{ sm: <small /> }}
                       />
                       {/* £1.85<small>/hour</small> */}
                     </div>
                     <div className="mb-0 w-100 border-right fw-light">
                       <Trans
-                        i18nKey={dayPerMonth1}
+                        i18nKey={subjectList[0]?.weekdays?.perMonth}
                         components={{ sm: <small /> }}
                       />
                     </div>
                   </div>
                   <strong>
-                    {dayDays1}
+                    {subjectList[0]?.weekdays?.days}
                     <br />
-                    {dayDuration1}
+                    {subjectList[0]?.weekdays?.duration}
                   </strong>
                 </td>
 
@@ -177,21 +144,21 @@ const FeeStructure = () => {
                     {/* <h6 class="mb-0 w-100 border-right"><small>/</small></h6> */}
                     <div className="mb-0 w-100 border-left">
                       <Trans
-                        i18nKey={endPerHour1}
+                        i18nKey={subjectList[0]?.weekends?.perHour}
                         components={{ sm: <small /> }}
                       />
                     </div>
                     <div className="mb-0 w-100 border-left">
                       <Trans
-                        i18nKey={endPerMonth1}
+                        i18nKey={subjectList[0]?.weekends?.perMonth}
                         components={{ sm: <small /> }}
                       />
                     </div>
                   </div>
                   <strong>
-                    {endDays1}
+                    {subjectList[0]?.weekends?.days}
                     <br />
-                    {endDuration1}
+                    {subjectList[0]?.weekends?.duration}
                   </strong>
                 </td>
               </tr>
@@ -207,49 +174,49 @@ const FeeStructure = () => {
                     // className="text-danger font-14"
                     className="font-14"
                   >
-                    <h5>{sub2Title}</h5>
+                    <h5>{subjectList[1]?.title}</h5>
                   </Link>
                 </td>
                 <td className="text-center p-1 border mb-0">
                   <div className="d-flex justify-content-around">
                     <div className="mb-0 w-100 border-right fw-light">
                       <Trans
-                        i18nKey={dayPerHour2}
+                        i18nKey={subjectList[1]?.weekdays?.perHour}
                         components={{ sm: <small /> }}
                       />
                     </div>
                     <div className="mb-0 w-100 border-right fw-light">
                       <Trans
-                        i18nKey={dayPerMonth2}
+                        i18nKey={subjectList[1]?.weekdays?.perMonth}
                         components={{ sm: <small /> }}
                       />
                     </div>
                   </div>
                   <strong>
-                    {dayDays2}
+                    {subjectList[1]?.weekdays?.days}
                     <br />
-                    {dayDuration2}
+                    {subjectList[1]?.weekdays?.duration}
                   </strong>
                 </td>
                 <td className="text-center p-1 border mb-0">
                   <div className="d-flex justify-content-around">
                     <div className="mb-0 w-100 border-left fw-light">
                       <Trans
-                        i18nKey={endPerHour2}
+                        i18nKey={subjectList[1]?.weekends?.perHour}
                         components={{ sm: <small /> }}
                       />
                     </div>
                     <div className="mb-0 w-100 border-left fw-light">
                       <Trans
-                        i18nKey={endPerMonth2}
+                        i18nKey={subjectList[1]?.weekends?.perMonth}
                         components={{ sm: <small /> }}
                       />
                     </div>
                   </div>
                   <strong>
-                    {endDays2}
+                    {subjectList[1]?.weekends?.days}
                     <br />
-                    {endDuration2}
+                    {subjectList[0]?.weekends?.duration}
                   </strong>
                 </td>
               </tr>
@@ -267,49 +234,49 @@ const FeeStructure = () => {
 
                     className="font-14"
                   >
-                    <h5>{sub3Title}</h5>
+                    <h5>{subjectList[2]?.title}</h5>
                   </Link>
                 </td>
                 <td className="text-center p-1 border mb-0">
                   <div className="d-flex justify-content-around">
                     <div className="mb-0 w-100 border-right fw-light">
                       <Trans
-                        i18nKey={dayPerHour3}
+                        i18nKey={subjectList[2]?.weekdays?.perHour}
                         components={{ sm: <small /> }}
                       />{" "}
                     </div>
                     <div className="mb-0 w-100 border-right fw-light">
                       <Trans
-                        i18nKey={dayPerMonth3}
+                        i18nKey={subjectList[2]?.weekdays?.perMonth}
                         components={{ sm: <small /> }}
                       />{" "}
                     </div>
                   </div>
                   <strong>
-                    {dayDays3}
+                    {subjectList[2]?.weekdays?.days}
                     <br />
-                    {dayDuration3}
+                    {subjectList[2]?.weekdays?.duration}
                   </strong>
                 </td>
                 <td className="text-center p-1 border mb-0">
                   <div className="d-flex justify-content-around">
                     <div className="mb-0 w-100 border-left fw-light">
                       <Trans
-                        i18nKey={endPerHour3}
+                        i18nKey={subjectList[2]?.weekends?.perHour}
                         components={{ sm: <small /> }}
                       />{" "}
                     </div>
                     <div className="mb-0 w-100 border-left fw-light">
                       <Trans
-                        i18nKey={endPerMonth3}
+                        i18nKey={subjectList[2]?.weekends?.perMonth}
                         components={{ sm: <small /> }}
                       />{" "}
                     </div>
                   </div>
                   <strong>
-                    {endDays3}
+                    {subjectList[2]?.weekends?.days}
                     <br />
-                    {endDuration3}
+                    {subjectList[2]?.weekends?.duration}
                   </strong>
                 </td>
               </tr>
@@ -327,49 +294,49 @@ const FeeStructure = () => {
                     className="font-14"
                     // className="text-danger font-14"
                   >
-                    <h5>{sub4Title}</h5>
+                    <h5>{subjectList[3]?.title}</h5>
                   </Link>
                 </td>
                 <td className="text-center p-1 border mb-0">
                   <div className="d-flex justify-content-around">
                     <div className="mb-0 w-100 border-right fw-light">
                       <Trans
-                        i18nKey={dayPerHour4}
+                        i18nKey={subjectList[3]?.weekdays?.perHour}
                         components={{ sm: <small /> }}
                       />{" "}
                     </div>
                     <div className="mb-0 w-100 border-right fw-light">
                       <Trans
-                        i18nKey={dayPerMonth4}
+                        i18nKey={subjectList[3]?.weekdays?.perMonth}
                         components={{ sm: <small /> }}
                       />{" "}
                     </div>
                   </div>
                   <strong>
-                    {dayDays4}
+                    {subjectList[3]?.weekdays?.days}
                     <br />
-                    {dayDuration4}
+                    {subjectList[3]?.weekdays?.duration}
                   </strong>
                 </td>
                 <td className="text-center p-1 border mb-0">
                   <div className="d-flex justify-content-around">
                     <div className="mb-0 w-100 border-left fw-light">
                       <Trans
-                        i18nKey={endPerHour4}
+                        i18nKey={subjectList[3]?.weekends?.perHour}
                         components={{ sm: <small /> }}
                       />
                     </div>
                     <div className="mb-0 w-100 border-left fw-light">
                       <Trans
-                        i18nKey={endPerMonth4}
+                        i18nKey={subjectList[3]?.weekends?.perMonth}
                         components={{ sm: <small /> }}
                       />
                     </div>
                   </div>
                   <strong>
-                    {endDays4}
+                    {subjectList[3]?.weekends?.days}
                     <br />
-                    {endDuration4}
+                    {subjectList[3]?.weekends?.duration}
                   </strong>
                 </td>
               </tr>
@@ -386,49 +353,49 @@ const FeeStructure = () => {
                     className="font-14"
                     // className="text-danger font-14"
                   >
-                    <h5>{sub5Title}</h5>
+                    <h5>{subjectList[4]?.title}</h5>
                   </Link>
                 </td>
                 <td className="text-center p-1 border mb-0">
                   <div className="d-flex justify-content-around">
                     <div className="mb-0 w-100 border-right fw-light">
                       <Trans
-                        i18nKey={dayPerHour5}
+                        i18nKey={subjectList[4]?.weekdays?.perHour}
                         components={{ sm: <small /> }}
                       />
                     </div>
                     <div className="mb-0 w-100 border-right fw-light">
                       <Trans
-                        i18nKey={dayPerMonth5}
+                        i18nKey={subjectList[4]?.weekdays?.perMonth}
                         components={{ sm: <small /> }}
                       />{" "}
                     </div>
                   </div>
                   <strong>
-                    {dayDays5}
+                    {subjectList[4]?.weekdays?.days}
                     <br />
-                    {dayDuration5}
+                    {subjectList[4]?.weekdays?.duration}
                   </strong>
                 </td>
                 <td className="text-center p-1 border mb-0">
                   <div className="d-flex justify-content-around">
                     <div className="mb-0 w-100 border-left fw-light">
                       <Trans
-                        i18nKey={endPerHour5}
+                        i18nKey={subjectList[4]?.weekends?.perHour}
                         components={{ sm: <small /> }}
                       />{" "}
                     </div>
                     <div className="mb-0 w-100 border-left fw-light">
                       <Trans
-                        i18nKey={endPerMonth5}
+                        i18nKey={subjectList[4]?.weekends?.perMonth}
                         components={{ sm: <small /> }}
                       />{" "}
                     </div>
                   </div>
                   <strong>
-                    {endDays5}
+                    {subjectList[4]?.weekends?.days}
                     <br />
-                    {endDuration5}
+                    {subjectList[4]?.weekends?.duration}
                   </strong>
                 </td>
               </tr>

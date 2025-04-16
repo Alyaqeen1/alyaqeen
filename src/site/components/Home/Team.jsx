@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 
 const Team = () => {
   const { t } = useTranslation(["home"]);
+
   const [staffData, setStaffData] = useState([]);
   const swiperRef = useRef(null);
   const sliderContainerRef = useRef(null);
@@ -169,14 +170,14 @@ const Team = () => {
                     </div>
                     <div className="team-content">
                       <h3>
-                        <Link to={`/staff-details/${state_member.id}`}>
-                          {t(state_member.name)}
+                        <Link to={`/staff-details/${state_member?.id}`}>
+                          {t(state_member?.name)}
                         </Link>
                       </h3>
 
                       <p>
                         {/*Instructors*/}
-                        {t(state_member.post_of_staff)}
+                        {t(state_member?.post_of_staff)}
                       </p>
                     </div>
                   </div>

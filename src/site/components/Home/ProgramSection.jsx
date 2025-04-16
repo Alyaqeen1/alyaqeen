@@ -4,18 +4,19 @@ import { Link } from "react-router";
 const ProgramSection = () => {
   const { t } = useTranslation(["home"]);
   const {
-    heading1,
-    heading2,
-    program1: { title1, description1 },
-    program2: { title2, description2 },
-    program3: { title3, description3 },
-    age,
-    weekly,
-    time,
-    years,
-    days,
-    hrs,
+    mainHeading,
+    sectionTitle,
+    details: {
+      ageLabel,
+      weeklyLabel,
+      timeLabel,
+      ageRange,
+      daysPerWeek,
+      hoursPerWeek,
+      // programList,
+    },
   } = t("programs") || {};
+  const programList = t("programs.programList", { returnObjects: true });
 
   return (
     <section
@@ -69,11 +70,11 @@ const ProgramSection = () => {
       <div className="container">
         <div className="section-title text-center mt-60">
           <span data-aos-duration="800" data-aos="fade-up">
-            {heading2}
+            {sectionTitle}
           </span>
           <h2 data-aos-duration="800" data-aos="fade-up" data-aos-delay="300">
             {/* We meet kids at their level <br /> regardless of their age */}
-            <Trans i18nKey={heading1} components={{ break: <br /> }} />
+            <Trans i18nKey={mainHeading} components={{ break: <br /> }} />
           </h2>
         </div>
         <div className="row">
@@ -105,33 +106,37 @@ const ProgramSection = () => {
                   />
                 </div>
                 <div className="clases-content">
-                  <h4 style={{ color: "var(--white)" }}>{title1}</h4>
+                  <h4 style={{ color: "var(--white)" }}>
+                    {programList[0]?.title}
+                  </h4>
                   <p
                     style={{
                       color: "var(--white)",
                       borderColor: "var(--white)",
                     }}
                   >
-                    {description1}
+                    {programList[0]?.description}
                   </p>
                   <ul
                     style={{ color: "var(--white)" }}
                     className="clases-schedule"
                   >
                     <li style={{ color: "var(--white)" }}>
-                      <span style={{ color: "var(--white)" }}>{age}</span>{" "}
+                      <span style={{ color: "var(--white)" }}>{ageLabel}</span>{" "}
                       <br />
-                      {years}
+                      {ageRange}
                     </li>
                     <li style={{ color: "var(--white)" }}>
-                      <span style={{ color: "var(--white)" }}>{weekly}</span>{" "}
+                      <span style={{ color: "var(--white)" }}>
+                        {weeklyLabel}
+                      </span>{" "}
                       <br />
-                      {days}
+                      {daysPerWeek}
                     </li>
                     <li style={{ color: "var(--white)" }}>
-                      <span style={{ color: "var(--white)" }}>{time}</span>{" "}
+                      <span style={{ color: "var(--white)" }}>{timeLabel}</span>{" "}
                       <br />
-                      {hrs}
+                      {hoursPerWeek}
                     </li>
                   </ul>
                 </div>
@@ -166,33 +171,37 @@ const ProgramSection = () => {
                   />
                 </div>
                 <div className="clases-content">
-                  <h4 style={{ color: "var(--white)" }}>{title2}</h4>
+                  <h4 style={{ color: "var(--white)" }}>
+                    {programList[1]?.title}
+                  </h4>
                   <p
                     style={{
                       color: "var(--white)",
                       borderColor: "var(--white)",
                     }}
                   >
-                    {description2}
+                    {programList[1]?.description}
                   </p>
                   <ul
                     style={{ color: "var(--white)" }}
                     className="clases-schedule"
                   >
                     <li style={{ color: "var(--white)" }}>
-                      <span style={{ color: "var(--white)" }}>{age}</span>{" "}
+                      <span style={{ color: "var(--white)" }}>{ageLabel}</span>{" "}
                       <br />
-                      {years}
+                      {ageRange}
                     </li>
                     <li style={{ color: "var(--white)" }}>
-                      <span style={{ color: "var(--white)" }}>{weekly}</span>{" "}
+                      <span style={{ color: "var(--white)" }}>
+                        {weeklyLabel}
+                      </span>{" "}
                       <br />
-                      {days}
+                      {daysPerWeek}
                     </li>
                     <li style={{ color: "var(--white)" }}>
-                      <span style={{ color: "var(--white)" }}>{time}</span>{" "}
+                      <span style={{ color: "var(--white)" }}>{timeLabel}</span>{" "}
                       <br />
-                      {hrs}
+                      {hoursPerWeek}
                     </li>
                   </ul>
                 </div>
@@ -228,20 +237,20 @@ const ProgramSection = () => {
                   />
                 </div>
                 <div className="clases-content">
-                  <h4>{title3}</h4>
-                  <p>{description3}</p>
+                  <h4>{programList[2]?.title}</h4>
+                  <p>{programList[2]?.description}</p>
                   <ul className="clases-schedule">
                     <li>
-                      <span>{age}</span> <br />
-                      {years}
+                      <span>{ageLabel}</span> <br />
+                      {ageRange}
                     </li>
                     <li>
-                      <span>{weekly}</span> <br />
-                      {days}
+                      <span>{weeklyLabel}</span> <br />
+                      {daysPerWeek}
                     </li>
                     <li>
-                      <span>{time}</span> <br />
-                      {hrs}
+                      <span>{timeLabel}</span> <br />
+                      {hoursPerWeek}
                     </li>
                   </ul>
                 </div>

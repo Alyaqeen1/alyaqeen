@@ -6,8 +6,7 @@ import { Link } from "react-router";
 
 const WorkProcess = () => {
   const { t } = useTranslation(["home"]);
-  const { title1, description1, title2, description2, title3, description3 } =
-    t("workProcess");
+  const { sessions, feeStructure, holidays } = t("workProcess") || {};
 
   return (
     <section className="work-process-section fix section-padding fix">
@@ -37,8 +36,8 @@ const WorkProcess = () => {
                     <FaCalendarAlt className="fs-3 text-white" />
                   </div>
                   <div className="content">
-                    <h4>{title1} </h4>
-                    <p>{description1}</p>
+                    <h4>{sessions?.title} </h4>
+                    <p>{sessions?.description}</p>
                   </div>
                 </div>
               </Link>
@@ -66,8 +65,8 @@ const WorkProcess = () => {
                     <IoIosCalculator className="fs-2 text-white" />
                   </div>
                   <div className="content">
-                    <h4>{title2}</h4>
-                    <p>{description2}</p>
+                    <h4>{feeStructure?.title}</h4>
+                    <p>{feeStructure?.description}</p>
                   </div>
                 </div>
               </Link>
@@ -89,8 +88,8 @@ const WorkProcess = () => {
                     <IoBusOutline className="fs-2 text-white" />
                   </div>
                   <div className="content">
-                    <h4>{title3}</h4>
-                    <p>{description3}</p>
+                    <h4>{holidays?.title}</h4>
+                    <p>{holidays?.description}</p>
                   </div>
                 </div>
               </Link>

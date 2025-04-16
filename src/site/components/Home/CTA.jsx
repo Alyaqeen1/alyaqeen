@@ -3,7 +3,7 @@ import { Link } from "react-router";
 
 const CTA = () => {
   const { t } = useTranslation(["home"]);
-  const { heading1, heading2, applyBtn } = t("cta") || {};
+  const { mainHeading, sectionTitle, applyBtn } = t("cta") || {};
   return (
     <section
       className="cta-section fix section-padding bg-cover"
@@ -35,7 +35,7 @@ const CTA = () => {
                   data-aos-duration="800"
                   data-aos="fade-up"
                 >
-                  {heading2}
+                  {sectionTitle}
                 </span>
                 <h2
                   className="text-white "
@@ -43,7 +43,7 @@ const CTA = () => {
                   data-aos="fade-up"
                   data-aos-delay="300"
                 >
-                  <Trans i18nKey={heading1} components={{ break: <br /> }} />
+                  <Trans i18nKey={mainHeading} components={{ break: <br /> }} />
                 </h2>
               </div>
               <div

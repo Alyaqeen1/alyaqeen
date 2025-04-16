@@ -3,8 +3,8 @@
     "cmnBannerTitle": "About The Founder"
   },
   "ourValue": {
-    "heading1": "The best playschool <break /> for your kid",
-    "heading2": "Our values"
+    "mainHeading": "The best playschool <break /> for your kid",
+    "sectionTitle": "Our values"
   },
   "counter": {
     "experience": "Year of Experience",

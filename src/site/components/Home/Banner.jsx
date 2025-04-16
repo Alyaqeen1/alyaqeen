@@ -8,12 +8,10 @@ const Banner = () => {
   const { t, i18n } = useTranslation(["home"]);
   // const { i18n } = useTranslation();
   const {
-    heading1: { span1, span2, span3 },
-    heading2,
+    mainHeading: { part1, part2, part3 },
+    subHeading,
     description,
-    applyBtn,
-    timetableBtn,
-    videoPlayBtn,
+    buttons: { apply, timetable, playVideo },
   } = t("banner") || {};
   // const description = t("description");
   return (
@@ -86,7 +84,7 @@ const Banner = () => {
             <div className="col-lg-6">
               <div className="hero-content">
                 <h5 data-aos-duration="800" data-aos="fade-up">
-                  {heading2}
+                  {subHeading}
                 </h5>
                 <h2
                   data-aos-duration={800}
@@ -94,8 +92,8 @@ const Banner = () => {
                   data-aos-delay={10}
                   // className="fs-1"
                 >
-                  {span1}
-                  <br /> <span>{span2}</span> {span3}
+                  {part1}
+                  <br /> <span>{part2}</span> {part3}
                 </h2>
                 <p
                   data-aos-duration={800}
@@ -112,7 +110,7 @@ const Banner = () => {
                     data-aos="fade-up"
                     data-aos-delay={100}
                   >
-                    {applyBtn} <i className="fa-solid fa-arrow-right-long"></i>
+                    {apply} <i className="fa-solid fa-arrow-right-long"></i>
                   </Link>
                   <span
                     className="button-text "
@@ -126,7 +124,7 @@ const Banner = () => {
                     >
                       <i className="fa-solid fa-play"></i>
                     </a>
-                    <span className="ms-4 d-line">{videoPlayBtn}</span>
+                    <span className="ms-4 d-line">{playVideo}</span>
                   </span>
                 </div>
                 <div className="hero-button-feb3 mt-4 text-start">
@@ -138,7 +136,7 @@ const Banner = () => {
                     to="/prayer-timetable"
                     // className="theme-btn"
                   >
-                    {timetableBtn}
+                    {timetable}
                     {/*<i className="fa-solid fa-arrow-right-long"></i>*/}
                   </Link>
                 </div>

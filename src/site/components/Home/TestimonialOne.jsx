@@ -5,7 +5,7 @@ import { Trans, useTranslation } from "react-i18next";
 
 const TestimonialOne = () => {
   const { t } = useTranslation(["home"]);
-  const { heading1, heading2 } = t("testimonialOne") || {};
+  const { mainHeading, sectionTitle } = t("testimonialOne") || {};
   return (
     <section className="testimonial-section fix section-padding">
       <div className="pencil-shape">
@@ -44,14 +44,17 @@ const TestimonialOne = () => {
               <div className="testimonial-right">
                 <div className="section-title">
                   <span data-aos-duration="800" data-aos="fade-up">
-                    {heading2}
+                    {sectionTitle}
                   </span>
                   <h2
                     data-aos-duration="800"
                     data-aos="fade-up"
                     data-aos-delay="300"
                   >
-                    <Trans i18nKey={heading1} components={{ break: <br /> }} />{" "}
+                    <Trans
+                      i18nKey={mainHeading}
+                      components={{ break: <br /> }}
+                    />{" "}
                   </h2>
                 </div>
                 <div className="array-button">

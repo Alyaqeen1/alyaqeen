@@ -6,8 +6,8 @@ import { Trans, useTranslation } from "react-i18next";
 const TestimonialTwo = () => {
   const { t } = useTranslation(["home"]);
   const {
-    heading1,
-    heading2,
+    mainHeading,
+    sectionTitle,
     testimonial1: { review1, author1 },
     testimonial2: { review2, author2 },
     testimonial3: { review3, author3 },
@@ -44,10 +44,10 @@ const TestimonialTwo = () => {
       <div className="container">
         <div className="section-title text-center">
           <span data-aos-duration="800" data-aos="fade-up">
-            {heading2}
+            {sectionTitle}
           </span>
           <h2 data-aos-duration="800" data-aos="fade-up" data-aos-delay="300">
-            <Trans i18nKey={heading1} components={{ break: <br /> }} />
+            <Trans i18nKey={mainHeading} components={{ break: <br /> }} />
           </h2>
         </div>
         <div className="swiper testimonial-slider">
