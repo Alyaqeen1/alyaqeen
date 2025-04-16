@@ -10,26 +10,30 @@ import { MdSunnySnowing } from "react-icons/md";
 
 const News = () => {
   const [times, setTimes] = useState([]);
-  const date = new Date();
+  const [formattedTime, setFormattedTime] = useState(""); // ⬅️ add this
+
   const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  const currentDate = new Intl.DateTimeFormat("en-US", {
-    timeZone: userTimeZone,
-    day: "2-digit",
-  }).format(date);
 
-  // Get the full month name (e.g., April)
-  const currentMonthName = new Intl.DateTimeFormat("en-US", {
-    timeZone: userTimeZone,
-    month: "long",
-  }).format(date);
+  const getFormattedTime = () => {
+    const date = new Date();
+    return new Intl.DateTimeFormat("en-US", {
+      timeZone: userTimeZone,
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true,
+    }).format(date);
+  };
 
-  const formattedTime = new Intl.DateTimeFormat("en-US", {
-    timeZone: userTimeZone,
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    hour12: true,
-  }).format(date);
+  useEffect(() => {
+    setFormattedTime(getFormattedTime()); // initial set
+
+    const interval = setInterval(() => {
+      setFormattedTime(getFormattedTime()); // update every second
+    }, 1000);
+
+    return () => clearInterval(interval); // cleanup
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,12 +42,25 @@ const News = () => {
     };
     fetchData();
   }, []);
+
+  // Date parts
+  const date = new Date();
+  const currentDate = new Intl.DateTimeFormat("en-US", {
+    timeZone: userTimeZone,
+    day: "2-digit",
+  }).format(date);
+
+  const currentMonthName = new Intl.DateTimeFormat("en-US", {
+    timeZone: userTimeZone,
+    month: "long",
+  }).format(date);
+
   const todayTimes = times[currentMonthName]?.find(
     (day) => day?.date == currentDate
   );
-  // Function to get the suffix for the date (e.g., 'st', 'nd', 'rd', 'th')
+
   const getDateSuffix = (date) => {
-    if (date > 3 && date < 21) return "th"; // For dates 11-13, always use 'th'
+    if (date > 3 && date < 21) return "th";
     switch (date % 10) {
       case 1:
         return "st";
@@ -195,7 +212,7 @@ const News = () => {
                     Prayer Timetable
                   </Link>
                 </div>
-                <div className="d-flex justify-content-between align-items-center my-2">
+                <div className="d-flex justify-content-between align-items-center my-4">
                   <div className="mt-2">
                     <p className="fw-bolder text-black">Current Date</p>
                     <p style={{ color: "var(--theme)" }} className="fs-5">
@@ -235,8 +252,8 @@ const News = () => {
                     <tbody>
                       <tr className="border border-white">
                         <td
-                          style={{ color: "var(--theme)" }}
-                          className="bg-white h6 text-center align-middle text-uppercase py-3 fw-bolder"
+                          style={{ backgroundColor: "var(--theme)" }}
+                          className="h6 text-center align-middle text-uppercase py-3 fw-bolder"
                         >
                           Fajr
                         </td>
@@ -249,32 +266,18 @@ const News = () => {
                         <td className="bg-white h6 text-center align-middle">
                           {todayTimes?.fajr?.start}
                         </td>
-                        <td className="bg-white h6 text-center align-middle">
+                        <td
+                          style={{ backgroundColor: "var(--theme)" }}
+                          className="h6 text-center align-middle"
+                        >
                           {todayTimes?.fajr?.jamat}
                         </td>
                       </tr>
+
                       <tr className="border border-white">
                         <td
-                          style={{ color: "var(--theme)" }}
-                          className="bg-white h6 text-center align-middle text-uppercase py-3 fw-bolder"
-                        >
-                          Sunrise
-                        </td>
-                        <td className="bg-white h6 text-center align-middle">
-                          <WiSunrise
-                            className="fs-3"
-                            style={{ color: "var(--theme)" }}
-                          />
-                        </td>
-                        <td className="bg-white h6 text-center align-middle">
-                          {todayTimes?.sunrise}
-                        </td>
-                        <td className="bg-white h6 text-center align-middle"></td>
-                      </tr>
-                      <tr className="border border-white">
-                        <td
-                          style={{ color: "var(--theme)" }}
-                          className="bg-white h6 text-center align-middle text-uppercase py-3 fw-bolder"
+                          style={{ backgroundColor: "var(--theme)" }}
+                          className="h6 text-center align-middle text-uppercase py-3 fw-bolder"
                         >
                           zuhr
                         </td>
@@ -287,14 +290,17 @@ const News = () => {
                         <td className="bg-white h6 text-center align-middle">
                           {todayTimes?.zuhr?.start}
                         </td>
-                        <td className="bg-white h6 text-center align-middle">
+                        <td
+                          style={{ backgroundColor: "var(--theme)" }}
+                          className=" h6 text-center align-middle"
+                        >
                           {todayTimes?.zuhr?.jamat}
                         </td>
                       </tr>
                       <tr className="border border-white">
                         <td
-                          style={{ color: "var(--theme)" }}
-                          className="bg-white h6 text-center align-middle text-uppercase py-3 fw-bolder"
+                          style={{ backgroundColor: "var(--theme)" }}
+                          className="h6 text-center align-middle text-uppercase py-3 fw-bolder"
                         >
                           asr
                         </td>
@@ -307,14 +313,17 @@ const News = () => {
                         <td className="bg-white h6 text-center align-middle">
                           {todayTimes?.asr?.start}
                         </td>
-                        <td className="bg-white h6 text-center align-middle">
+                        <td
+                          style={{ backgroundColor: "var(--theme)" }}
+                          className=" h6 text-center align-middle"
+                        >
                           {todayTimes?.asr?.jamat}
                         </td>
                       </tr>
                       <tr className="border border-white">
                         <td
-                          style={{ color: "var(--theme)" }}
-                          className="bg-white h6 text-center align-middle text-uppercase py-3 fw-bolder"
+                          style={{ backgroundColor: "var(--theme)" }}
+                          className="h6 text-center align-middle text-uppercase py-3 fw-bolder"
                         >
                           maghrib
                         </td>
@@ -327,14 +336,17 @@ const News = () => {
                         <td className="bg-white h6 text-center align-middle">
                           {todayTimes?.maghrib?.start}
                         </td>
-                        <td className="bg-white h6 text-center align-middle">
+                        <td
+                          style={{ backgroundColor: "var(--theme)" }}
+                          className="h6 text-center align-middle"
+                        >
                           {todayTimes?.maghrib?.jamat}
                         </td>
                       </tr>
                       <tr className="border border-white">
                         <td
-                          style={{ color: "var(--theme)" }}
-                          className="bg-white h6 text-center align-middle text-uppercase py-3 fw-bolder"
+                          style={{ backgroundColor: "var(--theme)" }}
+                          className="h6 text-center align-middle text-uppercase py-3 fw-bolder"
                         >
                           isha
                         </td>
@@ -347,7 +359,10 @@ const News = () => {
                         <td className="bg-white h6 text-center align-middle">
                           {todayTimes?.isha?.start}
                         </td>
-                        <td className="bg-white h6 text-center align-middle">
+                        <td
+                          style={{ backgroundColor: "var(--theme)" }}
+                          className="h6 text-center align-middle"
+                        >
                           {todayTimes?.isha?.jamat}
                         </td>
                       </tr>

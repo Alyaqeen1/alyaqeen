@@ -1,4 +1,5 @@
 import { Link } from "react-router";
+import img from "../../assets/img/cta/cta-new.png";
 
 const CTA = () => {
   return (
@@ -64,15 +65,19 @@ const CTA = () => {
               <div className="cta-image">
                 <img
                   className="w-100"
-                  src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/cta/ctaImg.png"
+                  // style={{ height: "400px" }}
+                  src={img}
                   // src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/home/graduation-mortarboard-svgrepo-com.svg"
                   alt="cta-img"
                 />
 
-                <div className="cta-shape text-start">
+                <div
+                  // style={{ bottom: "20%", right: "10%" }}
+                  className="cta-shape text-start"
+                >
                   {/* <img
                     src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/cta/cta-shape.png"
-                    style={{ width: "53%" }}
+                    style={{ width: "93%" }}
                     alt="img"
                   /> */}
                 </div>
