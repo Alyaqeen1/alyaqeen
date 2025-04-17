@@ -6,6 +6,7 @@ import LoadingSpinner from "../LoadingSpinner";
 
 const NewsList = () => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchText, setSearchText] = useState("");
   const itemsPerPage = 5; // Change as needed
   const [selectedCategory, setSelectedCategory] = useState("voluptates");
   const { data: news, isLoading, isError, isSuccess } = useGetNewsQuery();
@@ -30,15 +31,19 @@ const NewsList = () => {
   if (isError) {
     return <h2 className="text-center my-4">Error loading news</h2>;
   }
+  const filteredNewsItems = currentNewsItems.filter((single) =>
+    single?.title?.toLowerCase().includes(searchText.toLowerCase())
+  );
 
+  console.log(searchText);
   return (
     <section className="news-standard fix section-padding">
       <div className="container">
         <div className="row g-4">
           <div className="col-12 col-lg-8">
             <div className="news-standard-wrapper">
-              {news?.data?.length > 0 ? (
-                currentNewsItems?.map((single) => (
+              {news?.data?.length > 0 && filteredNewsItems?.length > 0 ? (
+                filteredNewsItems?.map((single) => (
                   <div key={single?.id} className="news-standard-items">
                     <div className="news-thumb">
                       {single?.media?.length > 0 ? (
@@ -158,7 +163,11 @@ const NewsList = () => {
                 </div>
                 <div className="search-widget">
                   <form action="#">
-                    <input type="text" placeholder="Search here" />
+                    <input
+                      onChange={(e) => setSearchText(e.target.value)}
+                      type="text"
+                      placeholder="Search here"
+                    />
                     <button type="submit">
                       <i className="fa-solid fa-magnifying-glass"></i>
                     </button>
