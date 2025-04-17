@@ -5,11 +5,24 @@ import { useGetNewsQuery } from "../../../redux/features/news/newsAPI";
 import LoadingSpinner from "../LoadingSpinner";
 
 const NewsList = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5; // Change as needed
   const [selectedCategory, setSelectedCategory] = useState("voluptates");
   const { data: news, isLoading, isError, isSuccess } = useGetNewsQuery();
 
   const selectedNews =
     news?.data?.find((single) => single?.title === selectedCategory) || {};
+  const allNewsItems = selectedNews?.news_and_events || [];
+  // Get current items for the current page
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentNewsItems = allNewsItems.slice(
+    indexOfFirstItem,
+    indexOfLastItem
+  );
+
+  // Total pages
+  const totalPages = Math.ceil(allNewsItems.length / itemsPerPage);
 
   if (isLoading) {
     return <LoadingSpinner></LoadingSpinner>;
@@ -25,7 +38,7 @@ const NewsList = () => {
           <div className="col-12 col-lg-8">
             <div className="news-standard-wrapper">
               {news?.data?.length > 0 ? (
-                selectedNews?.news_and_events?.map((single) => (
+                currentNewsItems?.map((single) => (
                   <div key={single?.id} className="news-standard-items">
                     <div className="news-thumb">
                       {single?.media?.length > 0 ? (
@@ -98,29 +111,40 @@ const NewsList = () => {
               <div className="page-nav-wrap pt-5 text-center">
                 <ul>
                   <li>
-                    <Link className="page-numbers" to="/">
+                    <button
+                      onClick={() =>
+                        setCurrentPage((prev) => Math.max(prev - 1, 1))
+                      }
+                      className="page-numbers"
+                      disabled={currentPage === 1}
+                    >
                       <i className="fa-solid fa-arrow-left-long"></i>
-                    </Link>
+                    </button>
                   </li>
+                  {[...Array(totalPages)].map((_, i) => (
+                    <li key={i}>
+                      <button
+                        onClick={() => setCurrentPage(i + 1)}
+                        className={`page-numbers`}
+                        style={{
+                          backgroundColor:
+                            currentPage === i + 1 ? "var(--theme)" : "",
+                        }}
+                      >
+                        {i + 1}
+                      </button>
+                    </li>
+                  ))}
                   <li>
-                    <Link className="page-numbers" to="/">
-                      01
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="page-numbers" to="/">
-                      02
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="page-numbers" to="/">
-                      03
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="page-numbers" to="/">
+                    <button
+                      onClick={() =>
+                        setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                      }
+                      className="page-numbers"
+                      disabled={currentPage === totalPages}
+                    >
                       <i className="fa-solid fa-arrow-right-long"></i>
-                    </Link>
+                    </button>
                   </li>
                 </ul>
               </div>
@@ -150,7 +174,10 @@ const NewsList = () => {
                     {isSuccess && news?.data?.length > 0 ? (
                       news?.data?.map((single) => (
                         <li
-                          onClick={() => setSelectedCategory(single?.title)}
+                          onClick={() => {
+                            setSelectedCategory(single?.title);
+                            setCurrentPage(1);
+                          }}
                           className={
                             selectedCategory === single?.title ? "active" : ""
                           }
