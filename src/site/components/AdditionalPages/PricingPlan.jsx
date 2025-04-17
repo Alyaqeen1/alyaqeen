@@ -1,12 +1,42 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router";
+import { useGetProductsQuery } from "../../../redux/features/products/productsApi";
+import LoadingSpinner from "../LoadingSpinner";
+import ProductModal from "./ProductModal";
 
 const PricingPlan = () => {
-  const [activeTabIndex, setActiveTabIndex] = useState(0);
+  const {
+    data: products,
+    isLoading,
+    isError,
+    isSuccess,
+  } = useGetProductsQuery();
+  const [showModal, setShowModal] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState({});
 
-  const handleTabClick = (index) => {
-    setActiveTabIndex(index);
+  // Toggle modal visibility
+  const handleShow = (product) => {
+    setShowModal(true);
+    setSelectedProduct(product);
   };
+  const handleClose = () => setShowModal(false);
+
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  useEffect(() => {
+    setSelectedCategory(products?.data[0]?.title.toString());
+  }, [products]);
+
+  const selectedProducts =
+    products?.data?.find((product) => product?.title === selectedCategory) ||
+    {};
+
+  if (isLoading) {
+    return <LoadingSpinner></LoadingSpinner>;
+  }
+  if (isError) {
+    return <h2 className="text-center my-4">Error loading products</h2>;
+  }
+
   return (
     <section className="pricing-section section-padding mt-0">
       <div className="container">
@@ -20,372 +50,94 @@ const PricingPlan = () => {
             </h2>
           </div>
           <ul className="nav" role="tablist">
-            <li
-              className="nav-item "
-              data-aos-duration="800"
-              data-aos="fade-up"
-              data-aos-delay="300"
-              role="presentation"
-            >
-              <a
-                className={`nav-link box-shadow ${
-                  activeTabIndex === 0 ? " active" : ""
-                }`}
-                onClick={() => handleTabClick(0)}
-              >
-                Books
-              </a>
-            </li>
-            <li
-              className="nav-item "
-              data-aos-duration="800"
-              data-aos="fade-up"
-              data-aos-delay="500"
-              role="presentation"
-            >
-              <a
-                className={`nav-link box-shadow ${
-                  activeTabIndex === 1 ? " active" : ""
-                }`}
-                onClick={() => handleTabClick(1)}
-              >
-                Academy Bags and Stationary
-              </a>
-            </li>
-            <li
-              className="nav-item "
-              data-aos-duration="800"
-              data-aos="fade-up"
-              data-aos-delay="500"
-              role="presentation"
-            >
-              <a
-                className={`nav-link box-shadow ${
-                  activeTabIndex === 2 ? " active" : ""
-                }`}
-                onClick={() => handleTabClick(2)}
-              >
-                Academy Football Shirt
-              </a>
-            </li>
+            {isSuccess && products?.data?.length > 0 ? (
+              products?.data?.map((product) => (
+                <li
+                  key={product?.id}
+                  className="nav-item "
+                  data-aos-duration="800"
+                  data-aos="fade-up"
+                  data-aos-delay="300"
+                  role="presentation"
+                >
+                  <button
+                    className={`nav-link box-shadow ${
+                      product?.title === selectedCategory && "active"
+                    }`}
+                    onClick={() => setSelectedCategory(product?.title)}
+                  >
+                    {product?.title}
+                  </button>
+                </li>
+              ))
+            ) : (
+              <>
+                <h2 className="text-center my-4">No Categories Found</h2>
+              </>
+            )}
           </ul>
         </div>
         <div className="tab-content">
-          <div
-            id="monthly"
-            className={`c-tab-single ${
-              activeTabIndex === 0 ? "active-tab" : ""
-            }`}
-          >
+          <div id="monthly" className={``}>
             <div className="row">
-              <div
-                className="col-xl-4 col-lg-6 col-md-6 "
-                data-aos-duration="800"
-                data-aos="fade-up"
-                data-aos-delay="300"
-              >
-                <div className="pricing-items box-shadow">
-                  <div className="icon">
-                    <img
-                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/pricing/icon.svg"
-                      alt="icon-img"
-                    />
+              {isSuccess && selectedProducts?.products?.length > 0 ? (
+                selectedProducts?.products?.map((product, idx) => (
+                  <div
+                    key={product?.id}
+                    className="col-xl-4 col-lg-6 col-md-6 "
+                    data-aos-duration="800"
+                    data-aos="fade-up"
+                    data-aos-delay="300"
+                  >
+                    <div
+                      className={`pricing-items ${
+                        (idx + 1) % 3 === 2 ? "active" : ""
+                      }`}
+                    >
+                      <div className="icon">
+                        <img
+                          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/pricing/icon.svg"
+                          alt="icon-img"
+                        />
+                      </div>
+                      <div className="element-shape">
+                        <img
+                          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/pricing/element.png"
+                          alt="shape-img"
+                        />
+                      </div>
+                      <div className="pricing-header">
+                        <h4>{product?.title}</h4>
+                        <h2>£{product?.price}</h2>
+                      </div>
+                      <ul className="pricing-list">
+                        <li>
+                          <i className="fa-solid fa-check"></i>
+                          {product?.description?.substring(0, 130)}...
+                        </li>
+                      </ul>
+                      <button
+                        onClick={() => handleShow(product)}
+                        className="theme-btn"
+                      >
+                        View Details{" "}
+                        <i className="fa-solid fa-arrow-right-long"></i>
+                      </button>
+                    </div>
                   </div>
-                  <div className="element-shape">
-                    <img
-                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/pricing/element.png"
-                      alt="shape-img"
-                    />
-                  </div>
-                  <div className="pricing-header">
-                    <h4>Basic Plan</h4>
-                    <h2>
-                      $39 <span>/monthly</span>
-                    </h2>
-                  </div>
-                  <ul className="pricing-list">
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Condimentum porttitor sem
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Condimentum lacinia quisque
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Fusce sagittis est fringilla auctor
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Ligula enim varius lacus et luctus
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Pellentesque non massa sed elit
-                    </li>
-                  </ul>
-                  <Link to="contact" className="theme-btn">
-                    Choose Plan <i className="fa-solid fa-arrow-right-long"></i>
-                  </Link>
-                </div>
-              </div>
-              <div
-                className="col-xl-4 col-lg-6 col-md-6 "
-                data-aos-duration="800"
-                data-aos="fade-up"
-                data-aos-delay="500"
-              >
-                <div className="pricing-items active">
-                  <div className="icon">
-                    <img
-                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/pricing/icon.svg"
-                      alt="icon-img"
-                    />
-                  </div>
-                  <div className="element-shape">
-                    <img
-                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/pricing/element-2.png"
-                      alt="shape-img"
-                    />
-                  </div>
-                  <div className="pricing-header">
-                    <h4>Premium Plan</h4>
-                    <h2>
-                      $49 <span>/monthly</span>
-                    </h2>
-                  </div>
-                  <ul className="pricing-list">
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Condimentum porttitor sem
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Condimentum lacinia quisque
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Fusce sagittis est fringilla auctor
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Ligula enim varius lacus et luctus
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Pellentesque non massa sed elit
-                    </li>
-                  </ul>
-                  <Link to="contact" className="theme-btn">
-                    Choose Plan <i className="fa-solid fa-arrow-right-long"></i>
-                  </Link>
-                </div>
-              </div>
-              <div
-                className="col-xl-4 col-lg-6 col-md-6 "
-                data-aos-duration="800"
-                data-aos="fade-up"
-                data-aos-delay="700"
-              >
-                <div className="pricing-items box-shadow">
-                  <div className="icon">
-                    <img
-                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/pricing/icon.svg"
-                      alt="icon-img"
-                    />
-                  </div>
-                  <div className="element-shape">
-                    <img
-                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/pricing/element.png"
-                      alt="shape-img"
-                    />
-                  </div>
-                  <div className="pricing-header">
-                    <h4>Advanced</h4>
-                    <h2>
-                      $99 <span>/monthly</span>
-                    </h2>
-                  </div>
-                  <ul className="pricing-list">
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Condimentum porttitor sem
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Condimentum lacinia quisque
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Fusce sagittis est fringilla auctor
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Ligula enim varius lacus et luctus
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Pellentesque non massa sed elit
-                    </li>
-                  </ul>
-                  <Link to="contact" className="theme-btn">
-                    Choose Plan <i className="fa-solid fa-arrow-right-long"></i>
-                  </Link>
-                </div>
-              </div>
+                ))
+              ) : (
+                <>
+                  <h2 className="text-center my-4">No Products Found</h2>
+                </>
+              )}
             </div>
           </div>
-          <div
-            id="yearly"
-            className={`c-tab-single ${
-              activeTabIndex === 1 ? "active-tab" : ""
-            }`}
-          >
-            <div className="row">
-              <div className="col-xl-4 col-lg-6 col-md-6">
-                <div className="pricing-items box-shadow">
-                  <div className="icon">
-                    <img
-                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/pricing/icon.svg"
-                      alt="icon-img"
-                    />
-                  </div>
-                  <div className="element-shape">
-                    <img
-                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/pricing/element.png"
-                      alt="shape-img"
-                    />
-                  </div>
-                  <div className="pricing-header">
-                    <h4>Basic Plan</h4>
-                    <h2>
-                      $39 <span>/monthly</span>
-                    </h2>
-                  </div>
-                  <ul className="pricing-list">
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Condimentum porttitor sem
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Condimentum lacinia quisque
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Fusce sagittis est fringilla auctor
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Ligula enim varius lacus et luctus
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Pellentesque non massa sed elit
-                    </li>
-                  </ul>
-                  <Link to="contact" className="theme-btn">
-                    Choose Plan <i className="fa-solid fa-arrow-right-long"></i>
-                  </Link>
-                </div>
-              </div>
-              <div className="col-xl-4 col-lg-6 col-md-6">
-                <div className="pricing-items active">
-                  <div className="icon">
-                    <img
-                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/pricing/icon.svg"
-                      alt="icon-img"
-                    />
-                  </div>
-                  <div className="element-shape">
-                    <img
-                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/pricing/element-2.png"
-                      alt="shape-img"
-                    />
-                  </div>
-                  <div className="pricing-header">
-                    <h4>Premium Plan</h4>
-                    <h2>
-                      $49 <span>/monthly</span>
-                    </h2>
-                  </div>
-                  <ul className="pricing-list">
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Condimentum porttitor sem
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Condimentum lacinia quisque
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Fusce sagittis est fringilla auctor
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Ligula enim varius lacus et luctus
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Pellentesque non massa sed elit
-                    </li>
-                  </ul>
-                  <Link to="contact" className="theme-btn">
-                    Choose Plan <i className="fa-solid fa-arrow-right-long"></i>
-                  </Link>
-                </div>
-              </div>
-              <div className="col-xl-4 col-lg-6 col-md-6">
-                <div className="pricing-items box-shadow">
-                  <div className="icon">
-                    <img
-                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/pricing/icon.svg"
-                      alt="icon-img"
-                    />
-                  </div>
-                  <div className="element-shape">
-                    <img
-                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/pricing/element.png"
-                      alt="shape-img"
-                    />
-                  </div>
-                  <div className="pricing-header">
-                    <h4>Advanced</h4>
-                    <h2>
-                      $99 <span>/monthly</span>
-                    </h2>
-                  </div>
-                  <ul className="pricing-list">
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Condimentum porttitor sem
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Condimentum lacinia quisque
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Fusce sagittis est fringilla auctor
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Ligula enim varius lacus et luctus
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Pellentesque non massa sed elit
-                    </li>
-                  </ul>
-                  <Link to="contact" className="theme-btn">
-                    Choose Plan <i className="fa-solid fa-arrow-right-long"></i>
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
+          <ProductModal
+            selectedProduct={selectedProduct}
+            showModal={showModal}
+            handleClose={handleClose}
+          ></ProductModal>
         </div>
       </div>
     </section>
