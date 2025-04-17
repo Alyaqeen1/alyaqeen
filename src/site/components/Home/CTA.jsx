@@ -1,6 +1,5 @@
 import { Trans, useTranslation } from "react-i18next";
 import { Link } from "react-router";
-import img from "../../assets/img/cta/cta-new.png";
 
 const CTA = () => {
   const { t } = useTranslation(["home"]);
@@ -68,7 +67,7 @@ const CTA = () => {
                 <img
                   className="w-100"
                   // style={{ height: "400px" }}
-                  src={img}
+                  src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/cta/cta-new-image.png"
                   // src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/home/graduation-mortarboard-svgrepo-com.svg"
                   alt="cta-img"
                 />

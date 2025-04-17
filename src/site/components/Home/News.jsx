@@ -207,7 +207,7 @@ const News = () => {
             <div className="col-xl-6 col-lg-8 mt-5 mt-xl-0">
               <div>
                 <div className="d-flex justify-content-between align-items-center">
-                  <h3 className="fs-2">Daily Prayer Times</h3>
+                  <h3 className="fs-2">Prayer Times</h3>
                   <Link to="/prayer-timetable" className="theme-btn">
                     Prayer Timetable
                   </Link>

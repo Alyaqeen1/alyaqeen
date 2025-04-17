@@ -257,9 +257,19 @@ const CourseDetails = ({
                           className="me-2 fs-4"
                           style={{ color: "var(--theme)" }}
                         />
-                        Timing:
+                        1st Session:
                       </span>
-                      {detailsObj?.weeklyTiming}
+                      {detailsObj?.session01}
+                    </li>
+                    <li>
+                      <span>
+                        <MdOutlineTimelapse
+                          className="me-2 fs-4"
+                          style={{ color: "var(--theme)" }}
+                        />
+                        2nd Session:
+                      </span>
+                      {detailsObj?.session02}
                     </li>
                     <li>
                       <span>
@@ -319,9 +329,19 @@ const CourseDetails = ({
                           className="me-2 fs-4"
                           style={{ color: "var(--theme)" }}
                         />
-                        Timing:
+                        Morning:
                       </span>
-                      {detailsObj?.weekendTiming}
+                      {detailsObj?.morning}
+                    </li>
+                    <li>
+                      <span>
+                        <MdOutlineTimelapse
+                          className="me-2 fs-4"
+                          style={{ color: "var(--theme)" }}
+                        />
+                        Afternoon:
+                      </span>
+                      {detailsObj?.afternoon}
                     </li>
                     <li>
                       <span>

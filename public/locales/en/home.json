@@ -68,87 +68,87 @@
   },
 
   "feeStructure": {
-    "mainHeading": "أكاديمية اليقين<break />الصفوف وهيكل الرسوم",
-    "sectionTitle": "الصفوف وهيكل الرسوم",
+    "mainHeading": "Alyaqeen Academy<break />Classes & Fee Structure",
+    "sectionTitle": "Classes & Fee Structure",
     "tableHeaders": {
-      "subject": "المادة",
-      "weekdays": "صفوف أيام الأسبوع",
-      "weekends": "صفوف عطلة نهاية الأسبوع"
+      "subject": "Subject",
+      "weekdays": "Weekdays Classes",
+      "weekends": "Weekends Classes"
     },
     "subjects": [
       {
-        "title": "القاعدة، القرآن والدراسات الإسلامية",
+        "title": "Qaidah, Quran & Islamic Studies",
         "weekdays": {
-          "perHour": "£1.85<sm>/في الساعة</sm>",
-          "perMonth": "£50<sm>/في الشهر</sm>",
-          "days": "الاثنين - الخميس",
-          "duration": "٤:٣٠ - ٦:٠٠م / ٥:٤٥ - ٧:١٥م"
+          "perHour": "£1.85<sm>/hour</sm>",
+          "perMonth": "£50<sm>/month</sm>",
+          "days": "Mon - Thu",
+          "duration": "4:30 - 6:00pm / 5:45 - 7:15pm"
         },
         "weekends": {
-          "perHour": "£1.70<sm>/في الساعة</sm>",
-          "perMonth": "£50<sm>/في الشهر</sm>",
-          "days": "السبت - الأحد",
-          "duration": "١٠ص - ١٢:٣٠م / ١٢:٣٠ - ٢:٣٠م"
+          "perHour": "£1.70<sm>/hour</sm>",
+          "perMonth": "£50<sm>/month</sm>",
+          "days": "Sat - Sun",
+          "duration": "10am - 12:30pm / 12:30 - 2:30pm"
         }
       },
       {
-        "title": "دروس رياضيات وإنجليزي للمرحلة الابتدائية",
+        "title": "Primary Maths & English Tuition",
         "weekdays": {
-          "perHour": "£5<sm>/في الساعة</sm>",
-          "perMonth": "£100<sm>/في الشهر</sm>",
-          "days": "الاثنين - الثلاثاء",
-          "duration": "٥ - ٧م"
+          "perHour": "£5<sm>/hour</sm>",
+          "perMonth": "£100<sm>/month</sm>",
+          "days": "Mon - Tue",
+          "duration": "5 - 7pm"
         },
         "weekends": {
-          "perHour": "£4.44<sm>/في الساعة</sm>",
-          "perMonth": "£80<sm>/في الشهر</sm>",
-          "days": "السبت - الأحد",
-          "duration": "١٠ص - ١٢م"
+          "perHour": "£4.44<sm>/hour</sm>",
+          "perMonth": "£80<sm>/month</sm>",
+          "days": "Sat - Sun",
+          "duration": "10am - 12pm"
         }
       },
       {
-        "title": "GCSE دروس رياضيات وإنجليزي وعلوم",
+        "title": "GCSE Maths English & Science Tuition",
         "weekdays": {
-          "perHour": "£6.25<sm>/في الساعة</sm>",
-          "perMonth": "£120<sm>/في الشهر</sm>",
-          "days": "الأربعاء - الخميس",
-          "duration": "٥ - ٧م"
+          "perHour": "£6.25<sm>/hour</sm>",
+          "perMonth": "£120<sm>/month</sm>",
+          "days": "Wed - Thu",
+          "duration": "5 - 7pm"
         },
         "weekends": {
-          "perHour": "£5<sm>/في الساعة</sm>",
-          "perMonth": "£100<sm>/في الشهر</sm>",
-          "days": "السبت - الأحد",
-          "duration": "١٠ص - ١٢م / ١٠ص - ١م"
+          "perHour": "£5<sm>/hour</sm>",
+          "perMonth": "£100<sm>/month</sm>",
+          "days": "Sat - Sun",
+          "duration": "10am - 12pm / 10am - 1pm"
         }
       },
       {
-        "title": "تحفيظ (حفظ القرآن)",
+        "title": "Hifz Memorisation",
         "weekdays": {
-          "perHour": "£1.85<sm>/في الساعة</sm>",
-          "perMonth": "£90<sm>/في الشهر</sm>",
-          "days": "الاثنين - الخميس",
-          "duration": "٤:٣٠ - ٧م / ٥ - ٧م"
+          "perHour": "£1.85<sm>/hour</sm>",
+          "perMonth": "£90<sm>/month</sm>",
+          "days": "Mon - Thu",
+          "duration": "4:30 - 7:00pm / 5 - 7pm"
         },
         "weekends": {
-          "perHour": "£2<sm>/في الساعة</sm>",
-          "perMonth": "£60<sm>/في الشهر</sm>",
-          "days": "السبت - الأحد",
-          "duration": "١٠ص - ١م / ١٢ - ٢:٣٠م"
+          "perHour": "£2<sm>/hour</sm>",
+          "perMonth": "£60<sm>/month</sm>",
+          "days": "Sat - Sun",
+          "duration": "10am - 1pm / 12 - 2:30pm"
         }
       },
       {
-        "title": "اللغة العربية",
+        "title": "Arabic Language",
         "weekdays": {
-          "perHour": "£1.66<sm>/في الساعة</sm>",
-          "perMonth": "£60<sm>/في الشهر</sm>",
-          "days": "الاثنين - الخميس",
-          "duration": "٦ - ٧م"
+          "perHour": "£1.66<sm>/hour</sm>",
+          "perMonth": "£60<sm>/month</sm>",
+          "days": "Mon - Thu",
+          "duration": "6 - 7pm"
         },
         "weekends": {
-          "perHour": "£10<sm>/في الساعة</sm>",
-          "perMonth": "£50<sm>/في الشهر</sm>",
-          "days": "السبت - الأحد",
-          "duration": "١٠ص - ١٢:٣٠م / ١٢:٣٠ - ٢:٣٠م"
+          "perHour": "£10<sm>/hour</sm>",
+          "perMonth": "£50<sm>/month</sm>",
+          "days": "Sat - Sun",
+          "duration": "10am - 12:30pm / 12:30 - 2:30pm"
         }
       }
     ]

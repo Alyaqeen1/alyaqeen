@@ -25,8 +25,10 @@ export default function ModernForeignLanguages() {
         structurePara6=""
         detailsObj={{
           age: "5-15",
-          weeklyTiming: "4:30 - 6:00pm / 5:45 - 7:15pm",
-          weekendTiming: "10am - 12:30pm / 12:30 - 2:30pm",
+          session01: "4:30 - 6:00pm",
+          session02: "5:45 - 7:15pm",
+          morning: "10am - 12:30pm",
+          afternoon: "12:30 - 2:30pm",
           weeklyDays: "Mon-Thu",
           weekendDays: "Sat-Sun",
           weekdaysDuration: "1.5",

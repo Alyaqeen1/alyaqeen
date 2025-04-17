@@ -333,20 +333,27 @@ const PrayerComp = () => {
               </table>
             </div>
             <hr />
-            <div>
-              <h3>Jumuah Information</h3>
-              <div className="my-4">
-                <h5>Summer Jumu'ah Timetable:</h5>
-                <p>1st Jama'ah at 1:40pm</p>
-                <p>2nd Jama'ah at 2:30pm</p>
+            <div
+              style={{ backgroundColor: "var(--theme)" }}
+              className="p-4 text-white rounded-4"
+            >
+              <div className="d-flex justify-content-between">
+                <div className="mt-5">
+                  <h5>Summer Jumu'ah Timetable:</h5>
+                  <p>1st Jama'ah at 1:30 PM</p>
+                  <p>2nd Jama'ah at 2:00 PM</p>
+                  <p>3rd Jama'ah at 2:30 PM</p>
+                </div>
+                <h3>Jumuah Information</h3>
+                <div className="mt-5">
+                  <h5>Winter Jumu'ah Timetable:</h5>
+                  <p>1st Jama'ah at 12:45 PM</p>
+                  <p>2nd Jama'ah at 1:15 PM</p>
+                  <p>2nd Jama'ah at 1:45 PM</p>
+                </div>
               </div>
-              <div>
-                <h5>Winter Jumu'ah Timetable:</h5>
-                <p>1st Jama'ah at 1:00pm</p>
-                <p>2nd Jama'ah at 1:45pm</p>
-              </div>
-              <h5 className="mt-4">
-                Please note Friday Khutbah/Sermon starts 30 minutes before
+              <h5 className="mt-4 text-center">
+                Please note: Friday Khutbah starts 5 minutes before
                 congregation.
               </h5>
             </div>
