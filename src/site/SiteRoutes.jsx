@@ -34,6 +34,7 @@ import Holidays from "./pages/AdditionalPages/Holidays";
 import Session from "./pages/AdditionalPages/Session";
 import ApplyNow from "./pages/AdditionalPages/ApplyNow";
 import AllServices from "./pages/AdditionalPages/AllServices";
+import NewsDetails from "./sharedComponents/NewsDetails";
 
 const siteRoutes = [
   {
@@ -168,6 +169,10 @@ const siteRoutes = [
       {
         path: "/all-services",
         element: <AllServices></AllServices>,
+      },
+      {
+        path: "/news-details/:categoryId/:newsId",
+        element: <NewsDetails></NewsDetails>,
       },
       {
         path: "*",

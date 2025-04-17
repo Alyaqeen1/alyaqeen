@@ -5,9 +5,11 @@ import financialReducer from "../redux/features/financial/financialSlice";
 import administrationReducer from "../redux/features/administration/administrationSlice";
 import marketplaceReducer from "../redux/features/marketplace/marketplaceSlice";
 import classroomReducer from "../redux/features/classroom/classroomSlice";
+import { apiSlice } from "./features/api/apiSlice";
 
 const store = configureStore({
   reducer: {
+    [apiSlice.reducerPath]: apiSlice.reducer,
     core: coreReducer,
     academic: academicReducer,
     financial: financialReducer,
@@ -15,7 +17,8 @@ const store = configureStore({
     marketplace: marketplaceReducer,
     classroom: classroomReducer,
   },
-  //   middleware: () => {},
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(apiSlice.middleware),
 });
 
 export default store;
