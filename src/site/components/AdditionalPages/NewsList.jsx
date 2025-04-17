@@ -8,9 +8,12 @@ const NewsList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchText, setSearchText] = useState("");
   const itemsPerPage = 5; // Change as needed
-  const [selectedCategory, setSelectedCategory] = useState("voluptates");
   const { data: news, isLoading, isError, isSuccess } = useGetNewsQuery();
-
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  useEffect(() => {
+    setSelectedCategory(news?.data[0]?.title.toString());
+  }, [news]);
+  console.log(news?.data[0]?.title);
   const selectedNews =
     news?.data?.find((single) => single?.title === selectedCategory) || {};
   const allNewsItems = selectedNews?.news_and_events || [];
@@ -35,7 +38,6 @@ const NewsList = () => {
     single?.title?.toLowerCase().includes(searchText.toLowerCase())
   );
 
-  console.log(searchText);
   return (
     <section className="news-standard fix section-padding">
       <div className="container">
