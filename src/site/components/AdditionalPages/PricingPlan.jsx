@@ -12,10 +12,12 @@ const PricingPlan = () => {
     isSuccess,
   } = useGetProductsQuery();
   const [showModal, setShowModal] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState({});
+
   // Toggle modal visibility
-  const handleShow = () => {
+  const handleShow = (product) => {
     setShowModal(true);
-    // setSelectedCategory(selectedCategory);
+    setSelectedProduct(product);
   };
   const handleClose = () => setShowModal(false);
 
@@ -27,7 +29,6 @@ const PricingPlan = () => {
   const selectedProducts =
     products?.data?.find((product) => product?.title === selectedCategory) ||
     {};
-  console.log(selectedProducts);
 
   if (isLoading) {
     return <LoadingSpinner></LoadingSpinner>;
@@ -115,7 +116,10 @@ const PricingPlan = () => {
                           {product?.description?.substring(0, 130)}...
                         </li>
                       </ul>
-                      <button onClick={handleShow} className="theme-btn">
+                      <button
+                        onClick={() => handleShow(product)}
+                        className="theme-btn"
+                      >
                         View Details{" "}
                         <i className="fa-solid fa-arrow-right-long"></i>
                       </button>
@@ -130,6 +134,7 @@ const PricingPlan = () => {
             </div>
           </div>
           <ProductModal
+            selectedProduct={selectedProduct}
             showModal={showModal}
             handleClose={handleClose}
           ></ProductModal>
