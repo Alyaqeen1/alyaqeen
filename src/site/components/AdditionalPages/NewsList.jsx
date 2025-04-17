@@ -1,155 +1,155 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { Link } from "react-router";
+import { useGetNewsQuery } from "../../../redux/features/news/newsAPI";
+import LoadingSpinner from "../LoadingSpinner";
 
 const NewsList = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchText, setSearchText] = useState("");
+  const itemsPerPage = 5; // Change as needed
+  const [selectedCategory, setSelectedCategory] = useState("voluptates");
+  const { data: news, isLoading, isError, isSuccess } = useGetNewsQuery();
+
+  const selectedNews =
+    news?.data?.find((single) => single?.title === selectedCategory) || {};
+  const allNewsItems = selectedNews?.news_and_events || [];
+  // Get current items for the current page
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentNewsItems = allNewsItems.slice(
+    indexOfFirstItem,
+    indexOfLastItem
+  );
+
+  // Total pages
+  const totalPages = Math.ceil(allNewsItems.length / itemsPerPage);
+
+  if (isLoading) {
+    return <LoadingSpinner></LoadingSpinner>;
+  }
+  if (isError) {
+    return <h2 className="text-center my-4">Error loading news</h2>;
+  }
+  const filteredNewsItems = currentNewsItems.filter((single) =>
+    single?.title?.toLowerCase().includes(searchText.toLowerCase())
+  );
+
+  console.log(searchText);
   return (
     <section className="news-standard fix section-padding">
       <div className="container">
         <div className="row g-4">
           <div className="col-12 col-lg-8">
             <div className="news-standard-wrapper">
-              <div className="news-standard-items">
-                <div className="news-thumb">
-                  <img
-                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/post-1.jpg"
-                    alt="img"
-                  />
-                  <div className="post">
-                    <span>Activities</span>
+              {news?.data?.length > 0 && filteredNewsItems?.length > 0 ? (
+                filteredNewsItems?.map((single) => (
+                  <div key={single?.id} className="news-standard-items">
+                    <div className="news-thumb">
+                      {single?.media?.length > 0 ? (
+                        single?.media[0]?.type === "video" ? (
+                          <video controls style={{ width: "100%" }}>
+                            <source
+                              src={single?.media[0]?.url}
+                              type="video/mp4"
+                            />
+                          </video>
+                        ) : (
+                          <img
+                            style={{ height: "400px", objectFit: "cover" }}
+                            src={single?.media[0]?.url}
+                            alt="img"
+                          />
+                        )
+                      ) : (
+                        <img
+                          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/post-1.jpg"
+                          alt="img"
+                        />
+                      )}
+                      <div className="post">
+                        <span>{selectedCategory}</span>
+                      </div>
+                    </div>
+                    <div className="news-content">
+                      <ul>
+                        <li>
+                          <i className="fas fa-calendar-alt"></i>
+                          {new Date(single?.created_at).toLocaleDateString(
+                            "en-US",
+                            {
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                            }
+                          )}
+                        </li>
+                        <li>
+                          <i className="far fa-user"></i>
+                          By admin
+                        </li>
+                      </ul>
+                      <h3>
+                        <Link
+                          to={`/news-details/${selectedNews?.id}/${single?.id}`}
+                        >
+                          {single?.title}
+                        </Link>
+                      </h3>
+                      <p>{single?.description}</p>
+                      <Link
+                        to={`/news-details/${selectedNews?.id}/${single?.id}`}
+                        className="theme-btn mt-4"
+                      >
+                        Read More
+                        <i className="fa-solid fa-arrow-right-long"></i>
+                      </Link>
+                    </div>
                   </div>
-                </div>
-                <div className="news-content">
-                  <ul>
-                    <li>
-                      <i className="fas fa-calendar-alt"></i>
-                      Feb 10, 2024
-                    </li>
-                    <li>
-                      <i className="far fa-user"></i>
-                      By admin
-                    </li>
-                  </ul>
-                  <h3>
-                    <Link to="news-details">
-                      That jerk form finance really me
-                    </Link>
-                  </h3>
-                  <p>
-                    Pellentesque egestas rutrum nibh facilisis ultrices.
-                    Phasellus in magna ut orci malesuada the sollicitudin.
-                    Aenean faucibus scelerisque convallis. Quisque interdum
-                    mauris id nunc molestie tincidunt erat gravida. Nullam dui
-                    libero, mollis ac quam et, venenatis.
-                  </p>
-                  <Link to="news-details" className="theme-btn mt-4">
-                    Read More
-                    <i className="fa-solid fa-arrow-right-long"></i>
-                  </Link>
-                </div>
-              </div>
-              <div className="news-standard-items">
-                <div className="news-thumb">
-                  <img
-                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/post-2.jpg"
-                    alt="img"
-                  />
-                  <div className="post">
-                    <span>Activities</span>
-                  </div>
-                </div>
-                <div className="news-content">
-                  <ul>
-                    <li>
-                      <i className="fas fa-calendar-alt"></i>
-                      Feb 10, 2024
-                    </li>
-                    <li>
-                      <i className="far fa-user"></i>
-                      By admin
-                    </li>
-                  </ul>
-                  <h3>
-                    <Link to="news-details">
-                      How to Keep Children Safe Online In Simple..
-                    </Link>
-                  </h3>
-                  <p>
-                    Pellentesque egestas rutrum nibh facilisis ultrices.
-                    Phasellus in magna ut orci malesuada the sollicitudin.
-                    Aenean faucibus scelerisque convallis. Quisque interdum
-                    mauris id nunc molestie tincidunt erat gravida. Nullam dui
-                    libero, mollis ac quam et, venenatis.
-                  </p>
-                  <Link to="news-details" className="theme-btn mt-4">
-                    Read More
-                    <i className="fa-solid fa-arrow-right-long"></i>
-                  </Link>
-                </div>
-              </div>
-              <div className="news-standard-items">
-                <div className="news-thumb">
-                  <img
-                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/post-3.jpg"
-                    alt="img"
-                  />
-                  <div className="post">
-                    <span>Activities</span>
-                  </div>
-                </div>
-                <div className="news-content">
-                  <ul>
-                    <li>
-                      <i className="fas fa-calendar-alt"></i>
-                      Feb 10, 2024
-                    </li>
-                    <li>
-                      <i className="far fa-user"></i>
-                      By admin
-                    </li>
-                  </ul>
-                  <h3>
-                    <Link to="news-details">
-                      From without content style without{" "}
-                    </Link>
-                  </h3>
-                  <p>
-                    Pellentesque egestas rutrum nibh facilisis ultrices.
-                    Phasellus in magna ut orci malesuada the sollicitudin.
-                    Aenean faucibus scelerisque convallis. Quisque interdum
-                    mauris id nunc molestie tincidunt erat gravida. Nullam dui
-                    libero, mollis ac quam et, venenatis.
-                  </p>
-                  <Link to="news-details" className="theme-btn mt-4">
-                    Read More
-                    <i className="fa-solid fa-arrow-right-long"></i>
-                  </Link>
-                </div>
-              </div>
+                ))
+              ) : (
+                <>
+                  <h2 className="text-center my-4">No News Found</h2>
+                </>
+              )}
+
               <div className="page-nav-wrap pt-5 text-center">
                 <ul>
                   <li>
-                    <Link className="page-numbers" to="/">
+                    <button
+                      onClick={() =>
+                        setCurrentPage((prev) => Math.max(prev - 1, 1))
+                      }
+                      className="page-numbers"
+                      disabled={currentPage === 1}
+                    >
                       <i className="fa-solid fa-arrow-left-long"></i>
-                    </Link>
+                    </button>
                   </li>
+                  {[...Array(totalPages)].map((_, i) => (
+                    <li key={i}>
+                      <button
+                        onClick={() => setCurrentPage(i + 1)}
+                        className={`page-numbers`}
+                        style={{
+                          backgroundColor:
+                            currentPage === i + 1 ? "var(--theme)" : "",
+                        }}
+                      >
+                        {i + 1}
+                      </button>
+                    </li>
+                  ))}
                   <li>
-                    <Link className="page-numbers" to="/">
-                      01
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="page-numbers" to="/">
-                      02
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="page-numbers" to="/">
-                      03
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="page-numbers" to="/">
+                    <button
+                      onClick={() =>
+                        setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                      }
+                      className="page-numbers"
+                      disabled={currentPage === totalPages}
+                    >
                       <i className="fa-solid fa-arrow-right-long"></i>
-                    </Link>
+                    </button>
                   </li>
                 </ul>
               </div>
@@ -163,7 +163,11 @@ const NewsList = () => {
                 </div>
                 <div className="search-widget">
                   <form action="#">
-                    <input type="text" placeholder="Search here" />
+                    <input
+                      onChange={(e) => setSearchText(e.target.value)}
+                      type="text"
+                      placeholder="Search here"
+                    />
                     <button type="submit">
                       <i className="fa-solid fa-magnifying-glass"></i>
                     </button>
@@ -176,27 +180,29 @@ const NewsList = () => {
                 </div>
                 <div className="news-widget-categories">
                   <ul>
-                    <li>
-                      <Link to="news-details">Teachers</Link> <span>(5)</span>
-                    </li>
-                    <li>
-                      <Link to="news-details">Indoor Games</Link>{" "}
-                      <span>(3)</span>
-                    </li>
-                    <li className="active">
-                      <Link to="news-details">Education</Link>
-                      <span>(6)</span>
-                    </li>
-                    <li>
-                      <Link to="news-details">Canteen</Link> <span>(2)</span>
-                    </li>
-                    <li>
-                      <Link to="news-details">Classes</Link> <span>(4)</span>
-                    </li>
-                    <li>
-                      <Link to="news-details">Examination</Link>{" "}
-                      <span>(7)</span>
-                    </li>
+                    {isSuccess && news?.data?.length > 0 ? (
+                      news?.data?.map((single) => (
+                        <li
+                          onClick={() => {
+                            setSelectedCategory(single?.title);
+                            setCurrentPage(1);
+                          }}
+                          className={
+                            selectedCategory === single?.title ? "active" : ""
+                          }
+                          key={single.id}
+                        >
+                          <Link onClick={(e) => e.preventDefault()}>
+                            {single?.title}
+                          </Link>
+                          <span>({single?.news_and_events?.length})</span>
+                        </li>
+                      ))
+                    ) : (
+                      <>
+                        <h2 className="text-center my-4">No Category Found</h2>
+                      </>
+                    )}
                   </ul>
                 </div>
               </div>
