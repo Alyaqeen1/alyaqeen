@@ -4,6 +4,7 @@ export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
     baseUrl: "https://talibiq.com",
+    // baseUrl: "http://35.176.169.111",
     // baseUrl: import.meta.env.VITE_WebApi_URL,
   }),
   tagTypes: [],
