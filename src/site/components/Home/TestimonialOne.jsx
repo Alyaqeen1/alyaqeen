@@ -2,10 +2,18 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation } from "swiper/modules";
 import "swiper/swiper-bundle.css";
 import { Trans, useTranslation } from "react-i18next";
+import { useGetReviewsQuery } from "../../../redux/features/reviews/reviewsApi";
+import LoadingSpinner from "../LoadingSpinner";
 
 const TestimonialOne = () => {
   const { t } = useTranslation(["home"]);
   const { mainHeading, sectionTitle } = t("testimonialOne") || {};
+  const { data: reviews, isLoading, isError } = useGetReviewsQuery();
+  if (isLoading) return <LoadingSpinner></LoadingSpinner>;
+  if (isError) {
+    return <h2 className="text-center my-4">Error loading news</h2>;
+  }
+
   return (
     <section className="testimonial-section fix section-padding">
       <div className="pencil-shape">
@@ -86,114 +94,45 @@ const TestimonialOne = () => {
                     }}
                     className="swiper-wrapper"
                   >
-                    <SwiperSlide>
-                      <div className="swiper-slide">
-                        <div className="testimonial-content mt-4 mt-md-0">
-                          <div className="star">
-                            <i className="fas fa-star"></i>
-                            <i className="fas fa-star"></i>
-                            <i className="fas fa-star"></i>
-                            <i className="fas fa-star"></i>
-                            <i className="fas fa-star color-star"></i>
-                          </div>
-                          <p>
-                            Nullam dignissim ante scelerisque the is euismod
-                            fermentum odio sem semper the is erat a feugiat leo
-                            urna eget eros. Duis Aenean a imperdiet risus.
-                            Aliquam pellentesque.
-                          </p>
-                          <div className="client-info">
-                            <img
-                              src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/client/01.png"
-                              alt="img"
-                            />
-                            <div className="content">
-                              <h5>Mohammad Khalid</h5>
-                              <p>Managing Director & Headteacher</p>
+                    {reviews?.data?.length > 0 ? (
+                      reviews?.data?.map((review) => (
+                        <SwiperSlide key={review?.id}>
+                          <div className="swiper-slide">
+                            <div className="testimonial-content mt-4 mt-md-0">
+                              <div className="star">
+                                <i className="fas fa-star"></i>
+                                <i className="fas fa-star"></i>
+                                <i className="fas fa-star"></i>
+                                <i className="fas fa-star"></i>
+                                <i className="fas fa-star color-star"></i>
+                              </div>
+                              <p>{review?.description}</p>
+                              <div className="client-info">
+                                {/* <img
+                                  src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/client/01.png"
+                                  alt="img"
+                                /> */}
+                                <div className="content">
+                                  <h5>{review?.name}</h5>
+                                  <p>{review?.email}</p>
+                                </div>
+                              </div>
+                              <div className="icon text-end">
+                                <img
+                                  className="w-50"
+                                  src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/client/quote.png"
+                                  alt="img"
+                                />
+                              </div>
                             </div>
                           </div>
-                          <div className="icon text-end">
-                            <img
-                              className="w-50"
-                              src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/client/quote.png"
-                              alt="img"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </SwiperSlide>
-                    <SwiperSlide>
-                      <div className="swiper-slide">
-                        <div className="testimonial-content mt-4 mt-md-0">
-                          <div className="star">
-                            <i className="fas fa-star"></i>
-                            <i className="fas fa-star"></i>
-                            <i className="fas fa-star"></i>
-                            <i className="fas fa-star"></i>
-                            <i className="fas fa-star color-star"></i>
-                          </div>
-                          <p>
-                            Nullam dignissim ante scelerisque the is euismod
-                            fermentum odio sem semper the is erat a feugiat leo
-                            urna eget eros. Duis Aenean a imperdiet risus.
-                            Aliquam pellentesque.
-                          </p>
-                          <div className="client-info">
-                            <img
-                              src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/client/01.png"
-                              alt="img"
-                            />
-                            <div className="content">
-                              <h5>Mohammad Khalid</h5>
-                              <p>Managing Director & Headteacher</p>
-                            </div>
-                          </div>
-                          <div className="icon text-end">
-                            <img
-                              className="w-50"
-                              src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/client/quote.png"
-                              alt="img"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </SwiperSlide>
-                    <SwiperSlide>
-                      <div className="swiper-slide">
-                        <div className="testimonial-content mt-4 mt-md-0">
-                          <div className="star">
-                            <i className="fas fa-star"></i>
-                            <i className="fas fa-star"></i>
-                            <i className="fas fa-star"></i>
-                            <i className="fas fa-star"></i>
-                            <i className="fas fa-star color-star"></i>
-                          </div>
-                          <p>
-                            Nullam dignissim ante scelerisque the is euismod
-                            fermentum odio sem semper the is erat a feugiat leo
-                            urna eget eros. Duis Aenean a imperdiet risus.
-                            Aliquam pellentesque.
-                          </p>
-                          <div className="client-info">
-                            <img
-                              src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/client/01.png"
-                              alt="img"
-                            />
-                            <div className="content">
-                              <h5>Mohammad Khalid</h5>
-                              <p>Managing Director & Headteacher</p>
-                            </div>
-                          </div>
-                          <div className="icon text-end">
-                            <img
-                              className="w-50"
-                              src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/client/quote.png"
-                              alt="img"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </SwiperSlide>
+                        </SwiperSlide>
+                      ))
+                    ) : (
+                      <>
+                        <h2 className="text-center my-4">No Reviews Found</h2>
+                      </>
+                    )}
                   </Swiper>
                 </div>
               </div>

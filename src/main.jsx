@@ -10,6 +10,7 @@ import store from "./redux/store.js";
 import "./site/i18n.js";
 import LoadingSpinner from "./site/components/LoadingSpinner.jsx";
 import React from "react";
+import { Toaster } from "react-hot-toast";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -17,6 +18,7 @@ createRoot(document.getElementById("root")).render(
       <Provider store={store}>
         <RouterProvider router={router} />
         <InitAnimations />
+        <Toaster />
       </Provider>
     </React.Suspense>
   </StrictMode>
