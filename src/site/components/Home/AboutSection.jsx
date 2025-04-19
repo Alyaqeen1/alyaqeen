@@ -2,7 +2,6 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
 import AwesomeStarsRating from "react-awesome-stars-rating";
 import { useState } from "react";
-import { showErrorToast } from "../../utils/customToast/toast";
 import toast from "react-hot-toast";
 
 const AboutSection = () => {
