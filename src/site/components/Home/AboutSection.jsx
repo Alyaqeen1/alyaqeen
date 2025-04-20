@@ -3,10 +3,13 @@ import { Link } from "react-router";
 import AwesomeStarsRating from "react-awesome-stars-rating";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { useAddReviewMutation } from "../../../redux/features/reviews/reviewsApi";
 
 const AboutSection = () => {
   const { t } = useTranslation(["home"]);
   const { mainHeading, sectionTitle, submitBtn, call } = t("activities");
+  const [addReview, { data: review, isLoading, isError }] =
+    useAddReviewMutation();
   const [rating, setRating] = useState(0);
   const handleChange = (value) => {
     setRating(value);
@@ -24,6 +27,7 @@ const AboutSection = () => {
     if (!rating) {
       return toast.error("please provide a rating");
     }
+
     const reviewData = {
       name,
       email,
@@ -33,7 +37,9 @@ const AboutSection = () => {
       madrasha_id,
       rating,
     };
-    console.log(reviewData);
+    // console.log(reviewData);
+    addReview(reviewData);
+    toast.success("Review submitted successfully!");
     form.reset();
     setRating(0);
   };

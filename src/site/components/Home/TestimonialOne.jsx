@@ -5,6 +5,22 @@ import { Trans, useTranslation } from "react-i18next";
 import { useGetReviewsQuery } from "../../../redux/features/reviews/reviewsApi";
 import LoadingSpinner from "../LoadingSpinner";
 
+// const renderStars = (rating) => {
+//   const stars = [];
+
+//   for (let i = 1; i <= 5; i++) {
+//     if (rating >= i) {
+//       stars.push(<i key={i} className="fas fa-star color-star"></i>); // full star
+//     } else if (rating >= i - 0.5) {
+//       stars.push(<i key={i} className="fas fa-star-half-alt color-star"></i>); // half star
+//     } else {
+//       stars.push(<i key={i} className="far fa-star"></i>); // empty star
+//     }
+//   }
+
+//   return stars;
+// };
+
 const TestimonialOne = () => {
   const { t } = useTranslation(["home"]);
   const { mainHeading, sectionTitle } = t("testimonialOne") || {};
