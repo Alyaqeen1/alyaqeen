@@ -29,7 +29,8 @@ const AnnouncementsGrid = () => {
   };
 
   if (isLoading) return <LoadingSpinner />;
-  if (isError) return <h2 className="text-center my-4">Error loading news</h2>;
+  if (isError)
+    return <h2 className="text-center my-4">Error loading Announcements</h2>;
 
   return (
     <section className="news-section-3 fix section-padding">

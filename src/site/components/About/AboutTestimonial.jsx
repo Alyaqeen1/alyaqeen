@@ -1,8 +1,15 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation } from "swiper/modules";
 import "swiper/swiper-bundle.css";
+import { useGetReviewsQuery } from "../../../redux/features/reviews/reviewsApi";
+import LoadingSpinner from "../LoadingSpinner";
 
 const AboutTestimonial = () => {
+  const { data: reviews, isLoading, isError } = useGetReviewsQuery();
+  if (isLoading) return <LoadingSpinner></LoadingSpinner>;
+  if (isError) {
+    return <h2 className="text-center my-4">Error loading Reviews</h2>;
+  }
   return (
     <section className="testimonial-section-2 section-padding pt-0">
       <div className="container">
@@ -51,144 +58,27 @@ const AboutTestimonial = () => {
               }}
               className="swiper-wrapper"
             >
-              <SwiperSlide>
-                <div className="swiper-slide">
-                  <div className="testimonial-box-items">
-                    <p>
-                      Nunc vulputate tempor leo quis accumsan Sed vel mauris
-                      bibendum dignissim nisl a dapibus tortor Fusce sagittis
-                      est fringilla auctor eros vitae aliquam mauris Ut et elit
-                      consectetur porta felis ac interdum dolor Maecenas neque
-                      mi ullamcorper id sapien ac elementum
-                    </p>
-                    <div className="client-info">
-                      <img
-                        src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/client/01.png"
-                        alt="img"
-                      />
-                      <div className="content">
-                        <h5>Mohammad Khalid</h5>
-                        <p>Managing Director & Headteacher</p>
+              {reviews?.data?.length > 0 ? (
+                reviews?.data?.map((review) => (
+                  <SwiperSlide key={review?.id}>
+                    <div className="swiper-slide">
+                      <div className="testimonial-box-items">
+                        <p>{review?.description}</p>
+                        <div className="client-info">
+                          <div className="content">
+                            <h5>{review?.name}</h5>
+                            <p>{review?.email}</p>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                <div className="swiper-slide">
-                  <div className="testimonial-box-items">
-                    <p>
-                      Nunc vulputate tempor leo quis accumsan Sed vel mauris
-                      bibendum dignissim nisl a dapibus tortor Fusce sagittis
-                      est fringilla auctor eros vitae aliquam mauris Ut et elit
-                      consectetur porta felis ac interdum dolor Maecenas neque
-                      mi ullamcorper id sapien ac elementum
-                    </p>
-                    <div className="client-info">
-                      <img
-                        src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/client/01.png"
-                        alt="img"
-                      />
-                      <div className="content">
-                        <h5>Mohammad Khalid</h5>
-                        <p>Managing Director & Headteacher</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                <div className="swiper-slide">
-                  <div className="testimonial-box-items">
-                    <p>
-                      Nunc vulputate tempor leo quis accumsan Sed vel mauris
-                      bibendum dignissim nisl a dapibus tortor Fusce sagittis
-                      est fringilla auctor eros vitae aliquam mauris Ut et elit
-                      consectetur porta felis ac interdum dolor Maecenas neque
-                      mi ullamcorper id sapien ac elementum
-                    </p>
-                    <div className="client-info">
-                      <img
-                        src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/client/01.png"
-                        alt="img"
-                      />
-                      <div className="content">
-                        <h5>Mohammad Khalid</h5>
-                        <p>Managing Director & Headteacher</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                <div className="swiper-slide">
-                  <div className="testimonial-box-items">
-                    <p>
-                      Nunc vulputate tempor leo quis accumsan Sed vel mauris
-                      bibendum dignissim nisl a dapibus tortor Fusce sagittis
-                      est fringilla auctor eros vitae aliquam mauris Ut et elit
-                      consectetur porta felis ac interdum dolor Maecenas neque
-                      mi ullamcorper id sapien ac elementum
-                    </p>
-                    <div className="client-info">
-                      <img
-                        src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/client/01.png"
-                        alt="img"
-                      />
-                      <div className="content">
-                        <h5>Mohammad Khalid</h5>
-                        <p>Managing Director & Headteacher</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                <div className="swiper-slide">
-                  <div className="testimonial-box-items">
-                    <p>
-                      Nunc vulputate tempor leo quis accumsan Sed vel mauris
-                      bibendum dignissim nisl a dapibus tortor Fusce sagittis
-                      est fringilla auctor eros vitae aliquam mauris Ut et elit
-                      consectetur porta felis ac interdum dolor Maecenas neque
-                      mi ullamcorper id sapien ac elementum
-                    </p>
-                    <div className="client-info">
-                      <img
-                        src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/client/01.png"
-                        alt="img"
-                      />
-                      <div className="content">
-                        <h5>Mohammad Khalid</h5>
-                        <p>Managing Director & Headteacher</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                <div className="swiper-slide">
-                  <div className="testimonial-box-items">
-                    <p>
-                      Nunc vulputate tempor leo quis accumsan Sed vel mauris
-                      bibendum dignissim nisl a dapibus tortor Fusce sagittis
-                      est fringilla auctor eros vitae aliquam mauris Ut et elit
-                      consectetur porta felis ac interdum dolor Maecenas neque
-                      mi ullamcorper id sapien ac elementum
-                    </p>
-                    <div className="client-info">
-                      <img
-                        src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/client/01.png"
-                        alt="img"
-                      />
-                      <div className="content">
-                        <h5>Mohammad Khalid</h5>
-                        <p>Managing Director & Headteacher</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </SwiperSlide>
+                  </SwiperSlide>
+                ))
+              ) : (
+                <>
+                  <h2 className="text-center my-4">No Reviews Found</h2>
+                </>
+              )}
             </Swiper>
           </div>
           <div className="array-button">
