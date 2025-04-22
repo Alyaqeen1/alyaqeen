@@ -1,12 +1,12 @@
-import one from "../assets/img/program/details-1.jpg";
-import two from "../assets/img/program/author.png";
-import three from "../assets/img/program/icon/08.svg";
-import four from "../assets/img/program/icon/09.svg";
-import five from "../assets/img/program/icon/10.svg";
-import six from "../assets/img/program/icon/11.svg";
-import seven from "../assets/img/program/icon/14.svg";
-import eight from "../assets/img/program/icon/13.svg";
-import nine from "../assets/img/program/p-author.jpg";
+import one from "../assets/img/event/event-details-1.jpg";
+import two from "../assets/img/event/event-details-2.jpg";
+import three from "../assets/img/event/event-details-3.jpg";
+import four from "../assets/img/event/icon/01.svg";
+import five from "../assets/img/event/icon/02.svg";
+import six from "../assets/img/event/icon/03.svg";
+import seven from "../assets/img/event/icon/04.svg";
+import eight from "../assets/img/event/icon/05.svg";
+import nine from "../assets/img/event/icon/06.svg";
 import { Link, useParams } from "react-router";
 import { useGetVacanciesQuery } from "../../redux/features/vacancies/vacanciesApi";
 import { useEffect } from "react";
@@ -121,7 +121,7 @@ const VacancyDetails = () => {
             </div>
             <div className="col-lg-4">
               <div className="details-list-area">
-                <h3>Classes includes:</h3>
+                <h3>Event Information:</h3>
                 <ul className="details-list">
                   <li>
                     <span>
@@ -158,19 +158,20 @@ const VacancyDetails = () => {
                   </li>
                   <li>
                     <span>
-                      <FaRegEnvelope
+                      {/* <FaRegEnvelope
                         style={{
                           color: "var(--theme)",
                           marginRight: "0.5rem",
                         }}
-                      />
+                      /> */}
+                      <img src={eight} alt="img" className="me-2" />
                       Email:
                     </span>
                     contact@alyaqeen.co.uk
                   </li>
                   <li>
                     <span>
-                      <img src={eight} alt="img" className="me-2" />
+                      <img src={nine} alt="img" className="me-2" />
                       Language
                     </span>
                     English
