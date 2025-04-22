@@ -2,9 +2,35 @@ import { useState } from "react";
 
 import ModalVideo from "react-modal-video";
 import { Link } from "react-router";
+import { useAddContactMutation } from "../../../redux/features/contact/contactApi";
+import toast from "react-hot-toast";
 
 const ContactSection = () => {
   const [isOpen, setOpen] = useState(false);
+  const [addContact, { data, isLoading, isError, isSuccess }] =
+    useAddContactMutation();
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const name = form.name.value;
+    const email = form.email.value;
+    const phone = form.phone.value;
+    const title = form.title.value;
+    const description = form.description.value;
+    const madrasha_id = 2;
+    const contactData = {
+      name,
+      email,
+      phone,
+      title,
+      description,
+      madrasha_id,
+    };
+    // console.log(data);
+    addContact(contactData);
+    toast.success("Contact form submitted successfully!");
+    form.reset();
+  };
 
   return (
     <>
@@ -83,14 +109,14 @@ const ContactSection = () => {
                           xmlns="http://www.w3.org/2000/svg"
                         >
                           <path
-                            fill-rule="evenodd"
-                            clip-rule="evenodd"
+                            fillRule="evenodd"
+                            clipRule="evenodd"
                             d="M16 1.66675C11.036 1.66675 7 5.73875 7 10.7614C7 12.4627 7.74933 14.5734 8.84 16.6787C11.2413 21.3147 15.2413 25.9841 15.2413 25.9841C15.3352 26.0934 15.4516 26.1812 15.5826 26.2413C15.7135 26.3015 15.8559 26.3326 16 26.3326C16.1441 26.3326 16.2865 26.3015 16.4174 26.2413C16.5484 26.1812 16.6648 26.0934 16.7587 25.9841C16.7587 25.9841 20.7587 21.3147 23.16 16.6787C24.2507 14.5734 25 12.4627 25 10.7614C25 5.73875 20.964 1.66675 16 1.66675ZM16 7.00008C15.0447 7.02585 14.1371 7.42346 13.4705 8.10828C12.8039 8.79311 12.4309 9.71106 12.4309 10.6667C12.4309 11.6224 12.8039 12.5404 13.4705 13.2252C14.1371 13.91 15.0447 14.3076 16 14.3334C16.9553 14.3076 17.8629 13.91 18.5295 13.2252C19.1961 12.5404 19.5691 11.6224 19.5691 10.6667C19.5691 9.71106 19.1961 8.79311 18.5295 8.10828C17.8629 7.42346 16.9553 7.02585 16 7.00008Z"
                             fill="white"
                           />
                           <path
-                            fill-rule="evenodd"
-                            clip-rule="evenodd"
+                            fillRule="evenodd"
+                            clipRule="evenodd"
                             d="M22.3774 23.1694C23.4614 23.4948 24.3547 23.8974 24.972 24.3694C25.372 24.6734 25.6654 24.9707 25.6654 25.3334C25.6654 25.5467 25.544 25.7401 25.3734 25.9334C25.0907 26.2521 24.6707 26.5387 24.1507 26.8054C22.3134 27.7454 19.3427 28.3334 15.9987 28.3334C12.6547 28.3334 9.68403 27.7454 7.8467 26.8054C7.3267 26.5387 6.9067 26.2521 6.62403 25.9334C6.45336 25.7401 6.33203 25.5467 6.33203 25.3334C6.33203 24.9707 6.62536 24.6734 7.02536 24.3694C7.6427 23.8974 8.53603 23.4948 9.62003 23.1694C9.87411 23.093 10.0874 22.9188 10.2131 22.6852C10.3387 22.4515 10.3664 22.1775 10.29 21.9234C10.2136 21.6693 10.0395 21.456 9.80579 21.3304C9.57212 21.2047 9.29811 21.177 9.04403 21.2534C7.39336 21.7507 6.1107 22.4321 5.34003 23.1854C4.6627 23.8454 4.33203 24.5841 4.33203 25.3334C4.33203 26.2694 4.86136 27.2027 5.93736 27.9814C7.82536 29.3467 11.6174 30.3334 15.9987 30.3334C20.38 30.3334 24.172 29.3467 26.06 27.9814C27.136 27.2027 27.6654 26.2694 27.6654 25.3334C27.6654 24.5841 27.3347 23.8454 26.6574 23.1854C25.8867 22.4321 24.604 21.7507 22.9534 21.2534C22.8276 21.2156 22.6955 21.2029 22.5648 21.2161C22.4341 21.2293 22.3073 21.2681 22.1916 21.3304C22.0759 21.3926 21.9736 21.477 21.8905 21.5787C21.8074 21.6805 21.7452 21.7976 21.7074 21.9234C21.6695 22.0492 21.6569 22.1812 21.6701 22.3119C21.6833 22.4427 21.7221 22.5695 21.7843 22.6852C21.8465 22.8009 21.9309 22.9032 22.0327 22.9863C22.1344 23.0694 22.2516 23.1316 22.3774 23.1694Z"
                             fill="white"
                           />
@@ -128,9 +154,10 @@ const ContactSection = () => {
                     or Feedback.
                   </p>
                   <form
-                    action="contact.php"
+                    onSubmit={handleSubmit}
+                    // action="contact.php"
                     id="contact-form"
-                    method="POST"
+                    // method="POST"
                     className="contact-form-items"
                   >
                     <div className="row g-4">
@@ -146,6 +173,7 @@ const ContactSection = () => {
                             type="text"
                             name="name"
                             id="name"
+                            required
                             placeholder="Your Name"
                           />
                         </div>
@@ -163,6 +191,41 @@ const ContactSection = () => {
                             name="email"
                             id="email"
                             placeholder="Your Email"
+                            required
+                          />
+                        </div>
+                      </div>
+                      <div
+                        className="col-lg-6"
+                        data-aos-duration="800"
+                        data-aos="fade-up"
+                        data-aos-delay="700"
+                      >
+                        <div className="form-clt">
+                          <span>Your Phone Number*</span>
+                          <input
+                            type="number"
+                            name="phone"
+                            id="phone"
+                            required
+                            placeholder="Your Phone Number"
+                          />
+                        </div>
+                      </div>
+                      <div
+                        className="col-lg-6"
+                        data-aos-duration="800"
+                        data-aos="fade-up"
+                        data-aos-delay="900"
+                      >
+                        <div className="form-clt">
+                          <span>Subject*</span>
+                          <input
+                            type="text"
+                            name="title"
+                            id="subject"
+                            required
+                            placeholder="Enter the subject of your message"
                           />
                         </div>
                       </div>
@@ -170,13 +233,14 @@ const ContactSection = () => {
                         className="col-lg-12 "
                         data-aos-duration="800"
                         data-aos="fade-up"
-                        data-aos-delay="700"
+                        data-aos-delay="1000"
                       >
                         <div className="form-clt">
                           <span>Write Message*</span>
                           <textarea
-                            name="message"
+                            name="description"
                             id="message"
+                            required
                             placeholder="Write Message"
                           ></textarea>
                         </div>
@@ -185,10 +249,14 @@ const ContactSection = () => {
                         className="col-lg-7 "
                         data-aos-duration="800"
                         data-aos="fade-up"
-                        data-aos-delay="900"
+                        data-aos-delay="500"
                       >
-                        <button type="submit" className="theme-btn">
-                          Send Message{" "}
+                        <button
+                          disabled={isLoading}
+                          type="submit"
+                          className="theme-btn"
+                        >
+                          {isLoading ? "Submitting" : "Send Message"}
                           <i className="fa-solid fa-arrow-right-long"></i>
                         </button>
                       </div>

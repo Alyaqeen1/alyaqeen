@@ -18,7 +18,6 @@ export default function StaffDetails() {
     };
     fetchData();
   }, []);
-  console.log(staffData);
 
   return (
     <div>

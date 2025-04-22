@@ -15,7 +15,6 @@ const AboutTeam = ({ title, subtitle }) => {
       .catch((error) => console.error("Error fetching staff data:", error));
   }, []);
 
-  console.log(staffData);
   return (
     <section className="team-section-3 fix  section-padding pt-1 mt-60">
       <div className="tree-shape float-bob-x">

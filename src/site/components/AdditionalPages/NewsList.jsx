@@ -13,7 +13,7 @@ const NewsList = () => {
   useEffect(() => {
     setSelectedCategory(news?.data[0]?.title.toString());
   }, [news]);
-  console.log(news?.data[0]?.title);
+
   const selectedNews =
     news?.data?.find((single) => single?.title === selectedCategory) || {};
   const allNewsItems = selectedNews?.news_and_events || [];

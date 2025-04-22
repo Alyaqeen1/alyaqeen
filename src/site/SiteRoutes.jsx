@@ -36,6 +36,7 @@ import ApplyNow from "./pages/AdditionalPages/ApplyNow";
 import AllServices from "./pages/AdditionalPages/AllServices";
 import NewsDetails from "./sharedComponents/NewsDetails";
 import VacancyDetails from "./sharedComponents/VacancyDetails";
+import Complaint from "./pages/AdditionalPages/Complaint";
 
 const siteRoutes = [
   {
@@ -178,6 +179,10 @@ const siteRoutes = [
       {
         path: "/vacancy-details/:id",
         element: <VacancyDetails></VacancyDetails>,
+      },
+      {
+        path: "/complaint",
+        element: <Complaint></Complaint>,
       },
       {
         path: "*",

@@ -27,7 +27,7 @@ const TestimonialOne = () => {
   const { data: reviews, isLoading, isError } = useGetReviewsQuery();
   if (isLoading) return <LoadingSpinner></LoadingSpinner>;
   if (isError) {
-    return <h2 className="text-center my-4">Error loading news</h2>;
+    return <h2 className="text-center my-4">Error loading Reviews</h2>;
   }
 
   return (

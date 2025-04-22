@@ -31,7 +31,6 @@ const VacancyDetails = () => {
     (vacancy) => vacancy?.id === parseInt(id)
   );
 
-  console.log(singleVacancy);
   const {
     application_closing_date,
     desired_qualification,
