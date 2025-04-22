@@ -84,7 +84,7 @@ const VacanciesGrid = () => {
                       </li>
                     </ul>
                     <h3>
-                      <Link to={`/vacancies/${vacancy?.id}`}>
+                      <Link to={`/vacancy-details/${vacancy?.id}`}>
                         {vacancy?.job_title}
                       </Link>
                     </h3>
@@ -103,7 +103,7 @@ const VacanciesGrid = () => {
                       </div>
                     </div>
                     <Link
-                      to={`/vacancies/${vacancy?.id}`}
+                      to={`/vacancy-details/${vacancy?.id}`}
                       className="theme-btn-2 mt-3 d-flex align-items-center"
                     >
                       Read More <i className="fas fa-long-arrow-right"></i>

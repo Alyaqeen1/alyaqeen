@@ -35,6 +35,7 @@ import Session from "./pages/AdditionalPages/Session";
 import ApplyNow from "./pages/AdditionalPages/ApplyNow";
 import AllServices from "./pages/AdditionalPages/AllServices";
 import NewsDetails from "./sharedComponents/NewsDetails";
+import VacancyDetails from "./sharedComponents/VacancyDetails";
 
 const siteRoutes = [
   {
@@ -173,6 +174,10 @@ const siteRoutes = [
       {
         path: "/news-details/:categoryId/:newsId",
         element: <NewsDetails></NewsDetails>,
+      },
+      {
+        path: "/vacancy-details/:id",
+        element: <VacancyDetails></VacancyDetails>,
       },
       {
         path: "*",
