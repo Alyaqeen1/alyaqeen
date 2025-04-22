@@ -5,7 +5,6 @@ import { PiMoneyWavy } from "react-icons/pi";
 
 const VacanciesGrid = () => {
   const { data: vacancies, isLoading, isError } = useGetVacanciesQuery();
-  console.log(vacancies);
   if (isLoading) {
     return <LoadingSpinner></LoadingSpinner>;
   }

@@ -6,7 +6,7 @@ const FeeStructure = () => {
   const { t } = useTranslation(["home"]);
   const { mainHeading, sectionTitle, tableHeaders } = t("feeStructure") || {};
   const subjectList = t("feeStructure.subjects", { returnObjects: true });
-  console.log(subjectList);
+
   const { subject, weekdays, weekends } = tableHeaders || {};
 
   return (

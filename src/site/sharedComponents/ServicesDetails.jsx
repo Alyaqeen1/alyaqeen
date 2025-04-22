@@ -7,11 +7,11 @@ import AboutMain from "./AboutMain";
 export default function ServicesDetails() {
   const [service, setService] = useState({});
   const { category } = useParams();
-  console.log(category);
+
   useEffect(() => {
     const fetchData = async () => {
       const { data } = await axios.get("/services.json");
-      console.log(data);
+
       const service = data.find((single) => single.category === category);
       setService(service);
     };

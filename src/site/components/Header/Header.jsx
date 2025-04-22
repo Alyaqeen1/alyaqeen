@@ -251,6 +251,9 @@ const Header = () => {
                             <li>
                               <Link to="/photos-videos">{photosVideos}</Link>
                             </li>
+                            <li>
+                              <Link to="/complaint">Complaint</Link>
+                            </li>
                           </ul>
                         </li>
                         <li>
