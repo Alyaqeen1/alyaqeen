@@ -11,6 +11,9 @@ import { Link, useParams } from "react-router";
 import { useGetVacanciesQuery } from "../../redux/features/vacancies/vacanciesApi";
 import { useEffect } from "react";
 import LoadingSpinner from "../components/LoadingSpinner";
+import { LiaMoneyBillWaveSolid } from "react-icons/lia";
+import { GiClockwork } from "react-icons/gi";
+import { FaRegEnvelope } from "react-icons/fa";
 
 const VacancyDetails = () => {
   const { id } = useParams();
@@ -37,6 +40,7 @@ const VacancyDetails = () => {
     required_qualification,
     role_responsibilities,
     salary,
+    created_at,
   } = singleVacancy || {};
   if (isLoading) return <LoadingSpinner></LoadingSpinner>;
 
@@ -58,61 +62,59 @@ const VacancyDetails = () => {
                     </div>
                   </div>
                   <div className="details-author-area">
-                    <div className="author-items">
-                      <img src={two} alt="img" />
-                      <p>Savannah Nguyen</p>
-                    </div>
                     <ul className="class-list">
                       <li>
-                        <i className="fa-regular fa-circle-play me-2"></i>
-                        30 Classes
+                        <LiaMoneyBillWaveSolid
+                          style={{
+                            color: "var(--theme)",
+                            fontSize: "1.5rem",
+                            marginRight: "0.5rem",
+                          }}
+                        />
+                        Salary: {salary}
                       </li>
                       <li>
-                        <i className="fas fa-star me-2"></i>
-                        3.4 (36 Review)
+                        <GiClockwork
+                          style={{
+                            color: "var(--theme)",
+                            fontSize: "1.5rem",
+                            marginRight: "0.5rem",
+                          }}
+                        />{" "}
+                        Application Deadline: {application_closing_date}
                       </li>
                     </ul>
                   </div>
-                  <h2>Descriptions</h2>
-                  <p className="mb-3">
-                    Consectetur adipisicing elit, sed do eiusmod tempor is
-                    incididunt ut labore et dolore of magna aliqua. Ut enim ad
-                    minim veniam, made of owl the quis nostrud exercitation
-                    ullamco laboris nisi ut aliquip ex ea dolor commodo
-                    consequat. Duis aute irure and dolor in reprehenderit.
-                  </p>
-                  <p className="mb-4">
-                    The is ipsum dolor sit amet consectetur adipiscing elit.
-                    Fusce eleifend porta arcu In hac augu ehabitasse the is
-                    platea augue thelorem turpoi dictumst. In lacus libero
-                    faucibus at malesuada sagittis placerat eros sed istincidunt
-                    augue ac ante rutrum sed the is sodales augue consequat.
-                  </p>
-                  <h2>Requirements for The Classes</h2>
-                  <p>
-                    Nulla facilisi. Vestibulum tristique sem in eros eleifend
-                    imperdiet. Donec quis convallis neque. In id lacus pulvinar
-                    lacus, eget vulputate lectus. Ut viverra bibendum lorem, at
-                    tempus nibh mattis in. Sed a massa eget lacus consequat
-                    auctor.
-                  </p>
-                  <ul className="list-items">
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Ut viverra bibendum lorem, at tempus nibh mattis
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      quis nostrud exercitation ullamco laboris nisi
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Duis aute irure and dolor in reprehenderit.
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      ante rutrum sed the is sodales augue consequat.
-                    </li>
+                  <h2>Required Qualification</h2>
+                  <ul className="list-items mb-5">
+                    {required_qualification
+                      ?.split(". ")
+                      .map((qualification) => (
+                        <li>
+                          <i className="fa-solid fa-check"></i>
+                          {qualification}
+                        </li>
+                      ))}
+                  </ul>
+                  <h2>Desired Qualification</h2>
+
+                  <ul className="list-items mb-5">
+                    {desired_qualification?.split(". ").map((qualification) => (
+                      <li>
+                        <i className="fa-solid fa-check"></i>
+                        {qualification}
+                      </li>
+                    ))}
+                  </ul>
+                  <h2>Role Responsibilities</h2>
+
+                  <ul className="list-items mb-2">
+                    {role_responsibilities?.split(". ").map((qualification) => (
+                      <li>
+                        <i className="fa-solid fa-check"></i>
+                        {qualification}
+                      </li>
+                    ))}
                   </ul>
                 </div>
               </div>
@@ -123,38 +125,48 @@ const VacancyDetails = () => {
                 <ul className="details-list">
                   <li>
                     <span>
-                      <img src={three} alt="img" className="me-2" />
-                      Age
-                    </span>
-                    3-5 year
-                  </li>
-                  <li>
-                    <span>
                       <img src={four} alt="img" className="me-2" />
-                      Duration:
+                      Creation Date:
                     </span>
-                    9:00-11:00
+                    {new Date(created_at).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
                   </li>
                   <li>
                     <span>
                       <img src={five} alt="img" className="me-2" />
-                      Lessons:
+                      Deadline:
                     </span>
-                    15
+                    {application_closing_date}
                   </li>
-                  <li>
-                    <span>
+                  <li className="flex">
+                    <span className="flex">
                       <img src={six} alt="img" className="me-2" />
-                      Students:
+                      Location:
                     </span>
-                    50
+                    116 Church Road, Yardley,
+                    <br /> Birmingham, B25 8UX
                   </li>
                   <li>
                     <span>
                       <img src={seven} alt="img" className="me-2" />
-                      Certifications:
+                      Phone:
                     </span>
-                    Yes
+                    +07869636849
+                  </li>
+                  <li>
+                    <span>
+                      <FaRegEnvelope
+                        style={{
+                          color: "var(--theme)",
+                          marginRight: "0.5rem",
+                        }}
+                      />
+                      Email:
+                    </span>
+                    contact@alyaqeen.co.uk
                   </li>
                   <li>
                     <span>
@@ -164,19 +176,10 @@ const VacancyDetails = () => {
                     English
                   </li>
                 </ul>
-                <Link
-                  to="program-details"
-                  className="theme-btn w-100 border-style mb-3"
-                >
-                  This course Free $49.00
-                </Link>
-                <Link to="program-details" className="theme-btn w-100">
-                  Enroll Your Kid{" "}
-                  <i className="fa-solid fa-arrow-right-long"></i>
-                </Link>
+
                 <div className="social-icon d-flex align-items-center">
                   <span>Share: </span>
-                  <Link to="/">
+                  <Link to="https://www.facebook.com/AlyaqeenAcademy">
                     <i className="fab fa-facebook-f"></i>
                   </Link>
                   <Link to="/">
@@ -185,51 +188,9 @@ const VacancyDetails = () => {
                   <Link to="/">
                     <i className="fa-brands fa-linkedin-in"></i>
                   </Link>
-                  <Link to="/">
+                  <Link to="https://www.youtube.com/@alyaqeenacademy5282">
                     <i className="fa-brands fa-youtube"></i>
                   </Link>
-                </div>
-              </div>
-            </div>
-            <div className="col-lg-12">
-              <div className="program-author-items">
-                <div className="thumb">
-                  <img src={nine} alt="img" />
-                </div>
-                <div className="content">
-                  <h2>Savannah Nguyen</h2>
-                  <span>Children Diet</span>
-                  <p>
-                    Adipiscing elit. Mauris viverra nisl quis mollis laoreet. Ut
-                    eget lacus a felis accumsan pharetra in dignissim enim. In
-                    amet odio mollis urna aliquet volutpat. Sed bibendum nisl
-                    vehicula imperdiet imperdiet, augue massa fringilla.
-                  </p>
-                  <ul>
-                    <li>Experience: 10 Years</li>
-                    <li>
-                      <i className="fas fa-user"></i>
-                      188 Students
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-star color-star"></i>
-                      454 (36 Review)
-                    </li>
-                  </ul>
-                  <div className="social-icon d-flex align-items-center">
-                    <Link to="/">
-                      <i className="fab fa-facebook-f"></i>
-                    </Link>
-                    <Link to="/">
-                      <i className="fab fa-twitter"></i>
-                    </Link>
-                    <Link to="/">
-                      <i className="fa-brands fa-linkedin-in"></i>
-                    </Link>
-                    <Link to="/">
-                      <i className="fa-brands fa-youtube"></i>
-                    </Link>
-                  </div>
                 </div>
               </div>
             </div>
