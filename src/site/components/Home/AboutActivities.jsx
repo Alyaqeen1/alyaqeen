@@ -1,4 +1,11 @@
 import { useTranslation } from "react-i18next";
+import one from "../../assets/img/about/pencil.png";
+import two from "../../assets/img/about/kaaba-svgrepo-com.svg";
+import three from "../../assets/img/home/new-mask.png";
+import four from "../../assets/img/icon/board-svgrepo-com.svg";
+import five from "../../assets/img/icon/group_focus_2.svg";
+import eight from "../../assets/img/icon/quran_2.svg";
+import nine from "../../assets/img/icon/earth-globe-geography-svgrepo-com.svg";
 
 const AboutActivities = () => {
   const { t } = useTranslation(["home"]);
@@ -18,18 +25,10 @@ const AboutActivities = () => {
   return (
     <section className="about-activities-section section-padding pt-0">
       <div className="pencil-shape">
-        <img
-          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/about/pencil.png"
-          className="w-50"
-          alt="shape-img"
-        />
+        <img src={one} className="w-50" alt="shape-img" />
       </div>
       <div className="zebra-shape float-bob-y w-25 text-end">
-        <img
-          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/about/kaaba-svgrepo-com.svg"
-          style={{ width: "35%" }}
-          alt="shape-img"
-        />
+        <img src={two} style={{ width: "35%" }} alt="shape-img" />
       </div>
       <div className="container">
         <div className="about-activities-wrapper">
@@ -41,10 +40,7 @@ const AboutActivities = () => {
               data-aos-delay="400"
             >
               <div className="activities-image">
-                <img
-                  src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/home/new-mask.png"
-                  alt="img"
-                />
+                <img src={three} alt="img" />
               </div>
             </div>
             <div className="col-lg-6">
@@ -70,11 +66,7 @@ const AboutActivities = () => {
                   >
                     <div className="icon-items">
                       <div className="icon box-color-1">
-                        <img
-                          className="w-50"
-                          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/icon/board-svgrepo-com.svg"
-                          alt="img"
-                        />
+                        <img className="w-50" src={four} alt="img" />
                       </div>
                       <div className="content">
                         <h5>{teachingTools}</h5>
@@ -89,11 +81,7 @@ const AboutActivities = () => {
                   >
                     <div className="icon-items">
                       <div className="icon box-color-3">
-                        <img
-                          className="w-50"
-                          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/icon/group_focus_2.svg"
-                          alt="img"
-                        />
+                        <img className="w-50" src={five} alt="img" />
                       </div>
                       <div className="content">
                         <h5>{smallGroups}</h5>
@@ -305,11 +293,7 @@ const AboutActivities = () => {
                   >
                     <div className="icon-items">
                       <div className="icon box-color-1">
-                        <img
-                          className="w-50"
-                          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/icon/quran_2.svg"
-                          alt="img"
-                        />
+                        <img className="w-50" src={eight} alt="img" />
                       </div>
                       <div className="content">
                         <h5>{quranTajweed}</h5>
@@ -324,11 +308,7 @@ const AboutActivities = () => {
                   >
                     <div className="icon-items">
                       <div className="icon box-color-2">
-                        <img
-                          className="w-50"
-                          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/icon/earth-globe-geography-svgrepo-com.svg"
-                          alt="img"
-                        />
+                        <img className="w-50" src={nine} alt="img" />
                       </div>
                       <div className="content">
                         <h5>{friendlyEnvironment}</h5>

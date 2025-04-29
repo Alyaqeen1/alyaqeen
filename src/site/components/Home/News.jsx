@@ -1,10 +1,7 @@
 import { Link } from "react-router";
-import BestTeacher from "./BestTeacher";
-import BestStudent from "./BestStudent";
-import { WiSunrise } from "react-icons/wi";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { FaCloudSun, FaUssunnah } from "react-icons/fa";
+import { FaUssunnah } from "react-icons/fa";
 import { IoMoonOutline, IoSunny, IoSunnyOutline } from "react-icons/io5";
 import { MdSunnySnowing } from "react-icons/md";
 

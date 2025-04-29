@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import OffCanvasMenu from "./OffCanvasMenu";
 import { Link } from "react-router";
 import { useTranslation } from "react-i18next";
+import logo from "../../assets/img/logo/logo.png";
+import grid from "../../assets/img/grid.svg";
 
 const languages = [
   { code: "en", lang: "English" },
@@ -127,17 +129,13 @@ const Header = () => {
                     <img
                       className="h-auto"
                       style={{ width: "70px" }}
-                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/logo/logo.png"
+                      src={logo}
                       alt="logo-img"
                     />
                   </Link>
                 </div>
                 <div className="category-oneadjust flex">
-                  <img
-                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/grid.svg"
-                    alt="img"
-                    className="me-2 inline"
-                  />
+                  <img src={grid} alt="img" className="me-2 inline" />
                   <select
                     name="cate"
                     onChange={(e) => changeLanguage(e.target.value)}

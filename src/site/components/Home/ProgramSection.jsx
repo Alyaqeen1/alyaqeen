@@ -1,5 +1,14 @@
 import { Trans, useTranslation } from "react-i18next";
 import { Link } from "react-router";
+import one from "../../assets/img/section-top-shape.png";
+import two from "../../assets/img/section-bottom-shape.png";
+import three from "../../assets/img/program/mask.png";
+import four from "../../assets/img/program/pencil.png";
+import five from "../../assets/img/program/mask-2.png";
+import six from "../../assets/img/program/compass.png";
+import seven from "../../assets/img/program/course2.jpeg";
+import eight from "../../assets/img/program/course4.png";
+import nine from "../../assets/img/program/image4.jpg";
 
 const ProgramSection = () => {
   const { t } = useTranslation(["home"]);
@@ -27,7 +36,7 @@ const ProgramSection = () => {
         <img
           className="w-75"
           style={{ marginTop: "-8px" }}
-          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/section-top-shape.png"
+          src={one}
           alt="shape-img"
         />
       </div>
@@ -35,37 +44,21 @@ const ProgramSection = () => {
         <img
           className="w-75"
           style={{ marginBottom: "-8px" }}
-          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/section-bottom-shape.png"
+          src={two}
           alt="shape-img"
         />
       </div>
       <div className="mask-shape float-bob-x">
-        <img
-          className="w-50"
-          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/mask.png"
-          alt="shape-img"
-        />
+        <img className="w-50" src={three} alt="shape-img" />
       </div>
       <div className="pencil-shape">
-        <img
-          className="w-50"
-          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/pencil.png"
-          alt="shape-img"
-        />
+        <img className="w-50" src={four} alt="shape-img" />
       </div>
       <div className="mask-shape-2">
-        <img
-          className="w-50"
-          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/mask-2.png"
-          alt="shape-img"
-        />
+        <img className="w-50" src={five} alt="shape-img" />
       </div>
       <div className="compass-shape">
-        <img
-          className="w-50"
-          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/compass.png"
-          alt="shape-img"
-        />
+        <img className="w-50" src={six} alt="shape-img" />
       </div>
       <div className="container">
         <div className="section-title text-center mt-60">
@@ -101,7 +94,7 @@ const ProgramSection = () => {
                       objectFit: "cover",
                     }}
                     // className="rounded-5"
-                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/course2.jpeg"
+                    src={seven}
                     alt="img"
                   />
                 </div>
@@ -166,7 +159,7 @@ const ProgramSection = () => {
                       minHeight: "220px",
                       objectFit: "cover",
                     }}
-                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/course4.png"
+                    src={eight}
                     alt="img"
                   />
                 </div>
@@ -232,7 +225,7 @@ const ProgramSection = () => {
                       objectFit: "cover",
                     }}
                     // className="rounded-5"
-                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/image4.jpg"
+                    src={nine}
                     alt="img"
                   />
                 </div>

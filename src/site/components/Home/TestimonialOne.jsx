@@ -4,6 +4,11 @@ import "swiper/swiper-bundle.css";
 import { Trans, useTranslation } from "react-i18next";
 import { useGetReviewsQuery } from "../../../redux/features/reviews/reviewsApi";
 import LoadingSpinner from "../LoadingSpinner";
+import one from "../../assets/img/client/pencil.png";
+import two from "../../assets/img/home/quran-quran-svgrepo-com.svg";
+import three from "../../assets/img/home/testimonial.png";
+import four from "../../assets/img/client/01.png";
+import five from "../../assets/img/client/quote.png";
 
 // const renderStars = (rating) => {
 //   const stars = [];
@@ -26,22 +31,18 @@ const TestimonialOne = () => {
   const { mainHeading, sectionTitle } = t("testimonialOne") || {};
   const { data: reviews, isLoading, isError } = useGetReviewsQuery();
   if (isLoading) return <LoadingSpinner></LoadingSpinner>;
-  if (isError) {
-    return <h2 className="text-center my-4">Error loading Reviews</h2>;
-  }
+  // if (isError) {
+  //   return <h2 className="text-center my-4">Error loading Reviews</h2>;
+  // }
 
   return (
     <section className="testimonial-section fix section-padding">
       <div className="pencil-shape">
-        <img
-          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/client/pencil.png"
-          className="w-50"
-          alt="shape-img"
-        />
+        <img src={one} className="w-50" alt="shape-img" />
       </div>
       <div className="girl-shape float-bob-y text-end">
         <img
-          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/home/quran-quran-svgrepo-com.svg"
+          src={two}
           className=""
           style={{ width: "120px" }}
           alt="shape-img"
@@ -57,11 +58,7 @@ const TestimonialOne = () => {
               data-aos-delay="400"
             >
               <div className="testimonial-image">
-                <img
-                  className="object-fit-cover"
-                  src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/home/testimonial.png"
-                  alt="image"
-                />
+                <img className="object-fit-cover" src={three} alt="image" />
               </div>
             </div>
             <div className="col-lg-6">
@@ -134,11 +131,7 @@ const TestimonialOne = () => {
                                 </div>
                               </div>
                               <div className="icon text-end">
-                                <img
-                                  className="w-50"
-                                  src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/client/quote.png"
-                                  alt="img"
-                                />
+                                <img className="w-50" src={five} alt="img" />
                               </div>
                             </div>
                           </div>
@@ -148,6 +141,11 @@ const TestimonialOne = () => {
                       <>
                         <h2 className="text-center my-4">No Reviews Found</h2>
                       </>
+                    )}
+                    {isError && (
+                      <h2 className="text-center my-4">
+                        Error loading Reviews
+                      </h2>
                     )}
                   </Swiper>
                 </div>

@@ -2,6 +2,11 @@ import { Link } from "react-router";
 import BestStudent from "./BestStudent";
 import BestTeacher from "./BestTeacher";
 import { useTranslation } from "react-i18next";
+import one from "../../assets/img/news/01.jpg";
+import two from "../../assets/img/news/02.jpg";
+import three from "../../assets/img/news/03.jpg";
+import five from "../../assets/img/news/author-3.png";
+import author from "../../assets/img/news/author.png";
 
 const Blogs = () => {
   const { t } = useTranslation(["home"]);
@@ -39,10 +44,7 @@ const Blogs = () => {
             >
               <div className="news-single-items">
                 <div className="news-image">
-                  <img
-                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/01.jpg"
-                    alt="news-img"
-                  />
+                  <img src={one} alt="news-img" />
                 </div>
                 <div className="news-content">
                   <ul>
@@ -95,10 +97,7 @@ const Blogs = () => {
                   <div className="post-author-items">
                     <div className="post-items">
                       <div className="thumb">
-                        <img
-                          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/author.png"
-                          alt="img"
-                        />
+                        <img src={author} alt="img" />
                       </div>
                       <div className="content">
                         <span>By Admin</span>

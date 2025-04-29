@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import one from "../../assets/img/asterisk.svg";
 
 const Marquee = () => {
   const { t } = useTranslation(["home"]);
@@ -12,60 +13,37 @@ const Marquee = () => {
             <ul className="marqee-list">
               <li className="marquee-item d-flex">
                 <div className="text-slider w-[50px] flex justify-center items-center">
-                  <img
-                    className="w-full"
-                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/asterisk.svg"
-                    alt="img"
-                  />
+                  <img className="w-full" src={one} alt="img" />
                 </div>
                 <span className="text-slider">{highlightAchievement}</span>
                 <span className="text-slider w-[50px] flex justify-center items-center">
-                  <img
-                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/asterisk.svg"
-                    className=""
-                    alt="img"
-                  />
+                  <img src={one} className="" alt="img" />
                 </span>
                 <span className="text-slider text-color">
                   {certificateRecognition}
                 </span>
                 <span className="text-slider w-[50px] flex justify-center items-center">
-                  <img
-                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/asterisk.svg"
-                    alt="img"
-                  />
+                  <img src={one} alt="img" />
                 </span>
                 <span className="text-slider">{examAnnouncement}</span>
                 <span className="text-slider w-[50px] flex justify-center items-center">
-                  <img
-                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/asterisk.svg"
-                    alt="img"
-                  />
+                  <img src={one} alt="img" />
                 </span>
                 <span className="text-slider text-color">
                   {highlightAchievement}
                 </span>
                 <span className="text-slider w-[50px] flex justify-center items-center">
-                  <img
-                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/asterisk.svg"
-                    alt="img"
-                  />
+                  <img src={one} alt="img" />
                 </span>
                 <span className="text-slider">{certificateRecognition}</span>
                 <span className="text-slider w-[50px] flex justify-center items-center">
-                  <img
-                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/asterisk.svg"
-                    alt="img"
-                  />
+                  <img src={one} alt="img" />
                 </span>
                 <span className="text-slider text-color">
                   {examAnnouncement}
                 </span>
                 <span className="text-slider w-[50px] flex justify-center items-center">
-                  <img
-                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/asterisk.svg"
-                    alt="img"
-                  />
+                  <img src={one} alt="img" />
                 </span>
               </li>
             </ul>

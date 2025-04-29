@@ -3,6 +3,9 @@ import { FaCalendarAlt } from "react-icons/fa";
 import { IoIosCalculator } from "react-icons/io";
 import { IoBusOutline } from "react-icons/io5";
 import { Link } from "react-router";
+import one from "../../assets/img/process/line.png";
+import three from "../../assets/img/process/line-2.png";
+import seven from "../../assets/img/process/icon-bg.png";
 
 const WorkProcess = () => {
   const { t } = useTranslation(["home"]);
@@ -22,15 +25,12 @@ const WorkProcess = () => {
               <Link to="session-timings">
                 <div className="work-process-items text-center">
                   <div className="line-shape">
-                    <img
-                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/process/line.png"
-                      alt="shape-img"
-                    />
+                    <img src={one} alt="shape-img" />
                   </div>
                   <div
                     className="icon bg-cover  flex justify-center items-center"
                     style={{
-                      backgroundImage: `url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/process/icon-bg.png)`,
+                      backgroundImage: `url(${seven})`,
                     }}
                   >
                     <FaCalendarAlt className="fs-3 text-white" />
@@ -51,15 +51,12 @@ const WorkProcess = () => {
               <Link to="fees">
                 <div className="work-process-items text-center style-2">
                   <div className="line-shape-2">
-                    <img
-                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/process/line-2.png"
-                      alt="shape-img"
-                    />
+                    <img src={three} alt="shape-img" />
                   </div>
                   <div
                     className="icon bg-cover  flex justify-center items-center"
                     style={{
-                      backgroundImage: `url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/process/icon-bg.png)`,
+                      backgroundImage: `url(${seven})`,
                     }}
                   >
                     <IoIosCalculator className="fs-2 text-white" />
@@ -82,7 +79,7 @@ const WorkProcess = () => {
                   <div
                     className="icon bg-cover flex justify-center items-center"
                     style={{
-                      backgroundImage: `url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/process/icon-bg.png)`,
+                      backgroundImage: `url(${seven})`,
                     }}
                   >
                     <IoBusOutline className="fs-2 text-white" />

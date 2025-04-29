@@ -4,114 +4,114 @@ import "swiper/swiper-bundle.css";
 
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import one from "../../assets/img/certificates/girl1.png";
+import two from "../../assets/img/certificates/girl2.png";
+import three from "../../assets/img/certificates/girl3.png";
+import four from "../../assets/img/certificates/boy1.png";
+import five from "../../assets/img/certificates/boy2.png";
+import six from "../../assets/img/certificates/boy3.png";
+import seven from "../../assets/img/certificates/boy4.png";
+import eight from "../../assets/img/certificates/boy5.png";
+import nine from "../../assets/img/certificates/boy6.png";
+import ten from "../../assets/img/certificates/girl4.png";
+import eleven from "../../assets/img/certificates/girl5.png";
+import twelve from "../../assets/img/certificates/girl6.png";
+import thirteen from "../../assets/img/certificates/girl7.png";
+import fourteen from "../../assets/img/certificates/girl8.png";
+import fifteen from "../../assets/img/certificates/girl9.png";
+import sixteen from "../../assets/img/certificates/boy7.png";
+import seventeen from "../../assets/img/certificates/boy8.png";
+import eighteen from "../../assets/img/certificates/boy9.png";
 
 const certificate_list_data = [
   {
     id: "1",
-    image_link:
-      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificates/girl1.png",
+    image_link: one,
     category_id: 1,
   },
   {
     id: "2",
-    image_link:
-      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificates/girl2.png",
+    image_link: two,
     category_id: 1,
   },
   {
     id: "3",
-    image_link:
-      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificates/girl3.png",
+    image_link: three,
     category_id: 1,
   },
   {
     id: "4",
-    image_link:
-      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificates/boy1.png",
+    image_link: four,
     category_id: 1,
   },
   {
     id: "5",
-    image_link:
-      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificates/boy2.png",
+    image_link: five,
     category_id: 1,
   },
   {
     id: "6",
-    image_link:
-      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificates/boy3.png",
+    image_link: six,
     category_id: 1,
   },
   {
     id: "7",
-    image_link:
-      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificates/boy4.png",
+    image_link: seven,
     category_id: 2,
   },
   {
     id: "8",
-    image_link:
-      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificates/boy5.png",
+    image_link: eight,
     category_id: 2,
   },
   {
     id: "9",
-    image_link:
-      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificates/boy6.png",
+    image_link: nine,
     category_id: 2,
   },
   {
     id: "10",
-    image_link:
-      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificates/girl4.png",
+    image_link: ten,
     category_id: 2,
   },
   {
     id: "11",
-    image_link:
-      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificates/girl5.png",
+    image_link: eleven,
     category_id: 2,
   },
   {
     id: "12",
-    image_link:
-      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificates/girl6.png",
+    image_link: twelve,
     category_id: 2,
   },
   {
     id: "13",
-    image_link:
-      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificates/girl7.png",
+    image_link: thirteen,
     category_id: 3,
   },
   {
     id: "14",
-    image_link:
-      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificates/girl8.png",
+    image_link: fourteen,
     category_id: 3,
   },
   {
     id: "15",
-    image_link:
-      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificates/girl9.png",
+    image_link: fifteen,
     category_id: 3,
   },
   {
     id: "16",
-    image_link:
-      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificates/boy7.png",
+    image_link: sixteen,
     category_id: 3,
   },
   {
     id: "17",
-    image_link:
-      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificates/boy8.png",
+    image_link: seventeen,
     category_id: 3,
   },
   {
     id: "18",
-    image_link:
-      "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/certificates/boy9.png",
+    image_link: eighteen,
     category_id: 3,
   },
 ];

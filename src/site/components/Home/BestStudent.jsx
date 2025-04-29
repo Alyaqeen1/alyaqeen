@@ -1,4 +1,5 @@
 import React from "react";
+import three from "../../assets/img/home/s.png";
 
 export default function BestStudent({ bestStudent }) {
   const { name, post, description, title } = bestStudent || {};
@@ -71,7 +72,7 @@ export default function BestStudent({ bestStudent }) {
       >
         <div className="news-thumb col-lg-6 col-sm-6 border-2  px-3">
           <img
-            src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/home/s.png"
+            src={three}
             className="object-fit-cover"
             style={{
               borderRadius: "5%",

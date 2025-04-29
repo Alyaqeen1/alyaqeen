@@ -5,6 +5,9 @@ import { Link } from "react-router";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
+import one from "../../assets/img/section-top-shape.png";
+import two from "../../assets/img/team/love.png";
+import three from "../../assets/img/team/frame.png";
 
 const Team = () => {
   const { t } = useTranslation(["home"]);
@@ -50,24 +53,13 @@ const Team = () => {
       id="team"
     >
       <div className="top-shape">
-        <img
-          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/section-top-shape.png"
-          alt="shape-img"
-        />
+        <img src={one} alt="shape-img" />
       </div>
       <div className="love-shape float-bob-x">
-        <img
-          className="w-50"
-          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/team/love.png"
-          alt="shape-img"
-        />
+        <img className="w-50" src={two} alt="shape-img" />
       </div>
       <div className="frame-shape text-end">
-        <img
-          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/team/frame.png"
-          className="w-50"
-          alt="shape-img"
-        />
+        <img src={three} className="w-50" alt="shape-img" />
       </div>
       <div className="container">
         <div className="section-title-area">

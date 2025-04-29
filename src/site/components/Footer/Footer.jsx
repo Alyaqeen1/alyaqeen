@@ -1,6 +1,14 @@
 import { Link } from "react-router";
 import ScrollTop from "./ScrollTop";
 import { useTranslation } from "react-i18next";
+import one from "../../assets/img/footer-top.png";
+import two from "../../assets/img/frame.png";
+import three from "../../assets/img/home/pen-svgrepo-com.svg";
+import four from "../../assets/img/logo/logo.png";
+import five from "../../assets/img/news/pp1.jpg";
+import six from "../../assets/img/news/pp2.jpg";
+import seven from "../../assets/img/footer-bottom.png";
+import watsapp from "../../assets/img/home/whatsapp-icon-logo-svgrepo-com.svg";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -27,7 +35,7 @@ const Footer = () => {
         <a href="https://wa.me/447869636849" target={"_blank"}>
           <img
             className="position-fixed"
-            src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/home/whatsapp-icon-logo-svgrepo-com.svg"
+            src={watsapp}
             style={{
               width: "50px",
               bottom: 20,
@@ -39,25 +47,13 @@ const Footer = () => {
         </a>
       </div>
       <div className="footer-top-shape">
-        <img
-          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/footer-top.png"
-          className="w-50"
-          alt="shape-img"
-        />
+        <img src={one} className="w-50" alt="shape-img" />
       </div>
       <div className="frame-shape">
-        <img
-          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/frame.png"
-          className="w-50"
-          alt="shape-img"
-        />
+        <img src={two} className="w-50" alt="shape-img" />
       </div>
       <div className="zebra-shape float-bob-y text-end">
-        <img
-          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/home/pen-svgrepo-com.svg"
-          style={{ width: "130px" }}
-          alt="shape-img"
-        />
+        <img src={three} style={{ width: "130px" }} alt="shape-img" />
       </div>
       <div className="container">
         <div className="contact-info-area">
@@ -174,11 +170,7 @@ const Footer = () => {
               <div className="single-footer-widget">
                 <div className="widget-head w-25">
                   <Link to="/">
-                    <img
-                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/logo/logo.png"
-                      className="w-100"
-                      alt="logo-img"
-                    />
+                    <img src={four} className="w-100" alt="logo-img" />
                   </Link>
                 </div>
                 <div className="footer-content">
@@ -295,10 +287,7 @@ const Footer = () => {
                 <div className="recent-post-area">
                   <div className="recent-post-items">
                     <div className="thumb">
-                      <img
-                        src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/pp1.jpg"
-                        alt="post-img"
-                      />
+                      <img src={five} alt="post-img" />
                     </div>
                     <div className="content">
                       <ul className="post-date">
@@ -317,10 +306,7 @@ const Footer = () => {
                   </div>
                   <div className="recent-post-items mb-0">
                     <div className="thumb">
-                      <img
-                        src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/pp2.jpg"
-                        alt="post-img"
-                      />
+                      <img src={six} alt="post-img" />
                     </div>
                     <div className="content">
                       <ul className="post-date">
@@ -345,10 +331,7 @@ const Footer = () => {
       </div>
       <div className="footer-bottom">
         <div className="f-bottom-shape">
-          <img
-            src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/footer-bottom.png"
-            alt="shape-img"
-          />
+          <img src={seven} alt="shape-img" />
         </div>
         <div className="container">
           <div className="footer-wrapper d-flex align-items-center justify-content-between">

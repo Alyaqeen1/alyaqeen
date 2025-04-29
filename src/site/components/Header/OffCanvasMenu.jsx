@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router";
+import logo from "../../assets/img/logo/logo.png";
 
 const OffCanvasMenu = ({ toggleMenu, handleToggleMenu }) => {
   const [openSubMenu, setOpenSubMenu] = useState(null);
@@ -46,10 +47,7 @@ const OffCanvasMenu = ({ toggleMenu, handleToggleMenu }) => {
               <div className="offcanvas__top mb-5 d-flex justify-content-between align-items-center">
                 <div className="offcanvas__logo">
                   <Link to="/">
-                    <img
-                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/logo/logo.png"
-                      alt="logo-img"
-                    />
+                    <img src={logo} alt="logo-img" />
                   </Link>
                 </div>
                 <div className="offcanvas__close">

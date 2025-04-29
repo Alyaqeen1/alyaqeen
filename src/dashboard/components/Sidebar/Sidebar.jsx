@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Outlet, Link, NavLink } from "react-router";
 import { FaChevronDown, FaChevronRight, FaRegCircle } from "react-icons/fa";
 import { TiHomeOutline } from "react-icons/ti";
+import logo from "../../../site/assets/img/logo/logo.png";
 
 export default function Sidebar() {
   const [openSubMenu, setOpenSubMenu] = useState("pages");
@@ -51,11 +52,7 @@ export default function Sidebar() {
       >
         {/* Sidebar Header */}
         <Link to="/" className="py-2 text-white text-center">
-          <img
-            src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/logo/logo.png"
-            style={{ width: "60px" }}
-            alt=""
-          />
+          <img src={logo} style={{ width: "60px" }} alt="" />
         </Link>
         <hr className="text-white" />
         {/* Sidebar Links */}

@@ -1,5 +1,9 @@
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
+import oneImg from "../../assets/img/plane.png";
+import threeImg from "../../assets/img/cta/plane.png";
+import fourImg from "../../assets/img/cta/shape.png";
+import teacherOfTheYear from "../../assets/img/team/team02.png";
 
 const MainCta = () => {
   const { t } = useTranslation(["home", "common"]);
@@ -15,27 +19,15 @@ const MainCta = () => {
   return (
     <section className="main-cta-section rounded-5">
       <div className="plane-shape float-bob-y text-end">
-        <img
-          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/plane.png"
-          className="w-50"
-          alt="shape-img"
-        />
+        <img src={oneImg} className="w-50" alt="shape-img" />
       </div>
       <div className="container">
         <div className="main-cta-wrapper section-padding">
           <div className="plane-shape float-bob-y">
-            <img
-              src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/cta/plane.png"
-              className="w-50"
-              alt="img"
-            />
+            <img src={threeImg} className="w-50" alt="img" />
           </div>
           <div className="cta-shape float-bob-x">
-            <img
-              src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/cta/shape.png"
-              className="w-50"
-              alt="img"
-            />
+            <img src={fourImg} className="w-50" alt="img" />
           </div>
           <div className="cta-bg" style={{ borderRadius: "100px" }}></div>
           {/* changed newsletter section from here */}
@@ -47,7 +39,7 @@ const MainCta = () => {
                 data-aos="fade-up"
                 data-aos-delay="500"
                 style={{ height: "500px" }}
-                src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/team/team02.png"
+                src={teacherOfTheYear}
                 alt="img"
               />
             </div>

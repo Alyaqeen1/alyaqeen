@@ -1,6 +1,12 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-
+import three from "../../assets/img/program/mask.png";
+import four from "../../assets/img/program/pencil.png";
+import five from "../../assets/img/program/mask-2.png";
+import six from "../../assets/img/program/compass.png";
+import seven from "../../assets/img/home/online-learing.png";
+import eight from "../../assets/img/home/nikaah_bg.jpg";
+import nine from "../../assets/img/home/sports-club.jpg";
 import { Link } from "react-router";
 
 export default function AdditionalServices() {
@@ -14,32 +20,17 @@ export default function AdditionalServices() {
       id="programs"
     >
       <div className="mask-shape float-bob-x">
-        <img
-          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/mask.png"
-          className="w-50"
-          alt="shape-img"
-        />
+        <img src={three} className="w-50" alt="shape-img" />
       </div>
       <div className="pencil-shape">
-        <img
-          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/pencil.png"
-          className="w-50"
-        />
+        <img src={four} className="w-50" />
       </div>
       <div className="mask-shape-2 text-end">
-        <img
-          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/mask-2.png"
-          className="w-50"
-          alt="shape-img"
-        />
+        <img src={five} className="w-50" alt="shape-img" />
       </div>
 
       <div className="compass-shape text-end">
-        <img
-          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/compass.png"
-          className="w-50"
-          alt="shape-img"
-        />
+        <img src={six} className="w-50" alt="shape-img" />
       </div>
       <div className="container">
         <div className="section-title-area">
@@ -81,7 +72,7 @@ export default function AdditionalServices() {
                     height: "300px",
                     borderRadius: "150px",
                   }}
-                  src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/home/online-learing.png"
+                  src={seven}
                   alt="img"
                 />
               </div>
@@ -113,7 +104,7 @@ export default function AdditionalServices() {
                     height: "300px",
                     borderRadius: "150px",
                   }}
-                  src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/home/nikaah_bg.jpg"
+                  src={eight}
                   alt="img"
                 />
               </div>
@@ -148,7 +139,7 @@ export default function AdditionalServices() {
                     height: "300px",
                     borderRadius: "150px",
                   }}
-                  src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/home/sports-club.jpg"
+                  src={nine}
                   alt="img"
                 />
               </div>

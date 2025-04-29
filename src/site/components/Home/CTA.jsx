@@ -1,5 +1,9 @@
 import { Trans, useTranslation } from "react-i18next";
 import { Link } from "react-router";
+import one from "../../assets/img/cta/plane.png";
+import two from "../../assets/img/cta/pencil.png";
+import five from "../../assets/img/cta/cta-bg.jpg";
+import six from "../../assets/img/cta/cta-new-image.png";
 
 const CTA = () => {
   const { t } = useTranslation(["home"]);
@@ -8,22 +12,14 @@ const CTA = () => {
     <section
       className="cta-section fix section-padding bg-cover"
       style={{
-        backgroundImage: `url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/cta/cta-bg.jpg)`,
+        backgroundImage: `url(${five})`,
       }}
     >
       <div className="plane-shape">
-        <img
-          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/cta/plane.png"
-          className="w-50"
-          alt="img"
-        />
+        <img src={one} className="w-50" alt="img" />
       </div>
       <div className="pencil-shape text-end">
-        <img
-          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/cta/pencil.png"
-          className="w-50"
-          alt="img"
-        />
+        <img src={two} className="w-50" alt="img" />
       </div>
       <div className="container">
         <div className="cta-wrapper">
@@ -67,21 +63,14 @@ const CTA = () => {
                 <img
                   className="w-100"
                   // style={{ height: "400px" }}
-                  src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/cta/cta-new-image.png"
-                  // src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/home/graduation-mortarboard-svgrepo-com.svg"
+                  src={six}
                   alt="cta-img"
                 />
 
                 <div
                   // style={{ bottom: "20%", right: "10%" }}
                   className="cta-shape text-start"
-                >
-                  {/* <img
-                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/cta/cta-shape.png"
-                    style={{ width: "93%" }}
-                    alt="img"
-                  /> */}
-                </div>
+                ></div>
               </div>
             </div>
           </div>

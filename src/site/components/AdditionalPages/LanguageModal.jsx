@@ -1,6 +1,8 @@
 import { changeLanguage } from "i18next";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import ukImg from "../../assets/img/home/uk_svg_repo.svg";
+import uaeImg from "../../assets/img/home/uae__svg_repo.svg";
 
 export default function LanguageModal() {
   const { i18n } = useTranslation();
@@ -79,7 +81,7 @@ export default function LanguageModal() {
                 }}
               >
                 <img
-                  src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/home/uk_svg_repo.svg"
+                  src={ukImg}
                   onClick={handleClose}
                   style={{
                     width: "100px",
@@ -103,7 +105,7 @@ export default function LanguageModal() {
                 }}
               >
                 <img
-                  src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/home/uae__svg_repo.svg"
+                  src={uaeImg}
                   onClick={handleClose}
                   style={{
                     width: "100px",
