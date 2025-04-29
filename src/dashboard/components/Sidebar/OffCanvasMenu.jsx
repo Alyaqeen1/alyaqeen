@@ -4,6 +4,7 @@ import { FaChevronDown, FaChevronRight, FaRegCircle } from "react-icons/fa";
 import { TiHomeOutline } from "react-icons/ti";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { FaRegWindowClose } from "react-icons/fa";
+import logo from "../../../site/assets/img/logo/logo.png";
 
 export default function OffCanvasMenu() {
   const [openSubMenu, setOpenSubMenu] = useState("pages");
@@ -89,7 +90,7 @@ export default function OffCanvasMenu() {
             <div className="text-center py-2">
               <Link to="/" className="py-2 text-white text-center">
                 <img
-                  src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/logo/logo.png"
+                  src={logo}
                   className="mx-auto"
                   style={{ width: "60px" }}
                   alt=""
