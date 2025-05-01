@@ -1,28 +1,24 @@
 import { Link } from "react-router";
+import one from "../../assets/img/about/left-shape.png";
+import two from "../../assets/img/plane.png";
+import three from "../../assets/img/line-1.png";
+import four from "../../assets/img/about/radius-shape.png";
+import five from "../../assets/img/about/circle.png";
+import six from "../../assets/img/about/parent.png";
+import seven from "../../assets/img/about/kid-smile.png";
+import eight from "../../assets/img/team/team01.jpeg";
 
 const Values = () => {
   return (
     <section className="about-section section-padding pt-0" id="about">
       <div className="left-shape">
-        <img
-          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/about/left-shape.png"
-          className="w-50"
-          alt="shape-img"
-        />
+        <img src={one} className="w-50" alt="shape-img" />
       </div>
       <div className="plane-shape float-bob-y">
-        <img
-          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/plane.png"
-          className="w-50"
-          alt="shape-img"
-        />
+        <img src={two} className="w-50" alt="shape-img" />
       </div>
       <div className="line-1 text-end">
-        <img
-          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/line-1.png"
-          className="w-50"
-          alt="shape-img"
-        />
+        <img src={three} className="w-50" alt="shape-img" />
       </div>
       <div className="container">
         <div className="about-wrapper-3">
@@ -30,22 +26,14 @@ const Values = () => {
             <div className="col-lg-6">
               <div className="about-image-area">
                 <div className="radius-shape">
-                  <img
-                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/about/radius-shape.png"
-                    className="w-50"
-                    alt="shape-img"
-                  />
+                  <img src={four} className="w-50" alt="shape-img" />
                 </div>
                 <div className="circle-shape text-end">
-                  <img
-                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/about/circle.png"
-                    className="w-50"
-                    alt="shape-img"
-                  />
+                  <img src={five} className="w-50" alt="shape-img" />
                 </div>
                 <div className="about-image">
                   <img
-                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/about/parent.png"
+                    src={six}
                     alt="about-img"
                     data-aos-duration="800"
                     data-aos="fade-up"
@@ -58,7 +46,7 @@ const Values = () => {
                     data-aos-delay="500"
                   >
                     <img
-                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/about/kid-smile.png"
+                      src={seven}
                       className=""
                       style={{ width: "60%" }}
                       alt="about-img"
@@ -137,7 +125,7 @@ const Values = () => {
                     data-aos-delay="500"
                   >
                     <img
-                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/team/team01.jpeg"
+                      src={eight}
                       className="rounded-circle object-fit-cover"
                       style={{ width: "60px", height: "60px" }}
                       alt="author-img"

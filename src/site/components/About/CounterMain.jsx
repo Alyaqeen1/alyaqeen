@@ -1,5 +1,11 @@
 import { useTranslation } from "react-i18next";
 import Counter from "./Counter";
+import one from "../../assets/img/counter/line-shape.png";
+import two from "../../assets/img/counter/box-shape.png";
+import three from "../../assets/img/counter/icon-1.svg";
+import four from "../../assets/img/counter/icon-2.svg";
+import five from "../../assets/img/counter/icon-3.svg";
+import six from "../../assets/img/counter/icon-4.svg";
 
 const CounterMain = () => {
   const { t } = useTranslation(["about"]);
@@ -7,18 +13,10 @@ const CounterMain = () => {
   return (
     <section className="counter-section fix">
       <div className="line-shape">
-        <img
-          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/counter/line-shape.png"
-          className="w-50"
-          alt="shape-img"
-        />
+        <img src={one} className="w-50" alt="shape-img" />
       </div>
       <div className="box-shape float-bob-x text-end">
-        <img
-          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/counter/box-shape.png"
-          className="w-50"
-          alt="shape-img"
-        />
+        <img src={two} className="w-50" alt="shape-img" />
       </div>
       <div className="counter-bg"></div>
       <div className="container">
@@ -32,10 +30,7 @@ const CounterMain = () => {
             >
               <div className="counter-items flex flex-col items-center justify-center">
                 <div className="icon">
-                  <img
-                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/counter/icon-1.svg"
-                    alt="img"
-                  />
+                  <img src={three} alt="img" />
                 </div>
                 <div className="content">
                   <h2>
@@ -56,10 +51,7 @@ const CounterMain = () => {
             >
               <div className="counter-items flex flex-col items-center justify-center">
                 <div className="icon">
-                  <img
-                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/counter/icon-2.svg"
-                    alt="img"
-                  />
+                  <img src={four} alt="img" />
                 </div>
                 <div className="content">
                   <h2>
@@ -80,10 +72,7 @@ const CounterMain = () => {
             >
               <div className="counter-items flex flex-col items-center justify-center">
                 <div className="icon">
-                  <img
-                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/counter/icon-3.svg"
-                    alt="img"
-                  />
+                  <img src={five} alt="img" />
                 </div>
                 <div className="content">
                   <h2>
@@ -104,10 +93,7 @@ const CounterMain = () => {
             >
               <div className="counter-items flex flex-col items-center justify-center border-none">
                 <div className="icon">
-                  <img
-                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/counter/icon-4.svg"
-                    alt="img"
-                  />
+                  <img src={six} alt="img" />
                 </div>
                 <div className="content">
                   <h2>

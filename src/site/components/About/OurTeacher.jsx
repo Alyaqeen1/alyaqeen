@@ -2,6 +2,7 @@ import { Link } from "react-router";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
+import one from "../../assets/img/team/team-shape.png";
 
 const OurTeacher = () => {
   const { t } = useTranslation(["home"]);
@@ -25,10 +26,7 @@ const OurTeacher = () => {
               <div className="team-items mt-0">
                 <div className="team-image">
                   <div className="shape-img">
-                    <img
-                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/team/team-shape.png"
-                      alt="img"
-                    />
+                    <img src={one} alt="img" />
                   </div>
                   <img src={single_data?.image_link} alt="team-img" />
                   <div className="social-profile">

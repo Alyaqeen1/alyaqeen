@@ -5,6 +5,10 @@ import { Link } from "react-router";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
+import one from "../../assets/img/tree-shape.png";
+import two from "../../assets/img/testi-r-shape.png";
+import three from "../../assets/img/testi-bee-shape.png";
+import four from "../../assets/img/team/team-shape.png";
 
 const AboutTeam = ({ title, subtitle }) => {
   const { t } = useTranslation(["home"]);
@@ -18,25 +22,13 @@ const AboutTeam = ({ title, subtitle }) => {
   return (
     <section className="team-section-3 fix  section-padding pt-1 mt-60">
       <div className="tree-shape float-bob-x">
-        <img
-          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/tree-shape.png"
-          className="w-50"
-          alt="shape-img"
-        />
+        <img src={one} className="w-50" alt="shape-img" />
       </div>
       <div className="right-shape text-end">
-        <img
-          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/testi-r-shape.png"
-          className="w-50"
-          alt="shape-img"
-        />
+        <img src={two} className="w-50" alt="shape-img" />
       </div>
       <div className="bee-shape float-bob-y text-end">
-        <img
-          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/testi-bee-shape.png"
-          className="w-50"
-          alt="shape-img"
-        />
+        <img src={three} className="w-50" alt="shape-img" />
       </div>
       <div className="container">
         <div className="section-title-area">
@@ -102,10 +94,7 @@ const AboutTeam = ({ title, subtitle }) => {
                     <div className="team-items">
                       <div className="team-image">
                         <div className="shape-img">
-                          <img
-                            src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/team/team-shape.png"
-                            alt="img"
-                          />
+                          <img src={four} alt="img" />
                         </div>
                         <img src={state_member?.image_link} alt="team-img" />
                         <div className="social-profile">

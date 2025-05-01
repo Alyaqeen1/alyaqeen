@@ -3,6 +3,8 @@ import { Autoplay, Navigation } from "swiper/modules";
 import "swiper/swiper-bundle.css";
 import { useGetReviewsQuery } from "../../../redux/features/reviews/reviewsApi";
 import LoadingSpinner from "../LoadingSpinner";
+import three from "../../assets/img/client/shape-1.png";
+import four from "../../assets/img/client/shape-2.png";
 
 const AboutTestimonial = () => {
   const { data: reviews, isLoading, isError } = useGetReviewsQuery();
@@ -15,18 +17,10 @@ const AboutTestimonial = () => {
       <div className="container">
         <div className="testimonial-wrapper style-2 section-padding">
           <div className="shape-1">
-            <img
-              src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/client/shape-1.png"
-              className="w-50"
-              alt="shape-img"
-            />
+            <img src={three} className="w-50" alt="shape-img" />
           </div>
           <div className="shape-2">
-            <img
-              src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/client/shape-2.png"
-              className="w-50"
-              alt="shape-img"
-            />
+            <img src={four} className="w-50" alt="shape-img" />
           </div>
           <div className="testimonial-bg"></div>
           <div className="section-title text-center">

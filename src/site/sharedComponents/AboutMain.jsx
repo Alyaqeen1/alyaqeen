@@ -1,6 +1,15 @@
 import { Link } from "react-router";
 import { useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
+import one from "../assets/img/about/kaaba-svgrepo-com.svg";
+import two from "../assets/img/section-top-shape-2.png";
+import three from "../assets/img/client/shape-2.png";
+import four from "../assets/img/about/academy.png";
+import five from "../assets/img/about/radius-shape.png";
+import six from "../assets/img/about/circle.png";
+import eight from "../assets/img/about/icon-5.svg";
+import nine from "../assets/img/about/icon-6.svg";
+import ten from "../assets/img/team/team01.jpeg";
 
 const AboutMain = ({
   image,
@@ -27,24 +36,13 @@ const AboutMain = ({
   return (
     <section className="about-activities-section-2 style-2 section-padding">
       <div className="zebra-shape float-bob-y w-25 text-end">
-        <img
-          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/about/kaaba-svgrepo-com.svg"
-          style={{ width: "35%" }}
-          alt="shape-img"
-        />
+        <img src={one} style={{ width: "35%" }} alt="shape-img" />
       </div>
       <div className="bottom-shape">
-        <img
-          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/section-top-shape-2.png"
-          alt="shape-img"
-        />
+        <img src={two} alt="shape-img" />
       </div>
       <div className="sun-shape">
-        <img
-          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/client/shape-2.png"
-          className="w-50"
-          alt="shape-img"
-        />
+        <img src={three} className="w-50" alt="shape-img" />
       </div>
       <div className="container">
         <div className="about-activities-wrapper style-2">
@@ -56,26 +54,12 @@ const AboutMain = ({
               data-aos-delay="300"
             >
               <div className="activities-image-items">
-                <img
-                  src={
-                    image ||
-                    "https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/about/academy.png"
-                  }
-                  alt="img"
-                />
+                <img src={image || four} alt="img" />
                 <div className="radius-shape">
-                  <img
-                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/about/radius-shape.png"
-                    className="w-50"
-                    alt="shape-img"
-                  />
+                  <img src={five} className="w-50" alt="shape-img" />
                 </div>
                 <div className="circle-shape text-end">
-                  <img
-                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/about/circle.png"
-                    className="w-50"
-                    alt="shape-img"
-                  />
+                  <img src={six} className="w-50" alt="shape-img" />
                 </div>
               </div>
             </div>
@@ -170,10 +154,7 @@ const AboutMain = ({
                   >
                     <div className="icon-items">
                       <div className="icon">
-                        <img
-                          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/about/icon-5.svg"
-                          alt="img"
-                        />
+                        <img src={eight} alt="img" />
                       </div>
                       <div className="content">
                         <h5>{sportTitle}</h5>
@@ -194,10 +175,7 @@ const AboutMain = ({
                   >
                     <div className="icon-items">
                       <div className="icon">
-                        <img
-                          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/about/icon-6.svg"
-                          alt="img"
-                        />
+                        <img src={nine} alt="img" />
                       </div>
                       <div className="content">
                         <h5>{learnTitle}</h5>
@@ -219,7 +197,7 @@ const AboutMain = ({
                     data-aos-delay="300"
                   >
                     <img
-                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/team/team01.jpeg"
+                      src={ten}
                       className="rounded-circle object-fit-cover"
                       style={{ width: "60px", height: "60px" }}
                       alt="author-img"

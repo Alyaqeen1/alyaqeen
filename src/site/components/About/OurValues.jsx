@@ -1,4 +1,12 @@
 import { Trans, useTranslation } from "react-i18next";
+import one from "../../assets/img/value/shape-1.png";
+import two from "../../assets/img/value/shape-2.png";
+import three from "../../assets/img/value/icon-1.svg";
+import four from "../../assets/img/value/icon-2.svg";
+import five from "../../assets/img/about/about-girl.png";
+import six from "../../assets/img/cta/cta-shape-2.png";
+import seven from "../../assets/img/value/icon-3.svg";
+import eight from "../../assets/img/value/icon-4.svg";
 
 const OurValues = () => {
   const { t } = useTranslation(["about"]);
@@ -6,18 +14,10 @@ const OurValues = () => {
   return (
     <section className="feature-value-section fix section-padding section-bg-2">
       <div className="shape-1">
-        <img
-          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/value/shape-1.png"
-          className="w-50"
-          alt="shape-img"
-        />
+        <img src={one} className="w-50" alt="shape-img" />
       </div>
       <div className="shape-2 float-bob-x">
-        <img
-          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/value/shape-2.png"
-          className="w-50"
-          alt="shape-img"
-        />
+        <img src={two} className="w-50" alt="shape-img" />
       </div>
       <div className="container">
         <div className="section-title text-center">
@@ -38,10 +38,7 @@ const OurValues = () => {
                 data-aos-delay="300"
               >
                 <div className="icon">
-                  <img
-                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/value/icon-1.svg"
-                    alt="img"
-                  />
+                  <img src={three} alt="img" />
                 </div>
                 <div className="content">
                   <h5>Teacher Training and Progress </h5>
@@ -58,10 +55,7 @@ const OurValues = () => {
                 data-aos-delay="500"
               >
                 <div className="icon color-2">
-                  <img
-                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/value/icon-2.svg"
-                    alt="img"
-                  />
+                  <img src={four} alt="img" />
                 </div>
                 <div className="content">
                   <h5>Nanny Selection 24/7</h5>
@@ -81,13 +75,10 @@ const OurValues = () => {
           >
             <div className="feature-value-items">
               <div className="feature-value-image">
-                <img
-                  src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/about/about-girl.png"
-                  alt="img"
-                />
+                <img src={five} alt="img" />
                 <div className="value-shape">
                   <img
-                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/cta/cta-shape-2.png"
+                    src={six}
                     className=""
                     style={{ width: "85%" }}
                     alt="shape-img"
@@ -112,10 +103,7 @@ const OurValues = () => {
                   </p>
                 </div>
                 <div className="icon color-3">
-                  <img
-                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/value/icon-3.svg"
-                    alt="img"
-                  />
+                  <img src={seven} alt="img" />
                 </div>
               </div>
               <div
@@ -132,10 +120,7 @@ const OurValues = () => {
                   </p>
                 </div>
                 <div className="icon color-2 color-4">
-                  <img
-                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/value/icon-4.svg"
-                    alt="img"
-                  />
+                  <img src={eight} alt="img" />
                 </div>
               </div>
             </div>

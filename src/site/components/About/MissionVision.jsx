@@ -1,21 +1,20 @@
 import { Link } from "react-router";
+import one from "../../assets/img/about/line-shape.png";
+import two from "../../assets/img/about/frame.png";
+import three from "../../assets/img/about/border-shape.png";
+import four from "../../assets/img/about/mission-vision.png";
+import five from "../../assets/img/about/icon-7.svg";
+import six from "../../assets/img/about/icon-8.svg";
+import seven from "../../assets/img/team/team01.jpeg";
 
 const MissionVision = () => {
   return (
     <section className="about-section-2 fix section-padding" id="about">
       <div className="left-shape">
-        <img
-          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/about/line-shape.png"
-          className="w-50"
-          alt="shape-img"
-        />
+        <img src={one} className="w-50" alt="shape-img" />
       </div>
       <div className="frame-shape text-end">
-        <img
-          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/about/frame.png"
-          className="w-50"
-          alt="shape-img"
-        />
+        <img src={two} className="w-50" alt="shape-img" />
       </div>
       <div className="container">
         <div className="about-wrapper-2">
@@ -29,17 +28,14 @@ const MissionVision = () => {
               <div className="about-image-items">
                 <div className="border-shape ">
                   <img
-                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/about/border-shape.png"
+                    src={three}
                     className=""
                     style={{ width: "365px" }}
                     alt="shape-img"
                   />
                 </div>
                 <div className="thumb">
-                  <img
-                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/about/mission-vision.png"
-                    alt="about-img"
-                  />
+                  <img src={four} alt="about-img" />
                 </div>
               </div>
             </div>
@@ -77,10 +73,7 @@ const MissionVision = () => {
                   >
                     <div className="icon-items">
                       <div className="icon">
-                        <img
-                          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/about/icon-7.svg"
-                          alt="img"
-                        />
+                        <img src={five} alt="img" />
                       </div>
                       <div className="content">
                         <h5>Our Mission</h5>
@@ -98,10 +91,7 @@ const MissionVision = () => {
                   >
                     <div className="icon-items">
                       <div className="icon">
-                        <img
-                          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/about/icon-8.svg"
-                          alt="img"
-                        />
+                        <img src={six} alt="img" />
                       </div>
                       <div className="content">
                         <h5>Our Vision</h5>
@@ -120,7 +110,7 @@ const MissionVision = () => {
                     data-aos-delay="300"
                   >
                     <img
-                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/team/team01.jpeg"
+                      src={seven}
                       className="rounded-circle object-fit-cover"
                       style={{ width: "60px", height: "60px" }}
                       alt="author-img"
