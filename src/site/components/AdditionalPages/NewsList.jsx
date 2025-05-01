@@ -3,6 +3,11 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { useGetNewsQuery } from "../../../redux/features/news/newsAPI";
 import LoadingSpinner from "../LoadingSpinner";
+import one from "../../assets/img/news/post-1.jpg";
+
+import four from "../../assets/img/news/pp3.jpg";
+import five from "../../assets/img/news/pp4.jpg";
+import six from "../../assets/img/news/pp5.jpg";
 
 const NewsList = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -64,10 +69,7 @@ const NewsList = () => {
                           />
                         )
                       ) : (
-                        <img
-                          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/post-1.jpg"
-                          alt="img"
-                        />
+                        <img src={one} alt="img" />
                       )}
                       <div className="post">
                         <span>{selectedCategory}</span>
@@ -215,10 +217,7 @@ const NewsList = () => {
                 <div className="recent-post-area">
                   <div className="recent-items">
                     <div className="recent-thumb">
-                      <img
-                        src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/pp3.jpg"
-                        alt="img"
-                      />
+                      <img src={four} alt="img" />
                     </div>
                     <div className="recent-content">
                       <ul>
@@ -237,10 +236,7 @@ const NewsList = () => {
                   </div>
                   <div className="recent-items">
                     <div className="recent-thumb">
-                      <img
-                        src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/pp4.jpg"
-                        alt="img"
-                      />
+                      <img src={five} alt="img" />
                     </div>
                     <div className="recent-content">
                       <ul>
@@ -259,10 +255,7 @@ const NewsList = () => {
                   </div>
                   <div className="recent-items">
                     <div className="recent-thumb">
-                      <img
-                        src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/pp5.jpg"
-                        alt="img"
-                      />
+                      <img src={six} alt="img" />
                     </div>
                     <div className="recent-content">
                       <ul>

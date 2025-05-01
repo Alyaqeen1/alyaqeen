@@ -1,13 +1,14 @@
 import React from "react";
 import CmnBanner from "../../sharedComponents/CmnBanner";
 import CourseDetails from "../../components/Course/CourseDetails";
+import one from "../../assets/img/program/course4.png";
 
 export default function MathEnglishScience() {
   return (
     <div>
       <CmnBanner title="Maths, English & Science"></CmnBanner>
       <CourseDetails
-        image="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/course4.png"
+        image={one}
         title="Maths, English & Science"
         subtitle1="Descriptions"
         descriptionPara1="At Alyaqeen Academy, we have a team of dedicated tutors who are committed to providing quality education. Our tutors ensure that students are taught according to the national curriculum syllabus while also catering to their individual learning needs."

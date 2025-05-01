@@ -121,10 +121,6 @@ const TestimonialOne = () => {
                               </div>
                               <p>{review?.description}</p>
                               <div className="client-info">
-                                {/* <img
-                                  src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/client/01.png"
-                                  alt="img"
-                                /> */}
                                 <div className="content">
                                   <h5>{review?.name}</h5>
                                   <p>{review?.email}</p>

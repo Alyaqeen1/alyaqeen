@@ -3,6 +3,9 @@ import { Link } from "react-router";
 import { useGetProductsQuery } from "../../../redux/features/products/productsApi";
 import LoadingSpinner from "../LoadingSpinner";
 import ProductModal from "./ProductModal";
+import four from "../../assets/img/pricing/icon.svg";
+import five from "../../assets/img/pricing/element.png";
+import six from "../../assets/img/pricing/element-2.png";
 
 const PricingPlan = () => {
   const {
@@ -95,16 +98,10 @@ const PricingPlan = () => {
                       }`}
                     >
                       <div className="icon">
-                        <img
-                          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/pricing/icon.svg"
-                          alt="icon-img"
-                        />
+                        <img src={four} alt="icon-img" />
                       </div>
                       <div className="element-shape">
-                        <img
-                          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/pricing/element.png"
-                          alt="shape-img"
-                        />
+                        <img src={five} alt="shape-img" />
                       </div>
                       <div className="pricing-header">
                         <h4>{product?.title}</h4>

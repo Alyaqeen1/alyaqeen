@@ -1,13 +1,14 @@
 import React from "react";
 import CmnBanner from "../../sharedComponents/CmnBanner";
 import CourseDetails from "../../components/Course/CourseDetails";
+import one from "../../assets/img/program/image4.jpg";
 
 export default function ArabicLanguage() {
   return (
     <div>
       <CmnBanner title="Arabic Language"></CmnBanner>
       <CourseDetails
-        image="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/program/image4.jpg"
+        image={one}
         title="Arabic Language"
         subtitle1="Descriptions"
         descriptionPara1="Islam is just not religion that Muslims follow, but it is a way of life."

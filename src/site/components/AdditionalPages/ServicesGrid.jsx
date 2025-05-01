@@ -1,6 +1,8 @@
 import { Link } from "react-router";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import one from "../../assets/img/event/shape.png";
+import two from "../../assets/img/event/calender.svg";
 
 const ServicesGrid = () => {
   const [services, setServices] = useState([]);
@@ -28,18 +30,11 @@ const ServicesGrid = () => {
                     alt="event-img"
                   />
                   <div className="event-shape">
-                    <img
-                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/event/shape.png"
-                      alt="shape-img"
-                    />
+                    <img src={one} alt="shape-img" />
                   </div>
                   <ul className="post-date">
                     <li>
-                      <img
-                        src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/event/calender.svg"
-                        alt="img"
-                        className="me-2"
-                      />
+                      <img src={two} alt="img" className="me-2" />
                       Jan 16, 2024
                     </li>
                   </ul>

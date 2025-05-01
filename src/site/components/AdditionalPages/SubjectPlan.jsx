@@ -1,4 +1,8 @@
 import React from "react";
+import four from "../../assets/img/pricing/icon.svg";
+import five from "../../assets/img/pricing/element.png";
+import six from "../../assets/img/pricing/element-2.png";
+
 export default function SubjectPlan({
   aqidahData,
   fiqhData,
@@ -18,17 +22,10 @@ export default function SubjectPlan({
       >
         <div className="pricing-items box-shadow">
           <div className="icon">
-            <img
-              src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/pricing/icon.svg"
-              alt="icon-img"
-            />
+            <img src={four} alt="icon-img" />
           </div>
           <div className="element-shape text-end">
-            <img
-              src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/pricing/element.png"
-              className="w-75"
-              alt="shape-img"
-            />
+            <img src={five} className="w-75" alt="shape-img" />
           </div>
           <div className="pricing-header mt-3 pb-5">
             <h4 className="text-uppercase">Aqidah</h4>
@@ -62,17 +59,10 @@ export default function SubjectPlan({
       >
         <div className="pricing-items active">
           <div className="icon">
-            <img
-              src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/pricing/icon.svg"
-              alt="icon-img"
-            />
+            <img src={four} alt="icon-img" />
           </div>
           <div className="element-shape text-end">
-            <img
-              src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/pricing/element-2.png"
-              className="w-75"
-              alt="shape-img"
-            />
+            <img src={six} className="w-75" alt="shape-img" />
           </div>
           <div className="pricing-header mt-3 pb-5">
             <h4 className="text-uppercase">Fiqh</h4>
@@ -105,17 +95,10 @@ export default function SubjectPlan({
       >
         <div className="pricing-items active">
           <div className="icon">
-            <img
-              src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/pricing/icon.svg"
-              alt="icon-img"
-            />
+            <img src={four} alt="icon-img" />
           </div>
           <div className="element-shape text-end">
-            <img
-              src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/pricing/element-2.png"
-              className="w-75"
-              alt="shape-img"
-            />
+            <img src={six} className="w-75" alt="shape-img" />
           </div>
           <div className="pricing-header mt-3 pb-5">
             <h4 className="text-uppercase">History</h4>
@@ -148,17 +131,10 @@ export default function SubjectPlan({
       >
         <div className="pricing-items box-shadow">
           <div className="icon">
-            <img
-              src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/pricing/icon.svg"
-              alt="icon-img"
-            />
+            <img src={four} alt="icon-img" />
           </div>
           <div className="element-shape text-end">
-            <img
-              src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/pricing/element.png"
-              className="w-75"
-              alt="shape-img"
-            />
+            <img src={five} className="w-75" alt="shape-img" />
           </div>
           <div className="pricing-header mt-3 pb-5">
             <h4 className="text-uppercase">Personal Development</h4>
@@ -195,17 +171,10 @@ export default function SubjectPlan({
       >
         <div className="pricing-items active">
           <div className="icon">
-            <img
-              src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/pricing/icon.svg"
-              alt="icon-img"
-            />
+            <img src={four} alt="icon-img" />
           </div>
           <div className="element-shape text-end">
-            <img
-              src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/pricing/element-2.png"
-              className="w-75"
-              alt="shape-img"
-            />
+            <img src={six} className="w-75" alt="shape-img" />
           </div>
           <div className="pricing-header mt-3 pb-5">
             <h4 className="text-uppercase">Sirah</h4>

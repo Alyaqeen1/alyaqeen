@@ -1,4 +1,5 @@
 import React from "react";
+import one from "../../assets/img/news/post-1.jpg";
 
 export default function ProductModal({
   selectedProduct,
@@ -56,7 +57,7 @@ export default function ProductModal({
             ) : (
               <img
                 style={{ height: "300px", width: "100%", padding: "10px" }}
-                src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/post-1.jpg"
+                src={one}
                 alt="img"
               />
             )}

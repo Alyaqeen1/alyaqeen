@@ -2,6 +2,10 @@ import Lottie from "lottie-react";
 import loginAnimation from "../../assets/animation/login.json";
 import { useNavigate } from "react-router";
 import { useEffect } from "react";
+import one from "../../assets/img/line-1.png";
+import two from "../../assets/img/line-2.png";
+import three from "../../assets/img/contact.png";
+import four from "../../assets/img/circle-2.png";
 
 const LoginComp = () => {
   const navigate = useNavigate();
@@ -25,18 +29,10 @@ const LoginComp = () => {
   return (
     <section className="contact-section py-5">
       <div className="line-1">
-        <img
-          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/line-1.png"
-          className="w-50"
-          alt="shape-img"
-        />
+        <img src={one} className="w-50" alt="shape-img" />
       </div>
       <div className="line-2 text-end">
-        <img
-          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/line-2.png"
-          className="w-50"
-          alt="shape-img"
-        />
+        <img src={two} className="w-50" alt="shape-img" />
       </div>
       <div className="container">
         <div className="contact-wrapper py-5">
@@ -133,11 +129,7 @@ const LoginComp = () => {
                 />
                 {/* <img src={three} alt="contact-img" /> */}
                 <div className="cricle-shape ">
-                  <img
-                    src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/circle-2.png"
-                    className=""
-                    alt="shape-img"
-                  />
+                  <img src={four} className="" alt="shape-img" />
                 </div>
               </div>
             </div>

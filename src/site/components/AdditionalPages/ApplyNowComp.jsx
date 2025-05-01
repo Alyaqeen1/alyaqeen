@@ -1,19 +1,14 @@
+import one from "../../assets/img/line-1.png";
+import two from "../../assets/img/line-2.png";
+
 const ApplyNowComp = () => {
   return (
     <section className="contact-section section-padding">
       <div className="line-1">
-        <img
-          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/line-1.png"
-          className="w-50"
-          alt="shape-img"
-        />
+        <img src={one} className="w-50" alt="shape-img" />
       </div>
       <div className="line-2 text-end">
-        <img
-          src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/line-2.png"
-          className="w-50"
-          alt="shape-img"
-        />
+        <img src={two} className="w-50" alt="shape-img" />
       </div>
 
       <div className="container">

@@ -1,3 +1,5 @@
+import one from "../assets/img/news/post-5.jpg";
+import two from "../assets/img/news/post-6.jpg";
 import three from "../assets/img/news/comment.png";
 import four from "../assets/img/news/comment-2.png";
 
@@ -74,7 +76,7 @@ const NewsDetails = () => {
                           height: "450px",
                           objectFit: "cover",
                         }}
-                        src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/post-1.jpg"
+                        src={one}
                         alt="img"
                       />
                     )}
@@ -175,10 +177,7 @@ const NewsDetails = () => {
                               <img src={singleNews?.media[1]?.url} alt="img" />
                             )
                           ) : (
-                            <img
-                              src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/post-5.jpg"
-                              alt="img"
-                            />
+                            <img src={one} alt="img" />
                           )}
 
                           {/* <img src={one} alt="img" /> */}
@@ -205,10 +204,7 @@ const NewsDetails = () => {
                               <img src={singleNews?.media[2]?.url} alt="img" />
                             )
                           ) : (
-                            <img
-                              src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/post-6.jpg"
-                              alt="img"
-                            />
+                            <img src={two} alt="img" />
                           )}
                           {/* <img src={two} alt="img" /> */}
                         </div>

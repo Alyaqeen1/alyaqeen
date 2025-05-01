@@ -7,6 +7,8 @@ import { FaRegBell } from "react-icons/fa";
 import { IoSettingsOutline } from "react-icons/io5";
 import { Link } from "react-router";
 import { motion } from "framer-motion";
+import img from "../../../site/assets/img/team/team01.jpeg";
+import logo from "../../assets/favicon.png";
 
 export default function Navbar() {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
@@ -27,11 +29,7 @@ export default function Navbar() {
     <nav class="navbar bg-white sticky-top">
       <div class="container-fluid">
         <Link to="/" class="navbar-brand mb-0 h3">
-          <img
-            src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/dashboard-assets/favicon.png"
-            style={{ width: "40px" }}
-            alt=""
-          />
+          <img src={logo} style={{ width: "40px" }} alt="" />
         </Link>
         <div className="d-flex align-items-center gap-3">
           <motion.button
@@ -91,7 +89,7 @@ export default function Navbar() {
           </motion.button>
           <div className="d-flex gap-2 align-items-center">
             <img
-              src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/team/team01.jpeg"
+              src={img}
               className="rounded-circle object-fit-cover"
               style={{ width: "40px", height: "40px" }}
               alt=""

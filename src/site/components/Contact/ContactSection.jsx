@@ -4,6 +4,7 @@ import ModalVideo from "react-modal-video";
 import { Link } from "react-router";
 import { useAddContactMutation } from "../../../redux/features/contact/contactApi";
 import toast from "react-hot-toast";
+import one from "../../assets/img/about/new-pic.jpeg";
 
 const ContactSection = () => {
   const [isOpen, setOpen] = useState(false);
@@ -130,7 +131,7 @@ const ContactSection = () => {
                   </div>
                   <div className="video-image">
                     <img
-                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/about/new-pic.jpeg"
+                      src={one}
                       className="object-fit-cover"
                       style={{ height: "350px", objectPosition: "center" }}
                       alt="img"

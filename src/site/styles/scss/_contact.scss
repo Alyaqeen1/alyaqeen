@@ -168,7 +168,7 @@
         @include before;
         background-repeat: no-repeat;
         background-size: cover;
-        background-image: url("https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/circle.png");
+        background-image: url("../../assets/img/circle.png");
         animation: cir36 10s linear infinite;
       }
     }
@@ -238,7 +238,7 @@
             @include before;
             background-repeat: no-repeat;
             background-size: cover;
-            background-image: url("https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/circle-3.png");
+            background-image: url("../../assets/img/circle-3.png");
             animation: cir36 10s linear infinite;
           }
         }

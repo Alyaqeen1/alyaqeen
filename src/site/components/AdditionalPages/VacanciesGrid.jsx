@@ -26,40 +26,6 @@ const VacanciesGrid = () => {
               >
                 <div className="news-card-items mt-0 d-flex flex-column w-100">
                   <div className="news-image">
-                    {/* <img
-                      src="https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/04.jpg"
-                      alt="img"
-                    /> */}
-                    {/* <div className="news-layer-wrapper">
-                      <div
-                        className="news-layer-image"
-                        style={{
-                          backgroundImage:
-                            "url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/04.jpg)",
-                        }}
-                      ></div>
-                      <div
-                        className="news-layer-image"
-                        style={{
-                          backgroundImage:
-                            "url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/04.jpg)",
-                        }}
-                      ></div>
-                      <div
-                        className="news-layer-image"
-                        style={{
-                          backgroundImage:
-                            "url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/04.jpg)",
-                        }}
-                      ></div>
-                      <div
-                        className="news-layer-image"
-                        style={{
-                          backgroundImage:
-                            "url(https://talibiq.s3.eu-west-2.amazonaws.com/al-yaqeen/web/images/assets/img/news/04.jpg)",
-                        }}
-                      ></div>
-                    </div> */}
                     <div className="post">
                       <span>Activities</span>
                     </div>
