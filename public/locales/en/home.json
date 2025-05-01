@@ -103,7 +103,7 @@
           "perHour": "£4.44<sm>/hour</sm>",
           "perMonth": "£80<sm>/month</sm>",
           "days": "Sat - Sun",
-          "duration": "10am - 12pm"
+          "duration": "10am - 12pm / 10am - 1pm"
         }
       },
       {
@@ -148,7 +148,7 @@
           "perHour": "£10<sm>/hour</sm>",
           "perMonth": "£50<sm>/month</sm>",
           "days": "Sat - Sun",
-          "duration": "10am - 12:30pm / 12:30 - 2:30pm"
+          "duration": "9 - 10am"
         }
       }
     ]

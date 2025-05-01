@@ -201,7 +201,7 @@ const FeeStructure = () => {
                   <strong>
                     {subjectList[1]?.weekends?.days}
                     <br />
-                    {subjectList[0]?.weekends?.duration}
+                    {subjectList[1]?.weekends?.duration}
                   </strong>
                 </td>
               </tr>
