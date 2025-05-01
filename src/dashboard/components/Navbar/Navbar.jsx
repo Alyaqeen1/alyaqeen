@@ -8,7 +8,7 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { Link } from "react-router";
 import { motion } from "framer-motion";
 import img from "../../../site/assets/img/team/team01.jpeg";
-import logo from "../../assets/favicon.png";
+import logo from "../../dashboard-assets/favicon.png";
 
 export default function Navbar() {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
