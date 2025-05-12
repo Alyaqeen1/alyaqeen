@@ -37,6 +37,7 @@ import AllServices from "./pages/AdditionalPages/AllServices";
 import NewsDetails from "./sharedComponents/NewsDetails";
 import VacancyDetails from "./sharedComponents/VacancyDetails";
 import Complaint from "./pages/AdditionalPages/Complaint";
+import Register from "./pages/Authentication/Register";
 
 const siteRoutes = [
   {
@@ -183,6 +184,10 @@ const siteRoutes = [
       {
         path: "/complaint",
         element: <Complaint></Complaint>,
+      },
+      {
+        path: "/register",
+        element: <Register></Register>,
       },
       {
         path: "*",

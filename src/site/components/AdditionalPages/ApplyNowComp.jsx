@@ -1,9 +1,132 @@
+import { useEffect, useState } from "react";
 import one from "../../assets/img/line-1.png";
 import two from "../../assets/img/line-2.png";
 
 const ApplyNowComp = () => {
+  const [department, setDepartment] = useState("");
+  const [session, setSession] = useState("");
+  const [sessionTime, setSessionTime] = useState("");
+  useEffect(() => {
+    setSession("");
+    setSessionTime("");
+  }, [department]);
+  const getClassOptions = () => {
+    if (!department || !session || !sessionTime) {
+      return <option value="">Select Class</option>;
+    }
+
+    if (department === "math-english") {
+      if (session === "weekend" && sessionTime === "wa") {
+        return <option value="adult-english">Adult English</option>;
+      }
+      if (session === "weekend" && sessionTime === "wm") {
+        return (
+          <>
+            <option value="tuitionG1">Tuition G1</option>
+            <option value="tuitionG2">Tuition G2</option>
+          </>
+        );
+      }
+    }
+
+    if (department === "arabic") {
+      if (session === "weekdays" && sessionTime === "s2") {
+        return <option value="arabic-beginner">Arabic Beginner Group</option>;
+      }
+      if (session === "weekend" && sessionTime === "wa") {
+        return (
+          <>
+            <option value="arabic-gcse">Arabic GCSE</option>
+            <option value="arabic-beginner">Arabic Beginner Group</option>
+          </>
+        );
+      }
+    }
+    if (department === "quran") {
+      if (session === "weekdays" && sessionTime === "s1") {
+        return (
+          <>
+            <option value="b6/7">B6/7</option>
+            <option value="b3/4">B3/4</option>
+            <option value="b1/2">B1/2</option>
+            <option value="g2">G2</option>
+            <option value="g3/4">G3/4</option>
+            <option value="g6/7">G6/7</option>
+          </>
+        );
+      }
+      if (session === "weekdays" && sessionTime === "s2") {
+        return (
+          <>
+            <option value="b8">B8</option>
+            <option value="b5/6">B5/6</option>
+            <option value="bg1/2">BG1/2</option>
+            <option value="g3/5">G3/5</option>
+            <option value="g7/8">G7/8</option>
+            <option value="b7">B7</option>
+          </>
+        );
+      }
+      if (session === "weekend" && sessionTime === "wa") {
+        return (
+          <>
+            <option value="wab3/5">WA - B3/5</option>
+            <option value="wag1/2">WA - G1/2</option>
+            <option value="wab7">WA - B7</option>
+            <option value="wag5/7">WA - G5/7</option>
+            <option value="wab1/2">WA - B1/2</option>
+          </>
+        );
+      }
+      if (session === "weekend" && sessionTime === "wm") {
+        return (
+          <>
+            <option value="wmb1/2">WM - B1/2</option>
+            <option value="wmg7/7">WM - G7/7</option>
+            <option value="wmb8">WM - B8</option>
+            <option value="wmb4/6">WM - B4/6</option>
+            <option value="wmg2/4">WM - G2/4</option>
+          </>
+        );
+      }
+    }
+    if (department === "online") {
+      if (session === "weekdays" && sessionTime === "s1") {
+        return (
+          <>
+            <option value="class1">Qaida and Quran Class 1</option>
+          </>
+        );
+      }
+      if (session === "weekdays" && sessionTime === "s2") {
+        return (
+          <>
+            <option value="class2">Qaida and Quran Class 2</option>
+          </>
+        );
+      }
+      if (session === "weekend" && sessionTime === "wa") {
+        return (
+          <>
+            {" "}
+            <option value="class4">Qaida and Quran Class 4</option>
+          </>
+        );
+      }
+      if (session === "weekend" && sessionTime === "wm") {
+        return (
+          <>
+            <option value="class3">Qaida and Quran Class 3</option>
+          </>
+        );
+      }
+    }
+
+    return <option value="">Not Available</option>;
+  };
+
   return (
-    <section className="contact-section section-padding">
+    <section className="contact-section">
       <div className="line-1">
         <img src={one} className="w-50" alt="shape-img" />
       </div>
@@ -88,20 +211,22 @@ const ApplyNowComp = () => {
                       <div className="form-clt">
                         <span>Departments*</span>
                         <select
+                          onChange={(e) => setDepartment(e.target.value)}
                           name="std_department_id"
+                          value={department}
                           className="form-control selectDepartment"
                           style={{ backgroundColor: "var(--theme2)" }}
                         >
                           <option value="">Select department</option>
-                          <option value="15">
+                          <option value="math-english">
                             Maths, English &amp; Science Tuition
                           </option>
-                          <option value="16">Arabic Language</option>
-                          <option value="17">Urdu/Banla Language</option>
-                          <option value="18">
+                          <option value="arabic">Arabic Language</option>
+                          <option value="urdu">Urdu/Banla Language</option>
+                          <option value="quran">
                             Arabic, Quran &amp; Islamic Education
                           </option>
-                          <option value="19">Online Learning</option>
+                          <option value="online">Online Learning</option>
                         </select>
                       </div>
                     </div>
@@ -115,13 +240,15 @@ const ApplyNowComp = () => {
                       <div className="form-clt">
                         <span>Session*</span>
                         <select
+                          onChange={(e) => setSession(e.target.value)}
                           name="std_type"
+                          value={session}
                           className="form-control font-light selectClassType"
                           style={{ backgroundColor: "var(--theme2)" }}
                         >
                           <option value="">Select Session</option>
-                          <option value="Weekdays">Weekdays</option>
-                          <option value="Weekend">Weekend</option>
+                          <option value="weekdays">Weekdays</option>
+                          <option value="weekend">Weekend</option>
                         </select>
                         {/* <input
                           type="text"
@@ -143,8 +270,22 @@ const ApplyNowComp = () => {
                         <select
                           name="std_time"
                           className="form-control font-light selectClassTime"
+                          value={sessionTime}
+                          style={{ backgroundColor: "var(--theme2)" }}
+                          onChange={(e) => setSessionTime(e.target.value)}
                         >
                           <option value="">Select Session Time</option>
+                          {department && session === "weekdays" ? (
+                            <>
+                              <option value="s1">S1</option>
+                              <option value="s2">S2</option>
+                            </>
+                          ) : department && session === "weekend" ? (
+                            <>
+                              <option value="wm">WM</option>
+                              <option value="wa">WA</option>
+                            </>
+                          ) : null}
                         </select>
                       </div>
                     </div>
@@ -160,8 +301,10 @@ const ApplyNowComp = () => {
                         <select
                           name="std_class_id"
                           className="form-control selectClass"
+                          style={{ backgroundColor: "var(--theme2)" }}
                         >
                           <option value="">Select Class</option>
+                          {getClassOptions()}
                         </select>
                         {/* <input
                           type="text"
@@ -199,6 +342,27 @@ const ApplyNowComp = () => {
                           name="name"
                           id="name"
                           placeholder=""
+                          required
+                        />
+                      </div>
+                    </div>
+                    {/* gender */}
+                    <div
+                      className="col-lg-8 "
+                      data-aos-duration="800"
+                      data-aos="fade-up"
+                      data-aos-delay="500"
+                    >
+                      <div className="form-clt">
+                        <span>
+                          Student Email Address*(Should not be the same as
+                          parent)
+                        </span>
+                        <input
+                          type="email"
+                          name="email"
+                          id="name"
+                          placeholder=""
                         />
                       </div>
                     </div>
@@ -215,6 +379,7 @@ const ApplyNowComp = () => {
                           style={{ backgroundColor: "var(--theme2)" }}
                           name="std_gender"
                           className="form-control"
+                          required
                         >
                           <option value="">Select gender</option>
                           <option value="Male">Male</option>
@@ -230,7 +395,7 @@ const ApplyNowComp = () => {
                       data-aos-delay="700"
                     >
                       <div className="form-clt">
-                        <span>Language*</span>
+                        <span>Language (optional)</span>
                         <input
                           type="text"
                           name="language"
@@ -726,6 +891,52 @@ const ApplyNowComp = () => {
                       <div className="form-clt">
                         <span>Expected Starting Date*</span>
                         <input type="date" name="std_dob" />
+                      </div>
+                    </div>
+                    <div className="text-white">
+                      <h5 className="text-white">
+                        Some important points for your consideration:
+                      </h5>
+                      <p>
+                        1. A one off admission fee of £20 for each course is to
+                        be paid before starting.
+                      </p>
+                      <p>2. Fees MUST be paid by the 1st week of each month.</p>
+                      <p>
+                        3. Alyaqeen Academy will not accept responsibility for
+                        students 10 minutes after home time nor for students who
+                        arrive 10 minutes before their scheduled time.
+                      </p>
+                      <p>
+                        4. We do not recommend any DRESS CODE currently, but we
+                        recommend that the students avoid brand clothes.
+                      </p>
+                      <p>
+                        5. At the end of each term, the Academy will inform the
+                        parents about the child’s progress in the form of a
+                        report.
+                      </p>
+                      <p className="mt-2 fw-bold">Male and female teachers</p>
+                      <p className="fw-bold">
+                        Enjoyable and beneficial environment
+                      </p>
+                      <p className="fw-bold">
+                        Classes are available for boys and Girls aged 5 to 16
+                        years.
+                      </p>
+                      <p className="mt-2">
+                        If you wish to enroll your child at the Academy, Please
+                        fill the admission form, which can be collected from the
+                        office or downloaded from the website.
+                      </p>
+                      <p>
+                        For more information kindly visit our website or contact{" "}
+                        <br />
+                        116-118 Church Road Yew Tree Lane Yardley Birmingham B25
+                        8UX
+                      </p>
+                      <div>
+                        <p></p>
                       </div>
                     </div>
 

@@ -283,9 +283,14 @@ const Header = () => {
                           </ul>
                         </li>
                         {!logout ? (
-                          <li>
-                            <Link to="/login">{login}</Link>
-                          </li>
+                          <>
+                            <li>
+                              <Link to="/login">{login}</Link>
+                            </li>
+                            <li>
+                              <Link to="/register">Register</Link>
+                            </li>
+                          </>
                         ) : (
                           <li>
                             <button onClick={handleLogout}>{logOut}</button>
