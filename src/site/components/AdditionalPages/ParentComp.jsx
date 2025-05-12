@@ -147,106 +147,6 @@ const ParentComp = () => {
                       </div>
                     </div>
 
-                    {/* where did you hear about us */}
-                    <div
-                      className="col-lg-4 "
-                      data-aos-duration="800"
-                      data-aos="fade-up"
-                      data-aos-delay="700"
-                    >
-                      <div className="form-clt">
-                        <span>Where did you hear about us? (optional)</span>
-                        <select
-                          style={{ backgroundColor: "var(--theme2)" }}
-                          name="admission_source"
-                          className="form-control"
-                        >
-                          <option value="">Select hear about us?</option>
-                          <option value="Google">Google</option>
-                          <option value="Alyaqeen Website">
-                            Alyaqeen Website
-                          </option>
-                          <option value="Friends &amp; Family">
-                            Friends &amp; Family
-                          </option>
-                          <option value="Social Media">Social Media</option>
-                          <option value="Leaflet Advertisement">
-                            Leaflet Advertisement
-                          </option>
-                          <option value="Alyaqeen Academy Premises">
-                            Alyaqeen Academy Premises
-                          </option>
-                          <option value="Other">Other</option>
-                        </select>
-                      </div>
-                    </div>
-                    {/* photo */}
-                    <div
-                      className="col-lg-12 "
-                      data-aos-duration="800"
-                      data-aos="fade-up"
-                      data-aos-delay="300"
-                    >
-                      <div className="form-clt">
-                        <span>Photo (optional)</span>
-                        <input
-                          type="file"
-                          name="std_photo"
-                          className="form-control"
-                        />
-                      </div>
-                    </div>
-                    {/* child details */}
-                    <div className="col-md-12 mb-2">
-                      <div
-                        className="rounded"
-                        style={{
-                          background:
-                            "linear-gradient(90deg, var(--theme) 0, var(--theme2)  100%)",
-                        }}
-                      >
-                        <h6 className="text-white font-weight-bold rounded mb-0 text-uppercase p-2">
-                          Child Information
-                        </h6>
-                      </div>
-                    </div>
-                    {/* child's name */}
-                    <div
-                      className="col-lg-4 "
-                      data-aos-duration="800"
-                      data-aos="fade-up"
-                      data-aos-delay="300"
-                    >
-                      <div className="form-clt">
-                        <span>Child's Full Name*</span>
-                        <input
-                          type="text"
-                          name="childName"
-                          id="name"
-                          placeholder=""
-                          required
-                        />
-                      </div>
-                    </div>
-                    {/* student id */}
-                    <div
-                      className="col-lg-4 "
-                      data-aos-duration="800"
-                      data-aos="fade-up"
-                      data-aos-delay="500"
-                    >
-                      <div className="form-clt">
-                        <span>Child's Student ID:*</span>
-                        <input
-                          type="text"
-                          name="studentId"
-                          id="name"
-                          placeholder=""
-                          required
-                        />
-                      </div>
-                    </div>
-
                     {/* relation with the student */}
                     <div
                       className="col-lg-4 "
@@ -269,6 +169,60 @@ const ParentComp = () => {
                           <option value="mother">Mother</option>
                           <option value="guardian">Guardian</option>
                         </select>
+                      </div>
+                    </div>
+                    {/* photo */}
+                    <div
+                      className="col-lg-12 "
+                      data-aos-duration="800"
+                      data-aos="fade-up"
+                      data-aos-delay="300"
+                    >
+                      <div className="form-clt">
+                        <span>Photo (optional)</span>
+                        <input
+                          type="file"
+                          name="std_photo"
+                          className="form-control"
+                        />
+                      </div>
+                    </div>
+                    {/* credentials */}
+                    <div className="col-md-12 mb-2">
+                      <div
+                        className="rounded"
+                        style={{
+                          background:
+                            "linear-gradient(90deg, var(--theme) 0, var(--theme2)  100%)",
+                        }}
+                      >
+                        <h6 className="text-white font-weight-bold rounded mb-0 text-uppercase p-2">
+                          Credentials
+                        </h6>
+                      </div>
+                    </div>
+                    {/* password */}
+                    <div
+                      className="col-lg-6"
+                      data-aos-duration="800"
+                      data-aos="fade-up"
+                      data-aos-delay="300"
+                    >
+                      <div className="form-clt">
+                        <span>Password*</span>
+                        <input type="password" placeholder="" required />
+                      </div>
+                    </div>
+                    {/* confirm password */}
+                    <div
+                      className="col-lg-6"
+                      data-aos-duration="800"
+                      data-aos="fade-up"
+                      data-aos-delay="500"
+                    >
+                      <div className="form-clt">
+                        <span>Confirm Password*</span>
+                        <input type="password" placeholder="" required />
                       </div>
                     </div>
 

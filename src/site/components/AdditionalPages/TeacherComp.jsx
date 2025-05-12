@@ -453,6 +453,44 @@ const TeacherComp = () => {
                         />
                       </div>
                     </div>
+                    {/* credentials */}
+                    <div className="col-md-12 mb-2">
+                      <div
+                        className="rounded"
+                        style={{
+                          background:
+                            "linear-gradient(90deg, var(--theme) 0, var(--theme2)  100%)",
+                        }}
+                      >
+                        <h6 className="text-white font-weight-bold rounded mb-0 text-uppercase p-2">
+                          Credentials
+                        </h6>
+                      </div>
+                    </div>
+                    {/* password */}
+                    <div
+                      className="col-lg-6"
+                      data-aos-duration="800"
+                      data-aos="fade-up"
+                      data-aos-delay="300"
+                    >
+                      <div className="form-clt">
+                        <span>Password*</span>
+                        <input type="password" placeholder="" required />
+                      </div>
+                    </div>
+                    {/* confirm password */}
+                    <div
+                      className="col-lg-6"
+                      data-aos-duration="800"
+                      data-aos="fade-up"
+                      data-aos-delay="500"
+                    >
+                      <div className="form-clt">
+                        <span>Confirm Password*</span>
+                        <input type="password" placeholder="" required />
+                      </div>
+                    </div>
 
                     <div
                       className="col-lg-9"
