@@ -11,6 +11,8 @@ const ApplyNowComp = () => {
   const [department, setDepartment] = useState("");
   const [session, setSession] = useState("");
   const [sessionTime, setSessionTime] = useState("");
+  const [show, setShow] = useState(false);
+  const [confirmShow, setConfirmShow] = useState(false);
   const sigRef = useRef();
 
   const clearSignature = () => sigRef.current.clear();
@@ -336,7 +338,7 @@ const ApplyNowComp = () => {
                         />
                       </div>
                     </div>
-                    {/* parent/guardian name */}
+                    {/* contact */}
                     <div
                       className="col-lg-4 "
                       data-aos-duration="800"
@@ -354,21 +356,172 @@ const ApplyNowComp = () => {
                         />
                       </div>
                     </div>
-                    {/* email */}
+                    {/* contact */}
                     <div
-                      className="col-lg-8 "
+                      className="col-lg-4 "
                       data-aos-duration="800"
                       data-aos="fade-up"
                       data-aos-delay="500"
                     >
                       <div className="form-clt">
-                        <span>
-                          Student Email Address*(Should not be the same as
-                          parent)
-                        </span>
+                        <span>Preferred Number*</span>
+                        <input
+                          type="tel"
+                          name="number"
+                          id="number"
+                          placeholder=""
+                          required
+                        />
+                      </div>
+                    </div>
+                    {/* email */}
+                    <div
+                      className="col-lg-4 "
+                      data-aos-duration="800"
+                      data-aos="fade-up"
+                      data-aos-delay="700"
+                    >
+                      <div className="form-clt">
+                        <span>Student Email Address*(not same as parent)</span>
                         <input
                           type="email"
                           name="email"
+                          id="name"
+                          placeholder=""
+                        />
+                      </div>
+                    </div>
+
+                    {/* parent or guardian details */}
+
+                    <div className="col-md-12 mb-2">
+                      <div
+                        className="rounded"
+                        style={{
+                          background:
+                            "linear-gradient(90deg, var(--theme) 0, var(--theme2)  100%)",
+                        }}
+                      >
+                        <h6 className="text-white font-weight-bold rounded mb-0 text-uppercase p-2">
+                          Parent/Guardian Details
+                        </h6>
+                      </div>
+                    </div>
+                    {/* mothers name */}
+                    <div
+                      className="col-lg-4 "
+                      data-aos-duration="800"
+                      data-aos="fade-up"
+                      data-aos-delay="300"
+                    >
+                      <div className="form-clt">
+                        <span>Mother Name*</span>
+                        <input
+                          type="text"
+                          name="mother-name"
+                          id="name"
+                          placeholder=""
+                        />
+                      </div>
+                    </div>
+                    {/* Occupation */}
+                    <div
+                      className="col-lg-4 "
+                      data-aos-duration="800"
+                      data-aos="fade-up"
+                      data-aos-delay="500"
+                    >
+                      <div className="form-clt">
+                        <span>Occupation:*</span>
+                        <input
+                          type="text"
+                          name="occupation"
+                          id="name"
+                          placeholder=""
+                        />
+                      </div>
+                    </div>
+                    {/* contact number */}
+                    <div
+                      className="col-lg-4 "
+                      data-aos-duration="800"
+                      data-aos="fade-up"
+                      data-aos-delay="700"
+                    >
+                      <div className="form-clt">
+                        <span>Contact Number:*</span>
+                        <input
+                          type="number"
+                          name="number"
+                          id="name"
+                          placeholder=""
+                        />
+                      </div>
+                    </div>
+                    {/* fathers name */}
+                    <div
+                      className="col-lg-4 "
+                      data-aos-duration="800"
+                      data-aos="fade-up"
+                      data-aos-delay="300"
+                    >
+                      <div className="form-clt">
+                        <span>Father Name*</span>
+                        <input
+                          type="text"
+                          name="father-name"
+                          id="name"
+                          placeholder=""
+                        />
+                      </div>
+                    </div>
+                    {/* Occupation */}
+                    <div
+                      className="col-lg-4 "
+                      data-aos-duration="800"
+                      data-aos="fade-up"
+                      data-aos-delay="500"
+                    >
+                      <div className="form-clt">
+                        <span>Occupation:*</span>
+                        <input
+                          type="text"
+                          name="occupation"
+                          id="name"
+                          placeholder=""
+                        />
+                      </div>
+                    </div>
+                    {/* contact number */}
+                    <div
+                      className="col-lg-4 "
+                      data-aos-duration="800"
+                      data-aos="fade-up"
+                      data-aos-delay="700"
+                    >
+                      <div className="form-clt">
+                        <span>Contact Number:*</span>
+                        <input
+                          type="number"
+                          name="number"
+                          id="name"
+                          placeholder=""
+                        />
+                      </div>
+                    </div>
+
+                    {/* parent email */}
+                    <div
+                      className="col-lg-12 "
+                      data-aos-duration="800"
+                      data-aos="fade-up"
+                      data-aos-delay="300"
+                    >
+                      <div className="form-clt">
+                        <span>One of the parents email*</span>
+                        <input
+                          type="email"
+                          name="parent-email"
                           id="name"
                           placeholder=""
                         />
@@ -483,13 +636,21 @@ const ApplyNowComp = () => {
                           <option value="">Select Session Time</option>
                           {department && session === "weekdays" ? (
                             <>
-                              <option value="s1">S1</option>
-                              <option value="s2">S2</option>
+                              <option value="4:30 PM – 6:00 PM">
+                                4:30 PM – 6:00 PM
+                              </option>
+                              <option value="5:45 PM – 7:15 PM">
+                                5:45 PM – 7:15 PM
+                              </option>
                             </>
                           ) : department && session === "weekend" ? (
                             <>
-                              <option value="wm">WM</option>
-                              <option value="wa">WA</option>
+                              <option value="10:00 AM – 12:30 PM">
+                                10:00 AM – 12:30 PM
+                              </option>
+                              <option value="12:30 PM – 2:30 PM">
+                                12:30 PM – 2:30 PM
+                              </option>
                             </>
                           ) : null}
                         </select>
@@ -530,6 +691,58 @@ const ApplyNowComp = () => {
                         </h6>
                       </div>
                     </div>
+                    {/* doctor name */}
+                    <div
+                      className="col-lg-4 "
+                      data-aos-duration="800"
+                      data-aos="fade-up"
+                      data-aos-delay="300"
+                    >
+                      <div className="form-clt">
+                        <span>Surgery/Doctor name*</span>
+                        <input
+                          type="text"
+                          name="doctor-name"
+                          id="name"
+                          placeholder=""
+                        />
+                      </div>
+                    </div>
+                    {/* Surgery address */}
+                    <div
+                      className="col-lg-4 "
+                      data-aos-duration="800"
+                      data-aos="fade-up"
+                      data-aos-delay="500"
+                    >
+                      <div className="form-clt">
+                        <span>Surgery address*</span>
+                        <input
+                          type="text"
+                          name="surgery-address"
+                          id="name"
+                          placeholder=""
+                        />
+                      </div>
+                    </div>
+                    {/* Surgery contact */}
+                    <div
+                      className="col-lg-4 "
+                      data-aos-duration="800"
+                      data-aos="fade-up"
+                      data-aos-delay="700"
+                    >
+                      <div className="form-clt">
+                        <span>Surgery contact*</span>
+                        <input
+                          type="number"
+                          name="surgery-number"
+                          id="name"
+                          placeholder=""
+                        />
+                      </div>
+                    </div>
+
                     {/* Known Allergies */}
                     <div
                       className="col-lg-6 "
@@ -538,7 +751,7 @@ const ApplyNowComp = () => {
                       data-aos-delay="300"
                     >
                       <div className="form-clt">
-                        <span>Known Allergies (Optional)</span>
+                        <span>Known Allergies</span>
 
                         <input
                           type="text"
@@ -557,7 +770,7 @@ const ApplyNowComp = () => {
                       data-aos-delay="500"
                     >
                       <div className="form-clt">
-                        <span>Medical Conditions (Optional)</span>
+                        <span>Medical Conditions</span>
 
                         <input
                           type="text"
@@ -582,23 +795,7 @@ const ApplyNowComp = () => {
                         </h6>
                       </div>
                     </div>
-                    {/* parent email */}
-                    <div
-                      className="col-lg-12 "
-                      data-aos-duration="800"
-                      data-aos="fade-up"
-                      data-aos-delay="300"
-                    >
-                      <div className="form-clt">
-                        <span>One of the parents email*</span>
-                        <input
-                          type="email"
-                          name="parent-email"
-                          id="name"
-                          placeholder=""
-                        />
-                      </div>
-                    </div>
+
                     {/* password */}
                     <div
                       className="col-lg-6"
@@ -654,22 +851,22 @@ const ApplyNowComp = () => {
                           canvasProps={{
                             // width: 550,
                             height: 150,
-                            className: "border rounded w-100",
+                            className: "border w-100",
                           }}
                           ref={sigRef}
                         />
-                        <div className="mt-2 flex gap-2">
+                        <div className="mt-2 d-flex gap-2">
                           <button
                             type="button"
                             onClick={clearSignature}
-                            className="px-2 py-1 bg-red-500 text-white rounded"
+                            className="theme-btn px-2 py-1 bg-red-500 text-white rounded"
                           >
                             Clear
                           </button>
                           <button
                             type="button"
                             onClick={saveSignature}
-                            className="px-2 py-1 bg-blue-500 text-white rounded"
+                            className="theme-btn px-2 py-1 bg-red-500 text-white rounded"
                           >
                             Save
                           </button>
@@ -700,43 +897,42 @@ const ApplyNowComp = () => {
 
                     <div className="text-white">
                       <h5 className="text-white">
-                        Some important points for your consideration:
+                        Important Guidelines for Parents & Guardians::
                       </h5>
                       <p>
-                        1. Admission Fee: A one-time non-refundable admission
-                        fee of £20 per course is required before the start of
-                        classes.
+                        1. Admission Fee: A one-time, non-refundable fee of £20
+                        per course is required before the start of classes.
                       </p>
                       <p>
                         2. Monthly Fees: All tuition fees must be paid within
-                        the first week of each month to avoid disruptions in
+                        the first week of each month to ensure uninterrupted
                         attendance.
                       </p>
                       <p>
-                        3. Student Supervision: The Academy is not responsible
-                        for supervising students more than 10 minutes before or
-                        after their scheduled class time. Please ensure punctual
-                        drop-off and pick-up.
+                        3. Student Supervision: The Academy is only responsible
+                        for supervising students up to 10 minutes before and
+                        after their class time. Please ensure timely drop-off
+                        and pick-up.
                       </p>
                       <p>
-                        4. Dress Code: While no strict dress code is enforced,
-                        we kindly recommend modest attire and discourage branded
-                        or fashion-label clothing to maintain a focused learning
-                        environment.
+                        4. Dress Code: While there is no strict uniform, we
+                        kindly encourage modest and simple attire. Branded or
+                        fashion-label clothing is discouraged to help maintain a
+                        focused Islamic learning environment.
                       </p>
                       <p>
-                        5. Progress Reports: Parents will receive a term-wise
-                        performance report to stay informed about their child's
-                        academic and personal development.
+                        5. Progress Reports: Parents will receive a performance
+                        report at the end of each term, highlighting their
+                        child’s academic progress and personal development.
                       </p>
                       <p className="mt-2 fw-bold">
                         We are honored to be part of your child’s educational
                         journey.
                       </p>
                       <p className="fw-bold">
-                        Our team is committed to nurturing strong values,
-                        academic excellence, and a love for learning in a warm
-                        and welcoming environment.
+                        At Alyaqeen, our mission is to nurture strong Islamic
+                        values, academic excellence, and a love for learning in
+                        a warm and welcoming environment.
                       </p>
                       <p className="fw-bold">
                         Classes are available for boys and Girls aged 5 to 16
@@ -746,6 +942,10 @@ const ApplyNowComp = () => {
                         To register your child, please fill out the admission
                         form, available at our office or downloadable via our
                         website.
+                      </p>
+                      <p className="my-2">
+                        Jazakum Allahu Khayran – May Allah bless your efforts
+                        and grant your child success.
                       </p>
                       <p>
                         For more information kindly visit our website or
