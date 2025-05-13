@@ -1,11 +1,20 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import one from "../../assets/img/line-1.png";
 import two from "../../assets/img/line-2.png";
+import SignatureCanvas from "react-signature-canvas";
 
 const ApplyNowComp = () => {
   const [department, setDepartment] = useState("");
   const [session, setSession] = useState("");
   const [sessionTime, setSessionTime] = useState("");
+  const sigRef = useRef();
+
+  const clearSignature = () => sigRef.current.clear();
+
+  const saveSignature = () => {
+    const signatureData = sigRef.current.toDataURL();
+    console.log(signatureData); // You can send this to Firebase or backend
+  };
   useEffect(() => {
     setSession("");
     setSessionTime("");
@@ -187,133 +196,6 @@ const ApplyNowComp = () => {
                   className="contact-form-items"
                 >
                   <div className="row g-4">
-                    {/* subject info */}
-                    <div className="col-md-12 mb-2">
-                      <div
-                        className="rounded"
-                        style={{
-                          background:
-                            "linear-gradient(90deg, var(--theme) 0, var(--theme2)  100%)",
-                        }}
-                      >
-                        <h6 className="text-white font-weight-bold rounded mb-0 text-uppercase p-2">
-                          Subject Info
-                        </h6>
-                      </div>
-                    </div>
-                    {/* department */}
-                    <div
-                      className="col-lg-6 "
-                      data-aos-duration="800"
-                      data-aos="fade-up"
-                      data-aos-delay="300"
-                    >
-                      <div className="form-clt">
-                        <span>Departments*</span>
-                        <select
-                          onChange={(e) => setDepartment(e.target.value)}
-                          name="std_department_id"
-                          value={department}
-                          className="form-control selectDepartment"
-                          style={{ backgroundColor: "var(--theme2)" }}
-                        >
-                          <option value="">Select department</option>
-                          <option value="math-english">
-                            Maths, English &amp; Science Tuition
-                          </option>
-                          <option value="arabic">Arabic Language</option>
-                          <option value="urdu">Urdu/Banla Language</option>
-                          <option value="quran">
-                            Arabic, Quran &amp; Islamic Education
-                          </option>
-                          <option value="online">Online Learning</option>
-                        </select>
-                      </div>
-                    </div>
-                    {/* session */}
-                    <div
-                      className="col-lg-6 "
-                      data-aos-duration="800"
-                      data-aos="fade-up"
-                      data-aos-delay="500"
-                    >
-                      <div className="form-clt">
-                        <span>Session*</span>
-                        <select
-                          onChange={(e) => setSession(e.target.value)}
-                          name="std_type"
-                          value={session}
-                          className="form-control font-light selectClassType"
-                          style={{ backgroundColor: "var(--theme2)" }}
-                        >
-                          <option value="">Select Session</option>
-                          <option value="weekdays">Weekdays</option>
-                          <option value="weekend">Weekend</option>
-                        </select>
-                        {/* <input
-                          type="text"
-                          name="email"
-                          id="email"
-                          placeholder="info@example.com"
-                        /> */}
-                      </div>
-                    </div>
-                    {/* session timing */}
-                    <div
-                      className="col-lg-6 "
-                      data-aos-duration="800"
-                      data-aos="fade-up"
-                      data-aos-delay="300"
-                    >
-                      <div className="form-clt">
-                        <span>Session Time*</span>
-                        <select
-                          name="std_time"
-                          className="form-control font-light selectClassTime"
-                          value={sessionTime}
-                          style={{ backgroundColor: "var(--theme2)" }}
-                          onChange={(e) => setSessionTime(e.target.value)}
-                        >
-                          <option value="">Select Session Time</option>
-                          {department && session === "weekdays" ? (
-                            <>
-                              <option value="s1">S1</option>
-                              <option value="s2">S2</option>
-                            </>
-                          ) : department && session === "weekend" ? (
-                            <>
-                              <option value="wm">WM</option>
-                              <option value="wa">WA</option>
-                            </>
-                          ) : null}
-                        </select>
-                      </div>
-                    </div>
-                    {/* class name */}
-                    <div
-                      className="col-lg-6 "
-                      data-aos-duration="800"
-                      data-aos="fade-up"
-                      data-aos-delay="500"
-                    >
-                      <div className="form-clt">
-                        <span>Class Name*</span>
-                        <select
-                          name="std_class_id"
-                          className="form-control selectClass"
-                          style={{ backgroundColor: "var(--theme2)" }}
-                        >
-                          <option value="">Select Class</option>
-                          {getClassOptions()}
-                        </select>
-                        {/* <input
-                          type="text"
-                          name="email"
-                          id="email"
-                          placeholder="info@example.com"
-                        /> */}
-                      </div>
-                    </div>
                     {/* basic info */}
                     <div className="col-md-12 mb-2">
                       <div
@@ -346,24 +228,16 @@ const ApplyNowComp = () => {
                         />
                       </div>
                     </div>
-                    {/* gender */}
+                    {/* date of birth */}
                     <div
-                      className="col-lg-8 "
+                      className="col-lg-4 "
                       data-aos-duration="800"
                       data-aos="fade-up"
                       data-aos-delay="500"
                     >
                       <div className="form-clt">
-                        <span>
-                          Student Email Address*(Should not be the same as
-                          parent)
-                        </span>
-                        <input
-                          type="email"
-                          name="email"
-                          id="name"
-                          placeholder=""
-                        />
+                        <span>Date of birth*</span>
+                        <input type="date" name="std_dob" />
                       </div>
                     </div>
                     {/* gender */}
@@ -371,7 +245,7 @@ const ApplyNowComp = () => {
                       className="col-lg-4 "
                       data-aos-duration="800"
                       data-aos="fade-up"
-                      data-aos-delay="500"
+                      data-aos-delay="700"
                     >
                       <div className="form-clt">
                         <span>Gender*</span>
@@ -387,41 +261,12 @@ const ApplyNowComp = () => {
                         </select>
                       </div>
                     </div>
-                    {/* language */}
-                    <div
-                      className="col-lg-4 "
-                      data-aos-duration="800"
-                      data-aos="fade-up"
-                      data-aos-delay="700"
-                    >
-                      <div className="form-clt">
-                        <span>Language (optional)</span>
-                        <input
-                          type="text"
-                          name="language"
-                          id="name"
-                          placeholder=""
-                        />
-                      </div>
-                    </div>
-                    {/* date of birth */}
-                    <div
-                      className="col-lg-4 "
-                      data-aos-duration="800"
-                      data-aos="fade-up"
-                      data-aos-delay="300"
-                    >
-                      <div className="form-clt">
-                        <span>Date of birth*</span>
-                        <input type="date" name="std_dob" />
-                      </div>
-                    </div>
                     {/* school year */}
                     <div
                       className="col-lg-4 "
                       data-aos-duration="800"
                       data-aos="fade-up"
-                      data-aos-delay="500"
+                      data-aos-delay="300"
                     >
                       <div className="form-clt">
                         <span>School Year*</span>
@@ -452,36 +297,7 @@ const ApplyNowComp = () => {
                         </select>
                       </div>
                     </div>
-                    {/* admission date */}
-                    <div
-                      className="col-lg-4 "
-                      data-aos-duration="800"
-                      data-aos="fade-up"
-                      data-aos-delay="700"
-                    >
-                      <div className="form-clt">
-                        <span>Admission Date*</span>
-                        <input type="date" name="std_dob" />
-                      </div>
-                    </div>
-                    {/* address */}
-                    <div
-                      className="col-lg-4 "
-                      data-aos-duration="800"
-                      data-aos="fade-up"
-                      data-aos-delay="300"
-                    >
-                      <div className="form-clt">
-                        <span>Address*</span>
-                        <input
-                          type="text"
-                          name="address"
-                          id="name"
-                          placeholder=""
-                        />
-                      </div>
-                    </div>
-                    {/* postcode */}
+                    {/* language */}
                     <div
                       className="col-lg-4 "
                       data-aos-duration="800"
@@ -489,16 +305,16 @@ const ApplyNowComp = () => {
                       data-aos-delay="500"
                     >
                       <div className="form-clt">
-                        <span>Postcode*</span>
+                        <span>Mother Language (optional)</span>
                         <input
                           type="text"
-                          name="postcode"
+                          name="language"
                           id="name"
                           placeholder=""
                         />
                       </div>
                     </div>
-                    {/* where did you hear about us */}
+                    {/* parent/guardian name */}
                     <div
                       className="col-lg-4 "
                       data-aos-duration="800"
@@ -506,47 +322,196 @@ const ApplyNowComp = () => {
                       data-aos-delay="700"
                     >
                       <div className="form-clt">
-                        <span>Where did you hear about us?*</span>
-                        <select
-                          style={{ backgroundColor: "var(--theme2)" }}
-                          name="admission_source"
-                          className="form-control"
-                        >
-                          <option value="">Select hear about us?</option>
-                          <option value="Google">Google</option>
-                          <option value="Alyaqeen Website">
-                            Alyaqeen Website
-                          </option>
-                          <option value="Friends &amp; Family">
-                            Friends &amp; Family
-                          </option>
-                          <option value="Social Media">Social Media</option>
-                          <option value="Leaflet Advertisement">
-                            Leaflet Advertisement
-                          </option>
-                          <option value="Alyaqeen Academy Premises">
-                            Alyaqeen Academy Premises
-                          </option>
-                          <option value="Other">Other</option>
-                        </select>
+                        <span>Parent/Guardian Full Name*</span>
+                        <input
+                          type="text"
+                          name="name"
+                          id="name"
+                          placeholder=""
+                          required
+                        />
                       </div>
                     </div>
-                    {/* photo */}
+                    {/* parent/guardian name */}
                     <div
-                      className="col-lg-12 "
+                      className="col-lg-4 "
                       data-aos-duration="800"
                       data-aos="fade-up"
                       data-aos-delay="300"
                     >
                       <div className="form-clt">
-                        <span>Photo*</span>
+                        <span>Contact Number*</span>
                         <input
-                          type="file"
-                          name="std_photo"
-                          className="form-control"
+                          type="tel"
+                          name="number"
+                          id="number"
+                          placeholder=""
+                          required
                         />
                       </div>
                     </div>
+                    {/* email */}
+                    <div
+                      className="col-lg-8 "
+                      data-aos-duration="800"
+                      data-aos="fade-up"
+                      data-aos-delay="500"
+                    >
+                      <div className="form-clt">
+                        <span>
+                          Student Email Address*(Should not be the same as
+                          parent)
+                        </span>
+                        <input
+                          type="email"
+                          name="email"
+                          id="name"
+                          placeholder=""
+                        />
+                      </div>
+                    </div>
+
+                    {/* Academic Details */}
+                    <div className="col-md-12 mb-2">
+                      <div
+                        className="rounded"
+                        style={{
+                          background:
+                            "linear-gradient(90deg, var(--theme) 0, var(--theme2)  100%)",
+                        }}
+                      >
+                        <h6 className="text-white font-weight-bold rounded mb-0 text-uppercase p-2">
+                          Academic Details
+                        </h6>
+                      </div>
+                    </div>
+                    {/* full name */}
+                    <div
+                      className="col-lg-6 "
+                      data-aos-duration="800"
+                      data-aos="fade-up"
+                      data-aos-delay="300"
+                    >
+                      <div className="form-clt">
+                        <span>Previous Institute*</span>
+                        <input
+                          type="text"
+                          name="previousInstitute"
+                          id="name"
+                          placeholder=""
+                          required
+                        />
+                      </div>
+                    </div>
+                    {/* department */}
+                    <div
+                      className="col-lg-6 "
+                      data-aos-duration="800"
+                      data-aos="fade-up"
+                      data-aos-delay="500"
+                    >
+                      <div className="form-clt">
+                        <span>Departments*</span>
+                        <select
+                          onChange={(e) => setDepartment(e.target.value)}
+                          name="std_department_id"
+                          value={department}
+                          className="form-control selectDepartment"
+                          style={{ backgroundColor: "var(--theme2)" }}
+                        >
+                          <option value="">Select department</option>
+                          <option value="quran">
+                            Arabic, Quran &amp; Islamic Education
+                          </option>
+                          <option value="math-english">
+                            Maths, English &amp; Science Tuition
+                          </option>
+                          <option value="arabic">Arabic Language</option>
+                          <option value="urdu">Urdu/Banla Language</option>
+                          <option value="online">Online Learning</option>
+                        </select>
+                      </div>
+                    </div>
+                    {/* session */}
+                    <div
+                      className="col-lg-6 "
+                      data-aos-duration="800"
+                      data-aos="fade-up"
+                      data-aos-delay="300"
+                    >
+                      <div className="form-clt">
+                        <span>Session*</span>
+                        <select
+                          onChange={(e) => setSession(e.target.value)}
+                          name="std_type"
+                          value={session}
+                          className="form-control font-light selectClassType"
+                          style={{ backgroundColor: "var(--theme2)" }}
+                        >
+                          <option value="">Select Session</option>
+                          <option value="weekdays">Weekdays</option>
+                          <option value="weekend">Weekend</option>
+                        </select>
+                        {/* <input
+                          type="text"
+                          name="email"
+                          id="email"
+                          placeholder="info@example.com"
+                        /> */}
+                      </div>
+                    </div>
+                    {/* session timing */}
+                    <div
+                      className="col-lg-6 "
+                      data-aos-duration="800"
+                      data-aos="fade-up"
+                      data-aos-delay="500"
+                    >
+                      <div className="form-clt">
+                        <span>Session Time*</span>
+                        <select
+                          name="std_time"
+                          className="form-control font-light selectClassTime"
+                          value={sessionTime}
+                          style={{ backgroundColor: "var(--theme2)" }}
+                          onChange={(e) => setSessionTime(e.target.value)}
+                        >
+                          <option value="">Select Session Time</option>
+                          {department && session === "weekdays" ? (
+                            <>
+                              <option value="s1">S1</option>
+                              <option value="s2">S2</option>
+                            </>
+                          ) : department && session === "weekend" ? (
+                            <>
+                              <option value="wm">WM</option>
+                              <option value="wa">WA</option>
+                            </>
+                          ) : null}
+                        </select>
+                      </div>
+                    </div>
+                    {/* class name */}
+                    {/* <div
+                      className="col-lg-6 "
+                      data-aos-duration="800"
+                      data-aos="fade-up"
+                      data-aos-delay="500"
+                    >
+                      <div className="form-clt">
+                        <span>Class Name*</span>
+                        <select
+                          name="std_class_id"
+                          className="form-control selectClass"
+                          style={{ backgroundColor: "var(--theme2)" }}
+                        >
+                          <option value="">Select Class</option>
+                          {getClassOptions()}
+                        </select>
+                     
+                      </div>
+                    </div> */}
+
                     {/* parental details */}
                     <div className="col-md-12 mb-2">
                       <div
@@ -557,161 +522,60 @@ const ApplyNowComp = () => {
                         }}
                       >
                         <h6 className="text-white font-weight-bold rounded mb-0 text-uppercase p-2">
-                          PARENTAL DETAILS
+                          Health Information
                         </h6>
                       </div>
                     </div>
-                    {/* mothers name */}
+                    {/* Known Allergies */}
                     <div
-                      className="col-lg-4 "
+                      className="col-lg-6 "
                       data-aos-duration="800"
                       data-aos="fade-up"
                       data-aos-delay="300"
                     >
                       <div className="form-clt">
-                        <span>Mother Name*</span>
+                        <span>Known Allergies (Optional)</span>
+
                         <input
                           type="text"
-                          name="mother-name"
+                          name="allergies"
                           id="name"
                           placeholder=""
+                          required
                         />
                       </div>
                     </div>
-                    {/* Occupation */}
+                    {/* Medical Conditions */}
                     <div
-                      className="col-lg-4 "
+                      className="col-lg-6 "
                       data-aos-duration="800"
                       data-aos="fade-up"
                       data-aos-delay="500"
                     >
                       <div className="form-clt">
-                        <span>Occupation:*</span>
+                        <span>Medical Conditions (Optional)</span>
+
                         <input
                           type="text"
-                          name="occupation"
+                          name="medicalCondition"
                           id="name"
                           placeholder=""
+                          required
                         />
                       </div>
                     </div>
-                    {/* contact number */}
-                    <div
-                      className="col-lg-4 "
-                      data-aos-duration="800"
-                      data-aos="fade-up"
-                      data-aos-delay="700"
-                    >
-                      <div className="form-clt">
-                        <span>Contact Number:*</span>
-                        <input
-                          type="number"
-                          name="number"
-                          id="name"
-                          placeholder=""
-                        />
-                      </div>
-                    </div>
-                    {/* fathers name */}
-                    <div
-                      className="col-lg-4 "
-                      data-aos-duration="800"
-                      data-aos="fade-up"
-                      data-aos-delay="300"
-                    >
-                      <div className="form-clt">
-                        <span>Father Name*</span>
-                        <input
-                          type="text"
-                          name="father-name"
-                          id="name"
-                          placeholder=""
-                        />
-                      </div>
-                    </div>
-                    {/* Occupation */}
-                    <div
-                      className="col-lg-4 "
-                      data-aos-duration="800"
-                      data-aos="fade-up"
-                      data-aos-delay="500"
-                    >
-                      <div className="form-clt">
-                        <span>Occupation:*</span>
-                        <input
-                          type="text"
-                          name="occupation"
-                          id="name"
-                          placeholder=""
-                        />
-                      </div>
-                    </div>
-                    {/* contact number */}
-                    <div
-                      className="col-lg-4 "
-                      data-aos-duration="800"
-                      data-aos="fade-up"
-                      data-aos-delay="700"
-                    >
-                      <div className="form-clt">
-                        <span>Contact Number:*</span>
-                        <input
-                          type="number"
-                          name="number"
-                          id="name"
-                          placeholder=""
-                        />
-                      </div>
-                    </div>
-                    {/* emergency contact name */}
-                    <div
-                      className="col-lg-4 "
-                      data-aos-duration="800"
-                      data-aos="fade-up"
-                      data-aos-delay="300"
-                    >
-                      <div className="form-clt">
-                        <span>Emergency Contact Name*</span>
-                        <input
-                          type="text"
-                          name="mother-name"
-                          id="name"
-                          placeholder=""
-                        />
-                      </div>
-                    </div>
-                    {/* relation with student */}
-                    <div
-                      className="col-lg-4 "
-                      data-aos-duration="800"
-                      data-aos="fade-up"
-                      data-aos-delay="500"
-                    >
-                      <div className="form-clt">
-                        <span>Relation with student*</span>
-                        <input
-                          type="text"
-                          name="mother-name"
-                          id="name"
-                          placeholder=""
-                        />
-                      </div>
-                    </div>
-                    {/* emergency contact number */}
-                    <div
-                      className="col-lg-4 "
-                      data-aos-duration="800"
-                      data-aos="fade-up"
-                      data-aos-delay="700"
-                    >
-                      <div className="form-clt">
-                        <span>Emergency Contact Number:*</span>
-                        <input
-                          type="number"
-                          name="number"
-                          id="name"
-                          placeholder=""
-                        />
+                    {/* credentials */}
+                    <div className="col-md-12 mb-2">
+                      <div
+                        className="rounded"
+                        style={{
+                          background:
+                            "linear-gradient(90deg, var(--theme) 0, var(--theme2)  100%)",
+                        }}
+                      >
+                        <h6 className="text-white font-weight-bold rounded mb-0 text-uppercase p-2">
+                          Credentials
+                        </h6>
                       </div>
                     </div>
                     {/* parent email */}
@@ -731,120 +595,28 @@ const ApplyNowComp = () => {
                         />
                       </div>
                     </div>
-                    {/* MEDICAL INFO & SIGNATURES */}
-                    <div className="col-md-12 mb-2">
-                      <div
-                        className="rounded"
-                        style={{
-                          background:
-                            "linear-gradient(90deg, var(--theme) 0, var(--theme2)  100%)",
-                        }}
-                      >
-                        <h6 className="text-white font-weight-bold rounded mb-0 text-uppercase p-2">
-                          MEDICAL INFO & SIGNATURES
-                        </h6>
-                      </div>
-                    </div>
-                    {/* doctor name */}
+                    {/* password */}
                     <div
-                      className="col-lg-4 "
+                      className="col-lg-6"
                       data-aos-duration="800"
                       data-aos="fade-up"
                       data-aos-delay="300"
                     >
                       <div className="form-clt">
-                        <span>Surgery/Doctor name*</span>
-                        <input
-                          type="text"
-                          name="doctor-name"
-                          id="name"
-                          placeholder=""
-                        />
+                        <span>Password*</span>
+                        <input type="password" placeholder="" required />
                       </div>
                     </div>
-                    {/* Surgery address */}
+                    {/* confirm password */}
                     <div
-                      className="col-lg-4 "
+                      className="col-lg-6"
                       data-aos-duration="800"
                       data-aos="fade-up"
                       data-aos-delay="500"
                     >
                       <div className="form-clt">
-                        <span>Surgery address*</span>
-                        <input
-                          type="text"
-                          name="surgery-address"
-                          id="name"
-                          placeholder=""
-                        />
-                      </div>
-                    </div>
-                    {/* Surgery contact */}
-                    <div
-                      className="col-lg-4 "
-                      data-aos-duration="800"
-                      data-aos="fade-up"
-                      data-aos-delay="700"
-                    >
-                      <div className="form-clt">
-                        <span>Surgery contact*</span>
-                        <input
-                          type="number"
-                          name="surgery-number"
-                          id="name"
-                          placeholder=""
-                        />
-                      </div>
-                    </div>
-                    {/* Any known medical issue */}
-                    <div
-                      className="col-lg-4 "
-                      data-aos-duration="800"
-                      data-aos="fade-up"
-                      data-aos-delay="300"
-                    >
-                      <div className="form-clt">
-                        <span>Any known medical issue*</span>
-                        <input
-                          type="text"
-                          name="medical-issue"
-                          id="name"
-                          placeholder=""
-                        />
-                      </div>
-                    </div>
-                    {/* Any Disability */}
-                    <div
-                      className="col-lg-4 "
-                      data-aos-duration="800"
-                      data-aos="fade-up"
-                      data-aos-delay="500"
-                    >
-                      <div className="form-clt">
-                        <span>Any Disability*</span>
-                        <input
-                          type="text"
-                          name="any-disability"
-                          id="name"
-                          placeholder=""
-                        />
-                      </div>
-                    </div>
-                    {/* Any food allergy */}
-                    <div
-                      className="col-lg-4 "
-                      data-aos-duration="800"
-                      data-aos="fade-up"
-                      data-aos-delay="700"
-                    >
-                      <div className="form-clt">
-                        <span>Any food allergy*</span>
-                        <input
-                          type="text"
-                          name="food-allergy"
-                          id="name"
-                          placeholder=""
-                        />
+                        <span>Confirm Password*</span>
+                        <input type="password" placeholder="" required />
                       </div>
                     </div>
                     <div className="col-md-12 mb-2">
@@ -873,13 +645,41 @@ const ApplyNowComp = () => {
                     >
                       <div className="form-clt">
                         <span>Parents Signature*</span>
+                        <SignatureCanvas
+                          penColor="black"
+                          canvasProps={{
+                            // width: 550,
+                            height: 150,
+                            className: "border rounded w-100",
+                          }}
+                          ref={sigRef}
+                        />
+                        <div className="mt-2 flex gap-2">
+                          <button
+                            type="button"
+                            onClick={clearSignature}
+                            className="px-2 py-1 bg-red-500 text-white rounded"
+                          >
+                            Clear
+                          </button>
+                          <button
+                            type="button"
+                            onClick={saveSignature}
+                            className="px-2 py-1 bg-blue-500 text-white rounded"
+                          >
+                            Save
+                          </button>
+                        </div>
+                      </div>
+                      {/* <div className="form-clt">
+                        <span>Parents Signature*</span>
                         <input
                           type="text"
                           name="parent-sign"
                           id="name"
                           placeholder=""
                         />
-                      </div>
+                      </div> */}
                     </div>
                     {/* Expected Starting Date */}
                     <div
@@ -893,6 +693,7 @@ const ApplyNowComp = () => {
                         <input type="date" name="std_dob" />
                       </div>
                     </div>
+
                     <div className="text-white">
                       <h5 className="text-white">
                         Some important points for your consideration:

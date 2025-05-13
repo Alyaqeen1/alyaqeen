@@ -11,14 +11,17 @@ import "./site/i18n.js";
 import LoadingSpinner from "./site/components/LoadingSpinner.jsx";
 import React from "react";
 import { Toaster } from "react-hot-toast";
+import AuthProvider from "./AuthProvider/AuthProvider.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <React.Suspense fallback={<LoadingSpinner></LoadingSpinner>}>
       <Provider store={store}>
-        <RouterProvider router={router} />
-        <InitAnimations />
-        <Toaster />
+        <AuthProvider>
+          <RouterProvider router={router} />
+          <InitAnimations />
+          <Toaster />
+        </AuthProvider>
       </Provider>
     </React.Suspense>
   </StrictMode>
