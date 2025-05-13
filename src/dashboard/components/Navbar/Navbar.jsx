@@ -26,9 +26,9 @@ export default function Navbar() {
     };
   }, []);
   return (
-    <nav class="navbar bg-white sticky-top">
-      <div class="container-fluid">
-        <Link to="/" class="navbar-brand mb-0 h3">
+    <nav className="navbar bg-white sticky-top">
+      <div className="container-fluid">
+        <Link to="/" className="navbar-brand mb-0 h3">
           <img src={logo} style={{ width: "40px" }} alt="" />
         </Link>
         <div className="d-flex align-items-center gap-3">

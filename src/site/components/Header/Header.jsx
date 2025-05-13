@@ -1,9 +1,12 @@
 import { useState, useEffect } from "react";
 import OffCanvasMenu from "./OffCanvasMenu";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 import { useTranslation } from "react-i18next";
 import logo from "../../assets/img/logo/logo.png";
 import grid from "../../assets/img/grid.svg";
+import useAuth from "../../../hooks/useAuth";
+import toast from "react-hot-toast";
+import LoadingSpinner from "../LoadingSpinner";
 
 const languages = [
   { code: "en", lang: "English" },
@@ -13,14 +16,17 @@ const languages = [
 const Header = () => {
   const [openSubMenu, setOpenSubMenu] = useState(null);
   const [toggleMenu, setToggleMenu] = useState(false);
-  const [logout, setLogout] = useState(
-    JSON.parse(localStorage.getItem("isLoggedIn"))
-  );
+  // const [logout, setLogout] = useState(
+  //   JSON.parse(localStorage.getItem("isLoggedIn"))
+  // );
+  const { user, signOutUser, loading } = useAuth();
+  const { pathname } = useLocation();
   const { i18n } = useTranslation();
 
-  const handleLogout = () => {
-    localStorage.setItem("isLoggedIn", "false");
-    setLogout(false); // Update the state immediately to trigger a re-render
+  const handleSignOut = () => {
+    signOutUser().then(() => {
+      toast.success("Logout successful");
+    });
   };
 
   const handleToggleMenu = () => {
@@ -77,7 +83,7 @@ const Header = () => {
   };
   useEffect(() => {
     document.body.style.textAlign = i18n.dir() === "rtl" ? "right" : "left";
-  }, [i18n, i18n.language]);
+  }, [i18n.language]);
   const { t } = useTranslation(["common"]);
   const { nav, discountBtn, options } = t("header") || {};
   const { english, arabic } = options || {};
@@ -282,7 +288,7 @@ const Header = () => {
                             </li>
                           </ul>
                         </li>
-                        {!logout ? (
+                        {!user ? (
                           <>
                             <li>
                               <Link to="/login">{login}</Link>
@@ -292,9 +298,19 @@ const Header = () => {
                             </li>
                           </>
                         ) : (
-                          <li>
-                            <button onClick={handleLogout}>{logOut}</button>
-                          </li>
+                          <>
+                            <li>
+                              <Link to="/dashboard">Dashboard</Link>
+                            </li>
+                            <li>
+                              <button
+                                className="theme-btn py-2 px-4"
+                                onClick={handleSignOut}
+                              >
+                                {logOut}
+                              </button>
+                            </li>
+                          </>
                         )}
                         {/* <li>
                           <Link to="/login">Login</Link>

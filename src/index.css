@@ -26,3 +26,14 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+input:focus,
+button:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+.form-control:focus,
+.btn:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}

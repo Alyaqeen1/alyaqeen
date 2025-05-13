@@ -2,10 +2,12 @@ import { useEffect, useRef, useState } from "react";
 import one from "../../assets/img/line-1.png";
 import two from "../../assets/img/line-2.png";
 import SignatureCanvas from "react-signature-canvas";
-import { FaEarthAfrica } from "react-icons/fa6";
+import { FaEarthAfrica, FaEye, FaEyeSlash } from "react-icons/fa6";
 import { FaEnvelope } from "react-icons/fa";
 import { FaPhoneAlt } from "react-icons/fa";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import useAuth from "../../../hooks/useAuth";
+import toast from "react-hot-toast";
 
 const ApplyNowComp = () => {
   const [department, setDepartment] = useState("");
@@ -13,6 +15,11 @@ const ApplyNowComp = () => {
   const [sessionTime, setSessionTime] = useState("");
   const [show, setShow] = useState(false);
   const [confirmShow, setConfirmShow] = useState(false);
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+
+  const { createUser, setUser, updateUser, setLoading } = useAuth();
+
   const sigRef = useRef();
 
   const clearSignature = () => sigRef.current.clear();
@@ -140,6 +147,47 @@ const ApplyNowComp = () => {
     return <option value="">Not Available</option>;
   };
 
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    setError("");
+    const form = e.target;
+    const name = form.name.value;
+    const student_email = form.student_email.value;
+
+    const password = form.password.value;
+    const confirmPassword = form.confirmPassword.value;
+
+    if (password !== confirmPassword) {
+      return setError("Password did not match");
+    }
+
+    if (!/[A-Z]/.test(password)) {
+      return setError("Must have an Uppercase letter in the password ");
+    }
+    if (!/[a-z]/.test(password)) {
+      return setError("Must have a Lowercase letter in the password");
+    }
+    if (password.length < 6) {
+      return setError("Password length must be at least 6 character");
+    }
+    createUser(student_email, password)
+      .then(async (result) => {
+        setUser(result.user);
+        navigate("/dashboard");
+        toast.success("Registration successful");
+        // updateUser({ displayName: name, photoURL: image }).then(() => {});
+
+        // const { data } = await axiosPublic.post("/users", user);
+
+        // if (data.insertedId) {
+        //   navigate("/");
+        // }
+      })
+      .catch((error) => toast.error(error.code))
+      .finally(() => setLoading(false));
+    form.reset();
+  };
+
   return (
     <section className="contact-section">
       <div className="line-1">
@@ -196,6 +244,7 @@ const ApplyNowComp = () => {
                 </div>
 
                 <form
+                  onSubmit={handleRegister}
                   action="#"
                   id="contact-form"
                   method="POST"
@@ -385,7 +434,7 @@ const ApplyNowComp = () => {
                         <span>Student Email Address*(not same as parent)</span>
                         <input
                           type="email"
-                          name="email"
+                          name="student_email"
                           id="name"
                           placeholder=""
                         />
@@ -803,9 +852,34 @@ const ApplyNowComp = () => {
                       data-aos="fade-up"
                       data-aos-delay="300"
                     >
-                      <div className="form-clt">
-                        <span>Password*</span>
-                        <input type="password" placeholder="" required />
+                      <div className="">
+                        <p
+                          className="text-white"
+                          style={{ marginBottom: "20px" }}
+                        >
+                          Password*
+                        </p>
+                        <div
+                          className="input-group border"
+                          style={{ padding: "14px 10px" }}
+                        >
+                          <input
+                            name="password"
+                            type={show ? "text" : "password"}
+                            className="form-control border-0 text-white"
+                            style={{
+                              backgroundColor: "var(--theme2)",
+                            }}
+                            required
+                          />
+                          <button
+                            onClick={() => setShow(!show)}
+                            type="button"
+                            className="text-white"
+                          >
+                            {show ? <FaEyeSlash /> : <FaEye />}
+                          </button>
+                        </div>
                       </div>
                     </div>
                     {/* confirm password */}
@@ -815,9 +889,34 @@ const ApplyNowComp = () => {
                       data-aos="fade-up"
                       data-aos-delay="500"
                     >
-                      <div className="form-clt">
-                        <span>Confirm Password*</span>
-                        <input type="password" placeholder="" required />
+                      <div className="">
+                        <p
+                          className="text-white"
+                          style={{ marginBottom: "20px" }}
+                        >
+                          Confirm Password*
+                        </p>
+                        <div
+                          className="input-group border"
+                          style={{ padding: "14px 10px" }}
+                        >
+                          <input
+                            type={confirmShow ? "text" : "password"}
+                            className="form-control border-0 text-white"
+                            name="confirmPassword"
+                            style={{
+                              backgroundColor: "var(--theme2)",
+                            }}
+                            required
+                          />
+                          <button
+                            onClick={() => setConfirmShow(!confirmShow)}
+                            type="button"
+                            className="text-white"
+                          >
+                            {confirmShow ? <FaEyeSlash /> : <FaEye />}
+                          </button>
+                        </div>
                       </div>
                     </div>
                     <div className="col-md-12 mb-2">
@@ -980,18 +1079,36 @@ const ApplyNowComp = () => {
                         </Link>
                       </div>
                     </div>
+                    {error && (
+                      <p className="text-danger text-center col-span-2">
+                        {error}
+                      </p>
+                    )}
 
                     <div
-                      className="col-lg-7 "
+                      className="col-lg-12 d-flex justify-content-center"
                       data-aos-duration="800"
                       data-aos="fade-up"
-                      data-aos-delay="900"
+                      // data-aos-delay="900"
                     >
-                      <button type="submit" className="theme-btn bg-white">
+                      <button
+                        type="submit"
+                        className="theme-btn bg-white text-center"
+                      >
                         Apply
                         <i className="fa-solid fa-arrow-right-long"></i>
                       </button>
                     </div>
+                    <p className="text-center text-white">
+                      Already have an account? Please{" "}
+                      <Link
+                        style={{ color: "var(--theme)" }}
+                        className=" font-bolder"
+                        to="/login"
+                      >
+                        Login
+                      </Link>
+                    </p>
                   </div>
                 </form>
               </div>

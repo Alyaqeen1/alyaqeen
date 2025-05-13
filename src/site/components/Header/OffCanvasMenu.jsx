@@ -1,10 +1,17 @@
 import { useState } from "react";
 import { Link } from "react-router";
 import logo from "../../assets/img/logo/logo.png";
+import useAuth from "../../../hooks/useAuth";
 
 const OffCanvasMenu = ({ toggleMenu, handleToggleMenu }) => {
   const [openSubMenu, setOpenSubMenu] = useState(null);
   const [openNestedMenu, setOpenNestedMenu] = useState(null);
+  const { user, signOutUser, loading } = useAuth();
+  const handleSignOut = () => {
+    signOutUser().then(() => {
+      toast.success("Logout successful");
+    });
+  };
 
   const handleSubmenu = (submenu) => {
     if (submenu === openSubMenu) {
@@ -304,14 +311,30 @@ const OffCanvasMenu = ({ toggleMenu, handleToggleMenu }) => {
                           </li>
                         </ul>
                       </li>
-                      <li>
-                        <Link
-                          onClick={() => handleToggleMenu(false)}
-                          to="/login"
-                        >
-                          Login
-                        </Link>
-                      </li>
+                      {!user ? (
+                        <>
+                          <li>
+                            <Link to="/login">Login</Link>
+                          </li>
+                          <li>
+                            <Link to="/register">Register</Link>
+                          </li>
+                        </>
+                      ) : (
+                        <>
+                          <li>
+                            <Link to="/dashboard">Dashboard</Link>
+                          </li>
+                          <li>
+                            <button
+                              className="theme-btn py-2 px-4"
+                              onClick={handleSignOut}
+                            >
+                              Logout
+                            </button>
+                          </li>
+                        </>
+                      )}
                     </ul>
                   </nav>
                 </div>

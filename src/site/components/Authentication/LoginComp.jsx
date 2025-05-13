@@ -1,31 +1,43 @@
 import Lottie from "lottie-react";
 import loginAnimation from "../../assets/animation/login.json";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useEffect } from "react";
 import one from "../../assets/img/line-1.png";
 import two from "../../assets/img/line-2.png";
 import three from "../../assets/img/contact.png";
 import four from "../../assets/img/circle-2.png";
+import useAuth from "../../../hooks/useAuth";
+import toast from "react-hot-toast";
 
 const LoginComp = () => {
   const navigate = useNavigate();
+  const { signInUser, setUser } = useAuth();
   const handleLogin = (e) => {
     e.preventDefault();
-    // Store login status in localStorage
-    localStorage.setItem("isLoggedIn", "true");
-
-    // Redirect to dashboard
-    navigate("/dashboard");
+    const form = e.target;
+    const email = form.email.value;
+    const password = form.password.value;
+    // const data = { email, password };
+    signInUser(email, password)
+      .then((result) => {
+        setUser(result.user);
+        toast.success("Login successful");
+        navigate(location?.state ? location?.state : "/dashboard");
+      })
+      .catch((error) => {
+        toast.error(error.code);
+      });
+    form.reset();
   };
 
-  useEffect(() => {
-    // Redirect if already logged in
-    if (JSON.parse(localStorage.getItem("isLoggedIn")) === true) {
-      navigate("/dashboard");
-    } else {
-      navigate("/login");
-    }
-  }, [navigate]);
+  // useEffect(() => {
+  //   // Redirect if already logged in
+  //   if (JSON.parse(localStorage.getItem("isLoggedIn")) === true) {
+  //     navigate("/dashboard");
+  //   } else {
+  //     navigate("/login");
+  //   }
+  // }, [navigate]);
   return (
     <section className="contact-section py-5">
       <div className="line-1">
@@ -57,6 +69,7 @@ const LoginComp = () => {
                   </h2>
                 </div>
                 <form
+                  onSubmit={handleLogin}
                   action="#"
                   id="contact-form"
                   method="POST"
@@ -72,7 +85,7 @@ const LoginComp = () => {
                       <div className="form-clt">
                         <span>Your Email*</span>
                         <input
-                          type="text"
+                          type="email"
                           name="email"
                           id="email"
                           placeholder=""
@@ -87,12 +100,7 @@ const LoginComp = () => {
                     >
                       <div className="form-clt">
                         <span>Password*</span>
-                        <input
-                          type="password"
-                          name="password"
-                          id="email"
-                          placeholder=""
-                        />
+                        <input type="password" name="password" placeholder="" />
                       </div>
                     </div>
 
@@ -100,17 +108,23 @@ const LoginComp = () => {
                       className="col-lg-7 "
                       data-aos-duration="800"
                       data-aos="fade-up"
-                      data-aos-delay="100"
+                      // data-aos-delay="100"
                     >
-                      <button
-                        onClick={handleLogin}
-                        type="submit"
-                        className="theme-btn bg-white"
-                      >
+                      <button type="submit" className="theme-btn bg-white">
                         Login
                         <i className="fa-solid fa-arrow-right-long"></i>
                       </button>
                     </div>
+                    <p className="text-white">
+                      Already have an account? Please{" "}
+                      <Link
+                        style={{ color: "var(--theme)" }}
+                        className=" font-bolder"
+                        to="/register"
+                      >
+                        Register
+                      </Link>
+                    </p>
                   </div>
                 </form>
               </div>
