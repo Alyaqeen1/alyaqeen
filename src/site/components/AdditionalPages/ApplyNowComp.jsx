@@ -2,6 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import one from "../../assets/img/line-1.png";
 import two from "../../assets/img/line-2.png";
 import SignatureCanvas from "react-signature-canvas";
+import { FaEarthAfrica } from "react-icons/fa6";
+import { FaEnvelope } from "react-icons/fa";
+import { FaPhoneAlt } from "react-icons/fa";
+import { Link } from "react-router";
 
 const ApplyNowComp = () => {
   const [department, setDepartment] = useState("");
@@ -699,45 +703,81 @@ const ApplyNowComp = () => {
                         Some important points for your consideration:
                       </h5>
                       <p>
-                        1. A one off admission fee of £20 for each course is to
-                        be paid before starting.
-                      </p>
-                      <p>2. Fees MUST be paid by the 1st week of each month.</p>
-                      <p>
-                        3. Alyaqeen Academy will not accept responsibility for
-                        students 10 minutes after home time nor for students who
-                        arrive 10 minutes before their scheduled time.
+                        1. Admission Fee: A one-time non-refundable admission
+                        fee of £20 per course is required before the start of
+                        classes.
                       </p>
                       <p>
-                        4. We do not recommend any DRESS CODE currently, but we
-                        recommend that the students avoid brand clothes.
+                        2. Monthly Fees: All tuition fees must be paid within
+                        the first week of each month to avoid disruptions in
+                        attendance.
                       </p>
                       <p>
-                        5. At the end of each term, the Academy will inform the
-                        parents about the child’s progress in the form of a
-                        report.
+                        3. Student Supervision: The Academy is not responsible
+                        for supervising students more than 10 minutes before or
+                        after their scheduled class time. Please ensure punctual
+                        drop-off and pick-up.
                       </p>
-                      <p className="mt-2 fw-bold">Male and female teachers</p>
+                      <p>
+                        4. Dress Code: While no strict dress code is enforced,
+                        we kindly recommend modest attire and discourage branded
+                        or fashion-label clothing to maintain a focused learning
+                        environment.
+                      </p>
+                      <p>
+                        5. Progress Reports: Parents will receive a term-wise
+                        performance report to stay informed about their child's
+                        academic and personal development.
+                      </p>
+                      <p className="mt-2 fw-bold">
+                        We are honored to be part of your child’s educational
+                        journey.
+                      </p>
                       <p className="fw-bold">
-                        Enjoyable and beneficial environment
+                        Our team is committed to nurturing strong values,
+                        academic excellence, and a love for learning in a warm
+                        and welcoming environment.
                       </p>
                       <p className="fw-bold">
                         Classes are available for boys and Girls aged 5 to 16
                         years.
                       </p>
                       <p className="mt-2">
-                        If you wish to enroll your child at the Academy, Please
-                        fill the admission form, which can be collected from the
-                        office or downloaded from the website.
+                        To register your child, please fill out the admission
+                        form, available at our office or downloadable via our
+                        website.
                       </p>
                       <p>
-                        For more information kindly visit our website or contact{" "}
+                        For more information kindly visit our website or
+                        contact.
                         <br />
                         116-118 Church Road Yew Tree Lane Yardley Birmingham B25
                         8UX
                       </p>
-                      <div>
-                        <p></p>
+                      <div className="d-flex gap-4 align-items-center flex-wrap text-white mt-3">
+                        <Link
+                          className="text-white d-flex gap-2 align-items-center"
+                          to={"https://alyaqeen.vercel.app/"}
+                        >
+                          <FaEarthAfrica />
+                          www.alyaqeen.co.uk
+                        </Link>
+                        <span>|</span>
+                        <Link
+                          className="text-white d-flex gap-2 align-items-center"
+                          to="mailto:kidsa@gmail.com"
+                        >
+                          <FaEnvelope />
+                          contact@alyaqeen.co.uk
+                        </Link>
+                        <span>|</span>
+                        <Link
+                          className="text-white d-flex gap-2 align-items-center"
+                          to="tel:+07869636849"
+                        >
+                          <FaPhoneAlt />
+                          07869636849
+                        </Link>
                       </div>
                     </div>
 
