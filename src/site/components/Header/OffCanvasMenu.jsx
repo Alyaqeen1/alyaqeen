@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router";
 import logo from "../../assets/img/logo/logo.png";
 import useAuth from "../../../hooks/useAuth";
+import toast from "react-hot-toast";
 
 const OffCanvasMenu = ({ toggleMenu, handleToggleMenu }) => {
   const [openSubMenu, setOpenSubMenu] = useState(null);

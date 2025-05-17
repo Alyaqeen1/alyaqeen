@@ -116,7 +116,7 @@ const LoginComp = () => {
                       </button>
                     </div>
                     <p className="text-white">
-                      Already have an account? Please{" "}
+                      Don't have an account? Please{" "}
                       <Link
                         style={{ color: "var(--theme)" }}
                         className=" font-bolder"

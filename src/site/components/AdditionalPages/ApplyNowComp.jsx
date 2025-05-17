@@ -8,6 +8,10 @@ import { FaPhoneAlt } from "react-icons/fa";
 import { Link, useNavigate } from "react-router";
 import useAuth from "../../../hooks/useAuth";
 import toast from "react-hot-toast";
+import useAxiosPublic from "../../../hooks/useAxiosPublic";
+
+const image_hosting_key = import.meta.env.VITE_Image_Hosting_Key;
+const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
 
 const ApplyNowComp = () => {
   const [department, setDepartment] = useState("");
@@ -16,7 +20,10 @@ const ApplyNowComp = () => {
   const [show, setShow] = useState(false);
   const [confirmShow, setConfirmShow] = useState(false);
   const [error, setError] = useState("");
+  const [signature, setSignature] = useState("");
   const navigate = useNavigate();
+
+  const axiosPublic = useAxiosPublic();
 
   const { createUser, setUser, updateUser, setLoading } = useAuth();
 
@@ -24,135 +31,195 @@ const ApplyNowComp = () => {
 
   const clearSignature = () => sigRef.current.clear();
 
-  const saveSignature = () => {
-    const signatureData = sigRef.current.toDataURL();
-    console.log(signatureData); // You can send this to Firebase or backend
+  const compressImage = async (dataUrl) => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.src = dataUrl;
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+
+        // Resize to a smaller canvas size (e.g., 300x100)
+        canvas.width = 300;
+        canvas.height = 100;
+
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        const compressedDataUrl = canvas.toDataURL("image/png", 0.7); // 0.7 quality
+        resolve(compressedDataUrl);
+      };
+    });
   };
+
+  const saveSignature = async () => {
+    let dataUrl = sigRef.current.toDataURL("image/png");
+
+    // Compress it
+    dataUrl = await compressImage(dataUrl);
+
+    const blob = await (await fetch(dataUrl)).blob();
+    const file = new File([blob], "signature.png", { type: "image/png" });
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      const res = await axiosPublic.post(image_hosting_api, formData);
+      const url = res.data?.data?.display_url;
+      setSignature(url);
+      toast.success("Signature uploaded!");
+    } catch (err) {
+      toast.error("Upload failed");
+    }
+  };
+
   useEffect(() => {
     setSession("");
     setSessionTime("");
   }, [department]);
-  const getClassOptions = () => {
-    if (!department || !session || !sessionTime) {
-      return <option value="">Select Class</option>;
-    }
+  // const getClassOptions = () => {
+  //   if (!department || !session || !sessionTime) {
+  //     return <option value="">Select Class</option>;
+  //   }
 
-    if (department === "math-english") {
-      if (session === "weekend" && sessionTime === "wa") {
-        return <option value="adult-english">Adult English</option>;
-      }
-      if (session === "weekend" && sessionTime === "wm") {
-        return (
-          <>
-            <option value="tuitionG1">Tuition G1</option>
-            <option value="tuitionG2">Tuition G2</option>
-          </>
-        );
-      }
-    }
+  //   if (department === "math-english") {
+  //     if (session === "weekend" && sessionTime === "wa") {
+  //       return <option value="adult-english">Adult English</option>;
+  //     }
+  //     if (session === "weekend" && sessionTime === "wm") {
+  //       return (
+  //         <>
+  //           <option value="tuitionG1">Tuition G1</option>
+  //           <option value="tuitionG2">Tuition G2</option>
+  //         </>
+  //       );
+  //     }
+  //   }
 
-    if (department === "arabic") {
-      if (session === "weekdays" && sessionTime === "s2") {
-        return <option value="arabic-beginner">Arabic Beginner Group</option>;
-      }
-      if (session === "weekend" && sessionTime === "wa") {
-        return (
-          <>
-            <option value="arabic-gcse">Arabic GCSE</option>
-            <option value="arabic-beginner">Arabic Beginner Group</option>
-          </>
-        );
-      }
-    }
-    if (department === "quran") {
-      if (session === "weekdays" && sessionTime === "s1") {
-        return (
-          <>
-            <option value="b6/7">B6/7</option>
-            <option value="b3/4">B3/4</option>
-            <option value="b1/2">B1/2</option>
-            <option value="g2">G2</option>
-            <option value="g3/4">G3/4</option>
-            <option value="g6/7">G6/7</option>
-          </>
-        );
-      }
-      if (session === "weekdays" && sessionTime === "s2") {
-        return (
-          <>
-            <option value="b8">B8</option>
-            <option value="b5/6">B5/6</option>
-            <option value="bg1/2">BG1/2</option>
-            <option value="g3/5">G3/5</option>
-            <option value="g7/8">G7/8</option>
-            <option value="b7">B7</option>
-          </>
-        );
-      }
-      if (session === "weekend" && sessionTime === "wa") {
-        return (
-          <>
-            <option value="wab3/5">WA - B3/5</option>
-            <option value="wag1/2">WA - G1/2</option>
-            <option value="wab7">WA - B7</option>
-            <option value="wag5/7">WA - G5/7</option>
-            <option value="wab1/2">WA - B1/2</option>
-          </>
-        );
-      }
-      if (session === "weekend" && sessionTime === "wm") {
-        return (
-          <>
-            <option value="wmb1/2">WM - B1/2</option>
-            <option value="wmg7/7">WM - G7/7</option>
-            <option value="wmb8">WM - B8</option>
-            <option value="wmb4/6">WM - B4/6</option>
-            <option value="wmg2/4">WM - G2/4</option>
-          </>
-        );
-      }
-    }
-    if (department === "online") {
-      if (session === "weekdays" && sessionTime === "s1") {
-        return (
-          <>
-            <option value="class1">Qaida and Quran Class 1</option>
-          </>
-        );
-      }
-      if (session === "weekdays" && sessionTime === "s2") {
-        return (
-          <>
-            <option value="class2">Qaida and Quran Class 2</option>
-          </>
-        );
-      }
-      if (session === "weekend" && sessionTime === "wa") {
-        return (
-          <>
-            {" "}
-            <option value="class4">Qaida and Quran Class 4</option>
-          </>
-        );
-      }
-      if (session === "weekend" && sessionTime === "wm") {
-        return (
-          <>
-            <option value="class3">Qaida and Quran Class 3</option>
-          </>
-        );
-      }
-    }
+  //   if (department === "arabic") {
+  //     if (session === "weekdays" && sessionTime === "s2") {
+  //       return <option value="arabic-beginner">Arabic Beginner Group</option>;
+  //     }
+  //     if (session === "weekend" && sessionTime === "wa") {
+  //       return (
+  //         <>
+  //           <option value="arabic-gcse">Arabic GCSE</option>
+  //           <option value="arabic-beginner">Arabic Beginner Group</option>
+  //         </>
+  //       );
+  //     }
+  //   }
+  //   if (department === "quran") {
+  //     if (session === "weekdays" && sessionTime === "s1") {
+  //       return (
+  //         <>
+  //           <option value="b6/7">B6/7</option>
+  //           <option value="b3/4">B3/4</option>
+  //           <option value="b1/2">B1/2</option>
+  //           <option value="g2">G2</option>
+  //           <option value="g3/4">G3/4</option>
+  //           <option value="g6/7">G6/7</option>
+  //         </>
+  //       );
+  //     }
+  //     if (session === "weekdays" && sessionTime === "s2") {
+  //       return (
+  //         <>
+  //           <option value="b8">B8</option>
+  //           <option value="b5/6">B5/6</option>
+  //           <option value="bg1/2">BG1/2</option>
+  //           <option value="g3/5">G3/5</option>
+  //           <option value="g7/8">G7/8</option>
+  //           <option value="b7">B7</option>
+  //         </>
+  //       );
+  //     }
+  //     if (session === "weekend" && sessionTime === "wa") {
+  //       return (
+  //         <>
+  //           <option value="wab3/5">WA - B3/5</option>
+  //           <option value="wag1/2">WA - G1/2</option>
+  //           <option value="wab7">WA - B7</option>
+  //           <option value="wag5/7">WA - G5/7</option>
+  //           <option value="wab1/2">WA - B1/2</option>
+  //         </>
+  //       );
+  //     }
+  //     if (session === "weekend" && sessionTime === "wm") {
+  //       return (
+  //         <>
+  //           <option value="wmb1/2">WM - B1/2</option>
+  //           <option value="wmg7/7">WM - G7/7</option>
+  //           <option value="wmb8">WM - B8</option>
+  //           <option value="wmb4/6">WM - B4/6</option>
+  //           <option value="wmg2/4">WM - G2/4</option>
+  //         </>
+  //       );
+  //     }
+  //   }
+  //   if (department === "online") {
+  //     if (session === "weekdays" && sessionTime === "s1") {
+  //       return (
+  //         <>
+  //           <option value="class1">Qaida and Quran Class 1</option>
+  //         </>
+  //       );
+  //     }
+  //     if (session === "weekdays" && sessionTime === "s2") {
+  //       return (
+  //         <>
+  //           <option value="class2">Qaida and Quran Class 2</option>
+  //         </>
+  //       );
+  //     }
+  //     if (session === "weekend" && sessionTime === "wa") {
+  //       return (
+  //         <>
+  //           {" "}
+  //           <option value="class4">Qaida and Quran Class 4</option>
+  //         </>
+  //       );
+  //     }
+  //     if (session === "weekend" && sessionTime === "wm") {
+  //       return (
+  //         <>
+  //           <option value="class3">Qaida and Quran Class 3</option>
+  //         </>
+  //       );
+  //     }
+  //   }
 
-    return <option value="">Not Available</option>;
-  };
+  //   return <option value="">Not Available</option>;
+  // };
 
   const handleRegister = async (e) => {
     e.preventDefault();
     setError("");
     const form = e.target;
-    const name = form.name.value;
+    const student_name = form.student_name.value;
     const student_email = form.student_email.value;
+    const student_dob = form.std_dob.value;
+    const student_gender = form.std_gender.value;
+    const school_year = form.school_year.value;
+    const language = form.language.value;
+    const parent_name = form.parent_name.value;
+    const student_number = form.student_number.value;
+    const emergency_number = form.emergency_number.value;
+    const mother_name = form.mother_name.value;
+    const mother_occupation = form.mother_occupation.value;
+    const mother_number = form.mother_number.value;
+    const father_name = form.father_name.value;
+    const father_occupation = form.father_occupation.value;
+    const father_number = form.father_number.value;
+    const parent_email = form.parent_email.value;
+    const previous_institute = form.previous_institute.value;
+    const std_department = form.std_department.value;
+    const std_time = form.std_time.value;
+    const doctor_name = form.doctor_name.value;
+    const surgery_address = form.surgery_address.value;
+    const surgery_number = form.surgery_number.value;
+    const allergies = form.allergies.value;
+    const medical_condition = form.medical_condition.value;
+    const starting_date = form.starting_date.value;
 
     const password = form.password.value;
     const confirmPassword = form.confirmPassword.value;
@@ -170,22 +237,90 @@ const ApplyNowComp = () => {
     if (password.length < 6) {
       return setError("Password length must be at least 6 character");
     }
-    createUser(student_email, password)
-      .then(async (result) => {
+    try {
+      setLoading(true);
+      if (signature) {
+        // Create user in Firebase
+        const result = await createUser(student_email, password);
+
+        const uid = result.user.uid;
+
+        // Optionally update profile
+        await updateUser({ displayName: student_name });
+
+        // Update user context
         setUser(result.user);
-        navigate("/dashboard");
+
+        // Prepare data with uid
+        const userData = {
+          uid,
+          name: student_name,
+          email: student_email,
+          role: "student",
+          createdAt: new Date(),
+          status: "submitted",
+        };
+
+        const studentData = {
+          uid,
+          name: student_name,
+          email: student_email,
+          dob: student_dob,
+          gender: student_gender,
+          schoolYear: school_year,
+          language,
+          parent: {
+            name: parent_name,
+            email: parent_email,
+            number: student_number,
+            emergencyNumber: emergency_number,
+          },
+          mother: {
+            name: mother_name,
+            occupation: mother_occupation,
+            number: mother_number,
+          },
+          father: {
+            name: father_name,
+            occupation: father_occupation,
+            number: father_number,
+          },
+          academic: {
+            previousInstitute: previous_institute,
+            department: std_department,
+            time: std_time,
+          },
+          medical: {
+            doctorName: doctor_name,
+            surgeryAddress: surgery_address,
+            surgeryNumber: surgery_number,
+            allergies,
+            condition: medical_condition,
+          },
+          startingDate: starting_date,
+          signature,
+          createdAt: new Date(),
+        };
+
+        console.log("User Data:", userData);
+        console.log("User:", studentData);
+
+        // 🔽 Optional: Send to backend
+        await axiosPublic.post("/users", userData);
+        await axiosPublic.post("/students", studentData);
+
         toast.success("Registration successful");
-        // updateUser({ displayName: name, photoURL: image }).then(() => {});
-
-        // const { data } = await axiosPublic.post("/users", user);
-
-        // if (data.insertedId) {
-        //   navigate("/");
-        // }
-      })
-      .catch((error) => toast.error(error.code))
-      .finally(() => setLoading(false));
-    form.reset();
+        navigate("/dashboard");
+        form.reset();
+      } else {
+        setError("Please save signature first");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(error.message || "Registration failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -276,7 +411,7 @@ const ApplyNowComp = () => {
                         <span>Full Name*</span>
                         <input
                           type="text"
-                          name="name"
+                          name="student_name"
                           id="name"
                           placeholder=""
                           required
@@ -380,7 +515,7 @@ const ApplyNowComp = () => {
                         <span>Parent/Guardian Full Name*</span>
                         <input
                           type="text"
-                          name="name"
+                          name="parent_name"
                           id="name"
                           placeholder=""
                           required
@@ -398,7 +533,7 @@ const ApplyNowComp = () => {
                         <span>Contact Number*</span>
                         <input
                           type="tel"
-                          name="number"
+                          name="student_number"
                           id="number"
                           placeholder=""
                           required
@@ -416,7 +551,7 @@ const ApplyNowComp = () => {
                         <span>Preferred Number*</span>
                         <input
                           type="tel"
-                          name="number"
+                          name="emergency_number"
                           id="number"
                           placeholder=""
                           required
@@ -467,7 +602,7 @@ const ApplyNowComp = () => {
                         <span>Mother Name*</span>
                         <input
                           type="text"
-                          name="mother-name"
+                          name="mother_name"
                           id="name"
                           placeholder=""
                         />
@@ -484,7 +619,7 @@ const ApplyNowComp = () => {
                         <span>Occupation:*</span>
                         <input
                           type="text"
-                          name="occupation"
+                          name="mother_occupation"
                           id="name"
                           placeholder=""
                         />
@@ -500,8 +635,8 @@ const ApplyNowComp = () => {
                       <div className="form-clt">
                         <span>Contact Number:*</span>
                         <input
-                          type="number"
-                          name="number"
+                          type="tel"
+                          name="mother_number"
                           id="name"
                           placeholder=""
                         />
@@ -518,7 +653,7 @@ const ApplyNowComp = () => {
                         <span>Father Name*</span>
                         <input
                           type="text"
-                          name="father-name"
+                          name="father_name"
                           id="name"
                           placeholder=""
                         />
@@ -535,7 +670,7 @@ const ApplyNowComp = () => {
                         <span>Occupation:*</span>
                         <input
                           type="text"
-                          name="occupation"
+                          name="father_occupation"
                           id="name"
                           placeholder=""
                         />
@@ -551,8 +686,8 @@ const ApplyNowComp = () => {
                       <div className="form-clt">
                         <span>Contact Number:*</span>
                         <input
-                          type="number"
-                          name="number"
+                          type="tel"
+                          name="father_number"
                           id="name"
                           placeholder=""
                         />
@@ -570,7 +705,7 @@ const ApplyNowComp = () => {
                         <span>One of the parents email*</span>
                         <input
                           type="email"
-                          name="parent-email"
+                          name="parent_email"
                           id="name"
                           placeholder=""
                         />
@@ -602,7 +737,7 @@ const ApplyNowComp = () => {
                         <span>Previous Institute*</span>
                         <input
                           type="text"
-                          name="previousInstitute"
+                          name="previous_institute"
                           id="name"
                           placeholder=""
                           required
@@ -620,21 +755,27 @@ const ApplyNowComp = () => {
                         <span>Departments*</span>
                         <select
                           onChange={(e) => setDepartment(e.target.value)}
-                          name="std_department_id"
+                          name="std_department"
                           value={department}
                           className="form-control selectDepartment"
                           style={{ backgroundColor: "var(--theme2)" }}
                         >
                           <option value="">Select department</option>
-                          <option value="quran">
-                            Arabic, Quran &amp; Islamic Education
+                          <option value="Arabic, Quran & Islamic Education">
+                            Arabic, Quran & Islamic Education
                           </option>
-                          <option value="math-english">
-                            Maths, English &amp; Science Tuition
+                          <option value="Maths, English & Science Tuition">
+                            Maths, English & Science Tuition
                           </option>
-                          <option value="arabic">Arabic Language</option>
-                          <option value="urdu">Urdu/Banla Language</option>
-                          <option value="online">Online Learning</option>
+                          <option value="Arabic Language">
+                            Arabic Language
+                          </option>
+                          <option value="Urdu/Banla Language">
+                            Urdu/Banla Language
+                          </option>
+                          <option value="Online Learning">
+                            Online Learning
+                          </option>
                         </select>
                       </div>
                     </div>
@@ -649,7 +790,7 @@ const ApplyNowComp = () => {
                         <span>Session*</span>
                         <select
                           onChange={(e) => setSession(e.target.value)}
-                          name="std_type"
+                          name="std_session"
                           value={session}
                           className="form-control font-light selectClassType"
                           style={{ backgroundColor: "var(--theme2)" }}
@@ -726,7 +867,7 @@ const ApplyNowComp = () => {
                       </div>
                     </div> */}
 
-                    {/* parental details */}
+                    {/* health details */}
                     <div className="col-md-12 mb-2">
                       <div
                         className="rounded"
@@ -751,7 +892,7 @@ const ApplyNowComp = () => {
                         <span>Surgery/Doctor name*</span>
                         <input
                           type="text"
-                          name="doctor-name"
+                          name="doctor_name"
                           id="name"
                           placeholder=""
                         />
@@ -768,7 +909,7 @@ const ApplyNowComp = () => {
                         <span>Surgery address*</span>
                         <input
                           type="text"
-                          name="surgery-address"
+                          name="surgery_address"
                           id="name"
                           placeholder=""
                         />
@@ -784,8 +925,8 @@ const ApplyNowComp = () => {
                       <div className="form-clt">
                         <span>Surgery contact*</span>
                         <input
-                          type="number"
-                          name="surgery-number"
+                          type="tel"
+                          name="surgery_number"
                           id="name"
                           placeholder=""
                         />
@@ -823,7 +964,7 @@ const ApplyNowComp = () => {
 
                         <input
                           type="text"
-                          name="medicalCondition"
+                          name="medical_condition"
                           id="name"
                           placeholder=""
                           required
@@ -990,7 +1131,7 @@ const ApplyNowComp = () => {
                     >
                       <div className="form-clt">
                         <span>Expected Starting Date*</span>
-                        <input type="date" name="std_dob" />
+                        <input type="date" name="starting_date" />
                       </div>
                     </div>
 
