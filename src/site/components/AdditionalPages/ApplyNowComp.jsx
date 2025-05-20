@@ -434,6 +434,38 @@ const ApplyNowComp = () => {
                         <input type="date" name="std_dob" />
                       </div>
                     </div>
+                    {/* school year */}
+                    <div
+                      className="col-lg-4 "
+                      data-aos-duration="800"
+                      data-aos="fade-up"
+                      data-aos-delay="300"
+                    >
+                      <div className="form-clt">
+                        <span>Age*</span>
+                        <select
+                          style={{ backgroundColor: "var(--theme2)" }}
+                          name="student_age"
+                          className="form-control"
+                        >
+                          <option value="">Select age</option>
+                          <option value="4">4</option>
+                          <option value="5">5</option>
+                          <option value="6">6</option>
+                          <option value="7">7</option>
+                          <option value="8">8</option>
+                          <option value="9">9</option>
+                          <option value="10">10</option>
+                          <option value="11">11</option>
+                          <option value="12">12</option>
+                          <option value="13">13</option>
+                          <option value="14">14</option>
+                          <option value="15">15</option>
+                          <option value="16">16</option>
+                          <option value="17">17</option>
+                        </select>
+                      </div>
+                    </div>
                     {/* gender */}
                     <div
                       className="col-lg-4 "
@@ -470,6 +502,7 @@ const ApplyNowComp = () => {
                           className="form-control"
                         >
                           <option value="">Select year</option>
+                          <option value="reception">Reception</option>
                           <option value="Year 1">Year 1</option>
                           <option value="Year 2">Year 2</option>
                           <option value="Year 3">Year 3</option>
@@ -499,7 +532,7 @@ const ApplyNowComp = () => {
                       data-aos-delay="500"
                     >
                       <div className="form-clt">
-                        <span>Mother Language (optional)</span>
+                        <span>Mother Language*</span>
                         <input
                           type="text"
                           name="language"
@@ -516,34 +549,17 @@ const ApplyNowComp = () => {
                       data-aos-delay="700"
                     >
                       <div className="form-clt">
-                        <span>Parent/Guardian Full Name*</span>
+                        <span>Family Name*</span>
                         <input
                           type="text"
-                          name="parent_name"
+                          name="family_name"
                           id="name"
                           placeholder=""
                           required
                         />
                       </div>
                     </div>
-                    {/* contact */}
-                    <div
-                      className="col-lg-4 "
-                      data-aos-duration="800"
-                      data-aos="fade-up"
-                      data-aos-delay="300"
-                    >
-                      <div className="form-clt">
-                        <span>Contact Number*</span>
-                        <input
-                          type="tel"
-                          name="student_number"
-                          id="number"
-                          placeholder=""
-                          required
-                        />
-                      </div>
-                    </div>
+
                     {/* contact */}
                     <div
                       className="col-lg-4 "
@@ -552,7 +568,7 @@ const ApplyNowComp = () => {
                       data-aos-delay="500"
                     >
                       <div className="form-clt">
-                        <span>Preferred Number*</span>
+                        <span>Preferred Contact Number*</span>
                         <input
                           type="tel"
                           name="emergency_number"
@@ -570,7 +586,7 @@ const ApplyNowComp = () => {
                       data-aos-delay="700"
                     >
                       <div className="form-clt">
-                        <span>Student Email Address*(not same as parent)</span>
+                        <span>Preferred Email*(not same as other one)</span>
                         <input
                           type="email"
                           name="student_email"
@@ -706,7 +722,7 @@ const ApplyNowComp = () => {
                       data-aos-delay="300"
                     >
                       <div className="form-clt">
-                        <span>One of the parents email*</span>
+                        <span>One of the other parents email*</span>
                         <input
                           type="email"
                           name="parent_email"
@@ -730,30 +746,13 @@ const ApplyNowComp = () => {
                         </h6>
                       </div>
                     </div>
-                    {/* full name */}
-                    <div
-                      className="col-lg-6 "
-                      data-aos-duration="800"
-                      data-aos="fade-up"
-                      data-aos-delay="300"
-                    >
-                      <div className="form-clt">
-                        <span>Previous Institute*</span>
-                        <input
-                          type="text"
-                          name="previous_institute"
-                          id="name"
-                          placeholder=""
-                          required
-                        />
-                      </div>
-                    </div>
+
                     {/* department */}
                     <div
                       className="col-lg-6 "
                       data-aos-duration="800"
                       data-aos="fade-up"
-                      data-aos-delay="500"
+                      data-aos-delay="300"
                     >
                       <div className="form-clt">
                         <span>Departments*</span>
@@ -788,7 +787,7 @@ const ApplyNowComp = () => {
                       className="col-lg-6 "
                       data-aos-duration="800"
                       data-aos="fade-up"
-                      data-aos-delay="300"
+                      data-aos-delay="500"
                     >
                       <div className="form-clt">
                         <span>Session*</span>
@@ -816,7 +815,7 @@ const ApplyNowComp = () => {
                       className="col-lg-6 "
                       data-aos-duration="800"
                       data-aos="fade-up"
-                      data-aos-delay="500"
+                      data-aos-delay="300"
                     >
                       <div className="form-clt">
                         <span>Session Time*</span>
@@ -830,23 +829,47 @@ const ApplyNowComp = () => {
                           <option value="">Select Session Time</option>
                           {department && session === "weekdays" ? (
                             <>
-                              <option value="4:30 PM – 6:00 PM">
-                                4:30 PM – 6:00 PM
+                              <option value="Early - 4:30 PM – 6:00 PM (1½ hrs)">
+                                Early - 4:30 PM – 6:00 PM (1½ hrs)
                               </option>
-                              <option value="5:45 PM – 7:15 PM">
-                                5:45 PM – 7:15 PM
+                              <option value="Late - 5:45 PM – 7:15 PM (1½ hrs)">
+                                Late - 5:45 PM – 7:15 PM (1½ hrs)
                               </option>
                             </>
                           ) : department && session === "weekend" ? (
                             <>
-                              <option value="10:00 AM – 12:30 PM">
-                                10:00 AM – 12:30 PM
+                              <option value="Morning - 10:00 AM – 12:30 PM (1½ hrs)">
+                                Morning - 10:00 AM – 12:30 PM (1½ hrs)
                               </option>
-                              <option value="12:30 PM – 2:30 PM">
-                                12:30 PM – 2:30 PM
+                              <option value="Afternoon - 12:30 PM – 2:30 PM (1½ hrs)">
+                                Afternoon - 12:30 PM – 2:30 PM (1½ hrs)
                               </option>
                             </>
                           ) : null}
+                        </select>
+                      </div>
+                    </div>
+                    {/* class */}
+                    <div
+                      className="col-lg-6 "
+                      data-aos-duration="800"
+                      data-aos="fade-up"
+                      data-aos-delay="500"
+                    >
+                      <div className="form-clt">
+                        <span>Class*</span>
+                        <select
+                          disabled
+                          style={{
+                            backgroundColor: "var(--theme2)",
+                            cursor: "not-allowed",
+                          }}
+                          name="student_age"
+                          className="form-control"
+                        >
+                          <option value="">
+                            Class will be selected by Admin
+                          </option>
                         </select>
                       </div>
                     </div>
@@ -964,7 +987,7 @@ const ApplyNowComp = () => {
                       data-aos-delay="500"
                     >
                       <div className="form-clt">
-                        <span>Medical Conditions</span>
+                        <span>Any Other Medical Conditions</span>
 
                         <input
                           type="text"
@@ -1112,7 +1135,7 @@ const ApplyNowComp = () => {
                             onClick={saveSignature}
                             className="theme-btn px-2 py-1 bg-red-500 text-white rounded"
                           >
-                            Save
+                            Save & Submit
                           </button>
                         </div>
                       </div>
@@ -1128,7 +1151,7 @@ const ApplyNowComp = () => {
                     </div>
                     {/* Expected Starting Date */}
                     <div
-                      className="col-lg-6 "
+                      className="col-lg-6 mt-5"
                       data-aos-duration="800"
                       data-aos="fade-up"
                       data-aos-delay="500"
@@ -1148,9 +1171,25 @@ const ApplyNowComp = () => {
                         per course is required before the start of classes.
                       </p>
                       <p>
-                        2. Monthly Fees: All tuition fees must be paid within
-                        the first week of each month to ensure uninterrupted
-                        attendance.
+                        2. Monthly Fees Policy: Parents have two options for
+                        paying tuition fees based on the admission date:
+                        <div className="ms-4">
+                          a.{" "}
+                          <strong>
+                            Admission After the 10th of the Month:
+                          </strong>{" "}
+                          Pay a pro-rated fee (such as 1/3 or 2/3 of the monthly
+                          fee) for the remaining days of the current month, and
+                          Begin regular full-month payments starting from the
+                          first week of the next month.
+                          <br />
+                          b. <strong>Full-Month Enrollment:</strong>{" "}
+                          Alternatively, if parents prefer the student to be
+                          considered enrolled for the entire current month, the
+                          full monthly fee must be paid within 7 days of
+                          admission (e.g., admitted on the 10th → pay by the
+                          17th).
+                        </div>
                       </p>
                       <p>
                         3. Student Supervision: The Academy is only responsible
@@ -1169,20 +1208,20 @@ const ApplyNowComp = () => {
                         report at the end of each term, highlighting their
                         child’s academic progress and personal development.
                       </p>
-                      <p className="mt-2 fw-bold">
+                      <p className="mt-3 fw-bold fs-5">
                         We are honored to be part of your child’s educational
                         journey.
                       </p>
-                      <p className="fw-bold">
+                      <p className="fw-bold fs-5">
                         At Alyaqeen, our mission is to nurture strong Islamic
                         values, academic excellence, and a love for learning in
                         a warm and welcoming environment.
                       </p>
-                      <p className="fw-bold">
+                      <p className="fw-bold fs-5">
                         Classes are available for boys and Girls aged 5 to 16
                         years.
                       </p>
-                      <p className="mt-2">
+                      <p className="mt-3">
                         To register your child, please fill out the admission
                         form, available at our office or downloadable via our
                         website.
