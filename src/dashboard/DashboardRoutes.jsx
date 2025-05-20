@@ -1,3 +1,4 @@
+import Admissions from "./admissions/Admissions";
 import DashboardLayout from "./layout/DashboardLayout";
 import Home from "./pages/Home/Home";
 
@@ -9,6 +10,10 @@ const dashboardRoutes = [
       {
         path: "",
         element: <Home></Home>,
+      },
+      {
+        path: "online-admissions",
+        element: <Admissions></Admissions>,
       },
     ],
   },

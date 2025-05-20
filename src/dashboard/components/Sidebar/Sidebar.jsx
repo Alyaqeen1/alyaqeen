@@ -1,139 +1,244 @@
 import React, { useState } from "react";
 import { Outlet, Link, NavLink } from "react-router";
-import { FaChevronDown, FaChevronRight, FaRegCircle } from "react-icons/fa";
+import {
+  FaChevronDown,
+  FaChevronRight,
+  FaCogs,
+  FaRegCircle,
+} from "react-icons/fa";
 import { TiHomeOutline } from "react-icons/ti";
 import logo from "../../../site/assets/img/logo/logo.png";
+import MenuItem from "../../shared/MenuItem";
+import { FaUsers } from "react-icons/fa6";
 
 export default function Sidebar() {
-  const [openSubMenu, setOpenSubMenu] = useState("pages");
-  const [openNestedMenu, setOpenNestedMenu] = useState(null);
+  const [openSubMenu, setOpenSubMenu] = useState(null);
 
-  const handleSubmenu = (submenu) => {
-    if (submenu === openSubMenu) {
-      setOpenSubMenu(null);
+  const handleSubmenu = (submenuId) => {
+    if (openSubMenu === submenuId) {
+      setOpenSubMenu(null); // Close if already open
     } else {
-      setOpenSubMenu(submenu);
+      setOpenSubMenu(submenuId); // Open the clicked one
     }
   };
 
-  const handleNestedmenu = (nestmenu) => {
-    if (nestmenu === openNestedMenu) {
-      setOpenNestedMenu(null);
-    } else {
-      setOpenNestedMenu(nestmenu);
-    }
-  };
+  const isSubMenuOpen = (submenuId) => openSubMenu === submenuId;
 
-  const isNestedMenuOpen = (nestmenu) => {
-    return nestmenu === openNestedMenu ? " sub-menu-active" : " ";
-  };
-
-  const isNestedMenuButton = (nestmenu) => {
-    return nestmenu === openNestedMenu ? " drop-active" : " ";
-  };
-
-  const isSubMenuOpen = (submenu) => {
-    return submenu === openSubMenu ? "sub-menu-active" : " ";
-  };
-
-  const isSubMenuButton = (submenu) => {
-    return submenu === openSubMenu ? " drop-active" : " ";
+  const handleToggleMenu = (open) => {
+    console.log("Toggle menu:", open);
   };
 
   return (
     <div
-      className={`col-md-3 col-xl-2 p-0 d-none d-md-block`}
-      style={{ minHeight: "100vh", backgroundColor: "#101C42" }}
+      className="col-md-3 col-xl-2 p-0 d-none d-md-block"
+      style={{ minHeight: "100vh", backgroundColor: "var(--border2)" }}
       id="sidebar"
     >
       <div
         className="d-flex flex-column fixed-top"
         style={{ width: "inherit" }}
       >
-        {/* Sidebar Header */}
         <Link to="/" className="py-2 text-white text-center">
-          <img src={logo} style={{ width: "60px" }} alt="" />
+          <img src={logo} style={{ width: "60px" }} alt="Logo" />
         </Link>
         <hr className="text-white" />
-        {/* Sidebar Links */}
+
         <nav className="flex-grow-1 px-4 mean-nav mobile-menu">
-          <p className=" ms-2" style={{ fontSize: "12px", color: "#A2AED0" }}>
+          <p className="ms-2" style={{ fontSize: "12px", color: "#A2AED0" }}>
             MAIN
           </p>
-          <ul className="list-unstyled ">
-            <li className="has-dropdown">
+          <ul className="list-unstyled">
+            {/* First Dropdown */}
+            {/* <li className="has-dropdown">
               <a
-                className={` border-0 rounded-2  ${
-                  openSubMenu && "bg-white bg-opacity-10"
-                } d-flex justify-content-between `}
-                // style={{ padding: "10px 10px !important" }}
-                onClick={() => handleSubmenu("pages")}
+                className={`border-0 rounded-2 d-flex justify-content-between ${
+                  isSubMenuOpen("dashboard1") ? "bg-white bg-opacity-10" : ""
+                }`}
+                onClick={() => handleSubmenu("dashboard1")}
               >
                 <span className="d-flex align-items-center">
                   <TiHomeOutline className="mx-2 fs-5" />
-                  Dashboard
+                  Dashboard 1
                 </span>
-                <span>
-                  {!openSubMenu ? (
-                    <FaChevronRight className="me-2" />
+                <span className="me-2">
+                  {isSubMenuOpen("dashboard1") ? (
+                    <FaChevronDown />
                   ) : (
-                    <FaChevronDown className="me-2" />
+                    <FaChevronRight />
                   )}
                 </span>
               </a>
-              <ul className={`submenu ${isSubMenuOpen("pages")}`}>
-                <li>
-                  <NavLink
-                    className="border-0 p-0"
-                    onClick={() => handleToggleMenu(false)}
-                    to="/dashboard"
-                    style={({ isActive }) => ({
-                      color: isActive ? "white" : "#A2AED0",
-                      textDecoration: "none",
-                      transition: "color 0.2s ease-in-out",
-                    })}
-                    onMouseEnter={(e) => (e.target.style.color = "white")}
-                    onMouseLeave={(e) =>
-                      (e.target.style.color = e.target.classList.contains(
-                        "active"
-                      )
-                        ? "white"
-                        : "#A2AED0")
-                    }
-                  >
-                    <FaRegCircle
-                      style={{ fontSize: "5px", marginRight: "8px" }}
-                    />
-                    CRM
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    className="border-0 p-0"
-                    onClick={() => handleToggleMenu(false)}
-                    to="/news"
-                    style={({ isActive }) => ({
-                      color: isActive ? "white" : "#A2AED0",
-                      textDecoration: "none",
-                      transition: "color 0.2s ease-in-out",
-                    })}
-                    onMouseEnter={(e) => (e.target.style.color = "white")}
-                    onMouseLeave={(e) =>
-                      (e.target.style.color = e.target.classList.contains(
-                        "active"
-                      )
-                        ? "white"
-                        : "#A2AED0")
-                    }
-                  >
-                    <FaRegCircle
-                      style={{ fontSize: "5px", marginRight: "8px" }}
-                    />
-                    Ecommerce
-                  </NavLink>
-                </li>
-              </ul>
-            </li>
+              {isSubMenuOpen("dashboard1") && (
+                <ul className="submenu sub-menu-active">
+                  <li>
+                    <NavLink
+                      className="border-0 p-0"
+                      onClick={() => handleToggleMenu(false)}
+                      to="/dashboard"
+                      style={({ isActive }) => ({
+                        color: isActive ? "white" : "#A2AED0",
+                        textDecoration: "none",
+                        transition: "color 0.2s ease-in-out",
+                      })}
+                      onMouseEnter={(e) => (e.target.style.color = "white")}
+                      onMouseLeave={(e) =>
+                        (e.target.style.color = e.target.classList.contains(
+                          "active"
+                        )
+                          ? "white"
+                          : "#A2AED0")
+                      }
+                    >
+                      <FaRegCircle
+                        style={{ fontSize: "5px", marginRight: "8px" }}
+                      />
+                      CRM
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      className="border-0 p-0"
+                      onClick={() => handleToggleMenu(false)}
+                      to="/news"
+                      style={({ isActive }) => ({
+                        color: isActive ? "white" : "#A2AED0",
+                        textDecoration: "none",
+                        transition: "color 0.2s ease-in-out",
+                      })}
+                      onMouseEnter={(e) => (e.target.style.color = "white")}
+                      onMouseLeave={(e) =>
+                        (e.target.style.color = e.target.classList.contains(
+                          "active"
+                        )
+                          ? "white"
+                          : "#A2AED0")
+                      }
+                    >
+                      <FaRegCircle
+                        style={{ fontSize: "5px", marginRight: "8px" }}
+                      />
+                      Ecommerce
+                    </NavLink>
+                  </li>
+                </ul>
+              )}
+            </li> */}
+
+            {/* Second Dropdown */}
+            {/* <li className="has-dropdown">
+              <a
+                className={`border-0 rounded-2 d-flex justify-content-between ${
+                  isSubMenuOpen("dashboard2") ? "bg-white bg-opacity-10" : ""
+                }`}
+                onClick={() => handleSubmenu("dashboard2")}
+              >
+                <span className="d-flex align-items-center">
+                  <TiHomeOutline className="mx-2 fs-5" />
+                  Dashboard 2
+                </span>
+                <span className="me-2">
+                  {isSubMenuOpen("dashboard2") ? (
+                    <FaChevronDown />
+                  ) : (
+                    <FaChevronRight />
+                  )}
+                </span>
+              </a>
+              {isSubMenuOpen("dashboard2") && (
+                <ul className="submenu sub-menu-active">
+                  <li>
+                    <NavLink
+                      className="border-0 p-0"
+                      onClick={() => handleToggleMenu(false)}
+                      to="/analytics"
+                      style={({ isActive }) => ({
+                        color: isActive ? "white" : "#A2AED0",
+                        textDecoration: "none",
+                        transition: "color 0.2s ease-in-out",
+                      })}
+                      onMouseEnter={(e) => (e.target.style.color = "white")}
+                      onMouseLeave={(e) =>
+                        (e.target.style.color = e.target.classList.contains(
+                          "active"
+                        )
+                          ? "white"
+                          : "#A2AED0")
+                      }
+                    >
+                      <FaRegCircle
+                        style={{ fontSize: "5px", marginRight: "8px" }}
+                      />
+                      Analytics
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      className="border-0 p-0"
+                      onClick={() => handleToggleMenu(false)}
+                      to="/sales"
+                      style={({ isActive }) => ({
+                        color: isActive ? "white" : "#A2AED0",
+                        textDecoration: "none",
+                        transition: "color 0.2s ease-in-out",
+                      })}
+                      onMouseEnter={(e) => (e.target.style.color = "white")}
+                      onMouseLeave={(e) =>
+                        (e.target.style.color = e.target.classList.contains(
+                          "active"
+                        )
+                          ? "white"
+                          : "#A2AED0")
+                      }
+                    >
+                      <FaRegCircle
+                        style={{ fontSize: "5px", marginRight: "8px" }}
+                      />
+                      Sales
+                    </NavLink>
+                  </li>
+                </ul>
+              )}
+            </li> */}
+
+            {/* Dashboard (no submenu) */}
+            <MenuItem
+              icon={<TiHomeOutline className="mx-2 fs-5" />}
+              label="Dashboard"
+              to="/dashboard"
+            />
+            {/* <MenuItem
+              icon={<TiHomeOutline className="mx-2 fs-5" />}
+              label="Admissions"
+              to="admissions"
+            /> */}
+
+            {/* Users (with submenu) */}
+            <MenuItem
+              icon={<FaUsers className="mx-2 fs-5" />}
+              label="Students"
+              identifier="students"
+              submenuItems={[
+                { label: "Add New", to: "add-new" },
+                { label: "Active Students", to: "active-students" },
+                { label: "Inactive Students", to: "inactive-students" },
+                { label: "Online Admission", to: "online-admissions" },
+              ]}
+              openSubMenu={openSubMenu}
+              handleSubmenu={handleSubmenu}
+              isSubMenuOpen={isSubMenuOpen}
+              handleToggleMenu={handleToggleMenu}
+            />
+
+            {/* Settings (no submenu) */}
+            <MenuItem
+              icon={<FaCogs className="mx-2 fs-5" />}
+              label="Settings"
+              to="/settings"
+              openSubMenu={openSubMenu}
+              handleSubmenu={handleSubmenu}
+              isSubMenuOpen={isSubMenuOpen}
+              handleToggleMenu={handleToggleMenu}
+            />
           </ul>
         </nav>
       </div>

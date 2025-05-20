@@ -223,6 +223,7 @@ const ApplyNowComp = () => {
 
     const password = form.password.value;
     const confirmPassword = form.confirmPassword.value;
+    const studentClass = null;
 
     if (password !== confirmPassword) {
       return setError("Password did not match");
@@ -268,6 +269,8 @@ const ApplyNowComp = () => {
           dob: student_dob,
           gender: student_gender,
           schoolYear: school_year,
+          status: "under review",
+          activity: "active",
           language,
           parent: {
             name: parent_name,
@@ -289,6 +292,7 @@ const ApplyNowComp = () => {
             previousInstitute: previous_institute,
             department: std_department,
             time: std_time,
+            class: studentClass,
           },
           medical: {
             doctorName: doctor_name,

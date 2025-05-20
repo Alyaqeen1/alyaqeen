@@ -38,6 +38,7 @@
     "react-spinners": "^0.15.0",
     "reducers": "^3.0.0-alpha",
     "simplebar-react": "^3.3.0",
+    "sweetalert2": "^11.21.2",
     "swiper": "^11.2.5"
   },
   "devDependencies": {

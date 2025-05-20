@@ -75,7 +75,7 @@ export default function OffCanvasMenu() {
       >
         <div
           className="d-flex flex-column h-100 "
-          style={{ minHeight: "100vh", backgroundColor: "#101C42" }}
+          style={{ minHeight: "100vh", backgroundColor: "var(--border2)" }}
         >
           {/* Sidebar Header */}
           <div>
