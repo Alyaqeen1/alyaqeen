@@ -1,5 +1,5 @@
 import React from "react";
-import { useGetStudentQuery } from "../../redux/features/students/StudentsApi";
+import { useGetStudentQuery } from "../../redux/features/students/studentsApi";
 import { FaCheck, FaCross, FaPen } from "react-icons/fa6";
 import { FaTrashAlt } from "react-icons/fa";
 import { ImCross } from "react-icons/im";

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useGetStudentsQuery } from "../../redux/features/students/StudentsApi";
+import { useGetStudentsQuery } from "../../redux/features/students/studentsApi";
 import { Link } from "react-router";
 import { FaCheck, FaEye, FaPen } from "react-icons/fa6";
 import { FaTrashAlt } from "react-icons/fa";
