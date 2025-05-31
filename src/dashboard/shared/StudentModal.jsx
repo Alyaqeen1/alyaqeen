@@ -3,30 +3,41 @@ import { useGetStudentQuery } from "../../redux/features/students/studentsApi";
 import { FaCheck, FaCross, FaPen } from "react-icons/fa6";
 import { FaTrashAlt } from "react-icons/fa";
 import { ImCross } from "react-icons/im";
+import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
+import Swal from "sweetalert2";
 export default function StudentModal({ studentId, handleClose, showModal }) {
   const {
     data: student,
     isLoading,
     isError,
+    refetch,
   } = useGetStudentQuery(studentId, {
     skip: !studentId, // avoid fetching if no ID
   });
-  console.log(student);
+
+  const axiosPublic = useAxiosPublic();
 
   const {
     name,
     email,
     dob,
     gender,
-    schoolYear,
+    school_year,
     language,
-    parent,
+    status,
+    emergency_number,
+
+    student_age,
+    family_name,
+    activity,
     mother,
     father,
     academic,
     medical,
     startingDate,
     signature,
+    parent_email,
   } = student || {};
   const { doctorName, surgeryAddress, surgeryNumber, allergies, condition } =
     medical || {};
@@ -37,19 +48,8 @@ export default function StudentModal({ studentId, handleClose, showModal }) {
   } = father || {};
 
   const { name: motherName, occupation, number: motherNumber } = mother || {};
-  const {
-    name: parentName,
-    email: parentEmail,
-    number,
-    emergencyNumber,
-  } = parent || {};
 
-  const {
-    previousInstitute,
-    department,
-    time,
-    class: studentClass,
-  } = academic || {};
+  const { session, department, time, class: student_class } = academic || {};
 
   const handleBackdropClick = (event) => {
     // Close modal only if clicked on the backdrop (not modal content)
@@ -57,8 +57,38 @@ export default function StudentModal({ studentId, handleClose, showModal }) {
       handleClose();
     }
   };
+  const handleStatus = async (newStatus) => {
+    if (newStatus === "approved" && !student_class) {
+      Swal.fire({
+        icon: "warning",
+        title: "Assign a class first!",
+        text: "You must assign a class before approving the student.",
+      });
+      return;
+    }
+
+    try {
+      const { data } = await axiosPublic.patch(`/student/${studentId}`, {
+        status: newStatus,
+      });
+
+      if (data.modifiedCount) {
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: `Student ${newStatus} successfully`,
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        refetch();
+      }
+    } catch (err) {
+      console.error("Failed to update status:", err);
+    }
+  };
+
   if (!showModal) return null;
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <LoadingSpinnerDash></LoadingSpinnerDash>;
   if (isError || !student) return <div>Failed to load student data</div>;
   return (
     <div>
@@ -80,7 +110,12 @@ export default function StudentModal({ studentId, handleClose, showModal }) {
         <div className="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg">
           <div className="modal-content">
             <div className="modal-body">
-              <h2 className="text-xl font-bold mb-2">{name && name}</h2>
+              <div className="d-flex justify-content-between align-items-center">
+                <h2 className="text-xl font-bold mb-2">{name && name}</h2>
+                <button type="button" class="btn btn-primary">
+                  {status}
+                </button>
+              </div>
               <div className="d-flex justify-content-center gap-2">
                 <div className="flex-grow-1">
                   <p>
@@ -90,39 +125,40 @@ export default function StudentModal({ studentId, handleClose, showModal }) {
                     <strong>DOB:</strong> {dob}
                   </p>
                   <p>
+                    <strong>Student Age:</strong> {student_age}
+                  </p>
+                  <p>
+                    <strong>Family Name:</strong> {family_name}
+                  </p>
+                  <p>
                     <strong>Gender:</strong> {gender}
                   </p>
                   <p>
-                    <strong>School Year:</strong> {schoolYear}
+                    <strong>School Year:</strong> {school_year}
                   </p>
                   <p>
                     <strong>Language:</strong> {language}
                   </p>
-                  <p>
-                    <strong>Previous Institute:</strong> {previousInstitute}
-                  </p>
+
                   <p>
                     <strong>department:</strong> {department}
+                  </p>
+                  <p>
+                    <strong>Session:</strong> {session}
                   </p>
                   <p>
                     <strong>Session Time:</strong> {time}
                   </p>
                   <p>
-                    <strong>Parent Name:</strong> {parentName}
+                    <strong>Parent Email:</strong> {parent_email}
                   </p>
                   <p>
-                    <strong>Parent Email:</strong> {parentEmail}
-                  </p>
-                  <p>
-                    <strong>Student Number:</strong> {number}
-                  </p>
-                  <p>
-                    <strong>Emergency Number:</strong> {emergencyNumber}
+                    <strong>Emergency Number:</strong> {emergency_number}
                   </p>
                   <p>
                     <strong>
                       Class:{" "}
-                      {studentClass === null ? "Not Provided" : studentClass}
+                      {student_class === null ? "Not Provided" : student_class}
                     </strong>
                   </p>
                 </div>
@@ -173,12 +209,14 @@ export default function StudentModal({ studentId, handleClose, showModal }) {
               </div>
               <div className="d-flex justify-content-center gap-2 mt-3">
                 <button
+                  onClick={() => handleStatus("approved")}
                   className="text-success fs-5 py-1 px-2 rounded-2"
                   style={{ backgroundColor: "var(--border2)" }}
                 >
                   <FaCheck></FaCheck>
                 </button>
                 <button
+                  onClick={() => handleStatus("rejected")}
                   className="text-danger py-1 px-2 rounded-2"
                   style={{ backgroundColor: "var(--border2)" }}
                 >

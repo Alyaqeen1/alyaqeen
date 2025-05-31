@@ -10,9 +10,19 @@ import { TiHomeOutline } from "react-icons/ti";
 import logo from "../../../site/assets/img/logo/logo.png";
 import MenuItem from "../../shared/MenuItem";
 import { FaUsers } from "react-icons/fa6";
+import { useGetRoleQuery } from "../../../redux/features/role/roleApi";
+import useAuth from "../../../hooks/useAuth";
+import LoadingSpinner from "../../../site/components/LoadingSpinner";
+import LoadingSpinnerDash from "../LoadingSpinnerDash";
 
 export default function Sidebar() {
   const [openSubMenu, setOpenSubMenu] = useState(null);
+  const { user } = useAuth();
+  const { data, isLoading } = useGetRoleQuery(user?.email, {
+    skip: !user?.email, // avoid fetching if no ID
+  });
+
+  // console.log(role);
 
   const handleSubmenu = (submenuId) => {
     if (openSubMenu === submenuId) {
@@ -27,6 +37,7 @@ export default function Sidebar() {
   const handleToggleMenu = (open) => {
     console.log("Toggle menu:", open);
   };
+  if (isLoading) return <LoadingSpinnerDash></LoadingSpinnerDash>;
 
   return (
     <div
@@ -213,21 +224,23 @@ export default function Sidebar() {
             /> */}
 
             {/* Users (with submenu) */}
-            <MenuItem
-              icon={<FaUsers className="mx-2 fs-5" />}
-              label="Students"
-              identifier="students"
-              submenuItems={[
-                { label: "Add New", to: "add-new" },
-                { label: "Active Students", to: "active-students" },
-                { label: "Inactive Students", to: "inactive-students" },
-                { label: "Online Admission", to: "online-admissions" },
-              ]}
-              openSubMenu={openSubMenu}
-              handleSubmenu={handleSubmenu}
-              isSubMenuOpen={isSubMenuOpen}
-              handleToggleMenu={handleToggleMenu}
-            />
+            {data?.role === "admin" && (
+              <MenuItem
+                icon={<FaUsers className="mx-2 fs-5" />}
+                label="Students"
+                identifier="students"
+                submenuItems={[
+                  { label: "Add New", to: "add-new" },
+                  { label: "Active Students", to: "active-students" },
+                  { label: "Inactive Students", to: "inactive-students" },
+                  { label: "Online Admission", to: "online-admissions" },
+                ]}
+                openSubMenu={openSubMenu}
+                handleSubmenu={handleSubmenu}
+                isSubMenuOpen={isSubMenuOpen}
+                handleToggleMenu={handleToggleMenu}
+              />
+            )}
 
             {/* Settings (no submenu) */}
             <MenuItem

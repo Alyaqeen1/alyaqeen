@@ -195,15 +195,17 @@ const ApplyNowComp = () => {
     e.preventDefault();
     setError("");
     const form = e.target;
+    // basic info
     const student_name = form.student_name.value;
     const student_email = form.student_email.value;
     const student_dob = form.std_dob.value;
+    const student_age = form.student_age.value;
+    const family_name = form.family_name.value.trim();
     const student_gender = form.std_gender.value;
     const school_year = form.school_year.value;
     const language = form.language.value;
-    const parent_name = form.parent_name.value;
-    const student_number = form.student_number.value;
     const emergency_number = form.emergency_number.value;
+    // parent details
     const mother_name = form.mother_name.value;
     const mother_occupation = form.mother_occupation.value;
     const mother_number = form.mother_number.value;
@@ -211,9 +213,11 @@ const ApplyNowComp = () => {
     const father_occupation = form.father_occupation.value;
     const father_number = form.father_number.value;
     const parent_email = form.parent_email.value;
-    const previous_institute = form.previous_institute.value;
+    // academic details
     const std_department = form.std_department.value;
     const std_time = form.std_time.value;
+    const std_session = form.std_session.value;
+    // health details
     const doctor_name = form.doctor_name.value;
     const surgery_address = form.surgery_address.value;
     const surgery_number = form.surgery_number.value;
@@ -223,7 +227,7 @@ const ApplyNowComp = () => {
 
     const password = form.password.value;
     const confirmPassword = form.confirmPassword.value;
-    const studentClass = null;
+    const student_class = null;
 
     if (password !== confirmPassword) {
       return setError("Password did not match");
@@ -267,17 +271,15 @@ const ApplyNowComp = () => {
           name: student_name,
           email: student_email,
           dob: student_dob,
+          student_age,
           gender: student_gender,
-          schoolYear: school_year,
+          school_year: school_year,
           status: "under review",
           activity: "active",
           language,
-          parent: {
-            name: parent_name,
-            email: parent_email,
-            number: student_number,
-            emergencyNumber: emergency_number,
-          },
+          parent_email: parent_email,
+          emergency_number: emergency_number,
+          family_name: family_name,
           mother: {
             name: mother_name,
             occupation: mother_occupation,
@@ -289,16 +291,16 @@ const ApplyNowComp = () => {
             number: father_number,
           },
           academic: {
-            previousInstitute: previous_institute,
             department: std_department,
             time: std_time,
-            class: studentClass,
+            session: std_session,
+            class: student_class,
           },
           medical: {
             doctorName: doctor_name,
             surgeryAddress: surgery_address,
             surgeryNumber: surgery_number,
-            allergies,
+            allergies: allergies,
             condition: medical_condition,
           },
           startingDate: starting_date,
@@ -431,7 +433,7 @@ const ApplyNowComp = () => {
                     >
                       <div className="form-clt">
                         <span>Date of birth*</span>
-                        <input type="date" name="std_dob" />
+                        <input type="date" name="std_dob" required />
                       </div>
                     </div>
                     {/* school year */}
@@ -447,6 +449,7 @@ const ApplyNowComp = () => {
                           style={{ backgroundColor: "var(--theme2)" }}
                           name="student_age"
                           className="form-control"
+                          required
                         >
                           <option value="">Select age</option>
                           <option value="4">4</option>
@@ -500,6 +503,7 @@ const ApplyNowComp = () => {
                           style={{ backgroundColor: "var(--theme2)" }}
                           name="school_year"
                           className="form-control"
+                          required
                         >
                           <option value="">Select year</option>
                           <option value="reception">Reception</option>
@@ -538,6 +542,7 @@ const ApplyNowComp = () => {
                           name="language"
                           id="name"
                           placeholder=""
+                          required
                         />
                       </div>
                     </div>
@@ -549,12 +554,12 @@ const ApplyNowComp = () => {
                       data-aos-delay="700"
                     >
                       <div className="form-clt">
-                        <span>Family Name*</span>
+                        <span>Family Name (used to group your family)*</span>
                         <input
                           type="text"
                           name="family_name"
+                          placeholder="e.g. Rahman / Khan"
                           id="name"
-                          placeholder=""
                           required
                         />
                       </div>
@@ -592,6 +597,7 @@ const ApplyNowComp = () => {
                           name="student_email"
                           id="name"
                           placeholder=""
+                          required
                         />
                       </div>
                     </div>
@@ -659,6 +665,7 @@ const ApplyNowComp = () => {
                           name="mother_number"
                           id="name"
                           placeholder=""
+                          required
                         />
                       </div>
                     </div>
@@ -676,6 +683,7 @@ const ApplyNowComp = () => {
                           name="father_name"
                           id="name"
                           placeholder=""
+                          required
                         />
                       </div>
                     </div>
@@ -693,6 +701,7 @@ const ApplyNowComp = () => {
                           name="father_occupation"
                           id="name"
                           placeholder=""
+                          required
                         />
                       </div>
                     </div>
@@ -710,6 +719,7 @@ const ApplyNowComp = () => {
                           name="father_number"
                           id="name"
                           placeholder=""
+                          required
                         />
                       </div>
                     </div>
@@ -724,10 +734,12 @@ const ApplyNowComp = () => {
                       <div className="form-clt">
                         <span>One of the other parents email*</span>
                         <input
+                          // style={{ backgroundColor: "var(--theme2)" }}
                           type="email"
                           name="parent_email"
                           id="name"
                           placeholder=""
+                          required
                         />
                       </div>
                     </div>
@@ -762,6 +774,7 @@ const ApplyNowComp = () => {
                           value={department}
                           className="form-control selectDepartment"
                           style={{ backgroundColor: "var(--theme2)" }}
+                          required
                         >
                           <option value="">Select department</option>
                           <option value="Arabic, Quran & Islamic Education">
@@ -797,6 +810,7 @@ const ApplyNowComp = () => {
                           value={session}
                           className="form-control font-light selectClassType"
                           style={{ backgroundColor: "var(--theme2)" }}
+                          required
                         >
                           <option value="">Select Session</option>
                           <option value="weekdays">Weekdays</option>
@@ -825,6 +839,7 @@ const ApplyNowComp = () => {
                           value={sessionTime}
                           style={{ backgroundColor: "var(--theme2)" }}
                           onChange={(e) => setSessionTime(e.target.value)}
+                          required
                         >
                           <option value="">Select Session Time</option>
                           {department && session === "weekdays" ? (
@@ -864,7 +879,7 @@ const ApplyNowComp = () => {
                             backgroundColor: "var(--theme2)",
                             cursor: "not-allowed",
                           }}
-                          name="student_age"
+                          name="student_class"
                           className="form-control"
                         >
                           <option value="">
@@ -922,6 +937,7 @@ const ApplyNowComp = () => {
                           name="doctor_name"
                           id="name"
                           placeholder=""
+                          required
                         />
                       </div>
                     </div>
@@ -939,6 +955,7 @@ const ApplyNowComp = () => {
                           name="surgery_address"
                           id="name"
                           placeholder=""
+                          required
                         />
                       </div>
                     </div>
@@ -956,6 +973,7 @@ const ApplyNowComp = () => {
                           name="surgery_number"
                           id="name"
                           placeholder=""
+                          required
                         />
                       </div>
                     </div>
@@ -1139,15 +1157,6 @@ const ApplyNowComp = () => {
                           </button>
                         </div>
                       </div>
-                      {/* <div className="form-clt">
-                        <span>Parents Signature*</span>
-                        <input
-                          type="text"
-                          name="parent-sign"
-                          id="name"
-                          placeholder=""
-                        />
-                      </div> */}
                     </div>
                     {/* Expected Starting Date */}
                     <div
@@ -1158,7 +1167,7 @@ const ApplyNowComp = () => {
                     >
                       <div className="form-clt">
                         <span>Expected Starting Date*</span>
-                        <input type="date" name="starting_date" />
+                        <input type="date" name="starting_date" required />
                       </div>
                     </div>
 

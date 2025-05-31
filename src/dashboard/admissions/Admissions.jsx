@@ -47,7 +47,6 @@ export default function Admissions() {
   };
 
   const handleClose = () => setShowModal(false);
-  console.log(students);
 
   return (
     <div className="mt-8">
@@ -99,7 +98,7 @@ export default function Admissions() {
                 className="font-danger text-white fw-bolder border h6 text-center align-middle"
                 style={{ backgroundColor: "var(--border2)" }}
               >
-                Student Email
+                Email
               </th>
               <th
                 className="font-danger text-white fw-bolder border h6 text-center align-middle"
@@ -159,7 +158,7 @@ export default function Admissions() {
                   <td
                     className={`border h6 text-center align-middle text-nowrap`}
                   >
-                    {student?.schoolYear}
+                    {student?.school_year}
                   </td>
                   <td
                     className={`border d-flex gap-2 justify-content-center h6 text-center align-middle text-nowrap`}
@@ -178,12 +177,13 @@ export default function Admissions() {
                     >
                       <FaTrashAlt></FaTrashAlt>
                     </button>
-                    <button
+                    <Link
+                      to={`/dashboard/online-admissions/update/${student?._id}`}
                       className="text-white py-1 px-2 rounded-2"
                       style={{ backgroundColor: "var(--border2)" }}
                     >
                       <FaPen></FaPen>
-                    </button>
+                    </Link>
                   </td>
                 </tr>
               ))
