@@ -223,7 +223,6 @@ const ApplyNowComp = () => {
     const surgery_number = form.surgery_number.value;
     const allergies = form.allergies.value;
     const medical_condition = form.medical_condition.value;
-    const starting_date = form.starting_date.value;
 
     const password = form.password.value;
     const confirmPassword = form.confirmPassword.value;
@@ -255,6 +254,7 @@ const ApplyNowComp = () => {
 
         // Update user context
         setUser(result.user);
+        setLoading(false);
 
         // Prepare data with uid
         const userData = {
@@ -308,13 +308,21 @@ const ApplyNowComp = () => {
           createdAt: new Date(),
         };
 
+        const notification = {
+          type: "admission",
+          message: `${student_name} has Joined.`,
+          isRead: false,
+          createdAt: new Date(),
+          link: "/dashboard/online-admissions", // Optional: where to go when clicked
+        };
+
         console.log("User Data:", userData);
         console.log("User:", studentData);
 
         // 🔽 Optional: Send to backend
         await axiosPublic.post("/users", userData);
         await axiosPublic.post("/students", studentData);
-
+        await axiosPublic.post("/notifications", notification);
         toast.success("Registration successful");
         navigate("/dashboard");
         form.reset();

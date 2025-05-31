@@ -16,40 +16,20 @@ import useAuth from "../../../hooks/useAuth";
 import toast from "react-hot-toast";
 import { useGetRoleQuery } from "../../../redux/features/role/roleApi";
 import { useGetStudentsQuery } from "../../../redux/features/students/studentsApi";
+import { useGetUnreadNotificationsQuery } from "../../../redux/features/notifications/notificationsApi";
+import useAxiosPublic from "../../../hooks/useAxiosPublic";
 
 export default function Navbar() {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [showDropdown, setShowDropdown] = useState(false);
-  const [prevStudents, setPrevStudents] = useState([]);
   const navigate = useNavigate();
-  const { data } = useGetRoleQuery();
-
-  const { data: students = [] } = useGetStudentsQuery(undefined, {
-    pollingInterval: 30000,
-  });
-  const [notifications, setNotifications] = useState([]);
-
-  useEffect(() => {
-    if (
-      data?.role === "admin" &&
-      prevStudents.length &&
-      students.length > prevStudents.length
-    ) {
-      const newStudents = students.filter(
-        (s) => !prevStudents.some((prev) => prev._id === s._id)
-      );
-
-      const newNotifications = newStudents.map((student) => ({
-        name: student.name,
-      }));
-
-      setNotifications((prev) => [...newNotifications, ...prev]);
-    }
-
-    setPrevStudents(students);
-  }, [students, data]);
-
   const { user, signOutUser } = useAuth();
+  const { data, isLoading } = useGetRoleQuery(user?.email, {
+    skip: !user?.email, // avoid fetching if no ID
+  });
+  const axiosPublic = useAxiosPublic();
+  const { data: unreadNotifications, refetch } =
+    useGetUnreadNotificationsQuery();
 
   const handleSignOut = () => {
     signOutUser().then(() => {
@@ -61,9 +41,14 @@ export default function Navbar() {
     setShowDropdown((prev) => !prev);
   };
 
-  const handleNotificationClick = () => {
+  const handleNotificationClick = async (id, link) => {
     setShowDropdown(false);
-    navigate("/dashboard/online-admissions");
+    const { data } = await axiosPublic.patch(`/notifications/${id}`);
+    console.log(data);
+    if (data.modifiedCount) {
+      navigate(link);
+      refetch();
+    }
   };
 
   useEffect(() => {
@@ -122,14 +107,14 @@ export default function Navbar() {
               onClick={toggleDropdown}
             >
               <FaRegBell className="fs-4" />
-              {students.length > 0 && (
+              {unreadNotifications?.length > 0 && data?.role === "admin" && (
                 <motion.span
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
                   style={{ fontSize: "0.65rem" }}
                 >
-                  {students.length}
+                  {unreadNotifications?.length}
                 </motion.span>
               )}
             </motion.button>
@@ -139,18 +124,20 @@ export default function Navbar() {
                 className="position-absolute end-0 mt-2 p-2 bg-white shadow rounded"
                 style={{ minWidth: "200px", zIndex: 1000 }}
               >
-                {students.length > 0 ? (
-                  students.map((item, idx) => (
+                {unreadNotifications.length > 0 && data?.role === "admin" ? (
+                  unreadNotifications.map((item, idx) => (
                     <div
                       key={idx}
-                      onClick={handleNotificationClick}
+                      onClick={() =>
+                        handleNotificationClick(item?._id, item?.link)
+                      }
                       style={{
                         cursor: "pointer",
                         padding: "5px 10px",
-                        borderBottom: "1px solid #eee",
+                        border: "3px solid #eee",
                       }}
                     >
-                      👤 {item.name} has joined
+                      {item.message}
                     </div>
                   ))
                 ) : (
@@ -172,9 +159,9 @@ export default function Navbar() {
             />
             <div className="d-none d-lg-block">
               <h6 className="fw-bold" style={{ fontSize: "14px" }}>
-                Json Taylor
+                {user?.displayName || "Anonymous User"}
               </h6>
-              <h6 style={{ fontSize: "12px" }}>Web Designer</h6>
+              <h6 style={{ fontSize: "12px" }}>{user?.email}</h6>
             </div>
           </div>
 

@@ -1,5 +1,6 @@
 import AdminRoute from "../routes/AdminRoute";
 import PrivateRoute from "../routes/PrivateRoute";
+import AddStudent from "./admissions/AddStudent";
 import Admissions from "./admissions/Admissions";
 import UpdateStudent from "./admissions/UpdateStudent";
 import DashboardLayout from "./layout/DashboardLayout";
@@ -34,6 +35,16 @@ const dashboardRoutes = [
           <PrivateRoute>
             <AdminRoute>
               <UpdateStudent></UpdateStudent>
+            </AdminRoute>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "add-student",
+        element: (
+          <PrivateRoute>
+            <AdminRoute>
+              <AddStudent></AddStudent>
             </AdminRoute>
           </PrivateRoute>
         ),

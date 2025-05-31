@@ -230,7 +230,7 @@ export default function Sidebar() {
                 label="Students"
                 identifier="students"
                 submenuItems={[
-                  { label: "Add New", to: "add-new" },
+                  { label: "Add New", to: "add-student" },
                   { label: "Active Students", to: "active-students" },
                   { label: "Inactive Students", to: "inactive-students" },
                   { label: "Online Admission", to: "online-admissions" },
