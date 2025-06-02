@@ -10,6 +10,7 @@ import {
   updateProfile,
 } from "firebase/auth";
 import auth from "../firebase/firebase.config";
+import axios from "axios";
 // import axios from "axios";
 
 // const googleProvider = new GoogleAuthProvider();
@@ -35,25 +36,28 @@ export default function AuthProvider({ children }) {
     return updateProfile(auth.currentUser, profileData);
   };
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
-      setLoading(false);
-      //   if (currentUser) {
-      //     const userInfo = { email: currentUser.email };
-      //     axiosPublic.post("/jwt", userInfo).then((res) => {
-      //       if (res.data.token) {
-      //         localStorage.setItem("access-token", res.data.token);
-      //         setLoading(false);
-      //       }
-      //     });
-      //   } else {
-      //     localStorage.removeItem("access-token");
-      //     setLoading(false);
-      //   }
+      if (currentUser?.email) {
+        const { data } = await axios.post(
+          `${import.meta.env.VITE_WebApi_URL}/jwt`,
+          { email: currentUser?.email },
+          { withCredentials: true }
+        );
+
+        setLoading(false);
+      } else {
+        const { data } = await axios.get(
+          `${import.meta.env.VITE_WebApi_URL}/logout`,
+          {
+            withCredentials: true,
+          }
+        );
+
+        setLoading(false);
+      }
+      return () => unsubscribe();
     });
-    return () => {
-      return unsubscribe();
-    };
   }, []);
 
   const authInfo = {

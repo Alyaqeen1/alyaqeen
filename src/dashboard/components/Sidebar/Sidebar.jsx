@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Outlet, Link, NavLink } from "react-router";
+import { RiMoneyEuroCircleLine } from "react-icons/ri";
 import {
   FaChevronDown,
   FaChevronRight,
@@ -235,6 +236,18 @@ export default function Sidebar() {
                   { label: "Inactive Students", to: "inactive-students" },
                   { label: "Online Admission", to: "online-admissions" },
                 ]}
+                openSubMenu={openSubMenu}
+                handleSubmenu={handleSubmenu}
+                isSubMenuOpen={isSubMenuOpen}
+                handleToggleMenu={handleToggleMenu}
+              />
+            )}
+
+            {data?.role === "parent" && (
+              <MenuItem
+                icon={<RiMoneyEuroCircleLine className="mx-2 fs-5" />}
+                label="Payments"
+                to="/dashboard/payments"
                 openSubMenu={openSubMenu}
                 handleSubmenu={handleSubmenu}
                 isSubMenuOpen={isSubMenuOpen}

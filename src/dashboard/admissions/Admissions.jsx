@@ -6,12 +6,14 @@ import { FaTrashAlt } from "react-icons/fa";
 import StudentModal from "../shared/StudentModal";
 import Swal from "sweetalert2";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 export default function Admissions() {
   const { data: students, isLoading, isError, refetch } = useGetStudentsQuery();
   const [showModal, setShowModal] = useState(false);
   const [selectedStudentId, setSelectedStudentId] = useState(null);
   const axiosPublic = useAxiosPublic();
+  const axiosSecure = useAxiosSecure();
   // Toggle modal visibility
   const handleShow = (id) => {
     setSelectedStudentId(id);

@@ -223,6 +223,7 @@ const ApplyNowComp = () => {
     const surgery_number = form.surgery_number.value;
     const allergies = form.allergies.value;
     const medical_condition = form.medical_condition.value;
+    const starting_date = form.starting_date.value;
 
     const password = form.password.value;
     const confirmPassword = form.confirmPassword.value;
@@ -315,6 +316,42 @@ const ApplyNowComp = () => {
           createdAt: new Date(),
           link: "/dashboard/online-admissions", // Optional: where to go when clicked
         };
+        // 🔁 2. Check if parent exists
+        const { data: existingParent } = await axiosPublic.get(
+          `/family/${parent_email}`
+        );
+        if (existingParent) {
+          // Parent exists → just push the student data
+          await axiosPublic.patch(`/family/${parent_email}/add-child`, {
+            studentUid: uid,
+          });
+        } else {
+          // Parent doesn't exist → create new parent
+          const newFamily = {
+            name: family_name,
+            email: parent_email,
+            phone: father_number,
+            fatherName: father_name,
+            children: [uid], // ✅ Just UID here
+            createdAt: new Date(),
+          };
+          const { data } = await axiosPublic.post("/create-student-user", {
+            email: parent_email,
+            password: password,
+            displayName: family_name,
+          });
+          const parentData = {
+            uid: data.uid,
+            name: father_name,
+            email: parent_email,
+            role: "parent",
+            createdAt: new Date(),
+            status: "submitted",
+          };
+          console.log(data);
+          await axiosPublic.post("/families", newFamily);
+          await axiosPublic.post("/users", parentData);
+        }
 
         console.log("User Data:", userData);
         console.log("User:", studentData);

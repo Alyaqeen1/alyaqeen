@@ -6,6 +6,7 @@ export const apiSlice = createApi({
     // baseUrl: "http://35.176.169.111",
     // baseUrl: "https://talibiq.com",
     baseUrl: import.meta.env.VITE_WebApi_URL,
+    credentials: "include",
   }),
   tagTypes: ["Reviews"],
   endpoints: (builder) => ({}),
