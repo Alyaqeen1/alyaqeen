@@ -68,7 +68,7 @@ export default function StudentModal({ studentId, handleClose, showModal }) {
     }
 
     try {
-      const { data } = await axiosPublic.patch(`/student/${studentId}`, {
+      const { data } = await axiosPublic.patch(`/students/${studentId}`, {
         status: newStatus,
       });
 

@@ -124,7 +124,7 @@ export default function Navbar() {
                 className="position-absolute end-0 mt-2 p-2 bg-white shadow rounded"
                 style={{ minWidth: "200px", zIndex: 1000 }}
               >
-                {unreadNotifications.length > 0 && data?.role === "admin" ? (
+                {unreadNotifications?.length > 0 && data?.role === "admin" ? (
                   unreadNotifications.map((item, idx) => (
                     <div
                       key={idx}

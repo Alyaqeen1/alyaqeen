@@ -194,8 +194,10 @@ const ApplyNowComp = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
     const form = e.target;
-    // basic info
+
+    // Extract form values
     const student_name = form.student_name.value;
     const student_email = form.student_email.value;
     const student_dob = form.std_dob.value;
@@ -205,7 +207,7 @@ const ApplyNowComp = () => {
     const school_year = form.school_year.value;
     const language = form.language.value;
     const emergency_number = form.emergency_number.value;
-    // parent details
+
     const mother_name = form.mother_name.value;
     const mother_occupation = form.mother_occupation.value;
     const mother_number = form.mother_number.value;
@@ -213,11 +215,11 @@ const ApplyNowComp = () => {
     const father_occupation = form.father_occupation.value;
     const father_number = form.father_number.value;
     const parent_email = form.parent_email.value;
-    // academic details
+
     const std_department = form.std_department.value;
     const std_time = form.std_time.value;
     const std_session = form.std_session.value;
-    // health details
+
     const doctor_name = form.doctor_name.value;
     const surgery_address = form.surgery_address.value;
     const surgery_number = form.surgery_number.value;
@@ -229,143 +231,130 @@ const ApplyNowComp = () => {
     const confirmPassword = form.confirmPassword.value;
     const student_class = null;
 
+    // Password Validation
     if (password !== confirmPassword) {
-      return setError("Password did not match");
+      return setError("Passwords do not match");
     }
-
     if (!/[A-Z]/.test(password)) {
-      return setError("Must have an Uppercase letter in the password ");
+      return setError("Must include an uppercase letter");
     }
     if (!/[a-z]/.test(password)) {
-      return setError("Must have a Lowercase letter in the password");
+      return setError("Must include a lowercase letter");
     }
     if (password.length < 6) {
-      return setError("Password length must be at least 6 character");
+      return setError("Password must be at least 6 characters");
     }
+
     try {
-      setLoading(true);
-      if (signature) {
-        // Create user in Firebase
-        const result = await createUser(student_email, password);
-
-        const uid = result.user.uid;
-
-        // Optionally update profile
-        await updateUser({ displayName: student_name });
-
-        // Update user context
-        setUser(result.user);
-        setLoading(false);
-
-        // Prepare data with uid
-        const userData = {
-          uid,
-          name: student_name,
-          email: student_email,
-          role: "student",
-          createdAt: new Date(),
-          status: "submitted",
-        };
-
-        const studentData = {
-          uid,
-          name: student_name,
-          email: student_email,
-          dob: student_dob,
-          student_age,
-          gender: student_gender,
-          school_year: school_year,
-          status: "under review",
-          activity: "active",
-          language,
-          parent_email: parent_email,
-          emergency_number: emergency_number,
-          family_name: family_name,
-          mother: {
-            name: mother_name,
-            occupation: mother_occupation,
-            number: mother_number,
-          },
-          father: {
-            name: father_name,
-            occupation: father_occupation,
-            number: father_number,
-          },
-          academic: {
-            department: std_department,
-            time: std_time,
-            session: std_session,
-            class: student_class,
-          },
-          medical: {
-            doctorName: doctor_name,
-            surgeryAddress: surgery_address,
-            surgeryNumber: surgery_number,
-            allergies: allergies,
-            condition: medical_condition,
-          },
-          startingDate: starting_date,
-          signature,
-          createdAt: new Date(),
-        };
-
-        const notification = {
-          type: "admission",
-          message: `${student_name} has Joined.`,
-          isRead: false,
-          createdAt: new Date(),
-          link: "/dashboard/online-admissions", // Optional: where to go when clicked
-        };
-        // 🔁 2. Check if parent exists
-        const { data: existingParent } = await axiosPublic.get(
-          `/family/${parent_email}`
-        );
-        if (existingParent) {
-          // Parent exists → just push the student data
-          await axiosPublic.patch(`/family/${parent_email}/add-child`, {
-            studentUid: uid,
-          });
-        } else {
-          // Parent doesn't exist → create new parent
-          const newFamily = {
-            name: family_name,
-            email: parent_email,
-            phone: father_number,
-            fatherName: father_name,
-            children: [uid], // ✅ Just UID here
-            createdAt: new Date(),
-          };
-          const { data } = await axiosPublic.post("/create-student-user", {
-            email: parent_email,
-            password: password,
-            displayName: family_name,
-          });
-          const parentData = {
-            uid: data.uid,
-            name: father_name,
-            email: parent_email,
-            role: "parent",
-            createdAt: new Date(),
-            status: "submitted",
-          };
-          console.log(data);
-          await axiosPublic.post("/families", newFamily);
-          await axiosPublic.post("/users", parentData);
-        }
-
-        console.log("User Data:", userData);
-        console.log("User:", studentData);
-
-        // 🔽 Optional: Send to backend
-        await axiosPublic.post("/users", userData);
-        await axiosPublic.post("/students", studentData);
-        await axiosPublic.post("/notifications", notification);
-        toast.success("Registration successful");
-        navigate("/dashboard");
-        form.reset();
-      } else {
-        setError("Please save signature first");
+      if (!signature) {
+        return setError("Please save signature first");
       }
+
+      // 🔁 1. Check if parent already exists
+      const { data: existingParent } = await axiosPublic.get(
+        `/families/${parent_email}`
+      );
+      const studentUid = crypto.randomUUID(); // ✅ Generate student UID early
+      let parentUid;
+
+      if (existingParent) {
+        parentUid = existingParent.uid;
+      } else {
+        // 🔧 Create Firebase user for parent
+        const result = await createUser(parent_email, password);
+        parentUid = result.user.uid;
+
+        await updateUser({ displayName: family_name });
+
+        const newFamily = {
+          uid: parentUid,
+          name: family_name,
+          familyId: `${family_name}-${parent_email}`,
+          email: parent_email,
+          phone: father_number,
+          fatherName: father_name,
+          children: [studentUid], // ✅ Add student immediately
+          createdAt: new Date(),
+        };
+
+        const parentData = {
+          uid: parentUid,
+          name: family_name,
+          email: parent_email,
+          role: "parent",
+          createdAt: new Date(),
+        };
+
+        await axiosPublic.post("/families", newFamily);
+        await axiosPublic.post("/users", parentData);
+      }
+
+      // ✅ 2. Prepare student data
+      const studentData = {
+        uid: studentUid,
+        name: student_name,
+        email: student_email,
+        dob: student_dob,
+        parentUid,
+        student_age,
+        gender: student_gender,
+        school_year,
+        status: "under review",
+        activity: "active",
+        language,
+        parent_email,
+        emergency_number,
+        family_name,
+        mother: {
+          name: mother_name,
+          occupation: mother_occupation,
+          number: mother_number,
+        },
+        father: {
+          name: father_name,
+          occupation: father_occupation,
+          number: father_number,
+        },
+        academic: {
+          department: std_department,
+          time: std_time,
+          session: std_session,
+          class: student_class,
+        },
+        medical: {
+          doctorName: doctor_name,
+          surgeryAddress: surgery_address,
+          surgeryNumber: surgery_number,
+          allergies,
+          condition: medical_condition,
+        },
+        startingDate: starting_date,
+        signature,
+        createdAt: new Date(),
+      };
+
+      const notification = {
+        type: "admission",
+        message: `${student_name} has joined.`,
+        isRead: false,
+        createdAt: new Date(),
+        link: "/dashboard/online-admissions",
+      };
+
+      // ✅ 3. Save student and notify
+      await axiosPublic.post("/students", studentData);
+      await axiosPublic.post("/notifications", notification);
+
+      // ✅ 4. If parent existed, patch to add student UID
+      if (existingParent) {
+        await axiosPublic.patch(`/families/${parent_email}/add-child`, {
+          studentUid,
+        });
+      }
+
+      toast.success("Registration successful");
+      navigate("/dashboard");
+      form.reset();
     } catch (error) {
       console.error(error);
       toast.error(error.message || "Registration failed");

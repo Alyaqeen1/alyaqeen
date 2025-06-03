@@ -118,7 +118,7 @@ export default function UpdateStudent() {
       },
     };
 
-    const { data } = await axiosPublic.put(`/student/${id}`, studentData);
+    const { data } = await axiosPublic.put(`/students/${id}`, studentData);
     console.log(data);
     if (data.modifiedCount) {
       Swal.fire({

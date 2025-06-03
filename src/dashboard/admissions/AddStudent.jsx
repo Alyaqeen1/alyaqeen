@@ -11,167 +11,190 @@ export default function AddStudent() {
   const navigate = useNavigate();
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    const form = e.target;
     setError("");
-    // basic info
-    const student_name = form.student_name.value;
-    const student_email = form.student_email.value;
+    setLoading(true);
 
+    const form = e.target;
+
+    // --- Basic Info ---
+    const student_name = form.student_name.value.trim();
+    const student_email = form.student_email.value.trim();
     const student_dob = form.std_dob.value;
-    const student_age = form.student_age.value;
+    const student_age = form.student_age.value.trim();
     const family_name = form.family_name.value.trim();
     const student_gender = form.std_gender.value;
     const school_year = form.school_year.value;
     const language = form.language.value;
-    const emergency_number = form.emergency_number.value;
-    // parent details
-    const mother_name = form.mother_name.value;
-    const mother_occupation = form.mother_occupation.value;
-    const mother_number = form.mother_number.value;
-    const father_name = form.father_name.value;
-    const father_occupation = form.father_occupation.value;
-    const father_number = form.father_number.value;
-    const parent_email = form.parent_email.value;
-    // academic details
+    const emergency_number = form.emergency_number.value.trim();
+
+    // --- Parent Info ---
+    const mother_name = form.mother_name.value.trim();
+    const mother_occupation = form.mother_occupation.value.trim();
+    const mother_number = form.mother_number.value.trim();
+    const father_name = form.father_name.value.trim();
+    const father_occupation = form.father_occupation.value.trim();
+    const father_number = form.father_number.value.trim();
+    const parent_email = form.parent_email.value.trim();
+
+    // --- Academic Info ---
     const std_department = form.std_department.value;
     const std_time = form.std_time.value;
     const std_session = form.std_session.value;
-    // health details
-    const doctor_name = form.doctor_name.value;
-    const surgery_address = form.surgery_address.value;
-    const surgery_number = form.surgery_number.value;
-    const allergies = form.allergies.value;
-    const medical_condition = form.medical_condition.value;
     const student_class = form.student_class.value;
+
+    // --- Health Info ---
+    const doctor_name = form.doctor_name.value.trim();
+    const surgery_address = form.surgery_address.value.trim();
+    const surgery_number = form.surgery_number.value.trim();
+    const allergies = form.allergies.value.trim();
+    const medical_condition = form.medical_condition.value.trim();
+    const starting_date = form.starting_date.value;
+
     const password = form.password.value;
     const confirmPassword = form.confirmPassword.value;
-    const starting_date = form.starting_date.value;
-    if (password !== confirmPassword) {
-      return setError("Password did not match");
-    }
 
+    // --- Validation ---
+    if (password !== confirmPassword) {
+      setLoading(false);
+      return setError("Passwords do not match");
+    }
     if (!/[A-Z]/.test(password)) {
-      return setError("Must have an Uppercase letter in the password ");
+      setLoading(false);
+      return setError("Password must contain an uppercase letter");
     }
     if (!/[a-z]/.test(password)) {
-      return setError("Must have a Lowercase letter in the password");
+      setLoading(false);
+      return setError("Password must contain a lowercase letter");
     }
     if (password.length < 6) {
-      return setError("Password length must be at least 6 character");
+      setLoading(false);
+      return setError("Password must be at least 6 characters long");
     }
 
-    const { data } = await axiosPublic.post("/create-student-user", {
-      email: student_email,
-      password: password,
-      displayName: student_name,
-    });
-    console.log(data);
-    setLoading(false);
+    try {
+      // 🔁 1. Check if parent already exists
+      const { data: existingParent } = await axiosPublic.get(
+        `/families/${parent_email}`
+      );
+      let parentUid;
+      const studentUid = crypto.randomUUID();
 
-    const uid = data?.uid;
+      if (existingParent) {
+        parentUid = existingParent.uid;
+      } else {
+        // 🔧 Create Firebase user for parent
+        const parentRes = await axiosPublic.post("/create-student-user", {
+          email: parent_email,
+          password,
+          displayName: family_name,
+        });
 
-    // Prepare data with uid
-    const userData = {
-      uid,
-      name: student_name,
-      email: student_email,
-      role: "student",
-      createdAt: new Date(),
-      status: "submitted",
-    };
+        parentUid = parentRes?.data?.uid;
 
-    const studentData = {
-      uid,
-      name: student_name,
-      email: student_email,
-      dob: student_dob,
-      student_age,
-      gender: student_gender,
-      school_year: school_year,
-      status: "under review",
-      activity: "active",
-      language,
-      parent_email: parent_email,
-      emergency_number: emergency_number,
-      family_name: family_name,
-      mother: {
-        name: mother_name,
-        occupation: mother_occupation,
-        number: mother_number,
-      },
-      father: {
-        name: father_name,
-        occupation: father_occupation,
-        number: father_number,
-      },
-      academic: {
-        department: std_department,
-        time: std_time,
-        session: std_session,
-        class: student_class,
-      },
-      medical: {
-        doctorName: doctor_name,
-        surgeryAddress: surgery_address,
-        surgeryNumber: surgery_number,
-        allergies: allergies,
-        condition: medical_condition,
-      },
-      startingDate: starting_date,
-      createdAt: new Date(),
-    };
+        const newFamily = {
+          uid: parentUid,
+          name: family_name,
+          familyId: `${family_name}-${parent_email}`,
+          email: parent_email,
+          phone: father_number,
+          fatherName: father_name,
+          children: [studentUid], // will push child after
+          createdAt: new Date(),
+        };
 
-    // 🔁 2. Check if parent exists
-    const { data: existingParent } = await axiosPublic.get(
-      `/family/${parent_email}`
-    );
-    if (existingParent) {
-      // Parent exists → just push the student data
-      await axiosPublic.patch(`/family/${parent_email}/add-child`, {
-        studentUid: uid,
-      });
-    } else {
-      // Parent doesn't exist → create new parent
-      const newFamily = {
-        name: family_name,
-        email: parent_email,
-        phone: father_number,
-        fatherName: father_name,
-        children: [uid], // ✅ Just UID here
+        const parentData = {
+          uid: parentUid,
+          name: family_name,
+          email: parent_email,
+          role: "parent",
+          createdAt: new Date(),
+        };
+
+        await axiosPublic.post("/families", newFamily);
+        await axiosPublic.post("/users", parentData);
+      }
+
+      // ✅ 2. Generate student UID
+
+      // ✅ 3. Prepare studentData
+      const studentData = {
+        uid: studentUid,
+        name: student_name,
+        email: student_email,
+        dob: student_dob,
+        parentUid,
+        student_age,
+        gender: student_gender,
+        school_year,
+        status: "under review",
+        activity: "active",
+        language,
+        parent_email,
+        emergency_number,
+        family_name,
+        mother: {
+          name: mother_name,
+          occupation: mother_occupation,
+          number: mother_number,
+        },
+        father: {
+          name: father_name,
+          occupation: father_occupation,
+          number: father_number,
+        },
+        academic: {
+          department: std_department,
+          time: std_time,
+          session: std_session,
+          class: student_class,
+        },
+        medical: {
+          doctorName: doctor_name,
+          surgeryAddress: surgery_address,
+          surgeryNumber: surgery_number,
+          allergies,
+          condition: medical_condition,
+        },
+        startingDate: starting_date,
         createdAt: new Date(),
       };
-      const { data } = await axiosPublic.post("/create-student-user", {
-        email: parent_email,
-        password: password,
-        displayName: family_name,
-      });
 
-      const parentData = {
-        uid: data.uid,
-        name: father_name,
-        email: parent_email,
-        role: "parent",
+      const notification = {
+        type: "admission",
+        message: `${student_name} has joined.`,
+        isRead: false,
         createdAt: new Date(),
-        status: "submitted",
+        link: "/dashboard/online-admissions",
       };
-      console.log(data);
-      await axiosPublic.post("/families", newFamily);
-      await axiosPublic.post("/users", parentData);
+
+      // ✅ 4. Save student and notification
+      await axiosPublic.post("/students", studentData);
+      await axiosPublic.post("/notifications", notification);
+
+      // ✅ 5. If parent existed, add student UID
+      if (existingParent) {
+        await axiosPublic.patch(`/families/${parent_email}/add-child`, {
+          studentUid,
+        });
+      }
+      // --- 5. Success Notification ---
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Student added successfully!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      form.reset();
+      navigate("/dashboard");
+    } catch (error) {
+      console.error(error);
+      toast.error(error.response?.data?.message || "Registration failed");
+    } finally {
+      setLoading(false);
     }
-
-    // 🔽 Optional: Send to backend
-    await axiosPublic.post("/users", userData);
-    await axiosPublic.post("/students", studentData);
-    Swal.fire({
-      position: "center",
-      icon: "success",
-      title: "Student Added successfully",
-      showConfirmButton: false,
-      timer: 1500,
-    });
-    form.reset();
-    navigate("/dashboard");
   };
+
   return (
     <div>
       <h3 className={`fs-1 fw-bold text-center`}>Add New Student</h3>
