@@ -6,6 +6,7 @@ import UpdateStudent from "./admissions/UpdateStudent";
 import DashboardLayout from "./layout/DashboardLayout";
 import Home from "./pages/Home/Home";
 import Payments from "./payments/Payments";
+import PaymentSummary from "./payments/PaymentSummary";
 
 const dashboardRoutes = [
   {
@@ -55,6 +56,14 @@ const dashboardRoutes = [
         element: (
           <PrivateRoute>
             <Payments></Payments>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "payment-summary",
+        element: (
+          <PrivateRoute>
+            <PaymentSummary></PaymentSummary>
           </PrivateRoute>
         ),
       },

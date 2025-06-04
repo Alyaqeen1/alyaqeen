@@ -1,97 +1,171 @@
-import {
-  PaymentElement,
-  useElements,
-  useStripe,
-} from "@stripe/react-stripe-js";
-import React, { useEffect, useState } from "react";
+import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import useAuth from "../../hooks/useAuth";
+import "./CheckoutForm.css";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 
-export default function CheckoutForm() {
+const CheckoutForm = ({
+  uid,
+  amount = 0,
+  handleClose,
+  paymentType,
+  refetch,
+}) => {
+  const { user } = useAuth();
+  // const axiosSecure = useAxiosSecure();
+  const axiosPublic = useAxiosPublic();
   const stripe = useStripe();
   const elements = useElements();
 
-  const [message, setMessage] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [clientSecret, setClientSecret] = useState("");
+  const [processing, setProcessing] = useState(false);
 
+  // Step 1: Create Payment Intent when amount is set
   useEffect(() => {
-    if (!stripe) {
-      return;
+    if (amount > 0) {
+      createPaymentIntent();
     }
-    const clientSecret = new URLSearchParams(window.location.search).get(
-      "payment_intent_client_secret"
-    );
-    if (!clientSecret) {
-      return;
-    }
-    stripe
-      .retrievePaymentIntent(clientSecret)
-      .then(({ paymentIntent }) => {
-        switch (paymentIntent.status) {
-          case "succeeded":
-            setMessage("Payment succeeded!");
-            break;
-          case "processing":
-            setMessage("Your payment is processing.");
-            break;
-          case "requires_payment_method":
-            setMessage("Your payment was not successful, please try again.");
-            break;
-          default:
-            setMessage("Something went wrong.");
-            break;
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-        setMessage("An error occurred while processing your payment.");
-      });
-  }, [stripe]);
+  }, [amount]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const createPaymentIntent = async () => {
+    try {
+      const response = await axiosPublic.post("/create-payment-intent", {
+        price: amount,
+      });
+      setClientSecret(response.data.clientSecret);
+    } catch (error) {
+      console.error("Error creating payment intent:", error);
+      toast.error("Failed to initiate payment.");
+    }
+  };
+
+  // Step 2: Handle form submission
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setProcessing(true);
 
     if (!stripe || !elements) {
-      // Stripe.js hasn't yet loaded.
-      // Make sure to disable form submission until Stripe.js has loaded.
+      setProcessing(false);
       return;
     }
 
-    setIsLoading(true);
-
-    const { error } = await stripe.confirmPayment({
-      elements,
-      confirmParams: {
-        // Make sure to change this to your payment completion page
-        return_url: `http://localhost:5173/dashboard/payments`,
-      },
-    });
-
-    // This point will only be reached if there is an immediate error when
-    // confirming the payment. Otherwise, your customer will be redirected to
-    // your `return_url`. For some payment methods like iDEAL, your customer will
-    // be redirected to an intermediate site first to authorize the payment, then
-    // redirected to the `return_url`.
-    if (error.type === "card_error" || error.type === "validation_error") {
-      setMessage(error.message);
-    } else {
-      setMessage("An unexpected error occurred.");
+    const card = elements.getElement(CardElement);
+    if (!card) {
+      toast.error("Card input not found.");
+      setProcessing(false);
+      return;
     }
 
-    setIsLoading(false);
-  };
-  const paymentElementOptions = {
-    layout: "accordion",
+    const { error: methodError, paymentMethod } =
+      await stripe.createPaymentMethod({
+        type: "card",
+        card,
+      });
+
+    if (methodError) {
+      toast.error(methodError.message);
+      setProcessing(false);
+      return;
+    }
+
+    const { error: confirmError, paymentIntent } =
+      await stripe.confirmCardPayment(clientSecret, {
+        payment_method: {
+          card,
+          billing_details: {
+            name: user?.displayName || "Anonymous",
+            email: user?.email || "unknown@example.com",
+          },
+        },
+      });
+
+    if (confirmError) {
+      toast.error(confirmError.message);
+      setProcessing(false);
+      return;
+    }
+
+    if (paymentIntent.status === "succeeded") {
+      try {
+        const paymentData = {
+          uid,
+          name: user?.displayName,
+          email: user?.email,
+          amount,
+          date: new Date().toISOString(),
+          transactionId: paymentIntent.id,
+          paymentType, // add this for backend records if needed
+        };
+
+        const { data } = await axiosPublic.post("/fees", paymentData);
+
+        // ✅ 1. Save payment and show toast
+        if (data.insertedId) {
+          toast.success("Payment successful!");
+          refetch();
+        }
+
+        // ✅ 2. Extra logic for admission payments
+        if (paymentType === "admission") {
+          await axiosPublic.patch(`/students/${uid}`, {
+            status: "enrolled",
+          });
+
+          const notification = {
+            type: "admission",
+            message: `${user?.displayName} Payed Admission Fee.`,
+            isRead: false,
+            createdAt: new Date(),
+            link: "/dashboard/online-admissions",
+          };
+
+          // Optionally call backend to send email/WhatsApp
+          await axiosPublic.post("/notifications", notification);
+        }
+      } catch (error) {
+        toast.error("Payment succeeded, but further processing failed.");
+      } finally {
+        setProcessing(false);
+        handleClose?.();
+      }
+    } else {
+      toast.error("Payment failed.");
+      setProcessing(false);
+    }
   };
 
   return (
-    <form id="payment-form" onSubmit={handleSubmit}>
-      <PaymentElement id="payment-element" options={paymentElementOptions} />
-      <button disabled={isLoading || !stripe || !elements} id="submit">
-        <span id="button-text">
-          {isLoading ? <div className="spinner" id="spinner"></div> : "Pay now"}
-        </span>
-      </button>
-      {/* Show any error or success messages */}
-      {message && <div id="payment-message">{message}</div>}
+    <form onSubmit={handleSubmit}>
+      <label className="form-label">Card Details:</label>
+      <CardElement
+        options={{
+          style: {
+            base: {
+              fontSize: "16px",
+              color: "#424770",
+              "::placeholder": {
+                color: "#aab7c4",
+              },
+            },
+            invalid: {
+              color: "#9e2146",
+            },
+          },
+        }}
+      />
+      <div className="flex justify-end mt-4">
+        <button
+          className="btn btn-primary"
+          type="submit"
+          disabled={!stripe || !clientSecret || processing}
+        >
+          {processing ? "Processing..." : `Pay $${amount}`}
+        </button>
+      </div>
     </form>
   );
-}
+};
+
+export default CheckoutForm;

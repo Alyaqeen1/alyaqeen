@@ -1,0 +1,179 @@
+import React, { useEffect, useState } from "react";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
+import toast from "react-hot-toast";
+import useAuth from "../../hooks/useAuth";
+
+export default function FeeChoiceModal() {
+  const [showModal, setShowModal] = useState(false);
+  const [selectedChoice, setSelectedChoice] = useState(null);
+  const axiosPublic = useAxiosPublic();
+  const { user } = useAuth();
+
+  useEffect(() => {
+    // Show modal when component mounts (for example, after approval)
+    if (!selectedChoice) {
+      setShowModal(true);
+    }
+  }, [selectedChoice]);
+
+  const handleClose = () => setShowModal(false);
+
+  const handleBackdropClick = (event) => {
+    // Close modal only if clicked on the backdrop (not modal content)
+    if (event.target.classList.contains("modal-backdrop")) {
+      handleClose();
+    }
+  };
+
+  const handleSave = async () => {
+    if (!selectedChoice) {
+      toast.error("Please select a payment option.");
+      return;
+    }
+
+    try {
+      const response = await axiosPublic.patch(
+        `/families/${user?.email}/update-fee-choice`,
+        {
+          feeChoice: selectedChoice,
+        }
+      );
+
+      console.log(response.data); // Always inspect first to confirm structure
+
+      if (response.data?.modifiedCount) {
+        toast.success("Fee choice updated successfully!");
+      } else {
+        toast.error("Failed to save fee choice. Please try again.");
+      }
+
+      handleClose();
+    } catch (error) {
+      console.error("Error saving fee choice:", error);
+      toast.error("Something went wrong. Please try again.");
+    }
+  };
+
+  return (
+    <>
+      {showModal && (
+        <div
+          className="modal-backdrop fade show"
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            backgroundColor: "rgba(0,0,0,0.5)",
+            zIndex: 1040,
+          }}
+          onClick={handleBackdropClick}
+        />
+      )}
+
+      <div
+        className={`modal fade ${showModal ? "show" : ""}`}
+        tabIndex="-1"
+        aria-modal={showModal}
+        role="dialog"
+        style={{
+          display: showModal ? "block" : "none",
+          zIndex: 1050,
+        }}
+        aria-labelledby="feeChoiceModalLabel"
+        aria-hidden={!showModal}
+      >
+        <div className="modal-dialog modal-dialog-centered">
+          <div
+            className="modal-content p-4 rounded-4 shadow-lg mx-3 mx-md-auto"
+            style={{ maxWidth: "600px" }}
+          >
+            <div className="modal-header border-0 pb-0">
+              <h5 className="modal-title" id="feeChoiceModalLabel">
+                Select Your Tuition Fee Payment Option
+              </h5>
+              <button
+                type="button"
+                className="btn-close"
+                aria-label="Close"
+                onClick={handleClose}
+              />
+            </div>
+
+            <div className="modal-body mt-3">
+              <p>Please choose one of the following payment policies:</p>
+
+              <div className="d-flex flex-column gap-3">
+                {/* Option 1 */}
+                <button
+                  type="button"
+                  style={{
+                    border: "1px solid",
+                    borderColor: "var(--border2)",
+                    cursor: "pointer",
+                    backgroundColor:
+                      selectedChoice === "proRated"
+                        ? "var(--border2)"
+                        : "transparent",
+                    color:
+                      selectedChoice === "proRated"
+                        ? "white"
+                        : "var(--border2)",
+                  }}
+                  className={`text-start p-3 rounded-3`}
+                  onClick={() => setSelectedChoice("proRated")}
+                  //   style={{  }}
+                >
+                  <strong>Admission After 10th of the Month</strong>
+                  <br />
+                  Pay a pro-rated fee for the remaining days of the month, and
+                  start regular full payments from the next month.
+                </button>
+
+                {/* Option 2 */}
+                <button
+                  type="button"
+                  onClick={() => setSelectedChoice("fullMonth")}
+                  style={{
+                    border: "1px solid",
+                    borderColor: "var(--border2)",
+                    cursor: "pointer",
+                    backgroundColor:
+                      selectedChoice === "fullMonth"
+                        ? "var(--border2)"
+                        : "transparent",
+                    color:
+                      selectedChoice === "fullMonth"
+                        ? "white"
+                        : "var(--border2)",
+                  }}
+                  className={`text-start p-3 rounded-3`}
+                >
+                  <strong>Full Month Enrollment</strong>
+                  <br />
+                  Pay full monthly fee within 7 days of admission to be enrolled
+                  for the entire month.
+                </button>
+              </div>
+            </div>
+
+            <div className="modal-footer border-0 pt-3 justify-content-center">
+              <button
+                type="button"
+                style={{
+                  backgroundColor: "var(--border2)",
+                  color: "white",
+                }}
+                className="px-4 py-2"
+                onClick={handleSave}
+              >
+                Confirm & Save
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}

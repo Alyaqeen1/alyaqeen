@@ -4,7 +4,13 @@ import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import CheckoutForm from "./CheckoutForm";
 
-export default function Payments() {
+export default function Payments({
+  uid,
+  amount,
+  handleClose,
+  paymentType,
+  refetch,
+}) {
   const axiosPublic = useAxiosPublic();
   const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
   const [clientSecret, setClientSecret] = useState("");
@@ -37,19 +43,24 @@ export default function Payments() {
   const options = {
     clientSecret,
     appearance,
+    paymentMethodOrder: ["card"], // Only show credit cards
     wallets: {
       applePay: "never",
       googlePay: "never",
-      link: "never",
     },
   };
 
   return (
     <div>
-      <h2>payments</h2>
       {clientSecret && (
         <Elements options={options} stripe={stripePromise}>
-          <CheckoutForm></CheckoutForm>
+          <CheckoutForm
+            uid={uid}
+            amount={amount}
+            handleClose={handleClose}
+            paymentType={paymentType}
+            refetch={refetch}
+          ></CheckoutForm>
         </Elements>
       )}
     </div>

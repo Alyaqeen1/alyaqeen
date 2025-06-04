@@ -271,6 +271,7 @@ const ApplyNowComp = () => {
           name: family_name,
           familyId: `${family_name}-${parent_email}`,
           email: parent_email,
+          feeChoice: null,
           phone: father_number,
           fatherName: father_name,
           children: [studentUid], // ✅ Add student immediately

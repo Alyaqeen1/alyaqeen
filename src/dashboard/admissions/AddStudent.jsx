@@ -96,6 +96,7 @@ export default function AddStudent() {
           name: family_name,
           familyId: `${family_name}-${parent_email}`,
           email: parent_email,
+          feeChoice: null,
           phone: father_number,
           fatherName: father_name,
           children: [studentUid], // will push child after
