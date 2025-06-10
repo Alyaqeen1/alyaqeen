@@ -8,6 +8,7 @@ export const apiSlice = createApi({
     baseUrl: import.meta.env.VITE_WebApi_URL,
     credentials: "include",
   }),
-  tagTypes: ["Reviews"],
+  // tagTypes: ["Reviews"],
+  tagTypes: ["Student", "Family"], // Add both Student & Family tags here
   endpoints: (builder) => ({}),
 });

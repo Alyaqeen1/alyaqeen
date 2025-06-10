@@ -1,5 +1,8 @@
 import React from "react";
-import { useGetStudentQuery } from "../../redux/features/students/studentsApi";
+import {
+  useGetStudentQuery,
+  useUpdateStudentStatusMutation,
+} from "../../redux/features/students/studentsApi";
 import { FaCheck, FaCross, FaPen } from "react-icons/fa6";
 import { FaTrashAlt } from "react-icons/fa";
 import { ImCross } from "react-icons/im";
@@ -7,6 +10,7 @@ import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 import Swal from "sweetalert2";
 export default function StudentModal({ studentId, handleClose, showModal }) {
+  const [updateStudentStatus] = useUpdateStudentStatusMutation();
   const {
     data: student,
     isLoading,
@@ -68,21 +72,22 @@ export default function StudentModal({ studentId, handleClose, showModal }) {
     }
 
     try {
-      const { data } = await axiosPublic.patch(`/students/${studentId}`, {
-        status: newStatus,
-      });
+      // const { data } = await axiosPublic.patch(`/students/${studentId}`, {
+      //   status: newStatus,
+      // });
+      await updateStudentStatus({ id: studentId, status: newStatus });
 
-      if (data.modifiedCount) {
-        Swal.fire({
-          position: "center",
-          icon: "success",
-          title: `Student ${newStatus} successfully`,
-          showConfirmButton: false,
-          timer: 1500,
-        });
-        refetch();
-      }
+      // if (data.modifiedCount) {
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: `Student ${newStatus} successfully`,
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      refetch();
     } catch (err) {
+      // }
       console.error("Failed to update status:", err);
     }
   };

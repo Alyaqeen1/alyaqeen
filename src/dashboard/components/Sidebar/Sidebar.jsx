@@ -246,7 +246,7 @@ export default function Sidebar() {
             {data?.role === "parent" && (
               <MenuItem
                 icon={<RiMoneyEuroCircleLine className="mx-2 fs-5" />}
-                label="Payments"
+                label="Payment Summary"
                 to="/dashboard/payment-summary"
                 openSubMenu={openSubMenu}
                 handleSubmenu={handleSubmenu}

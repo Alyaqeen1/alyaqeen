@@ -1,10 +1,20 @@
 import React, { useState } from "react";
 import { Link } from "react-router";
 import AdmissionFeeModal from "../shared/AdmissionFeeModal";
+import { useGetApprovedFullFamilyQuery } from "../../redux/features/families/familiesApi";
+import useAuth from "../../hooks/useAuth";
+import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 
 export default function ParentDashboard({ family, refetch }) {
   const [showModal, setShowModal] = useState(false);
   const [selectedStudentId, setSelectedStudentId] = useState(null);
+  const { user, loading } = useAuth();
+
+  const { data: approvedFamily, isLoading: isLoading } =
+    useGetApprovedFullFamilyQuery(user?.email, {
+      skip: loading || !user?.email, // Prevent fetching until user is fully loaded
+    });
+
   const handleShow = (id) => {
     setSelectedStudentId(id);
     setShowModal(true);
@@ -24,6 +34,9 @@ export default function ParentDashboard({ family, refetch }) {
   };
 
   const admissionFee = getAdmissionFee();
+  if (isLoading) {
+    return <LoadingSpinnerDash></LoadingSpinnerDash>;
+  }
 
   return (
     <div>
@@ -56,32 +69,39 @@ export default function ParentDashboard({ family, refetch }) {
                 className="font-danger text-white fw-bolder border h6 text-center align-middle"
                 style={{ backgroundColor: "var(--border2)" }}
               >
-                Date of Birth
+                Department
               </th>
               <th
                 className="font-danger text-white fw-bolder border h6 text-center align-middle"
                 style={{ backgroundColor: "var(--border2)" }}
               >
-                Gender
+                Session
               </th>
               <th
                 className="font-danger text-white fw-bolder border h6 text-center align-middle"
                 style={{ backgroundColor: "var(--border2)" }}
               >
-                School Year
+                Class
               </th>
+              <th
+                className="font-danger text-white fw-bolder border h6 text-center align-middle"
+                style={{ backgroundColor: "var(--border2)" }}
+              >
+                Time
+              </th>
+
               <th
                 className="font-danger text-white fw-bolder border h6 text-center align-middle"
                 style={{ backgroundColor: "var(--border2)" }}
               >
                 Status
               </th>
-              <th
+              {/* <th
                 className="font-danger text-white fw-bolder border h6 text-center align-middle"
                 style={{ backgroundColor: "var(--border2)" }}
               >
                 Actions
-              </th>
+              </th> */}
             </tr>
           </thead>
           <tbody>
@@ -102,24 +122,31 @@ export default function ParentDashboard({ family, refetch }) {
                   <td
                     className={`border h6 text-center align-middle text-nowrap`}
                   >
-                    {student?.dob}
+                    {student?.academic?.department}
                   </td>
                   <td
                     className={`border h6 text-center align-middle text-nowrap`}
                   >
-                    {student?.gender}
+                    {student?.academic?.session}
                   </td>
                   <td
                     className={`border h6 text-center align-middle text-nowrap`}
                   >
-                    {student?.school_year}
+                    {!student?.academic?.class
+                      ? "Not Provided Yet"
+                      : student?.academic?.class}
+                  </td>
+                  <td
+                    className={`border h6 text-center align-middle text-nowrap`}
+                  >
+                    {student?.academic?.time}
                   </td>
                   <td
                     className={`border h6 text-center align-middle text-nowrap`}
                   >
                     {student?.status}
                   </td>
-                  <td
+                  {/* <td
                     className={`border d-flex gap-2 justify-content-center h6 text-center align-middle text-nowrap`}
                   >
                     {student?.status === "approved" ? (
@@ -153,7 +180,7 @@ export default function ParentDashboard({ family, refetch }) {
                         Pay Admission Fee
                       </button>
                     )}
-                  </td>
+                  </td> */}
                 </tr>
               ))
             ) : (
@@ -170,10 +197,56 @@ export default function ParentDashboard({ family, refetch }) {
           uid={selectedStudentId}
           showModal={showModal}
           handleClose={handleClose}
+          childrenDocs={approvedFamily?.childrenDocs}
           admissionFee={admissionFee} // Pass the calculated admission fee
           refetch={refetch}
         ></AdmissionFeeModal>
       </div>
+      <h3 className={`fs-1 fw-bold text-center pt-5`}>Action Required</h3>
+      {approvedFamily?.childrenDocs?.length > 0 ? (
+        <div className="row justify-content-center mt-3">
+          <button
+            onClick={() => handleShow(approvedFamily?._id)}
+            className="col-lg-2 text-white py-1 px-2 rounded-2"
+            style={{ backgroundColor: "var(--border2)" }}
+          >
+            Pay Now
+          </button>
+          <p className="col-lg-1 d-flex align-items-center justify-content-center">
+            or
+          </p>
+          <button
+            // onClick={() => handleShow(student?._id)}
+            className="col-lg-2 text-white py-1 px-2 rounded-2"
+            style={{ backgroundColor: "var(--border2)" }}
+          >
+            Pay in the office from the start day
+          </button>
+          <p className="col-lg-1 d-flex align-items-center justify-content-center">
+            or
+          </p>
+          <button
+            // onClick={() => handleShow(student?._id)}
+            className="col-lg-2 text-white py-1 px-2 rounded-2"
+            style={{ backgroundColor: "var(--border2)" }}
+          >
+            Pay With Bank <br />
+            (within 7 days)
+          </button>
+          <p className="col-lg-1 d-flex align-items-center justify-content-center">
+            or
+          </p>
+          <button
+            // onClick={() => handleShow(student?._id)}
+            className="col-lg-2 text-white py-1 px-2 rounded-2"
+            style={{ backgroundColor: "var(--border2)" }}
+          >
+            Pay With Cash / Card Machine (within 7 days)
+          </button>
+        </div>
+      ) : (
+        <h3 className="text-danger">No Child is Approved</h3>
+      )}
     </div>
   );
 }

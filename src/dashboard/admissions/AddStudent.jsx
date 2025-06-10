@@ -1,18 +1,73 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Swal from "sweetalert2";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 import useAuth from "../../hooks/useAuth";
 import { useNavigate } from "react-router";
+import SignatureCanvas from "react-signature-canvas";
+import { FaEye, FaEyeSlash } from "react-icons/fa6";
+import toast from "react-hot-toast";
 
+const image_hosting_key = import.meta.env.VITE_Image_Hosting_Key;
+const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
 export default function AddStudent() {
+  const [show, setShow] = useState(false);
+  const [confirmShow, setConfirmShow] = useState(false);
+  const [signature, setSignature] = useState("");
+  const [localLoading, setLocalLoading] = useState(false);
   const axiosPublic = useAxiosPublic();
   const { setLoading } = useAuth();
   const [error, setError] = useState("");
+
+  const sigRef = useRef();
+
+  const clearSignature = () => sigRef.current.clear();
+  const compressImage = async (dataUrl) => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.src = dataUrl;
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+
+        // Resize to a smaller canvas size (e.g., 300x100)
+        canvas.width = 300;
+        canvas.height = 100;
+
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        const compressedDataUrl = canvas.toDataURL("image/png", 0.7); // 0.7 quality
+        resolve(compressedDataUrl);
+      };
+    });
+  };
+
+  const saveSignature = async () => {
+    let dataUrl = sigRef.current.toDataURL("image/png");
+
+    // Compress it
+    dataUrl = await compressImage(dataUrl);
+
+    const blob = await (await fetch(dataUrl)).blob();
+    const file = new File([blob], "signature.png", { type: "image/png" });
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      const res = await axiosPublic.post(image_hosting_api, formData);
+      const url = res.data?.data?.display_url;
+      setSignature(url);
+      toast.success("Signature uploaded!");
+    } catch (err) {
+      toast.error("Upload failed");
+    }
+  };
+
   const navigate = useNavigate();
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
+    setLocalLoading(true); // ⬅️ Block double click
 
     const form = e.target;
 
@@ -72,9 +127,12 @@ export default function AddStudent() {
     }
 
     try {
+      if (!signature) {
+        return setError("Please save signature first");
+      }
       // 🔁 1. Check if parent already exists
       const { data: existingParent } = await axiosPublic.get(
-        `/families/${parent_email}`
+        `/families/${student_email}`
       );
       let parentUid;
       const studentUid = crypto.randomUUID();
@@ -84,7 +142,7 @@ export default function AddStudent() {
       } else {
         // 🔧 Create Firebase user for parent
         const parentRes = await axiosPublic.post("/create-student-user", {
-          email: parent_email,
+          email: student_email,
           password,
           displayName: family_name,
         });
@@ -94,8 +152,8 @@ export default function AddStudent() {
         const newFamily = {
           uid: parentUid,
           name: family_name,
-          familyId: `${family_name}-${parent_email}`,
-          email: parent_email,
+          familyId: `${family_name}-${student_email}`,
+          email: student_email,
           feeChoice: null,
           phone: father_number,
           fatherName: father_name,
@@ -106,7 +164,7 @@ export default function AddStudent() {
         const parentData = {
           uid: parentUid,
           name: family_name,
-          email: parent_email,
+          email: student_email,
           role: "parent",
           createdAt: new Date(),
         };
@@ -117,7 +175,7 @@ export default function AddStudent() {
 
       // ✅ 2. Generate student UID
 
-      // ✅ 3. Prepare studentData
+      // ✅ 2. Prepare student data
       const studentData = {
         uid: studentUid,
         name: student_name,
@@ -157,9 +215,9 @@ export default function AddStudent() {
           condition: medical_condition,
         },
         startingDate: starting_date,
+        signature,
         createdAt: new Date(),
       };
-
       const notification = {
         type: "admission",
         message: `${student_name} has joined.`,
@@ -174,7 +232,7 @@ export default function AddStudent() {
 
       // ✅ 5. If parent existed, add student UID
       if (existingParent) {
-        await axiosPublic.patch(`/families/${parent_email}/add-child`, {
+        await axiosPublic.patch(`/families/${student_email}/add-child`, {
           studentUid,
         });
       }
@@ -193,6 +251,7 @@ export default function AddStudent() {
       toast.error(error.response?.data?.message || "Registration failed");
     } finally {
       setLoading(false);
+      setLocalLoading(false);
     }
   };
 
@@ -473,15 +532,17 @@ export default function AddStudent() {
             required
           >
             <option value="">Select department</option>
-            <option value="Arabic, Quran & Islamic Education">
-              Arabic, Quran & Islamic Education
+            <option value="Qaidah, Quran & Islamic Studies">
+              Qaidah, Quran & Islamic Studies
             </option>
-            <option value="Maths, English & Science Tuition">
-              Maths, English & Science Tuition
+            <option value="Primary Maths & English Tuition">
+              Primary Maths & English Tuition
             </option>
+            <option value="GCSE Maths English & Science Tuition">
+              GCSE Maths English & Science Tuition
+            </option>
+            <option value="Hifz Memorisation">Hifz Memorisation</option>
             <option value="Arabic Language">Arabic Language</option>
-            <option value="Urdu/Banla Language">Urdu/Banla Language</option>
-            <option value="Online Learning">Online Learning</option>
           </select>
         </div>
 
@@ -616,30 +677,98 @@ export default function AddStudent() {
           Credentials
         </div>
         <div className="col-md-6">
-          <label className="form-label">Password</label>
-          <input
-            style={{ borderColor: "var(--border2)" }}
-            className="form-control bg-light"
-            type="text"
-            name="password"
-            id="name"
-            placeholder=""
-            required
-          />
+          <label htmlFor="password" className="form-label">
+            Password
+          </label>
+          <div className="input-group">
+            <input
+              id="password"
+              style={{ borderColor: "var(--border2)" }}
+              name="password"
+              type={show ? "text" : "password"}
+              className="form-control border border-secondary"
+              required
+            />
+            <button
+              type="button"
+              onClick={() => setShow(!show)}
+              className="btn btn-outline-secondary"
+              tabIndex={-1}
+            >
+              {show ? <FaEyeSlash /> : <FaEye />}
+            </button>
+          </div>
         </div>
         <div className="col-md-6">
-          <label className="form-label">Confirm Password</label>
-          <input
-            style={{ borderColor: "var(--border2)" }}
-            className="form-control bg-light"
-            type="text"
-            name="confirmPassword"
-            id="name"
-            placeholder=""
-            required
-          />
+          <label htmlFor="confirmPassword" className="form-label">
+            Confirm Password
+          </label>
+          <div className="input-group">
+            <input
+              id="confirmPassword" // ✅ fix here
+              style={{ borderColor: "var(--border2)" }}
+              name="confirmPassword"
+              type={confirmShow ? "text" : "password"}
+              className="form-control border border-secondary"
+              required
+            />
+            <button
+              type="button"
+              onClick={() => setConfirmShow(!confirmShow)}
+              className="btn btn-outline-secondary"
+              tabIndex={-1}
+            >
+              {confirmShow ? <FaEyeSlash /> : <FaEye />}
+            </button>
+          </div>
         </div>
-        <div className="col-md-12">
+
+        <div
+          style={{ backgroundColor: "var(--border2)" }}
+          className="text-white rounded-3 p-2 fs-5"
+        >
+          Signatures
+        </div>
+        {/* Parents Signature */}
+        <div className="col-lg-6 ">
+          <div className="form-clt">
+            <span>Parents Signature*</span>
+            <SignatureCanvas
+              penColor="black"
+              canvasProps={{
+                // width: 550,
+                height: 150,
+                className: "w-100",
+                style: {
+                  border: "1px solid var(--border2)", // or use a fixed color like "#333"
+                  borderRadius: "5px", // optional
+                },
+              }}
+              ref={sigRef}
+            />
+            <div className="mt-2 d-flex gap-2">
+              <button
+                type="button"
+                style={{ backgroundColor: "var(--border2)" }}
+                className="btn text-white"
+                onClick={clearSignature}
+                // className="theme-btn px-2 py-1 bg-red-500 text-white rounded"
+              >
+                Clear
+              </button>
+              <button
+                type="button"
+                style={{ backgroundColor: "var(--border2)" }}
+                className="btn text-white"
+                onClick={saveSignature}
+                // className="theme-btn px-2 py-1 bg-red-500 text-white rounded"
+              >
+                Save & Submit
+              </button>
+            </div>
+          </div>
+        </div>
+        <div className="col-md-6" style={{ marginTop: "50px" }}>
           <label className="form-label">Expected Starting Date</label>
           <input
             style={{ borderColor: "var(--border2)" }}
@@ -654,11 +783,12 @@ export default function AddStudent() {
         {/* Submit Button */}
         <div className="col-12 text-center py-3">
           <button
+            disabled={localLoading}
             type="submit"
             style={{ backgroundColor: "var(--border2)" }}
             className="btn text-white"
           >
-            Add
+            {localLoading ? "Adding..." : "Add"}
           </button>
         </div>
       </form>

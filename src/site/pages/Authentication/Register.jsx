@@ -11,7 +11,7 @@ export default function Register() {
   };
   return (
     <div className="pricing-wrapper">
-      <CmnBanner title="Register Now"></CmnBanner>
+      <CmnBanner title="Apply Now"></CmnBanner>
       <ul
         className="nav gap-2 my-5 flex justify-content-center align-items-center"
         role="tablist"
@@ -48,7 +48,7 @@ export default function Register() {
             Teacher
           </a>
         </li>
-        <li
+        {/* <li
           className="nav-item "
           data-aos-duration="800"
           data-aos="fade-up"
@@ -63,7 +63,7 @@ export default function Register() {
           >
             Parent
           </a>
-        </li>
+        </li> */}
       </ul>
       <div
         id="student"
@@ -77,12 +77,12 @@ export default function Register() {
       >
         <TeacherComp></TeacherComp>
       </div>
-      <div
+      {/* <div
         id="parent"
         className={`c-tab-single ${activeTabIndex === 2 ? "active-tab" : ""}`}
       >
         <ParentComp></ParentComp>
-      </div>
+      </div> */}
     </div>
   );
 }

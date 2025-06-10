@@ -21,6 +21,7 @@ const ApplyNowComp = () => {
   const [confirmShow, setConfirmShow] = useState(false);
   const [error, setError] = useState("");
   const [signature, setSignature] = useState("");
+  const [localLoading, setLocalLoading] = useState(false);
   const navigate = useNavigate();
 
   const axiosPublic = useAxiosPublic();
@@ -76,125 +77,13 @@ const ApplyNowComp = () => {
     setSession("");
     setSessionTime("");
   }, [department]);
-  // const getClassOptions = () => {
-  //   if (!department || !session || !sessionTime) {
-  //     return <option value="">Select Class</option>;
-  //   }
-
-  //   if (department === "math-english") {
-  //     if (session === "weekend" && sessionTime === "wa") {
-  //       return <option value="adult-english">Adult English</option>;
-  //     }
-  //     if (session === "weekend" && sessionTime === "wm") {
-  //       return (
-  //         <>
-  //           <option value="tuitionG1">Tuition G1</option>
-  //           <option value="tuitionG2">Tuition G2</option>
-  //         </>
-  //       );
-  //     }
-  //   }
-
-  //   if (department === "arabic") {
-  //     if (session === "weekdays" && sessionTime === "s2") {
-  //       return <option value="arabic-beginner">Arabic Beginner Group</option>;
-  //     }
-  //     if (session === "weekend" && sessionTime === "wa") {
-  //       return (
-  //         <>
-  //           <option value="arabic-gcse">Arabic GCSE</option>
-  //           <option value="arabic-beginner">Arabic Beginner Group</option>
-  //         </>
-  //       );
-  //     }
-  //   }
-  //   if (department === "quran") {
-  //     if (session === "weekdays" && sessionTime === "s1") {
-  //       return (
-  //         <>
-  //           <option value="b6/7">B6/7</option>
-  //           <option value="b3/4">B3/4</option>
-  //           <option value="b1/2">B1/2</option>
-  //           <option value="g2">G2</option>
-  //           <option value="g3/4">G3/4</option>
-  //           <option value="g6/7">G6/7</option>
-  //         </>
-  //       );
-  //     }
-  //     if (session === "weekdays" && sessionTime === "s2") {
-  //       return (
-  //         <>
-  //           <option value="b8">B8</option>
-  //           <option value="b5/6">B5/6</option>
-  //           <option value="bg1/2">BG1/2</option>
-  //           <option value="g3/5">G3/5</option>
-  //           <option value="g7/8">G7/8</option>
-  //           <option value="b7">B7</option>
-  //         </>
-  //       );
-  //     }
-  //     if (session === "weekend" && sessionTime === "wa") {
-  //       return (
-  //         <>
-  //           <option value="wab3/5">WA - B3/5</option>
-  //           <option value="wag1/2">WA - G1/2</option>
-  //           <option value="wab7">WA - B7</option>
-  //           <option value="wag5/7">WA - G5/7</option>
-  //           <option value="wab1/2">WA - B1/2</option>
-  //         </>
-  //       );
-  //     }
-  //     if (session === "weekend" && sessionTime === "wm") {
-  //       return (
-  //         <>
-  //           <option value="wmb1/2">WM - B1/2</option>
-  //           <option value="wmg7/7">WM - G7/7</option>
-  //           <option value="wmb8">WM - B8</option>
-  //           <option value="wmb4/6">WM - B4/6</option>
-  //           <option value="wmg2/4">WM - G2/4</option>
-  //         </>
-  //       );
-  //     }
-  //   }
-  //   if (department === "online") {
-  //     if (session === "weekdays" && sessionTime === "s1") {
-  //       return (
-  //         <>
-  //           <option value="class1">Qaida and Quran Class 1</option>
-  //         </>
-  //       );
-  //     }
-  //     if (session === "weekdays" && sessionTime === "s2") {
-  //       return (
-  //         <>
-  //           <option value="class2">Qaida and Quran Class 2</option>
-  //         </>
-  //       );
-  //     }
-  //     if (session === "weekend" && sessionTime === "wa") {
-  //       return (
-  //         <>
-  //           {" "}
-  //           <option value="class4">Qaida and Quran Class 4</option>
-  //         </>
-  //       );
-  //     }
-  //     if (session === "weekend" && sessionTime === "wm") {
-  //       return (
-  //         <>
-  //           <option value="class3">Qaida and Quran Class 3</option>
-  //         </>
-  //       );
-  //     }
-  //   }
-
-  //   return <option value="">Not Available</option>;
-  // };
-
   const handleRegister = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
+    if (localLoading) return; // Extra guard
+
+    setLocalLoading(true); // ⬅️ Block double click
     const form = e.target;
 
     // Extract form values
@@ -252,7 +141,7 @@ const ApplyNowComp = () => {
 
       // 🔁 1. Check if parent already exists
       const { data: existingParent } = await axiosPublic.get(
-        `/families/${parent_email}`
+        `/families/${student_email}`
       );
       const studentUid = crypto.randomUUID(); // ✅ Generate student UID early
       let parentUid;
@@ -261,7 +150,7 @@ const ApplyNowComp = () => {
         parentUid = existingParent.uid;
       } else {
         // 🔧 Create Firebase user for parent
-        const result = await createUser(parent_email, password);
+        const result = await createUser(student_email, password);
         parentUid = result.user.uid;
 
         await updateUser({ displayName: family_name });
@@ -269,8 +158,8 @@ const ApplyNowComp = () => {
         const newFamily = {
           uid: parentUid,
           name: family_name,
-          familyId: `${family_name}-${parent_email}`,
-          email: parent_email,
+          familyId: `${family_name}-${student_email}`,
+          email: student_email,
           feeChoice: null,
           phone: father_number,
           fatherName: father_name,
@@ -281,7 +170,7 @@ const ApplyNowComp = () => {
         const parentData = {
           uid: parentUid,
           name: family_name,
-          email: parent_email,
+          email: student_email,
           role: "parent",
           createdAt: new Date(),
         };
@@ -348,7 +237,7 @@ const ApplyNowComp = () => {
 
       // ✅ 4. If parent existed, patch to add student UID
       if (existingParent) {
-        await axiosPublic.patch(`/families/${parent_email}/add-child`, {
+        await axiosPublic.patch(`/families/${student_email}/add-child`, {
           studentUid,
         });
       }
@@ -361,6 +250,7 @@ const ApplyNowComp = () => {
       toast.error(error.message || "Registration failed");
     } finally {
       setLoading(false);
+      setLocalLoading(false);
     }
   };
 
@@ -626,7 +516,9 @@ const ApplyNowComp = () => {
                       data-aos-delay="700"
                     >
                       <div className="form-clt">
-                        <span>Preferred Email*(not same as other one)</span>
+                        <span>
+                          Preferred Email*(Where You Will get Updates)
+                        </span>
                         <input
                           type="email"
                           name="student_email"
@@ -812,20 +704,20 @@ const ApplyNowComp = () => {
                           required
                         >
                           <option value="">Select department</option>
-                          <option value="Arabic, Quran & Islamic Education">
-                            Arabic, Quran & Islamic Education
+                          <option value="Qaidah, Quran & Islamic Studies">
+                            Qaidah, Quran & Islamic Studies
                           </option>
-                          <option value="Maths, English & Science Tuition">
-                            Maths, English & Science Tuition
+                          <option value="Primary Maths & English Tuition">
+                            Primary Maths & English Tuition
+                          </option>
+                          <option value="GCSE Maths English & Science Tuition">
+                            GCSE Maths English & Science Tuition
+                          </option>
+                          <option value="Hifz Memorisation">
+                            Hifz Memorisation
                           </option>
                           <option value="Arabic Language">
                             Arabic Language
-                          </option>
-                          <option value="Urdu/Banla Language">
-                            Urdu/Banla Language
-                          </option>
-                          <option value="Online Learning">
-                            Online Learning
                           </option>
                         </select>
                       </div>
@@ -1321,9 +1213,10 @@ const ApplyNowComp = () => {
                     >
                       <button
                         type="submit"
+                        disabled={localLoading}
                         className="theme-btn bg-white text-center"
                       >
-                        Apply
+                        {localLoading ? "Submitting..." : "Submit"}
                         <i className="fa-solid fa-arrow-right-long"></i>
                       </button>
                     </div>

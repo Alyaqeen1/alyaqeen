@@ -17,6 +17,7 @@ export default function Home() {
       skip: !user?.email,
     }
   );
+  console.log(roleData);
 
   // Fetch family data with childrenDocs
   const {
@@ -25,7 +26,7 @@ export default function Home() {
     refetch,
   } = useGetAllFullFamilyQuery(user?.email, {
     skip: !user?.email,
-    pollingInterval: 1000, // 10 seconds in milliseconds
+    // pollingInterval: 1000, // 10 seconds in milliseconds
   });
 
   // Safely check conditions

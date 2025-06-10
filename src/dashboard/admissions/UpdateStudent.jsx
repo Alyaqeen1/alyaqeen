@@ -431,15 +431,17 @@ export default function UpdateStudent() {
               required
             >
               <option value="">Select department</option>
-              <option value="Arabic, Quran & Islamic Education">
-                Arabic, Quran & Islamic Education
+              <option value="Qaidah, Quran & Islamic Studies">
+                Qaidah, Quran & Islamic Studies
               </option>
-              <option value="Maths, English & Science Tuition">
-                Maths, English & Science Tuition
+              <option value="Primary Maths & English Tuition">
+                Primary Maths & English Tuition
               </option>
+              <option value="GCSE Maths English & Science Tuition">
+                GCSE Maths English & Science Tuition
+              </option>
+              <option value="Hifz Memorisation">Hifz Memorisation</option>
               <option value="Arabic Language">Arabic Language</option>
-              <option value="Urdu/Banla Language">Urdu/Banla Language</option>
-              <option value="Online Learning">Online Learning</option>
             </select>
           </div>
         )}
