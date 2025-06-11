@@ -1,5 +1,6 @@
 import AdminRoute from "../routes/AdminRoute";
 import PrivateRoute from "../routes/PrivateRoute";
+import FeeSettings from "./admin/FeeSettings";
 import AddStudent from "./admissions/AddStudent";
 import Admissions from "./admissions/Admissions";
 import UpdateStudent from "./admissions/UpdateStudent";
@@ -51,19 +52,27 @@ const dashboardRoutes = [
           </PrivateRoute>
         ),
       },
-      {
-        path: "payments",
-        element: (
-          <PrivateRoute>
-            <Payments></Payments>
-          </PrivateRoute>
-        ),
-      },
+      // {
+      //   path: "payments",
+      //   element: (
+      //     <PrivateRoute>
+      //       <Payments></Payments>
+      //     </PrivateRoute>
+      //   ),
+      // },
       {
         path: "payment-summary",
         element: (
           <PrivateRoute>
             <PaymentSummary></PaymentSummary>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "fee-settings",
+        element: (
+          <PrivateRoute>
+            <FeeSettings></FeeSettings>
           </PrivateRoute>
         ),
       },

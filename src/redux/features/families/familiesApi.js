@@ -7,20 +7,29 @@ export const familiesApi = apiSlice.injectEndpoints({
       providesTags: ["Family"],
     }),
     getFamily: builder.query({
-      query: (email) => `/families/${email}`,
+      query: (id) => `/families/${id}`,
       providesTags: ["Family"],
     }),
     getFullFamily: builder.query({
-      query: (email) => `/families/${email}/with-children`,
+      query: () => `/families/with-children/enrolled`,
       providesTags: ["Family"],
     }),
     getAllFullFamily: builder.query({
-      query: (email) => `/families/${email}/with-children/all`,
+      query: (email) => `/families/with-children/all/${email}`,
       providesTags: ["Family"],
     }),
     getApprovedFullFamily: builder.query({
-      query: (email) => `/families/${email}/with-children/approved`,
+      query: (email) => `/families/with-children/approved/${email}`,
       providesTags: ["Family"],
+    }),
+
+    updateFamilyData: builder.mutation({
+      query: ({ id, ...patch }) => ({
+        url: `/families/update-by-admin/${id}`,
+        method: "PATCH",
+        body: patch,
+      }),
+      invalidatesTags: ["Family"], // 🔥 Important — invalidate Family when a student's status changes
     }),
   }),
 });
@@ -31,4 +40,5 @@ export const {
   useGetFullFamilyQuery,
   useGetAllFullFamilyQuery,
   useGetApprovedFullFamilyQuery,
+  useUpdateFamilyDataMutation,
 } = apiSlice;

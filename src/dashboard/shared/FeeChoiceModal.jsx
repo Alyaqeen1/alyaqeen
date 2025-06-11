@@ -33,7 +33,7 @@ export default function FeeChoiceModal() {
 
     try {
       const response = await axiosPublic.patch(
-        `/families/${user?.email}/update-fee-choice`,
+        `/families/update-fee-choice/${user?.email}`,
         {
           feeChoice: selectedChoice,
         }

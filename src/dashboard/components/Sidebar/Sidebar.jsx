@@ -226,21 +226,36 @@ export default function Sidebar() {
 
             {/* Users (with submenu) */}
             {data?.role === "admin" && (
-              <MenuItem
-                icon={<FaUsers className="mx-2 fs-5" />}
-                label="Students"
-                identifier="students"
-                submenuItems={[
-                  { label: "Add New", to: "add-student" },
-                  { label: "Active Students", to: "active-students" },
-                  { label: "Inactive Students", to: "inactive-students" },
-                  { label: "Online Admission", to: "online-admissions" },
-                ]}
-                openSubMenu={openSubMenu}
-                handleSubmenu={handleSubmenu}
-                isSubMenuOpen={isSubMenuOpen}
-                handleToggleMenu={handleToggleMenu}
-              />
+              <>
+                <MenuItem
+                  icon={<FaUsers className="mx-2 fs-5" />}
+                  label="Students"
+                  identifier="students"
+                  submenuItems={[
+                    { label: "Add New", to: "add-student" },
+                    { label: "Active Students", to: "active-students" },
+                    { label: "Inactive Students", to: "inactive-students" },
+                    { label: "Online Admission", to: "online-admissions" },
+                  ]}
+                  openSubMenu={openSubMenu}
+                  handleSubmenu={handleSubmenu}
+                  isSubMenuOpen={isSubMenuOpen}
+                  handleToggleMenu={handleToggleMenu}
+                />
+                <MenuItem
+                  icon={<FaUsers className="mx-2 fs-5" />}
+                  label="Fee Management"
+                  identifier="fees"
+                  submenuItems={[
+                    { label: "Fee Settings", to: "fee-settings" },
+                    { label: "Unpaid List", to: "unpaid-list" },
+                  ]}
+                  openSubMenu={openSubMenu}
+                  handleSubmenu={handleSubmenu}
+                  isSubMenuOpen={isSubMenuOpen}
+                  handleToggleMenu={handleToggleMenu}
+                />
+              </>
             )}
 
             {data?.role === "parent" && (
