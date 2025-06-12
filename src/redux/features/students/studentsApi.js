@@ -8,6 +8,12 @@ export const studentsApi = apiSlice.injectEndpoints({
     getStudent: builder.query({
       query: (id) => `/students/${id}`,
     }),
+    getStudentsByStatus: builder.query({
+      query: (status) => `/students/get-by-status/${status}`,
+    }),
+    getWithoutEnrolledStudents: builder.query({
+      query: () => `/students/without-enrolled`,
+    }),
     updateStudentStatus: builder.mutation({
       query: ({ id, ...patch }) => ({
         url: `/students/${id}`,
@@ -22,5 +28,7 @@ export const studentsApi = apiSlice.injectEndpoints({
 export const {
   useGetStudentsQuery,
   useGetStudentQuery,
+  useGetStudentsByStatusQuery,
+  useGetWithoutEnrolledStudentsQuery,
   useUpdateStudentStatusMutation,
 } = apiSlice;

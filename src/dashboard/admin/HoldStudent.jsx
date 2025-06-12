@@ -1,88 +1,48 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { FaCheck } from "react-icons/fa6";
+import { ImCross } from "react-icons/im";
 import {
-  useGetStudentsQuery,
-  useGetWithoutEnrolledStudentsQuery,
+  useGetStudentsByStatusQuery,
+  useUpdateStudentStatusMutation,
 } from "../../redux/features/students/studentsApi";
-import { Link } from "react-router";
-import { FaCheck, FaEye, FaPen } from "react-icons/fa6";
-import { FaTrashAlt } from "react-icons/fa";
-import StudentModal from "../shared/StudentModal";
+import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 import Swal from "sweetalert2";
-import useAxiosPublic from "../../hooks/useAxiosPublic";
-import useAxiosSecure from "../../hooks/useAxiosSecure";
 
-export default function Admissions() {
+export default function HoldStudent() {
+  const [updateStudentStatus] = useUpdateStudentStatusMutation();
+
   const {
     data: students,
     isLoading,
     isError,
     refetch,
-  } = useGetWithoutEnrolledStudentsQuery();
-  const [showModal, setShowModal] = useState(false);
-  const [selectedStudentId, setSelectedStudentId] = useState(null);
-  const axiosPublic = useAxiosPublic();
-  const axiosSecure = useAxiosSecure();
-  // Toggle modal visibility
-  const handleShow = (id) => {
-    setSelectedStudentId(id);
-    setShowModal(true);
-  };
-  useEffect(() => {
-    refetch();
-  }, []);
+  } = useGetStudentsByStatusQuery("hold");
 
-  const handleDelete = (id) => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        axiosPublic.delete(`/students/${id}`).then((res) => {
-          if (res.data.deletedCount > 0) {
-            Swal.fire({
-              title: "Deleted!",
-              text: "Student has been deleted.",
-              icon: "success",
-            });
-            refetch();
-          }
-        });
-      }
-    });
-  };
+  if (isLoading) {
+    return <LoadingSpinnerDash></LoadingSpinnerDash>;
+  }
 
-  const handleClose = () => setShowModal(false);
+  const handleStatus = async (id, newStatus) => {
+    try {
+      await updateStudentStatus({ id, status: newStatus });
+
+      // if (data.modifiedCount) {
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: `Student ${newStatus} successfully`,
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      refetch();
+    } catch (err) {
+      // }
+      console.error("Failed to update status:", err);
+    }
+  };
 
   return (
-    <div className="mt-8">
-      <h3 className={`fs-1 fw-bold text-center`}>All Students List</h3>
-      <p className="text-center mb-3">
-        Manage all students here—approve, track, and ensure the right
-        connections are made.
-      </p>
-
-      {/* Filter Dropdown */}
-      {/* <label className="block mb-2">
-        Filter by Status:
-        <select
-          className="ml-2 p-2 border rounded"
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-        >
-          <option value="">All</option>
-          <option value="pending">Pending</option>
-          <option value="inprogress">In Progress</option>
-          <option value="done">Done</option>
-          <option value="canceled">Canceled</option>
-        </select>
-      </label> */}
-
-      {/* Table */}
+    <div>
       <div className="table-responsive mb-3">
         <table
           className="table mb-0"
@@ -176,24 +136,17 @@ export default function Admissions() {
                     <button
                       className="text-white py-1 px-2 rounded-2"
                       style={{ backgroundColor: "var(--border2)" }}
-                      onClick={() => handleShow(student?._id)}
+                      onClick={() => handleStatus(student?._id, "enrolled")}
                     >
-                      <FaEye></FaEye>
+                      <FaCheck></FaCheck>
                     </button>
                     <button
                       className="text-white py-1 px-2 rounded-2"
                       style={{ backgroundColor: "var(--border2)" }}
-                      onClick={() => handleDelete(student?._id)}
+                      onClick={() => handleStatus(student?._id, "approved")}
                     >
-                      <FaTrashAlt></FaTrashAlt>
+                      <ImCross />
                     </button>
-                    <Link
-                      to={`/dashboard/online-admissions/update/${student?._id}`}
-                      className="text-white py-1 px-2 rounded-2"
-                      style={{ backgroundColor: "var(--border2)" }}
-                    >
-                      <FaPen></FaPen>
-                    </Link>
                   </td>
                 </tr>
               ))
@@ -207,35 +160,7 @@ export default function Admissions() {
             {}
           </tbody>
         </table>
-        <StudentModal
-          studentId={selectedStudentId}
-          showModal={showModal}
-          handleClose={handleClose}
-        ></StudentModal>
       </div>
-
-      {/* Pagination */}
-      {/* <div className="flex justify-between items-center mt-4">
-        <button
-          className="btn bg-gradient-to-r text-white from-primary to-secondary  disabled:text-gray-400"
-          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-          disabled={currentPage === 1}
-        >
-          Previous
-        </button>
-        <span>
-          Page {currentPage} of {totalPages}
-        </span>
-        <button
-          className="btn bg-gradient-to-r text-white from-primary to-secondary  disabled:text-gray-400"
-          onClick={() =>
-            setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-          }
-          disabled={currentPage === totalPages}
-        >
-          Next
-        </button>
-      </div> */}
     </div>
   );
 }

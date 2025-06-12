@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { useGetStudentsQuery } from "../../redux/features/students/studentsApi";
 import { useGetFamilyQuery } from "../../redux/features/families/familiesApi";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
+import toast from "react-hot-toast";
+import feeStructure from "../../utils/feeStructure";
 
 export default function AdminPayModal({
   familyId,
@@ -8,6 +11,7 @@ export default function AdminPayModal({
   adminShowModal,
   refetch: familiesRefetch,
 }) {
+  const [fee, setFee] = useState(0);
   const {
     data: family,
     isLoading,
@@ -20,6 +24,7 @@ export default function AdminPayModal({
   const filteredStudents = students?.filter((student) =>
     family?.children?.includes(student.uid || student._id)
   ); // exclude already-added
+  const axiosPublic = useAxiosPublic();
   const months = [
     "January",
     "February",
@@ -46,13 +51,40 @@ export default function AdminPayModal({
 
   const [selectedMonth, setSelectedMonth] = useState("June");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Month:", selectedMonth);
-    // Submit logic here
-    handleAdminClose();
-  };
+    const form = e.target;
+    const fee = form.fee.value;
+    const fee_month = selectedMonth;
+    const fee_year = selectedYear;
+    const payment_date = paymentDate;
 
+    const paymentData = {
+      familyId,
+      name: family.name,
+      email: family.email,
+      payment_type: "monthly",
+      amount: fee,
+      fee_month,
+      fee_year,
+      payment_date,
+    };
+
+    try {
+      const { data } = await axiosPublic.post(
+        "/fees/monthly-fees",
+        paymentData
+      );
+      if (data.insertedId) {
+        toast.success(`${fee_month} payment successful`);
+        refetch();
+        familiesRefetch();
+        handleAdminClose();
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Payment failed");
+    }
+  };
   return (
     <div>
       {adminShowModal && <div className="modal-backdrop fade show"></div>}
@@ -83,62 +115,86 @@ export default function AdminPayModal({
             </div>
 
             {/* Body */}
+            {/* // Inside AdminPayModal.jsx (replace your return JSX with this one) */}
             <div className="modal-body p-4">
-              <div className="mb-3">
-                <strong>Family:</strong> {family?.name}
+              <table className="table table-bordered table-responsive">
+                <thead>
+                  <tr>
+                    <th>Student Name</th>
+                    <th>Joining Month</th>
+                    <th>Unpaid Months</th>
+                    <th>Fee</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredStudents?.map((child) => {
+                    const joiningDate = new Date(child?.startingDate);
+                    const selectedDate = new Date(
+                      `${selectedMonth} 1, ${selectedYear}`
+                    );
+                    const hasJoined =
+                      joiningDate.getFullYear() < selectedDate.getFullYear() ||
+                      (joiningDate.getFullYear() ===
+                        selectedDate.getFullYear() &&
+                        joiningDate.getMonth() <= selectedDate.getMonth());
+
+                    const feeAmount =
+                      hasJoined &&
+                      feeStructure.monthlyFees?.[child?.academic?.department]?.[
+                        child?.academic?.session
+                      ]
+                        ? feeStructure.monthlyFees[child.academic.department][
+                            child.academic.session
+                          ]
+                        : 0;
+
+                    return (
+                      <tr key={child._id}>
+                        <td>{child?.name}</td>
+                        <td>{child?.startingDate}</td>
+                        <td>
+                          {hasJoined ? `${selectedMonth}` : "Not Joined Yet"}
+                        </td>
+                        <td>{hasJoined ? `$${feeAmount}` : "$0"}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+
+              <div className="text-end mt-2">
+                <strong>
+                  Grand Total: $
+                  {filteredStudents?.reduce((sum, child) => {
+                    const joiningDate = new Date(child?.startingDate);
+                    const selectedDate = new Date(
+                      `${selectedMonth} 1, ${selectedYear}`
+                    );
+                    const hasJoined =
+                      joiningDate.getFullYear() < selectedDate.getFullYear() ||
+                      (joiningDate.getFullYear() ===
+                        selectedDate.getFullYear() &&
+                        joiningDate.getMonth() <= selectedDate.getMonth());
+
+                    const feeAmount =
+                      hasJoined &&
+                      feeStructure.monthlyFees?.[child?.academic?.department]?.[
+                        child?.academic?.session
+                      ]
+                        ? feeStructure.monthlyFees[child.academic.department][
+                            child.academic.session
+                          ]
+                        : 0;
+
+                    return sum + feeAmount;
+                  }, 0)}
+                </strong>
               </div>
-              <div className="mb-3">
-                <strong>Students in Family:</strong>{" "}
-                {filteredStudents?.map((std) => (
-                  <span key={std._id}>{std?.name}, </span>
-                ))}
-              </div>
+
               <form onSubmit={handleSubmit}>
                 <div className="row">
-                  <div className="mb-3 col-4">
-                    <label className="form-label">
-                      <strong>Fee Year:</strong>
-                    </label>
-                    <select
-                      className="form-select border-1 border-black"
-                      value={selectedYear}
-                      onChange={(e) => setSelectedYear(Number(e.target.value))}
-                    >
-                      {years.map((year) => (
-                        <option key={year} value={year}>
-                          {year}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div className="mb-3 col-4">
-                    <label className="form-label">
-                      <strong>Fee Month:</strong>
-                    </label>
-                    <select
-                      className="form-select border-1 border-black"
-                      value={selectedMonth}
-                      onChange={(e) => setSelectedMonth(e.target.value)}
-                    >
-                      {months.map((month) => (
-                        <option key={month} value={month}>
-                          {month}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="mb-3 col-4">
-                    <label className="form-label">
-                      <strong>Date:</strong>
-                    </label>
-                    <input
-                      type="date"
-                      className="form-control border-1 border-black"
-                      value={paymentDate}
-                      onChange={(e) => setPaymentDate(e.target.value)}
-                    />
-                  </div>
+                  {/* Year, Month, Date Pickers */}
+                  {/* ... (same as before) */}
 
                   <div className="mb-3 col-12">
                     <label className="form-label">
@@ -146,9 +202,34 @@ export default function AdminPayModal({
                     </label>
                     <input
                       style={{ borderColor: "var(--border2)" }}
-                      name="discount"
+                      name="fee"
                       className="form-control"
                       type="number"
+                      readOnly
+                      value={filteredStudents?.reduce((sum, child) => {
+                        const joiningDate = new Date(child?.startingDate);
+                        const selectedDate = new Date(
+                          `${selectedMonth} 1, ${selectedYear}`
+                        );
+                        const hasJoined =
+                          joiningDate.getFullYear() <
+                            selectedDate.getFullYear() ||
+                          (joiningDate.getFullYear() ===
+                            selectedDate.getFullYear() &&
+                            joiningDate.getMonth() <= selectedDate.getMonth());
+
+                        const feeAmount =
+                          hasJoined &&
+                          feeStructure.monthlyFees?.[
+                            child?.academic?.department
+                          ]?.[child?.academic?.session]
+                            ? feeStructure.monthlyFees[
+                                child.academic.department
+                              ][child.academic.session]
+                            : 0;
+
+                        return sum + feeAmount;
+                      }, 0)}
                     />
                   </div>
 
@@ -158,7 +239,7 @@ export default function AdminPayModal({
                       style={{ backgroundColor: "var(--border2)" }}
                       className="btn text-white"
                     >
-                      Pay Group Fee
+                      Pay Full Fee
                     </button>
                   </div>
                 </div>

@@ -1,6 +1,7 @@
 import AdminRoute from "../routes/AdminRoute";
 import PrivateRoute from "../routes/PrivateRoute";
 import FeeSettings from "./admin/FeeSettings";
+import HoldStudent from "./admin/HoldStudent";
 import AddStudent from "./admissions/AddStudent";
 import Admissions from "./admissions/Admissions";
 import UpdateStudent from "./admissions/UpdateStudent";
@@ -73,6 +74,14 @@ const dashboardRoutes = [
         element: (
           <PrivateRoute>
             <FeeSettings></FeeSettings>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "hold-students",
+        element: (
+          <PrivateRoute>
+            <HoldStudent></HoldStudent>
           </PrivateRoute>
         ),
       },

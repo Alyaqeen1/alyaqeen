@@ -235,6 +235,7 @@ export default function Sidebar() {
                     { label: "Add New", to: "add-student" },
                     { label: "Active Students", to: "active-students" },
                     { label: "Inactive Students", to: "inactive-students" },
+                    { label: "Hold Students", to: "hold-students" },
                     { label: "Online Admission", to: "online-admissions" },
                   ]}
                   openSubMenu={openSubMenu}

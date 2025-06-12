@@ -1,5 +1,8 @@
 import React, { useState } from "react";
-import { useGetStudentQuery } from "../../redux/features/students/studentsApi";
+import {
+  useGetStudentQuery,
+  useUpdateStudentStatusMutation,
+} from "../../redux/features/students/studentsApi";
 import { useParams } from "react-router";
 import useAuth from "../../hooks/useAuth";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
@@ -8,6 +11,7 @@ import Swal from "sweetalert2";
 
 export default function UpdateStudent() {
   const { id } = useParams();
+  const [updateStudentStatus] = useUpdateStudentStatusMutation();
   const {
     data: student,
     isLoading,
@@ -131,6 +135,37 @@ export default function UpdateStudent() {
       refetch();
     }
   };
+  const handleStatus = async (newStatus) => {
+    if (newStatus === "approved" && !studentClass) {
+      Swal.fire({
+        icon: "warning",
+        title: "Assign a class first!",
+        text: "You must assign a class before approving the student.",
+      });
+      return;
+    }
+
+    try {
+      // const { data } = await axiosPublic.patch(`/students/${studentId}`, {
+      //   status: newStatus,
+      // });
+      await updateStudentStatus({ id: id, status: newStatus });
+
+      // if (data.modifiedCount) {
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: `Student ${newStatus} successfully`,
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      refetch();
+    } catch (err) {
+      // }
+      console.error("Failed to update status:", err);
+    }
+  };
+
   if (isLoading || loading) {
     return <LoadingSpinnerDash></LoadingSpinnerDash>;
   }
@@ -584,13 +619,29 @@ export default function UpdateStudent() {
         </div>
 
         {/* Submit Button */}
-        <div className="col-12 text-center py-3">
+        <div className="col-12 d-flex gap-2 align-items-center justify-content-evenly text-center py-3">
+          <button
+            type="button"
+            style={{ backgroundColor: "var(--border2)" }}
+            className="btn text-white"
+            onClick={() => handleStatus("approved")}
+          >
+            Approve
+          </button>
           <button
             type="submit"
             style={{ backgroundColor: "var(--border2)" }}
             className="btn text-white"
           >
             Update
+          </button>
+          <button
+            type="button"
+            onClick={() => handleStatus("rejected")}
+            style={{ backgroundColor: "var(--border2)" }}
+            className="btn text-white"
+          >
+            Reject
           </button>
         </div>
       </form>

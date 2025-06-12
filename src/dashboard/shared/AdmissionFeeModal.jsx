@@ -102,7 +102,7 @@ export default function AdmissionFeeModal({
             {/* Body */}
             <div className="modal-body p-4">
               <h5>Per Child Fee Details</h5>
-              <table className="table table-bordered">
+              <table className="table table-bordered table-responsive">
                 <thead>
                   <tr>
                     <th>Child Name</th>
