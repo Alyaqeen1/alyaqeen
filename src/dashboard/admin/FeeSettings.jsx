@@ -24,6 +24,12 @@ export default function FeeSettings() {
     skip: loading || !user?.email, // Prevent fetching until user is fully loaded
   });
 
+  const filteredFamily = families?.filter(
+    (family) => family?.childrenDocs?.length > 0
+  );
+
+  console.log(filteredFamily);
+
   useEffect(() => {
     refetch();
   }, []);
@@ -192,8 +198,8 @@ export default function FeeSettings() {
             </tr>
           </thead>
           <tbody>
-            {families?.length > 0 ? (
-              families?.map((family, idx) => (
+            {filteredFamily?.length > 0 ? (
+              filteredFamily?.map((family, idx) => (
                 <tr key={family?._id}>
                   <td
                     className={` border h6 text-center align-middle text-nowrap`}
@@ -316,8 +322,8 @@ export default function FeeSettings() {
               ))
             ) : (
               <tr>
-                <td colSpan={12}>
-                  <h5>No students available.</h5>
+                <td colSpan={17}>
+                  <h5>No Families Student is enrolled yet .</h5>
                 </td>
               </tr>
             )}

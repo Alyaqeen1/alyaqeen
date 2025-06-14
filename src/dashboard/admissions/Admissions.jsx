@@ -42,16 +42,33 @@ export default function Admissions() {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        axiosPublic.delete(`/students/${id}`).then((res) => {
-          if (res.data.deletedCount > 0) {
+        axiosPublic
+          .delete(`/students/${id}`)
+          .then((res) => {
+            // You can optionally check res.status === 200
+            if (res.data?.message) {
+              Swal.fire({
+                title: "Deleted!",
+                text: res.data.message,
+                icon: "success",
+              });
+              refetch();
+            } else {
+              Swal.fire({
+                title: "Error",
+                text: "Something went wrong.",
+                icon: "error",
+              });
+            }
+          })
+          .catch((error) => {
             Swal.fire({
-              title: "Deleted!",
-              text: "Student has been deleted.",
-              icon: "success",
+              title: "Error",
+              text:
+                error.response?.data?.message || "Failed to delete student.",
+              icon: "error",
             });
-            refetch();
-          }
-        });
+          });
       }
     });
   };

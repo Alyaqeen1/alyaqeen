@@ -26,7 +26,7 @@ const ApplyNowComp = () => {
 
   const axiosPublic = useAxiosPublic();
 
-  const { createUser, setUser, updateUser, setLoading } = useAuth();
+  const { createUser, setUser, updateUser, signInUser, setLoading } = useAuth();
 
   const sigRef = useRef();
 
@@ -141,19 +141,33 @@ const ApplyNowComp = () => {
 
       // 🔁 1. Check if parent already exists
       const { data: existingParent } = await axiosPublic.get(
-        `/families/${student_email}`
+        `/families/by-email/${student_email}`
       );
       const studentUid = crypto.randomUUID(); // ✅ Generate student UID early
       let parentUid;
 
       if (existingParent) {
-        parentUid = existingParent.uid;
+        try {
+          // ✅ Attempt to sign in using Firebase client SDK
+          await signInUser(student_email, password); // from useAuth
+          parentUid = existingParent.uid;
+        } catch (err) {
+          // ❌ Invalid password
+          setLoading(false);
+          setLocalLoading(false);
+          return toast.error(
+            "Incorrect email/password for existing family account"
+          );
+        }
       } else {
-        // 🔧 Create Firebase user for parent
-        const result = await createUser(student_email, password);
-        parentUid = result.user.uid;
+        // 🔧 Create new Firebase user for parent
+        const parentRes = await createUser(student_email, password);
+        const currentUser = parentRes.user;
 
-        await updateUser({ displayName: family_name });
+        await updateUser({ displayName: family_name }); // optional but good for clarity
+        setUser(currentUser);
+
+        parentUid = currentUser.uid;
 
         const newFamily = {
           uid: parentUid,
@@ -163,7 +177,7 @@ const ApplyNowComp = () => {
           feeChoice: null,
           phone: father_number,
           fatherName: father_name,
-          children: [studentUid], // ✅ Add student immediately
+          children: [studentUid],
           createdAt: new Date(),
         };
 
@@ -741,7 +755,7 @@ const ApplyNowComp = () => {
                         >
                           <option value="">Select Session</option>
                           <option value="weekdays">Weekdays</option>
-                          <option value="weekend">Weekend</option>
+                          <option value="weekends">Weekends</option>
                         </select>
                         {/* <input
                           type="text"
@@ -778,7 +792,7 @@ const ApplyNowComp = () => {
                                 Late - 5:45 PM – 7:15 PM (1½ hrs)
                               </option>
                             </>
-                          ) : department && session === "weekend" ? (
+                          ) : department && session === "weekends" ? (
                             <>
                               <option value="Morning - 10:00 AM – 12:30 PM (1½ hrs)">
                                 Morning - 10:00 AM – 12:30 PM (1½ hrs)
@@ -1109,7 +1123,7 @@ const ApplyNowComp = () => {
                       <p>
                         2. Monthly Fees Policy: Parents have two options for
                         paying tuition fees based on the admission date:
-                        <div className="ms-4">
+                        <p className="ms-4">
                           a.{" "}
                           <strong>
                             Admission After the 10th of the Month:
@@ -1125,7 +1139,7 @@ const ApplyNowComp = () => {
                           full monthly fee must be paid within 7 days of
                           admission (e.g., admitted on the 10th → pay by the
                           17th).
-                        </div>
+                        </p>
                       </p>
                       <p>
                         3. Student Supervision: The Academy is only responsible

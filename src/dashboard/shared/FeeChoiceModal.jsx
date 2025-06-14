@@ -3,7 +3,7 @@ import useAxiosPublic from "../../hooks/useAxiosPublic";
 import toast from "react-hot-toast";
 import useAuth from "../../hooks/useAuth";
 
-export default function FeeChoiceModal() {
+export default function FeeChoiceModal({ refetch }) {
   const [showModal, setShowModal] = useState(false);
   const [selectedChoice, setSelectedChoice] = useState(null);
   const axiosPublic = useAxiosPublic();
@@ -28,6 +28,7 @@ export default function FeeChoiceModal() {
   const handleSave = async () => {
     if (!selectedChoice) {
       toast.error("Please select a payment option.");
+
       return;
     }
 
@@ -43,6 +44,7 @@ export default function FeeChoiceModal() {
 
       if (response.data?.modifiedCount) {
         toast.success("Fee choice updated successfully!");
+        refetch();
       } else {
         toast.error("Failed to save fee choice. Please try again.");
       }
@@ -101,8 +103,15 @@ export default function FeeChoiceModal() {
               />
             </div>
 
-            <div className="modal-body mt-3">
-              <p>Please choose one of the following payment policies:</p>
+            <div className="modal-body">
+              {/* <p>Please choose one of the following payment policies:</p> */}
+              <p className="text-muted">
+                If any of your children were admitted{" "}
+                <strong>after the 10th of the month</strong>, you must choose
+                how you'd like to be charged for the{" "}
+                <strong>first month</strong>. Please select one of the options
+                below:
+              </p>
 
               <div className="d-flex flex-column gap-3">
                 {/* Option 1 */}
@@ -125,10 +134,13 @@ export default function FeeChoiceModal() {
                   onClick={() => setSelectedChoice("proRated")}
                   //   style={{  }}
                 >
-                  <strong>Admission After 10th of the Month</strong>
+                  <strong>Pro-Rated Fee (After 10th of the Month)</strong>
                   <br />
-                  Pay a pro-rated fee for the remaining days of the month, and
-                  start regular full payments from the next month.
+                  If your child is admitted{" "}
+                  <strong>after the 10th of the month</strong>, you can pay a{" "}
+                  <strong>pro-rated fee</strong> for the remaining days of the
+                  current month. Full monthly fees will begin from the next
+                  month.
                 </button>
 
                 {/* Option 2 */}
@@ -150,10 +162,16 @@ export default function FeeChoiceModal() {
                   }}
                   className={`text-start p-3 rounded-3`}
                 >
-                  <strong>Full Month Enrollment</strong>
+                  <strong>Full Month Fee</strong>
                   <br />
-                  Pay full monthly fee within 7 days of admission to be enrolled
-                  for the entire month.
+                  Pay the{" "}
+                  <strong>
+                    full monthly fee within 7 days of admission
+                  </strong>{" "}
+                  to be enrolled for the <strong>entire current month</strong>.
+                  The next fee will be due on the{" "}
+                  <strong>same date next month</strong> (based on your admission
+                  date).
                 </button>
               </div>
             </div>

@@ -42,6 +42,7 @@ export default function StudentModal({ studentId, handleClose, showModal }) {
     startingDate,
     signature,
     parent_email,
+    monthly_fee,
   } = student || {};
   const { doctorName, surgeryAddress, surgeryNumber, allergies, condition } =
     medical || {};
@@ -117,7 +118,14 @@ export default function StudentModal({ studentId, handleClose, showModal }) {
             <div className="modal-body">
               <div className="d-flex justify-content-between align-items-center">
                 <h2 className="text-xl font-bold mb-2">{name && name}</h2>
-                <button type="button" class="btn btn-primary">
+                <button
+                  type="button"
+                  className={`btn  ${
+                    status === "under review" && "btn-primary"
+                  } ${status === "approved" && "btn-success"} ${
+                    status === "rejected" && "btn-danger"
+                  }`}
+                >
                   {status}
                 </button>
               </div>
@@ -165,6 +173,10 @@ export default function StudentModal({ studentId, handleClose, showModal }) {
                       Class:{" "}
                       {student_class === null ? "Not Provided" : student_class}
                     </strong>
+                  </p>
+                  <p>
+                    <strong>Monthly Fee:</strong>{" "}
+                    {monthly_fee ? monthly_fee : "Not Assigned"}
                   </p>
                 </div>
                 <div className="border-start border-2 ps-2 flex-grow-1">

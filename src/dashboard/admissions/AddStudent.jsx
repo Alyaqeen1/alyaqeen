@@ -95,7 +95,7 @@ export default function AddStudent() {
     const std_department = form.std_department.value;
     const std_time = form.std_time.value;
     const std_session = form.std_session.value;
-    const student_class = form.student_class.value;
+    const student_class = null;
 
     // --- Health Info ---
     const doctor_name = form.doctor_name.value.trim();
@@ -132,7 +132,7 @@ export default function AddStudent() {
       }
       // 🔁 1. Check if parent already exists
       const { data: existingParent } = await axiosPublic.get(
-        `/families/${student_email}`
+        `/families/by-email/${student_email}`
       );
       let parentUid;
       const studentUid = crypto.randomUUID();
@@ -557,7 +557,7 @@ export default function AddStudent() {
           >
             <option value="">Select Session</option>
             <option value="weekdays">Weekdays</option>
-            <option value="weekend">Weekend</option>
+            <option value="weekends">Weekend</option>
           </select>
         </div>
 
@@ -589,14 +589,18 @@ export default function AddStudent() {
         {/* class */}
         <div className="col-md-6">
           <label className="form-label">Class</label>
-          <input
-            style={{ borderColor: "var(--border2)" }}
+          <select
+            disabled
             className="form-control bg-light"
-            type="text"
+            style={{
+              backgroundColor: "var(--theme2)",
+              cursor: "not-allowed",
+              borderColor: "var(--border2)",
+            }}
             name="student_class"
-            placeholder=""
-            required
-          />
+          >
+            <option value="">Class Can be selected from the update form</option>
+          </select>
         </div>
         {/* Health Information */}
         <div

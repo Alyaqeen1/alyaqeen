@@ -5,8 +5,9 @@ import { Elements } from "@stripe/react-stripe-js";
 import CheckoutForm from "./CheckoutForm";
 
 export default function Payments({
-  uid,
+  familyId,
   amount,
+  paymentDetails,
   handleClose,
   paymentType,
   refetch,
@@ -55,8 +56,9 @@ export default function Payments({
       {clientSecret && (
         <Elements options={options} stripe={stripePromise}>
           <CheckoutForm
-            uid={uid}
+            familyId={familyId}
             amount={amount}
+            paymentDetails={paymentDetails}
             handleClose={handleClose}
             paymentType={paymentType}
             refetch={refetch}

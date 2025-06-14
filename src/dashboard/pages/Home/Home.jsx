@@ -17,7 +17,6 @@ export default function Home() {
       skip: !user?.email,
     }
   );
-  console.log(roleData);
 
   // Fetch family data with childrenDocs
   const {
@@ -28,16 +27,6 @@ export default function Home() {
     skip: !user?.email,
     // pollingInterval: 1000, // 10 seconds in milliseconds
   });
-
-  // Safely check conditions
-  const atLeastOneChildApproved =
-    family?.childrenDocs?.length > 0 &&
-    family.childrenDocs.some((child) => child.status === "approved");
-
-  const shouldShowModal =
-    roleData?.role === "parent" &&
-    atLeastOneChildApproved &&
-    family?.feeChoice === null;
 
   if (isRoleLoading || isFamilyLoading) {
     return <LoadingSpinnerDash></LoadingSpinnerDash>;
@@ -50,7 +39,7 @@ export default function Home() {
         <ParentDashboard family={family} refetch={refetch}></ParentDashboard>
       )}
 
-      {shouldShowModal && <FeeChoiceModal />}
+      {/* {shouldShowModal && <FeeChoiceModal refetch={refetch} />} */}
     </div>
   );
 }

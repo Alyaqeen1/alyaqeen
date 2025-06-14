@@ -5,15 +5,18 @@ import useAxiosSecure from "../../hooks/useAxiosSecure";
 import useAuth from "../../hooks/useAuth";
 import "./CheckoutForm.css";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
+import { useUpdateStudentStatusMutation } from "../../redux/features/students/studentsApi";
 
 const CheckoutForm = ({
-  uid,
+  familyId,
   amount = 0,
   handleClose,
   paymentType,
+  paymentDetails = [], // extra dynamic data per payment type
   refetch,
 }) => {
   const { user } = useAuth();
+  const [updateStudentStatus] = useUpdateStudentStatusMutation();
   // const axiosSecure = useAxiosSecure();
   const axiosPublic = useAxiosPublic();
   const stripe = useStripe();
@@ -89,15 +92,39 @@ const CheckoutForm = ({
 
     if (paymentIntent.status === "succeeded") {
       try {
-        const paymentData = {
-          uid,
+        const basePaymentData = {
+          familyId,
           name: user?.displayName,
           email: user?.email,
           amount,
           date: new Date().toISOString(),
+          method: "instant", // You can pass this as a prop too if you want to support "bank transfer"
           transactionId: paymentIntent.id,
-          paymentType, // add this for backend records if needed
+          paymentType,
         };
+
+        // Merge dynamic values based on type
+        let paymentData = { ...basePaymentData };
+
+        if (paymentType === "admission") {
+          paymentData = {
+            ...paymentData,
+            status: "paid",
+            students: paymentDetails?.map((student) => ({
+              studentId: student.studentId,
+              name: student.name,
+              admissionFee: student.admissionFee,
+              monthlyFee: student.monthlyFee,
+              joiningMonth: student.joiningMonth,
+              joiningYear: student.joiningYear,
+            })),
+          };
+        } else if (paymentType === "monthly") {
+          paymentData = {
+            ...paymentData,
+            students: paymentDetails?.students, // [{ uid, monthsPaid: [{month, year}] }]
+          };
+        }
 
         const { data } = await axiosPublic.post("/fees", paymentData);
 
@@ -109,13 +136,20 @@ const CheckoutForm = ({
 
         // ✅ 2. Extra logic for admission payments
         if (paymentType === "admission") {
-          await axiosPublic.patch(`/students/${uid}`, {
-            status: "enrolled",
-          });
+          const updatePromises = paymentDetails.map((student) =>
+            updateStudentStatus({ id: student.studentId, status: "enrolled" })
+              .unwrap()
+              .catch((err) => {
+                console.error(`Update failed for ${student.name}`, err);
+                return null;
+              })
+          );
+          const results = await Promise.allSettled(updatePromises);
+          // You can optionally handle or log the results here
 
           const notification = {
             type: "admission",
-            message: `${user?.displayName} Payed Admission Fee.`,
+            message: `${user?.displayName} Paid Admission Fee.`,
             isRead: false,
             createdAt: new Date(),
             link: "/dashboard/online-admissions",

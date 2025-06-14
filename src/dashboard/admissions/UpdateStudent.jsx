@@ -8,6 +8,7 @@ import useAuth from "../../hooks/useAuth";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 import Swal from "sweetalert2";
+import feeStructure from "../../utils/feeStructure";
 
 export default function UpdateStudent() {
   const { id } = useParams();
@@ -84,6 +85,9 @@ export default function UpdateStudent() {
     const allergies = form.allergies.value;
     const medical_condition = form.medical_condition.value;
     const student_class = form.student_class.value;
+    const starting_date = form.starting_date.value;
+    const monthly_fee =
+      feeStructure?.monthlyFees?.[std_department]?.[std_session];
 
     const studentData = {
       name: student_name,
@@ -120,19 +124,23 @@ export default function UpdateStudent() {
         allergies: allergies,
         condition: medical_condition,
       },
+      startingDate: starting_date,
+      monthly_fee,
     };
 
-    const { data } = await axiosPublic.put(`/students/${id}`, studentData);
-    console.log(data);
-    if (data.modifiedCount) {
-      Swal.fire({
-        position: "center",
-        icon: "success",
-        title: "Student updated successfully",
-        showConfirmButton: false,
-        timer: 1500,
-      });
-      refetch();
+    if (monthly_fee) {
+      const { data } = await axiosPublic.put(`/students/${id}`, studentData);
+      console.log(data);
+      if (data.modifiedCount) {
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Student updated successfully",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        refetch();
+      }
     }
   };
   const handleStatus = async (newStatus) => {
@@ -494,7 +502,7 @@ export default function UpdateStudent() {
             >
               <option value="">Select Session</option>
               <option value="weekdays">Weekdays</option>
-              <option value="weekend">Weekend</option>
+              <option value="weekends">Weekend</option>
             </select>
           </div>
         )}
@@ -528,7 +536,7 @@ export default function UpdateStudent() {
         )}
 
         {/* class */}
-        <div className="col-md-6">
+        {/* <div className="col-md-6">
           <label className="form-label">Class</label>
           <input
             style={{ borderColor: "var(--border2)" }}
@@ -539,7 +547,28 @@ export default function UpdateStudent() {
             placeholder=""
             required
           />
+        </div> */}
+
+        <div className="col-md-6">
+          <label className="form-label">Class</label>
+          {/* {studentClass && ( */}
+          <select
+            // disabled
+            className="form-control bg-light"
+            style={{
+              borderColor: "var(--border2)",
+            }}
+            name="student_class"
+            defaultValue={studentClass}
+          >
+            <option value="">Select Class</option>
+            <option value="class 2">Class 2</option>
+            <option value="class 3">Class 3</option>
+            <option value="class 4">Class 4</option>
+          </select>
+          {/* )} */}
         </div>
+
         {/* Health Information */}
         <div
           style={{ backgroundColor: "var(--border2)" }}
@@ -614,6 +643,18 @@ export default function UpdateStudent() {
             name="medical_condition"
             id="name"
             placeholder=""
+            required
+          />
+        </div>
+        {/* starting date */}
+        <div className="col-md-12">
+          <label className="form-label">Expected Starting Date</label>
+          <input
+            style={{ borderColor: "var(--border2)" }}
+            defaultValue={startingDate}
+            className="form-control bg-light"
+            type="date"
+            name="starting_date"
             required
           />
         </div>
