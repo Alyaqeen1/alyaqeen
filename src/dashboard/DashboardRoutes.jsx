@@ -1,7 +1,7 @@
 import AdminRoute from "../routes/AdminRoute";
 import PrivateRoute from "../routes/PrivateRoute";
 import FeeSettings from "./admin/FeeSettings";
-import HoldStudent from "./admin/HoldStudent";
+import PendingPayments from "./admin/PendingPayments";
 import AddStudent from "./admissions/AddStudent";
 import Admissions from "./admissions/Admissions";
 import UpdateStudent from "./admissions/UpdateStudent";
@@ -77,11 +77,19 @@ const dashboardRoutes = [
           </PrivateRoute>
         ),
       },
+      // {
+      //   path: "hold-students",
+      //   element: (
+      //     <PrivateRoute>
+      //       <HoldStudent></HoldStudent>
+      //     </PrivateRoute>
+      //   ),
+      // },
       {
-        path: "hold-students",
+        path: "pending-payments",
         element: (
           <PrivateRoute>
-            <HoldStudent></HoldStudent>
+            <PendingPayments></PendingPayments>
           </PrivateRoute>
         ),
       },

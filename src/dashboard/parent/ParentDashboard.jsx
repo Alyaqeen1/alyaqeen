@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import AdmissionFeeModal from "../shared/AdmissionFeeModal";
-import { useGetApprovedFullFamilyQuery } from "../../redux/features/families/familiesApi";
+import {
+  useGetApprovedFullFamilyQuery,
+  useGetEnrolledFullFamilyQuery,
+} from "../../redux/features/families/familiesApi";
 import useAuth from "../../hooks/useAuth";
 import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 import Swal from "sweetalert2";
@@ -9,6 +12,7 @@ import useAxiosPublic from "../../hooks/useAxiosPublic";
 import toast from "react-hot-toast";
 import { useGetRoleQuery } from "../../redux/features/role/roleApi";
 import FeeChoiceModal from "../shared/FeeChoiceModal";
+import MonthlyFeePayment from "./MonthlyFeePayment";
 
 export default function ParentDashboard({ family, refetch }) {
   const [showModal, setShowModal] = useState(false);
@@ -23,6 +27,10 @@ export default function ParentDashboard({ family, refetch }) {
   } = useGetApprovedFullFamilyQuery(user?.email, {
     skip: loading || !user?.email,
   });
+  const { data: enrolledFamily } = useGetEnrolledFullFamilyQuery(user?.email, {
+    skip: loading || !user?.email,
+  });
+
   const { data: roleData, isLoading: isRoleLoading } = useGetRoleQuery(
     user?.email,
     {
@@ -317,6 +325,7 @@ export default function ParentDashboard({ family, refetch }) {
                 "Session",
                 "Class",
                 "Time",
+                "Monthly Fee",
                 "Status",
               ].map((heading, index) => (
                 <th
@@ -352,6 +361,11 @@ export default function ParentDashboard({ family, refetch }) {
                     {student.academic?.time}
                   </td>
                   <td className="border h6 text-center align-middle text-nowrap">
+                    {student?.monthly_fee
+                      ? student?.monthly_fee
+                      : "Not Assigned"}
+                  </td>
+                  <td className="border h6 text-center align-middle text-nowrap">
                     {student.status}
                   </td>
                 </tr>
@@ -375,55 +389,62 @@ export default function ParentDashboard({ family, refetch }) {
           refetch={refetch}
         />
       </div>
-
-      <h3 className="fs-1 fw-bold text-center pt-5">
-        Action Required For Admission
-      </h3>
-      {approvedFamily?.childrenDocs?.length > 0 ? (
-        <div className="row justify-content-center mt-3">
-          <button
-            onClick={handleShow}
-            className="col-lg-2 text-white py-1 px-2 rounded-2"
-            style={{ backgroundColor: "var(--border2)" }}
-          >
-            Pay Now
-          </button>
-          <p className="col-lg-1 d-flex align-items-center justify-content-center">
-            or
-          </p>
-          <button
-            className="col-lg-2 text-white py-1 px-2 rounded-2"
-            style={{ backgroundColor: "var(--border2)" }}
-            onClick={() => handleOtherPayment("office payment")}
-          >
-            Pay in the office from the start day
-          </button>
-          <p className="col-lg-1 d-flex align-items-center justify-content-center">
-            or
-          </p>
-          <button
-            className="col-lg-2 text-white py-1 px-2 rounded-2"
-            style={{ backgroundColor: "var(--border2)" }}
-            onClick={() => handleOtherPayment("bank transfer")}
-          >
-            Pay With Bank <br />
-            (within 7 days)
-          </button>
-          <p className="col-lg-1 d-flex align-items-center justify-content-center">
-            or
-          </p>
-          <button
-            className="col-lg-2 text-white py-1 px-2 rounded-2"
-            style={{ backgroundColor: "var(--border2)" }}
-            onClick={() => handleOtherPayment("cash or card machine")}
-          >
-            Pay With Cash / Card Machine <br />
-            (within 7 days)
-          </button>
-        </div>
-      ) : (
-        <h3 className="text-danger">No Child is Approved</h3>
+      {approvedFamily?.childrenDocs?.length > 0 && (
+        <>
+          <h3 className="fs-1 fw-bold text-center pt-5">
+            Action Required For Admission
+          </h3>
+          {approvedFamily?.childrenDocs?.length > 0 ? (
+            <div className="row justify-content-center mt-3">
+              <button
+                onClick={handleShow}
+                className="col-lg-2 text-white py-1 px-2 rounded-2"
+                style={{ backgroundColor: "var(--border2)" }}
+              >
+                Pay Now
+              </button>
+              <p className="col-lg-1 d-flex align-items-center justify-content-center">
+                or
+              </p>
+              <button
+                className="col-lg-2 text-white py-1 px-2 rounded-2"
+                style={{ backgroundColor: "var(--border2)" }}
+                onClick={() => handleOtherPayment("office payment")}
+              >
+                Pay in the office from the start day
+              </button>
+              <p className="col-lg-1 d-flex align-items-center justify-content-center">
+                or
+              </p>
+              <button
+                className="col-lg-2 text-white py-1 px-2 rounded-2"
+                style={{ backgroundColor: "var(--border2)" }}
+                onClick={() => handleOtherPayment("bank transfer")}
+              >
+                Pay With Bank <br />
+                (within 7 days)
+              </button>
+              <p className="col-lg-1 d-flex align-items-center justify-content-center">
+                or
+              </p>
+              <button
+                className="col-lg-2 text-white py-1 px-2 rounded-2"
+                style={{ backgroundColor: "var(--border2)" }}
+                onClick={() => handleOtherPayment("cash or card machine")}
+              >
+                Pay With Cash / Card Machine <br />
+                (within 7 days)
+              </button>
+            </div>
+          ) : (
+            <h3 className="text-danger">No Child is Approved</h3>
+          )}
+        </>
       )}
+      {enrolledFamily?.childrenDocs?.length > 0 && (
+        <MonthlyFeePayment enrolledFamily={enrolledFamily}></MonthlyFeePayment>
+      )}
+
       {shouldShowModal && <FeeChoiceModal refetch={approvedRefetch} />}
     </div>
   );

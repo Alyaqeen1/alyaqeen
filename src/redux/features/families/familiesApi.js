@@ -22,6 +22,14 @@ export const familiesApi = apiSlice.injectEndpoints({
       query: (email) => `/families/with-children/approved/${email}`,
       providesTags: ["Family"],
     }),
+    getEnrolledFullFamily: builder.query({
+      query: (email) => `/families/with-children/enrolled/${email}`,
+      providesTags: ["Family"],
+    }),
+    getHoldFullFamily: builder.query({
+      query: () => `/families/with-children/hold`,
+      providesTags: ["Family"],
+    }),
 
     updateFamilyData: builder.mutation({
       query: ({ id, ...patch }) => ({
@@ -38,7 +46,9 @@ export const {
   useGetFamiliesQuery,
   useGetFamilyQuery,
   useGetFullFamilyQuery,
+  useGetEnrolledFullFamilyQuery,
   useGetAllFullFamilyQuery,
   useGetApprovedFullFamilyQuery,
+  useGetHoldFullFamilyQuery,
   useUpdateFamilyDataMutation,
 } = apiSlice;

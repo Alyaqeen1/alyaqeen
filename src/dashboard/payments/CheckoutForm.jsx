@@ -97,6 +97,7 @@ const CheckoutForm = ({
           name: user?.displayName,
           email: user?.email,
           amount,
+          status: "paid",
           date: new Date().toISOString(),
           method: "instant", // You can pass this as a prop too if you want to support "bank transfer"
           transactionId: paymentIntent.id,
@@ -122,7 +123,7 @@ const CheckoutForm = ({
         } else if (paymentType === "monthly") {
           paymentData = {
             ...paymentData,
-            students: paymentDetails?.students, // [{ uid, monthsPaid: [{month, year}] }]
+            students: paymentDetails, // [{ uid, monthsPaid: [{month, year}] }]
           };
         }
 
