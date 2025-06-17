@@ -1,9 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useGetStudentsQuery } from "../../redux/features/students/studentsApi";
-import { useGetFamilyQuery } from "../../redux/features/families/familiesApi";
+import {
+  useGetEnrolledFullFamilyByIdQuery,
+  useGetFamilyQuery,
+} from "../../redux/features/families/familiesApi";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 import toast from "react-hot-toast";
-import feeStructure from "../../utils/feeStructure";
+import { useGetFeesByIdQuery } from "../../redux/features/fees/feesApi";
+import { getUnpaidFees } from "../../utils/getUnpaidFees";
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 
 export default function AdminPayModal({
   familyId,
@@ -11,239 +16,283 @@ export default function AdminPayModal({
   adminShowModal,
   refetch: familiesRefetch,
 }) {
-  const [fee, setFee] = useState(0);
-  const {
-    data: family,
-    isLoading,
-    refetch,
-  } = useGetFamilyQuery(familyId, {
-    skip: !familyId, // Prevent fetching until user is fully loaded
-    refetchOnMountOrArgChange: true,
-  });
-  const { data: students, isLoading: studentLoading } = useGetStudentsQuery();
-  const filteredStudents = students?.filter((student) =>
-    family?.children?.includes(student.uid || student._id)
-  ); // exclude already-added
+  const [unpaidRows, setUnpaidRows] = useState([]);
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [expandedMonths, setExpandedMonths] = useState({});
+  const [grandTotal, setGrandTotal] = useState(0);
+
+  const { data: enrolledFamily } = useGetEnrolledFullFamilyByIdQuery(familyId);
+  const { data: fees = [] } = useGetFeesByIdQuery(enrolledFamily?._id);
+  const { data: family } = useGetFamilyQuery(familyId);
+
   const axiosPublic = useAxiosPublic();
-  const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-  const currentYear = new Date().getFullYear();
-  const years = Array.from({ length: 5 }, (_, i) => currentYear - 2 + i);
 
-  const [selectedYear, setSelectedYear] = useState(currentYear);
+  useEffect(() => {
+    if (enrolledFamily && fees) {
+      const calculatedUnpaid = getUnpaidFees({
+        students: enrolledFamily.childrenDocs,
+        fees,
+        feeChoice: enrolledFamily.feeChoice,
+        discount: enrolledFamily.discount,
+      });
+      setUnpaidRows(
+        calculatedUnpaid.map((row) => ({ ...row, selected: false }))
+      );
+    }
+  }, [enrolledFamily, fees]);
 
-  const [paymentDate, setPaymentDate] = useState(() => {
-    const today = new Date();
-    return today.toISOString().split("T")[0]; // "YYYY-MM-DD"
-  });
+  useEffect(() => {
+    const total = selectedRows.reduce((sum, row) => sum + row.totalAmount, 0);
+    setGrandTotal(total);
+  }, [selectedRows]);
 
-  const [selectedMonth, setSelectedMonth] = useState("June");
+  const toggleMonthExpand = (month) => {
+    setExpandedMonths((prev) => ({
+      ...prev,
+      [month]: !prev[month],
+    }));
+  };
+
+  const handleRowSelect = (row) => {
+    setSelectedRows((prev) => {
+      const isSelected = prev.some((r) => r.month === row.month);
+      return isSelected
+        ? prev.filter((r) => r.month !== row.month)
+        : [...prev, row];
+    });
+
+    // Update the unpaidRows selection state
+    setUnpaidRows((prev) =>
+      prev.map((r) =>
+        r.month === row.month ? { ...r, selected: !r.selected } : r
+      )
+    );
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const form = e.target;
-    const fee = form.fee.value;
-    const fee_month = selectedMonth;
-    const fee_year = selectedYear;
-    const payment_date = paymentDate;
+
+    if (selectedRows.length === 0) {
+      toast.error("Please select at least one month to pay");
+      return;
+    }
+
+    // Get current date in ISO format
+    const paymentDate = new Date().toISOString();
 
     const paymentData = {
       familyId,
       name: family.name,
       email: family.email,
-      payment_type: "monthly",
-      amount: fee,
-      fee_month,
-      fee_year,
-      payment_date,
+      amount: grandTotal,
+      status: "paid", // or "pending" based on your payment method
+      date: paymentDate,
+      method: "office payment", // or "instant" for online payments
+      paymentType: "monthly",
+      students: enrolledFamily.childrenDocs.map((student) => {
+        // Find all selected months for this student
+        const monthsPaid = selectedRows.flatMap((row) => {
+          const studentUnpaid = row.students.find(
+            (s) => s.studentId === student._id
+          );
+          if (!studentUnpaid) return [];
+
+          return {
+            month: studentUnpaid.monthsUnpaid[0].month.split("-")[1], // "08"
+            year: parseInt(studentUnpaid.monthsUnpaid[0].month.split("-")[0]), // 2025
+            monthlyFee: studentUnpaid.monthsUnpaid[0].monthlyFee,
+            discountedFee: studentUnpaid.monthsUnpaid[0].discountedFee,
+          };
+        });
+
+        return {
+          studentId: student._id,
+          name: student.name,
+          monthsPaid,
+          subtotal: monthsPaid.reduce(
+            (sum, payment) => sum + payment.discountedFee,
+            0
+          ),
+        };
+      }),
     };
 
     try {
-      const { data } = await axiosPublic.post(
-        "/fees/monthly-fees",
-        paymentData
-      );
+      const { data } = await axiosPublic.post("/fees", paymentData);
       if (data.insertedId) {
-        toast.success(`${fee_month} payment successful`);
-        refetch();
+        toast.success(
+          `Payment of $${grandTotal.toFixed(2)} recorded successfully`
+        );
         familiesRefetch();
         handleAdminClose();
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Payment failed");
+      toast.error(error.response?.data?.message || "Payment recording failed");
     }
   };
+
   return (
     <div>
       {adminShowModal && <div className="modal-backdrop fade show"></div>}
 
       <div
         className={`modal fade ${adminShowModal ? "show" : ""}`}
-        tabIndex="-1"
-        aria-hidden={!adminShowModal}
-        style={{
-          display: adminShowModal ? "block" : "none",
-          zIndex: 1050,
-        }}
-        onClick={(e) => {
-          if (e.target.classList.contains("modal")) handleAdminClose();
-        }}
+        style={{ display: adminShowModal ? "block" : "none", zIndex: 1050 }}
+        onClick={(e) =>
+          e.target.classList.contains("modal") && handleAdminClose()
+        }
       >
-        <div className="modal-dialog modal-dialog-centered">
+        <div className="modal-dialog modal-dialog-centered modal-xl">
           <div className="modal-content">
-            {/* Header */}
-            <div className="modal-header">
-              <h5 className="modal-title">Pay Fees</h5>
+            <div className="modal-header bg-light">
+              <h5 className="modal-title">Pay Unpaid Fees</h5>
               <button
                 type="button"
                 className="btn-close"
                 onClick={handleAdminClose}
-                aria-label="Close"
-              ></button>
+              />
             </div>
 
-            {/* Body */}
-            {/* // Inside AdminPayModal.jsx (replace your return JSX with this one) */}
             <div className="modal-body p-4">
-              <table className="table table-bordered table-responsive">
-                <thead>
-                  <tr>
-                    <th>Student Name</th>
-                    <th>Joining Month</th>
-                    <th>Unpaid Months</th>
-                    <th>Fee</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredStudents?.map((child) => {
-                    const joiningDate = new Date(child?.startingDate);
-                    const selectedDate = new Date(
-                      `${selectedMonth} 1, ${selectedYear}`
-                    );
-                    const hasJoined =
-                      joiningDate.getFullYear() < selectedDate.getFullYear() ||
-                      (joiningDate.getFullYear() ===
-                        selectedDate.getFullYear() &&
-                        joiningDate.getMonth() <= selectedDate.getMonth());
+              <div className="table-responsive">
+                <table className="table table-bordered table-hover">
+                  <thead className="table-light">
+                    <tr>
+                      <th style={{ width: "40px" }}></th>
+                      <th>Month</th>
+                      <th>Students</th>
+                      <th>Amount</th>
+                      <th>Status</th>
+                      <th style={{ width: "50px" }}></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {unpaidRows.map((row) => (
+                      <React.Fragment key={row.month}>
+                        {/* Month Summary Row */}
+                        <tr
+                          className={
+                            row.selected ? "table-primary" : "table-light"
+                          }
+                          style={{ cursor: "pointer" }}
+                        >
+                          <td>
+                            <input
+                              type="checkbox"
+                              checked={row.selected || false}
+                              onChange={() => handleRowSelect(row)}
+                              onClick={(e) => e.stopPropagation()}
+                            />
+                          </td>
+                          <td onClick={() => toggleMonthExpand(row.month)}>
+                            <strong>{row.month}</strong>
+                          </td>
+                          <td onClick={() => toggleMonthExpand(row.month)}>
+                            {row.studentNames}
+                          </td>
+                          <td onClick={() => toggleMonthExpand(row.month)}>
+                            ${row.totalAmount.toFixed(2)}
+                          </td>
+                          <td
+                            className="text-danger"
+                            onClick={() => toggleMonthExpand(row.month)}
+                          >
+                            Unpaid
+                          </td>
+                          <td
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleMonthExpand(row.month);
+                            }}
+                          >
+                            {expandedMonths[row.month] ? (
+                              <FaChevronUp className="text-muted" />
+                            ) : (
+                              <FaChevronDown className="text-muted" />
+                            )}
+                          </td>
+                        </tr>
 
-                    const feeAmount =
-                      hasJoined &&
-                      feeStructure.monthlyFees?.[child?.academic?.department]?.[
-                        child?.academic?.session
-                      ]
-                        ? feeStructure.monthlyFees[child.academic.department][
-                            child.academic.session
-                          ]
-                        : 0;
-
-                    return (
-                      <tr key={child._id}>
-                        <td>{child?.name}</td>
-                        <td>{child?.startingDate}</td>
-                        <td>
-                          {hasJoined ? `${selectedMonth}` : "Not Joined Yet"}
-                        </td>
-                        <td>{hasJoined ? `$${feeAmount}` : "$0"}</td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-
-              <div className="text-end mt-2">
-                <strong>
-                  Grand Total: $
-                  {filteredStudents?.reduce((sum, child) => {
-                    const joiningDate = new Date(child?.startingDate);
-                    const selectedDate = new Date(
-                      `${selectedMonth} 1, ${selectedYear}`
-                    );
-                    const hasJoined =
-                      joiningDate.getFullYear() < selectedDate.getFullYear() ||
-                      (joiningDate.getFullYear() ===
-                        selectedDate.getFullYear() &&
-                        joiningDate.getMonth() <= selectedDate.getMonth());
-
-                    const feeAmount =
-                      hasJoined &&
-                      feeStructure.monthlyFees?.[child?.academic?.department]?.[
-                        child?.academic?.session
-                      ]
-                        ? feeStructure.monthlyFees[child.academic.department][
-                            child.academic.session
-                          ]
-                        : 0;
-
-                    return sum + feeAmount;
-                  }, 0)}
-                </strong>
+                        {/* Expanded Student Details */}
+                        {expandedMonths[row.month] &&
+                          row.students.map((student) => (
+                            <tr
+                              key={`${row.month}-${student.studentId}`}
+                              className="bg-white"
+                            >
+                              <td></td>
+                              <td></td>
+                              <td>
+                                <div className="d-flex align-items-center">
+                                  <span className="ms-3">{student.name}</span>
+                                </div>
+                              </td>
+                              <td>
+                                $
+                                {student.monthsUnpaid[0].discountedFee.toFixed(
+                                  2
+                                )}
+                                <small className="text-muted ms-2">
+                                  (Original: $
+                                  {student.monthsUnpaid[0].monthlyFee.toFixed(
+                                    2
+                                  )}
+                                  )
+                                </small>
+                              </td>
+                              <td className="text-danger">Unpaid</td>
+                              <td></td>
+                            </tr>
+                          ))}
+                      </React.Fragment>
+                    ))}
+                  </tbody>
+                </table>
               </div>
 
-              <form onSubmit={handleSubmit}>
+              <div className="mt-4 p-3 bg-light rounded">
                 <div className="row">
-                  {/* Year, Month, Date Pickers */}
-                  {/* ... (same as before) */}
-
-                  <div className="mb-3 col-12">
-                    <label className="form-label">
-                      <strong>Pay Now:</strong>
-                    </label>
-                    <input
-                      style={{ borderColor: "var(--border2)" }}
-                      name="fee"
-                      className="form-control"
-                      type="number"
-                      readOnly
-                      value={filteredStudents?.reduce((sum, child) => {
-                        const joiningDate = new Date(child?.startingDate);
-                        const selectedDate = new Date(
-                          `${selectedMonth} 1, ${selectedYear}`
-                        );
-                        const hasJoined =
-                          joiningDate.getFullYear() <
-                            selectedDate.getFullYear() ||
-                          (joiningDate.getFullYear() ===
-                            selectedDate.getFullYear() &&
-                            joiningDate.getMonth() <= selectedDate.getMonth());
-
-                        const feeAmount =
-                          hasJoined &&
-                          feeStructure.monthlyFees?.[
-                            child?.academic?.department
-                          ]?.[child?.academic?.session]
-                            ? feeStructure.monthlyFees[
-                                child.academic.department
-                              ][child.academic.session]
-                            : 0;
-
-                        return sum + feeAmount;
-                      }, 0)}
-                    />
+                  <div className="col-md-6">
+                    <h5>Payment Summary</h5>
+                    <ul className="list-group">
+                      {selectedRows.map((row) => (
+                        <li
+                          key={row.month}
+                          className="list-group-item d-flex justify-content-between"
+                        >
+                          <span>{row.month}</span>
+                          <span>${row.totalAmount.toFixed(2)}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-
-                  <div className="">
-                    <button
-                      type="submit"
-                      style={{ backgroundColor: "var(--border2)" }}
-                      className="btn text-white"
-                    >
-                      Pay Full Fee
-                    </button>
+                  <div className="col-md-6 d-flex flex-column justify-content-end">
+                    <div className="d-flex justify-content-between align-items-center mb-3">
+                      <h5 className="mb-0">Total Amount:</h5>
+                      <h4 className="mb-0 text-primary">
+                        ${grandTotal.toFixed(2)}
+                      </h4>
+                    </div>
+                    <div className="d-flex justify-content-end gap-3">
+                      <button
+                        type="button"
+                        className="btn btn-outline-secondary"
+                        onClick={handleAdminClose}
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="button"
+                        className="btn btn-primary"
+                        onClick={handleSubmit}
+                        disabled={selectedRows.length === 0}
+                      >
+                        Confirm Payment
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </form>
+              </div>
             </div>
           </div>
         </div>
