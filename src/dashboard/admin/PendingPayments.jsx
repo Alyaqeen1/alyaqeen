@@ -8,20 +8,22 @@ import {
 import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 import Swal from "sweetalert2";
 import { useGetHoldFullFamilyQuery } from "../../redux/features/families/familiesApi";
-import { useGetFeesByStatusQuery } from "../../redux/features/fees/feesApi";
-import useAxiosPublic from "../../hooks/useAxiosPublic";
+import {
+  useGetFeesByStatusQuery,
+  useUpdateFeeDataMutation,
+} from "../../redux/features/fees/feesApi";
 import ShowFeeDataModal from "../shared/ShowFeeDataModal";
 
 export default function PendingPayments() {
   const [selectedFeeId, setSelectedFeeId] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [updateStudentStatus] = useUpdateStudentStatusMutation();
+  const [updateFeeData] = useUpdateFeeDataMutation();
   const {
     data: fees,
     isLoading: isFeeLoading,
     refetch,
   } = useGetFeesByStatusQuery("pending");
-  const axiosPublic = useAxiosPublic();
 
   console.log(fees);
   const handleShow = (id) => {
@@ -55,16 +57,25 @@ export default function PendingPayments() {
         await Promise.allSettled(updatePromises);
 
         if (newStatus === "enrolled") {
-          await axiosPublic.patch(`/fees/update-status-mode/${feeId}`, {
-            status: "paid",
-            paymentType: "admission",
+          // await axiosPublic.patch(`/fees/update-status-mode/${feeId}`, {
+          //   status: "paid",
+          //   paymentType: "admission",
+          // });
+          const data = await updateFeeData({
+            id: feeId,
+            data: {
+              status: "paid",
+              paymentType: "admission",
+            },
           });
-          Swal.fire({
-            icon: "success",
-            title: "Students Enrolled and Payment Approved",
-            timer: 1500,
-            showConfirmButton: false,
-          });
+          if (data?.modifiedCount) {
+            Swal.fire({
+              icon: "success",
+              title: "Students Enrolled and Payment Approved",
+              timer: 1500,
+              showConfirmButton: false,
+            });
+          }
         } else if (newStatus === "approved") {
           Swal.fire({
             title: "Are you sure?",
@@ -76,13 +87,15 @@ export default function PendingPayments() {
             confirmButtonText: "Yes, delete it!",
           }).then((result) => {
             if (result.isConfirmed) {
-              axiosPublic
-                .patch(`/fees/update-status-mode/${feeId}`, {
+              updateFeeData({
+                id: feeId,
+                data: {
                   status: "rejected",
                   paymentType: "admission",
-                })
+                },
+              })
                 .then((res) => {
-                  if (res?.data?.modifiedCount) {
+                  if (res?.modifiedCount) {
                     Swal.fire({
                       title: "Deleted!",
                       text: "Admission Declined & Fee Entry Rejected",
@@ -115,16 +128,22 @@ export default function PendingPayments() {
       // ✅ For monthlyOnHold payments
       else if (paymentType === "monthlyOnHold") {
         if (newStatus === "enrolled") {
-          await axiosPublic.patch(`/fees/update-status-mode/${feeId}`, {
-            status: "paid",
-            paymentType: "monthly",
-          });
-          Swal.fire({
-            icon: "success",
-            title: "Monthly Payment Approved",
-            timer: 1500,
-            showConfirmButton: false,
-          });
+          const data = await updateFeeData({
+            id: feeId,
+            data: {
+              status: "paid",
+              paymentType: "monthly",
+            },
+          }).unwrap();
+
+          if (data?.modifiedCount) {
+            Swal.fire({
+              icon: "success",
+              title: "Monthly Payment Approved",
+              timer: 1500,
+              showConfirmButton: false,
+            });
+          }
         } else if (newStatus === "approved") {
           Swal.fire({
             title: "Are you sure?",
@@ -136,13 +155,16 @@ export default function PendingPayments() {
             confirmButtonText: "Yes, delete it!",
           }).then((result) => {
             if (result.isConfirmed) {
-              axiosPublic
-                .patch(`/fees/update-status-mode/${feeId}`, {
+              updateFeeData({
+                id: feeId,
+                data: {
                   status: "rejected",
                   paymentType: "monthly",
-                })
+                },
+              })
+                .unwrap()
                 .then((res) => {
-                  if (res?.data?.modifiedCount) {
+                  if (res?.modifiedCount) {
                     Swal.fire({
                       title: "Deleted!",
                       text: "Monthly Fee Declined & Fee Entry Rejected",

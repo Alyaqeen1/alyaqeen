@@ -6,6 +6,7 @@ import useAuth from "../../hooks/useAuth";
 import "./CheckoutForm.css";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 import { useUpdateStudentStatusMutation } from "../../redux/features/students/studentsApi";
+import { useCreateFeeDataMutation } from "../../redux/features/fees/feesApi";
 
 const CheckoutForm = ({
   familyId,
@@ -16,6 +17,7 @@ const CheckoutForm = ({
   refetch,
 }) => {
   const { user } = useAuth();
+  const [createFeeData] = useCreateFeeDataMutation();
   const [updateStudentStatus] = useUpdateStudentStatusMutation();
   // const axiosSecure = useAxiosSecure();
   const axiosPublic = useAxiosPublic();
@@ -127,7 +129,8 @@ const CheckoutForm = ({
           };
         }
 
-        const { data } = await axiosPublic.post("/fees", paymentData);
+        // const { data } = await axiosPublic.post("/fees", paymentData);
+        const data = await createFeeData(paymentData).unwrap();
 
         // ✅ 1. Save payment and show toast
         if (data.insertedId) {

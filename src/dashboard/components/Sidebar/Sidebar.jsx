@@ -233,9 +233,8 @@ export default function Sidebar() {
                   identifier="students"
                   submenuItems={[
                     { label: "Add New", to: "add-student" },
-                    { label: "Active Students", to: "active-students" },
-                    { label: "Inactive Students", to: "inactive-students" },
-                    // { label: "Hold Students", to: "hold-students" },
+                    // { label: "Active Students", to: "active-students" },
+                    // { label: "Inactive Students", to: "inactive-students" },
                     { label: "Online Admission", to: "online-admissions" },
                   ]}
                   openSubMenu={openSubMenu}
@@ -249,7 +248,7 @@ export default function Sidebar() {
                   identifier="fees"
                   submenuItems={[
                     { label: "Fee Settings", to: "fee-settings" },
-                    { label: "Unpaid List", to: "unpaid-list" },
+                    // { label: "Unpaid List", to: "unpaid-list" },
                     { label: "Pending Payments", to: "pending-payments" },
                   ]}
                   openSubMenu={openSubMenu}
@@ -260,7 +259,7 @@ export default function Sidebar() {
               </>
             )}
 
-            {data?.role === "parent" && (
+            {/* {data?.role === "parent" && (
               <MenuItem
                 icon={<RiMoneyEuroCircleLine className="mx-2 fs-5" />}
                 label="Payment Summary"
@@ -270,18 +269,7 @@ export default function Sidebar() {
                 isSubMenuOpen={isSubMenuOpen}
                 handleToggleMenu={handleToggleMenu}
               />
-            )}
-
-            {/* Settings (no submenu) */}
-            <MenuItem
-              icon={<FaCogs className="mx-2 fs-5" />}
-              label="Settings"
-              to="/settings"
-              openSubMenu={openSubMenu}
-              handleSubmenu={handleSubmenu}
-              isSubMenuOpen={isSubMenuOpen}
-              handleToggleMenu={handleToggleMenu}
-            />
+            )} */}
           </ul>
         </nav>
       </div>

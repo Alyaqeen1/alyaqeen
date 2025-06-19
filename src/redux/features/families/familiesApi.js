@@ -47,6 +47,21 @@ export const familiesApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Family"], // 🔥 Important — invalidate Family when a student's status changes
     }),
+    updateFamilyFeeChoice: builder.mutation({
+      query: ({ email, ...patch }) => ({
+        url: `/families/update-fee-choice/${email}`,
+        method: "PATCH",
+        body: patch,
+      }),
+      invalidatesTags: ["Family"], // 🔥 Important — invalidate Family when a student's status changes
+    }),
+    deleteFamilyData: builder.mutation({
+      query: (id) => ({
+        url: `/families/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Family"], // 🔥 Important — invalidate Family when a student's status changes
+    }),
   }),
 });
 
@@ -61,4 +76,6 @@ export const {
   useGetApprovedFullFamilyQuery,
   useGetHoldFullFamilyQuery,
   useUpdateFamilyDataMutation,
+  useUpdateFamilyFeeChoiceMutation,
+  useDeleteFamilyDataMutation,
 } = apiSlice;

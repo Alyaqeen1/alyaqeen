@@ -1,7 +1,7 @@
 import { addDays, isBefore, format, isValid } from "date-fns";
 
 export function getUnpaidFees({ students, fees, feeChoice, discount = 0 }) {
-  const now = new Date(); //"2025-12-12"
+  const now = new Date("2025-10-14"); //"2025-12-12"
   const currentMonth = now.getMonth() + 1;
   const currentYear = now.getFullYear();
   const currentDate = now.getDate();

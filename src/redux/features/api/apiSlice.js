@@ -9,6 +9,6 @@ export const apiSlice = createApi({
     credentials: "include",
   }),
   // tagTypes: ["Reviews"],
-  tagTypes: ["Student", "Family"], // Add both Student & Family tags here
+  tagTypes: ["Student", "Family", "Fee"], // Add both Student & Family tags here
   endpoints: (builder) => ({}),
 });

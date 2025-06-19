@@ -6,7 +6,10 @@ import {
 } from "../../redux/features/families/familiesApi";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 import toast from "react-hot-toast";
-import { useGetFeesByIdQuery } from "../../redux/features/fees/feesApi";
+import {
+  useCreateFeeDataMutation,
+  useGetFeesByIdQuery,
+} from "../../redux/features/fees/feesApi";
 import { getUnpaidFees } from "../../utils/getUnpaidFees";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 
@@ -20,12 +23,13 @@ export default function AdminPayModal({
   const [selectedRows, setSelectedRows] = useState([]);
   const [expandedMonths, setExpandedMonths] = useState({});
   const [grandTotal, setGrandTotal] = useState(0);
+  const [createFeeData] = useCreateFeeDataMutation();
 
   const { data: enrolledFamily } = useGetEnrolledFullFamilyByIdQuery(familyId);
   const { data: fees = [] } = useGetFeesByIdQuery(enrolledFamily?._id);
   const { data: family } = useGetFamilyQuery(familyId);
 
-  const axiosPublic = useAxiosPublic();
+  // const axiosPublic = useAxiosPublic();
 
   useEffect(() => {
     if (enrolledFamily && fees) {
@@ -39,7 +43,13 @@ export default function AdminPayModal({
         calculatedUnpaid.map((row) => ({ ...row, selected: false }))
       );
     }
-  }, [enrolledFamily, fees]);
+  }, [
+    enrolledFamily,
+    fees,
+    enrolledFamily?.childrenDocs,
+    enrolledFamily?.feeChoice,
+    enrolledFamily?.discount,
+  ]);
 
   useEffect(() => {
     const total = selectedRows.reduce((sum, row) => sum + row.totalAmount, 0);
@@ -118,7 +128,8 @@ export default function AdminPayModal({
     };
 
     try {
-      const { data } = await axiosPublic.post("/fees", paymentData);
+      // const { data } = await axiosPublic.post("/fees", paymentData);
+      const data = await createFeeData(paymentData).unwrap();
       if (data.insertedId) {
         toast.success(
           `Payment of $${grandTotal.toFixed(2)} recorded successfully`

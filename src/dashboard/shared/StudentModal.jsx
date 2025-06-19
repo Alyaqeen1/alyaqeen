@@ -76,17 +76,21 @@ export default function StudentModal({ studentId, handleClose, showModal }) {
       // const { data } = await axiosPublic.patch(`/students/${studentId}`, {
       //   status: newStatus,
       // });
-      await updateStudentStatus({ id: studentId, status: newStatus });
+      const data = await updateStudentStatus({
+        id: studentId,
+        status: newStatus,
+      }).unwrap();
 
-      // if (data.modifiedCount) {
-      Swal.fire({
-        position: "center",
-        icon: "success",
-        title: `Student ${newStatus} successfully`,
-        showConfirmButton: false,
-        timer: 1500,
-      });
-      refetch();
+      if (data.modifiedCount) {
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: `Student ${newStatus} successfully`,
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        refetch();
+      }
     } catch (err) {
       // }
       console.error("Failed to update status:", err);

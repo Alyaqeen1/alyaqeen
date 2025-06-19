@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import {
+  useDeleteFamilyDataMutation,
   useGetEnrolledFullFamilyWithFeesQuery,
   useGetFullFamilyQuery,
 } from "../../redux/features/families/familiesApi";
 import useAuth from "../../hooks/useAuth";
 import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 import { FaPen, FaTrashAlt } from "react-icons/fa";
-import useAxiosPublic from "../../hooks/useAxiosPublic";
 import Swal from "sweetalert2";
 import FamilyUpdateModal from "../shared/FamilyUpdateModal";
 import AdminPayModal from "../shared/AdminPayModal";
@@ -35,7 +35,7 @@ export default function FeeSettings() {
   const [selectedAdminFamilyId, setSelectedAdminFamilyId] = useState(null);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const { user, loading } = useAuth();
-  const axiosPublic = useAxiosPublic();
+  const [deleteFamilyData] = useDeleteFamilyDataMutation();
 
   // Generate year options (current year ± 2 years)
   const yearOptions = Array.from({ length: 5 }, (_, i) => {
@@ -86,16 +86,20 @@ export default function FeeSettings() {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        axiosPublic.delete(`/families/${id}`).then((res) => {
-          if (res.data.deletedCount > 0) {
-            Swal.fire({
-              title: "Deleted!",
-              text: "Family has been deleted.",
-              icon: "success",
-            });
-            refetch();
-          }
-        });
+        // axiosPublic.delete(`/families/${id}`)
+        deleteFamilyData(id)
+          .unwrap()
+          .then((res) => {
+            console.log(res);
+            if (res?.deletedCount > 0) {
+              Swal.fire({
+                title: "Deleted!",
+                text: "Family has been deleted.",
+                icon: "success",
+              });
+              refetch();
+            }
+          });
       }
     });
   };
@@ -309,16 +313,18 @@ export default function FeeSettings() {
       </table>
 
       {/* Keep all your original modals */}
-      <AdminPayModal
-        key={selectedAdminFamilyId || "admin-modal"}
-        familyId={selectedAdminFamilyId}
-        adminShowModal={adminShowModal}
-        handleAdminClose={handleAdminClose}
-        refetch={refetch}
-      />
+      {selectedAdminFamilyId && (
+        <AdminPayModal
+          key={`admin-pay-${selectedAdminFamilyId}`}
+          familyId={selectedAdminFamilyId}
+          adminShowModal={adminShowModal}
+          handleAdminClose={handleAdminClose}
+          refetch={refetch}
+        />
+      )}
 
       <FamilyUpdateModal
-        key={selectedFamilyId || "family-update-modal"}
+        // key={selectedFamilyId || "family-update-modal"}
         familyId={selectedFamilyId}
         showModal={showModal}
         handleClose={handleClose}

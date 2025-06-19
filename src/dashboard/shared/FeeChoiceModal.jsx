@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 import toast from "react-hot-toast";
 import useAuth from "../../hooks/useAuth";
+import { useUpdateFamilyFeeChoiceMutation } from "../../redux/features/families/familiesApi";
 
 export default function FeeChoiceModal({ refetch }) {
   const [showModal, setShowModal] = useState(false);
   const [selectedChoice, setSelectedChoice] = useState(null);
+  const [updateFamilyFeeChoice] = useUpdateFamilyFeeChoiceMutation();
   const axiosPublic = useAxiosPublic();
   const { user } = useAuth();
 
@@ -33,16 +35,20 @@ export default function FeeChoiceModal({ refetch }) {
     }
 
     try {
-      const response = await axiosPublic.patch(
-        `/families/update-fee-choice/${user?.email}`,
-        {
-          feeChoice: selectedChoice,
-        }
-      );
+      // const response = await axiosPublic.patch(
+      //   `/families/update-fee-choice/${user?.email}`,
+      //   {
+      //     feeChoice: selectedChoice,
+      //   }
+      // );
+      const response = await updateFamilyFeeChoice({
+        email: user?.email,
+        feeChoice: selectedChoice,
+      }).unwrap();
 
-      console.log(response.data); // Always inspect first to confirm structure
+      console.log(response); // Always inspect first to confirm structure
 
-      if (response.data?.modifiedCount) {
+      if (response?.modifiedCount) {
         toast.success("Fee choice updated successfully!");
         refetch();
       } else {

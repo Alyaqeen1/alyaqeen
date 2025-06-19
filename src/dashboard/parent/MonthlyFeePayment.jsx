@@ -1,5 +1,8 @@
 import Swal from "sweetalert2";
-import { useGetFeesByIdQuery } from "../../redux/features/fees/feesApi";
+import {
+  useCreateFeeDataMutation,
+  useGetFeesByIdQuery,
+} from "../../redux/features/fees/feesApi";
 import { getUnpaidFees } from "../../utils/getUnpaidFees";
 import useAuth from "../../hooks/useAuth";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
@@ -13,6 +16,7 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
   const [showModal, setShowModal] = useState(false);
   const [selectedFeeId, setSelectedFeeId] = useState(null);
   const [showDataModal, setShowDataModal] = useState(false);
+  const [createFeeData] = useCreateFeeDataMutation();
   if (!enrolledFamily || enrolledFamily.childrenDocs.length === 0) {
     return <p>No enrolled students found.</p>;
   }
@@ -156,7 +160,8 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
             status: "pending",
             students: feeStudents,
           };
-          const { data } = await axiosPublic.post("/fees", paymentData);
+          // const { data } = await axiosPublic.post("/fees", paymentData);
+          const data = await createFeeData(paymentData).unwrap();
 
           if (data.insertedId) {
             toast.success("Payment successful!");
@@ -191,7 +196,7 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
           <tr>
             <th>Students</th>
             <th>Type</th>
-            <th>Month</th>
+            {/* <th>Month</th> */}
             <th>Amount(s)</th>
             <th>Status</th>
             <th>Paid Date</th>
@@ -203,9 +208,21 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
             <tr key={fee._id}>
               <td>{fee.students?.map((s) => s.name).join(", ")}</td>
               <td className="text-capitalize">{fee.paymentType}</td>
-              <td>{fee?.month || "_"}</td>
+              {/* <td>{fee?.month || "_"}</td> */}
               <td>{fee?.amount}</td>
-              <td>{fee.status}</td>
+              <td>
+                <span
+                  className={`py-1 px-2 rounded-3 text-white ${
+                    fee?.status === "paid"
+                      ? "bg-success"
+                      : fee?.status === "pending"
+                      ? "bg-warning"
+                      : "bg-danger"
+                  }`}
+                >
+                  {fee.status}
+                </span>
+              </td>
               <td>
                 {fee.date
                   ? new Date(fee.date).toLocaleDateString("en-US", {

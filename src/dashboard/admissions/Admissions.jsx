@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
+  useDeleteStudentDataMutation,
   useGetStudentsQuery,
   useGetWithoutEnrolledStudentsQuery,
 } from "../../redux/features/students/studentsApi";
@@ -8,8 +9,6 @@ import { FaCheck, FaEye, FaPen } from "react-icons/fa6";
 import { FaTrashAlt } from "react-icons/fa";
 import StudentModal from "../shared/StudentModal";
 import Swal from "sweetalert2";
-import useAxiosPublic from "../../hooks/useAxiosPublic";
-import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 export default function Admissions() {
   const {
@@ -20,8 +19,8 @@ export default function Admissions() {
   } = useGetWithoutEnrolledStudentsQuery();
   const [showModal, setShowModal] = useState(false);
   const [selectedStudentId, setSelectedStudentId] = useState(null);
-  const axiosPublic = useAxiosPublic();
-  const axiosSecure = useAxiosSecure();
+  const [deleteStudentData] = useDeleteStudentDataMutation();
+
   // Toggle modal visibility
   const handleShow = (id) => {
     setSelectedStudentId(id);
@@ -42,11 +41,10 @@ export default function Admissions() {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        axiosPublic
-          .delete(`/students/${id}`)
+        deleteStudentData(id)
           .then((res) => {
             // You can optionally check res.status === 200
-            if (res.data?.message) {
+            if (res?.message) {
               Swal.fire({
                 title: "Deleted!",
                 text: res.data.message,

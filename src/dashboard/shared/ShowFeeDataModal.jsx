@@ -1,14 +1,3 @@
-import React from "react";
-import {
-  useGetStudentQuery,
-  useUpdateStudentStatusMutation,
-} from "../../redux/features/students/studentsApi";
-import { FaCheck, FaCross, FaPen } from "react-icons/fa6";
-import { FaTrashAlt } from "react-icons/fa";
-import { ImCross } from "react-icons/im";
-import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
-import useAxiosPublic from "../../hooks/useAxiosPublic";
-import Swal from "sweetalert2";
 import { useGetFeeQuery } from "../../redux/features/fees/feesApi";
 export default function ShowFeeDataModal({ feeId, handleClose, showModal }) {
   const { data: fee } = useGetFeeQuery(feeId, {
@@ -58,57 +47,98 @@ export default function ShowFeeDataModal({ feeId, handleClose, showModal }) {
               >
                 <thead>
                   <tr style={{ backgroundColor: "#444", color: "#fff" }}>
-                    <th style={{ padding: "6px", border: "1px solid #ccc" }}>
-                      Student Name
-                    </th>
-                    <th style={{ padding: "6px", border: "1px solid #ccc" }}>
-                      Month Paid
-                    </th>
-                    <th style={{ padding: "6px", border: "1px solid #ccc" }}>
-                      Monthly Fee
-                    </th>
-                    <th style={{ padding: "6px", border: "1px solid #ccc" }}>
-                      Discounted Fee
-                    </th>
-                    <th style={{ padding: "6px", border: "1px solid #ccc" }}>
-                      Subtotal
-                    </th>
+                    <th>Student Name</th>
+                    {fee?.paymentType === "monthly" ||
+                    fee?.paymentType === "monthlyOnHold" ? (
+                      <>
+                        <th>Month Paid</th>
+                        <th>Monthly Fee</th>
+                        <th>Discounted Fee</th>
+                        <th>Subtotal</th>
+                      </>
+                    ) : (
+                      <>
+                        <th>Joining Month</th>
+                        <th>Monthly Fee</th>
+                        <th>Discount</th>
+                        <th>Admission Fee</th>
+                      </>
+                    )}
                   </tr>
                 </thead>
+
                 <tbody>
                   {fee?.students?.map((student, idx) => (
                     <tr key={idx}>
                       <td style={{ padding: "6px", border: "1px solid #ccc" }}>
                         {student?.name}
                       </td>
-                      <td style={{ padding: "6px", border: "1px solid #ccc" }}>
-                        {student?.monthsPaid?.map((data, idx) => (
-                          <span key={idx}>
-                            {data?.month} - {data?.year}
-                            <br />
-                          </span>
-                        ))}
-                      </td>
-                      <td style={{ padding: "6px", border: "1px solid #ccc" }}>
-                        {/* {enrolledFamily?.discount ?? 0}% */}
-                        {student?.monthsPaid?.map((data, idx) => (
-                          <span key={idx}>
-                            {data?.monthlyFee}
-                            <br />
-                          </span>
-                        ))}
-                      </td>
-                      <td style={{ padding: "6px", border: "1px solid #ccc" }}>
-                        {student?.monthsPaid?.map((data, idx) => (
-                          <span key={idx}>
-                            {data?.discountedFee}
-                            <br />
-                          </span>
-                        ))}
-                      </td>
-                      <td style={{ padding: "6px", border: "1px solid #ccc" }}>
-                        {student?.subtotal}
-                      </td>
+
+                      {/* For monthly payments */}
+                      {fee?.paymentType === "monthly" ||
+                      fee?.paymentType === "monthlyOnHold" ? (
+                        <>
+                          <td
+                            style={{ padding: "6px", border: "1px solid #ccc" }}
+                          >
+                            {student?.monthsPaid?.map((data, i) => (
+                              <span key={i}>
+                                {data?.month}-{data?.year}
+                                <br />
+                              </span>
+                            ))}
+                          </td>
+                          <td
+                            style={{ padding: "6px", border: "1px solid #ccc" }}
+                          >
+                            {student?.monthsPaid?.map((data, i) => (
+                              <span key={i}>
+                                {data?.monthlyFee}
+                                <br />
+                              </span>
+                            ))}
+                          </td>
+                          <td
+                            style={{ padding: "6px", border: "1px solid #ccc" }}
+                          >
+                            {student?.monthsPaid?.map((data, i) => (
+                              <span key={i}>
+                                {data?.discountedFee}
+                                <br />
+                              </span>
+                            ))}
+                          </td>
+                          <td
+                            style={{ padding: "6px", border: "1px solid #ccc" }}
+                          >
+                            {student?.subtotal}
+                          </td>
+                        </>
+                      ) : (
+                        // For admission payments
+                        <>
+                          <td
+                            style={{ padding: "6px", border: "1px solid #ccc" }}
+                          >
+                            {student?.joiningMonth} - {student?.joiningYear}
+                          </td>
+                          <td
+                            style={{ padding: "6px", border: "1px solid #ccc" }}
+                          >
+                            {student?.monthlyFee}
+                          </td>
+                          <td
+                            style={{ padding: "6px", border: "1px solid #ccc" }}
+                          >
+                            N/A
+                          </td>
+                          <td
+                            style={{ padding: "6px", border: "1px solid #ccc" }}
+                          >
+                            Admission: {student?.admissionFee}
+                          </td>
+                        </>
+                      )}
                     </tr>
                   ))}
                 </tbody>

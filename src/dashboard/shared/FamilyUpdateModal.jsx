@@ -15,7 +15,7 @@ export default function FamilyUpdateModal({
   showModal,
   refetch: familiesRefetch,
 }) {
-  const axiosPublic = useAxiosPublic();
+  // const axiosPublic = useAxiosPublic();
   const [updateFamilyData] = useUpdateFamilyDataMutation();
   const handleBackdropClick = (event) => {
     if (event.target.classList.contains("modal")) {

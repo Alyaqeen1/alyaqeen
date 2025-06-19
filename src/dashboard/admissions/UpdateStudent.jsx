@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import {
   useGetStudentQuery,
+  useUpdateAllStudentDataMutation,
   useUpdateStudentStatusMutation,
 } from "../../redux/features/students/studentsApi";
 import { useParams } from "react-router";
 import useAuth from "../../hooks/useAuth";
-import useAxiosPublic from "../../hooks/useAxiosPublic";
 import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 import Swal from "sweetalert2";
 import feeStructure from "../../utils/feeStructure";
@@ -13,6 +13,7 @@ import feeStructure from "../../utils/feeStructure";
 export default function UpdateStudent() {
   const { id } = useParams();
   const [updateStudentStatus] = useUpdateStudentStatusMutation();
+  const [updateAllStudentData] = useUpdateAllStudentDataMutation();
   const {
     data: student,
     isLoading,
@@ -20,7 +21,6 @@ export default function UpdateStudent() {
   } = useGetStudentQuery(id, {
     skip: !id, // avoid fetching if no ID)
   });
-  const axiosPublic = useAxiosPublic();
   const { user, updateUser, loading } = useAuth();
   const {
     name,
@@ -129,8 +129,8 @@ export default function UpdateStudent() {
     };
 
     if (monthly_fee) {
-      const { data } = await axiosPublic.put(`/students/${id}`, studentData);
-      console.log(data);
+      // const { data } = await axiosPublic.put(`/students/${id}`, studentData);
+      const data = await updateAllStudentData({ id, studentData }).unwrap();
       if (data.modifiedCount) {
         Swal.fire({
           position: "center",
