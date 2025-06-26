@@ -152,7 +152,10 @@ export default function Navbar() {
           {/* Profile */}
           <div className="d-flex gap-2 align-items-center">
             <img
-              src={img}
+              src={
+                user?.photoURL ||
+                "https://i.ibb.co/wrgq63jG/360-F-1316686759-Rn-Y5-CQrx-IPk-Neb-Z6xkkt-Wxm-Qw9p-BXR0b.jpg"
+              }
               className="rounded-circle object-fit-cover"
               style={{ width: "40px", height: "40px" }}
               alt="Profile"
@@ -161,7 +164,9 @@ export default function Navbar() {
               <h6 className="fw-bold" style={{ fontSize: "14px" }}>
                 {user?.displayName || "Anonymous User"}
               </h6>
-              <h6 style={{ fontSize: "12px" }}>{user?.email}</h6>
+              <h6 className="text-lowercase" style={{ fontSize: "12px" }}>
+                {user?.email}
+              </h6>
             </div>
           </div>
 

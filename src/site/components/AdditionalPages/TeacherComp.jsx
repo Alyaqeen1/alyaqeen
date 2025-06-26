@@ -1,8 +1,108 @@
 import { useEffect, useState } from "react";
 import one from "../../assets/img/line-1.png";
 import two from "../../assets/img/line-2.png";
+import { FaEye, FaEyeSlash } from "react-icons/fa6";
+import { useAddTeacherMutation } from "../../../redux/features/teachers/teachersApi";
+import toast from "react-hot-toast";
+import useAuth from "../../../hooks/useAuth";
+import { useNavigate } from "react-router";
+import useAxiosPublic from "../../../hooks/useAxiosPublic";
 
 const TeacherComp = () => {
+  const [show, setShow] = useState(false);
+  const [confirmShow, setConfirmShow] = useState(false);
+  const [addTeacher] = useAddTeacherMutation();
+  const { createUser, setUser, updateUser } = useAuth();
+  const navigate = useNavigate();
+  const axiosPublic = useAxiosPublic();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const name = form.full_name.value;
+    const email = form.email.value;
+    const number = form.number.value;
+    const dob = form.dob.value;
+    const qualification = form.qualification.value;
+    const present_address = form.present_address.value;
+    const permanent_address = form.permanent_address.value;
+    const marital_status = form.marital_status.value;
+    const gender = form.gender.value;
+    const department = form.department.value;
+    const experience = form.experience.value;
+    const designation = form.designation.value;
+    const teacher_photo = form.teacher_photo.files[0];
+    const mother_name = form.mother_name.value;
+    const father_name = form.father_name.value;
+    const emergency_number = form.emergency_number.value;
+    const account_title = form.account_title.value;
+    const bank_name = form.bank_name.value;
+    const bank_branch_name = form.bank_branch_name.value;
+    const account_number = form.account_number.value;
+    const password = form.password.value;
+    const confirm_password = form.confirm_password.value;
+
+    const teacherData = {
+      name,
+      email,
+      number,
+      dob,
+      qualification,
+      present_address,
+      permanent_address,
+      marital_status,
+      gender,
+      department,
+      experience,
+      designation,
+      // teacher_photo,
+      mother_name,
+      father_name,
+      emergency_number,
+      account_title,
+      bank_name,
+      bank_branch_name,
+      account_number,
+    };
+    // Password Validation
+    if (password !== confirm_password) {
+      return setError("Passwords do not match");
+    }
+    if (!/[A-Z]/.test(password)) {
+      return setError("Must include an uppercase letter");
+    }
+    if (!/[a-z]/.test(password)) {
+      return setError("Must include a lowercase letter");
+    }
+    if (password.length < 6) {
+      return setError("Password must be at least 6 characters");
+    }
+
+    try {
+      // Create user with email and password
+      const res = await createUser(email, password);
+      setUser(res?.user);
+      await updateUser({ displayName: name });
+      const userData = {
+        uid: res?.user?.uid,
+        name,
+        email,
+        role: "teacher",
+        createdAt: new Date(),
+      };
+      if (res?.user) {
+        const data = await addTeacher(teacherData).unwrap();
+        await axiosPublic.post("/users", userData);
+        if (data.insertedId) {
+          toast.success("Teacher registration successful!");
+          form.reset();
+          navigate("/dashboard");
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <section className="contact-section">
       <div className="line-1">
@@ -41,6 +141,7 @@ const TeacherComp = () => {
                 </div>
 
                 <form
+                  onSubmit={handleSubmit}
                   action="#"
                   id="contact-form"
                   method="POST"
@@ -72,9 +173,8 @@ const TeacherComp = () => {
                         <span>Full Name*</span>
                         <input
                           type="text"
-                          name="name"
+                          name="full_name"
                           id="name"
-                          placeholder=""
                           required
                         />
                       </div>
@@ -91,7 +191,6 @@ const TeacherComp = () => {
                         <input
                           type="email"
                           name="email"
-                          id="name"
                           placeholder=""
                           required
                         />
@@ -107,7 +206,7 @@ const TeacherComp = () => {
                       <div className="form-clt">
                         <span>Phone Number*</span>
                         <input
-                          type="number"
+                          type="tel"
                           name="number"
                           id="name"
                           placeholder=""
@@ -124,7 +223,7 @@ const TeacherComp = () => {
                     >
                       <div className="form-clt">
                         <span>Date of birth (optional)</span>
-                        <input type="date" name="std_dob" />
+                        <input type="date" name="dob" />
                       </div>
                     </div>
                     {/* qualification */}
@@ -154,7 +253,7 @@ const TeacherComp = () => {
                     >
                       <div className="form-clt">
                         <span>Date of Joining (optional)</span>
-                        <input type="date" name="joiningDate" />
+                        <input type="date" name="joining_date" />
                       </div>
                     </div>
                     {/* present address */}
@@ -168,7 +267,7 @@ const TeacherComp = () => {
                         <span>Present Address*</span>
                         <input
                           type="text"
-                          name="present"
+                          name="present_address"
                           id="name"
                           placeholder=""
                           required
@@ -186,7 +285,7 @@ const TeacherComp = () => {
                         <span>Permanent Address (optional)</span>
                         <input
                           type="text"
-                          name="permanent"
+                          name="permanent_address"
                           id="name"
                           placeholder=""
                         />
@@ -203,7 +302,7 @@ const TeacherComp = () => {
                         <span>Marital Status (optional)</span>
                         <select
                           style={{ backgroundColor: "var(--theme2)" }}
-                          name="maritalStatus"
+                          name="marital_status"
                           className="form-control"
                         >
                           <option value="">Select marital status</option>
@@ -298,7 +397,7 @@ const TeacherComp = () => {
                         <span>Photo (optional)</span>
                         <input
                           type="file"
-                          name="std_photo"
+                          name="teacher_photo"
                           className="form-control"
                         />
                       </div>
@@ -328,7 +427,7 @@ const TeacherComp = () => {
                         <span>Mother Name (optional)</span>
                         <input
                           type="text"
-                          name="mother-name"
+                          name="mother_name"
                           id="name"
                           placeholder=""
                         />
@@ -346,7 +445,7 @@ const TeacherComp = () => {
                         <span>Father Name (optional)</span>
                         <input
                           type="text"
-                          name="father-name"
+                          name="father_name"
                           id="name"
                           placeholder=""
                         />
@@ -363,8 +462,8 @@ const TeacherComp = () => {
                       <div className="form-clt">
                         <span>Emergency Contact Number (optional)</span>
                         <input
-                          type="number"
-                          name="emergencyNumber"
+                          type="tel"
+                          name="emergency_number"
                           id="name"
                           placeholder=""
                         />
@@ -396,7 +495,7 @@ const TeacherComp = () => {
                         <span>Account Title (optional)</span>
                         <input
                           type="text"
-                          name="accountTitle"
+                          name="account_title"
                           id="name"
                           placeholder=""
                         />
@@ -413,7 +512,7 @@ const TeacherComp = () => {
                         <span>Bank Name (optional)</span>
                         <input
                           type="text"
-                          name="bankName"
+                          name="bank_name"
                           id="name"
                           placeholder=""
                         />
@@ -430,7 +529,7 @@ const TeacherComp = () => {
                         <span>Bank Branch Name (optional)</span>
                         <input
                           type="number"
-                          name="bankBranchName"
+                          name="bank_branch_name"
                           id="name"
                           placeholder=""
                         />
@@ -447,7 +546,7 @@ const TeacherComp = () => {
                         <span>Bank Account Number (optional)</span>
                         <input
                           type="number"
-                          name="accountNumber"
+                          name="account_number"
                           id="name"
                           placeholder=""
                         />
@@ -474,9 +573,34 @@ const TeacherComp = () => {
                       data-aos="fade-up"
                       data-aos-delay="300"
                     >
-                      <div className="form-clt">
-                        <span>Password*</span>
-                        <input type="password" placeholder="" required />
+                      <div className="">
+                        <p
+                          className="text-white"
+                          style={{ marginBottom: "20px" }}
+                        >
+                          Password*
+                        </p>
+                        <div
+                          className="input-group border"
+                          style={{ padding: "14px 10px" }}
+                        >
+                          <input
+                            name="password"
+                            type={show ? "text" : "password"}
+                            className="form-control border-0 text-white"
+                            style={{
+                              backgroundColor: "var(--theme2)",
+                            }}
+                            required
+                          />
+                          <button
+                            onClick={() => setShow(!show)}
+                            type="button"
+                            className="text-white"
+                          >
+                            {show ? <FaEyeSlash /> : <FaEye />}
+                          </button>
+                        </div>
                       </div>
                     </div>
                     {/* confirm password */}
@@ -486,9 +610,34 @@ const TeacherComp = () => {
                       data-aos="fade-up"
                       data-aos-delay="500"
                     >
-                      <div className="form-clt">
-                        <span>Confirm Password*</span>
-                        <input type="password" placeholder="" required />
+                      <div className="">
+                        <p
+                          className="text-white"
+                          style={{ marginBottom: "20px" }}
+                        >
+                          Confirm Password*
+                        </p>
+                        <div
+                          className="input-group border"
+                          style={{ padding: "14px 10px" }}
+                        >
+                          <input
+                            type={confirmShow ? "text" : "password"}
+                            className="form-control border-0 text-white"
+                            name="confirm_password"
+                            style={{
+                              backgroundColor: "var(--theme2)",
+                            }}
+                            required
+                          />
+                          <button
+                            onClick={() => setConfirmShow(!confirmShow)}
+                            type="button"
+                            className="text-white"
+                          >
+                            {confirmShow ? <FaEyeSlash /> : <FaEye />}
+                          </button>
+                        </div>
                       </div>
                     </div>
 

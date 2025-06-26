@@ -302,7 +302,7 @@ const PrayerComp = () => {
                               : "bg-white"
                           } border h6 text-center align-middle text-nowrap`}
                         >
-                          {day?.isha?.start}
+                          {day?.isha?.jamat}
                         </td>
                       </tr>
                     ))

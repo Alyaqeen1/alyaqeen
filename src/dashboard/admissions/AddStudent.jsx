@@ -107,27 +107,45 @@ export default function AddStudent() {
 
     const password = form.password.value;
     const confirmPassword = form.confirmPassword.value;
+    const today = new Date().setHours(0, 0, 0, 0); // current date at midnight
+    const selectedDate = new Date(starting_date).setHours(0, 0, 0, 0); // user date at midnight
+
+    if (selectedDate < today) {
+      setLocalLoading(false); // ✅ Unblock double click
+      setLoading(false);
+      return setError("Starting date cannot be in the past");
+    }
 
     // --- Validation ---
     if (password !== confirmPassword) {
+      setLocalLoading(false); // ✅ Unblock double click
+
       setLoading(false);
       return setError("Passwords do not match");
     }
     if (!/[A-Z]/.test(password)) {
+      setLocalLoading(false); // ✅ Unblock double click
+
       setLoading(false);
       return setError("Password must contain an uppercase letter");
     }
     if (!/[a-z]/.test(password)) {
+      setLocalLoading(false); // ✅ Unblock double click
+
       setLoading(false);
       return setError("Password must contain a lowercase letter");
     }
     if (password.length < 6) {
+      setLocalLoading(false); // ✅ Unblock double click
+
       setLoading(false);
       return setError("Password must be at least 6 characters long");
     }
 
     try {
       if (!signature) {
+        setLocalLoading(false); // ✅ Unblock double click
+        setLoading(false);
         return setError("Please save signature first");
       }
       // 🔁 1. Check if parent already exists

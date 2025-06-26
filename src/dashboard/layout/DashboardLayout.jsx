@@ -33,7 +33,7 @@ export default function DashboardLayout() {
         {/* Content Area */}
         <Navbar></Navbar>
         <div
-          className="container-fluid"
+          className="px-5 py-3"
           style={{
             backgroundColor: "#F1F1F6",
             minHeight: "calc(100vh - 102px)",

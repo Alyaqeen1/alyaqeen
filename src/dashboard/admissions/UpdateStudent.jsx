@@ -9,6 +9,7 @@ import useAuth from "../../hooks/useAuth";
 import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 import Swal from "sweetalert2";
 import feeStructure from "../../utils/feeStructure";
+import toast from "react-hot-toast";
 
 export default function UpdateStudent() {
   const { id } = useParams();
@@ -21,7 +22,7 @@ export default function UpdateStudent() {
   } = useGetStudentQuery(id, {
     skip: !id, // avoid fetching if no ID)
   });
-  const { user, updateUser, loading } = useAuth();
+  const { user, updateUser, loading, setLoading } = useAuth();
   const {
     name,
     email,
@@ -88,6 +89,13 @@ export default function UpdateStudent() {
     const starting_date = form.starting_date.value;
     const monthly_fee =
       feeStructure?.monthlyFees?.[std_department]?.[std_session];
+    const today = new Date().setHours(0, 0, 0, 0); // current date at midnight
+    const selectedDate = new Date(starting_date).setHours(0, 0, 0, 0); // user date at midnight
+
+    if (selectedDate < today) {
+      setLoading(false); // ✅ Block double click
+      return toast.error("Starting date cannot be in the past");
+    }
 
     const studentData = {
       name: student_name,
@@ -157,17 +165,18 @@ export default function UpdateStudent() {
       // const { data } = await axiosPublic.patch(`/students/${studentId}`, {
       //   status: newStatus,
       // });
-      await updateStudentStatus({ id: id, status: newStatus });
+      await updateStudentStatus({ id: id, status: newStatus }).unwrap();
 
-      // if (data.modifiedCount) {
-      Swal.fire({
-        position: "center",
-        icon: "success",
-        title: `Student ${newStatus} successfully`,
-        showConfirmButton: false,
-        timer: 1500,
-      });
-      refetch();
+      if (data.modifiedCount) {
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: `Student ${newStatus} successfully`,
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        refetch();
+      }
     } catch (err) {
       // }
       console.error("Failed to update status:", err);

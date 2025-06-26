@@ -311,7 +311,7 @@ export default function ParentDashboard({ family, refetch }) {
 
   return (
     <div>
-      <h3 className="fs-1 fw-bold text-center pt-5">
+      <h3 className="fs-1 fw-bold text-center">
         Students Linked With this account
       </h3>
       <div className="table-responsive mb-3">

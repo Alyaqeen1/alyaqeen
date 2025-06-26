@@ -3635,116 +3635,141 @@
       }
     }
   ],
+
   "June": [
     {
       "date": 1,
       "fajr": {
-        "start": "2:54 AM",
-        "jamat": "4:00 AM"
+        "start": "2:31 AM",
+        "jamat": "2:34 AM"
       },
-      "sunrise": "4:51 AM",
+      "sunrise": "4:49 AM",
       "zuhr": {
-        "start": "1:10 PM",
-        "jamat": "1:30 PM"
+        "start": "12:58 PM",
+        "jamat": "1:01 PM"
       },
       "asr": {
-        "start": "6:40 PM",
-        "jamat": "7:30 PM"
+        "start": "5:18 PM",
+        "jamat": "5:21 PM"
       },
       "maghrib": {
-        "start": "9:21 PM",
-        "jamat": "9:26 PM"
+        "start": "9:08 PM",
+        "jamat": "9:11 PM"
       },
       "isha": {
-        "start": "10:40 PM",
-        "jamat": "10:50 PM"
+        "start": "11:19 PM",
+        "jamat": "11:22 PM"
       }
     },
     {
       "date": 2,
       "fajr": {
-        "start": "2:52 AM",
-        "jamat": "4:00 AM"
+        "start": "2:30 AM",
+        "jamat": "2:33 AM"
       },
-      "sunrise": "4:50 AM",
+      "sunrise": "4:48 AM",
       "zuhr": {
-        "start": "1:10 PM",
-        "jamat": "1:30 PM"
+        "start": "12:59 PM",
+        "jamat": "1:02 PM"
       },
       "asr": {
-        "start": "6:41 PM",
-        "jamat": "7:30 PM"
+        "start": "5:18 PM",
+        "jamat": "5:21 PM"
       },
       "maghrib": {
-        "start": "9:22 PM",
-        "jamat": "9:27 PM"
+        "start": "9:09 PM",
+        "jamat": "9:12 PM"
       },
       "isha": {
-        "start": "10:41 PM",
-        "jamat": "10:51 PM"
+        "start": "11:19 PM",
+        "jamat": "11:22 PM"
       }
     },
     {
       "date": 3,
       "fajr": {
-        "start": "2:51 AM",
-        "jamat": "4:00 AM"
+        "start": "2:30 AM",
+        "jamat": "2:33 AM"
       },
-      "sunrise": "4:49 AM",
+      "sunrise": "4:47 AM",
       "zuhr": {
-        "start": "1:10 PM",
-        "jamat": "1:30 PM"
+        "start": "12:59 PM",
+        "jamat": "1:02 PM"
       },
       "asr": {
-        "start": "6:41 PM",
-        "jamat": "7:30 PM"
+        "start": "5:19 PM",
+        "jamat": "5:22 PM"
       },
       "maghrib": {
-        "start": "9:23 PM",
-        "jamat": "9:28 PM"
+        "start": "9:10 PM",
+        "jamat": "9:13 PM"
       },
       "isha": {
-        "start": "10:42 PM",
-        "jamat": "10:57 PM"
+        "start": "11:20 PM",
+        "jamat": "11:23 PM"
       }
     },
     {
       "date": 4,
       "fajr": {
-        "start": "2:50 AM",
-        "jamat": "4:00 AM"
+        "start": "2:30 AM",
+        "jamat": "2:33 AM"
       },
-      "sunrise": "4:48 AM",
+      "sunrise": "4:47 AM",
       "zuhr": {
-        "start": "1:10 PM",
-        "jamat": "1:30 PM"
+        "start": "12:59 PM",
+        "jamat": "1:02 PM"
       },
       "asr": {
-        "start": "6:42 PM",
-        "jamat": "7:30 PM"
+        "start": "5:20 PM",
+        "jamat": "5:23 PM"
       },
       "maghrib": {
-        "start": "9:24 PM",
-        "jamat": "9:29 PM"
+        "start": "9:11 PM",
+        "jamat": "9:14 PM"
       },
       "isha": {
-        "start": "10:45 PM",
-        "jamat": "10:50 PM"
+        "start": "11:21 PM",
+        "jamat": "11:23 PM"
       }
     },
     {
       "date": 5,
       "fajr": {
-        "start": "2:49 AM",
-        "jamat": "4:00 AM"
+        "start": "2:30 AM",
+        "jamat": "2:33 AM"
       },
-      "sunrise": "4:48 AM",
+      "sunrise": "4:46 AM",
       "zuhr": {
-        "start": "1:10 PM",
-        "jamat": "1:30 PM"
+        "start": "1:00 PM",
+        "jamat": "1:02 PM"
       },
       "asr": {
-        "start": "6:42 PM",
+        "start": "5:20 PM",
+        "jamat": "5:23 PM"
+      },
+      "maghrib": {
+        "start": "9:12 PM",
+        "jamat": "9:15 PM"
+      },
+      "isha": {
+        "start": "11:21 PM",
+        "jamat": "11:24 PM"
+      }
+    },
+    {
+      "date": 6,
+      "fajr": {
+        "start": "2:47 AM",
+        "jamat": "4:00 AM"
+      },
+      "sunrise": "4:47 AM",
+      "zuhr": {
+        "start": "1:11 PM",
+        "jamat": "1:45 PM"
+      },
+      "asr": {
+        "start": "6:43 PM",
         "jamat": "7:30 PM"
       },
       "maghrib": {
@@ -3753,19 +3778,19 @@
       },
       "isha": {
         "start": "10:46 PM",
-        "jamat": "10:51 PM"
+        "jamat": "11:15 PM"
       }
     },
     {
-      "date": 6,
+      "date": 7,
       "fajr": {
-        "start": "2:48 AM",
+        "start": "2:46 AM",
         "jamat": "4:00 AM"
       },
-      "sunrise": "4:47 AM",
+      "sunrise": "4:46 AM",
       "zuhr": {
         "start": "1:11 PM",
-        "jamat": "1:30 PM"
+        "jamat": "1:45 PM"
       },
       "asr": {
         "start": "6:43 PM",
@@ -3777,31 +3802,7 @@
       },
       "isha": {
         "start": "10:47 PM",
-        "jamat": "10:52 PM"
-      }
-    },
-    {
-      "date": 7,
-      "fajr": {
-        "start": "2:47 AM",
-        "jamat": "4:00 AM"
-      },
-      "sunrise": "4:46 AM",
-      "zuhr": {
-        "start": "1:12 PM",
-        "jamat": "1:30 PM"
-      },
-      "asr": {
-        "start": "6:44 PM",
-        "jamat": "7:30 PM"
-      },
-      "maghrib": {
-        "start": "9:26 PM",
-        "jamat": "9:31 PM"
-      },
-      "isha": {
-        "start": "10:48 PM",
-        "jamat": "10:53 PM"
+        "jamat": "11:15 PM"
       }
     },
     {
@@ -3812,8 +3813,8 @@
       },
       "sunrise": "4:46 AM",
       "zuhr": {
-        "start": "1:12 PM",
-        "jamat": "1:30 PM"
+        "start": "1:11 PM",
+        "jamat": "1:45 PM"
       },
       "asr": {
         "start": "6:44 PM",
@@ -3825,31 +3826,31 @@
       },
       "isha": {
         "start": "10:48 PM",
-        "jamat": "10:53 PM"
+        "jamat": "11:15 PM"
       }
     },
     {
       "date": 9,
       "fajr": {
-        "start": "2:45 AM",
+        "start": "2:44 AM",
         "jamat": "4:00 AM"
       },
-      "sunrise": "4:46 AM",
+      "sunrise": "4:45 AM",
       "zuhr": {
-        "start": "1:12 PM",
-        "jamat": "1:30 PM"
+        "start": "1:11 PM",
+        "jamat": "1:45 PM"
       },
       "asr": {
-        "start": "6:45 PM",
+        "start": "6:44 PM",
         "jamat": "7:30 PM"
       },
       "maghrib": {
-        "start": "9:28 PM",
-        "jamat": "9:33 PM"
+        "start": "9:27 PM",
+        "jamat": "9:32 PM"
       },
       "isha": {
-        "start": "10:50 PM",
-        "jamat": "10:55 PM"
+        "start": "10:48 PM",
+        "jamat": "11:15 PM"
       }
     },
     {
@@ -3861,7 +3862,7 @@
       "sunrise": "4:45 AM",
       "zuhr": {
         "start": "1:12 PM",
-        "jamat": "1:30 PM"
+        "jamat": "1:45 PM"
       },
       "asr": {
         "start": "6:45 PM",
@@ -3873,7 +3874,7 @@
       },
       "isha": {
         "start": "10:51 PM",
-        "jamat": "10:56 PM"
+        "jamat": "11:15 PM"
       }
     },
     {
@@ -3885,7 +3886,31 @@
       "sunrise": "4:45 AM",
       "zuhr": {
         "start": "1:12 PM",
-        "jamat": "1:30 PM"
+        "jamat": "1:45 PM"
+      },
+      "asr": {
+        "start": "6:45 PM",
+        "jamat": "7:30 PM"
+      },
+      "maghrib": {
+        "start": "9:29 PM",
+        "jamat": "9:34 PM"
+      },
+      "isha": {
+        "start": "10:52 PM",
+        "jamat": "11:15 PM"
+      }
+    },
+    {
+      "date": 12,
+      "fajr": {
+        "start": "2:41 AM",
+        "jamat": "4:00 AM"
+      },
+      "sunrise": "4:44 AM",
+      "zuhr": {
+        "start": "1:12 PM",
+        "jamat": "1:45 PM"
       },
       "asr": {
         "start": "6:46 PM",
@@ -3897,43 +3922,19 @@
       },
       "isha": {
         "start": "10:53 PM",
-        "jamat": "10:58 PM"
-      }
-    },
-    {
-      "date": 12,
-      "fajr": {
-        "start": "2:42 AM",
-        "jamat": "4:00 AM"
-      },
-      "sunrise": "4:44 AM",
-      "zuhr": {
-        "start": "1:12 PM",
-        "jamat": "1:30 PM"
-      },
-      "asr": {
-        "start": "6:46 PM",
-        "jamat": "7:30 PM"
-      },
-      "maghrib": {
-        "start": "9:30 PM",
-        "jamat": "9:35 PM"
-      },
-      "isha": {
-        "start": "10:54 PM",
-        "jamat": "10:59 PM"
+        "jamat": "11:15 PM"
       }
     },
     {
       "date": 13,
       "fajr": {
-        "start": "2:41 AM",
+        "start": "2:40 AM",
         "jamat": "4:00 AM"
       },
       "sunrise": "4:44 AM",
       "zuhr": {
         "start": "1:12 PM",
-        "jamat": "1:30 PM"
+        "jamat": "1:45 PM"
       },
       "asr": {
         "start": "6:46 PM",
@@ -3945,7 +3946,7 @@
       },
       "isha": {
         "start": "10:55 PM",
-        "jamat": "11:00 PM"
+        "jamat": "11:15 PM"
       }
     },
     {
@@ -3956,11 +3957,11 @@
       },
       "sunrise": "4:44 AM",
       "zuhr": {
-        "start": "1:13 PM",
-        "jamat": "1:30 PM"
+        "start": "1:12 PM",
+        "jamat": "1:45 PM"
       },
       "asr": {
-        "start": "6:47 PM",
+        "start": "6:46 PM",
         "jamat": "7:30 PM"
       },
       "maghrib": {
@@ -3968,8 +3969,8 @@
         "jamat": "9:36 PM"
       },
       "isha": {
-        "start": "10:56 PM",
-        "jamat": "11:01 PM"
+        "start": "10:55 PM",
+        "jamat": "11:15 PM"
       }
     },
     {
@@ -3981,19 +3982,19 @@
       "sunrise": "4:44 AM",
       "zuhr": {
         "start": "1:13 PM",
-        "jamat": "1:30 PM"
+        "jamat": "1:45 PM"
       },
       "asr": {
         "start": "6:47 PM",
         "jamat": "7:30 PM"
       },
       "maghrib": {
-        "start": "9:31 PM",
-        "jamat": "9:36 PM"
+        "start": "9:32 PM",
+        "jamat": "9:37 PM"
       },
       "isha": {
         "start": "10:56 PM",
-        "jamat": "11:01 PM"
+        "jamat": "11:15 PM"
       }
     },
     {
@@ -4005,7 +4006,7 @@
       "sunrise": "4:44 AM",
       "zuhr": {
         "start": "1:13 PM",
-        "jamat": "1:30 PM"
+        "jamat": "1:45 PM"
       },
       "asr": {
         "start": "6:47 PM",
@@ -4016,8 +4017,8 @@
         "jamat": "9:37 PM"
       },
       "isha": {
-        "start": "10:56 PM",
-        "jamat": "11:01 PM"
+        "start": "10:55 PM",
+        "jamat": "11:15 PM"
       }
     },
     {
@@ -4028,11 +4029,11 @@
       },
       "sunrise": "4:44 AM",
       "zuhr": {
-        "start": "1:14 PM",
-        "jamat": "1:30 PM"
+        "start": "1:13 PM",
+        "jamat": "1:45 PM"
       },
       "asr": {
-        "start": "6:48 PM",
+        "start": "6:47 PM",
         "jamat": "7:30 PM"
       },
       "maghrib": {
@@ -4041,7 +4042,7 @@
       },
       "isha": {
         "start": "10:56 PM",
-        "jamat": "11:01 PM"
+        "jamat": "11:15 PM"
       }
     },
     {
@@ -4052,20 +4053,20 @@
       },
       "sunrise": "4:44 AM",
       "zuhr": {
-        "start": "1:14 PM",
-        "jamat": "1:30 PM"
+        "start": "1:13 PM",
+        "jamat": "1:45 PM"
       },
       "asr": {
         "start": "6:48 PM",
         "jamat": "7:30 PM"
       },
       "maghrib": {
-        "start": "9:34 PM",
-        "jamat": "9:39 PM"
+        "start": "9:33 PM",
+        "jamat": "9:38 PM"
       },
       "isha": {
-        "start": "10:56 PM",
-        "jamat": "11:01 PM"
+        "start": "10:55 PM",
+        "jamat": "11:15 PM"
       }
     },
     {
@@ -4077,7 +4078,31 @@
       "sunrise": "4:44 AM",
       "zuhr": {
         "start": "1:14 PM",
-        "jamat": "1:30 PM"
+        "jamat": "1:45 PM"
+      },
+      "asr": {
+        "start": "6:48 PM",
+        "jamat": "7:30 PM"
+      },
+      "maghrib": {
+        "start": "9:33 PM",
+        "jamat": "9:38 PM"
+      },
+      "isha": {
+        "start": "10:55 PM",
+        "jamat": "11:15 PM"
+      }
+    },
+    {
+      "date": 20,
+      "fajr": {
+        "start": "2:40 AM",
+        "jamat": "4:00 AM"
+      },
+      "sunrise": "4:44 AM",
+      "zuhr": {
+        "start": "1:14 PM",
+        "jamat": "1:45 PM"
       },
       "asr": {
         "start": "6:48 PM",
@@ -4089,31 +4114,7 @@
       },
       "isha": {
         "start": "10:56 PM",
-        "jamat": "11:01 PM"
-      }
-    },
-    {
-      "date": 20,
-      "fajr": {
-        "start": "2:41 AM",
-        "jamat": "4:00 AM"
-      },
-      "sunrise": "4:44 AM",
-      "zuhr": {
-        "start": "1:14 PM",
-        "jamat": "1:30 PM"
-      },
-      "asr": {
-        "start": "6:49 PM",
-        "jamat": "7:30 PM"
-      },
-      "maghrib": {
-        "start": "9:34 PM",
-        "jamat": "9:39 PM"
-      },
-      "isha": {
-        "start": "10:56 PM",
-        "jamat": "11:01 PM"
+        "jamat": "11:15 PM"
       }
     },
     {
@@ -4125,7 +4126,7 @@
       "sunrise": "4:44 AM",
       "zuhr": {
         "start": "1:14 PM",
-        "jamat": "1:30 PM"
+        "jamat": "1:45 PM"
       },
       "asr": {
         "start": "6:49 PM",
@@ -4137,19 +4138,19 @@
       },
       "isha": {
         "start": "10:55 PM",
-        "jamat": "11:00 PM"
+        "jamat": "11:15 PM"
       }
     },
     {
       "date": 22,
       "fajr": {
-        "start": "2:42 AM",
+        "start": "2:41 AM",
         "jamat": "4:00 AM"
       },
       "sunrise": "4:44 AM",
       "zuhr": {
-        "start": "1:15 PM",
-        "jamat": "1:30 PM"
+        "start": "1:14 PM",
+        "jamat": "1:45 PM"
       },
       "asr": {
         "start": "6:49 PM",
@@ -4160,8 +4161,8 @@
         "jamat": "9:39 PM"
       },
       "isha": {
-        "start": "10:55 PM",
-        "jamat": "11:00 PM"
+        "start": "10:54 PM",
+        "jamat": "11:15 PM"
       }
     },
     {
@@ -4172,8 +4173,8 @@
       },
       "sunrise": "4:45 AM",
       "zuhr": {
-        "start": "1:15 PM",
-        "jamat": "1:30 PM"
+        "start": "1:14 PM",
+        "jamat": "1:45 PM"
       },
       "asr": {
         "start": "6:49 PM",
@@ -4184,8 +4185,8 @@
         "jamat": "9:39 PM"
       },
       "isha": {
-        "start": "10:55 PM",
-        "jamat": "11:00 PM"
+        "start": "10:54 PM",
+        "jamat": "11:15 PM"
       }
     },
     {
@@ -4197,7 +4198,7 @@
       "sunrise": "4:45 AM",
       "zuhr": {
         "start": "1:15 PM",
-        "jamat": "1:30 PM"
+        "jamat": "1:45 PM"
       },
       "asr": {
         "start": "6:49 PM",
@@ -4208,8 +4209,8 @@
         "jamat": "9:39 PM"
       },
       "isha": {
-        "start": "10:54 PM",
-        "jamat": "10:59 PM"
+        "start": "10:53 PM",
+        "jamat": "11:15 PM"
       }
     },
     {
@@ -4221,7 +4222,7 @@
       "sunrise": "4:46 AM",
       "zuhr": {
         "start": "1:15 PM",
-        "jamat": "1:30 PM"
+        "jamat": "1:45 PM"
       },
       "asr": {
         "start": "6:49 PM",
@@ -4232,8 +4233,8 @@
         "jamat": "9:39 PM"
       },
       "isha": {
-        "start": "10:54 PM",
-        "jamat": "10:59 PM"
+        "start": "10:53 PM",
+        "jamat": "11:15 PM"
       }
     },
     {
@@ -4244,8 +4245,8 @@
       },
       "sunrise": "4:46 AM",
       "zuhr": {
-        "start": "1:16 PM",
-        "jamat": "1:30 PM"
+        "start": "1:15 PM",
+        "jamat": "1:45 PM"
       },
       "asr": {
         "start": "6:49 PM",
@@ -4256,23 +4257,23 @@
         "jamat": "9:39 PM"
       },
       "isha": {
-        "start": "10:54 PM",
-        "jamat": "10:59 PM"
+        "start": "10:53 PM",
+        "jamat": "11:15 PM"
       }
     },
     {
       "date": 27,
       "fajr": {
-        "start": "2:46 AM",
+        "start": "2:45 AM",
         "jamat": "4:00 AM"
       },
-      "sunrise": "4:47 AM",
+      "sunrise": "4:46 AM",
       "zuhr": {
-        "start": "1:16 PM",
-        "jamat": "1:30 PM"
+        "start": "1:15 PM",
+        "jamat": "1:45 PM"
       },
       "asr": {
-        "start": "6:50 PM",
+        "start": "6:59 PM",
         "jamat": "7:30 PM"
       },
       "maghrib": {
@@ -4280,8 +4281,8 @@
         "jamat": "9:39 PM"
       },
       "isha": {
-        "start": "10:53 PM",
-        "jamat": "10:58 PM"
+        "start": "10:52 PM",
+        "jamat": "11:15 PM"
       }
     },
     {
@@ -4292,8 +4293,8 @@
       },
       "sunrise": "4:47 AM",
       "zuhr": {
-        "start": "1:16 PM",
-        "jamat": "1:30 PM"
+        "start": "1:15 PM",
+        "jamat": "1:45 PM"
       },
       "asr": {
         "start": "6:50 PM",
@@ -4305,43 +4306,19 @@
       },
       "isha": {
         "start": "10:52 PM",
-        "jamat": "10:57 PM"
+        "jamat": "11:15 PM"
       }
     },
     {
       "date": 29,
       "fajr": {
-        "start": "2:49 AM",
+        "start": "2:48 AM",
         "jamat": "4:00 AM"
       },
       "sunrise": "4:48 AM",
       "zuhr": {
         "start": "1:16 PM",
-        "jamat": "1:30 PM"
-      },
-      "asr": {
-        "start": "6:50 PM",
-        "jamat": "7:30 PM"
-      },
-      "maghrib": {
-        "start": "9:33 PM",
-        "jamat": "9:38 PM"
-      },
-      "isha": {
-        "start": "10:51 PM",
-        "jamat": "10:56 PM"
-      }
-    },
-    {
-      "date": 30,
-      "fajr": {
-        "start": "2:49 AM",
-        "jamat": "4:00 AM"
-      },
-      "sunrise": "4:48 AM",
-      "zuhr": {
-        "start": "1:16 PM",
-        "jamat": "1:30 PM"
+        "jamat": "1:45 PM"
       },
       "asr": {
         "start": "6:50 PM",
@@ -4353,10 +4330,35 @@
       },
       "isha": {
         "start": "10:50 PM",
-        "jamat": "10:55 PM"
+        "jamat": "11:15 PM"
+      }
+    },
+    {
+      "date": 30,
+      "fajr": {
+        "start": "2:48 AM",
+        "jamat": "4:00 AM"
+      },
+      "sunrise": "4:48 AM",
+      "zuhr": {
+        "start": "1:16 PM",
+        "jamat": "1:45 PM"
+      },
+      "asr": {
+        "start": "6:50 PM",
+        "jamat": "7:30 PM"
+      },
+      "maghrib": {
+        "start": "9:33 PM",
+        "jamat": "9:38 PM"
+      },
+      "isha": {
+        "start": "10:49 PM",
+        "jamat": "11:15 PM"
       }
     }
   ],
+
   "July": [
     {
       "date": 1,
@@ -4367,10 +4369,10 @@
       "sunrise": "4:49 AM",
       "zuhr": {
         "start": "1:16 PM",
-        "jamat": "1:30 PM"
+        "jamat": "1:45 PM"
       },
       "asr": {
-        "start": "6:49 PM",
+        "start": "6:50 PM",
         "jamat": "7:30 PM"
       },
       "maghrib": {
@@ -4378,8 +4380,8 @@
         "jamat": "9:38 PM"
       },
       "isha": {
-        "start": "10:49 PM",
-        "jamat": "10:54 PM"
+        "start": "10:48 PM",
+        "jamat": "11:15 PM"
       }
     },
     {
@@ -4391,31 +4393,7 @@
       "sunrise": "4:50 AM",
       "zuhr": {
         "start": "1:16 PM",
-        "jamat": "1:30 PM"
-      },
-      "asr": {
-        "start": "6:49PM",
-        "jamat": "7:30 PM"
-      },
-      "maghrib": {
-        "start": "9:32 PM",
-        "jamat": "9:37 PM"
-      },
-      "isha": {
-        "start": "10:48 PM",
-        "jamat": "10:53 PM"
-      }
-    },
-    {
-      "date": 3,
-      "fajr": {
-        "start": "2:53 AM",
-        "jamat": "4:00 AM"
-      },
-      "sunrise": "4:51 AM",
-      "zuhr": {
-        "start": "1:16 PM",
-        "jamat": "1:30 PM"
+        "jamat": "1:45 PM"
       },
       "asr": {
         "start": "6:49 PM",
@@ -4426,8 +4404,32 @@
         "jamat": "9:37 PM"
       },
       "isha": {
-        "start": "10:48 PM",
-        "jamat": "10:53 PM"
+        "start": "10:47 PM",
+        "jamat": "11:15 PM"
+      }
+    },
+    {
+      "date": 3,
+      "fajr": {
+        "start": "2:52 AM",
+        "jamat": "4:00 AM"
+      },
+      "sunrise": "4:50 AM",
+      "zuhr": {
+        "start": "1:16 PM",
+        "jamat": "1:45 PM"
+      },
+      "asr": {
+        "start": "6:49 PM",
+        "jamat": "7:30 PM"
+      },
+      "maghrib": {
+        "start": "9:32 PM",
+        "jamat": "9:37 PM"
+      },
+      "isha": {
+        "start": "10:47 PM",
+        "jamat": "11:15 PM"
       }
     },
     {
@@ -4439,7 +4441,7 @@
       "sunrise": "4:51 AM",
       "zuhr": {
         "start": "1:17 PM",
-        "jamat": "1:30"
+        "jamat": "1:45 PM"
       },
       "asr": {
         "start": "6:49 PM",
@@ -4450,8 +4452,8 @@
         "jamat": "9:36 PM"
       },
       "isha": {
-        "start": "10:46 PM",
-        "jamat": "10:51 PM"
+        "start": "10:45 PM",
+        "jamat": "11:00 PM"
       }
     },
     {
@@ -4474,8 +4476,8 @@
         "jamat": "9:36 PM"
       },
       "isha": {
-        "start": "10:46 PM",
-        "jamat": "10:51 PM"
+        "start": "10:45 PM",
+        "jamat": "11:00 PM"
       }
     },
     {
@@ -4487,7 +4489,7 @@
       "sunrise": "4:53 AM",
       "zuhr": {
         "start": "1:17 PM",
-        "jamat": "1:30 PM"
+        "jamat": "1:45 PM"
       },
       "asr": {
         "start": "6:49 PM",
@@ -4498,32 +4500,32 @@
         "jamat": "9:35 PM"
       },
       "isha": {
-        "start": "10:45 PM",
-        "jamat": "10:50 PM"
+        "start": "10:44 PM",
+        "jamat": "11:00 PM"
       }
     },
     {
       "date": 7,
       "fajr": {
-        "start": "2:59 AM",
+        "start": "2:58 AM",
         "jamat": "4:00 AM"
       },
       "sunrise": "4:54 AM",
       "zuhr": {
         "start": "1:17 PM",
-        "jamat": "1:30 PM"
+        "jamat": "1:45 PM"
       },
       "asr": {
         "start": "6:49 PM",
         "jamat": "7:30 PM"
       },
       "maghrib": {
-        "start": "9:29 PM",
-        "jamat": "9:34 PM"
+        "start": "9:30 PM",
+        "jamat": "9:35 PM"
       },
       "isha": {
-        "start": "10:44 PM",
-        "jamat": "10:49 PM"
+        "start": "10:43 PM",
+        "jamat": "11:00 PM"
       }
     },
     {
@@ -4535,10 +4537,10 @@
       "sunrise": "4:55 AM",
       "zuhr": {
         "start": "1:17 PM",
-        "jamat": "1:30 PM"
+        "jamat": "1:45 PM"
       },
       "asr": {
-        "start": "6:48 PM",
+        "start": "6:49 PM",
         "jamat": "7:30 PM"
       },
       "maghrib": {
@@ -4546,20 +4548,20 @@
         "jamat": "9:34 PM"
       },
       "isha": {
-        "start": "10:43 PM",
-        "jamat": "10:48 PM"
+        "start": "10:42 PM",
+        "jamat": "11:00 PM"
       }
     },
     {
       "date": 9,
       "fajr": {
-        "start": "3:02 AM",
+        "start": "3:01 AM",
         "jamat": "4:00 AM"
       },
       "sunrise": "4:56 AM",
       "zuhr": {
         "start": "1:17 PM",
-        "jamat": "1:30 PM"
+        "jamat": "1:45 PM"
       },
       "asr": {
         "start": "6:48 PM",
@@ -4570,20 +4572,20 @@
         "jamat": "9:33 PM"
       },
       "isha": {
-        "start": "10:42 PM",
-        "jamat": "10:47 PM"
+        "start": "10:41 PM",
+        "jamat": "11:00 PM"
       }
     },
     {
       "date": 10,
       "fajr": {
-        "start": "3:03 AM",
+        "start": "3:02 AM",
         "jamat": "4:00 AM"
       },
       "sunrise": "4:57 AM",
       "zuhr": {
-        "start": "1:17 PM",
-        "jamat": "1:30 PM"
+        "start": "1:18 PM",
+        "jamat": "1:45 PM"
       },
       "asr": {
         "start": "6:48 PM",
@@ -4594,20 +4596,44 @@
         "jamat": "9:32 PM"
       },
       "isha": {
-        "start": "10:40 PM",
-        "jamat": "10:45 PM"
+        "start": "10:38 PM",
+        "jamat": "11:00 PM"
       }
     },
     {
       "date": 11,
       "fajr": {
-        "start": "3:05 AM",
-        "jamat": "4:00 AM"
+        "start": "3:03 AM",
+        "jamat": "4:15 AM"
       },
       "sunrise": "4:58 AM",
       "zuhr": {
         "start": "1:18 PM",
-        "jamat": "1:30 PM"
+        "jamat": "1:45 PM"
+      },
+      "asr": {
+        "start": "6:48 PM",
+        "jamat": "7:30 PM"
+      },
+      "maghrib": {
+        "start": "9:27 PM",
+        "jamat": "9:32 PM"
+      },
+      "isha": {
+        "start": "10:39 PM",
+        "jamat": "11:00 PM"
+      }
+    },
+    {
+      "date": 12,
+      "fajr": {
+        "start": "3:05 AM",
+        "jamat": "4:15 AM"
+      },
+      "sunrise": "4:59 AM",
+      "zuhr": {
+        "start": "1:18 PM",
+        "jamat": "1:45 PM"
       },
       "asr": {
         "start": "6:48 PM",
@@ -4618,14 +4644,14 @@
         "jamat": "9:31 PM"
       },
       "isha": {
-        "start": "10:40 PM",
-        "jamat": "10:45 PM"
+        "start": "10:38 PM",
+        "jamat": "11:00 PM"
       }
     },
     {
-      "date": 12,
+      "date": 13,
       "fajr": {
-        "start": "3:05 AM",
+        "start": "3:06 AM",
         "jamat": "4:15 AM"
       },
       "sunrise": "5:00 AM",
@@ -4642,32 +4668,8 @@
         "jamat": "9:30 PM"
       },
       "isha": {
-        "start": "10:39 PM",
-        "jamat": "10:44 PM"
-      }
-    },
-    {
-      "date": 13,
-      "fajr": {
-        "start": "3:06 AM",
-        "jamat": "4:15 AM"
-      },
-      "sunrise": "5:01 AM",
-      "zuhr": {
-        "start": "1:18 PM",
-        "jamat": "1:30 PM"
-      },
-      "asr": {
-        "start": "6:47 PM",
-        "jamat": "7:30 PM"
-      },
-      "maghrib": {
-        "start": "9:24 PM",
-        "jamat": "9:29 PM"
-      },
-      "isha": {
-        "start": "10:37 PM",
-        "jamat": "10:42 PM"
+        "start": "10:36 PM",
+        "jamat": "11:00 PM"
       }
     },
     {
@@ -4679,19 +4681,19 @@
       "sunrise": "5:02 AM",
       "zuhr": {
         "start": "1:18 PM",
-        "jamat": "1:30 PM"
+        "jamat": "1:45 PM"
       },
       "asr": {
         "start": "6:47 PM",
         "jamat": "7:30 PM"
       },
       "maghrib": {
-        "start": "9:23 PM",
-        "jamat": "9:28 PM"
+        "start": "9:24 PM",
+        "jamat": "9:29 PM"
       },
       "isha": {
-        "start": "10:36 PM",
-        "jamat": "10:41 PM"
+        "start": "10:35 PM",
+        "jamat": "11:00 PM"
       }
     },
     {
@@ -4703,19 +4705,19 @@
       "sunrise": "5:03 AM",
       "zuhr": {
         "start": "1:18 PM",
-        "jamat": "1:30 PM"
+        "jamat": "1:45 PM"
       },
       "asr": {
-        "start": "6:46 PM",
+        "start": "6:47 PM",
         "jamat": "7:30 PM"
       },
       "maghrib": {
-        "start": "9:22 PM",
-        "jamat": "9:27 PM"
+        "start": "9:23 PM",
+        "jamat": "9:28 PM"
       },
       "isha": {
-        "start": "10:35 PM",
-        "jamat": "10:40 PM"
+        "start": "10:34 PM",
+        "jamat": "11:00 PM"
       }
     },
     {
@@ -4727,7 +4729,7 @@
       "sunrise": "5:04 AM",
       "zuhr": {
         "start": "1:18 PM",
-        "jamat": "1:30 PM"
+        "jamat": "1:45 PM"
       },
       "asr": {
         "start": "6:46 PM",
@@ -4738,8 +4740,8 @@
         "jamat": "9:26 PM"
       },
       "isha": {
-        "start": "10:33 PM",
-        "jamat": "10:38 PM"
+        "start": "10:31 PM",
+        "jamat": "11:00 PM"
       }
     },
     {
@@ -4748,13 +4750,13 @@
         "start": "3:13 AM",
         "jamat": "4:15 AM"
       },
-      "sunrise": "5:06 AM",
+      "sunrise": "5:05 AM",
       "zuhr": {
         "start": "1:18 PM",
-        "jamat": "1:30 PM"
+        "jamat": "1:45 PM"
       },
       "asr": {
-        "start": "6:45 PM",
+        "start": "6:46 PM",
         "jamat": "7:30 PM"
       },
       "maghrib": {
@@ -4762,20 +4764,20 @@
         "jamat": "9:25 PM"
       },
       "isha": {
-        "start": "10:28 PM",
-        "jamat": "10:33 PM"
+        "start": "10:30 PM",
+        "jamat": "11:00 PM"
       }
     },
     {
       "date": 18,
       "fajr": {
         "start": "3:15 AM",
-        "jamat": "4:15 AM"
+        "jamat": "4:30 AM"
       },
       "sunrise": "5:07 AM",
       "zuhr": {
         "start": "1:18 PM",
-        "jamat": "1:30 PM"
+        "jamat": "1:45 PM"
       },
       "asr": {
         "start": "6:45 PM",
@@ -4786,8 +4788,8 @@
         "jamat": "9:24 PM"
       },
       "isha": {
-        "start": "10:27 PM",
-        "jamat": "10:32 PM"
+        "start": "10:29 PM",
+        "jamat": "10:45 PM"
       }
     },
     {
@@ -4802,7 +4804,7 @@
         "jamat": "1:45 PM"
       },
       "asr": {
-        "start": "6:44 PM",
+        "start": "6:45 PM",
         "jamat": "7:30 PM"
       },
       "maghrib": {
@@ -4810,32 +4812,32 @@
         "jamat": "9:23 PM"
       },
       "isha": {
-        "start": "10:26 PM",
-        "jamat": "10:31 PM"
+        "start": "10:27 PM",
+        "jamat": "10:45 PM"
       }
     },
     {
       "date": 20,
       "fajr": {
-        "start": "3:17 AM",
+        "start": "3:18 AM",
         "jamat": "4:30 AM"
       },
-      "sunrise": "5:10 AM",
+      "sunrise": "5:09 AM",
       "zuhr": {
-        "start": "1:18 PM",
-        "jamat": "1:30 PM"
+        "start": "1:19 PM",
+        "jamat": "1:45 PM"
       },
       "asr": {
-        "start": "6:43 PM",
+        "start": "6:44 PM",
         "jamat": "7:30 PM"
       },
       "maghrib": {
-        "start": "9:16 PM",
-        "jamat": "9:21 PM"
+        "start": "9:17 PM",
+        "jamat": "9:22 PM"
       },
       "isha": {
-        "start": "10:23 PM",
-        "jamat": "10:28 PM"
+        "start": "10:26 PM",
+        "jamat": "10:45 PM"
       }
     },
     {
@@ -4847,7 +4849,7 @@
       "sunrise": "5:11 AM",
       "zuhr": {
         "start": "1:19 PM",
-        "jamat": "1:30 PM"
+        "jamat": "1:45 PM"
       },
       "asr": {
         "start": "6:43 PM",
@@ -4858,8 +4860,8 @@
         "jamat": "9:20 PM"
       },
       "isha": {
-        "start": "10:22 PM",
-        "jamat": "10:27 PM"
+        "start": "10:24 PM",
+        "jamat": "10:45 PM"
       }
     },
     {
@@ -4868,10 +4870,10 @@
         "start": "3:22 AM",
         "jamat": "4:30 AM"
       },
-      "sunrise": "5:13 AM",
+      "sunrise": "5:12 AM",
       "zuhr": {
         "start": "1:19 PM",
-        "jamat": "1:30 PM"
+        "jamat": "1:45 PM"
       },
       "asr": {
         "start": "6:43 PM",
@@ -4882,44 +4884,44 @@
         "jamat": "9:19 PM"
       },
       "isha": {
-        "start": "10:20 PM",
-        "jamat": "10:25 PM"
+        "start": "10:22 PM",
+        "jamat": "10:45 PM"
       }
     },
     {
       "date": 23,
       "fajr": {
-        "start": "3:26 AM",
+        "start": "3:24 AM",
         "jamat": "4:30 AM"
       },
       "sunrise": "5:14 AM",
       "zuhr": {
         "start": "1:19 PM",
-        "jamat": "1:30 PM"
+        "jamat": "1:45 PM"
       },
       "asr": {
         "start": "6:42 PM",
         "jamat": "7:30 PM"
       },
       "maghrib": {
-        "start": "9:12 PM",
-        "jamat": "9:17 PM"
+        "start": "9:13 PM",
+        "jamat": "9:18 PM"
       },
       "isha": {
-        "start": "10:18 PM",
-        "jamat": "10:23 PM"
+        "start": "10:21 PM",
+        "jamat": "10:45 PM"
       }
     },
     {
       "date": 24,
       "fajr": {
-        "start": "3:27 AM",
+        "start": "3:26 AM",
         "jamat": "4:30 AM"
       },
       "sunrise": "5:15 AM",
       "zuhr": {
         "start": "1:19 PM",
-        "jamat": "1:30 PM"
+        "jamat": "1:45 PM"
       },
       "asr": {
         "start": "6:42 PM",
@@ -4930,15 +4932,15 @@
         "jamat": "9:16 PM"
       },
       "isha": {
-        "start": "10:18 PM",
-        "jamat": "10:23 PM"
+        "start": "10:19 PM",
+        "jamat": "10:45 PM"
       }
     },
     {
       "date": 25,
       "fajr": {
-        "start": "3:30 AM",
-        "jamat": "4:30 AM"
+        "start": "3:28 AM",
+        "jamat": "4:45 AM"
       },
       "sunrise": "5:17 AM",
       "zuhr": {
@@ -4950,3838 +4952,3843 @@
         "jamat": "7:30 PM"
       },
       "maghrib": {
-        "start": "9:09 PM",
-        "jamat": "9:14 PM"
+        "start": "9:10 PM",
+        "jamat": "9:15 PM"
       },
       "isha": {
-        "start": "10:16 PM",
-        "jamat": "10:21 PM"
+        "start": "10:17 PM",
+        "jamat": "10:30 PM"
       }
     },
     {
       "date": 26,
       "fajr": {
-        "start": "3:31 AM",
-        "jamat": "4:30 AM"
+        "start": "2:46 AM",
+        "jamat": "2:49 AM"
       },
-      "sunrise": "5:18 AM",
+      "sunrise": "5:16 AM",
       "zuhr": {
-        "start": "1:19 PM",
-        "jamat": "1:45 PM"
+        "start": "1:07 PM",
+        "jamat": "1:10 PM"
       },
       "asr": {
-        "start": "6:40 PM",
-        "jamat": "7:30 PM"
+        "start": "6:20 PM",
+        "jamat": "7:23 PM"
       },
       "maghrib": {
-        "start": "9:08 PM",
-        "jamat": "9:13 PM"
+        "start": "9:58 PM",
+        "jamat": "9:01 PM"
       },
       "isha": {
-        "start": "10:15 PM",
-        "jamat": "10:20 PM"
+        "start": "10:19 PM",
+        "jamat": "11:22 PM"
       }
     },
     {
       "date": 27,
       "fajr": {
-        "start": "3:31 AM",
-        "jamat": "4:30 AM"
+        "start": "2:47 AM",
+        "jamat": "4:50 AM"
       },
-      "sunrise": "5:20 AM",
+      "sunrise": "5:17 AM",
       "zuhr": {
-        "start": "1:19 PM",
-        "jamat": "1:30 PM"
+        "start": "1:07 PM",
+        "jamat": "1:10 PM"
       },
       "asr": {
-        "start": "6:39 PM",
-        "jamat": "7:30 PM"
+        "start": "5:20 PM",
+        "jamat": "5:23 PM"
       },
       "maghrib": {
-        "start": "9:06 PM",
-        "jamat": "9:11 PM"
+        "start": "8:56 PM",
+        "jamat": "9:59 PM"
       },
       "isha": {
-        "start": "10:12 PM",
-        "jamat": "10:17 PM"
+        "start": "11:18 PM",
+        "jamat": "11:21 PM"
       }
     },
     {
       "date": 28,
       "fajr": {
-        "start": "3:34 AM",
-        "jamat": "4:30 AM"
+        "start": "2:47 AM",
+        "jamat": "2:50 AM"
       },
-      "sunrise": "5:21 AM",
+      "sunrise": "5:19 AM",
       "zuhr": {
-        "start": "1:19 PM",
-        "jamat": "1:30 PM"
+        "start": "1:07 PM",
+        "jamat": "1:10 PM"
       },
       "asr": {
-        "start": "6:38 PM",
-        "jamat": "7:30 PM"
+        "start": "5:19 PM",
+        "jamat": "5:22 PM"
       },
       "maghrib": {
-        "start": "9:05 PM",
-        "jamat": "9:10 PM"
+        "start": "8:55 PM",
+        "jamat": "8:58 PM"
       },
       "isha": {
-        "start": "10:11 PM",
-        "jamat": "10:16 PM"
+        "start": "11:17 PM",
+        "jamat": "11:20 PM"
       }
     },
     {
       "date": 29,
       "fajr": {
-        "start": "3:35 AM",
-        "jamat": "4:30 AM"
+        "start": "2:48 AM",
+        "jamat": "2:51 AM"
       },
-      "sunrise": "5:23 AM",
+      "sunrise": "5:20 AM",
       "zuhr": {
-        "start": "1:19 PM",
-        "jamat": "1:30 PM"
+        "start": "1:07 PM",
+        "jamat": "1:10 PM"
       },
       "asr": {
-        "start": "6:38 PM",
-        "jamat": "7:30 PM"
+        "start": "5:19 PM",
+        "jamat": "5:22 PM"
       },
       "maghrib": {
-        "start": "9:03 PM",
-        "jamat": "9:08 PM"
+        "start": "8:53 PM",
+        "jamat": "8:56 PM"
       },
       "isha": {
-        "start": "10:09 PM",
-        "jamat": "10:14 PM"
+        "start": "11:17 PM",
+        "jamat": "11:20 PM"
       }
     },
     {
       "date": 30,
       "fajr": {
-        "start": "3:38 AM",
-        "jamat": "4:30 AM"
+        "start": "2:49 AM",
+        "jamat": "2:52 AM"
       },
-      "sunrise": "5:25 AM",
+      "sunrise": "5:22 AM",
       "zuhr": {
-        "start": "1:19 PM",
-        "jamat": "1:30 PM"
+        "start": "1:07 PM",
+        "jamat": "1:10 PM"
       },
       "asr": {
-        "start": "6:37 PM",
-        "jamat": "7:30 PM"
+        "start": "5:18 PM",
+        "jamat": "5:21 PM"
       },
       "maghrib": {
-        "start": "9:01 PM",
-        "jamat": "9:06 PM"
+        "start": "8:51 PM",
+        "jamat": "8:54 PM"
       },
       "isha": {
-        "start": "10:08 PM",
-        "jamat": "10:13 PM"
+        "start": "11:16 PM",
+        "jamat": "11:19 PM"
       }
     },
     {
       "date": 31,
       "fajr": {
-        "start": "3:40 AM",
-        "jamat": "4:30 AM"
+        "start": "2:49 AM",
+        "jamat": "2:52 AM"
       },
-      "sunrise": "5:26 AM",
+      "sunrise": "5:23 AM",
       "zuhr": {
-        "start": "1:18 PM",
-        "jamat": "1:30 PM"
+        "start": "1:07 PM",
+        "jamat": "1:10 PM"
       },
       "asr": {
-        "start": "6:36 PM",
-        "jamat": "7:30 PM"
+        "start": "5:17 PM",
+        "jamat": "5:20 PM"
       },
       "maghrib": {
-        "start": "9:00 PM",
-        "jamat": "9:05 PM"
+        "start": "8:50 PM",
+        "jamat": "8:53 PM"
       },
       "isha": {
-        "start": "10:08 PM",
-        "jamat": "10:13 PM"
+        "start": "11:15 PM",
+        "jamat": "11:18 PM"
       }
     }
   ],
+
   "August": [
     {
       "date": 1,
       "fajr": {
-        "start": "3:42 AM",
-        "jamat": "4:30 AM"
+        "start": "2:50 AM",
+        "jamat": "2:53 AM"
       },
-      "sunrise": "5:27 AM",
+      "sunrise": "5:25 AM",
       "zuhr": {
-        "start": "1:18 PM",
-        "jamat": "1:30 PM"
+        "start": "1:07 PM",
+        "jamat": "1:10 PM"
       },
       "asr": {
-        "start": "6:30 PM",
-        "jamat": "7:30 PM"
+        "start": "5:17 PM",
+        "jamat": "5:20 PM"
       },
       "maghrib": {
-        "start": "8:58 PM",
-        "jamat": "9:05 PM"
+        "start": "8:48 PM",
+        "jamat": "8:51 PM"
       },
       "isha": {
-        "start": "10:07 PM",
-        "jamat": "10:11 PM"
+        "start": "11:15 PM",
+        "jamat": "11:18 PM"
       }
     },
     {
       "date": 2,
       "fajr": {
-        "start": "3:44 AM",
-        "jamat": "4:45 AM"
+        "start": "2:50 AM",
+        "jamat": "2:53 AM"
       },
-      "sunrise": "5:28 AM",
+      "sunrise": "5:26 AM",
       "zuhr": {
-        "start": "1:18 PM",
-        "jamat": "1:30 PM"
+        "start": "1:07 PM",
+        "jamat": "1:10 PM"
       },
       "asr": {
-        "start": "6:29 PM",
-        "jamat": "7:30 PM"
+        "start": "5:16 PM",
+        "jamat": "5:19 PM"
       },
       "maghrib": {
-        "start": "8:56 PM",
-        "jamat": "9:03 PM"
+        "start": "8:47 PM",
+        "jamat": "8:50 PM"
       },
       "isha": {
-        "start": "10:05 PM",
-        "jamat": "10:10 PM"
+        "start": "11:14 PM",
+        "jamat": "11:17 PM"
       }
     },
     {
       "date": 3,
       "fajr": {
-        "start": "3:46 AM",
-        "jamat": "4:45 AM"
+        "start": "2:51 AM",
+        "jamat": "2:54 AM"
       },
-      "sunrise": "5:30 AM",
+      "sunrise": "5:28 AM",
       "zuhr": {
-        "start": "1:18 PM",
-        "jamat": "1:30 PM"
+        "start": "1:07 PM",
+        "jamat": "1:10 PM"
       },
       "asr": {
-        "start": "6:28 PM",
-        "jamat": "7:30 PM"
+        "start": "5:15 PM",
+        "jamat": "5:18 PM"
       },
       "maghrib": {
-        "start": "8:55 PM",
-        "jamat": "9:02 PM"
+        "start": "8:45 PM",
+        "jamat": "8:48 PM"
       },
       "isha": {
-        "start": "10:03 PM",
-        "jamat": "10:08 PM"
+        "start": "11:13 PM",
+        "jamat": "11:16 PM"
       }
     },
     {
       "date": 4,
       "fajr": {
-        "start": "3:48 AM",
-        "jamat": "4:45 AM"
+        "start": "2:51 AM",
+        "jamat": "2:54 AM"
       },
-      "sunrise": "5:32 AM",
+      "sunrise": "5:29 AM",
       "zuhr": {
-        "start": "1:18 PM",
-        "jamat": "1:30 PM"
+        "start": "1:07 PM",
+        "jamat": "1:10 PM"
       },
       "asr": {
-        "start": "6:27 PM",
-        "jamat": "7:30 PM"
+        "start": "5:14 PM",
+        "jamat": "5:17 PM"
       },
       "maghrib": {
-        "start": "8:53 PM",
-        "jamat": "9:00 PM"
+        "start": "8:43 PM",
+        "jamat": "8:46 PM"
       },
       "isha": {
-        "start": "10:02 PM",
-        "jamat": "10:07 PM"
+        "start": "11:11 PM",
+        "jamat": "11:14 PM"
       }
     },
     {
       "date": 5,
       "fajr": {
-        "start": "3:50 AM",
-        "jamat": "4:45 AM"
+        "start": "2:52 AM",
+        "jamat": "2:55 AM"
       },
-      "sunrise": "5:33 AM",
+      "sunrise": "5:31 AM",
       "zuhr": {
-        "start": "1:18 PM",
-        "jamat": "1:30 PM"
+        "start": "1:06 PM",
+        "jamat": "1:09 PM"
       },
       "asr": {
-        "start": "6:25 PM",
-        "jamat": "7:30 PM"
+        "start": "5:14 PM",
+        "jamat": "5:17 PM"
       },
       "maghrib": {
-        "start": "8:51 PM",
-        "jamat": "8:59 PM"
+        "start": "8:41 PM",
+        "jamat": "8:44 PM"
       },
       "isha": {
-        "start": "10:00 PM",
-        "jamat": "10:05 PM"
+        "start": "11:08 PM",
+        "jamat": "11:11 PM"
       }
     },
     {
       "date": 6,
       "fajr": {
-        "start": "3:52 AM",
-        "jamat": "4:45 AM"
+        "start": "2:53 AM",
+        "jamat": "2:56 AM"
       },
-      "sunrise": "5:35 AM",
+      "sunrise": "5:32 AM",
       "zuhr": {
-        "start": "1:18 PM",
-        "jamat": "1:30 PM"
+        "start": "1:06 PM",
+        "jamat": "1:09 PM"
       },
       "asr": {
-        "start": "6:24 PM",
-        "jamat": "7:30 PM"
+        "start": "5:13 PM",
+        "jamat": "5:16 PM"
       },
       "maghrib": {
-        "start": "8:49 PM",
-        "jamat": "8:56 PM"
+        "start": "8:40 PM",
+        "jamat": "8:43 PM"
       },
       "isha": {
-        "start": "9:59 PM",
-        "jamat": "10:04 PM"
+        "start": "11:04 PM",
+        "jamat": "11:07 PM"
       }
     },
     {
       "date": 7,
       "fajr": {
-        "start": "3:54 AM",
-        "jamat": "4:45 AM"
+        "start": "2:57 AM",
+        "jamat": "3:00 AM"
       },
-      "sunrise": "5:36 AM",
+      "sunrise": "5:34 AM",
       "zuhr": {
-        "start": "1:17 PM",
-        "jamat": "1:30 PM"
+        "start": "1:06 PM",
+        "jamat": "1:09 PM"
       },
       "asr": {
-        "start": "6:23 PM",
-        "jamat": "7:30 PM"
+        "start": "5:12 PM",
+        "jamat": "5:15 PM"
       },
       "maghrib": {
-        "start": "8:47 PM",
-        "jamat": "8:54 PM"
+        "start": "8:38 PM",
+        "jamat": "8:41 PM"
       },
       "isha": {
-        "start": "9:57 PM",
-        "jamat": "10:02 PM"
+        "start": "11:01 PM",
+        "jamat": "11:04 PM"
       }
     },
     {
       "date": 8,
       "fajr": {
-        "start": "3:56 AM",
-        "jamat": "4:45 AM"
+        "start": "3:00 AM",
+        "jamat": "3:03 AM"
+      },
+      "sunrise": "5:35 AM",
+      "zuhr": {
+        "start": "1:06 PM",
+        "jamat": "1:09 PM"
+      },
+      "asr": {
+        "start": "5:11 PM",
+        "jamat": "5:14 PM"
+      },
+      "maghrib": {
+        "start": "8:36 PM",
+        "jamat": "8:39 PM"
+      },
+      "isha": {
+        "start": "10:57 PM",
+        "jamat": "11:00 PM"
+      }
+    },
+    {
+      "date": 9,
+      "fajr": {
+        "start": "3:04 AM",
+        "jamat": "3:07 AM"
+      },
+      "sunrise": "5:37 AM",
+      "zuhr": {
+        "start": "1:06 PM",
+        "jamat": "1:09 PM"
+      },
+      "asr": {
+        "start": "5:10 PM",
+        "jamat": "5:13 PM"
+      },
+      "maghrib": {
+        "start": "8:34 PM",
+        "jamat": "8:37 PM"
+      },
+      "isha": {
+        "start": "10:54 PM",
+        "jamat": "10:57 PM"
+      }
+    },
+    {
+      "date": 10,
+      "fajr": {
+        "start": "3:07 AM",
+        "jamat": "3:10 AM"
       },
       "sunrise": "5:38 AM",
       "zuhr": {
-        "start": "1:17 PM",
-        "jamat": "1:30 PM"
+        "start": "1:06 PM",
+        "jamat": "1:09 PM"
       },
       "asr": {
-        "start": "6:22 PM",
-        "jamat": "7:30 PM"
+        "start": "5:09 PM",
+        "jamat": "5:12 PM"
       },
       "maghrib": {
-        "start": "8:45 PM",
-        "jamat": "8:52 PM"
+        "start": "8:32 PM",
+        "jamat": "8:35 PM"
       },
       "isha": {
-        "start": "9:55 PM",
+        "start": "10:51 PM",
+        "jamat": "10:54 PM"
+      }
+    },
+    {
+      "date": 11,
+      "fajr": {
+        "start": "3:10 AM",
+        "jamat": "3:13 AM"
+      },
+      "sunrise": "5:40 AM",
+      "zuhr": {
+        "start": "1:06 PM",
+        "jamat": "1:09 PM"
+      },
+      "asr": {
+        "start": "5:08 PM",
+        "jamat": "5:11 PM"
+      },
+      "maghrib": {
+        "start": "8:30 PM",
+        "jamat": "8:33 PM"
+      },
+      "isha": {
+        "start": "10:47 PM",
+        "jamat": "10:50 PM"
+      }
+    },
+    {
+      "date": 12,
+      "fajr": {
+        "start": "3:14 AM",
+        "jamat": "3:17 AM"
+      },
+      "sunrise": "5:42 AM",
+      "zuhr": {
+        "start": "1:05 PM",
+        "jamat": "1:08 PM"
+      },
+      "asr": {
+        "start": "5:07 PM",
+        "jamat": "5:10 PM"
+      },
+      "maghrib": {
+        "start": "8:28 PM",
+        "jamat": "8:31 PM"
+      },
+      "isha": {
+        "start": "10:44 PM",
+        "jamat": "10:47 PM"
+      }
+    },
+    {
+      "date": 13,
+      "fajr": {
+        "start": "3:17 AM",
+        "jamat": "3:20 AM"
+      },
+      "sunrise": "5:43 AM",
+      "zuhr": {
+        "start": "1:05 PM",
+        "jamat": "1:08 PM"
+      },
+      "asr": {
+        "start": "5:07 PM",
+        "jamat": "5:10 PM"
+      },
+      "maghrib": {
+        "start": "8:27 PM",
+        "jamat": "8:30 PM"
+      },
+      "isha": {
+        "start": "10:41 PM",
+        "jamat": "10:44 PM"
+      }
+    },
+    {
+      "date": 14,
+      "fajr": {
+        "start": "3:20 AM",
+        "jamat": "3:23 AM"
+      },
+      "sunrise": "5:45 AM",
+      "zuhr": {
+        "start": "1:05 PM",
+        "jamat": "1:08 PM"
+      },
+      "asr": {
+        "start": "5:06 PM",
+        "jamat": "5:09 PM"
+      },
+      "maghrib": {
+        "start": "8:25 PM",
+        "jamat": "8:28 PM"
+      },
+      "isha": {
+        "start": "10:38 PM",
+        "jamat": "10:41 PM"
+      }
+    },
+    {
+      "date": 15,
+      "fajr": {
+        "start": "3:23 AM",
+        "jamat": "3:26 AM"
+      },
+      "sunrise": "5:46 AM",
+      "zuhr": {
+        "start": "1:05 PM",
+        "jamat": "1:08 PM"
+      },
+      "asr": {
+        "start": "5:04 PM",
+        "jamat": "5:07 PM"
+      },
+      "maghrib": {
+        "start": "8:23 PM",
+        "jamat": "8:26 PM"
+      },
+      "isha": {
+        "start": "10:34 PM",
+        "jamat": "10:37 PM"
+      }
+    },
+    {
+      "date": 16,
+      "fajr": {
+        "start": "3:26 AM",
+        "jamat": "3:29 AM"
+      },
+      "sunrise": "5:48 AM",
+      "zuhr": {
+        "start": "1:05 PM",
+        "jamat": "1:08 PM"
+      },
+      "asr": {
+        "start": "5:03 PM",
+        "jamat": "5:06 PM"
+      },
+      "maghrib": {
+        "start": "8:21 PM",
+        "jamat": "8:24 PM"
+      },
+      "isha": {
+        "start": "10:31 PM",
+        "jamat": "10:34 PM"
+      }
+    },
+    {
+      "date": 17,
+      "fajr": {
+        "start": "3:29 AM",
+        "jamat": "3:32 AM"
+      },
+      "sunrise": "5:49 AM",
+      "zuhr": {
+        "start": "1:04 PM",
+        "jamat": "1:07 PM"
+      },
+      "asr": {
+        "start": "5:02 PM",
+        "jamat": "5:05 PM"
+      },
+      "maghrib": {
+        "start": "8:19 PM",
+        "jamat": "8:22 PM"
+      },
+      "isha": {
+        "start": "10:28 PM",
+        "jamat": "10:31 PM"
+      }
+    },
+    {
+      "date": 18,
+      "fajr": {
+        "start": "3:32 AM",
+        "jamat": "3:35 AM"
+      },
+      "sunrise": "5:51 AM",
+      "zuhr": {
+        "start": "1:04 PM",
+        "jamat": "1:07 PM"
+      },
+      "asr": {
+        "start": "5:01 PM",
+        "jamat": "5:04 PM"
+      },
+      "maghrib": {
+        "start": "8:17 PM",
+        "jamat": "8:20 PM"
+      },
+      "isha": {
+        "start": "10:25 PM",
+        "jamat": "10:28 PM"
+      }
+    },
+    {
+      "date": 19,
+      "fajr": {
+        "start": "3:35 AM",
+        "jamat": "3:38 AM"
+      },
+      "sunrise": "5:53 AM",
+      "zuhr": {
+        "start": "1:04 PM",
+        "jamat": "1:07 PM"
+      },
+      "asr": {
+        "start": "5:00 PM",
+        "jamat": "5:03 PM"
+      },
+      "maghrib": {
+        "start": "8:14 PM",
+        "jamat": "8:17 PM"
+      },
+      "isha": {
+        "start": "10:22 PM",
+        "jamat": "10:25 PM"
+      }
+    },
+    {
+      "date": 20,
+      "fajr": {
+        "start": "3:37 AM",
+        "jamat": "3:40 AM"
+      },
+      "sunrise": "5:54 AM",
+      "zuhr": {
+        "start": "1:04 PM",
+        "jamat": "1:07 PM"
+      },
+      "asr": {
+        "start": "4:59 PM",
+        "jamat": "5:02 PM"
+      },
+      "maghrib": {
+        "start": "8:12 PM",
+        "jamat": "8:15 PM"
+      },
+      "isha": {
+        "start": "10:19 PM",
+        "jamat": "10:22 PM"
+      }
+    },
+    {
+      "date": 21,
+      "fajr": {
+        "start": "3:40 AM",
+        "jamat": "3:43 AM"
+      },
+      "sunrise": "5:56 AM",
+      "zuhr": {
+        "start": "1:04 PM",
+        "jamat": "1:07 PM"
+      },
+      "asr": {
+        "start": "4:58 PM",
+        "jamat": "5:01 PM"
+      },
+      "maghrib": {
+        "start": "8:10 PM",
+        "jamat": "8:13 PM"
+      },
+      "isha": {
+        "start": "10:16 PM",
+        "jamat": "10:19 PM"
+      }
+    },
+    {
+      "date": 22,
+      "fajr": {
+        "start": "3:43 AM",
+        "jamat": "3:46 AM"
+      },
+      "sunrise": "5:57 AM",
+      "zuhr": {
+        "start": "1:03 PM",
+        "jamat": "1:06 PM"
+      },
+      "asr": {
+        "start": "4:57 PM",
+        "jamat": "5:00 PM"
+      },
+      "maghrib": {
+        "start": "8:08 PM",
+        "jamat": "8:11 PM"
+      },
+      "isha": {
+        "start": "10:13 PM",
+        "jamat": "10:16 PM"
+      }
+    },
+    {
+      "date": 23,
+      "fajr": {
+        "start": "3:46 AM",
+        "jamat": "3:49 AM"
+      },
+      "sunrise": "5:59 AM",
+      "zuhr": {
+        "start": "1:03 PM",
+        "jamat": "1:06 PM"
+      },
+      "asr": {
+        "start": "4:56 PM",
+        "jamat": "4:59 PM"
+      },
+      "maghrib": {
+        "start": "8:06 PM",
+        "jamat": "8:09 PM"
+      },
+      "isha": {
+        "start": "10:09 PM",
+        "jamat": "10:12 PM"
+      }
+    },
+    {
+      "date": 24,
+      "fajr": {
+        "start": "3:48 AM",
+        "jamat": "3:51 AM"
+      },
+      "sunrise": "6:01 AM",
+      "zuhr": {
+        "start": "1:03 PM",
+        "jamat": "1:06 PM"
+      },
+      "asr": {
+        "start": "4:54 PM",
+        "jamat": "4:57 PM"
+      },
+      "maghrib": {
+        "start": "8:04 PM",
+        "jamat": "8:07 PM"
+      },
+      "isha": {
+        "start": "10:06 PM",
+        "jamat": "10:09 PM"
+      }
+    },
+    {
+      "date": 25,
+      "fajr": {
+        "start": "3:51 AM",
+        "jamat": "3:54 AM"
+      },
+      "sunrise": "6:02 AM",
+      "zuhr": {
+        "start": "1:02 PM",
+        "jamat": "1:05 PM"
+      },
+      "asr": {
+        "start": "4:53 PM",
+        "jamat": "4:56 PM"
+      },
+      "maghrib": {
+        "start": "8:02 PM",
+        "jamat": "8:05 PM"
+      },
+      "isha": {
+        "start": "10:03 PM",
+        "jamat": "10:06 PM"
+      }
+    },
+    {
+      "date": 26,
+      "fajr": {
+        "start": "3:54 AM",
+        "jamat": "3:57 AM"
+      },
+      "sunrise": "6:04 AM",
+      "zuhr": {
+        "start": "1:02 PM",
+        "jamat": "1:05 PM"
+      },
+      "asr": {
+        "start": "4:52 PM",
+        "jamat": "4:55 PM"
+      },
+      "maghrib": {
+        "start": "8:00 PM",
+        "jamat": "8:03 PM"
+      },
+      "isha": {
+        "start": "10:00 PM",
+        "jamat": "10:03 PM"
+      }
+    },
+    {
+      "date": 27,
+      "fajr": {
+        "start": "3:56 AM",
+        "jamat": "3:59 AM"
+      },
+      "sunrise": "6:05 AM",
+      "zuhr": {
+        "start": "1:02 PM",
+        "jamat": "1:05 PM"
+      },
+      "asr": {
+        "start": "4:51 PM",
+        "jamat": "4:54 PM"
+      },
+      "maghrib": {
+        "start": "7:57 PM",
+        "jamat": "8:00 PM"
+      },
+      "isha": {
+        "start": "9:57 PM",
         "jamat": "10:00 PM"
       }
     },
     {
-      "date": 9,
-      "fajr": {
-        "start": "3:58 AM",
-        "jamat": "5:00 AM"
-      },
-      "sunrise": "5:40 AM",
-      "zuhr": {
-        "start": "1:17 PM",
-        "jamat": "1:30 PM"
-      },
-      "asr": {
-        "start": "6:20 PM",
-        "jamat": "7:30 PM"
-      },
-      "maghrib": {
-        "start": "8:43 PM",
-        "jamat": "8:50 PM"
-      },
-      "isha": {
-        "start": "9:53 PM",
-        "jamat": "9:58 PM"
-      }
-    },
-    {
-      "date": 10,
-      "fajr": {
-        "start": "4:00 AM",
-        "jamat": "5:00 AM"
-      },
-      "sunrise": "5:41 AM",
-      "zuhr": {
-        "start": "1:17 PM",
-        "jamat": "1:30 PM"
-      },
-      "asr": {
-        "start": "6:19 PM",
-        "jamat": "7:30 PM"
-      },
-      "maghrib": {
-        "start": "8:41 PM",
-        "jamat": "8:48 PM"
-      },
-      "isha": {
-        "start": "9:51 PM",
-        "jamat": "9:56 PM"
-      }
-    },
-    {
-      "date": 11,
-      "fajr": {
-        "start": "4:01 AM",
-        "jamat": "5:00 AM"
-      },
-      "sunrise": "5:43 AM",
-      "zuhr": {
-        "start": "1:17 PM",
-        "jamat": "1:30 PM"
-      },
-      "asr": {
-        "start": "6:18 PM",
-        "jamat": "7:30 PM"
-      },
-      "maghrib": {
-        "start": "8:40 PM",
-        "jamat": "8:47 PM"
-      },
-      "isha": {
-        "start": "9:50 PM",
-        "jamat": "9:55 PM"
-      }
-    },
-    {
-      "date": 12,
-      "fajr": {
-        "start": "4:04 AM",
-        "jamat": "5:00 AM"
-      },
-      "sunrise": "5:45 AM",
-      "zuhr": {
-        "start": "1:17 PM",
-        "jamat": "1:30 PM"
-      },
-      "asr": {
-        "start": "6:16 PM",
-        "jamat": "7:30 PM"
-      },
-      "maghrib": {
-        "start": "8:38 PM",
-        "jamat": "8:44 PM"
-      },
-      "isha": {
-        "start": "9:48 PM",
-        "jamat": "9:53 PM"
-      }
-    },
-    {
-      "date": 13,
-      "fajr": {
-        "start": "4:06 AM",
-        "jamat": "5:00 AM"
-      },
-      "sunrise": "5:46 AM",
-      "zuhr": {
-        "start": "1:16 PM",
-        "jamat": "1:30 PM"
-      },
-      "asr": {
-        "start": "6:15 PM",
-        "jamat": "7:30 PM"
-      },
-      "maghrib": {
-        "start": "8:35 PM",
-        "jamat": "8:42 PM"
-      },
-      "isha": {
-        "start": "9:46 PM",
-        "jamat": "9:51 PM"
-      }
-    },
-    {
-      "date": 14,
-      "fajr": {
-        "start": "4:08 AM",
-        "jamat": "5:00 AM"
-      },
-      "sunrise": "5:48 AM",
-      "zuhr": {
-        "start": "1:16 PM",
-        "jamat": "1:30 PM"
-      },
-      "asr": {
-        "start": "6:14 PM",
-        "jamat": "7:30 PM"
-      },
-      "maghrib": {
-        "start": "8:33 PM",
-        "jamat": "8:41 PM"
-      },
-      "isha": {
-        "start": "9:44 PM",
-        "jamat": "9:49 PM"
-      }
-    },
-    {
-      "date": 15,
-      "fajr": {
-        "start": "4:10 AM",
-        "jamat": "5:00 AM"
-      },
-      "sunrise": "5:50 AM",
-      "zuhr": {
-        "start": "1:16 PM",
-        "jamat": "1:30 PM"
-      },
-      "asr": {
-        "start": "6:12 PM",
-        "jamat": "7:30 PM"
-      },
-      "maghrib": {
-        "start": "8:33 PM",
-        "jamat": "8:39 PM"
-      },
-      "isha": {
-        "start": "9:42 PM",
-        "jamat": "9:47 PM"
-      }
-    },
-    {
-      "date": 16,
-      "fajr": {
-        "start": "4:12 AM",
-        "jamat": "5:15 AM"
-      },
-      "sunrise": "5:51 AM",
-      "zuhr": {
-        "start": "1:16 PM",
-        "jamat": "1:30 PM"
-      },
-      "asr": {
-        "start": "6:11 PM",
-        "jamat": "6:30 PM"
-      },
-      "maghrib": {
-        "start": "8:31 PM",
-        "jamat": "8:37 PM"
-      },
-      "isha": {
-        "start": "9:41 PM",
-        "jamat": "9:46 PM"
-      }
-    },
-    {
-      "date": 17,
-      "fajr": {
-        "start": "4:14 AM",
-        "jamat": "5:15 AM"
-      },
-      "sunrise": "5:53 AM",
-      "zuhr": {
-        "start": "1:15 PM",
-        "jamat": "1:30 PM"
-      },
-      "asr": {
-        "start": "6:09 PM",
-        "jamat": "6:30 PM"
-      },
-      "maghrib": {
-        "start": "8:29 PM",
-        "jamat": "8:35 PM"
-      },
-      "isha": {
-        "start": "9:39 PM",
-        "jamat": "9:44 PM"
-      }
-    },
-    {
-      "date": 18,
-      "fajr": {
-        "start": "4:16 AM",
-        "jamat": "5:15 AM"
-      },
-      "sunrise": "5:55 AM",
-      "zuhr": {
-        "start": "1:15 PM",
-        "jamat": "1:30 PM"
-      },
-      "asr": {
-        "start": "6:08 PM",
-        "jamat": "6:30 PM"
-      },
-      "maghrib": {
-        "start": "8:27 PM",
-        "jamat": "8:33 PM"
-      },
-      "isha": {
-        "start": "9:37 PM",
-        "jamat": "9:42 PM"
-      }
-    },
-    {
-      "date": 19,
-      "fajr": {
-        "start": "4:18 AM",
-        "jamat": "5:15 AM"
-      },
-      "sunrise": "5:56 AM",
-      "zuhr": {
-        "start": "1:15 PM",
-        "jamat": "1:30 PM"
-      },
-      "asr": {
-        "start": "6:06 PM",
-        "jamat": "6:30 PM"
-      },
-      "maghrib": {
-        "start": "8:25 PM",
-        "jamat": "8:31 PM"
-      },
-      "isha": {
-        "start": "9:35 PM",
-        "jamat": "9:40 PM"
-      }
-    },
-    {
-      "date": 20,
-      "fajr": {
-        "start": "4:20 AM",
-        "jamat": "5:15 AM"
-      },
-      "sunrise": "5:58 AM",
-      "zuhr": {
-        "start": "1:15 PM",
-        "jamat": "1:30 PM"
-      },
-      "asr": {
-        "start": "6:05 PM",
-        "jamat": "6:30 PM"
-      },
-      "maghrib": {
-        "start": "8:22 PM",
-        "jamat": "8:28 PM"
-      },
-      "isha": {
-        "start": "9:33 PM",
-        "jamat": "9:38 PM"
-      }
-    },
-    {
-      "date": 21,
-      "fajr": {
-        "start": "4:22 AM",
-        "jamat": "5:15 AM"
-      },
-      "sunrise": "6:00 AM",
-      "zuhr": {
-        "start": "1:14 PM",
-        "jamat": "1:30 PM"
-      },
-      "asr": {
-        "start": "6:03 PM",
-        "jamat": "6:30 PM"
-      },
-      "maghrib": {
-        "start": "8:20 PM",
-        "jamat": "8:26 PM"
-      },
-      "isha": {
-        "start": "9:32 PM",
-        "jamat": "9:37 PM"
-      }
-    },
-    {
-      "date": 22,
-      "fajr": {
-        "start": "4:24 AM",
-        "jamat": "5:15 AM"
-      },
-      "sunrise": "6:01 AM",
-      "zuhr": {
-        "start": "1:14 PM",
-        "jamat": "1:30 PM"
-      },
-      "asr": {
-        "start": "6:02 PM",
-        "jamat": "6:30 PM"
-      },
-      "maghrib": {
-        "start": "8:18 PM",
-        "jamat": "8:24 PM"
-      },
-      "isha": {
-        "start": "9:29 PM",
-        "jamat": "9:34 PM"
-      }
-    },
-    {
-      "date": 23,
-      "fajr": {
-        "start": "4:26 AM",
-        "jamat": "5:15 AM"
-      },
-      "sunrise": "6:03 AM",
-      "zuhr": {
-        "start": "1:14 PM",
-        "jamat": "1:30 PM"
-      },
-      "asr": {
-        "start": "6:00 PM",
-        "jamat": "6:30 PM"
-      },
-      "maghrib": {
-        "start": "8:16 PM",
-        "jamat": "8:22 PM"
-      },
-      "isha": {
-        "start": "9:27 PM",
-        "jamat": "9:33 PM"
-      }
-    },
-    {
-      "date": 24,
-      "fajr": {
-        "start": "4:28 AM",
-        "jamat": "5:30 AM"
-      },
-      "sunrise": "6:05 AM",
-      "zuhr": {
-        "start": "1:14 PM",
-        "jamat": "1:30 PM"
-      },
-      "asr": {
-        "start": "5:58 PM",
-        "jamat": "6:30 PM"
-      },
-      "maghrib": {
-        "start": "8:14 PM",
-        "jamat": "8:20 PM"
-      },
-      "isha": {
-        "start": "9:25 PM",
-        "jamat": "9:30 PM"
-      }
-    },
-    {
-      "date": 25,
-      "fajr": {
-        "start": "4:30 AM",
-        "jamat": "5:30 AM"
-      },
-      "sunrise": "6:06 AM",
-      "zuhr": {
-        "start": "1:13 PM",
-        "jamat": "1:30 PM"
-      },
-      "asr": {
-        "start": "5:57 PM",
-        "jamat": "6:30 PM"
-      },
-      "maghrib": {
-        "start": "8:09 PM",
-        "jamat": "8:18 PM"
-      },
-      "isha": {
-        "start": "9:24 PM",
-        "jamat": "9:29 PM"
-      }
-    },
-    {
-      "date": 26,
-      "fajr": {
-        "start": "4:32 AM",
-        "jamat": "5:30 AM"
-      },
-      "sunrise": "6:08 AM",
-      "zuhr": {
-        "start": "1:13 PM",
-        "jamat": "1:30 PM"
-      },
-      "asr": {
-        "start": "5:55 PM",
-        "jamat": "6:30 PM"
-      },
-      "maghrib": {
-        "start": "8:09 PM",
-        "jamat": "8:15 PM"
-      },
-      "isha": {
-        "start": "9:22 PM",
-        "jamat": "9:27 PM"
-      }
-    },
-    {
-      "date": 27,
-      "fajr": {
-        "start": "4:34 AM",
-        "jamat": "5:30 AM"
-      },
-      "sunrise": "6:10 AM",
-      "zuhr": {
-        "start": "1:13 PM",
-        "jamat": "1:30 PM"
-      },
-      "asr": {
-        "start": "5:53 PM",
-        "jamat": "6:30 PM"
-      },
-      "maghrib": {
-        "start": "8:07 PM",
-        "jamat": "8:10 PM"
-      },
-      "isha": {
-        "start": "9:19 PM",
-        "jamat": "9:24 PM"
-      }
-    },
-    {
       "date": 28,
       "fajr": {
-        "start": "4:36 AM",
-        "jamat": "5:30 AM"
+        "start": "3:59 AM",
+        "jamat": "4:02 AM"
       },
-      "sunrise": "6:11 AM",
+      "sunrise": "6:07 AM",
       "zuhr": {
-        "start": "1:12 PM",
-        "jamat": "1:30 PM"
+        "start": "1:02 PM",
+        "jamat": "1:05 PM"
       },
       "asr": {
-        "start": "5:52 PM",
-        "jamat": "6:30 PM"
+        "start": "4:49 PM",
+        "jamat": "4:52 PM"
       },
       "maghrib": {
-        "start": "8:05 PM",
-        "jamat": "8:11 PM"
+        "start": "7:55 PM",
+        "jamat": "7:58 PM"
       },
       "isha": {
-        "start": "9:17 PM",
-        "jamat": "9:22 PM"
+        "start": "9:54 PM",
+        "jamat": "9:57 PM"
       }
     },
     {
       "date": 29,
       "fajr": {
-        "start": "4:38 AM",
-        "jamat": "5:30 AM"
+        "start": "4:01 AM",
+        "jamat": "4:04 AM"
       },
-      "sunrise": "6:13 AM",
+      "sunrise": "6:09 AM",
       "zuhr": {
-        "start": "1:12 PM",
-        "jamat": "1:30 PM"
+        "start": "1:01 PM",
+        "jamat": "1:04 PM"
       },
       "asr": {
-        "start": "5:50 PM",
-        "jamat": "6:30 PM"
+        "start": "4:48 PM",
+        "jamat": "4:51 PM"
       },
       "maghrib": {
-        "start": "8:03 PM",
-        "jamat": "8:09 PM"
+        "start": "7:53 PM",
+        "jamat": "7:56 PM"
       },
       "isha": {
-        "start": "9:16 PM",
-        "jamat": "9:21 PM"
+        "start": "9:51 PM",
+        "jamat": "9:54 PM"
       }
     },
     {
       "date": 30,
       "fajr": {
-        "start": "4:40 AM",
-        "jamat": "5:30 AM"
+        "start": "4:04 AM",
+        "jamat": "4:07 AM"
       },
-      "sunrise": "6:15 AM",
+      "sunrise": "6:10 AM",
       "zuhr": {
-        "start": "1:12 PM",
-        "jamat": "1:30 PM"
+        "start": "1:01 PM",
+        "jamat": "1:04 PM"
       },
       "asr": {
-        "start": "5:48 PM",
-        "jamat": "6:30 PM"
+        "start": "4:47 PM",
+        "jamat": "4:50 PM"
       },
       "maghrib": {
-        "start": "8:00 PM",
-        "jamat": "8:06 PM"
+        "start": "7:51 PM",
+        "jamat": "7:54 PM"
       },
       "isha": {
-        "start": "9:14 PM",
-        "jamat": "9:19 PM"
+        "start": "9:49 PM",
+        "jamat": "9:52 PM"
       }
     },
     {
       "date": 31,
       "fajr": {
-        "start": "4:42 AM",
-        "jamat": "5:30 AM"
+        "start": "4:06 AM",
+        "jamat": "4:09 AM"
       },
-      "sunrise": "6:16 AM",
+      "sunrise": "6:12 AM",
       "zuhr": {
-        "start": "1:12 PM",
-        "jamat": "1:30 PM"
+        "start": "1:01 PM",
+        "jamat": "1:04 PM"
       },
       "asr": {
-        "start": "5:47 PM",
-        "jamat": "6:30 PM"
+        "start": "4:45 PM",
+        "jamat": "4:48 PM"
       },
       "maghrib": {
-        "start": "7:58 PM",
-        "jamat": "8:04 PM"
+        "start": "7:49 PM",
+        "jamat": "7:52 PM"
       },
       "isha": {
-        "start": "9:11 PM",
-        "jamat": "9:16 PM"
+        "start": "9:46 PM",
+        "jamat": "9:49 PM"
       }
     }
   ],
+
   "September": [
     {
       "date": 1,
       "fajr": {
-        "start": "4:43 AM",
-        "jamat": "5:30 AM"
+        "start": "4:08 AM",
+        "jamat": "4:11 AM"
       },
-      "sunrise": "6:18 AM",
+      "sunrise": "6:13 AM",
       "zuhr": {
-        "start": "1:11 PM",
-        "jamat": "1:30 PM"
+        "start": "1:00 PM",
+        "jamat": "1:03 PM"
       },
       "asr": {
-        "start": "5:50 PM",
-        "jamat": "8:30 PM"
+        "start": "4:44 PM",
+        "jamat": "4:47 PM"
       },
       "maghrib": {
-        "start": "7:54 PM",
-        "jamat": "8:01 PM"
+        "start": "7:46 PM",
+        "jamat": "7:49 PM"
       },
       "isha": {
-        "start": "9:10 PM",
-        "jamat": "9:15 PM"
+        "start": "9:43 PM",
+        "jamat": "9:46 PM"
       }
     },
     {
       "date": 2,
       "fajr": {
-        "start": "4:45 AM",
-        "jamat": "5:30 AM"
+        "start": "4:11 AM",
+        "jamat": "4:14 AM"
       },
-      "sunrise": "6:20 AM",
+      "sunrise": "6:15 AM",
       "zuhr": {
-        "start": "1:11 PM",
-        "jamat": "1:30 PM"
+        "start": "1:00 PM",
+        "jamat": "1:03 PM"
       },
       "asr": {
-        "start": "5:48 PM",
-        "jamat": "6:30 PM"
+        "start": "4:42 PM",
+        "jamat": "4:45 PM"
       },
       "maghrib": {
-        "start": "7:52 PM",
-        "jamat": "7:59 PM"
+        "start": "7:44 PM",
+        "jamat": "7:47 PM"
       },
       "isha": {
-        "start": "9:08 PM",
-        "jamat": "9:15 PM"
+        "start": "9:40 PM",
+        "jamat": "9:43 PM"
       }
     },
     {
       "date": 3,
       "fajr": {
-        "start": "4:47 AM",
-        "jamat": "5:30 AM"
+        "start": "4:13 AM",
+        "jamat": "4:16 AM"
       },
-      "sunrise": "6:21 AM",
+      "sunrise": "6:17 AM",
       "zuhr": {
-        "start": "1:11 PM",
-        "jamat": "1:30 PM"
+        "start": "1:00 PM",
+        "jamat": "1:03 PM"
       },
       "asr": {
-        "start": "5:47 PM",
-        "jamat": "6:30 PM"
+        "start": "4:41 PM",
+        "jamat": "4:44 PM"
       },
       "maghrib": {
-        "start": "7:49 PM",
-        "jamat": "7:56 PM"
+        "start": "7:42 PM",
+        "jamat": "7:45 PM"
       },
       "isha": {
-        "start": "9:05 PM",
-        "jamat": "9:15 PM"
+        "start": "9:37 PM",
+        "jamat": "9:40 PM"
       }
     },
     {
       "date": 4,
       "fajr": {
-        "start": "4:48 AM",
-        "jamat": "5:30 AM"
+        "start": "4:15 AM",
+        "jamat": "4:18 AM"
       },
-      "sunrise": "6:23 AM",
+      "sunrise": "6:18 AM",
       "zuhr": {
-        "start": "1:10 PM",
-        "jamat": "1:30 PM"
+        "start": "12:59 PM",
+        "jamat": "1:02 PM"
       },
       "asr": {
-        "start": "5:45 PM",
-        "jamat": "6:30 PM"
+        "start": "4:40 PM",
+        "jamat": "4:43 PM"
       },
       "maghrib": {
-        "start": "7:47 PM",
-        "jamat": "7:54 PM"
+        "start": "7:40 PM",
+        "jamat": "7:43 PM"
       },
       "isha": {
-        "start": "9:04 PM",
-        "jamat": "9:15 PM"
+        "start": "9:34 PM",
+        "jamat": "9:37 PM"
       }
     },
     {
       "date": 5,
       "fajr": {
-        "start": "4:50 AM",
-        "jamat": "5:30 AM"
+        "start": "4:18 AM",
+        "jamat": "4:21 AM"
       },
-      "sunrise": "6:25 AM",
+      "sunrise": "6:20 AM",
       "zuhr": {
-        "start": "1:10 PM",
-        "jamat": "1:30 PM"
+        "start": "12:59 PM",
+        "jamat": "1:02 PM"
       },
       "asr": {
-        "start": "5:43 PM",
-        "jamat": "6:30 PM"
+        "start": "4:38 PM",
+        "jamat": "4:41 PM"
       },
       "maghrib": {
-        "start": "7:45 PM",
-        "jamat": "7:52 PM"
+        "start": "7:37 PM",
+        "jamat": "7:40 PM"
       },
       "isha": {
-        "start": "9:02 PM",
-        "jamat": "9:15 PM"
+        "start": "9:31 PM",
+        "jamat": "9:34 PM"
       }
     },
     {
       "date": 6,
       "fajr": {
-        "start": "4:52 AM",
-        "jamat": "5:45 AM"
+        "start": "4:20 AM",
+        "jamat": "4:23 AM"
       },
-      "sunrise": "6:27 AM",
+      "sunrise": "6:21 AM",
       "zuhr": {
-        "start": "1:10 PM",
-        "jamat": "1:30 PM"
+        "start": "12:59 PM",
+        "jamat": "1:02 PM"
       },
       "asr": {
-        "start": "5:41 PM",
-        "jamat": "6:15 PM"
+        "start": "4:37 PM",
+        "jamat": "4:40 PM"
       },
       "maghrib": {
-        "start": "7:42 PM",
-        "jamat": "7:49 PM"
+        "start": "7:35 PM",
+        "jamat": "7:38 PM"
       },
       "isha": {
-        "start": "8:59 PM",
-        "jamat": "9:15 PM"
+        "start": "9:28 PM",
+        "jamat": "9:31 PM"
       }
     },
     {
       "date": 7,
       "fajr": {
-        "start": "4:53 AM",
-        "jamat": "5:45 AM"
+        "start": "4:22 AM",
+        "jamat": "4:25 AM"
       },
-      "sunrise": "6:28 AM",
+      "sunrise": "6:23 AM",
       "zuhr": {
-        "start": "1:09 PM",
-        "jamat": "1:30 PM"
+        "start": "12:58 PM",
+        "jamat": "1:01 PM"
       },
       "asr": {
-        "start": "5:40 PM",
-        "jamat": "6:15 PM"
+        "start": "4:35 PM",
+        "jamat": "4:38 PM"
       },
       "maghrib": {
-        "start": "7:40 PM",
-        "jamat": "7:47 PM"
+        "start": "7:33 PM",
+        "jamat": "7:36 PM"
       },
       "isha": {
-        "start": "8:58 PM",
-        "jamat": "9:15 PM"
+        "start": "9:26 PM",
+        "jamat": "9:29 PM"
       }
     },
     {
       "date": 8,
       "fajr": {
-        "start": "4:55 AM",
-        "jamat": "5:45 AM"
+        "start": "4:24 AM",
+        "jamat": "4:27 AM"
       },
-      "sunrise": "6:30 AM",
+      "sunrise": "6:24 AM",
       "zuhr": {
-        "start": "1:09 PM",
-        "jamat": "1:30 PM"
+        "start": "12:58 PM",
+        "jamat": "1:01 PM"
       },
       "asr": {
-        "start": "5:38 PM",
-        "jamat": "6:15 PM"
+        "start": "4:34 PM",
+        "jamat": "4:37 PM"
       },
       "maghrib": {
-        "start": "7:38 PM",
-        "jamat": "7:45 PM"
+        "start": "7:31 PM",
+        "jamat": "7:34 PM"
       },
       "isha": {
-        "start": "8:56 PM",
-        "jamat": "9:15 PM"
+        "start": "9:23 PM",
+        "jamat": "9:26 PM"
       }
     },
     {
       "date": 9,
       "fajr": {
-        "start": "4:57 AM",
-        "jamat": "5:45 AM"
+        "start": "4:26 AM",
+        "jamat": "4:29 AM"
       },
-      "sunrise": "6:32 AM",
+      "sunrise": "6:26 AM",
       "zuhr": {
-        "start": "1:09 PM",
-        "jamat": "1:30 PM"
+        "start": "12:58 PM",
+        "jamat": "1:01 PM"
       },
       "asr": {
-        "start": "5:36 PM",
-        "jamat": "6:15 PM"
+        "start": "4:32 PM",
+        "jamat": "4:35 PM"
       },
       "maghrib": {
-        "start": "7:35 PM",
-        "jamat": "7:42 PM"
+        "start": "7:28 PM",
+        "jamat": "7:31 PM"
       },
       "isha": {
-        "start": "8:53 PM",
-        "jamat": "9:15 PM"
+        "start": "9:20 PM",
+        "jamat": "9:23 PM"
       }
     },
     {
       "date": 10,
       "fajr": {
-        "start": "4:58 AM",
-        "jamat": "5:45 AM"
+        "start": "4:29 AM",
+        "jamat": "4:32 AM"
       },
-      "sunrise": "6:33 AM",
+      "sunrise": "6:28 AM",
       "zuhr": {
-        "start": "1:08 PM",
-        "jamat": "1:30 PM"
+        "start": "12:57 PM",
+        "jamat": "1:00 PM"
       },
       "asr": {
-        "start": "5:34 PM",
-        "jamat": "6:15 PM"
+        "start": "4:31 PM",
+        "jamat": "4:34 PM"
       },
       "maghrib": {
-        "start": "7:33 PM",
-        "jamat": "7:40 PM"
+        "start": "7:26 PM",
+        "jamat": "7:29 PM"
       },
       "isha": {
-        "start": "8:51 PM",
-        "jamat": "9:15 PM"
+        "start": "9:17 PM",
+        "jamat": "9:20 PM"
       }
     },
     {
       "date": 11,
       "fajr": {
-        "start": "5:00 AM",
-        "jamat": "5:45 AM"
+        "start": "4:31 AM",
+        "jamat": "4:34 AM"
       },
-      "sunrise": "6:35 AM",
+      "sunrise": "6:29 AM",
       "zuhr": {
-        "start": "1:08 PM",
-        "jamat": "1:30 PM"
+        "start": "12:57 PM",
+        "jamat": "1:00 PM"
       },
       "asr": {
-        "start": "5:32 PM",
-        "jamat": "6:15 PM"
+        "start": "4:29 PM",
+        "jamat": "4:32 PM"
       },
       "maghrib": {
-        "start": "7:31 PM",
-        "jamat": "7:38 PM"
+        "start": "7:24 PM",
+        "jamat": "7:27 PM"
       },
       "isha": {
-        "start": "8:50 PM",
-        "jamat": "9:15 PM"
+        "start": "9:14 PM",
+        "jamat": "9:17 PM"
       }
     },
     {
       "date": 12,
       "fajr": {
-        "start": "5:02 AM",
-        "jamat": "5:45 AM"
+        "start": "4:33 AM",
+        "jamat": "4:36 AM"
       },
-      "sunrise": "6:37 AM",
+      "sunrise": "6:31 AM",
       "zuhr": {
-        "start": "1:08 PM",
-        "jamat": "1:30 PM"
+        "start": "12:57 PM",
+        "jamat": "1:00 PM"
       },
       "asr": {
-        "start": "5:30 PM",
-        "jamat": "6:15 PM"
+        "start": "4:28 PM",
+        "jamat": "4:31 PM"
       },
       "maghrib": {
-        "start": "7:28 PM",
-        "jamat": "7:35 PM"
+        "start": "7:21 PM",
+        "jamat": "7:24 PM"
       },
       "isha": {
-        "start": "8:47 PM",
+        "start": "9:12 PM",
         "jamat": "9:15 PM"
       }
     },
     {
       "date": 13,
       "fajr": {
-        "start": "5:03 AM",
-        "jamat": "6:00 AM"
+        "start": "4:35 AM",
+        "jamat": "4:38 AM"
       },
-      "sunrise": "6:38 AM",
+      "sunrise": "6:32 AM",
       "zuhr": {
-        "start": "1:07 PM",
-        "jamat": "1:30 PM"
+        "start": "12:56 PM",
+        "jamat": "12:59 PM"
       },
       "asr": {
-        "start": "5:29 PM",
-        "jamat": "6:00 PM"
+        "start": "4:26 PM",
+        "jamat": "4:29 PM"
       },
       "maghrib": {
-        "start": "7:26 PM",
-        "jamat": "7:33 PM"
+        "start": "7:19 PM",
+        "jamat": "7:22 PM"
       },
       "isha": {
-        "start": "8:45 PM",
-        "jamat": "9:00 PM"
+        "start": "9:09 PM",
+        "jamat": "9:12 PM"
       }
     },
     {
       "date": 14,
       "fajr": {
-        "start": "5:05 AM",
-        "jamat": "6:00 AM"
+        "start": "4:37 AM",
+        "jamat": "4:40 AM"
       },
-      "sunrise": "6:40 AM",
+      "sunrise": "6:34 AM",
       "zuhr": {
-        "start": "1:07 PM",
-        "jamat": "1:30 PM"
+        "start": "12:56 PM",
+        "jamat": "12:59 PM"
       },
       "asr": {
-        "start": "5:27 PM",
-        "jamat": "6:00 PM"
+        "start": "4:25 PM",
+        "jamat": "4:28 PM"
       },
       "maghrib": {
-        "start": "7:24 PM",
-        "jamat": "7:31 PM"
+        "start": "7:17 PM",
+        "jamat": "7:20 PM"
       },
       "isha": {
-        "start": "8:43 PM",
-        "jamat": "9:00 PM"
+        "start": "9:06 PM",
+        "jamat": "9:09 PM"
       }
     },
     {
       "date": 15,
       "fajr": {
-        "start": "5:07 AM",
-        "jamat": "6:00 AM"
+        "start": "4:39 AM",
+        "jamat": "4:42 AM"
       },
-      "sunrise": "6:42 AM",
+      "sunrise": "6:36 AM",
       "zuhr": {
-        "start": "1:07 PM",
-        "jamat": "1:30 PM"
+        "start": "12:56 PM",
+        "jamat": "12:59 PM"
       },
       "asr": {
-        "start": "5:25 PM",
-        "jamat": "6:00 PM"
+        "start": "4:23 PM",
+        "jamat": "4:26 PM"
       },
       "maghrib": {
-        "start": "7:21 PM",
-        "jamat": "7:28 PM"
+        "start": "7:15 PM",
+        "jamat": "7:18 PM"
       },
       "isha": {
-        "start": "8:41 PM",
-        "jamat": "9:00 PM"
+        "start": "9:03 PM",
+        "jamat": "9:06 PM"
       }
     },
     {
       "date": 16,
       "fajr": {
-        "start": "5:09 AM",
-        "jamat": "6:00 AM"
+        "start": "4:41 AM",
+        "jamat": "4:44 AM"
       },
-      "sunrise": "6:43 AM",
+      "sunrise": "6:37 AM",
       "zuhr": {
-        "start": "1:06 PM",
-        "jamat": "1:30 PM"
+        "start": "12:55 PM",
+        "jamat": "12:58 PM"
       },
       "asr": {
-        "start": "5:23 PM",
-        "jamat": "6:00 PM"
+        "start": "4:21 PM",
+        "jamat": "4:24 PM"
       },
       "maghrib": {
-        "start": "7:19 PM",
-        "jamat": "7:26 PM"
+        "start": "7:12 PM",
+        "jamat": "7:15 PM"
       },
       "isha": {
-        "start": "8:39 PM",
-        "jamat": "9:00 PM"
+        "start": "9:01 PM",
+        "jamat": "9:04 PM"
       }
     },
     {
       "date": 17,
       "fajr": {
-        "start": "5:11 AM",
-        "jamat": "6:00 AM"
+        "start": "4:43 AM",
+        "jamat": "4:46 AM"
       },
-      "sunrise": "6:45 AM",
+      "sunrise": "6:39 AM",
       "zuhr": {
-        "start": "1:06 PM",
-        "jamat": "1:30 PM"
+        "start": "12:55 PM",
+        "jamat": "12:58 PM"
       },
       "asr": {
-        "start": "5:21 PM",
-        "jamat": "6:00 PM"
+        "start": "4:20 PM",
+        "jamat": "4:23 PM"
       },
       "maghrib": {
-        "start": "7:16 PM",
-        "jamat": "7:23 PM"
+        "start": "7:10 PM",
+        "jamat": "7:13 PM"
       },
       "isha": {
-        "start": "8:36 PM",
-        "jamat": "9:00 PM"
+        "start": "8:58 PM",
+        "jamat": "9:01 PM"
       }
     },
     {
       "date": 18,
       "fajr": {
-        "start": "5:13 AM",
-        "jamat": "6:00 AM"
+        "start": "4:45 AM",
+        "jamat": "4:48 AM"
       },
-      "sunrise": "6:47 AM",
+      "sunrise": "6:40 AM",
       "zuhr": {
-        "start": "1:06 PM",
-        "jamat": "1:30 PM"
+        "start": "12:55 PM",
+        "jamat": "12:58 PM"
       },
       "asr": {
-        "start": "5:19 PM",
-        "jamat": "6:00 PM"
+        "start": "4:18 PM",
+        "jamat": "4:21 PM"
       },
       "maghrib": {
-        "start": "7:16 PM",
-        "jamat": "7:21 PM"
+        "start": "7:08 PM",
+        "jamat": "7:11 PM"
       },
       "isha": {
-        "start": "8:34 PM",
-        "jamat": "9:00 PM"
+        "start": "8:56 PM",
+        "jamat": "8:59 PM"
       }
     },
     {
       "date": 19,
       "fajr": {
-        "start": "5:15 AM",
-        "jamat": "6:00 AM"
+        "start": "4:47 AM",
+        "jamat": "4:50 AM"
       },
-      "sunrise": "6:48 AM",
+      "sunrise": "6:42 AM",
       "zuhr": {
-        "start": "1:05 PM",
-        "jamat": "1:30 PM"
+        "start": "12:54 PM",
+        "jamat": "12:57 PM"
       },
       "asr": {
-        "start": "5:16 PM",
-        "jamat": "6:00 PM"
+        "start": "4:17 PM",
+        "jamat": "4:20 PM"
       },
       "maghrib": {
-        "start": "7:14 PM",
-        "jamat": "7:21 PM"
+        "start": "7:05 PM",
+        "jamat": "7:08 PM"
       },
       "isha": {
-        "start": "8:32 PM",
-        "jamat": "9:00 PM"
+        "start": "8:53 PM",
+        "jamat": "8:56 PM"
       }
     },
     {
       "date": 20,
       "fajr": {
-        "start": "5:17 AM",
-        "jamat": "6:00 AM"
+        "start": "4:49 AM",
+        "jamat": "4:52 AM"
       },
-      "sunrise": "6:50 AM",
+      "sunrise": "6:44 AM",
       "zuhr": {
-        "start": "1:05 PM",
-        "jamat": "1:30 PM"
+        "start": "12:54 PM",
+        "jamat": "12:57 PM"
       },
       "asr": {
-        "start": "5:14 PM",
-        "jamat": "5:45 PM"
+        "start": "4:15 PM",
+        "jamat": "4:18 PM"
       },
       "maghrib": {
-        "start": "7:12 PM",
-        "jamat": "7:19 PM"
+        "start": "7:03 PM",
+        "jamat": "7:06 PM"
       },
       "isha": {
-        "start": "8:29 PM",
-        "jamat": "8:45 PM"
+        "start": "8:50 PM",
+        "jamat": "8:53 PM"
       }
     },
     {
       "date": 21,
       "fajr": {
-        "start": "5:19 AM",
-        "jamat": "6:00 AM"
+        "start": "4:51 AM",
+        "jamat": "4:54 AM"
       },
-      "sunrise": "6:52 AM",
+      "sunrise": "6:45 AM",
       "zuhr": {
-        "start": "1:05 PM",
-        "jamat": "1:30 PM"
+        "start": "12:53 PM",
+        "jamat": "12:56 PM"
       },
       "asr": {
-        "start": "5:12 PM",
-        "jamat": "5:45 PM"
+        "start": "4:13 PM",
+        "jamat": "4:16 PM"
       },
       "maghrib": {
-        "start": "7:09 PM",
-        "jamat": "7:16 PM"
+        "start": "7:01 PM",
+        "jamat": "7:04 PM"
       },
       "isha": {
-        "start": "8:28 PM",
-        "jamat": "8:45 PM"
+        "start": "8:48 PM",
+        "jamat": "8:51 PM"
       }
     },
     {
       "date": 22,
       "fajr": {
-        "start": "5:21 AM",
-        "jamat": "6:00 AM"
+        "start": "4:53 AM",
+        "jamat": "4:56 AM"
       },
-      "sunrise": "6:53 AM",
+      "sunrise": "6:47 AM",
       "zuhr": {
-        "start": "1:04 PM",
-        "jamat": "1:30 PM"
+        "start": "12:53 PM",
+        "jamat": "12:56 PM"
       },
       "asr": {
-        "start": "5:09 PM",
-        "jamat": "5:45 PM"
+        "start": "4:12 PM",
+        "jamat": "4:15 PM"
       },
       "maghrib": {
-        "start": "7:07 PM",
-        "jamat": "7:14 PM"
+        "start": "6:58 PM",
+        "jamat": "7:01 PM"
       },
       "isha": {
-        "start": "8:26 PM",
-        "jamat": "8:45 PM"
+        "start": "8:45 PM",
+        "jamat": "8:48 PM"
       }
     },
     {
       "date": 23,
       "fajr": {
-        "start": "5:23 AM",
-        "jamat": "6:00 AM"
+        "start": "4:55 AM",
+        "jamat": "4:58 AM"
       },
-      "sunrise": "6:55 AM",
+      "sunrise": "6:48 AM",
       "zuhr": {
-        "start": "1:04 PM",
-        "jamat": "1:30 PM"
+        "start": "12:53 PM",
+        "jamat": "12:56 PM"
       },
       "asr": {
-        "start": "5:07 PM",
-        "jamat": "5:45 PM"
+        "start": "4:10 PM",
+        "jamat": "4:13 PM"
       },
       "maghrib": {
-        "start": "7:05 PM",
-        "jamat": "7:12 PM"
+        "start": "6:56 PM",
+        "jamat": "6:59 PM"
       },
       "isha": {
-        "start": "8:23 PM",
-        "jamat": "8:45 PM"
+        "start": "8:43 PM",
+        "jamat": "8:46 PM"
       }
     },
     {
       "date": 24,
       "fajr": {
-        "start": "5:25 AM",
-        "jamat": "6:00 AM"
+        "start": "4:57 AM",
+        "jamat": "5:00 AM"
       },
-      "sunrise": "6:57 AM",
+      "sunrise": "6:50 AM",
       "zuhr": {
-        "start": "1:04 PM",
-        "jamat": "1:30 PM"
+        "start": "12:52 PM",
+        "jamat": "12:55 PM"
       },
       "asr": {
-        "start": "5:05 PM",
-        "jamat": "5:45 PM"
+        "start": "4:08 PM",
+        "jamat": "4:11 PM"
       },
       "maghrib": {
-        "start": "7:02 PM",
-        "jamat": "7:09 PM"
+        "start": "6:54 PM",
+        "jamat": "6:57 PM"
       },
       "isha": {
-        "start": "8:21 PM",
-        "jamat": "8:45 PM"
+        "start": "8:40 PM",
+        "jamat": "8:43 PM"
       }
     },
     {
       "date": 25,
       "fajr": {
-        "start": "5:27 AM",
-        "jamat": "6:00 AM"
+        "start": "4:59 AM",
+        "jamat": "5:02 AM"
       },
-      "sunrise": "6:58 AM",
+      "sunrise": "6:52 AM",
       "zuhr": {
-        "start": "1:03 PM",
-        "jamat": "1:30 PM"
+        "start": "12:52 PM",
+        "jamat": "12:55 PM"
       },
       "asr": {
-        "start": "5:03 PM",
-        "jamat": "5:45 PM"
+        "start": "4:07 PM",
+        "jamat": "4:10 PM"
       },
       "maghrib": {
-        "start": "7:00 PM",
-        "jamat": "7:07 PM"
+        "start": "6:51 PM",
+        "jamat": "6:54 PM"
       },
       "isha": {
-        "start": "8:19 PM",
-        "jamat": "8:45 PM"
+        "start": "8:37 PM",
+        "jamat": "8:40 PM"
       }
     },
     {
       "date": 26,
       "fajr": {
-        "start": "5:29 AM",
-        "jamat": "6:00 AM"
+        "start": "5:00 AM",
+        "jamat": "5:03 AM"
       },
-      "sunrise": "7:00 AM",
+      "sunrise": "6:53 AM",
       "zuhr": {
-        "start": "1:03 PM",
-        "jamat": "1:30 PM"
+        "start": "12:52 PM",
+        "jamat": "12:55 PM"
       },
       "asr": {
-        "start": "5:01 PM",
-        "jamat": "5:45 PM"
+        "start": "4:05 PM",
+        "jamat": "4:08 PM"
       },
       "maghrib": {
-        "start": "6:57 PM",
-        "jamat": "7:04 PM"
+        "start": "6:49 PM",
+        "jamat": "6:52 PM"
       },
       "isha": {
-        "start": "8:17 PM",
-        "jamat": "8:45 PM"
+        "start": "8:35 PM",
+        "jamat": "8:38 PM"
       }
     },
     {
       "date": 27,
       "fajr": {
-        "start": "5:31 AM",
-        "jamat": "6:15 AM"
+        "start": "5:02 AM",
+        "jamat": "5:05 AM"
       },
-      "sunrise": "7:02 AM",
+      "sunrise": "6:55 AM",
       "zuhr": {
-        "start": "1:03 PM",
-        "jamat": "1:30 PM"
+        "start": "12:51 PM",
+        "jamat": "12:54 PM"
       },
       "asr": {
-        "start": "4:59 PM",
-        "jamat": "5:30 PM"
+        "start": "4:03 PM",
+        "jamat": "4:06 PM"
       },
       "maghrib": {
-        "start": "6:55 PM",
-        "jamat": "7:02 PM"
+        "start": "6:47 PM",
+        "jamat": "6:50 PM"
       },
       "isha": {
-        "start": "8:15 PM",
-        "jamat": "8:30 PM"
+        "start": "8:32 PM",
+        "jamat": "8:35 PM"
       }
     },
     {
       "date": 28,
       "fajr": {
-        "start": "5:33 AM",
-        "jamat": "6:15 AM"
+        "start": "5:04 AM",
+        "jamat": "5:07 AM"
       },
-      "sunrise": "7:03 AM",
+      "sunrise": "6:56 AM",
       "zuhr": {
-        "start": "1:02 PM",
-        "jamat": "1:30 PM"
+        "start": "12:51 PM",
+        "jamat": "12:54 PM"
       },
       "asr": {
-        "start": "4:58 PM",
-        "jamat": "5:30 PM"
+        "start": "4:02 PM",
+        "jamat": "4:05 PM"
       },
       "maghrib": {
-        "start": "6:53 PM",
-        "jamat": "7:00 PM"
+        "start": "6:45 PM",
+        "jamat": "6:48 PM"
       },
       "isha": {
-        "start": "8:12 PM",
-        "jamat": "8:30 PM"
+        "start": "8:30 PM",
+        "jamat": "8:33 PM"
       }
     },
     {
       "date": 29,
       "fajr": {
-        "start": "5:35 AM",
-        "jamat": "6:15 AM"
+        "start": "5:06 AM",
+        "jamat": "5:09 AM"
       },
-      "sunrise": "7:05 AM",
+      "sunrise": "6:58 AM",
       "zuhr": {
-        "start": "1:02 PM",
-        "jamat": "1:30 PM"
+        "start": "12:51 PM",
+        "jamat": "12:54 PM"
       },
       "asr": {
-        "start": "4:56 PM",
-        "jamat": "5:30 PM"
+        "start": "4:00 PM",
+        "jamat": "4:03 PM"
       },
       "maghrib": {
-        "start": "6:50 PM",
-        "jamat": "6:57 PM"
+        "start": "6:42 PM",
+        "jamat": "6:45 PM"
       },
       "isha": {
-        "start": "8:10 PM",
-        "jamat": "8:30 PM"
+        "start": "8:28 PM",
+        "jamat": "8:31 PM"
       }
     },
     {
       "date": 30,
       "fajr": {
-        "start": "5:37 AM",
-        "jamat": "6:15 AM"
+        "start": "5:08 AM",
+        "jamat": "5:11 AM"
       },
-      "sunrise": "7:07 AM",
+      "sunrise": "7:00 AM",
       "zuhr": {
-        "start": "1:01 PM",
-        "jamat": "1:30 PM"
+        "start": "12:50 PM",
+        "jamat": "12:53 PM"
       },
       "asr": {
-        "start": "4:54 PM",
-        "jamat": "5:30 PM"
+        "start": "3:58 PM",
+        "jamat": "4:01 PM"
       },
       "maghrib": {
-        "start": "6:48 PM",
-        "jamat": "6:55 PM"
+        "start": "6:40 PM",
+        "jamat": "6:43 PM"
       },
       "isha": {
-        "start": "8:08 PM",
-        "jamat": "8:30 PM"
+        "start": "8:25 PM",
+        "jamat": "8:28 PM"
       }
     }
   ],
+
   "October": [
     {
       "date": 1,
       "fajr": {
-        "start": "5:37 AM",
-        "jamat": "6:15 AM"
+        "start": "5:09 AM",
+        "jamat": "5:12 AM"
       },
-      "sunrise": "7:08 AM",
+      "sunrise": "7:01 AM",
       "zuhr": {
-        "start": "1:01 PM",
-        "jamat": "1:30 PM"
+        "start": "12:50 PM",
+        "jamat": "12:53 PM"
       },
       "asr": {
-        "start": "4:54 PM",
-        "jamat": "5:30 PM"
+        "start": "3:57 PM",
+        "jamat": "4:00 PM"
       },
       "maghrib": {
-        "start": "6:46 PM",
-        "jamat": "6:53 PM"
+        "start": "6:38 PM",
+        "jamat": "6:41 PM"
       },
       "isha": {
-        "start": "8:06 PM",
-        "jamat": "8:30 PM"
+        "start": "8:23 PM",
+        "jamat": "8:26 PM"
       }
     },
     {
       "date": 2,
       "fajr": {
-        "start": "5:39 AM",
-        "jamat": "6:15 AM"
+        "start": "5:11 AM",
+        "jamat": "5:14 AM"
       },
-      "sunrise": "7:10 AM",
+      "sunrise": "7:03 AM",
       "zuhr": {
-        "start": "1:01 PM",
-        "jamat": "1:30 PM"
+        "start": "12:50 PM",
+        "jamat": "12:53 PM"
       },
       "asr": {
-        "start": "4:52 PM",
-        "jamat": "5:30 PM"
+        "start": "3:55 PM",
+        "jamat": "3:58 PM"
       },
       "maghrib": {
-        "start": "6:43 PM",
-        "jamat": "6:50 PM"
+        "start": "6:35 PM",
+        "jamat": "6:38 PM"
       },
       "isha": {
-        "start": "8:04 PM",
-        "jamat": "8:30 PM"
+        "start": "8:20 PM",
+        "jamat": "8:23 PM"
       }
     },
     {
       "date": 3,
       "fajr": {
-        "start": "5:41 AM",
-        "jamat": "6:15 AM"
+        "start": "5:13 AM",
+        "jamat": "5:16 AM"
       },
-      "sunrise": "7:12 AM",
+      "sunrise": "7:05 AM",
       "zuhr": {
-        "start": "1:01 PM",
-        "jamat": "1:30 PM"
+        "start": "12:49 PM",
+        "jamat": "12:52 PM"
       },
       "asr": {
-        "start": "4:50 PM",
-        "jamat": "5:30 PM"
+        "start": "3:53 PM",
+        "jamat": "3:56 PM"
       },
       "maghrib": {
-        "start": "6:41 PM",
-        "jamat": "6:48 PM"
+        "start": "6:33 PM",
+        "jamat": "6:36 PM"
       },
       "isha": {
-        "start": "8:03 PM",
-        "jamat": "8:30 PM"
+        "start": "8:18 PM",
+        "jamat": "8:21 PM"
       }
     },
     {
       "date": 4,
       "fajr": {
-        "start": "5:43 AM",
-        "jamat": "6:30 AM"
+        "start": "5:15 AM",
+        "jamat": "5:18 AM"
       },
-      "sunrise": "7:14 AM",
+      "sunrise": "7:06 AM",
       "zuhr": {
-        "start": "1:01 PM",
-        "jamat": "1:30 PM"
+        "start": "12:49 PM",
+        "jamat": "12:52 PM"
       },
       "asr": {
-        "start": "4:48 PM",
-        "jamat": "5:15 PM"
+        "start": "3:52 PM",
+        "jamat": "3:55 PM"
       },
       "maghrib": {
-        "start": "6:39 PM",
-        "jamat": "6:46 PM"
+        "start": "6:31 PM",
+        "jamat": "6:34 PM"
       },
       "isha": {
-        "start": "8:00 PM",
-        "jamat": "8:15 PM"
+        "start": "8:16 PM",
+        "jamat": "8:19 PM"
       }
     },
     {
       "date": 5,
       "fajr": {
-        "start": "5:44 AM",
-        "jamat": "6:30 AM"
+        "start": "5:17 AM",
+        "jamat": "5:20 AM"
       },
-      "sunrise": "7:15 AM",
+      "sunrise": "7:08 AM",
       "zuhr": {
-        "start": "1:01 PM",
-        "jamat": "1:30 PM"
+        "start": "12:49 PM",
+        "jamat": "12:52 PM"
       },
       "asr": {
-        "start": "4:46 PM",
-        "jamat": "5:15 PM"
+        "start": "3:50 PM",
+        "jamat": "3:53 PM"
       },
       "maghrib": {
-        "start": "6:36 PM",
-        "jamat": "6:43 PM"
+        "start": "6:29 PM",
+        "jamat": "6:32 PM"
       },
       "isha": {
-        "start": "7:58 PM",
-        "jamat": "8:15 PM"
+        "start": "8:13 PM",
+        "jamat": "8:16 PM"
       }
     },
     {
       "date": 6,
       "fajr": {
-        "start": "5:45 AM",
-        "jamat": "6:30 AM"
+        "start": "5:18 AM",
+        "jamat": "5:21 AM"
       },
-      "sunrise": "7:17 AM",
+      "sunrise": "7:10 AM",
       "zuhr": {
-        "start": "1:01 PM",
-        "jamat": "1:30 PM"
+        "start": "12:48 PM",
+        "jamat": "12:51 PM"
       },
       "asr": {
-        "start": "4:44 PM",
-        "jamat": "5:15 PM"
+        "start": "3:48 PM",
+        "jamat": "3:51 PM"
       },
       "maghrib": {
-        "start": "6:34 PM",
-        "jamat": "6:41 PM"
+        "start": "6:26 PM",
+        "jamat": "6:29 PM"
       },
       "isha": {
-        "start": "7:56 PM",
-        "jamat": "8:15 PM"
+        "start": "8:11 PM",
+        "jamat": "8:14 PM"
       }
     },
     {
       "date": 7,
       "fajr": {
-        "start": "5:47 AM",
-        "jamat": "6:30 AM"
+        "start": "5:20 AM",
+        "jamat": "5:23 AM"
       },
-      "sunrise": "7:19 AM",
+      "sunrise": "7:11 AM",
       "zuhr": {
-        "start": "1:00 PM",
-        "jamat": "1:30 PM"
+        "start": "12:48 PM",
+        "jamat": "12:51 PM"
       },
       "asr": {
-        "start": "4:42 PM",
-        "jamat": "5:15 PM"
+        "start": "3:47 PM",
+        "jamat": "3:50 PM"
       },
       "maghrib": {
-        "start": "6:32 PM",
-        "jamat": "6:40 PM"
+        "start": "6:24 PM",
+        "jamat": "6:27 PM"
       },
       "isha": {
-        "start": "7:55 PM",
-        "jamat": "8:15 PM"
+        "start": "8:09 PM",
+        "jamat": "8:12 PM"
       }
     },
     {
       "date": 8,
       "fajr": {
-        "start": "5:49 AM",
-        "jamat": "6:30 AM"
+        "start": "5:22 AM",
+        "jamat": "5:25 AM"
       },
-      "sunrise": "7:20 AM",
+      "sunrise": "7:13 AM",
       "zuhr": {
-        "start": "1:00 PM",
-        "jamat": "1:30 PM"
+        "start": "12:48 PM",
+        "jamat": "12:51 PM"
       },
       "asr": {
-        "start": "4:40 PM",
-        "jamat": "5:15 PM"
+        "start": "3:45 PM",
+        "jamat": "3:48 PM"
       },
       "maghrib": {
-        "start": "6:29 PM",
-        "jamat": "6:36 PM"
+        "start": "6:22 PM",
+        "jamat": "6:25 PM"
       },
       "isha": {
-        "start": "7:53 PM",
-        "jamat": "8:15 PM"
+        "start": "8:06 PM",
+        "jamat": "8:09 PM"
       }
     },
     {
       "date": 9,
       "fajr": {
-        "start": "5:51 AM",
-        "jamat": "6:30 AM"
+        "start": "5:23 AM",
+        "jamat": "5:26 AM"
       },
-      "sunrise": "7:22 AM",
+      "sunrise": "7:15 AM",
       "zuhr": {
-        "start": "1:00 PM",
-        "jamat": "1:30 PM"
+        "start": "12:48 PM",
+        "jamat": "12:51 PM"
       },
       "asr": {
-        "start": "4:38 PM",
-        "jamat": "5:15 PM"
+        "start": "3:43 PM",
+        "jamat": "3:46 PM"
       },
       "maghrib": {
-        "start": "6:27 PM",
-        "jamat": "6:34 PM"
+        "start": "6:20 PM",
+        "jamat": "6:23 PM"
       },
       "isha": {
-        "start": "7:51 PM",
-        "jamat": "8:15 PM"
+        "start": "8:04 PM",
+        "jamat": "8:07 PM"
       }
     },
     {
       "date": 10,
       "fajr": {
-        "start": "5:53 AM",
-        "jamat": "6:30 AM"
+        "start": "5:25 AM",
+        "jamat": "5:28 AM"
       },
-      "sunrise": "7:24 AM",
+      "sunrise": "7:16 AM",
       "zuhr": {
-        "start": "1:00 PM",
-        "jamat": "1:30 PM"
+        "start": "12:47 PM",
+        "jamat": "12:50 PM"
       },
       "asr": {
-        "start": "4:36 PM",
-        "jamat": "5:15 PM"
+        "start": "3:41 PM",
+        "jamat": "3:44 PM"
       },
       "maghrib": {
-        "start": "6:23 PM",
-        "jamat": "6:30 PM"
+        "start": "6:18 PM",
+        "jamat": "6:21 PM"
       },
       "isha": {
-        "start": "7:48 PM",
-        "jamat": "8:15 PM"
+        "start": "8:02 PM",
+        "jamat": "8:05 PM"
       }
     },
     {
       "date": 11,
       "fajr": {
-        "start": "5:54 AM",
-        "jamat": "6:45 AM"
+        "start": "5:27 AM",
+        "jamat": "5:30 AM"
       },
-      "sunrise": "7:26 AM",
+      "sunrise": "7:18 AM",
       "zuhr": {
-        "start": "12:58 PM",
-        "jamat": "1:30 PM"
+        "start": "12:47 PM",
+        "jamat": "12:50 PM"
       },
       "asr": {
-        "start": "4:34 PM",
-        "jamat": "5:15 PM"
+        "start": "3:40 PM",
+        "jamat": "3:43 PM"
       },
       "maghrib": {
-        "start": "6:20 PM",
-        "jamat": "6:27 PM"
+        "start": "6:15 PM",
+        "jamat": "6:18 PM"
       },
       "isha": {
-        "start": "7:46 PM",
-        "jamat": "8:00 PM"
+        "start": "8:00 PM",
+        "jamat": "8:03 PM"
       }
     },
     {
       "date": 12,
       "fajr": {
-        "start": "5:55 AM",
-        "jamat": "6:45 AM"
+        "start": "5:29 AM",
+        "jamat": "5:32 AM"
       },
-      "sunrise": "7:27 AM",
+      "sunrise": "7:20 AM",
       "zuhr": {
-        "start": "12:58 PM",
-        "jamat": "1:30 PM"
+        "start": "12:47 PM",
+        "jamat": "12:50 PM"
       },
       "asr": {
-        "start": "4:32 PM",
-        "jamat": "5:15 PM"
+        "start": "3:38 PM",
+        "jamat": "3:41 PM"
       },
       "maghrib": {
-        "start": "6:18 PM",
-        "jamat": "6:25 PM"
+        "start": "6:13 PM",
+        "jamat": "6:16 PM"
       },
       "isha": {
-        "start": "7:44 PM",
-        "jamat": "8:00 PM"
+        "start": "7:58 PM",
+        "jamat": "8:01 PM"
       }
     },
     {
       "date": 13,
       "fajr": {
-        "start": "5:57 AM",
-        "jamat": "6:45 AM"
+        "start": "5:30 AM",
+        "jamat": "5:33 AM"
       },
-      "sunrise": "7:29 AM",
+      "sunrise": "7:21 AM",
       "zuhr": {
-        "start": "12:58 PM",
-        "jamat": "1:30 PM"
+        "start": "12:47 PM",
+        "jamat": "12:50 PM"
       },
       "asr": {
-        "start": "4:30 PM",
-        "jamat": "5:15 PM"
+        "start": "3:36 PM",
+        "jamat": "3:39 PM"
       },
       "maghrib": {
-        "start": "6:16 PM",
-        "jamat": "6:23 PM"
+        "start": "6:11 PM",
+        "jamat": "6:14 PM"
       },
       "isha": {
-        "start": "7:44 PM",
-        "jamat": "8:00 PM"
+        "start": "7:56 PM",
+        "jamat": "7:59 PM"
       }
     },
     {
       "date": 14,
       "fajr": {
-        "start": "5:58 AM",
-        "jamat": "6:45 AM"
+        "start": "5:32 AM",
+        "jamat": "5:35 AM"
       },
-      "sunrise": "7:31 AM",
+      "sunrise": "7:23 AM",
       "zuhr": {
-        "start": "12:58 PM",
-        "jamat": "1:30 PM"
+        "start": "12:46 PM",
+        "jamat": "12:49 PM"
       },
       "asr": {
-        "start": "4:28 PM",
-        "jamat": "5:15 PM"
+        "start": "3:35 PM",
+        "jamat": "3:38 PM"
       },
       "maghrib": {
-        "start": "6:14 PM",
-        "jamat": "6:21 PM"
+        "start": "6:09 PM",
+        "jamat": "6:12 PM"
       },
       "isha": {
-        "start": "7:41 PM",
-        "jamat": "8:00 PM"
+        "start": "7:53 PM",
+        "jamat": "7:56 PM"
       }
     },
     {
       "date": 15,
       "fajr": {
-        "start": "6:00 AM",
-        "jamat": "6:45 AM"
+        "start": "5:34 AM",
+        "jamat": "5:37 AM"
       },
-      "sunrise": "7:33 AM",
+      "sunrise": "7:25 AM",
       "zuhr": {
-        "start": "12:57 PM",
-        "jamat": "1:30 PM"
+        "start": "12:46 PM",
+        "jamat": "12:49 PM"
       },
       "asr": {
-        "start": "4:26 PM",
-        "jamat": "5:15 PM"
+        "start": "3:33 PM",
+        "jamat": "3:36 PM"
       },
       "maghrib": {
-        "start": "6:11 PM",
-        "jamat": "6:16 PM"
+        "start": "6:07 PM",
+        "jamat": "6:10 PM"
       },
       "isha": {
-        "start": "7:39 PM",
-        "jamat": "8:00 PM"
+        "start": "7:51 PM",
+        "jamat": "7:54 PM"
       }
     },
     {
       "date": 16,
       "fajr": {
-        "start": "6:01 AM",
-        "jamat": "6:45 AM"
+        "start": "5:35 AM",
+        "jamat": "5:38 AM"
       },
-      "sunrise": "7:35 AM",
+      "sunrise": "7:26 AM",
       "zuhr": {
-        "start": "12:57 PM",
-        "jamat": "1:30 PM"
+        "start": "12:46 PM",
+        "jamat": "12:49 PM"
       },
       "asr": {
-        "start": "4:24 PM",
-        "jamat": "5:15 PM"
+        "start": "3:31 PM",
+        "jamat": "3:34 PM"
       },
       "maghrib": {
-        "start": "6:09 PM",
-        "jamat": "6:16 PM"
+        "start": "6:05 PM",
+        "jamat": "6:08 PM"
       },
       "isha": {
-        "start": "7:37 PM",
-        "jamat": "8:00 PM"
+        "start": "7:49 PM",
+        "jamat": "7:52 PM"
       }
     },
     {
       "date": 17,
       "fajr": {
-        "start": "6:02 AM",
-        "jamat": "6:45 AM"
+        "start": "5:37 AM",
+        "jamat": "5:40 AM"
       },
-      "sunrise": "7:36 AM",
+      "sunrise": "7:28 AM",
       "zuhr": {
-        "start": "12:57 PM",
-        "jamat": "1:30 PM"
+        "start": "12:46 PM",
+        "jamat": "12:49 PM"
       },
       "asr": {
-        "start": "4:22 PM",
-        "jamat": "5:15 PM"
+        "start": "3:30 PM",
+        "jamat": "3:33 PM"
       },
       "maghrib": {
-        "start": "6:07 PM",
-        "jamat": "6:14 PM"
+        "start": "6:02 PM",
+        "jamat": "6:05 PM"
       },
       "isha": {
-        "start": "7:35 PM",
-        "jamat": "8:00 PM"
+        "start": "7:47 PM",
+        "jamat": "7:50 PM"
       }
     },
     {
       "date": 18,
       "fajr": {
-        "start": "6:04 AM",
-        "jamat": "6:45 AM"
+        "start": "5:39 AM",
+        "jamat": "5:42 AM"
       },
-      "sunrise": "7:38 AM",
+      "sunrise": "7:30 AM",
       "zuhr": {
-        "start": "12:57 PM",
-        "jamat": "1:30 PM"
+        "start": "12:46 PM",
+        "jamat": "12:49 PM"
       },
       "asr": {
-        "start": "4:20 PM",
-        "jamat": "4:30 PM"
+        "start": "3:28 PM",
+        "jamat": "3:31 PM"
       },
       "maghrib": {
-        "start": "6:05 PM",
-        "jamat": "6:12 PM"
+        "start": "6:00 PM",
+        "jamat": "6:03 PM"
       },
       "isha": {
-        "start": "7:33 PM",
-        "jamat": "7:45 PM"
+        "start": "7:45 PM",
+        "jamat": "7:48 PM"
       }
     },
     {
       "date": 19,
       "fajr": {
-        "start": "6:05 AM",
-        "jamat": "6:45 AM"
+        "start": "5:40 AM",
+        "jamat": "5:43 AM"
       },
-      "sunrise": "7:40 AM",
+      "sunrise": "7:32 AM",
       "zuhr": {
-        "start": "12:57 PM",
-        "jamat": "1:30 PM"
+        "start": "12:45 PM",
+        "jamat": "12:48 PM"
       },
       "asr": {
-        "start": "4:18 PM",
-        "jamat": "4:30 PM"
+        "start": "3:27 PM",
+        "jamat": "3:30 PM"
       },
       "maghrib": {
-        "start": "6:03 PM",
-        "jamat": "6:10 PM"
+        "start": "5:58 PM",
+        "jamat": "6:01 PM"
       },
       "isha": {
-        "start": "7:31 PM",
-        "jamat": "7:45 PM"
+        "start": "7:43 PM",
+        "jamat": "7:46 PM"
       }
     },
     {
       "date": 20,
       "fajr": {
-        "start": "6:07 AM",
-        "jamat": "6:45 AM"
+        "start": "5:42 AM",
+        "jamat": "5:45 AM"
       },
-      "sunrise": "7:42 AM",
+      "sunrise": "7:33 AM",
       "zuhr": {
-        "start": "12:57 PM",
-        "jamat": "1:30 PM"
+        "start": "12:45 PM",
+        "jamat": "12:48 PM"
       },
       "asr": {
-        "start": "4:16 PM",
-        "jamat": "4:30 PM"
+        "start": "3:25 PM",
+        "jamat": "3:28 PM"
       },
       "maghrib": {
-        "start": "6:01 PM",
-        "jamat": "6:08 PM"
+        "start": "5:56 PM",
+        "jamat": "5:59 PM"
       },
       "isha": {
-        "start": "7:28 PM",
-        "jamat": "7:45 PM"
+        "start": "7:41 PM",
+        "jamat": "7:44 PM"
       }
     },
     {
       "date": 21,
       "fajr": {
-        "start": "6:08 AM",
-        "jamat": "6:45 AM"
+        "start": "5:43 AM",
+        "jamat": "5:46 AM"
       },
-      "sunrise": "7:43 AM",
+      "sunrise": "7:35 AM",
       "zuhr": {
-        "start": "12:57 PM",
-        "jamat": "1:30 PM"
+        "start": "12:45 PM",
+        "jamat": "12:48 PM"
       },
       "asr": {
-        "start": "4:14 PM",
-        "jamat": "4:30 PM"
+        "start": "3:23 PM",
+        "jamat": "3:26 PM"
       },
       "maghrib": {
-        "start": "5:58 PM",
-        "jamat": "6:05 PM"
+        "start": "5:54 PM",
+        "jamat": "5:57 PM"
       },
       "isha": {
-        "start": "7:28 PM",
-        "jamat": "7:45 PM"
+        "start": "7:39 PM",
+        "jamat": "7:42 PM"
       }
     },
     {
       "date": 22,
       "fajr": {
-        "start": "6:09 AM",
-        "jamat": "6:45 AM"
+        "start": "5:45 AM",
+        "jamat": "5:48 AM"
       },
-      "sunrise": "7:45 AM",
+      "sunrise": "7:37 AM",
       "zuhr": {
-        "start": "12:57 PM",
-        "jamat": "1:30 PM"
+        "start": "12:45 PM",
+        "jamat": "12:48 PM"
       },
       "asr": {
-        "start": "4:13 PM",
-        "jamat": "4:30 PM"
+        "start": "3:22 PM",
+        "jamat": "3:25 PM"
       },
       "maghrib": {
-        "start": "5:56 PM",
-        "jamat": "6:03 PM"
+        "start": "5:52 PM",
+        "jamat": "5:55 PM"
       },
       "isha": {
-        "start": "7:26 PM",
-        "jamat": "7:45 PM"
+        "start": "7:37 PM",
+        "jamat": "7:40 PM"
       }
     },
     {
       "date": 23,
       "fajr": {
-        "start": "6:11 AM",
-        "jamat": "6:45 AM"
+        "start": "5:47 AM",
+        "jamat": "5:50 AM"
       },
-      "sunrise": "7:47 AM",
+      "sunrise": "7:38 AM",
       "zuhr": {
-        "start": "12:56 PM",
-        "jamat": "1:30 PM"
+        "start": "12:45 PM",
+        "jamat": "12:48 PM"
       },
       "asr": {
-        "start": "4:11 PM",
-        "jamat": "4:30 PM"
+        "start": "3:20 PM",
+        "jamat": "3:23 PM"
       },
       "maghrib": {
-        "start": "5:54 PM",
-        "jamat": "6:01 PM"
+        "start": "5:50 PM",
+        "jamat": "5:53 PM"
       },
       "isha": {
-        "start": "7:24 PM",
-        "jamat": "7:45 PM"
+        "start": "7:36 PM",
+        "jamat": "7:39 PM"
       }
     },
     {
       "date": 24,
       "fajr": {
-        "start": "6:12 AM",
-        "jamat": "6:45 AM"
+        "start": "5:48 AM",
+        "jamat": "5:51 AM"
       },
-      "sunrise": "7:49 AM",
+      "sunrise": "7:40 AM",
       "zuhr": {
-        "start": "12:56 PM",
-        "jamat": "1:30 PM"
+        "start": "12:45 PM",
+        "jamat": "12:48 PM"
       },
       "asr": {
-        "start": "4:09 PM",
-        "jamat": "4:30 PM"
+        "start": "3:19 PM",
+        "jamat": "3:22 PM"
       },
       "maghrib": {
-        "start": "5:52 PM",
-        "jamat": "5:59 PM"
+        "start": "5:48 PM",
+        "jamat": "5:51 PM"
       },
       "isha": {
-        "start": "7:22 PM",
-        "jamat": "7:45 PM"
+        "start": "7:34 PM",
+        "jamat": "7:37 PM"
       }
     },
     {
       "date": 25,
       "fajr": {
-        "start": "6:13 AM",
-        "jamat": "6:45 AM"
+        "start": "5:50 AM",
+        "jamat": "5:53 AM"
       },
-      "sunrise": "7:51 AM",
+      "sunrise": "7:42 AM",
       "zuhr": {
-        "start": "12:56 PM",
-        "jamat": "1:30 PM"
+        "start": "12:45 PM",
+        "jamat": "12:48 PM"
       },
       "asr": {
-        "start": "4:07 PM",
-        "jamat": "4:30 PM"
+        "start": "3:17 PM",
+        "jamat": "3:20 PM"
       },
       "maghrib": {
-        "start": "5:50 PM",
-        "jamat": "5:57 PM"
+        "start": "5:46 PM",
+        "jamat": "5:49 PM"
       },
       "isha": {
-        "start": "7:22 PM",
-        "jamat": "7:45 PM"
+        "start": "7:32 PM",
+        "jamat": "7:35 PM"
       }
     },
     {
       "date": 26,
       "fajr": {
-        "start": "6:14 AM",
-        "jamat": "6:45 AM"
+        "start": "5:51 AM",
+        "jamat": "5:54 AM"
       },
-      "sunrise": "7:53 AM",
+      "sunrise": "7:44 AM",
       "zuhr": {
-        "start": "12:56 PM",
-        "jamat": "1:30 PM"
+        "start": "12:44 PM",
+        "jamat": "12:47 PM"
       },
       "asr": {
-        "start": "4:05 PM",
-        "jamat": "4:30 PM"
+        "start": "3:16 PM",
+        "jamat": "3:19 PM"
       },
       "maghrib": {
-        "start": "5:48 PM",
-        "jamat": "5:55 PM"
+        "start": "5:44 PM",
+        "jamat": "5:47 PM"
       },
       "isha": {
-        "start": "7:20 PM",
-        "jamat": "7:45 PM"
+        "start": "7:30 PM",
+        "jamat": "7:33 PM"
       }
     },
     {
       "date": 27,
       "fajr": {
-        "start": "6:15 AM",
-        "jamat": "6:45 AM"
+        "start": "4:53 AM",
+        "jamat": "4:56 AM"
       },
-      "sunrise": "7:54 AM",
+      "sunrise": "6:45 AM",
       "zuhr": {
-        "start": "11:56 AM",
-        "jamat": "1:00 PM"
+        "start": "11:44 AM",
+        "jamat": "11:47 AM"
       },
       "asr": {
-        "start": "3:03 PM",
-        "jamat": "3:30 PM"
+        "start": "2:14 PM",
+        "jamat": "2:17 PM"
       },
       "maghrib": {
-        "start": "4:46 PM",
-        "jamat": "4:53 PM"
+        "start": "4:42 PM",
+        "jamat": "4:45 PM"
       },
       "isha": {
-        "start": "6:18 PM",
-        "jamat": "7:30 PM"
+        "start": "6:28 PM",
+        "jamat": "6:31 PM"
       }
     },
     {
       "date": 28,
       "fajr": {
-        "start": "6:17 AM",
-        "jamat": "6:45 AM"
+        "start": "4:55 AM",
+        "jamat": "4:58 AM"
       },
-      "sunrise": "7:56 AM",
+      "sunrise": "6:47 AM",
       "zuhr": {
-        "start": "11:56 AM",
-        "jamat": "1:00 PM"
+        "start": "11:44 AM",
+        "jamat": "11:47 AM"
       },
       "asr": {
-        "start": "3:02 PM",
-        "jamat": "3:30 PM"
+        "start": "2:13 PM",
+        "jamat": "2:16 PM"
       },
       "maghrib": {
-        "start": "5:44 PM",
-        "jamat": "5:51 PM"
+        "start": "4:40 PM",
+        "jamat": "4:43 PM"
       },
       "isha": {
-        "start": "7:16 PM",
-        "jamat": "7:30 PM"
+        "start": "6:27 PM",
+        "jamat": "6:30 PM"
       }
     },
     {
       "date": 29,
       "fajr": {
-        "start": "6:18 AM",
-        "jamat": "6:45 AM"
+        "start": "4:56 AM",
+        "jamat": "4:59 AM"
       },
-      "sunrise": "7:57 AM",
+      "sunrise": "6:49 AM",
       "zuhr": {
-        "start": "11:56 AM",
-        "jamat": "1:00 PM"
+        "start": "11:44 AM",
+        "jamat": "11:47 AM"
       },
       "asr": {
-        "start": "3:02 PM",
-        "jamat": "3:30 PM"
+        "start": "2:11 PM",
+        "jamat": "2:14 PM"
       },
       "maghrib": {
-        "start": "4:42 PM",
-        "jamat": "5:49 PM"
+        "start": "4:38 PM",
+        "jamat": "4:41 PM"
       },
       "isha": {
-        "start": "6:14 PM",
-        "jamat": "7:30 PM"
+        "start": "6:25 PM",
+        "jamat": "6:28 PM"
       }
     },
     {
       "date": 30,
       "fajr": {
-        "start": "5:20 AM",
-        "jamat": "5:45 AM"
+        "start": "4:58 AM",
+        "jamat": "5:01 AM"
       },
-      "sunrise": "6:59 AM",
+      "sunrise": "6:51 AM",
       "zuhr": {
-        "start": "11:56 AM",
-        "jamat": "1:00 PM"
+        "start": "11:44 AM",
+        "jamat": "11:47 AM"
       },
       "asr": {
-        "start": "2:58 PM",
-        "jamat": "3:30 PM"
+        "start": "2:10 PM",
+        "jamat": "2:13 PM"
       },
       "maghrib": {
-        "start": "4:40 PM",
-        "jamat": "4:47 PM"
+        "start": "4:37 PM",
+        "jamat": "4:40 PM"
       },
       "isha": {
-        "start": "6:12 PM",
-        "jamat": "7:30 PM"
+        "start": "6:23 PM",
+        "jamat": "6:26 PM"
       }
     },
     {
       "date": 31,
       "fajr": {
-        "start": "5:22 AM",
-        "jamat": "5:45 AM"
+        "start": "4:59 AM",
+        "jamat": "5:02 AM"
       },
-      "sunrise": "7:00 AM",
+      "sunrise": "6:52 AM",
       "zuhr": {
-        "start": "11:56 AM",
-        "jamat": "1:00 PM"
+        "start": "11:44 AM",
+        "jamat": "11:47 AM"
       },
       "asr": {
-        "start": "2:56 PM",
-        "jamat": "3:30 PM"
+        "start": "2:08 PM",
+        "jamat": "2:11 PM"
       },
       "maghrib": {
-        "start": "4:38 PM",
-        "jamat": "4:45 PM"
+        "start": "4:35 PM",
+        "jamat": "4:38 PM"
       },
       "isha": {
-        "start": "6:10 PM",
-        "jamat": "7:30 PM"
+        "start": "6:22 PM",
+        "jamat": "6:25 PM"
       }
     }
   ],
+
   "November": [
     {
       "date": 1,
       "fajr": {
-        "start": "6:24 AM",
-        "jamat": "6:15 AM"
+        "start": "5:01 AM",
+        "jamat": "5:04 AM"
       },
-      "sunrise": "7:04 AM",
+      "sunrise": "6:54 AM",
       "zuhr": {
-        "start": "11:56 AM",
-        "jamat": "1:00 PM"
+        "start": "11:44 AM",
+        "jamat": "11:47 AM"
       },
       "asr": {
-        "start": "2:55 PM",
-        "jamat": "3:15 PM"
+        "start": "2:07 PM",
+        "jamat": "2:10 PM"
       },
       "maghrib": {
-        "start": "4:37 PM",
-        "jamat": "4:44 PM"
+        "start": "4:33 PM",
+        "jamat": "4:36 PM"
       },
       "isha": {
-        "start": "6:09 PM",
-        "jamat": "7:30 PM"
+        "start": "6:20 PM",
+        "jamat": "6:23 PM"
       }
     },
     {
       "date": 2,
       "fajr": {
-        "start": "5:25 AM",
-        "jamat": "6:15 AM"
+        "start": "5:02 AM",
+        "jamat": "5:05 AM"
       },
-      "sunrise": "7:06 AM",
+      "sunrise": "6:56 AM",
       "zuhr": {
-        "start": "11:56 AM",
-        "jamat": "1:00 PM"
+        "start": "11:44 AM",
+        "jamat": "11:47 AM"
       },
       "asr": {
-        "start": "2:53 PM",
-        "jamat": "3:15 PM"
+        "start": "2:05 PM",
+        "jamat": "2:08 PM"
       },
       "maghrib": {
-        "start": "4:35 PM",
-        "jamat": "4:42 PM"
+        "start": "4:31 PM",
+        "jamat": "4:34 PM"
       },
       "isha": {
-        "start": "6:07 PM",
-        "jamat": "7:30 PM"
+        "start": "6:18 PM",
+        "jamat": "6:21 PM"
       }
     },
     {
       "date": 3,
       "fajr": {
-        "start": "5:27 AM",
-        "jamat": "6:15 AM"
+        "start": "5:04 AM",
+        "jamat": "5:07 AM"
       },
-      "sunrise": "7:08 AM",
+      "sunrise": "6:58 AM",
       "zuhr": {
-        "start": "11:56 AM",
-        "jamat": "1:00 PM"
+        "start": "11:44 AM",
+        "jamat": "11:47 AM"
       },
       "asr": {
-        "start": "2:51 PM",
-        "jamat": "3:15 PM"
+        "start": "2:04 PM",
+        "jamat": "2:07 PM"
       },
       "maghrib": {
-        "start": "4:33 PM",
-        "jamat": "4:40 PM"
+        "start": "4:29 PM",
+        "jamat": "4:32 PM"
       },
       "isha": {
-        "start": "6:06 PM",
-        "jamat": "7:30 PM"
+        "start": "6:17 PM",
+        "jamat": "6:20 PM"
       }
     },
     {
       "date": 4,
       "fajr": {
-        "start": "5:28 AM",
-        "jamat": "6:15 AM"
+        "start": "5:05 AM",
+        "jamat": "5:08 AM"
       },
-      "sunrise": "7:10 AM",
+      "sunrise": "6:59 AM",
       "zuhr": {
-        "start": "11:56 AM",
-        "jamat": "1:00 PM"
+        "start": "11:44 AM",
+        "jamat": "11:47 AM"
       },
       "asr": {
-        "start": "2:50 PM",
-        "jamat": "3:15 PM"
+        "start": "2:03 PM",
+        "jamat": "2:06 PM"
       },
       "maghrib": {
-        "start": "4:31 PM",
-        "jamat": "4:39 PM"
+        "start": "4:28 PM",
+        "jamat": "4:31 PM"
       },
       "isha": {
-        "start": "6:05 PM",
-        "jamat": "7:30 PM"
+        "start": "6:15 PM",
+        "jamat": "6:18 PM"
       }
     },
     {
       "date": 5,
       "fajr": {
-        "start": "5:30 AM",
-        "jamat": "6:15 AM"
+        "start": "5:07 AM",
+        "jamat": "5:10 AM"
       },
-      "sunrise": "7:11 AM",
+      "sunrise": "7:01 AM",
       "zuhr": {
-        "start": "11:56 AM",
-        "jamat": "1:00 PM"
+        "start": "11:44 AM",
+        "jamat": "11:47 AM"
       },
       "asr": {
-        "start": "2:48 PM",
-        "jamat": "3:15 PM"
+        "start": "2:01 PM",
+        "jamat": "2:04 PM"
       },
       "maghrib": {
-        "start": "4:29 PM",
-        "jamat": "4:36 PM"
+        "start": "4:26 PM",
+        "jamat": "4:29 PM"
       },
       "isha": {
-        "start": "6:04 PM",
-        "jamat": "7:30 PM"
+        "start": "6:14 PM",
+        "jamat": "6:17 PM"
       }
     },
     {
       "date": 6,
       "fajr": {
-        "start": "5:31 AM",
-        "jamat": "6:15 AM"
+        "start": "5:08 AM",
+        "jamat": "5:11 AM"
       },
-      "sunrise": "7:13 AM",
+      "sunrise": "7:03 AM",
       "zuhr": {
-        "start": "11:56 AM",
-        "jamat": "1:00 PM"
+        "start": "11:44 AM",
+        "jamat": "11:47 AM"
       },
       "asr": {
-        "start": "2:47 PM",
-        "jamat": "3:15 PM"
+        "start": "2:00 PM",
+        "jamat": "2:03 PM"
       },
       "maghrib": {
-        "start": "4:28 PM",
-        "jamat": "4:35 PM"
+        "start": "4:24 PM",
+        "jamat": "4:27 PM"
       },
       "isha": {
-        "start": "6:02 PM",
-        "jamat": "7:30 PM"
+        "start": "6:13 PM",
+        "jamat": "6:16 PM"
       }
     },
     {
       "date": 7,
       "fajr": {
-        "start": "5:33 AM",
-        "jamat": "6:15 AM"
+        "start": "5:10 AM",
+        "jamat": "5:13 AM"
       },
-      "sunrise": "7:15 AM",
+      "sunrise": "7:05 AM",
       "zuhr": {
-        "start": "11:56 AM",
-        "jamat": "1:00 PM"
+        "start": "11:44 AM",
+        "jamat": "11:47 AM"
       },
       "asr": {
-        "start": "2:45 PM",
-        "jamat": "3:15 PM"
+        "start": "1:59 PM",
+        "jamat": "2:02 PM"
       },
       "maghrib": {
-        "start": "4:26 PM",
-        "jamat": "4:33 PM"
+        "start": "4:23 PM",
+        "jamat": "4:26 PM"
       },
       "isha": {
-        "start": "6:01 PM",
-        "jamat": "7:30 PM"
+        "start": "6:11 PM",
+        "jamat": "6:14 PM"
       }
     },
     {
       "date": 8,
       "fajr": {
-        "start": "5:34 AM",
-        "jamat": "6:30 AM"
+        "start": "5:11 AM",
+        "jamat": "5:14 AM"
       },
-      "sunrise": "7:17 AM",
+      "sunrise": "7:07 AM",
       "zuhr": {
-        "start": "11:56 AM",
-        "jamat": "1:00 PM"
+        "start": "11:44 AM",
+        "jamat": "11:47 AM"
       },
       "asr": {
-        "start": "2:44 PM",
-        "jamat": "3:00 PM"
+        "start": "1:57 PM",
+        "jamat": "2:00 PM"
       },
       "maghrib": {
-        "start": "4:24 PM",
-        "jamat": "4:31 PM"
+        "start": "4:21 PM",
+        "jamat": "4:24 PM"
       },
       "isha": {
-        "start": "5:59 PM",
-        "jamat": "7:30 PM"
+        "start": "6:10 PM",
+        "jamat": "6:13 PM"
       }
     },
     {
       "date": 9,
       "fajr": {
-        "start": "5:36 AM",
-        "jamat": "6:30 AM"
+        "start": "5:13 AM",
+        "jamat": "5:16 AM"
       },
-      "sunrise": "7:19 AM",
+      "sunrise": "7:08 AM",
       "zuhr": {
-        "start": "11:56 AM",
-        "jamat": "1:00 PM"
+        "start": "11:44 AM",
+        "jamat": "11:47 AM"
       },
       "asr": {
-        "start": "2:42 PM",
-        "jamat": "3:00 PM"
+        "start": "1:56 PM",
+        "jamat": "1:59 PM"
       },
       "maghrib": {
-        "start": "4:23 PM",
-        "jamat": "4:30 PM"
+        "start": "4:19 PM",
+        "jamat": "4:22 PM"
       },
       "isha": {
-        "start": "5:57 PM",
-        "jamat": "7:30 PM"
+        "start": "6:08 PM",
+        "jamat": "6:11 PM"
       }
     },
     {
       "date": 10,
       "fajr": {
-        "start": "5:37 AM",
-        "jamat": "6:30 AM"
+        "start": "5:14 AM",
+        "jamat": "5:17 AM"
       },
-      "sunrise": "7:21 AM",
+      "sunrise": "7:10 AM",
       "zuhr": {
-        "start": "11:57 AM",
-        "jamat": "1:00 PM"
+        "start": "11:44 AM",
+        "jamat": "11:47 AM"
       },
       "asr": {
-        "start": "2:41 PM",
-        "jamat": "3:00 PM"
+        "start": "1:55 PM",
+        "jamat": "1:58 PM"
       },
       "maghrib": {
-        "start": "4:21 PM",
-        "jamat": "4:28 PM"
+        "start": "4:18 PM",
+        "jamat": "4:21 PM"
       },
       "isha": {
-        "start": "5:56 PM",
-        "jamat": "7:30 PM"
+        "start": "6:07 PM",
+        "jamat": "6:10 PM"
       }
     },
     {
       "date": 11,
       "fajr": {
-        "start": "5:39 AM",
-        "jamat": "6:30 AM"
+        "start": "5:16 AM",
+        "jamat": "5:19 AM"
       },
-      "sunrise": "7:22 AM",
+      "sunrise": "7:12 AM",
       "zuhr": {
-        "start": "11:57 AM",
-        "jamat": "1:00 PM"
+        "start": "11:45 AM",
+        "jamat": "11:48 AM"
       },
       "asr": {
-        "start": "2:39 PM",
-        "jamat": "3:00 PM"
+        "start": "1:54 PM",
+        "jamat": "1:57 PM"
       },
       "maghrib": {
-        "start": "4:19 PM",
-        "jamat": "4:26 PM"
+        "start": "4:16 PM",
+        "jamat": "4:19 PM"
       },
       "isha": {
-        "start": "5:54 PM",
-        "jamat": "7:30 PM"
+        "start": "6:06 PM",
+        "jamat": "6:09 PM"
       }
     },
     {
       "date": 12,
       "fajr": {
-        "start": "5:41 AM",
-        "jamat": "6:30 AM"
+        "start": "5:17 AM",
+        "jamat": "5:20 AM"
       },
-      "sunrise": "7:24 AM",
+      "sunrise": "7:14 AM",
       "zuhr": {
-        "start": "11:57 AM",
-        "jamat": "1:00 PM"
+        "start": "11:45 AM",
+        "jamat": "11:48 AM"
       },
       "asr": {
-        "start": "2:38 PM",
-        "jamat": "3:00 PM"
+        "start": "1:53 PM",
+        "jamat": "1:56 PM"
       },
       "maghrib": {
-        "start": "4:18 PM",
-        "jamat": "4:25 PM"
+        "start": "4:15 PM",
+        "jamat": "4:18 PM"
       },
       "isha": {
-        "start": "5:54 PM",
-        "jamat": "7:30 PM"
+        "start": "6:05 PM",
+        "jamat": "6:08 PM"
       }
     },
     {
       "date": 13,
       "fajr": {
-        "start": "5:42 AM",
-        "jamat": "6:30 AM"
+        "start": "5:19 AM",
+        "jamat": "5:22 AM"
       },
-      "sunrise": "7:26 AM",
+      "sunrise": "7:15 AM",
       "zuhr": {
-        "start": "11:57 AM",
-        "jamat": "1:00 PM"
+        "start": "11:45 AM",
+        "jamat": "11:48 AM"
       },
       "asr": {
-        "start": "2:36 PM",
-        "jamat": "3:00 PM"
+        "start": "1:52 PM",
+        "jamat": "1:55 PM"
       },
       "maghrib": {
-        "start": "4:16 PM",
-        "jamat": "4:23 PM"
+        "start": "4:14 PM",
+        "jamat": "4:17 PM"
       },
       "isha": {
-        "start": "5:52 PM",
-        "jamat": "7:30 PM"
+        "start": "6:04 PM",
+        "jamat": "6:07 PM"
       }
     },
     {
       "date": 14,
       "fajr": {
-        "start": "5:43 AM",
-        "jamat": "6:30 AM"
+        "start": "5:20 AM",
+        "jamat": "5:23 AM"
       },
-      "sunrise": "7:28 AM",
+      "sunrise": "7:17 AM",
       "zuhr": {
-        "start": "11:57 AM",
-        "jamat": "1:00 PM"
+        "start": "11:45 AM",
+        "jamat": "11:48 AM"
       },
       "asr": {
-        "start": "2:35 PM",
-        "jamat": "3:00 PM"
+        "start": "1:50 PM",
+        "jamat": "1:53 PM"
       },
       "maghrib": {
-        "start": "4:15 PM",
-        "jamat": "4:22 PM"
+        "start": "4:12 PM",
+        "jamat": "4:15 PM"
       },
       "isha": {
-        "start": "5:51 PM",
-        "jamat": "7:30 PM"
+        "start": "6:02 PM",
+        "jamat": "6:05 PM"
       }
     },
     {
       "date": 15,
       "fajr": {
-        "start": "5:45 AM",
-        "jamat": "6:30 AM"
+        "start": "5:22 AM",
+        "jamat": "5:25 AM"
       },
-      "sunrise": "7:29 AM",
+      "sunrise": "7:19 AM",
       "zuhr": {
-        "start": "11:57 AM",
-        "jamat": "1:00 PM"
+        "start": "11:45 AM",
+        "jamat": "11:48 AM"
       },
       "asr": {
-        "start": "2:34 PM",
-        "jamat": "2:50 PM"
+        "start": "1:49 PM",
+        "jamat": "1:52 PM"
       },
       "maghrib": {
-        "start": "4:13 PM",
-        "jamat": "4:20 PM"
+        "start": "4:11 PM",
+        "jamat": "4:14 PM"
       },
       "isha": {
-        "start": "5:49 PM",
-        "jamat": "7:30 PM"
+        "start": "6:01 PM",
+        "jamat": "6:04 PM"
       }
     },
     {
       "date": 16,
       "fajr": {
-        "start": "5:46 AM",
-        "jamat": "6:30 AM"
+        "start": "5:23 AM",
+        "jamat": "5:26 AM"
       },
-      "sunrise": "7:31 AM",
+      "sunrise": "7:20 AM",
       "zuhr": {
-        "start": "11:57 AM",
-        "jamat": "1:00 PM"
+        "start": "11:45 AM",
+        "jamat": "11:48 AM"
       },
       "asr": {
-        "start": "2:32 PM",
-        "jamat": "2:50 PM"
+        "start": "1:48 PM",
+        "jamat": "1:51 PM"
       },
       "maghrib": {
-        "start": "4:12 PM",
-        "jamat": "4:19 PM"
+        "start": "4:09 PM",
+        "jamat": "4:12 PM"
       },
       "isha": {
-        "start": "5:48 PM",
-        "jamat": "7:30 PM"
+        "start": "6:00 PM",
+        "jamat": "6:03 PM"
       }
     },
     {
       "date": 17,
       "fajr": {
-        "start": "5:48 AM",
-        "jamat": "6:30 AM"
+        "start": "5:24 AM",
+        "jamat": "5:27 AM"
       },
-      "sunrise": "7:33 AM",
+      "sunrise": "7:22 AM",
       "zuhr": {
-        "start": "11:58 AM",
-        "jamat": "1:00 PM"
+        "start": "11:45 AM",
+        "jamat": "11:48 AM"
       },
       "asr": {
-        "start": "2:31 PM",
-        "jamat": "2:50 PM"
+        "start": "1:47 PM",
+        "jamat": "1:50 PM"
       },
       "maghrib": {
-        "start": "4:11 PM",
-        "jamat": "4:18 PM"
+        "start": "4:08 PM",
+        "jamat": "4:11 PM"
       },
       "isha": {
-        "start": "5:48 PM",
-        "jamat": "7:30 PM"
+        "start": "5:59 PM",
+        "jamat": "6:02 PM"
       }
     },
     {
       "date": 18,
       "fajr": {
-        "start": "5:49 AM",
-        "jamat": "6:30 AM"
+        "start": "5:26 AM",
+        "jamat": "5:29 AM"
       },
-      "sunrise": "7:35 AM",
+      "sunrise": "7:24 AM",
       "zuhr": {
-        "start": "11:58 AM",
-        "jamat": "1:00 PM"
+        "start": "11:46 AM",
+        "jamat": "11:49 AM"
       },
       "asr": {
-        "start": "2:30 PM",
-        "jamat": "2:50 PM"
+        "start": "1:46 PM",
+        "jamat": "1:49 PM"
       },
       "maghrib": {
-        "start": "4:09 PM",
-        "jamat": "4:16 PM"
+        "start": "4:07 PM",
+        "jamat": "4:10 PM"
       },
       "isha": {
-        "start": "5:47 PM",
-        "jamat": "7:30 PM"
+        "start": "5:58 PM",
+        "jamat": "6:01 PM"
       }
     },
     {
       "date": 19,
       "fajr": {
-        "start": "5:51 AM",
-        "jamat": "6:30 AM"
+        "start": "5:27 AM",
+        "jamat": "5:30 AM"
       },
-      "sunrise": "7:36 AM",
+      "sunrise": "7:25 AM",
       "zuhr": {
-        "start": "11:58 AM",
-        "jamat": "1:00 PM"
+        "start": "11:46 AM",
+        "jamat": "11:49 AM"
       },
       "asr": {
-        "start": "2:29 PM",
-        "jamat": "2:50 PM"
+        "start": "1:46 PM",
+        "jamat": "1:49 PM"
       },
       "maghrib": {
-        "start": "4:08 PM",
-        "jamat": "4:15 PM"
+        "start": "4:06 PM",
+        "jamat": "4:09 PM"
       },
       "isha": {
-        "start": "5:46 PM",
-        "jamat": "7:30 PM"
+        "start": "5:57 PM",
+        "jamat": "6:00 PM"
       }
     },
     {
       "date": 20,
       "fajr": {
-        "start": "5:53 AM",
-        "jamat": "6:30 AM"
+        "start": "5:29 AM",
+        "jamat": "5:32 AM"
       },
-      "sunrise": "7:38 AM",
+      "sunrise": "7:27 AM",
       "zuhr": {
-        "start": "11:58 AM",
-        "jamat": "1:00 PM"
+        "start": "11:46 AM",
+        "jamat": "11:49 AM"
       },
       "asr": {
-        "start": "2:28 PM",
-        "jamat": "2:50 PM"
+        "start": "1:45 PM",
+        "jamat": "1:48 PM"
       },
       "maghrib": {
-        "start": "4:07 PM",
-        "jamat": "4:14 PM"
+        "start": "4:05 PM",
+        "jamat": "4:08 PM"
       },
       "isha": {
-        "start": "5:45 PM",
-        "jamat": "7:30 PM"
+        "start": "5:57 PM",
+        "jamat": "6:00 PM"
       }
     },
     {
       "date": 21,
       "fajr": {
-        "start": "5:55 AM",
-        "jamat": "6:30 AM"
+        "start": "5:30 AM",
+        "jamat": "5:33 AM"
       },
-      "sunrise": "7:40 AM",
+      "sunrise": "7:29 AM",
       "zuhr": {
-        "start": "11:59 AM",
-        "jamat": "1:00 PM"
+        "start": "11:46 AM",
+        "jamat": "11:49 AM"
       },
       "asr": {
-        "start": "2:27 PM",
-        "jamat": "2:50 PM"
+        "start": "1:44 PM",
+        "jamat": "1:47 PM"
       },
       "maghrib": {
-        "start": "4:06 PM",
-        "jamat": "4:13 PM"
+        "start": "4:03 PM",
+        "jamat": "4:06 PM"
       },
       "isha": {
-        "start": "5:45 PM",
-        "jamat": "7:30 PM"
+        "start": "5:56 PM",
+        "jamat": "5:59 PM"
       }
     },
     {
       "date": 22,
       "fajr": {
-        "start": "5:56 AM",
-        "jamat": "6:45 AM"
+        "start": "5:31 AM",
+        "jamat": "5:34 AM"
       },
-      "sunrise": "7:42 AM",
+      "sunrise": "7:30 AM",
       "zuhr": {
-        "start": "11:59 AM",
-        "jamat": "1:00 PM"
+        "start": "11:47 AM",
+        "jamat": "11:50 AM"
       },
       "asr": {
-        "start": "2:26 PM",
-        "jamat": "2:45 PM"
+        "start": "1:43 PM",
+        "jamat": "1:46 PM"
       },
       "maghrib": {
-        "start": "4:05 PM",
-        "jamat": "4:12 PM"
+        "start": "4:02 PM",
+        "jamat": "4:05 PM"
       },
       "isha": {
-        "start": "5:44 PM",
-        "jamat": "7:30 PM"
+        "start": "5:55 PM",
+        "jamat": "5:58 PM"
       }
     },
     {
       "date": 23,
       "fajr": {
-        "start": "5:58 AM",
-        "jamat": "6:45 AM"
+        "start": "5:33 AM",
+        "jamat": "5:36 AM"
       },
-      "sunrise": "7:43 AM",
+      "sunrise": "7:32 AM",
       "zuhr": {
-        "start": "11:59 AM",
-        "jamat": "1:00 PM"
+        "start": "11:47 AM",
+        "jamat": "11:50 AM"
       },
       "asr": {
-        "start": "2:25 PM",
-        "jamat": "2:45 PM"
+        "start": "1:42 PM",
+        "jamat": "1:45 PM"
       },
       "maghrib": {
-        "start": "4:04 PM",
-        "jamat": "4:11 PM"
+        "start": "4:01 PM",
+        "jamat": "4:04 PM"
       },
       "isha": {
-        "start": "5:43 PM",
-        "jamat": "7:30 PM"
+        "start": "5:54 PM",
+        "jamat": "5:57 PM"
       }
     },
     {
       "date": 24,
       "fajr": {
-        "start": "6:00 AM",
-        "jamat": "6:45 AM"
+        "start": "5:34 AM",
+        "jamat": "5:37 AM"
+      },
+      "sunrise": "7:33 AM",
+      "zuhr": {
+        "start": "11:47 AM",
+        "jamat": "11:50 AM"
+      },
+      "asr": {
+        "start": "1:41 PM",
+        "jamat": "1:44 PM"
+      },
+      "maghrib": {
+        "start": "4:00 PM",
+        "jamat": "4:03 PM"
+      },
+      "isha": {
+        "start": "5:53 PM",
+        "jamat": "5:56 PM"
+      }
+    },
+    {
+      "date": 25,
+      "fajr": {
+        "start": "5:35 AM",
+        "jamat": "5:38 AM"
+      },
+      "sunrise": "7:35 AM",
+      "zuhr": {
+        "start": "11:48 AM",
+        "jamat": "11:51 AM"
+      },
+      "asr": {
+        "start": "1:41 PM",
+        "jamat": "1:44 PM"
+      },
+      "maghrib": {
+        "start": "3:59 PM",
+        "jamat": "4:02 PM"
+      },
+      "isha": {
+        "start": "5:53 PM",
+        "jamat": "5:56 PM"
+      }
+    },
+    {
+      "date": 26,
+      "fajr": {
+        "start": "5:36 AM",
+        "jamat": "5:39 AM"
+      },
+      "sunrise": "7:37 AM",
+      "zuhr": {
+        "start": "11:48 AM",
+        "jamat": "11:51 AM"
+      },
+      "asr": {
+        "start": "1:40 PM",
+        "jamat": "1:43 PM"
+      },
+      "maghrib": {
+        "start": "3:58 PM",
+        "jamat": "4:01 PM"
+      },
+      "isha": {
+        "start": "5:52 PM",
+        "jamat": "5:55 PM"
+      }
+    },
+    {
+      "date": 27,
+      "fajr": {
+        "start": "5:38 AM",
+        "jamat": "5:41 AM"
+      },
+      "sunrise": "7:38 AM",
+      "zuhr": {
+        "start": "11:48 AM",
+        "jamat": "11:51 AM"
+      },
+      "asr": {
+        "start": "1:40 PM",
+        "jamat": "1:43 PM"
+      },
+      "maghrib": {
+        "start": "3:58 PM",
+        "jamat": "4:01 PM"
+      },
+      "isha": {
+        "start": "5:52 PM",
+        "jamat": "5:55 PM"
+      }
+    },
+    {
+      "date": 28,
+      "fajr": {
+        "start": "5:39 AM",
+        "jamat": "5:42 AM"
+      },
+      "sunrise": "7:40 AM",
+      "zuhr": {
+        "start": "11:48 AM",
+        "jamat": "11:51 AM"
+      },
+      "asr": {
+        "start": "1:39 PM",
+        "jamat": "1:42 PM"
+      },
+      "maghrib": {
+        "start": "3:57 PM",
+        "jamat": "4:00 PM"
+      },
+      "isha": {
+        "start": "5:51 PM",
+        "jamat": "5:54 PM"
+      }
+    },
+    {
+      "date": 29,
+      "fajr": {
+        "start": "5:40 AM",
+        "jamat": "5:43 AM"
+      },
+      "sunrise": "7:41 AM",
+      "zuhr": {
+        "start": "11:49 AM",
+        "jamat": "11:52 AM"
+      },
+      "asr": {
+        "start": "1:38 PM",
+        "jamat": "1:41 PM"
+      },
+      "maghrib": {
+        "start": "3:56 PM",
+        "jamat": "3:59 PM"
+      },
+      "isha": {
+        "start": "5:51 PM",
+        "jamat": "5:54 PM"
+      }
+    },
+    {
+      "date": 30,
+      "fajr": {
+        "start": "5:41 AM",
+        "jamat": "5:44 AM"
+      },
+      "sunrise": "7:42 AM",
+      "zuhr": {
+        "start": "11:49 AM",
+        "jamat": "11:52 AM"
+      },
+      "asr": {
+        "start": "1:38 PM",
+        "jamat": "1:41 PM"
+      },
+      "maghrib": {
+        "start": "3:55 PM",
+        "jamat": "3:58 PM"
+      },
+      "isha": {
+        "start": "5:50 PM",
+        "jamat": "5:53 PM"
+      }
+    }
+  ],
+
+  "December": [
+    {
+      "date": 1,
+      "fajr": {
+        "start": "5:42 AM",
+        "jamat": "5:45 AM"
+      },
+      "sunrise": "7:44 AM",
+      "zuhr": {
+        "start": "11:50 AM",
+        "jamat": "11:53 AM"
+      },
+      "asr": {
+        "start": "1:37 PM",
+        "jamat": "1:40 PM"
+      },
+      "maghrib": {
+        "start": "3:55 PM",
+        "jamat": "3:58 PM"
+      },
+      "isha": {
+        "start": "5:50 PM",
+        "jamat": "5:53 PM"
+      }
+    },
+    {
+      "date": 2,
+      "fajr": {
+        "start": "5:43 AM",
+        "jamat": "5:46 AM"
       },
       "sunrise": "7:45 AM",
       "zuhr": {
-        "start": "11:59 AM",
-        "jamat": "1:00 PM"
+        "start": "11:50 AM",
+        "jamat": "11:53 AM"
       },
       "asr": {
-        "start": "2:24 PM",
-        "jamat": "2:45 PM"
+        "start": "1:37 PM",
+        "jamat": "1:40 PM"
       },
       "maghrib": {
-        "start": "4:02 PM",
-        "jamat": "4:09 PM"
+        "start": "3:54 PM",
+        "jamat": "3:57 PM"
       },
       "isha": {
-        "start": "5:42 PM",
-        "jamat": "7:30 PM"
+        "start": "5:49 PM",
+        "jamat": "5:52 PM"
+      }
+    },
+    {
+      "date": 3,
+      "fajr": {
+        "start": "5:45 AM",
+        "jamat": "5:48 AM"
+      },
+      "sunrise": "7:47 AM",
+      "zuhr": {
+        "start": "11:50 AM",
+        "jamat": "11:53 AM"
+      },
+      "asr": {
+        "start": "1:37 PM",
+        "jamat": "1:40 PM"
+      },
+      "maghrib": {
+        "start": "3:54 PM",
+        "jamat": "3:57 PM"
+      },
+      "isha": {
+        "start": "5:49 PM",
+        "jamat": "5:52 PM"
+      }
+    },
+    {
+      "date": 4,
+      "fajr": {
+        "start": "5:46 AM",
+        "jamat": "5:49 AM"
+      },
+      "sunrise": "7:48 AM",
+      "zuhr": {
+        "start": "11:51 AM",
+        "jamat": "11:54 AM"
+      },
+      "asr": {
+        "start": "1:36 PM",
+        "jamat": "1:39 PM"
+      },
+      "maghrib": {
+        "start": "3:53 PM",
+        "jamat": "3:56 PM"
+      },
+      "isha": {
+        "start": "5:49 PM",
+        "jamat": "5:52 PM"
+      }
+    },
+    {
+      "date": 5,
+      "fajr": {
+        "start": "5:47 AM",
+        "jamat": "5:50 AM"
+      },
+      "sunrise": "7:49 AM",
+      "zuhr": {
+        "start": "11:51 AM",
+        "jamat": "11:54 AM"
+      },
+      "asr": {
+        "start": "1:36 PM",
+        "jamat": "1:39 PM"
+      },
+      "maghrib": {
+        "start": "3:53 PM",
+        "jamat": "3:56 PM"
+      },
+      "isha": {
+        "start": "5:49 PM",
+        "jamat": "5:52 PM"
+      }
+    },
+    {
+      "date": 6,
+      "fajr": {
+        "start": "5:48 AM",
+        "jamat": "5:51 AM"
+      },
+      "sunrise": "7:50 AM",
+      "zuhr": {
+        "start": "11:52 AM",
+        "jamat": "11:55 AM"
+      },
+      "asr": {
+        "start": "1:36 PM",
+        "jamat": "1:39 PM"
+      },
+      "maghrib": {
+        "start": "3:52 PM",
+        "jamat": "3:55 PM"
+      },
+      "isha": {
+        "start": "5:48 PM",
+        "jamat": "5:51 PM"
+      }
+    },
+    {
+      "date": 7,
+      "fajr": {
+        "start": "5:49 AM",
+        "jamat": "5:52 AM"
+      },
+      "sunrise": "7:52 AM",
+      "zuhr": {
+        "start": "11:52 AM",
+        "jamat": "11:55 AM"
+      },
+      "asr": {
+        "start": "1:36 PM",
+        "jamat": "1:39 PM"
+      },
+      "maghrib": {
+        "start": "3:52 PM",
+        "jamat": "3:55 PM"
+      },
+      "isha": {
+        "start": "5:48 PM",
+        "jamat": "5:51 PM"
+      }
+    },
+    {
+      "date": 8,
+      "fajr": {
+        "start": "5:50 AM",
+        "jamat": "5:53 AM"
+      },
+      "sunrise": "7:53 AM",
+      "zuhr": {
+        "start": "11:52 AM",
+        "jamat": "11:55 AM"
+      },
+      "asr": {
+        "start": "1:36 PM",
+        "jamat": "1:39 PM"
+      },
+      "maghrib": {
+        "start": "3:52 PM",
+        "jamat": "3:55 PM"
+      },
+      "isha": {
+        "start": "5:48 PM",
+        "jamat": "5:51 PM"
+      }
+    },
+    {
+      "date": 9,
+      "fajr": {
+        "start": "5:51 AM",
+        "jamat": "5:54 AM"
+      },
+      "sunrise": "7:54 AM",
+      "zuhr": {
+        "start": "11:53 AM",
+        "jamat": "11:56 AM"
+      },
+      "asr": {
+        "start": "1:35 PM",
+        "jamat": "1:38 PM"
+      },
+      "maghrib": {
+        "start": "3:52 PM",
+        "jamat": "3:55 PM"
+      },
+      "isha": {
+        "start": "5:48 PM",
+        "jamat": "5:51 PM"
+      }
+    },
+    {
+      "date": 10,
+      "fajr": {
+        "start": "5:52 AM",
+        "jamat": "5:55 AM"
+      },
+      "sunrise": "7:55 AM",
+      "zuhr": {
+        "start": "11:53 AM",
+        "jamat": "11:56 AM"
+      },
+      "asr": {
+        "start": "1:35 PM",
+        "jamat": "1:38 PM"
+      },
+      "maghrib": {
+        "start": "3:51 PM",
+        "jamat": "3:54 PM"
+      },
+      "isha": {
+        "start": "5:48 PM",
+        "jamat": "5:51 PM"
+      }
+    },
+    {
+      "date": 11,
+      "fajr": {
+        "start": "5:52 AM",
+        "jamat": "5:55 AM"
+      },
+      "sunrise": "7:56 AM",
+      "zuhr": {
+        "start": "11:54 AM",
+        "jamat": "11:57 AM"
+      },
+      "asr": {
+        "start": "1:35 PM",
+        "jamat": "1:38 PM"
+      },
+      "maghrib": {
+        "start": "3:51 PM",
+        "jamat": "3:54 PM"
+      },
+      "isha": {
+        "start": "5:48 PM",
+        "jamat": "5:51 PM"
+      }
+    },
+    {
+      "date": 12,
+      "fajr": {
+        "start": "5:53 AM",
+        "jamat": "5:56 AM"
+      },
+      "sunrise": "7:57 AM",
+      "zuhr": {
+        "start": "11:54 AM",
+        "jamat": "11:57 AM"
+      },
+      "asr": {
+        "start": "1:35 PM",
+        "jamat": "1:38 PM"
+      },
+      "maghrib": {
+        "start": "3:51 PM",
+        "jamat": "3:54 PM"
+      },
+      "isha": {
+        "start": "5:48 PM",
+        "jamat": "5:51 PM"
+      }
+    },
+    {
+      "date": 13,
+      "fajr": {
+        "start": "5:54 AM",
+        "jamat": "5:57 AM"
+      },
+      "sunrise": "7:58 AM",
+      "zuhr": {
+        "start": "11:55 AM",
+        "jamat": "11:58 AM"
+      },
+      "asr": {
+        "start": "1:35 PM",
+        "jamat": "1:38 PM"
+      },
+      "maghrib": {
+        "start": "3:51 PM",
+        "jamat": "3:54 PM"
+      },
+      "isha": {
+        "start": "5:49 PM",
+        "jamat": "5:52 PM"
+      }
+    },
+    {
+      "date": 14,
+      "fajr": {
+        "start": "5:55 AM",
+        "jamat": "5:58 AM"
+      },
+      "sunrise": "7:59 AM",
+      "zuhr": {
+        "start": "11:55 AM",
+        "jamat": "11:58 AM"
+      },
+      "asr": {
+        "start": "1:36 PM",
+        "jamat": "1:39 PM"
+      },
+      "maghrib": {
+        "start": "3:51 PM",
+        "jamat": "3:54 PM"
+      },
+      "isha": {
+        "start": "5:49 PM",
+        "jamat": "5:52 PM"
+      }
+    },
+    {
+      "date": 15,
+      "fajr": {
+        "start": "5:56 AM",
+        "jamat": "5:59 AM"
+      },
+      "sunrise": "8:00 AM",
+      "zuhr": {
+        "start": "11:56 AM",
+        "jamat": "11:59 AM"
+      },
+      "asr": {
+        "start": "1:36 PM",
+        "jamat": "1:39 PM"
+      },
+      "maghrib": {
+        "start": "3:52 PM",
+        "jamat": "3:55 PM"
+      },
+      "isha": {
+        "start": "5:49 PM",
+        "jamat": "5:52 PM"
+      }
+    },
+    {
+      "date": 16,
+      "fajr": {
+        "start": "5:56 AM",
+        "jamat": "5:59 AM"
+      },
+      "sunrise": "8:00 AM",
+      "zuhr": {
+        "start": "11:56 AM",
+        "jamat": "11:59 AM"
+      },
+      "asr": {
+        "start": "1:36 PM",
+        "jamat": "1:39 PM"
+      },
+      "maghrib": {
+        "start": "3:52 PM",
+        "jamat": "3:55 PM"
+      },
+      "isha": {
+        "start": "5:49 PM",
+        "jamat": "5:52 PM"
+      }
+    },
+    {
+      "date": 17,
+      "fajr": {
+        "start": "5:57 AM",
+        "jamat": "6:00 AM"
+      },
+      "sunrise": "8:01 AM",
+      "zuhr": {
+        "start": "11:57 AM",
+        "jamat": "12:00 PM"
+      },
+      "asr": {
+        "start": "1:36 PM",
+        "jamat": "1:39 PM"
+      },
+      "maghrib": {
+        "start": "3:52 PM",
+        "jamat": "3:55 PM"
+      },
+      "isha": {
+        "start": "5:50 PM",
+        "jamat": "5:53 PM"
+      }
+    },
+    {
+      "date": 18,
+      "fajr": {
+        "start": "5:58 AM",
+        "jamat": "6:01 AM"
+      },
+      "sunrise": "8:02 AM",
+      "zuhr": {
+        "start": "11:57 AM",
+        "jamat": "12:00 PM"
+      },
+      "asr": {
+        "start": "1:36 PM",
+        "jamat": "1:39 PM"
+      },
+      "maghrib": {
+        "start": "3:52 PM",
+        "jamat": "3:55 PM"
+      },
+      "isha": {
+        "start": "5:50 PM",
+        "jamat": "5:53 PM"
+      }
+    },
+    {
+      "date": 19,
+      "fajr": {
+        "start": "5:58 AM",
+        "jamat": "6:01 AM"
+      },
+      "sunrise": "8:03 AM",
+      "zuhr": {
+        "start": "11:58 AM",
+        "jamat": "12:01 PM"
+      },
+      "asr": {
+        "start": "1:37 PM",
+        "jamat": "1:40 PM"
+      },
+      "maghrib": {
+        "start": "3:53 PM",
+        "jamat": "3:56 PM"
+      },
+      "isha": {
+        "start": "5:50 PM",
+        "jamat": "5:53 PM"
+      }
+    },
+    {
+      "date": 20,
+      "fajr": {
+        "start": "5:59 AM",
+        "jamat": "6:02 AM"
+      },
+      "sunrise": "8:03 AM",
+      "zuhr": {
+        "start": "11:58 AM",
+        "jamat": "12:01 PM"
+      },
+      "asr": {
+        "start": "1:37 PM",
+        "jamat": "1:40 PM"
+      },
+      "maghrib": {
+        "start": "3:53 PM",
+        "jamat": "3:56 PM"
+      },
+      "isha": {
+        "start": "5:51 PM",
+        "jamat": "5:54 PM"
+      }
+    },
+    {
+      "date": 21,
+      "fajr": {
+        "start": "5:59 AM",
+        "jamat": "6:02 AM"
+      },
+      "sunrise": "8:04 AM",
+      "zuhr": {
+        "start": "11:59 AM",
+        "jamat": "12:02 PM"
+      },
+      "asr": {
+        "start": "1:38 PM",
+        "jamat": "1:41 PM"
+      },
+      "maghrib": {
+        "start": "3:54 PM",
+        "jamat": "3:57 PM"
+      },
+      "isha": {
+        "start": "5:51 PM",
+        "jamat": "5:54 PM"
+      }
+    },
+    {
+      "date": 22,
+      "fajr": {
+        "start": "6:00 AM",
+        "jamat": "6:03 AM"
+      },
+      "sunrise": "8:04 AM",
+      "zuhr": {
+        "start": "11:59 AM",
+        "jamat": "12:02 PM"
+      },
+      "asr": {
+        "start": "1:38 PM",
+        "jamat": "1:41 PM"
+      },
+      "maghrib": {
+        "start": "3:54 PM",
+        "jamat": "3:57 PM"
+      },
+      "isha": {
+        "start": "5:52 PM",
+        "jamat": "5:55 PM"
+      }
+    },
+    {
+      "date": 23,
+      "fajr": {
+        "start": "6:00 AM",
+        "jamat": "6:03 AM"
+      },
+      "sunrise": "8:05 AM",
+      "zuhr": {
+        "start": "12:00 PM",
+        "jamat": "12:03 PM"
+      },
+      "asr": {
+        "start": "1:39 PM",
+        "jamat": "1:42 PM"
+      },
+      "maghrib": {
+        "start": "3:55 PM",
+        "jamat": "3:58 PM"
+      },
+      "isha": {
+        "start": "5:52 PM",
+        "jamat": "5:55 PM"
+      }
+    },
+    {
+      "date": 24,
+      "fajr": {
+        "start": "6:01 AM",
+        "jamat": "6:04 AM"
+      },
+      "sunrise": "8:05 AM",
+      "zuhr": {
+        "start": "12:00 PM",
+        "jamat": "12:03 PM"
+      },
+      "asr": {
+        "start": "1:39 PM",
+        "jamat": "1:42 PM"
+      },
+      "maghrib": {
+        "start": "3:55 PM",
+        "jamat": "3:58 PM"
+      },
+      "isha": {
+        "start": "5:53 PM",
+        "jamat": "5:56 PM"
       }
     },
     {
       "date": 25,
       "fajr": {
         "start": "6:01 AM",
-        "jamat": "6:45 AM"
-      },
-      "sunrise": "7:46 AM",
-      "zuhr": {
-        "start": "12:00 PM",
-        "jamat": "1:00 PM"
-      },
-      "asr": {
-        "start": "2:23 PM",
-        "jamat": "2:45 PM"
-      },
-      "maghrib": {
-        "start": "4:01 PM",
-        "jamat": "4:08 PM"
-      },
-      "isha": {
-        "start": "5:42 PM",
-        "jamat": "7:30 PM"
-      }
-    },
-    {
-      "date": 26,
-      "fajr": {
-        "start": "6:03 AM",
-        "jamat": "6:45 AM"
-      },
-      "sunrise": "7:48 AM",
-      "zuhr": {
-        "start": "12:00 PM",
-        "jamat": "1:00 PM"
-      },
-      "asr": {
-        "start": "2:22 PM",
-        "jamat": "2:45 PM"
-      },
-      "maghrib": {
-        "start": "4:01 PM",
-        "jamat": "4:08 PM"
-      },
-      "isha": {
-        "start": "5:41 PM",
-        "jamat": "7:30 PM"
-      }
-    },
-    {
-      "date": 27,
-      "fajr": {
-        "start": "6:04 AM",
-        "jamat": "6:45 AM"
-      },
-      "sunrise": "7:50 AM",
-      "zuhr": {
-        "start": "12:00 PM",
-        "jamat": "1:00 PM"
-      },
-      "asr": {
-        "start": "2:21 PM",
-        "jamat": "2:45 PM"
-      },
-      "maghrib": {
-        "start": "4:00 PM",
-        "jamat": "4:07 PM"
-      },
-      "isha": {
-        "start": "5:40 PM",
-        "jamat": "7:30 PM"
-      }
-    },
-    {
-      "date": 28,
-      "fajr": {
-        "start": "6:06 AM",
-        "jamat": "6:45 AM"
-      },
-      "sunrise": "7:51 AM",
-      "zuhr": {
-        "start": "12:01 PM",
-        "jamat": "1:00 PM"
-      },
-      "asr": {
-        "start": "2:20 PM",
-        "jamat": "2:45 PM"
-      },
-      "maghrib": {
-        "start": "3:59 PM",
-        "jamat": "4:06 PM"
-      },
-      "isha": {
-        "start": "5:36 PM",
-        "jamat": "7:30 PM"
-      }
-    },
-    {
-      "date": 29,
-      "fajr": {
-        "start": "6:07 AM",
-        "jamat": "6:50 AM"
-      },
-      "sunrise": "7:52 AM",
-      "zuhr": {
-        "start": "12:01 PM",
-        "jamat": "1:00 PM"
-      },
-      "asr": {
-        "start": "2:20 PM",
-        "jamat": "2:40 PM"
-      },
-      "maghrib": {
-        "start": "3:58 PM",
-        "jamat": "4:05 PM"
-      },
-      "isha": {
-        "start": "5:39 PM",
-        "jamat": "7:30 PM"
-      }
-    },
-    {
-      "date": 30,
-      "fajr": {
-        "start": "6:07 AM",
-        "jamat": "6:50 AM"
-      },
-      "sunrise": "7:54 AM",
-      "zuhr": {
-        "start": "12:01 PM",
-        "jamat": "1:00 PM"
-      },
-      "asr": {
-        "start": "2:19 PM",
-        "jamat": "2:40 PM"
-      },
-      "maghrib": {
-        "start": "3:57 PM",
-        "jamat": "4:04 PM"
-      },
-      "isha": {
-        "start": "5:38 PM",
-        "jamat": "7:30 PM"
-      }
-    }
-  ],
-  "December": [
-    {
-      "date": 1,
-      "fajr": {
-        "start": "6:10 AM",
-        "jamat": "6:50 AM"
-      },
-      "sunrise": "7:54 AM",
-      "zuhr": {
-        "start": "12:02 PM",
-        "jamat": "1:00 PM"
-      },
-      "asr": {
-        "start": "2:19 PM",
-        "jamat": "2:40 PM"
-      },
-      "maghrib": {
-        "start": "3:57 PM",
-        "jamat": "4:02 PM"
-      },
-      "isha": {
-        "start": "5:38 PM",
-        "jamat": "7:30 PM"
-      }
-    },
-    {
-      "date": 2,
-      "fajr": {
-        "start": "6:12 AM",
-        "jamat": "6:50 AM"
-      },
-      "sunrise": "7:56 AM",
-      "zuhr": {
-        "start": "12:02 PM",
-        "jamat": "1:00 PM"
-      },
-      "asr": {
-        "start": "2:18 PM",
-        "jamat": "2:40 PM"
-      },
-      "maghrib": {
-        "start": "3:56 PM",
-        "jamat": "4:01 PM"
-      },
-      "isha": {
-        "start": "5:37 PM",
-        "jamat": "7:30 PM"
-      }
-    },
-    {
-      "date": 3,
-      "fajr": {
-        "start": "6:13 AM",
-        "jamat": "6:50 AM"
-      },
-      "sunrise": "7:57 AM",
-      "zuhr": {
-        "start": "12:03 PM",
-        "jamat": "1:00 PM"
-      },
-      "asr": {
-        "start": "2:17 PM",
-        "jamat": "2:40 PM"
-      },
-      "maghrib": {
-        "start": "3:56 PM",
-        "jamat": "4:01 PM"
-      },
-      "isha": {
-        "start": "5:36 PM",
-        "jamat": "7:30 PM"
-      }
-    },
-    {
-      "date": 4,
-      "fajr": {
-        "start": "6:15 AM",
-        "jamat": "6:50 AM"
-      },
-      "sunrise": "7:59 AM",
-      "zuhr": {
-        "start": "12:03 PM",
-        "jamat": "1:00 PM"
-      },
-      "asr": {
-        "start": "2:17 PM",
-        "jamat": "2:40 PM"
-      },
-      "maghrib": {
-        "start": "3:55 PM",
-        "jamat": "4:00 PM"
-      },
-      "isha": {
-        "start": "5:36 PM",
-        "jamat": "7:30 PM"
-      }
-    },
-    {
-      "date": 5,
-      "fajr": {
-        "start": "6:16 AM",
-        "jamat": "6:50 AM"
-      },
-      "sunrise": "8:00 AM",
-      "zuhr": {
-        "start": "12:03 PM",
-        "jamat": "1:00 PM"
-      },
-      "asr": {
-        "start": "2:16 PM",
-        "jamat": "2:40 PM"
-      },
-      "maghrib": {
-        "start": "3:54 PM",
-        "jamat": "3:59 PM"
-      },
-      "isha": {
-        "start": "5:35 PM",
-        "jamat": "7:30 PM"
-      }
-    },
-    {
-      "date": 6,
-      "fajr": {
-        "start": "6:17 AM",
-        "jamat": "7:00 AM"
-      },
-      "sunrise": "8:01 AM",
-      "zuhr": {
-        "start": "12:04 PM",
-        "jamat": "1:00 PM"
-      },
-      "asr": {
-        "start": "2:16 PM",
-        "jamat": "2:40 PM"
-      },
-      "maghrib": {
-        "start": "3:54 PM",
-        "jamat": "3:59 PM"
-      },
-      "isha": {
-        "start": "5:35 PM",
-        "jamat": "7:30 PM"
-      }
-    },
-    {
-      "date": 7,
-      "fajr": {
-        "start": "6:18 AM",
-        "jamat": "7:00 AM"
-      },
-      "sunrise": "8:03 AM",
-      "zuhr": {
-        "start": "12:04 PM",
-        "jamat": "1:00 PM"
-      },
-      "asr": {
-        "start": "2:16 PM",
-        "jamat": "2:40 PM"
-      },
-      "maghrib": {
-        "start": "3:54 PM",
-        "jamat": "3:59 PM"
-      },
-      "isha": {
-        "start": "5:35 PM",
-        "jamat": "7:30 PM"
-      }
-    },
-    {
-      "date": 8,
-      "fajr": {
-        "start": "6:20 AM",
-        "jamat": "7:00 AM"
-      },
-      "sunrise": "8:04 AM",
-      "zuhr": {
-        "start": "12:05 PM",
-        "jamat": "1:00 PM"
-      },
-      "asr": {
-        "start": "2:16 PM",
-        "jamat": "2:40 PM"
-      },
-      "maghrib": {
-        "start": "3:53 PM",
-        "jamat": "3:58 PM"
-      },
-      "isha": {
-        "start": "5:34 PM",
-        "jamat": "7:30 PM"
-      }
-    },
-    {
-      "date": 9,
-      "fajr": {
-        "start": "6:21 AM",
-        "jamat": "7:00 AM"
+        "jamat": "6:04 AM"
       },
       "sunrise": "8:05 AM",
       "zuhr": {
-        "start": "12:05 PM",
-        "jamat": "1:00 PM"
+        "start": "12:01 PM",
+        "jamat": "12:04 PM"
       },
       "asr": {
-        "start": "2:15 PM",
-        "jamat": "2:40 PM"
-      },
-      "maghrib": {
-        "start": "3:53 PM",
-        "jamat": "3:58 PM"
-      },
-      "isha": {
-        "start": "5:34 PM",
-        "jamat": "7:30 PM"
-      }
-    },
-    {
-      "date": 10,
-      "fajr": {
-        "start": "6:22 AM",
-        "jamat": "7:00 AM"
-      },
-      "sunrise": "8:06 AM",
-      "zuhr": {
-        "start": "12:06 PM",
-        "jamat": "1:00 PM"
-      },
-      "asr": {
-        "start": "2:15 PM",
-        "jamat": "2:40 PM"
-      },
-      "maghrib": {
-        "start": "3:53 PM",
-        "jamat": "3:58 PM"
-      },
-      "isha": {
-        "start": "5:34 PM",
-        "jamat": "7:30 PM"
-      }
-    },
-    {
-      "date": 11,
-      "fajr": {
-        "start": "6:23 AM",
-        "jamat": "7:00 AM"
-      },
-      "sunrise": "8:07 AM",
-      "zuhr": {
-        "start": "12:06 PM",
-        "jamat": "1:00 PM"
-      },
-      "asr": {
-        "start": "2:15 PM",
-        "jamat": "2:40 PM"
-      },
-      "maghrib": {
-        "start": "3:53 PM",
-        "jamat": "3:58 PM"
-      },
-      "isha": {
-        "start": "5:33 PM",
-        "jamat": "7:30 PM"
-      }
-    },
-    {
-      "date": 12,
-      "fajr": {
-        "start": "6:24 AM",
-        "jamat": "7:00 AM"
-      },
-      "sunrise": "8:10 AM",
-      "zuhr": {
-        "start": "12:07 PM",
-        "jamat": "1:00 PM"
-      },
-      "asr": {
-        "start": "2:15 PM",
-        "jamat": "2:40 PM"
-      },
-      "maghrib": {
-        "start": "3:53 PM",
-        "jamat": "3:58 PM"
-      },
-      "isha": {
-        "start": "5:33 PM",
-        "jamat": "7:30 PM"
-      }
-    },
-    {
-      "date": 13,
-      "fajr": {
-        "start": "6:25 AM",
-        "jamat": "7:00 AM"
-      },
-      "sunrise": "8:09 AM",
-      "zuhr": {
-        "start": "12:07 PM",
-        "jamat": "1:00 PM"
-      },
-      "asr": {
-        "start": "2:15 PM",
-        "jamat": "2:40 PM"
-      },
-      "maghrib": {
-        "start": "3:53 PM",
-        "jamat": "3:58 PM"
-      },
-      "isha": {
-        "start": "5:33 PM",
-        "jamat": "7:30 PM"
-      }
-    },
-    {
-      "date": 14,
-      "fajr": {
-        "start": "6:26 AM",
-        "jamat": "7:00 AM"
-      },
-      "sunrise": "8:10 AM",
-      "zuhr": {
-        "start": "12:07 PM",
-        "jamat": "1:00 PM"
-      },
-      "asr": {
-        "start": "2:15 PM",
-        "jamat": "2:40 PM"
-      },
-      "maghrib": {
-        "start": "3:53 PM",
-        "jamat": "3:58 PM"
-      },
-      "isha": {
-        "start": "5:33 PM",
-        "jamat": "7:30 PM"
-      }
-    },
-    {
-      "date": 15,
-      "fajr": {
-        "start": "6:27 AM",
-        "jamat": "7:00 AM"
-      },
-      "sunrise": "8:11 AM",
-      "zuhr": {
-        "start": "12:08 PM",
-        "jamat": "1:00 PM"
-      },
-      "asr": {
-        "start": "2:15 PM",
-        "jamat": "2:40 PM"
-      },
-      "maghrib": {
-        "start": "3:53 PM",
-        "jamat": "3:58 PM"
-      },
-      "isha": {
-        "start": "5:34 PM",
-        "jamat": "7:30 PM"
-      }
-    },
-    {
-      "date": 16,
-      "fajr": {
-        "start": "6:29 AM",
-        "jamat": "7:00 AM"
-      },
-      "sunrise": "8:12 AM",
-      "zuhr": {
-        "start": "12:08 PM",
-        "jamat": "1:00 PM"
-      },
-      "asr": {
-        "start": "2:16 PM",
-        "jamat": "2:40 PM"
-      },
-      "maghrib": {
-        "start": "3:53 PM",
-        "jamat": "3:58 PM"
-      },
-      "isha": {
-        "start": "5:34 PM",
-        "jamat": "7:30 PM"
-      }
-    },
-    {
-      "date": 17,
-      "fajr": {
-        "start": "6:30 AM",
-        "jamat": "7:00 AM"
-      },
-      "sunrise": "8:13 AM",
-      "zuhr": {
-        "start": "12:09 PM",
-        "jamat": "1:00 PM"
-      },
-      "asr": {
-        "start": "2:16 PM",
-        "jamat": "2:40 PM"
-      },
-      "maghrib": {
-        "start": "3:53 PM",
-        "jamat": "3:58 PM"
-      },
-      "isha": {
-        "start": "5:34 PM",
-        "jamat": "7:30 PM"
-      }
-    },
-    {
-      "date": 18,
-      "fajr": {
-        "start": "6:30 AM",
-        "jamat": "7:00 AM"
-      },
-      "sunrise": "8:13 AM",
-      "zuhr": {
-        "start": "12:09 PM",
-        "jamat": "1:00 PM"
-      },
-      "asr": {
-        "start": "2:16 PM",
-        "jamat": "2:40 PM"
-      },
-      "maghrib": {
-        "start": "3:54 PM",
-        "jamat": "3:59 PM"
-      },
-      "isha": {
-        "start": "5:34 PM",
-        "jamat": "7:30 PM"
-      }
-    },
-    {
-      "date": 19,
-      "fajr": {
-        "start": "6:31 AM",
-        "jamat": "7:00 AM"
-      },
-      "sunrise": "8:14 AM",
-      "zuhr": {
-        "start": "12:10 PM",
-        "jamat": "1:00 PM"
-      },
-      "asr": {
-        "start": "2:17 PM",
-        "jamat": "2:40 PM"
-      },
-      "maghrib": {
-        "start": "3:54 PM",
-        "jamat": "3:59 PM"
-      },
-      "isha": {
-        "start": "5:34 PM",
-        "jamat": "7:30 PM"
-      }
-    },
-    {
-      "date": 20,
-      "fajr": {
-        "start": "6:33 AM",
-        "jamat": "7:00 AM"
-      },
-      "sunrise": "8:15 AM",
-      "zuhr": {
-        "start": "12:10 PM",
-        "jamat": "1:00 PM"
-      },
-      "asr": {
-        "start": "2:17 PM",
-        "jamat": "2:40 PM"
-      },
-      "maghrib": {
-        "start": "3:55 PM",
-        "jamat": "4:00 PM"
-      },
-      "isha": {
-        "start": "5:35 PM",
-        "jamat": "7:30 PM"
-      }
-    },
-    {
-      "date": 21,
-      "fajr": {
-        "start": "6:33 AM",
-        "jamat": "7:00 AM"
-      },
-      "sunrise": "8:15 AM",
-      "zuhr": {
-        "start": "12:11 PM",
-        "jamat": "1:00 PM"
-      },
-      "asr": {
-        "start": "2:18 PM",
-        "jamat": "2:40 PM"
-      },
-      "maghrib": {
-        "start": "3:55 PM",
-        "jamat": "4:00 PM"
-      },
-      "isha": {
-        "start": "5:35 PM",
-        "jamat": "7:30 PM"
-      }
-    },
-    {
-      "date": 22,
-      "fajr": {
-        "start": "6:34 AM",
-        "jamat": "7:00 AM"
-      },
-      "sunrise": "8:16 AM",
-      "zuhr": {
-        "start": "12:11 PM",
-        "jamat": "1:00 PM"
-      },
-      "asr": {
-        "start": "2:18 PM",
-        "jamat": "2:40 PM"
+        "start": "1:40 PM",
+        "jamat": "1:43 PM"
       },
       "maghrib": {
         "start": "3:56 PM",
-        "jamat": "4:01 PM"
+        "jamat": "3:59 PM"
       },
       "isha": {
-        "start": "5:36 PM",
-        "jamat": "7:30 PM"
-      }
-    },
-    {
-      "date": 23,
-      "fajr": {
-        "start": "6:34 AM",
-        "jamat": "7:00 AM"
-      },
-      "sunrise": "8:16 AM",
-      "zuhr": {
-        "start": "12:12 PM",
-        "jamat": "1:00 PM"
-      },
-      "asr": {
-        "start": "2:19 PM",
-        "jamat": "2:40 PM"
-      },
-      "maghrib": {
-        "start": "3:56 PM",
-        "jamat": "4:01 PM"
-      },
-      "isha": {
-        "start": "5:36 PM",
-        "jamat": "7:30 PM"
-      }
-    },
-    {
-      "date": 24,
-      "fajr": {
-        "start": "6:34 AM",
-        "jamat": "7:00 AM"
-      },
-      "sunrise": "8:17 AM",
-      "zuhr": {
-        "start": "12:12 PM",
-        "jamat": "1:00 PM"
-      },
-      "asr": {
-        "start": "2:19 PM",
-        "jamat": "2:40 PM"
-      },
-      "maghrib": {
-        "start": "3:57 PM",
-        "jamat": "4:02 PM"
-      },
-      "isha": {
-        "start": "5:37 PM",
-        "jamat": "7:30 PM"
-      }
-    },
-    {
-      "date": 25,
-      "fajr": {
-        "start": "6:35 AM",
-        "jamat": "7:00 AM"
-      },
-      "sunrise": "8:17 AM",
-      "zuhr": {
-        "start": "12:13 PM",
-        "jamat": "1:00 PM"
-      },
-      "asr": {
-        "start": "2:20 PM",
-        "jamat": "2:40 PM"
-      },
-      "maghrib": {
-        "start": "3:58 PM",
-        "jamat": "4:03 PM"
-      },
-      "isha": {
-        "start": "5:38 PM",
-        "jamat": "7:30 PM"
+        "start": "5:54 PM",
+        "jamat": "5:57 PM"
       }
     },
     {
       "date": 26,
       "fajr": {
-        "start": "6:37 AM",
-        "jamat": "7:00 AM"
+        "start": "6:01 AM",
+        "jamat": "6:04 AM"
       },
-      "sunrise": "8:17 AM",
+      "sunrise": "8:06 AM",
       "zuhr": {
-        "start": "12:13 PM",
-        "jamat": "1:00 PM"
+        "start": "12:01 PM",
+        "jamat": "12:04 PM"
       },
       "asr": {
-        "start": "2:21 PM",
-        "jamat": "2:40 PM"
+        "start": "1:40 PM",
+        "jamat": "1:43 PM"
       },
       "maghrib": {
-        "start": "3:58 PM",
-        "jamat": "4:03 PM"
+        "start": "3:57 PM",
+        "jamat": "4:00 PM"
       },
       "isha": {
-        "start": "5:38 PM",
-        "jamat": "7:30 PM"
+        "start": "5:54 PM",
+        "jamat": "5:57 PM"
       }
     },
     {
       "date": 27,
       "fajr": {
-        "start": "6:37 AM",
-        "jamat": "7:00 AM"
+        "start": "6:02 AM",
+        "jamat": "6:05 AM"
       },
-      "sunrise": "8:18 AM",
+      "sunrise": "8:06 AM",
       "zuhr": {
-        "start": "12:14 PM",
-        "jamat": "1:00 PM"
+        "start": "12:02 PM",
+        "jamat": "12:05 PM"
       },
       "asr": {
-        "start": "2:22 PM",
-        "jamat": "2:40 PM"
+        "start": "1:41 PM",
+        "jamat": "1:44 PM"
       },
       "maghrib": {
-        "start": "3:59 PM",
-        "jamat": "4:04 PM"
+        "start": "3:58 PM",
+        "jamat": "4:01 PM"
       },
       "isha": {
-        "start": "5:39 PM",
-        "jamat": "7:30 PM"
+        "start": "5:55 PM",
+        "jamat": "5:58 PM"
       }
     },
     {
       "date": 28,
       "fajr": {
-        "start": "6:37 AM",
-        "jamat": "7:00 AM"
+        "start": "6:02 AM",
+        "jamat": "6:05 AM"
       },
-      "sunrise": "8:18 AM",
+      "sunrise": "8:06 AM",
       "zuhr": {
-        "start": "12:14 PM",
-        "jamat": "1:00 PM"
+        "start": "12:02 PM",
+        "jamat": "12:05 PM"
       },
       "asr": {
-        "start": "2:22 PM",
-        "jamat": "2:40 PM"
+        "start": "1:42 PM",
+        "jamat": "1:45 PM"
       },
       "maghrib": {
-        "start": "4:00 PM",
-        "jamat": "4:05 PM"
+        "start": "3:58 PM",
+        "jamat": "4:01 PM"
       },
       "isha": {
-        "start": "5:40 PM",
-        "jamat": "7:30 PM"
+        "start": "5:56 PM",
+        "jamat": "5:59 PM"
       }
     },
     {
       "date": 29,
       "fajr": {
-        "start": "6:38 AM",
-        "jamat": "7:00 AM"
+        "start": "6:02 AM",
+        "jamat": "6:05 AM"
       },
-      "sunrise": "8:18 AM",
+      "sunrise": "8:06 AM",
       "zuhr": {
-        "start": "12:15 PM",
-        "jamat": "1:00 PM"
+        "start": "12:03 PM",
+        "jamat": "12:06 PM"
       },
       "asr": {
-        "start": "2:23 PM",
-        "jamat": "2:40 PM"
+        "start": "1:43 PM",
+        "jamat": "1:46 PM"
       },
       "maghrib": {
-        "start": "4:01 PM",
-        "jamat": "4:06 PM"
+        "start": "3:59 PM",
+        "jamat": "4:02 PM"
       },
       "isha": {
-        "start": "5:41 PM",
-        "jamat": "7:30 PM"
+        "start": "5:56 PM",
+        "jamat": "5:59 PM"
       }
     },
     {
       "date": 30,
       "fajr": {
-        "start": "6:39 AM",
-        "jamat": "7:00 AM"
+        "start": "6:02 AM",
+        "jamat": "6:05 AM"
       },
-      "sunrise": "8:18 AM",
+      "sunrise": "8:06 AM",
       "zuhr": {
-        "start": "12:15 PM",
-        "jamat": "1:00 PM"
+        "start": "12:03 PM",
+        "jamat": "12:06 PM"
       },
       "asr": {
-        "start": "2:24 PM",
-        "jamat": "2:40 PM"
+        "start": "1:43 PM",
+        "jamat": "1:46 PM"
       },
       "maghrib": {
-        "start": "4:02 PM",
-        "jamat": "4:07 PM"
+        "start": "4:00 PM",
+        "jamat": "4:03 PM"
       },
       "isha": {
-        "start": "5:42 PM",
-        "jamat": "7:30 PM"
+        "start": "5:57 PM",
+        "jamat": "6:00 PM"
       }
     },
     {
       "date": 31,
       "fajr": {
-        "start": "6:39 AM",
-        "jamat": "7:00 AM"
+        "start": "6:03 AM",
+        "jamat": "6:06 AM"
       },
-      "sunrise": "8:18 AM",
+      "sunrise": "8:06 AM",
       "zuhr": {
-        "start": "12:15 PM",
-        "jamat": "1:00 PM"
+        "start": "12:04 PM",
+        "jamat": "12:07 PM"
       },
       "asr": {
-        "start": "2:25 PM",
-        "jamat": "2:40 PM"
+        "start": "1:44 PM",
+        "jamat": "1:47 PM"
       },
       "maghrib": {
-        "start": "4:03 PM",
-        "jamat": "4:08 PM"
+        "start": "4:01 PM",
+        "jamat": "4:04 PM"
       },
       "isha": {
-        "start": "5:43 PM",
-        "jamat": "7:30 PM"
+        "start": "5:58 PM",
+        "jamat": "6:01 PM"
       }
     }
   ]

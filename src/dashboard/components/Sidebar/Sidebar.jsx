@@ -1,19 +1,18 @@
 import React, { useState } from "react";
-import { Outlet, Link, NavLink } from "react-router";
-import { RiMoneyEuroCircleLine } from "react-icons/ri";
-import {
-  FaChevronDown,
-  FaChevronRight,
-  FaCogs,
-  FaRegCircle,
-} from "react-icons/fa";
+import { Link } from "react-router";
+import { TbFileReport } from "react-icons/tb";
 import { TiHomeOutline } from "react-icons/ti";
 import logo from "../../../site/assets/img/logo/logo.png";
 import MenuItem from "../../shared/MenuItem";
-import { FaUsers } from "react-icons/fa6";
+import {
+  FaCalendar,
+  FaCalendarCheck,
+  FaEye,
+  FaTrophy,
+  FaUsers,
+} from "react-icons/fa6";
 import { useGetRoleQuery } from "../../../redux/features/role/roleApi";
 import useAuth from "../../../hooks/useAuth";
-import LoadingSpinner from "../../../site/components/LoadingSpinner";
 import LoadingSpinnerDash from "../LoadingSpinnerDash";
 
 export default function Sidebar() {
@@ -270,6 +269,55 @@ export default function Sidebar() {
                 handleToggleMenu={handleToggleMenu}
               />
             )} */}
+            {data?.role === "teacher" && (
+              <>
+                <MenuItem
+                  icon={<FaEye className="mx-2" />}
+                  label="View Profile"
+                  to="/dashboard/view-profile"
+                  openSubMenu={openSubMenu}
+                  handleSubmenu={handleSubmenu}
+                  isSubMenuOpen={isSubMenuOpen}
+                  handleToggleMenu={handleToggleMenu}
+                />
+                <MenuItem
+                  icon={<FaCalendar className="mx-2" />}
+                  label="Time Table"
+                  to="/dashboard/time-table"
+                  openSubMenu={openSubMenu}
+                  handleSubmenu={handleSubmenu}
+                  isSubMenuOpen={isSubMenuOpen}
+                  handleToggleMenu={handleToggleMenu}
+                />
+                <MenuItem
+                  icon={<FaCalendarCheck className="mx-2" />}
+                  label="Student Attendance"
+                  to="/dashboard/student-attendance"
+                  openSubMenu={openSubMenu}
+                  handleSubmenu={handleSubmenu}
+                  isSubMenuOpen={isSubMenuOpen}
+                  handleToggleMenu={handleToggleMenu}
+                />
+                <MenuItem
+                  icon={<FaTrophy className="mx-2" />}
+                  label="Merits"
+                  to="/dashboard/merits"
+                  openSubMenu={openSubMenu}
+                  handleSubmenu={handleSubmenu}
+                  isSubMenuOpen={isSubMenuOpen}
+                  handleToggleMenu={handleToggleMenu}
+                />
+                <MenuItem
+                  icon={<TbFileReport className="mx-2" />}
+                  label="Reports"
+                  to="/dashboard/reports"
+                  openSubMenu={openSubMenu}
+                  handleSubmenu={handleSubmenu}
+                  isSubMenuOpen={isSubMenuOpen}
+                  handleToggleMenu={handleToggleMenu}
+                />
+              </>
+            )}
           </ul>
         </nav>
       </div>

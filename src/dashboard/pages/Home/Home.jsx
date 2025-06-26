@@ -6,6 +6,8 @@ import { useGetAllFullFamilyQuery } from "../../../redux/features/families/famil
 import LoadingSpinnerDash from "../../components/LoadingSpinnerDash";
 import { Link } from "react-router";
 import ParentDashboard from "../../parent/ParentDashboard";
+import TeacherDashboard from "../../teacher/TeacherDashboard";
+import AdminDashboard from "../../admin/AdminDashboard";
 
 export default function Home() {
   const { user } = useAuth();
@@ -34,10 +36,11 @@ export default function Home() {
 
   return (
     <div>
-      <h2>Welcome to your dashboard!</h2>
+      {roleData?.role === "admin" && <AdminDashboard></AdminDashboard>}
       {roleData?.role === "parent" && (
         <ParentDashboard family={family} refetch={refetch}></ParentDashboard>
       )}
+      {roleData?.role === "teacher" && <TeacherDashboard></TeacherDashboard>}
 
       {/* {shouldShowModal && <FeeChoiceModal refetch={refetch} />} */}
     </div>

@@ -9,6 +9,8 @@ import DashboardLayout from "./layout/DashboardLayout";
 import Home from "./pages/Home/Home";
 import Payments from "./payments/Payments";
 import PaymentSummary from "./payments/PaymentSummary";
+import StudentAttendance from "./teacher/StudentAttendance";
+import TimeTable from "./teacher/TimeTable";
 
 const dashboardRoutes = [
   {
@@ -90,6 +92,22 @@ const dashboardRoutes = [
         element: (
           <PrivateRoute>
             <PendingPayments></PendingPayments>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "time-table",
+        element: (
+          <PrivateRoute>
+            <TimeTable></TimeTable>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "student-attendance",
+        element: (
+          <PrivateRoute>
+            <StudentAttendance></StudentAttendance>
           </PrivateRoute>
         ),
       },
