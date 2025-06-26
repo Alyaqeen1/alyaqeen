@@ -7,14 +7,48 @@ import toast from "react-hot-toast";
 import useAuth from "../../../hooks/useAuth";
 import { useNavigate } from "react-router";
 import useAxiosPublic from "../../../hooks/useAxiosPublic";
+import uploadToCloudinary from "../../../utils/uploadToCloudinary";
 
 const TeacherComp = () => {
   const [show, setShow] = useState(false);
   const [confirmShow, setConfirmShow] = useState(false);
+  const [photoUrl, setPhotoUrl] = useState("");
+  const [error, setError] = useState(""); // Add this with other useState hooks
+  const [cvUrl, setCvUrl] = useState("");
+  const [dbsUrl, setDbsUrl] = useState("");
+  const [certificateUrl, setCertificateUrl] = useState("");
+  const [uploading, setUploading] = useState(false);
+
   const [addTeacher] = useAddTeacherMutation();
   const { createUser, setUser, updateUser } = useAuth();
   const navigate = useNavigate();
   const axiosPublic = useAxiosPublic();
+
+  const handleFileChange = async (e, type) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Validate file type (example for PDFs)
+    if (type === "cv" && !file.name.match(/\.(pdf|doc|docx)$/i)) {
+      toast.error("Please upload a PDF or Word file!");
+      return;
+    }
+
+    setUploading(true);
+    try {
+      const url = await uploadToCloudinary(file, "teachers");
+      if (type === "photo") setPhotoUrl(url);
+      else if (type === "cv") setCvUrl(url);
+      else if (type === "dbs") setDbsUrl(url);
+      else if (type === "certificate") setCertificateUrl(url);
+      toast.success(`${type.toUpperCase()} uploaded!`);
+    } catch (err) {
+      toast.error("Upload failed!");
+      console.error(err);
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,21 +58,21 @@ const TeacherComp = () => {
     const number = form.number.value;
     const dob = form.dob.value;
     const qualification = form.qualification.value;
-    const present_address = form.present_address.value;
-    const permanent_address = form.permanent_address.value;
+    const address = form.address.value;
+    const post_code = form.post_code.value;
     const marital_status = form.marital_status.value;
     const gender = form.gender.value;
     const department = form.department.value;
     const experience = form.experience.value;
     const designation = form.designation.value;
     const teacher_photo = form.teacher_photo.files[0];
-    const mother_name = form.mother_name.value;
-    const father_name = form.father_name.value;
+    const dbs_crb = form.dbs_crb.files[0];
+    const cv = form.cv.files[0];
+    const highest_degree_certificate = form.highest_degree_certificate.files[0];
     const emergency_number = form.emergency_number.value;
-    const account_title = form.account_title.value;
-    const bank_name = form.bank_name.value;
-    const bank_branch_name = form.bank_branch_name.value;
-    const account_number = form.account_number.value;
+    const account_holder_name = form.account_holder_name.value;
+    const bank_account_number = form.bank_account_number.value;
+    const sord_code = form.sord_code.value;
     const password = form.password.value;
     const confirm_password = form.confirm_password.value;
 
@@ -48,22 +82,29 @@ const TeacherComp = () => {
       number,
       dob,
       qualification,
-      present_address,
-      permanent_address,
+      address,
+      post_code,
       marital_status,
       gender,
       department,
       experience,
       designation,
-      // teacher_photo,
-      mother_name,
-      father_name,
+      teacher_photo: photoUrl,
+      dbs_crb: dbsUrl,
+      cv: cvUrl,
+      highest_degree_certificate: certificateUrl,
+      sord_code,
       emergency_number,
-      account_title,
-      bank_name,
-      bank_branch_name,
-      account_number,
+      account_holder_name,
+      bank_account_number,
     };
+
+    console.log(teacherData);
+
+    if (!photoUrl || !cvUrl || !dbsUrl || !certificateUrl) {
+      return setError("Please wait until all files are uploaded.");
+    }
+
     // Password Validation
     if (password !== confirm_password) {
       return setError("Passwords do not match");
@@ -205,13 +246,7 @@ const TeacherComp = () => {
                     >
                       <div className="form-clt">
                         <span>Phone Number*</span>
-                        <input
-                          type="tel"
-                          name="number"
-                          id="name"
-                          placeholder=""
-                          required
-                        />
+                        <input type="tel" name="number" required />
                       </div>
                     </div>
                     {/* date of birth */}
@@ -222,8 +257,8 @@ const TeacherComp = () => {
                       data-aos-delay="300"
                     >
                       <div className="form-clt">
-                        <span>Date of birth (optional)</span>
-                        <input type="date" name="dob" />
+                        <span>Date of birth*</span>
+                        <input type="date" name="dob" required />
                       </div>
                     </div>
                     {/* qualification */}
@@ -234,14 +269,8 @@ const TeacherComp = () => {
                       data-aos-delay="500"
                     >
                       <div className="form-clt">
-                        <span>Educational Qualification</span>
-                        <input
-                          type="text"
-                          name="qualification"
-                          id="name"
-                          placeholder=""
-                          required
-                        />
+                        <span>Educational Qualification*</span>
+                        <input type="text" name="qualification" required />
                       </div>
                     </div>
                     {/* joining date */}
@@ -252,11 +281,11 @@ const TeacherComp = () => {
                       data-aos-delay="700"
                     >
                       <div className="form-clt">
-                        <span>Date of Joining (optional)</span>
-                        <input type="date" name="joining_date" />
+                        <span>Date of Joining*</span>
+                        <input type="date" name="joining_date" required />
                       </div>
                     </div>
-                    {/* present address */}
+                    {/* address */}
                     <div
                       className="col-lg-4 "
                       data-aos-duration="800"
@@ -264,17 +293,11 @@ const TeacherComp = () => {
                       data-aos-delay="300"
                     >
                       <div className="form-clt">
-                        <span>Present Address*</span>
-                        <input
-                          type="text"
-                          name="present_address"
-                          id="name"
-                          placeholder=""
-                          required
-                        />
+                        <span>Address*</span>
+                        <input type="text" name="address" required />
                       </div>
                     </div>
-                    {/* permanent address*/}
+                    {/* post code*/}
                     <div
                       className="col-lg-4 "
                       data-aos-duration="800"
@@ -282,13 +305,8 @@ const TeacherComp = () => {
                       data-aos-delay="500"
                     >
                       <div className="form-clt">
-                        <span>Permanent Address (optional)</span>
-                        <input
-                          type="text"
-                          name="permanent_address"
-                          id="name"
-                          placeholder=""
-                        />
+                        <span>Post Code*</span>
+                        <input type="text" name="post_code" required />
                       </div>
                     </div>
                     {/* marital status */}
@@ -299,10 +317,11 @@ const TeacherComp = () => {
                       data-aos-delay="700"
                     >
                       <div className="form-clt">
-                        <span>Marital Status (optional)</span>
+                        <span>Marital Status*</span>
                         <select
                           style={{ backgroundColor: "var(--theme2)" }}
                           name="marital_status"
+                          required
                           className="form-control"
                         >
                           <option value="">Select marital status</option>
@@ -342,13 +361,7 @@ const TeacherComp = () => {
                     >
                       <div className="form-clt">
                         <span>Designation*</span>
-                        <input
-                          type="text"
-                          name="designation"
-                          id="name"
-                          placeholder=""
-                          required
-                        />
+                        <input type="text" name="designation" required />
                       </div>
                     </div>
                     {/* department */}
@@ -360,13 +373,7 @@ const TeacherComp = () => {
                     >
                       <div className="form-clt">
                         <span>Department*</span>
-                        <input
-                          type="text"
-                          name="department"
-                          id="name"
-                          placeholder=""
-                          required
-                        />
+                        <input type="text" name="department" required />
                       </div>
                     </div>
                     {/* work experience */}
@@ -374,98 +381,107 @@ const TeacherComp = () => {
                       className="col-lg-4 "
                       data-aos-duration="800"
                       data-aos="fade-up"
-                      data-aos-delay="500"
-                    >
-                      <div className="form-clt">
-                        <span>Work Experience (optional)</span>
-                        <input
-                          type="text"
-                          name="experience"
-                          id="name"
-                          placeholder=""
-                        />
-                      </div>
-                    </div>
-                    {/* photo */}
-                    <div
-                      className="col-lg-8"
-                      data-aos-duration="800"
-                      data-aos="fade-up"
                       data-aos-delay="300"
                     >
                       <div className="form-clt">
-                        <span>Photo (optional)</span>
-                        <input
-                          type="file"
-                          name="teacher_photo"
-                          className="form-control"
-                        />
+                        <span>Work Experience*</span>
+                        <input type="text" name="experience" required />
                       </div>
                     </div>
-                    {/* parental details */}
-                    <div className="col-md-12 mb-2">
-                      <div
-                        className="rounded"
-                        style={{
-                          background:
-                            "linear-gradient(90deg, var(--theme) 0, var(--theme2)  100%)",
-                        }}
-                      >
-                        <h6 className="text-white font-weight-bold rounded mb-0 text-uppercase p-2">
-                          PARENTAL DETAILS
-                        </h6>
-                      </div>
-                    </div>
-                    {/* mothers name */}
-                    <div
-                      className="col-lg-4 "
-                      data-aos-duration="800"
-                      data-aos="fade-up"
-                      data-aos-delay="300"
-                    >
-                      <div className="form-clt">
-                        <span>Mother Name (optional)</span>
-                        <input
-                          type="text"
-                          name="mother_name"
-                          id="name"
-                          placeholder=""
-                        />
-                      </div>
-                    </div>
-
-                    {/* fathers name */}
-                    <div
-                      className="col-lg-4 "
-                      data-aos-duration="800"
-                      data-aos="fade-up"
-                      data-aos-delay="300"
-                    >
-                      <div className="form-clt">
-                        <span>Father Name (optional)</span>
-                        <input
-                          type="text"
-                          name="father_name"
-                          id="name"
-                          placeholder=""
-                        />
-                      </div>
-                    </div>
-
                     {/* emergency contact number */}
                     <div
                       className="col-lg-4 "
                       data-aos-duration="800"
                       data-aos="fade-up"
-                      data-aos-delay="700"
+                      data-aos-delay="500"
                     >
                       <div className="form-clt">
-                        <span>Emergency Contact Number (optional)</span>
+                        <span>Emergency Contact Number*</span>
                         <input
                           type="tel"
                           name="emergency_number"
-                          id="name"
                           placeholder=""
+                          required
+                        />
+                      </div>
+                    </div>
+                    {/* photo */}
+                    <div
+                      className="col-lg-4"
+                      data-aos-duration="800"
+                      data-aos="fade-up"
+                      data-aos-delay="700"
+                    >
+                      <div className="form-clt">
+                        <span>Photo*</span>
+                        <input
+                          type="file"
+                          name="teacher_photo"
+                          // accept="image/*"
+                          disabled={uploading} // Disable during upload
+                          onChange={(e) => handleFileChange(e, "photo")}
+                          className="form-control"
+                          required
+                        />
+                      </div>
+                    </div>
+                    {/* dbs crb */}
+                    <div
+                      className="col-lg-4"
+                      data-aos-duration="800"
+                      data-aos="fade-up"
+                      data-aos-delay="300"
+                    >
+                      <div className="form-clt">
+                        <span>DBS(CRB)*</span>
+                        <input
+                          type="file"
+                          name="dbs_crb"
+                          // accept=".pdf,.doc,.docx"
+                          onChange={(e) => handleFileChange(e, "dbs")}
+                          disabled={uploading} // Disable during upload
+                          className="form-control"
+                          required
+                        />
+                      </div>
+                    </div>
+                    {/* cv */}
+                    <div
+                      className="col-lg-4"
+                      data-aos-duration="800"
+                      data-aos="fade-up"
+                      data-aos-delay="500"
+                    >
+                      <div className="form-clt">
+                        <span>CV*</span>
+                        <input
+                          type="file"
+                          name="cv"
+                          // accept=".pdf,.doc,.docx"
+                          disabled={uploading} // Disable during upload
+                          onChange={(e) => handleFileChange(e, "cv")}
+                          className="form-control"
+                          required
+                        />
+                      </div>
+                    </div>
+                    {/* highest degree certificate */}
+                    <div
+                      className="col-lg-4"
+                      data-aos-duration="800"
+                      data-aos="fade-up"
+                      data-aos-delay="700"
+                    >
+                      <div className="form-clt">
+                        <span>Highest Degree Certificate*</span>
+                        <input
+                          type="file"
+                          name="highest_degree_certificate"
+                          // accept=".pdf,.doc,.docx"
+                          disabled={uploading} // Disable during upload
+                          onChange={(e) => handleFileChange(e, "certificate")}
+                          className="form-control"
+                          required
                         />
                       </div>
                     </div>
@@ -492,16 +508,17 @@ const TeacherComp = () => {
                       data-aos-delay="300"
                     >
                       <div className="form-clt">
-                        <span>Account Title (optional)</span>
+                        <span>Account Holder Name*</span>
                         <input
                           type="text"
-                          name="account_title"
+                          name="account_holder_name"
                           id="name"
                           placeholder=""
+                          required
                         />
                       </div>
                     </div>
-                    {/* Surgery address */}
+                    {/* bank account number */}
                     <div
                       className="col-lg-4 "
                       data-aos-duration="800"
@@ -509,16 +526,16 @@ const TeacherComp = () => {
                       data-aos-delay="500"
                     >
                       <div className="form-clt">
-                        <span>Bank Name (optional)</span>
+                        <span>Bank Account Number*</span>
                         <input
                           type="text"
-                          name="bank_name"
-                          id="name"
+                          name="bank_account_number"
                           placeholder=""
+                          required
                         />
                       </div>
                     </div>
-                    {/* branch name */}
+                    {/* sord code */}
                     <div
                       className="col-lg-4 "
                       data-aos-duration="800"
@@ -526,29 +543,12 @@ const TeacherComp = () => {
                       data-aos-delay="700"
                     >
                       <div className="form-clt">
-                        <span>Bank Branch Name (optional)</span>
+                        <span>Sord Code*</span>
                         <input
-                          type="number"
-                          name="bank_branch_name"
-                          id="name"
+                          type="text"
+                          name="sord_code"
                           placeholder=""
-                        />
-                      </div>
-                    </div>
-                    {/* Any known medical issue */}
-                    <div
-                      className="col-lg-8"
-                      data-aos-duration="800"
-                      data-aos="fade-up"
-                      data-aos-delay="300"
-                    >
-                      <div className="form-clt">
-                        <span>Bank Account Number (optional)</span>
-                        <input
-                          type="number"
-                          name="account_number"
-                          id="name"
-                          placeholder=""
+                          required
                         />
                       </div>
                     </div>
@@ -640,6 +640,12 @@ const TeacherComp = () => {
                         </div>
                       </div>
                     </div>
+
+                    {error && (
+                      <p className="text-danger text-center col-span-2">
+                        {error}
+                      </p>
+                    )}
 
                     <div
                       className="col-lg-9"
