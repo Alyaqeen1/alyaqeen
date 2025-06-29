@@ -1,7 +1,10 @@
 import AdminRoute from "../routes/AdminRoute";
 import PrivateRoute from "../routes/PrivateRoute";
+import AddTeacher from "./admin/AddTeacher";
 import FeeSettings from "./admin/FeeSettings";
 import PendingPayments from "./admin/PendingPayments";
+import PendingTeacher from "./admin/PendingTeacher";
+import UpdateTeacher from "./admin/UpdateTeacher";
 import AddStudent from "./admissions/AddStudent";
 import Admissions from "./admissions/Admissions";
 import UpdateStudent from "./admissions/UpdateStudent";
@@ -108,6 +111,30 @@ const dashboardRoutes = [
         element: (
           <PrivateRoute>
             <StudentAttendance></StudentAttendance>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "add-teacher",
+        element: (
+          <PrivateRoute>
+            <AddTeacher></AddTeacher>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "pending-teachers",
+        element: (
+          <PrivateRoute>
+            <PendingTeacher></PendingTeacher>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "teacher/update/:id",
+        element: (
+          <PrivateRoute>
+            <UpdateTeacher></UpdateTeacher>
           </PrivateRoute>
         ),
       },

@@ -5,7 +5,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import { useAddTeacherMutation } from "../../../redux/features/teachers/teachersApi";
 import toast from "react-hot-toast";
 import useAuth from "../../../hooks/useAuth";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import useAxiosPublic from "../../../hooks/useAxiosPublic";
 import uploadToCloudinary from "../../../utils/uploadToCloudinary";
 
@@ -18,9 +18,10 @@ const TeacherComp = () => {
   const [dbsUrl, setDbsUrl] = useState("");
   const [certificateUrl, setCertificateUrl] = useState("");
   const [uploading, setUploading] = useState(false);
+  const [localLoading, setLocalLoading] = useState(false);
 
   const [addTeacher] = useAddTeacherMutation();
-  const { createUser, setUser, updateUser } = useAuth();
+  const { createUser, setUser, updateUser, loading } = useAuth();
   const navigate = useNavigate();
   const axiosPublic = useAxiosPublic();
 
@@ -47,6 +48,7 @@ const TeacherComp = () => {
       console.error(err);
     } finally {
       setUploading(false);
+      setLocalLoading(false); // Reset local loading state after upload
     }
   };
 
@@ -57,6 +59,7 @@ const TeacherComp = () => {
     const email = form.email.value;
     const number = form.number.value;
     const dob = form.dob.value;
+    const joining_date = form.joining_date.value;
     const qualification = form.qualification.value;
     const address = form.address.value;
     const post_code = form.post_code.value;
@@ -65,10 +68,6 @@ const TeacherComp = () => {
     const department = form.department.value;
     const experience = form.experience.value;
     const designation = form.designation.value;
-    const teacher_photo = form.teacher_photo.files[0];
-    const dbs_crb = form.dbs_crb.files[0];
-    const cv = form.cv.files[0];
-    const highest_degree_certificate = form.highest_degree_certificate.files[0];
     const emergency_number = form.emergency_number.value;
     const account_holder_name = form.account_holder_name.value;
     const bank_account_number = form.bank_account_number.value;
@@ -81,6 +80,7 @@ const TeacherComp = () => {
       email,
       number,
       dob,
+      joining_date,
       qualification,
       address,
       post_code,
@@ -89,6 +89,8 @@ const TeacherComp = () => {
       department,
       experience,
       designation,
+      status: "pending",
+      assigned_groups: [],
       teacher_photo: photoUrl,
       dbs_crb: dbsUrl,
       cv: cvUrl,
@@ -97,25 +99,32 @@ const TeacherComp = () => {
       emergency_number,
       account_holder_name,
       bank_account_number,
+      createdAt: new Date(),
     };
 
-    console.log(teacherData);
+    if (localLoading) return; // Extra guard
+    setLocalLoading(true); // ⬅️ Block double click
 
     if (!photoUrl || !cvUrl || !dbsUrl || !certificateUrl) {
+      setLocalLoading(false); // Reset loading state if files are missing
       return setError("Please wait until all files are uploaded.");
     }
 
     // Password Validation
     if (password !== confirm_password) {
+      setLocalLoading(false); // Reset loading state if passwords do not match
       return setError("Passwords do not match");
     }
     if (!/[A-Z]/.test(password)) {
+      setLocalLoading(false); // Reset loading state if password does not meet criteria
       return setError("Must include an uppercase letter");
     }
     if (!/[a-z]/.test(password)) {
+      setLocalLoading(false); // Reset loading state if password does not meet criteria
       return setError("Must include a lowercase letter");
     }
     if (password.length < 6) {
+      setLocalLoading(false); // Reset loading state if password does not meet criteria
       return setError("Password must be at least 6 characters");
     }
 
@@ -142,6 +151,10 @@ const TeacherComp = () => {
       }
     } catch (error) {
       console.log(error);
+      setLocalLoading(false);
+      return toast.error(error?.message);
+    } finally {
+      setLocalLoading(false);
     }
   };
   return (
@@ -373,7 +386,32 @@ const TeacherComp = () => {
                     >
                       <div className="form-clt">
                         <span>Department*</span>
-                        <input type="text" name="department" required />
+                        <select
+                          // onChange={(e) => setDepartment(e.target.value)}
+                          name="department"
+                          // value={department}
+                          className="form-control selectDepartment"
+                          style={{ backgroundColor: "var(--theme2)" }}
+                          required
+                        >
+                          <option value="">Select department</option>
+                          <option value="Qaidah, Quran & Islamic Studies">
+                            Qaidah, Quran & Islamic Studies
+                          </option>
+                          <option value="Primary Maths & English Tuition">
+                            Primary Maths & English Tuition
+                          </option>
+                          <option value="GCSE Maths English & Science Tuition">
+                            GCSE Maths English & Science Tuition
+                          </option>
+                          <option value="Hifz Memorisation">
+                            Hifz Memorisation
+                          </option>
+                          <option value="Arabic Language">
+                            Arabic Language
+                          </option>
+                        </select>
+                        {/* <input type="text" name="department" required /> */}
                       </div>
                     </div>
                     {/* work experience */}
@@ -417,7 +455,7 @@ const TeacherComp = () => {
                         <input
                           type="file"
                           name="teacher_photo"
-                          // accept="image/*"
+                          accept="image/*"
                           disabled={uploading} // Disable during upload
                           onChange={(e) => handleFileChange(e, "photo")}
                           className="form-control"
@@ -648,16 +686,30 @@ const TeacherComp = () => {
                     )}
 
                     <div
-                      className="col-lg-9"
+                      className="col-lg-12 d-flex justify-content-center"
                       data-aos-duration="800"
                       data-aos="fade-up"
-                      data-aos-delay="900"
+                      // data-aos-delay="900"
                     >
-                      <button type="submit" className="theme-btn bg-white">
-                        Apply
+                      <button
+                        type="submit"
+                        disabled={localLoading}
+                        className="theme-btn bg-white text-center"
+                      >
+                        {localLoading ? "Submitting..." : "Submit"}
                         <i className="fa-solid fa-arrow-right-long"></i>
                       </button>
                     </div>
+                    <p className="text-center text-white">
+                      Already have an account? Please{" "}
+                      <Link
+                        style={{ color: "var(--theme)" }}
+                        className=" font-bolder"
+                        to="/login"
+                      >
+                        Login
+                      </Link>
+                    </p>
                   </div>
                 </form>
               </div>
