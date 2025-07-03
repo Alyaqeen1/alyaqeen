@@ -1,9 +1,12 @@
 import AdminRoute from "../routes/AdminRoute";
 import PrivateRoute from "../routes/PrivateRoute";
 import AddTeacher from "./admin/AddTeacher";
+import Classes from "./admin/Classes";
+import Departments from "./admin/Departments";
 import FeeSettings from "./admin/FeeSettings";
 import PendingPayments from "./admin/PendingPayments";
 import PendingTeacher from "./admin/PendingTeacher";
+import Subjects from "./admin/Subjects";
 import UpdateTeacher from "./admin/UpdateTeacher";
 import AddStudent from "./admissions/AddStudent";
 import Admissions from "./admissions/Admissions";
@@ -135,6 +138,30 @@ const dashboardRoutes = [
         element: (
           <PrivateRoute>
             <UpdateTeacher></UpdateTeacher>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "departments",
+        element: (
+          <PrivateRoute>
+            <Departments></Departments>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "subjects",
+        element: (
+          <PrivateRoute>
+            <Subjects></Subjects>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "classes",
+        element: (
+          <PrivateRoute>
+            <Classes></Classes>
           </PrivateRoute>
         ),
       },

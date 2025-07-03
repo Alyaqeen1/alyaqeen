@@ -11,6 +11,9 @@ const image_hosting_key = import.meta.env.VITE_Image_Hosting_Key;
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
 export default function AddStudent() {
   const [show, setShow] = useState(false);
+  const [department, setDepartment] = useState(false);
+  const [session, setSession] = useState(false);
+  const [session_time, setSessionTime] = useState(false);
   const [confirmShow, setConfirmShow] = useState(false);
   const [signature, setSignature] = useState("");
   const [localLoading, setLocalLoading] = useState(false);
@@ -545,6 +548,8 @@ export default function AddStudent() {
           <label className="form-label">Departments</label>
           <select
             name="std_department"
+            onChange={(e) => setDepartment(e.target.value)}
+            value={department}
             style={{ borderColor: "var(--border2)" }}
             className="form-control bg-light"
             required
@@ -569,13 +574,15 @@ export default function AddStudent() {
           <label className="form-label">Session</label>
           <select
             name="std_session"
+            value={session}
+            onChange={(e) => setSession(e.target.value)}
             style={{ borderColor: "var(--border2)" }}
             className="form-control bg-light"
             required
           >
             <option value="">Select Session</option>
             <option value="weekdays">Weekdays</option>
-            <option value="weekends">Weekend</option>
+            <option value="weekend">Weekend</option>
           </select>
         </div>
 
@@ -584,23 +591,28 @@ export default function AddStudent() {
           <label className="form-label">Session Time</label>
           <select
             name="std_time"
+            value={session_time}
+            onChange={(e) => setSessionTime(e.target.value)}
             style={{ borderColor: "var(--border2)" }}
             className="form-control bg-light"
             required
           >
             <option value="">Select Session Time</option>
-            <option value="Early - 4:30 PM – 6:00 PM (1½ hrs)">
-              Early - 4:30 PM – 6:00 PM (1½ hrs)
-            </option>
-            <option value="Late - 5:45 PM – 7:15 PM (1½ hrs)">
-              Late - 5:45 PM – 7:15 PM (1½ hrs)
-            </option>
-            <option value="Morning - 10:00 AM – 12:30 PM (1½ hrs)">
-              Morning - 10:00 AM – 12:30 PM (1½ hrs)
-            </option>
-            <option value="Afternoon - 12:30 PM – 2:30 PM (1½ hrs)">
-              Afternoon - 12:30 PM – 2:30 PM (1½ hrs)
-            </option>
+            {department && session === "weekdays" ? (
+              <>
+                <option value="S1">Early - 4:30 PM – 6:00 PM (1½ hrs)</option>
+                <option value="S2">Late - 5:45 PM – 7:15 PM (1½ hrs)</option>
+              </>
+            ) : department && session === "weekend" ? (
+              <>
+                <option value="WM">
+                  Morning - 10:00 AM – 12:30 PM (1½ hrs)
+                </option>
+                <option value="WA">
+                  Afternoon - 12:30 PM – 2:30 PM (1½ hrs)
+                </option>
+              </>
+            ) : null}
           </select>
         </div>
 

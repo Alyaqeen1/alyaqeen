@@ -43,7 +43,7 @@ export default function StudentAttendance() {
           >
             <option value="">Select Session</option>
             <option value="weekdays">Weekdays</option>
-            <option value="weekends">Weekends</option>
+            <option value="weekend">Weekend</option>
           </select>
         </div>
         <div className="col-md-3">
@@ -64,7 +64,7 @@ export default function StudentAttendance() {
               </>
             )}
 
-            {session === "weekends" && (
+            {session === "weekend" && (
               <>
                 <option value="WM">WM</option>
                 <option value="WA">WA</option>
@@ -85,7 +85,7 @@ export default function StudentAttendance() {
             <option value="">Select Class</option>
             {session === "weekdays" && sessionTime === "S1" ? (
               <option value="B7">B7</option>
-            ) : session === "weekends" && sessionTime === "WA" ? (
+            ) : session === "weekend" && sessionTime === "WA" ? (
               <option value="5">WA - B1/2</option>
             ) : null}
 
@@ -171,7 +171,7 @@ export default function StudentAttendance() {
                       Thursday
                     </th>
                   </>
-                ) : session === "weekends" ? (
+                ) : session === "weekend" ? (
                   <>
                     <th
                       className="font-danger text-white fw-bolder border h6 text-center align-middle"

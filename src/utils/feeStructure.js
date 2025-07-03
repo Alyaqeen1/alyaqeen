@@ -7,23 +7,23 @@ const feeStructure = {
   monthlyFees: {
     "Qaidah, Quran & Islamic Studies": {
       weekdays: 50,
-      weekends: 50,
+      weekend: 50,
     },
     "Primary Maths & English Tuition": {
       weekdays: 100,
-      weekends: 80,
+      weekend: 80,
     },
     "GCSE Maths English & Science Tuition": {
       weekdays: 120,
-      weekends: 100,
+      weekend: 100,
     },
     "Hifz Memorisation": {
       weekdays: 90,
-      weekends: 60,
+      weekend: 60,
     },
     "Arabic Language": {
       weekdays: 60,
-      weekends: 50,
+      weekend: 50,
     },
   },
 };

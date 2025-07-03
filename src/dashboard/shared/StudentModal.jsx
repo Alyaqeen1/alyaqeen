@@ -8,6 +8,7 @@ import { FaTrashAlt } from "react-icons/fa";
 import { ImCross } from "react-icons/im";
 import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
+import sessionMap from "../../utils/sessionMap";
 import Swal from "sweetalert2";
 export default function StudentModal({ studentId, handleClose, showModal }) {
   const [updateStudentStatus] = useUpdateStudentStatusMutation();
@@ -164,7 +165,8 @@ export default function StudentModal({ studentId, handleClose, showModal }) {
                     <strong>Session:</strong> {session}
                   </p>
                   <p>
-                    <strong>Session Time:</strong> {time}
+                    <strong>Session Time:</strong>{" "}
+                    {time ? sessionMap[time] : "not available"}
                   </p>
                   <p>
                     <strong>Parent Email:</strong> {parent_email}

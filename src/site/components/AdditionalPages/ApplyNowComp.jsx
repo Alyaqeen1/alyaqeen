@@ -773,7 +773,7 @@ const ApplyNowComp = () => {
                         >
                           <option value="">Select Session</option>
                           <option value="weekdays">Weekdays</option>
-                          <option value="weekends">Weekends</option>
+                          <option value="weekend">Weekend</option>
                         </select>
                         {/* <input
                           type="text"
@@ -803,19 +803,19 @@ const ApplyNowComp = () => {
                           <option value="">Select Session Time</option>
                           {department && session === "weekdays" ? (
                             <>
-                              <option value="Early - 4:30 PM – 6:00 PM (1½ hrs)">
+                              <option value="S1">
                                 Early - 4:30 PM – 6:00 PM (1½ hrs)
                               </option>
-                              <option value="Late - 5:45 PM – 7:15 PM (1½ hrs)">
+                              <option value="S2">
                                 Late - 5:45 PM – 7:15 PM (1½ hrs)
                               </option>
                             </>
-                          ) : department && session === "weekends" ? (
+                          ) : department && session === "weekend" ? (
                             <>
-                              <option value="Morning - 10:00 AM – 12:30 PM (1½ hrs)">
+                              <option value="WM">
                                 Morning - 10:00 AM – 12:30 PM (1½ hrs)
                               </option>
-                              <option value="Afternoon - 12:30 PM – 2:30 PM (1½ hrs)">
+                              <option value="WA">
                                 Afternoon - 12:30 PM – 2:30 PM (1½ hrs)
                               </option>
                             </>

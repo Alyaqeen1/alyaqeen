@@ -13,6 +13,7 @@ import toast from "react-hot-toast";
 import { useGetRoleQuery } from "../../redux/features/role/roleApi";
 import FeeChoiceModal from "../shared/FeeChoiceModal";
 import MonthlyFeePayment from "./MonthlyFeePayment";
+import sessionMap from "../../utils/sessionMap";
 
 export default function ParentDashboard({ family, refetch }) {
   const [showModal, setShowModal] = useState(false);
@@ -358,7 +359,9 @@ export default function ParentDashboard({ family, refetch }) {
                     {student.academic?.class || "Not Provided Yet"}
                   </td>
                   <td className="border h6 text-center align-middle text-nowrap">
-                    {student.academic?.time}
+                    {sessionMap[student.academic?.time]
+                      ? sessionMap[student.academic?.time]
+                      : "not available"}
                   </td>
                   <td className="border h6 text-center align-middle text-nowrap">
                     {student?.monthly_fee

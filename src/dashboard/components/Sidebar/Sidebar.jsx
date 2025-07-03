@@ -77,6 +77,20 @@ export default function Sidebar() {
               <>
                 <MenuItem
                   icon={<FaUsers className="mx-2 fs-5" />}
+                  label="Academics"
+                  identifier="academics"
+                  submenuItems={[
+                    { label: "Departments", to: "departments" },
+                    { label: "Classes", to: "classes" },
+                    { label: "Subjects", to: "subjects" },
+                  ]}
+                  openSubMenu={openSubMenu}
+                  handleSubmenu={handleSubmenu}
+                  isSubMenuOpen={isSubMenuOpen}
+                  handleToggleMenu={handleToggleMenu}
+                />
+                <MenuItem
+                  icon={<FaUsers className="mx-2 fs-5" />}
                   label="Students"
                   identifier="students"
                   submenuItems={[
