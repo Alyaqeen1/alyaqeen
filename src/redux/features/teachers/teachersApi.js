@@ -14,8 +14,16 @@ export const teachersApi = apiSlice.injectEndpoints({
       query: (status) => `/teachers/by-status/${status}`,
       providesTags: ["Teacher"],
     }),
+    getTeacherByActivity: builder.query({
+      query: (activity) => `/teachers/by-activity/${activity}`,
+      providesTags: ["Teacher"],
+    }),
     getPendingRejectedTeacher: builder.query({
       query: () => `/teachers/pending-rejected`,
+      providesTags: ["Teacher"],
+    }),
+    getTeacherWithDetails: builder.query({
+      query: (id) => `/teachers/with-details/${id}`,
       providesTags: ["Teacher"],
     }),
     addTeacher: builder.mutation({
@@ -35,7 +43,18 @@ export const teachersApi = apiSlice.injectEndpoints({
     }),
     updateTeacherStatus: builder.mutation({
       query: ({ id, ...patch }) => ({
-        url: `/teachers/${id}`,
+        url: `/teachers/update-status/${id}`,
+        method: "PATCH",
+        body: patch,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+      invalidatesTags: ["Teacher"],
+    }),
+    updateTeacherActivity: builder.mutation({
+      query: ({ id, ...patch }) => ({
+        url: `/teachers/update-activity/${id}`,
         method: "PATCH",
         body: patch,
         headers: {
@@ -62,9 +81,12 @@ export const {
   useGetTeachersQuery,
   useGetTeacherByIdQuery,
   useGetTeacherByStatusQuery,
+  useGetTeacherByActivityQuery,
+  useGetTeacherWithDetailsQuery,
   useGetPendingRejectedTeacherQuery,
   useAddTeacherMutation,
   useUpdateTeacherStatusMutation,
+  useUpdateTeacherActivityMutation,
   useUpdateTeacherMutation,
   useDeleteTeacherMutation,
 } = apiSlice;

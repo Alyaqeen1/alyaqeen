@@ -1,12 +1,15 @@
 import AdminRoute from "../routes/AdminRoute";
 import PrivateRoute from "../routes/PrivateRoute";
+import ActiveTeachers from "./admin/ActiveTeachers";
 import AddTeacher from "./admin/AddTeacher";
 import Classes from "./admin/Classes";
 import Departments from "./admin/Departments";
 import FeeSettings from "./admin/FeeSettings";
+import InactiveTeachers from "./admin/InactiveTeachers";
 import PendingPayments from "./admin/PendingPayments";
 import PendingTeacher from "./admin/PendingTeacher";
 import Subjects from "./admin/Subjects";
+import TeacherDetails from "./admin/TeacherDetails";
 import UpdateTeacher from "./admin/UpdateTeacher";
 import AddStudent from "./admissions/AddStudent";
 import Admissions from "./admissions/Admissions";
@@ -162,6 +165,30 @@ const dashboardRoutes = [
         element: (
           <PrivateRoute>
             <Classes></Classes>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "active-teachers",
+        element: (
+          <PrivateRoute>
+            <ActiveTeachers></ActiveTeachers>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "inactive-teachers",
+        element: (
+          <PrivateRoute>
+            <InactiveTeachers></InactiveTeachers>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "teacher/details/:id",
+        element: (
+          <PrivateRoute>
+            <TeacherDetails></TeacherDetails>
           </PrivateRoute>
         ),
       },

@@ -88,6 +88,7 @@ export default function AddTeacher() {
       experience,
       designation,
       status: "pending",
+      activity: "active",
       assigned_groups: [],
       teacher_photo: photoUrl,
       dbs_crb: dbsUrl,
@@ -97,6 +98,10 @@ export default function AddTeacher() {
       emergency_number,
       account_holder_name,
       bank_account_number,
+      dept_ids: [],
+      class_ids: [],
+      subject_ids: [],
+
       createdAt: new Date(),
     };
 
@@ -357,6 +362,7 @@ export default function AddTeacher() {
             type="file"
             name="teacher_photo"
             style={{ borderColor: "var(--border2)" }}
+            accept="image/*"
             disabled={uploading} // Disable during upload
             onChange={(e) => handleFileChange(e, "photo")}
             className="form-control bg-light"

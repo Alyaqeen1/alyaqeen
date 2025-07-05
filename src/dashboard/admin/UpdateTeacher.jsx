@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import {
   useAddTeacherMutation,
   useGetTeacherByIdQuery,
+  useGetTeacherWithDetailsQuery,
   useUpdateTeacherMutation,
+  useUpdateTeacherStatusMutation,
 } from "../../redux/features/teachers/teachersApi";
 import { useNavigate, useParams } from "react-router";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
@@ -12,39 +14,61 @@ import useAuth from "../../hooks/useAuth";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 import Select from "react-select";
+import { useGetDepartmentsQuery } from "../../redux/features/departments/departmentsApi";
+import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
+import { useGetClassesQuery } from "../../redux/features/classes/classesApi";
+import { useGetSubjectsQuery } from "../../redux/features/subjects/subjectsApi";
 
 export default function UpdateTeacher() {
   const [error, setError] = useState("");
   const { id } = useParams();
+  const [dept_id, setDept_id] = useState("");
   //   const [localLoading, setLocalLoading] = useState(false);
   const [cvUrl, setCvUrl] = useState("");
   const [dbsUrl, setDbsUrl] = useState("");
   const [certificateUrl, setCertificateUrl] = useState("");
   const [photoUrl, setPhotoUrl] = useState("");
   const [uploading, setUploading] = useState(false);
-  const [selectedGroups, setSelectedGroups] = useState([]);
+  const [selectedDepartments, setSelectedDepartments] = useState([]);
+
+  const [updateTeacherStatus, { isLoading: updateLoading }] =
+    useUpdateTeacherStatusMutation();
   const [updateTeacher, { isLoading: localLoading }] =
     useUpdateTeacherMutation();
-
-  //   const [addTeacher] = useAddTeacherMutation();
+  const { data: departments } = useGetDepartmentsQuery();
+  const { data: classes } = useGetClassesQuery();
+  const { data: subjects } = useGetSubjectsQuery();
   const navigate = useNavigate();
-  //   const axiosPublic = useAxiosPublic();
-  //   const { setUser } = useAuth();
 
-  console.log(id);
+  const [selectedDepartment, setSelectedDepartment] = useState(null);
+  const [selectedClasses, setSelectedClasses] = useState([]);
+  const [selectedSubjects, setSelectedSubjects] = useState([]);
+
   const {
     data: teacher,
     isLoading,
     isError,
     refetch,
-  } = useGetTeacherByIdQuery(id, {
+  } = useGetTeacherWithDetailsQuery(id, {
     skip: !id, // avoid fetching if no ID
   });
+  useEffect(() => {
+    if (teacher && departments && classes && subjects) {
+      // ✅ Populate selectedDepartments using dept_ids (array) instead of teacher.department (string)
+      setSelectedDepartments(
+        departments?.filter((d) => teacher?.dept_ids?.includes(d._id))
+      );
 
-  const groupOptions = [
-    { value: "Qaida or Quran Class 4", label: "Qaida or Quran Class 4" },
-    { value: "Qaida or Quran Class 3", label: "Qaida or Quran Class 3" },
-  ];
+      setSelectedClasses(
+        classes?.filter((cls) => teacher?.class_ids?.includes(cls._id))
+      );
+
+      setSelectedSubjects(
+        subjects?.filter((sub) => teacher?.subject_ids?.includes(sub._id))
+      );
+    }
+  }, [teacher, departments, classes, subjects]);
+
   const {
     name,
     email,
@@ -58,7 +82,9 @@ export default function UpdateTeacher() {
     department,
     experience,
     designation,
-    assigned_groups,
+    departments_info,
+    classes_info,
+    subjects_info,
     teacher_photo,
     dbs_crb,
     cv,
@@ -118,6 +144,7 @@ export default function UpdateTeacher() {
     const account_holder_name = form.account_holder_name.value;
     const bank_account_number = form.bank_account_number.value;
     const sord_code = form.sord_code.value;
+
     const teacherData = {
       name,
       number,
@@ -132,23 +159,23 @@ export default function UpdateTeacher() {
       experience,
       designation,
       assigned_groups: [],
-      teacher_photo: photoUrl,
-      dbs_crb: dbsUrl,
-      cv: cvUrl,
-      highest_degree_certificate: certificateUrl,
+      teacher_photo: photoUrl || teacher?.teacher_photo,
+      dbs_crb: dbsUrl || teacher?.dbs_crb,
+      cv: cvUrl || teacher?.cv,
+      highest_degree_certificate:
+        certificateUrl || teacher?.highest_degree_certificate,
+
       sord_code,
       emergency_number,
       account_holder_name,
       bank_account_number,
       createdAt: new Date(),
+      dept_ids: selectedDepartments.map((d) => d._id),
+      class_ids: selectedClasses?.map((c) => c._id),
+      subject_ids: selectedSubjects?.map((s) => s._id),
     };
 
     if (localLoading) return; // Extra guard
-    //   setLocalLoading(true); // ⬅️ Block double click
-
-    // if (!photoUrl || !cvUrl || !dbsUrl || !certificateUrl) {
-    //   return setError("Please wait until all files are uploaded.");
-    // }
 
     try {
       const data = await updateTeacher({ id, teacherData }).unwrap();
@@ -168,6 +195,72 @@ export default function UpdateTeacher() {
       return toast.error(error?.message);
     }
   };
+
+  const departmentOptions = departments?.map((d) => ({
+    value: d._id,
+    label: d.dept_name,
+  }));
+
+  const selectedDeptIds = selectedDepartments.map((d) => d._id);
+  const filteredClasses = classes?.filter((cls) =>
+    selectedDeptIds.includes(cls.dept_id)
+  );
+
+  const classOptions = filteredClasses?.map((c) => ({
+    value: c._id,
+    label: c.class_name,
+  }));
+
+  const selectedClassIds = selectedClasses.map((cls) => cls._id);
+  const filteredSubjects = subjects?.filter((subj) =>
+    selectedClassIds.includes(subj.class_id)
+  );
+
+  const subjectOptions = filteredSubjects?.map((s) => ({
+    value: s._id,
+    label: s.subject_name,
+  }));
+
+  const handleStatus = async (newStatus) => {
+    if (
+      newStatus === "approved" &&
+      (departments_info?.length === 0 ||
+        subjects_info?.length === 0 ||
+        classes_info?.length === 0)
+    ) {
+      Swal.fire({
+        icon: "warning",
+        title: "Assign a Group first!",
+        text: "You must assign a group before approving the teacher.",
+      });
+      return;
+    }
+
+    try {
+      const data = await updateTeacherStatus({
+        id,
+        status: newStatus,
+      }).unwrap();
+
+      if (data?.modifiedCount) {
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: `Teacher ${newStatus} successfully`,
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        refetch();
+      }
+    } catch (err) {
+      // }
+      console.error("Failed to update status:", err);
+    }
+  };
+
+  if (isLoading) {
+    return <LoadingSpinnerDash></LoadingSpinnerDash>;
+  }
   return (
     <div>
       <h3 className={`fs-1 fw-bold text-center`}>Update Teacher</h3>
@@ -448,43 +541,102 @@ export default function UpdateTeacher() {
         >
           Assign Groups
         </div>
-        <div className="mb-3">
-          <label className="form-label">Select Groups:</label>
+        {/* Department */}
+        <div className="col-md-4">
+          <label className="form-label">Departments</label>
           <Select
-            options={groupOptions}
-            value={selectedGroups}
-            onChange={setSelectedGroups}
-            placeholder="Search and select groups..."
-            classNamePrefix="react-select"
-            isSearchable
             isMulti
-            menuPortalTarget={document.body}
-            styles={{
-              container: (base) => ({
-                ...base,
-                width: "100%",
-                border: "1px solid black",
-                borderRadius: "5px",
-              }),
-              menuPortal: (base) => ({
-                ...base,
-                zIndex: 9999,
-              }),
+            value={selectedDepartments.map((dept) => ({
+              label: dept.dept_name,
+              value: dept._id,
+            }))}
+            onChange={(opts) => {
+              const selected = opts.map((opt) =>
+                departments.find((d) => d._id === opt.value)
+              );
+              setSelectedDepartments(selected);
+              setSelectedClasses([]);
+              setSelectedSubjects([]);
             }}
+            options={departmentOptions}
+            placeholder="Select Departments"
+            isSearchable
+          />
+        </div>
+
+        {/* Classes based on department */}
+        <div className="col-md-4">
+          <label className="form-label">Classes</label>
+          <Select
+            isMulti
+            options={classOptions}
+            value={selectedClasses?.map((c) => ({
+              label: c.class_name,
+              value: c._id,
+            }))}
+            onChange={(opts) => {
+              const selected = opts?.map((opt) =>
+                filteredClasses?.find((c) => c._id === opt.value)
+              );
+              setSelectedClasses(selected);
+              setSelectedSubjects([]); // reset subjects when classes change
+            }}
+            placeholder="Select Classes"
+            isSearchable
+          />
+        </div>
+
+        {/* Subjects based on selected classes */}
+        <div className="col-md-4">
+          <label className="form-label">Subjects</label>
+          <Select
+            isMulti
+            options={subjectOptions}
+            value={selectedSubjects?.map((s) => ({
+              label: s.subject_name,
+              value: s._id,
+            }))}
+            onChange={(opts) =>
+              setSelectedSubjects(
+                opts?.map((opt) =>
+                  filteredSubjects?.find((s) => s._id === opt.value)
+                )
+              )
+            }
+            placeholder="Select Subjects"
+            isSearchable
           />
         </div>
 
         {error && <p className="text-danger text-center col-span-2">{error}</p>}
 
         {/* Submit Button */}
-        <div className="col-12 text-center py-3">
+        <div className="col-12 text-center py-3 d-flex gap-2 align-items-center justify-content-evenly">
+          <button
+            type="button"
+            style={{ backgroundColor: "var(--border2)" }}
+            className="btn text-white"
+            disabled={updateLoading}
+            onClick={() => handleStatus("approved")}
+          >
+            Approve
+          </button>
           <button
             disabled={localLoading}
             type="submit"
             style={{ backgroundColor: "var(--border2)" }}
             className="btn text-white"
           >
-            {localLoading ? "Adding..." : "Add"}
+            {localLoading ? "Updating..." : "Update"}
+          </button>
+          <button
+            type="button"
+            disabled={updateLoading}
+            onClick={() => handleStatus("rejected")}
+            style={{ backgroundColor: "var(--border2)" }}
+            className="btn text-white"
+          >
+            Reject
           </button>
         </div>
       </form>

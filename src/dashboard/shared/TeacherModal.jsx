@@ -4,6 +4,7 @@ import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 import Swal from "sweetalert2";
 import {
   useGetTeacherByIdQuery,
+  useGetTeacherWithDetailsQuery,
   useUpdateTeacherStatusMutation,
 } from "../../redux/features/teachers/teachersApi";
 export default function TeacherModal({ teacherId, handleClose, showModal }) {
@@ -13,7 +14,7 @@ export default function TeacherModal({ teacherId, handleClose, showModal }) {
     isLoading,
     isError,
     refetch,
-  } = useGetTeacherByIdQuery(teacherId, {
+  } = useGetTeacherWithDetailsQuery(teacherId, {
     skip: !teacherId, // avoid fetching if no ID
   });
 
@@ -33,7 +34,9 @@ export default function TeacherModal({ teacherId, handleClose, showModal }) {
     department,
     experience,
     designation,
-    assigned_groups,
+    departments_info,
+    classes_info,
+    subjects_info,
     teacher_photo,
     dbs_crb,
     cv,
@@ -53,7 +56,12 @@ export default function TeacherModal({ teacherId, handleClose, showModal }) {
     }
   };
   const handleStatus = async (newStatus) => {
-    if (newStatus === "approved" && assigned_groups?.length === 0) {
+    if (
+      newStatus === "approved" &&
+      (departments_info?.length === 0 ||
+        subjects_info?.length === 0 ||
+        classes_info?.length === 0)
+    ) {
       Swal.fire({
         icon: "warning",
         title: "Assign a Group first!",
@@ -71,7 +79,7 @@ export default function TeacherModal({ teacherId, handleClose, showModal }) {
         status: newStatus,
       }).unwrap();
 
-      if (data.modifiedCount) {
+      if (data?.modifiedCount) {
         Swal.fire({
           position: "center",
           icon: "success",
@@ -111,7 +119,15 @@ export default function TeacherModal({ teacherId, handleClose, showModal }) {
           <div className="modal-content">
             <div className="modal-body">
               <div className="d-flex justify-content-between align-items-center">
-                <h2 className="text-xl font-bold mb-2">{name && name}</h2>
+                <div className="d-flex gap-2 align-items-center">
+                  <img
+                    style={{ width: "50px" }}
+                    className="rounded-5"
+                    src={teacher_photo}
+                    alt=""
+                  />
+                  <h3 className="text-xl font-bold mb-2">{name && name}</h3>
+                </div>
                 <button
                   type="button"
                   className={`btn  ${status === "pending" && "btn-warning"} ${
@@ -147,26 +163,53 @@ export default function TeacherModal({ teacherId, handleClose, showModal }) {
                   <p>
                     <strong>Marital Status:</strong> {marital_status}
                   </p>
+
                   <p>
-                    <strong>
-                      <a target="_blank" href={cv}>
-                        Teacher's CV
-                      </a>
-                    </strong>
+                    <strong>Assigned:</strong>
                   </p>
-                  <p>
-                    <strong>
-                      <a target="_blank" href={highest_degree_certificate}>
-                        Highest Degree Certificate
-                      </a>
-                    </strong>
-                  </p>
-                  <p>
-                    <strong>Assigned Groups:</strong>{" "}
-                    {assigned_groups?.length > 0
-                      ? assigned_groups?.join(", ")
-                      : "Not Assigned"}
-                  </p>
+                  {departments_info?.length > 0
+                    ? departments_info?.map((dept, index) => {
+                        // Filter subjects and classes that belong to this department
+                        const deptSubjects =
+                          subjects_info?.filter(
+                            (sub) => sub.dept_id === dept._id
+                          ) || [];
+                        const deptClasses =
+                          classes_info?.filter(
+                            (cls) => cls.dept_id === dept._id
+                          ) || [];
+
+                        return (
+                          <div key={dept._id} className="mb-3 ms-2">
+                            <p>
+                              <strong>{index + 1}. Department:</strong>{" "}
+                              {dept.dept_name}
+                            </p>
+
+                            {deptSubjects.length > 0 && (
+                              <ul>
+                                {deptSubjects.map((subj) => (
+                                  <li key={subj._id}>
+                                    <strong>Subject:</strong>{" "}
+                                    {subj.subject_name}
+                                  </li>
+                                ))}
+                              </ul>
+                            )}
+
+                            {deptClasses.length > 0 && (
+                              <ul>
+                                {deptClasses.map((cls) => (
+                                  <li key={cls._id}>
+                                    <strong>Class:</strong> {cls.class_name}
+                                  </li>
+                                ))}
+                              </ul>
+                            )}
+                          </div>
+                        );
+                      })
+                    : "Not provided Yet"}
                 </div>
                 <div className="border-start border-2 ps-2 flex-grow-1">
                   <p>
@@ -206,6 +249,20 @@ export default function TeacherModal({ teacherId, handleClose, showModal }) {
                     <strong>
                       <a target="_blank" href={dbs_crb}>
                         Teacher's DBS(CRB)
+                      </a>
+                    </strong>
+                  </p>
+                  <p>
+                    <strong>
+                      <a target="_blank" href={cv}>
+                        Teacher's CV
+                      </a>
+                    </strong>
+                  </p>
+                  <p>
+                    <strong>
+                      <a target="_blank" href={highest_degree_certificate}>
+                        Highest Degree Certificate
                       </a>
                     </strong>
                   </p>

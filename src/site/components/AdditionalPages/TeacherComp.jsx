@@ -90,7 +90,7 @@ const TeacherComp = () => {
       experience,
       designation,
       status: "pending",
-      assigned_groups: [],
+      activity: "active",
       teacher_photo: photoUrl,
       dbs_crb: dbsUrl,
       cv: cvUrl,
@@ -99,6 +99,9 @@ const TeacherComp = () => {
       emergency_number,
       account_holder_name,
       bank_account_number,
+      dept_ids: [],
+      class_ids: [],
+      subject_ids: [],
       createdAt: new Date(),
     };
 

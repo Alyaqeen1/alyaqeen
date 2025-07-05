@@ -111,6 +111,8 @@ export default function Sidebar() {
                   submenuItems={[
                     { label: "Add New", to: "add-teacher" },
                     { label: "Pending Teachers", to: "pending-teachers" },
+                    { label: "Active Teachers", to: "active-teachers" },
+                    { label: "Inactive Teachers", to: "inactive-teachers" },
                   ]}
                   openSubMenu={openSubMenu}
                   handleSubmenu={handleSubmenu}
