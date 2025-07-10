@@ -8,6 +8,7 @@ import FeeSettings from "./admin/FeeSettings";
 import InactiveTeachers from "./admin/InactiveTeachers";
 import PendingPayments from "./admin/PendingPayments";
 import PendingTeacher from "./admin/PendingTeacher";
+import PrayerTimeUpdate from "./admin/PrayerTimeUpdate";
 import Subjects from "./admin/Subjects";
 import TeacherDetails from "./admin/TeacherDetails";
 import UpdateTeacher from "./admin/UpdateTeacher";
@@ -189,6 +190,14 @@ const dashboardRoutes = [
         element: (
           <PrivateRoute>
             <TeacherDetails></TeacherDetails>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "prayer/time-update",
+        element: (
+          <PrivateRoute>
+            <PrayerTimeUpdate></PrayerTimeUpdate>
           </PrivateRoute>
         ),
       },

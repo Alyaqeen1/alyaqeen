@@ -4,10 +4,13 @@ import { useEffect, useState } from "react";
 import { FaUssunnah } from "react-icons/fa";
 import { IoMoonOutline, IoSunny, IoSunnyOutline } from "react-icons/io5";
 import { MdSunnySnowing } from "react-icons/md";
+import { useGetPrayerTimesQuery } from "../../../redux/features/prayer_times/prayer_timesApi";
+import LoadingSpinner from "../LoadingSpinner";
 
 const News = () => {
-  const [times, setTimes] = useState([]);
+  // const [times, setTimes] = useState([]);
   const [formattedTime, setFormattedTime] = useState(""); // ⬅️ add this
+  const { data: times, isLoading } = useGetPrayerTimesQuery();
 
   const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
@@ -32,13 +35,13 @@ const News = () => {
     return () => clearInterval(interval); // cleanup
   }, []);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const { data } = await axios.get("/prayerTimes.json");
-      setTimes(data);
-    };
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const { data } = await axios.get("/prayerTimes.json");
+  //     setTimes(data);
+  //   };
+  //   fetchData();
+  // }, []);
 
   // Date parts
   const date = new Date();
@@ -52,7 +55,7 @@ const News = () => {
     month: "long",
   }).format(date);
 
-  const todayTimes = times[currentMonthName]?.find(
+  const todayTimes = times?.[0]?.[currentMonthName]?.find(
     (day) => day?.date == currentDate
   );
 
@@ -69,6 +72,10 @@ const News = () => {
         return "th";
     }
   };
+
+  if (isLoading) {
+    return <LoadingSpinner></LoadingSpinner>;
+  }
 
   return (
     <section className="news-section section-padding fix" id="blog">

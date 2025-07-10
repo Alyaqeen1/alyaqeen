@@ -5,6 +5,7 @@ import { TiHomeOutline } from "react-icons/ti";
 import logo from "../../../site/assets/img/logo/logo.png";
 import MenuItem from "../../shared/MenuItem";
 import { GiTeacher } from "react-icons/gi";
+import { IoTimer } from "react-icons/io5";
 import {
   FaCalendar,
   FaCalendarCheck,
@@ -127,6 +128,18 @@ export default function Sidebar() {
                     { label: "Fee Settings", to: "fee-settings" },
                     // { label: "Unpaid List", to: "unpaid-list" },
                     { label: "Pending Payments", to: "pending-payments" },
+                  ]}
+                  openSubMenu={openSubMenu}
+                  handleSubmenu={handleSubmenu}
+                  isSubMenuOpen={isSubMenuOpen}
+                  handleToggleMenu={handleToggleMenu}
+                />
+                <MenuItem
+                  icon={<IoTimer className="mx-2 fs-5" />}
+                  label="Prayer Timetable"
+                  identifier="prayer-timetable"
+                  submenuItems={[
+                    { label: "Time Update", to: "prayer/time-update" },
                   ]}
                   openSubMenu={openSubMenu}
                   handleSubmenu={handleSubmenu}

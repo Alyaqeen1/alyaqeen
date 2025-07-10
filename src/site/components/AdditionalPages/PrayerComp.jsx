@@ -5,10 +5,14 @@ import three from "../../assets/img/program/mask.png";
 import four from "../../assets/img/program/pencil.png";
 import five from "../../assets/img/program/mask-2.png";
 import six from "../../assets/img/program/compass.png";
+import { useGetPrayerTimesQuery } from "../../../redux/features/prayer_times/prayer_timesApi";
+import LoadingSpinner from "../LoadingSpinner";
 
 const PrayerComp = () => {
-  const [times, setTimes] = useState([]);
+  // const [times, setTimes] = useState([]);
   const date = new Date();
+  const { data: times, isLoading, isError } = useGetPrayerTimesQuery();
+  // console.log(data);
   const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const currentDate = new Intl.DateTimeFormat("en-US", {
     timeZone: userTimeZone,
@@ -34,13 +38,20 @@ const PrayerComp = () => {
     "November",
     "December",
   ];
-  useEffect(() => {
-    const fetchData = async () => {
-      const { data } = await axios.get("/prayerTimes.json");
-      setTimes(data);
-    };
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const { data } = await axios.get("/prayerTimes.json");
+  //     setTimes(data);
+  //   };
+  //   fetchData();
+  // }, []);
+  if (isLoading) {
+    return <LoadingSpinner></LoadingSpinner>;
+  }
+
+  if (isError || !times || times.length === 0) {
+    return <p>Prayer times data could not be loaded.</p>;
+  }
 
   return (
     <section
@@ -181,8 +192,8 @@ const PrayerComp = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {times[selectedMonth]?.length > 0 ? (
-                    times[selectedMonth]?.map((day) => (
+                  {times?.[0]?.[selectedMonth]?.length > 0 ? (
+                    times[0][selectedMonth].map((day) => (
                       <tr key={day?.date}>
                         <td
                           className={`${
