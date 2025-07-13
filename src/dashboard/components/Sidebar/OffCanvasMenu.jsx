@@ -1,50 +1,56 @@
 import React, { useState } from "react";
-import { Outlet, Link, NavLink } from "react-router";
-import { FaChevronDown, FaChevronRight, FaRegCircle } from "react-icons/fa";
+import { Link, NavLink } from "react-router";
+import { TbFileReport } from "react-icons/tb";
 import { TiHomeOutline } from "react-icons/ti";
-import { GiHamburgerMenu } from "react-icons/gi";
-import { FaRegWindowClose } from "react-icons/fa";
+import { GiHamburgerMenu, GiTeacher } from "react-icons/gi";
+import { IoTimer } from "react-icons/io5";
+import {
+  FaCalendar,
+  FaCalendarCheck,
+  FaEye,
+  FaTrophy,
+  FaUsers,
+} from "react-icons/fa6";
+import { useGetRoleQuery } from "../../../redux/features/role/roleApi";
+import useAuth from "../../../hooks/useAuth";
+import LoadingSpinnerDash from "../LoadingSpinnerDash";
 import logo from "../../../site/assets/img/logo/logo.png";
+import MenuItem from "../../shared/MenuItem";
+import {
+  FaChevronDown,
+  FaChevronRight,
+  FaRegCircle,
+  FaRegWindowClose,
+} from "react-icons/fa";
 
 export default function OffCanvasMenu() {
   const [openSubMenu, setOpenSubMenu] = useState("pages");
   const [openNestedMenu, setOpenNestedMenu] = useState(null);
   const [showSidebar, setShowSidebar] = useState(false); // New state to manage sidebar visibility
-
+  const { user } = useAuth();
+  const { data, isLoading } = useGetRoleQuery(user?.email, {
+    skip: !user?.email, // avoid fetching if no ID
+  });
   const handleSidebarToggle = () => {
     setShowSidebar(!showSidebar); // Toggle the sidebar visibility
   };
-  const handleSubmenu = (submenu) => {
-    if (submenu === openSubMenu) {
-      setOpenSubMenu(null);
+  const handleSubmenu = (submenuId) => {
+    if (openSubMenu === submenuId) {
+      setOpenSubMenu(null); // Close if already open
     } else {
-      setOpenSubMenu(submenu);
+      setOpenSubMenu(submenuId); // Open the clicked one
     }
-  };
-
-  const handleNestedmenu = (nestmenu) => {
-    if (nestmenu === openNestedMenu) {
-      setOpenNestedMenu(null);
-    } else {
-      setOpenNestedMenu(nestmenu);
-    }
-  };
-
-  const isNestedMenuOpen = (nestmenu) => {
-    return nestmenu === openNestedMenu ? " sub-menu-active" : " ";
-  };
-
-  const isNestedMenuButton = (nestmenu) => {
-    return nestmenu === openNestedMenu ? " drop-active" : " ";
-  };
-
-  const isSubMenuOpen = (submenu) => {
-    return submenu === openSubMenu ? "sub-menu-active" : " ";
   };
 
   const isSubMenuButton = (submenu) => {
     return submenu === openSubMenu ? " drop-active" : " ";
   };
+  const isSubMenuOpen = (submenuId) => openSubMenu === submenuId;
+
+  const handleToggleMenu = (open) => {
+    console.log("Toggle menu:", open);
+  };
+
   return (
     <div>
       <div className="text-end">
@@ -105,79 +111,154 @@ export default function OffCanvasMenu() {
               MAIN
             </p>
             <ul className="list-unstyled">
-              <li className="has-dropdown">
-                <a
-                  className={` border-0 rounded-2  ${
-                    openSubMenu && "bg-white bg-opacity-10"
-                  } d-flex justify-content-between `}
-                  // style={{ padding: "10px 10px !important" }}
-                  onClick={() => handleSubmenu("pages")}
-                >
-                  <span className="d-flex align-items-center">
-                    <TiHomeOutline className="mx-2 fs-5" />
-                    Dashboard
-                  </span>
-                  <span>
-                    {!openSubMenu ? (
-                      <FaChevronRight className="me-2" />
-                    ) : (
-                      <FaChevronDown className="me-2" />
-                    )}
-                  </span>
-                </a>
-                <ul className={`submenu ${isSubMenuOpen("pages")}`}>
-                  <li>
-                    <NavLink
-                      className="border-0 p-0"
-                      onClick={() => handleToggleMenu(false)}
-                      to="/dashboard"
-                      style={({ isActive }) => ({
-                        color: isActive ? "white" : "#A2AED0",
-                        textDecoration: "none",
-                        transition: "color 0.2s ease-in-out",
-                      })}
-                      onMouseEnter={(e) => (e.target.style.color = "white")}
-                      onMouseLeave={(e) =>
-                        (e.target.style.color = e.target.classList.contains(
-                          "active"
-                        )
-                          ? "white"
-                          : "#A2AED0")
-                      }
-                    >
-                      <FaRegCircle
-                        style={{ fontSize: "5px", marginRight: "8px" }}
-                      />
-                      CRM
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink
-                      className="border-0 p-0"
-                      onClick={() => handleToggleMenu(false)}
-                      to="/news"
-                      style={({ isActive }) => ({
-                        color: isActive ? "white" : "#A2AED0",
-                        textDecoration: "none",
-                        transition: "color 0.2s ease-in-out",
-                      })}
-                      onMouseEnter={(e) => (e.target.style.color = "white")}
-                      onMouseLeave={(e) =>
-                        (e.target.style.color = e.target.classList.contains(
-                          "active"
-                        )
-                          ? "white"
-                          : "#A2AED0")
-                      }
-                    >
-                      <FaRegCircle
-                        style={{ fontSize: "5px", marginRight: "8px" }}
-                      />
-                      Ecommerce
-                    </NavLink>
-                  </li>
-                </ul>
-              </li>
+              {/* Dashboard (no submenu) */}
+              <MenuItem
+                icon={<TiHomeOutline className="mx-2 fs-5" />}
+                label="Dashboard"
+                to="/dashboard"
+              />
+              {/* <MenuItem
+              icon={<TiHomeOutline className="mx-2 fs-5" />}
+              label="Admissions"
+              to="admissions"
+            /> */}
+
+              {/* Users (with submenu) */}
+              {data?.role === "admin" && (
+                <>
+                  <MenuItem
+                    icon={<FaUsers className="mx-2 fs-5" />}
+                    label="Academics"
+                    identifier="academics"
+                    submenuItems={[
+                      { label: "Departments", to: "departments" },
+                      { label: "Classes", to: "classes" },
+                      { label: "Subjects", to: "subjects" },
+                    ]}
+                    openSubMenu={openSubMenu}
+                    handleSubmenu={handleSubmenu}
+                    isSubMenuOpen={isSubMenuOpen}
+                    handleToggleMenu={handleToggleMenu}
+                  />
+                  <MenuItem
+                    icon={<FaUsers className="mx-2 fs-5" />}
+                    label="Students"
+                    identifier="students"
+                    submenuItems={[
+                      { label: "Add New", to: "add-student" },
+                      // { label: "Active Students", to: "active-students" },
+                      // { label: "Inactive Students", to: "inactive-students" },
+                      { label: "Online Admission", to: "online-admissions" },
+                    ]}
+                    openSubMenu={openSubMenu}
+                    handleSubmenu={handleSubmenu}
+                    isSubMenuOpen={isSubMenuOpen}
+                    handleToggleMenu={handleToggleMenu}
+                  />
+                  <MenuItem
+                    icon={<GiTeacher className="mx-2 fs-5" />}
+                    label="Teachers"
+                    identifier="teachers"
+                    submenuItems={[
+                      { label: "Add New", to: "add-teacher" },
+                      { label: "Pending Teachers", to: "pending-teachers" },
+                      { label: "Active Teachers", to: "active-teachers" },
+                      { label: "Inactive Teachers", to: "inactive-teachers" },
+                    ]}
+                    openSubMenu={openSubMenu}
+                    handleSubmenu={handleSubmenu}
+                    isSubMenuOpen={isSubMenuOpen}
+                    handleToggleMenu={handleToggleMenu}
+                  />
+                  <MenuItem
+                    icon={<FaUsers className="mx-2 fs-5" />}
+                    label="Fee Management"
+                    identifier="fees"
+                    submenuItems={[
+                      { label: "Fee Settings", to: "fee-settings" },
+                      // { label: "Unpaid List", to: "unpaid-list" },
+                      { label: "Pending Payments", to: "pending-payments" },
+                    ]}
+                    openSubMenu={openSubMenu}
+                    handleSubmenu={handleSubmenu}
+                    isSubMenuOpen={isSubMenuOpen}
+                    handleToggleMenu={handleToggleMenu}
+                  />
+                  <MenuItem
+                    icon={<IoTimer className="mx-2 fs-5" />}
+                    label="Prayer Timetable"
+                    identifier="prayer-timetable"
+                    submenuItems={[
+                      { label: "Time Update", to: "prayer/time-update" },
+                    ]}
+                    openSubMenu={openSubMenu}
+                    handleSubmenu={handleSubmenu}
+                    isSubMenuOpen={isSubMenuOpen}
+                    handleToggleMenu={handleToggleMenu}
+                  />
+                </>
+              )}
+
+              {/* {data?.role === "parent" && (
+              <MenuItem
+                icon={<RiMoneyEuroCircleLine className="mx-2 fs-5" />}
+                label="Payment Summary"
+                to="/dashboard/payment-summary"
+                openSubMenu={openSubMenu}
+                handleSubmenu={handleSubmenu}
+                isSubMenuOpen={isSubMenuOpen}
+                handleToggleMenu={handleToggleMenu}
+              />
+            )} */}
+              {data?.role === "teacher" && (
+                <>
+                  <MenuItem
+                    icon={<FaEye className="mx-2" />}
+                    label="View Profile"
+                    to="/dashboard/view-profile"
+                    openSubMenu={openSubMenu}
+                    handleSubmenu={handleSubmenu}
+                    isSubMenuOpen={isSubMenuOpen}
+                    handleToggleMenu={handleToggleMenu}
+                  />
+                  <MenuItem
+                    icon={<FaCalendar className="mx-2" />}
+                    label="Time Table"
+                    to="/dashboard/time-table"
+                    openSubMenu={openSubMenu}
+                    handleSubmenu={handleSubmenu}
+                    isSubMenuOpen={isSubMenuOpen}
+                    handleToggleMenu={handleToggleMenu}
+                  />
+                  <MenuItem
+                    icon={<FaCalendarCheck className="mx-2" />}
+                    label="Student Attendance"
+                    to="/dashboard/student-attendance"
+                    openSubMenu={openSubMenu}
+                    handleSubmenu={handleSubmenu}
+                    isSubMenuOpen={isSubMenuOpen}
+                    handleToggleMenu={handleToggleMenu}
+                  />
+                  <MenuItem
+                    icon={<FaTrophy className="mx-2" />}
+                    label="Merits"
+                    to="/dashboard/merits"
+                    openSubMenu={openSubMenu}
+                    handleSubmenu={handleSubmenu}
+                    isSubMenuOpen={isSubMenuOpen}
+                    handleToggleMenu={handleToggleMenu}
+                  />
+                  <MenuItem
+                    icon={<TbFileReport className="mx-2" />}
+                    label="Reports"
+                    to="/dashboard/reports"
+                    openSubMenu={openSubMenu}
+                    handleSubmenu={handleSubmenu}
+                    isSubMenuOpen={isSubMenuOpen}
+                    handleToggleMenu={handleToggleMenu}
+                  />
+                </>
+              )}
             </ul>
           </nav>
         </div>

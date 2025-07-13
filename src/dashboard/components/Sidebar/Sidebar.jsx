@@ -10,6 +10,7 @@ import {
   FaCalendar,
   FaCalendarCheck,
   FaEye,
+  FaPersonCircleCheck,
   FaTrophy,
   FaUsers,
 } from "react-icons/fa6";
@@ -114,6 +115,22 @@ export default function Sidebar() {
                     { label: "Pending Teachers", to: "pending-teachers" },
                     { label: "Active Teachers", to: "active-teachers" },
                     { label: "Inactive Teachers", to: "inactive-teachers" },
+                  ]}
+                  openSubMenu={openSubMenu}
+                  handleSubmenu={handleSubmenu}
+                  isSubMenuOpen={isSubMenuOpen}
+                  handleToggleMenu={handleToggleMenu}
+                />
+                <MenuItem
+                  icon={<FaPersonCircleCheck className="mx-2 fs-5" />}
+                  label="Attendance"
+                  identifier="attendance"
+                  submenuItems={[
+                    {
+                      label: "Student Attendance",
+                      to: "student-attendance-admin",
+                    },
+                    { label: "Staff Attendance", to: "staff-attendance" },
                   ]}
                   openSubMenu={openSubMenu}
                   handleSubmenu={handleSubmenu}

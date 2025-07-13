@@ -228,62 +228,50 @@ export default function Subjects() {
                       className="px-3 py-2 bg-white"
                       style={{ transformOrigin: "top" }}
                     >
-                      {deptClasses?.length > 0 ? (
-                        deptClasses.map((cls) => {
-                          const relatedSubjects = subjects?.filter(
-                            (sub) => sub.class_id === cls._id
-                          );
+                      {subjects?.filter((sub) => sub.dept_id === dept._id)
+                        ?.length > 0 ? (
+                        <table className="table table-bordered">
+                          <thead>
+                            <tr>
+                              <th>Subject Name</th>
+                              <th>Class Name</th>
+                              <th>Action</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {subjects
+                              ?.filter((sub) => sub.dept_id === dept._id)
+                              .map((sub, idx) => {
+                                const cls = classes?.find(
+                                  (c) => String(c._id) === String(sub.class_id)
+                                );
 
-                          return (
-                            <div key={cls._id} className="mb-3">
-                              {/* <h6 className="fw-bold mb-2">
-                                Class: {cls.class_name}
-                              </h6> */}
-                              {relatedSubjects?.length > 0 ? (
-                                <table className="table table-bordered">
-                                  <thead>
-                                    <tr>
-                                      <th>Subject Name</th>
-                                      <th>Class Name</th>
-                                      <th>Action</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    {relatedSubjects.map((sub, idx) => (
-                                      <tr key={idx}>
-                                        <td>{sub.subject_name}</td>
-                                        <td>{cls.class_name}</td>
-                                        <td>
-                                          <button
-                                            className="btn btn-sm btn-danger me-2"
-                                            onClick={() =>
-                                              handleDelete(sub._id)
-                                            }
-                                          >
-                                            <FaTrashAlt />
-                                          </button>
-                                          <button
-                                            className="btn btn-sm btn-primary"
-                                            onClick={() => handleShow(sub?._id)}
-                                          >
-                                            <FaPen />
-                                          </button>
-                                        </td>
-                                      </tr>
-                                    ))}
-                                  </tbody>
-                                </table>
-                              ) : (
-                                <p className="text-muted">
-                                  No subjects added for this class.
-                                </p>
-                              )}
-                            </div>
-                          );
-                        })
+                                return (
+                                  <tr key={idx}>
+                                    <td>{sub.subject_name}</td>
+                                    <td>{cls?.class_name || "N/A"}</td>
+                                    <td>
+                                      <button
+                                        className="btn btn-sm btn-danger me-2"
+                                        onClick={() => handleDelete(sub._id)}
+                                      >
+                                        <FaTrashAlt />
+                                      </button>
+                                      <button
+                                        className="btn btn-sm btn-primary"
+                                        onClick={() => handleShow(sub._id)}
+                                      >
+                                        <FaPen />
+                                      </button>
+                                    </td>
+                                  </tr>
+                                );
+                              })}
+                          </tbody>
+                        </table>
                       ) : (
                         <p className="text-muted">
-                          No classes in this department.
+                          No subjects added in this department.
                         </p>
                       )}
                     </motion.div>

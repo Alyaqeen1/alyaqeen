@@ -6,6 +6,7 @@ import { useNavigate } from "react-router";
 import SignatureCanvas from "react-signature-canvas";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import toast from "react-hot-toast";
+import { useGetDepartmentsQuery } from "../../redux/features/departments/departmentsApi";
 
 const image_hosting_key = import.meta.env.VITE_Image_Hosting_Key;
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
@@ -20,6 +21,7 @@ export default function AddStudent() {
   const axiosPublic = useAxiosPublic();
   const { setLoading } = useAuth();
   const [error, setError] = useState("");
+  const { data: departments, isLoading } = useGetDepartmentsQuery();
 
   const sigRef = useRef();
 
@@ -223,10 +225,10 @@ export default function AddStudent() {
           number: father_number,
         },
         academic: {
-          department: std_department,
+          dept_id: std_department,
           time: std_time,
           session: std_session,
-          class: student_class,
+          class_id: student_class,
         },
         medical: {
           doctorName: doctor_name,
@@ -555,7 +557,11 @@ export default function AddStudent() {
             required
           >
             <option value="">Select department</option>
-            <option value="Qaidah, Quran & Islamic Studies">
+            {departments?.map((dept) => (
+              <option value={dept?._id}>{dept?.dept_name}</option>
+            ))}
+
+            {/* <option value="Qaidah, Quran & Islamic Studies">
               Qaidah, Quran & Islamic Studies
             </option>
             <option value="Primary Maths & English Tuition">
@@ -565,7 +571,7 @@ export default function AddStudent() {
               GCSE Maths English & Science Tuition
             </option>
             <option value="Hifz Memorisation">Hifz Memorisation</option>
-            <option value="Arabic Language">Arabic Language</option>
+            <option value="Arabic Language">Arabic Language</option> */}
           </select>
         </div>
 

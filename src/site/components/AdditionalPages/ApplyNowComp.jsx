@@ -9,6 +9,8 @@ import { Link, useNavigate } from "react-router";
 import useAuth from "../../../hooks/useAuth";
 import toast from "react-hot-toast";
 import useAxiosPublic from "../../../hooks/useAxiosPublic";
+import { useGetDepartmentsQuery } from "../../../redux/features/departments/departmentsApi";
+import LoadingSpinner from "../LoadingSpinner";
 
 const image_hosting_key = import.meta.env.VITE_Image_Hosting_Key;
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
@@ -23,6 +25,7 @@ const ApplyNowComp = () => {
   const [signature, setSignature] = useState("");
   const [localLoading, setLocalLoading] = useState(false);
   const navigate = useNavigate();
+  const { data: departments, isLoading } = useGetDepartmentsQuery();
 
   const axiosPublic = useAxiosPublic();
 
@@ -238,10 +241,10 @@ const ApplyNowComp = () => {
           number: father_number,
         },
         academic: {
-          department: std_department,
+          dept_id: std_department,
           time: std_time,
           session: std_session,
-          class: student_class,
+          class_id: student_class,
         },
         medical: {
           doctorName: doctor_name,
@@ -285,6 +288,10 @@ const ApplyNowComp = () => {
       setLocalLoading(false);
     }
   };
+
+  if (isLoading) {
+    return <LoadingSpinner></LoadingSpinner>;
+  }
 
   return (
     <section className="contact-section">
@@ -736,7 +743,10 @@ const ApplyNowComp = () => {
                           required
                         >
                           <option value="">Select department</option>
-                          <option value="Qaidah, Quran & Islamic Studies">
+                          {departments?.map((dept) => (
+                            <option value={dept?._id}>{dept?.dept_name}</option>
+                          ))}
+                          {/* <option value="Qaidah, Quran & Islamic Studies">
                             Qaidah, Quran & Islamic Studies
                           </option>
                           <option value="Primary Maths & English Tuition">
@@ -750,7 +760,7 @@ const ApplyNowComp = () => {
                           </option>
                           <option value="Arabic Language">
                             Arabic Language
-                          </option>
+                          </option> */}
                         </select>
                       </div>
                     </div>

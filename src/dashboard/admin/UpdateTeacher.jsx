@@ -18,6 +18,7 @@ import { useGetDepartmentsQuery } from "../../redux/features/departments/departm
 import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 import { useGetClassesQuery } from "../../redux/features/classes/classesApi";
 import { useGetSubjectsQuery } from "../../redux/features/subjects/subjectsApi";
+import { useAddGroupMutation } from "../../redux/features/groups/groupsApi";
 
 export default function UpdateTeacher() {
   const [error, setError] = useState("");
@@ -30,6 +31,7 @@ export default function UpdateTeacher() {
   const [photoUrl, setPhotoUrl] = useState("");
   const [uploading, setUploading] = useState(false);
   const [selectedDepartments, setSelectedDepartments] = useState([]);
+  const [addGroup] = useAddGroupMutation();
 
   const [updateTeacherStatus, { isLoading: updateLoading }] =
     useUpdateTeacherStatusMutation();
@@ -180,6 +182,38 @@ export default function UpdateTeacher() {
     try {
       const data = await updateTeacher({ id, teacherData }).unwrap();
       if (data.modifiedCount) {
+        // Loop through selected classes and subjects to create group(s)
+        for (const classObj of selectedClasses) {
+          for (const subjectObj of selectedSubjects) {
+            // Only pair subject if it belongs to the current class
+            if (subjectObj.class_id === classObj._id) {
+              const session = classObj.session;
+              const time = classObj.session_time;
+
+              let days = [];
+              if (session === "weekdays") {
+                days = ["Mon", "Tue", "Wed", "Thu"];
+              } else if (session === "weekend") {
+                days = ["Sat", "Sun"];
+              }
+
+              const groupData = {
+                teacher_id: id,
+                dept_id: classObj.dept_id,
+                class_id: classObj._id,
+                subject_id: subjectObj._id,
+                session,
+                time,
+                days,
+              };
+
+              console.log(groupData);
+
+              await addGroup(groupData); // send to backend
+            }
+          }
+        }
+
         Swal.fire({
           position: "center",
           icon: "success",
@@ -612,15 +646,18 @@ export default function UpdateTeacher() {
 
         {/* Submit Button */}
         <div className="col-12 text-center py-3 d-flex gap-2 align-items-center justify-content-evenly">
-          <button
-            type="button"
-            style={{ backgroundColor: "var(--border2)" }}
-            className="btn text-white"
-            disabled={updateLoading}
-            onClick={() => handleStatus("approved")}
-          >
-            Approve
-          </button>
+          {status !== "approved" && (
+            <button
+              type="button"
+              style={{ backgroundColor: "var(--border2)" }}
+              className="btn text-white"
+              disabled={updateLoading}
+              onClick={() => handleStatus("approved")}
+            >
+              Approve
+            </button>
+          )}
+
           <button
             disabled={localLoading}
             type="submit"
@@ -629,15 +666,18 @@ export default function UpdateTeacher() {
           >
             {localLoading ? "Updating..." : "Update"}
           </button>
-          <button
-            type="button"
-            disabled={updateLoading}
-            onClick={() => handleStatus("rejected")}
-            style={{ backgroundColor: "var(--border2)" }}
-            className="btn text-white"
-          >
-            Reject
-          </button>
+
+          {status !== "approved" && (
+            <button
+              type="button"
+              disabled={updateLoading}
+              onClick={() => handleStatus("rejected")}
+              style={{ backgroundColor: "var(--border2)" }}
+              className="btn text-white"
+            >
+              Reject
+            </button>
+          )}
         </div>
       </form>
     </div>

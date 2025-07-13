@@ -7,7 +7,7 @@ export const studentsApi = apiSlice.injectEndpoints({
       providesTags: ["Student"],
     }),
     getStudent: builder.query({
-      query: (id) => `/students/${id}`,
+      query: (id) => `/students/by-id/${id}`,
       providesTags: ["Student"],
     }),
     getStudentsByStatus: builder.query({
@@ -18,6 +18,11 @@ export const studentsApi = apiSlice.injectEndpoints({
       query: () => `/students/without-enrolled`,
       providesTags: ["Student"],
     }),
+    getStudentsByGroup: builder.query({
+      query: (groupId) => `/students/by-group/${groupId}`,
+      providesTags: ["Student"],
+    }),
+
     updateStudentStatus: builder.mutation({
       query: ({ id, ...patch }) => ({
         url: `/students/${id}`,
@@ -27,7 +32,7 @@ export const studentsApi = apiSlice.injectEndpoints({
           "Content-Type": "application/json",
         },
       }),
-      invalidatesTags: ["Family"], // 🔥 Important — invalidate Family when a student's status changes
+      invalidatesTags: ["Family", "Student"], // 🔥 Important — invalidate Family when a student's status changes
     }),
     updateAllStudentData: builder.mutation({
       query: ({ id, studentData }) => ({
@@ -54,6 +59,7 @@ export const {
   useGetStudentsQuery,
   useGetStudentQuery,
   useGetStudentsByStatusQuery,
+  useGetStudentsByGroupQuery,
   useGetWithoutEnrolledStudentsQuery,
   useUpdateStudentStatusMutation,
   useUpdateAllStudentDataMutation,

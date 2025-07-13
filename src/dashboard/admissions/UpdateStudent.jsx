@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   useGetStudentQuery,
   useUpdateAllStudentDataMutation,
@@ -10,11 +10,15 @@ import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 import Swal from "sweetalert2";
 import feeStructure from "../../utils/feeStructure";
 import toast from "react-hot-toast";
+import { useGetDepartmentsQuery } from "../../redux/features/departments/departmentsApi";
+import { useGetClassesQuery } from "../../redux/features/classes/classesApi";
 
 export default function UpdateStudent() {
   const { id } = useParams();
   const [updateStudentStatus] = useUpdateStudentStatusMutation();
   const [updateAllStudentData] = useUpdateAllStudentDataMutation();
+  const { data: departments } = useGetDepartmentsQuery();
+  const { data: classes } = useGetClassesQuery();
   const {
     data: student,
     isLoading,
@@ -53,8 +57,26 @@ export default function UpdateStudent() {
 
   const { name: motherName, occupation, number: motherNumber } = mother || {};
 
-  const { session, department, time, class: studentClass } = academic || {};
+  const {
+    session,
+    department,
+    time,
+    class: studentClass,
+    dept_id,
+    class_id,
+  } = academic || {};
+  console.log(department);
+  const [dept_state, setDept_state] = useState("");
+  const [session_state, setSession_state] = useState("");
+  const [time_state, setTime_state] = useState("");
+  const [class_state, setClass_state] = useState("");
 
+  useEffect(() => {
+    setDept_state(dept_id);
+    setSession_state(session);
+    setTime_state(time);
+    setClass_state(class_id);
+  }, [dept_id, session, time, class_id]);
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     const form = e.target;
@@ -87,8 +109,7 @@ export default function UpdateStudent() {
     const medical_condition = form.medical_condition.value;
     const student_class = form.student_class.value;
     const starting_date = form.starting_date.value;
-    const monthly_fee =
-      feeStructure?.monthlyFees?.[std_department]?.[std_session];
+    const monthly_fee = feeStructure?.monthlyFees?.[department]?.[std_session];
     const today = new Date().setHours(0, 0, 0, 0); // current date at midnight
     const selectedDate = new Date(starting_date).setHours(0, 0, 0, 0); // user date at midnight
 
@@ -103,8 +124,6 @@ export default function UpdateStudent() {
       student_age,
       gender: student_gender,
       school_year: school_year,
-      status: "under review",
-      activity: "active",
       language,
       parent_email: parent_email,
       emergency_number: emergency_number,
@@ -120,10 +139,10 @@ export default function UpdateStudent() {
         number: father_number,
       },
       academic: {
-        department: std_department,
+        dept_id: std_department,
         time: std_time,
         session: std_session,
-        class: student_class,
+        class_id: student_class,
       },
       medical: {
         doctorName: doctor_name,
@@ -152,7 +171,7 @@ export default function UpdateStudent() {
     }
   };
   const handleStatus = async (newStatus) => {
-    if (newStatus === "approved" && !studentClass) {
+    if (newStatus === "approved" && !class_id) {
       Swal.fire({
         icon: "warning",
         title: "Assign a class first!",
@@ -165,9 +184,12 @@ export default function UpdateStudent() {
       // const { data } = await axiosPublic.patch(`/students/${studentId}`, {
       //   status: newStatus,
       // });
-      await updateStudentStatus({ id: id, status: newStatus }).unwrap();
+      const data = await updateStudentStatus({
+        id: id,
+        status: newStatus,
+      }).unwrap();
 
-      if (data.modifiedCount) {
+      if (data?.modifiedCount) {
         Swal.fire({
           position: "center",
           icon: "success",
@@ -472,18 +494,26 @@ export default function UpdateStudent() {
         >
           Academic Details
         </div>
-        {department && (
+        {dept_state && (
           <div className="col-md-6">
             <label className="form-label">Departments</label>
             <select
               name="std_department"
               style={{ borderColor: "var(--border2)" }}
               className="form-control bg-light"
-              defaultValue={department}
+              value={dept_state}
+              onChange={(e) => setDept_state(e.target.value)}
+              // defaultValue={dept_id}
               required
             >
               <option value="">Select department</option>
-              <option value="Qaidah, Quran & Islamic Studies">
+              {departments?.map((dept) => (
+                <option key={dept?._id} value={dept?._id}>
+                  {dept?.dept_name}
+                </option>
+              ))}
+
+              {/* <option value="Qaidah, Quran & Islamic Studies">
                 Qaidah, Quran & Islamic Studies
               </option>
               <option value="Primary Maths & English Tuition">
@@ -493,13 +523,13 @@ export default function UpdateStudent() {
                 GCSE Maths English & Science Tuition
               </option>
               <option value="Hifz Memorisation">Hifz Memorisation</option>
-              <option value="Arabic Language">Arabic Language</option>
+              <option value="Arabic Language">Arabic Language</option> */}
             </select>
           </div>
         )}
 
         {/* session */}
-        {session && (
+        {session_state && (
           <div className="col-md-6">
             <label className="form-label">Session</label>
             <select
@@ -507,7 +537,9 @@ export default function UpdateStudent() {
               style={{ borderColor: "var(--border2)" }}
               className="form-control bg-light"
               required
-              defaultValue={session}
+              value={session_state}
+              onChange={(e) => setSession_state(e.target.value)}
+              // defaultValue={session}
             >
               <option value="">Select Session</option>
               <option value="weekdays">Weekdays</option>
@@ -517,7 +549,7 @@ export default function UpdateStudent() {
         )}
 
         {/* time */}
-        {time && (
+        {time_state && (
           <div className="col-md-6">
             <label className="form-label">Session Time</label>
             <select
@@ -525,15 +557,17 @@ export default function UpdateStudent() {
               style={{ borderColor: "var(--border2)" }}
               className="form-control bg-light"
               required
-              defaultValue={time}
+              value={time_state}
+              onChange={(e) => setTime_state(e.target.value)}
+              // defaultValue={time}
             >
               <option value="">Select Session Time</option>
-              {department && session === "weekdays" ? (
+              {dept_state && session_state === "weekdays" ? (
                 <>
                   <option value="S1">Early - 4:30 PM – 6:00 PM (1½ hrs)</option>
                   <option value="S2">Late - 5:45 PM – 7:15 PM (1½ hrs)</option>
                 </>
-              ) : department && session === "weekend" ? (
+              ) : dept_state && session_state === "weekend" ? (
                 <>
                   <option value="WM">
                     Morning - 10:00 AM – 12:30 PM (1½ hrs)
@@ -571,12 +605,29 @@ export default function UpdateStudent() {
               borderColor: "var(--border2)",
             }}
             name="student_class"
-            defaultValue={studentClass}
+            value={class_state}
+            onChange={(e) => setClass_state(e.target.value)}
+            // defaultValue={class_id}
           >
             <option value="">Select Class</option>
-            <option value="class 2">Class 2</option>
-            <option value="class 3">Class 3</option>
-            <option value="class 4">Class 4</option>
+            {(() => {
+              const selectedDept = departments?.find(
+                (dept) => dept._id === dept_state
+              );
+
+              return classes
+                ?.filter(
+                  (cls) =>
+                    cls.dept_id === selectedDept?._id &&
+                    cls?.session === session_state &&
+                    cls?.session_time === time_state
+                )
+                .map((cls) => (
+                  <option key={cls._id} value={cls._id}>
+                    {cls.class_name}
+                  </option>
+                ));
+            })()}
           </select>
           {/* )} */}
         </div>
