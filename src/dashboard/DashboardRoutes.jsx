@@ -23,6 +23,7 @@ import Payments from "./payments/Payments";
 import PaymentSummary from "./payments/PaymentSummary";
 import StudentAttendance from "./teacher/StudentAttendance";
 import TimeTable from "./teacher/TimeTable";
+import ViewProfile from "./teacher/ViewProfile";
 
 const dashboardRoutes = [
   {
@@ -216,6 +217,14 @@ const dashboardRoutes = [
         element: (
           <PrivateRoute>
             <StaffAttendance></StaffAttendance>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "view-profile",
+        element: (
+          <PrivateRoute>
+            <ViewProfile></ViewProfile>
           </PrivateRoute>
         ),
       },

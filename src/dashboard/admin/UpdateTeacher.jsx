@@ -18,7 +18,6 @@ import { useGetDepartmentsQuery } from "../../redux/features/departments/departm
 import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 import { useGetClassesQuery } from "../../redux/features/classes/classesApi";
 import { useGetSubjectsQuery } from "../../redux/features/subjects/subjectsApi";
-import { useAddGroupMutation } from "../../redux/features/groups/groupsApi";
 
 export default function UpdateTeacher() {
   const [error, setError] = useState("");
@@ -31,7 +30,6 @@ export default function UpdateTeacher() {
   const [photoUrl, setPhotoUrl] = useState("");
   const [uploading, setUploading] = useState(false);
   const [selectedDepartments, setSelectedDepartments] = useState([]);
-  const [addGroup] = useAddGroupMutation();
 
   const [updateTeacherStatus, { isLoading: updateLoading }] =
     useUpdateTeacherStatusMutation();
@@ -160,7 +158,6 @@ export default function UpdateTeacher() {
       department,
       experience,
       designation,
-      assigned_groups: [],
       teacher_photo: photoUrl || teacher?.teacher_photo,
       dbs_crb: dbsUrl || teacher?.dbs_crb,
       cv: cvUrl || teacher?.cv,
@@ -182,38 +179,6 @@ export default function UpdateTeacher() {
     try {
       const data = await updateTeacher({ id, teacherData }).unwrap();
       if (data.modifiedCount) {
-        // Loop through selected classes and subjects to create group(s)
-        for (const classObj of selectedClasses) {
-          for (const subjectObj of selectedSubjects) {
-            // Only pair subject if it belongs to the current class
-            if (subjectObj.class_id === classObj._id) {
-              const session = classObj.session;
-              const time = classObj.session_time;
-
-              let days = [];
-              if (session === "weekdays") {
-                days = ["Mon", "Tue", "Wed", "Thu"];
-              } else if (session === "weekend") {
-                days = ["Sat", "Sun"];
-              }
-
-              const groupData = {
-                teacher_id: id,
-                dept_id: classObj.dept_id,
-                class_id: classObj._id,
-                subject_id: subjectObj._id,
-                session,
-                time,
-                days,
-              };
-
-              console.log(groupData);
-
-              await addGroup(groupData); // send to backend
-            }
-          }
-        }
-
         Swal.fire({
           position: "center",
           icon: "success",
@@ -265,7 +230,7 @@ export default function UpdateTeacher() {
       Swal.fire({
         icon: "warning",
         title: "Assign a Group first!",
-        text: "You must assign a group before approving the teacher.",
+        text: "You must assign a department, subject and class before approving the teacher.",
       });
       return;
     }
@@ -585,12 +550,23 @@ export default function UpdateTeacher() {
               value: dept._id,
             }))}
             onChange={(opts) => {
-              const selected = opts.map((opt) =>
+              const newSelectedDepts = opts.map((opt) =>
                 departments.find((d) => d._id === opt.value)
               );
-              setSelectedDepartments(selected);
-              setSelectedClasses([]);
-              setSelectedSubjects([]);
+
+              // Filter classes to keep only those belonging to new departments
+              const preservedClasses = selectedClasses.filter((cls) =>
+                newSelectedDepts.some((dept) => dept._id === cls.dept_id)
+              );
+
+              // Filter subjects to keep only those belonging to preserved classes
+              const preservedSubjects = selectedSubjects.filter((subj) =>
+                preservedClasses.some((cls) => cls._id === subj.class_id)
+              );
+
+              setSelectedDepartments(newSelectedDepts);
+              setSelectedClasses(preservedClasses);
+              setSelectedSubjects(preservedSubjects);
             }}
             options={departmentOptions}
             placeholder="Select Departments"
@@ -609,11 +585,17 @@ export default function UpdateTeacher() {
               value: c._id,
             }))}
             onChange={(opts) => {
-              const selected = opts?.map((opt) =>
+              const newSelectedClasses = opts?.map((opt) =>
                 filteredClasses?.find((c) => c._id === opt.value)
               );
-              setSelectedClasses(selected);
-              setSelectedSubjects([]); // reset subjects when classes change
+
+              // Filter subjects to keep only those belonging to new classes
+              const preservedSubjects = selectedSubjects.filter((subj) =>
+                newSelectedClasses.some((cls) => cls._id === subj.class_id)
+              );
+
+              setSelectedClasses(newSelectedClasses);
+              setSelectedSubjects(preservedSubjects);
             }}
             placeholder="Select Classes"
             isSearchable

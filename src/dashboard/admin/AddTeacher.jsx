@@ -89,7 +89,6 @@ export default function AddTeacher() {
       designation,
       status: "pending",
       activity: "active",
-      assigned_groups: [],
       teacher_photo: photoUrl,
       dbs_crb: dbsUrl,
       cv: cvUrl,

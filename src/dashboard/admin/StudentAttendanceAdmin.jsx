@@ -9,7 +9,10 @@ import { format, addWeeks, startOfWeek, addDays, isSameWeek } from "date-fns";
 import { skipToken } from "@reduxjs/toolkit/query";
 
 import { useGetDepartmentsQuery } from "../../redux/features/departments/departmentsApi";
-import { useGetClassesQuery } from "../../redux/features/classes/classesApi";
+import {
+  useGetClassByParamsQuery,
+  useGetClassesQuery,
+} from "../../redux/features/classes/classesApi";
 import { useGetGroupByParamsQuery } from "../../redux/features/groups/groupsApi";
 import { useGetStudentsByGroupQuery } from "../../redux/features/students/studentsApi";
 
@@ -40,11 +43,17 @@ export default function StudentAttendanceAdmin() {
   const { data: departments = [] } = useGetDepartmentsQuery();
   const { data: classes = [] } = useGetClassesQuery();
 
-  const { data: group } = useGetGroupByParamsQuery(
+  const { data: group } = useGetClassByParamsQuery(
     department && classId && session && time
       ? { dept_id: department, class_id: classId, session, time }
       : skipToken
   );
+
+  // const { data: group } = useGetGroupByParamsQuery(
+  //   department && classId && session && time
+  //     ? { dept_id: department, class_id: classId, session, time }
+  //     : skipToken
+  // );
 
   const groupId = group?._id;
   const { data: students = [] } = useGetStudentsByGroupQuery(groupId, {
@@ -255,7 +264,10 @@ export default function StudentAttendanceAdmin() {
               <option value="">Select Class</option>
               {classes
                 .filter(
-                  (c) => c.dept_id === department && c.session === session
+                  (c) =>
+                    c.dept_id === department &&
+                    c.session === session &&
+                    c.session_time === time
                 )
                 .map((c) => (
                   <option key={c._id} value={c._id}>

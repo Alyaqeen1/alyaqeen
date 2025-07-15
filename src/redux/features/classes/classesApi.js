@@ -10,6 +10,11 @@ export const classesApi = apiSlice.injectEndpoints({
       query: (id) => `/classes/${id}`,
       providesTags: ["Class"],
     }),
+    getClassByParams: builder.query({
+      query: ({ dept_id, class_id, session, time }) =>
+        `/classes/find-one?dept_id=${dept_id}&class_id=${class_id}&session=${session}&time=${time}`,
+      providesTags: ["Class"],
+    }),
     addClass: builder.mutation({
       query: (class_name) => ({
         url: "/classes",
@@ -39,6 +44,7 @@ export const classesApi = apiSlice.injectEndpoints({
 export const {
   useGetClassesQuery,
   useGetClassQuery,
+  useGetClassByParamsQuery,
   useAddClassMutation,
   useUpdateClassMutation,
   useRemoveClassMutation,
