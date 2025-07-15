@@ -21,6 +21,7 @@ import DashboardLayout from "./layout/DashboardLayout";
 import Home from "./pages/Home/Home";
 import Payments from "./payments/Payments";
 import PaymentSummary from "./payments/PaymentSummary";
+import Merits from "./teacher/Merits";
 import StudentAttendance from "./teacher/StudentAttendance";
 import TimeTable from "./teacher/TimeTable";
 import ViewProfile from "./teacher/ViewProfile";
@@ -225,6 +226,14 @@ const dashboardRoutes = [
         element: (
           <PrivateRoute>
             <ViewProfile></ViewProfile>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "teacher/merits",
+        element: (
+          <PrivateRoute>
+            <Merits></Merits>
           </PrivateRoute>
         ),
       },

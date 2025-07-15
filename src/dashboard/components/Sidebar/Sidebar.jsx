@@ -209,7 +209,7 @@ export default function Sidebar() {
                 <MenuItem
                   icon={<FaTrophy className="mx-2" />}
                   label="Merits"
-                  to="/dashboard/merits"
+                  to="/dashboard/teacher/merits"
                   openSubMenu={openSubMenu}
                   handleSubmenu={handleSubmenu}
                   isSubMenuOpen={isSubMenuOpen}
