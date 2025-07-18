@@ -6,6 +6,7 @@ import Classes from "./admin/Classes";
 import Departments from "./admin/Departments";
 import FeeSettings from "./admin/FeeSettings";
 import InactiveTeachers from "./admin/InactiveTeachers";
+import MeritStudents from "./admin/MeritStudents";
 import PendingPayments from "./admin/PendingPayments";
 import PendingTeacher from "./admin/PendingTeacher";
 import PrayerTimeUpdate from "./admin/PrayerTimeUpdate";
@@ -21,7 +22,9 @@ import DashboardLayout from "./layout/DashboardLayout";
 import Home from "./pages/Home/Home";
 import Payments from "./payments/Payments";
 import PaymentSummary from "./payments/PaymentSummary";
+import LessonsCovered from "./teacher/LessonsCovered";
 import Merits from "./teacher/Merits";
+import ReportsSummary from "./teacher/ReportsSummary";
 import StudentAttendance from "./teacher/StudentAttendance";
 import TimeTable from "./teacher/TimeTable";
 import ViewProfile from "./teacher/ViewProfile";
@@ -234,6 +237,30 @@ const dashboardRoutes = [
         element: (
           <PrivateRoute>
             <Merits></Merits>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "merit-students",
+        element: (
+          <PrivateRoute>
+            <MeritStudents></MeritStudents>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "teacher/lessons-covered",
+        element: (
+          <PrivateRoute>
+            <LessonsCovered></LessonsCovered>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "teacher/reports-summary",
+        element: (
+          <PrivateRoute>
+            <ReportsSummary></ReportsSummary>
           </PrivateRoute>
         ),
       },

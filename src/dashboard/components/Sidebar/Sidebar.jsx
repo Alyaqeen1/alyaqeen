@@ -6,6 +6,7 @@ import logo from "../../../site/assets/img/logo/logo.png";
 import MenuItem from "../../shared/MenuItem";
 import { GiTeacher } from "react-icons/gi";
 import { IoTimer } from "react-icons/io5";
+import { PiStudentBold } from "react-icons/pi";
 import {
   FaCalendar,
   FaCalendarCheck,
@@ -163,6 +164,11 @@ export default function Sidebar() {
                   isSubMenuOpen={isSubMenuOpen}
                   handleToggleMenu={handleToggleMenu}
                 />
+                <MenuItem
+                  icon={<PiStudentBold className="mx-2 fs-5" />}
+                  label="Merit Students"
+                  to="merit-students"
+                />
               </>
             )}
 
@@ -215,7 +221,27 @@ export default function Sidebar() {
                   isSubMenuOpen={isSubMenuOpen}
                   handleToggleMenu={handleToggleMenu}
                 />
+
                 <MenuItem
+                  icon={<TbFileReport className="mx-2 fs-5" />}
+                  label="Reports"
+                  identifier="report"
+                  submenuItems={[
+                    {
+                      label: "Lessons Covered",
+                      to: "teacher/lessons-covered",
+                    },
+                    {
+                      label: "Reports Summary",
+                      to: "teacher/reports-summary",
+                    },
+                  ]}
+                  openSubMenu={openSubMenu}
+                  handleSubmenu={handleSubmenu}
+                  isSubMenuOpen={isSubMenuOpen}
+                  handleToggleMenu={handleToggleMenu}
+                />
+                {/* <MenuItem
                   icon={<TbFileReport className="mx-2" />}
                   label="Reports"
                   to="/dashboard/reports"
@@ -223,7 +249,7 @@ export default function Sidebar() {
                   handleSubmenu={handleSubmenu}
                   isSubMenuOpen={isSubMenuOpen}
                   handleToggleMenu={handleToggleMenu}
-                />
+                /> */}
               </>
             )}
           </ul>

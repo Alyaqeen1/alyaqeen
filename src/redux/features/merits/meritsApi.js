@@ -6,6 +6,10 @@ export const meritsApi = apiSlice.injectEndpoints({
       query: () => "/merits",
       providesTags: ["Merit"],
     }),
+    getTopMerits: builder.query({
+      query: () => "/merits/top-merit-students",
+      providesTags: ["Merit"],
+    }),
     addMerit: builder.mutation({
       query: (merit) => ({
         url: "/merits",
@@ -17,4 +21,5 @@ export const meritsApi = apiSlice.injectEndpoints({
   }),
 });
 
-export const { useGetMeritsQuery, useAddMeritMutation } = apiSlice;
+export const { useGetMeritsQuery, useGetTopMeritsQuery, useAddMeritMutation } =
+  apiSlice;
