@@ -10,6 +10,7 @@ import MeritStudents from "./admin/MeritStudents";
 import PendingPayments from "./admin/PendingPayments";
 import PendingTeacher from "./admin/PendingTeacher";
 import PrayerTimeUpdate from "./admin/PrayerTimeUpdate";
+import ReportsSummaryAdmin from "./admin/ReportsSummaryAdmin";
 import StaffAttendance from "./admin/StaffAttendance";
 import StudentAttendanceAdmin from "./admin/StudentAttendanceAdmin";
 import Subjects from "./admin/Subjects";
@@ -20,6 +21,7 @@ import Admissions from "./admissions/Admissions";
 import UpdateStudent from "./admissions/UpdateStudent";
 import DashboardLayout from "./layout/DashboardLayout";
 import Home from "./pages/Home/Home";
+import ReportsSummaryParent from "./parent/ReportsSummaryParent";
 import Payments from "./payments/Payments";
 import PaymentSummary from "./payments/PaymentSummary";
 import LessonsCovered from "./teacher/LessonsCovered";
@@ -261,6 +263,22 @@ const dashboardRoutes = [
         element: (
           <PrivateRoute>
             <ReportsSummary></ReportsSummary>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "reports-summary",
+        element: (
+          <PrivateRoute>
+            <ReportsSummaryAdmin></ReportsSummaryAdmin>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "parent/reports-summary",
+        element: (
+          <PrivateRoute>
+            <ReportsSummaryParent></ReportsSummaryParent>
           </PrivateRoute>
         ),
       },

@@ -30,6 +30,23 @@ export const lessons_coveredApi = apiSlice.injectEndpoints({
       },
       providesTags: ["LessonsCovered"],
     }),
+    getStudentLessonsCoveredMonthlySummary: builder.query({
+      query: ({ student_ids = [], month, year }) => {
+        const query = new URLSearchParams();
+
+        if (student_ids.length > 0) {
+          query.set("student_ids", student_ids.join(","));
+        }
+        if (month) query.set("month", month);
+        if (year) query.set("year", year);
+
+        return {
+          url: `/lessons-covered/student-monthly-summary`,
+          params: query,
+        };
+      },
+      providesTags: ["LessonsCovered"],
+    }),
 
     getLessonsCoveredYearlySummary: builder.query({
       query: ({ year }) => `/lessons-covered/yearly-summary?year=${year}`,
@@ -38,6 +55,24 @@ export const lessons_coveredApi = apiSlice.injectEndpoints({
     getTeacherLessonsCoveredYearlySummary: builder.query({
       query: ({ id, year }) =>
         `/lessons-covered/teacher-yearly-summary/${id}?year=${year}`,
+      providesTags: ["LessonsCovered"],
+    }),
+    getStudentLessonsCoveredYearlySummary: builder.query({
+      query: ({ student_ids = [], year }) => {
+        const query = new URLSearchParams();
+
+        if (student_ids.length > 0) {
+          query.set("student_ids", student_ids.join(","));
+        }
+        if (year) {
+          query.set("year", year);
+        }
+
+        return {
+          url: `/lessons-covered/student-yearly-summary`,
+          params: query,
+        };
+      },
       providesTags: ["LessonsCovered"],
     }),
     getTeacherStudentsProgress: builder.query({
@@ -67,6 +102,15 @@ export const lessons_coveredApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["LessonsCovered"],
     }),
+    publishMultipleLessons: builder.mutation({
+      query: ({ ids, monthly_publish, yearly_publish }) => ({
+        url: "lessons-covered/publish-multiple",
+        method: "PATCH",
+        body: { ids, monthly_publish, yearly_publish },
+      }),
+      invalidatesTags: ["LessonsCovered"],
+    }),
+
     deleteManyLessonCovered: builder.mutation({
       query: (ids) => ({
         url: "/lessons-covered/delete-many",
@@ -82,10 +126,13 @@ export const {
   useGetLessonsCoveredQuery,
   useGetLessonsCoveredMonthlySummaryQuery,
   useGetTeacherLessonsCoveredMonthlySummaryQuery,
+  useGetStudentLessonsCoveredMonthlySummaryQuery,
   useGetLessonsCoveredYearlySummaryQuery,
   useGetTeacherLessonsCoveredYearlySummaryQuery,
+  useGetStudentLessonsCoveredYearlySummaryQuery,
   useGetTeacherStudentsProgressQuery,
   useAddLessonCoveredMutation,
   useUpdateLessonCoveredMutation,
+  usePublishMultipleLessonsMutation,
   useDeleteManyLessonCoveredMutation,
 } = apiSlice;

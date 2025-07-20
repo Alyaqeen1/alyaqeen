@@ -125,6 +125,8 @@ export default function LessonsCovered() {
       subject_id: subjectId,
       teacher_id: teacher?._id,
       department_id: department,
+      monthly_publish: false,
+      yearly_publish: false,
       month,
       year,
       qaidahPages,

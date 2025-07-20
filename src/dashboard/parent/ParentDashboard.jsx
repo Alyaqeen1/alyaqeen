@@ -341,7 +341,7 @@ export default function ParentDashboard({ family, refetch }) {
           </thead>
           <tbody>
             {family?.childrenDocs?.length > 0 ? (
-              family.childrenDocs.map((student, idx) => (
+              family?.childrenDocs?.map((student, idx) => (
                 <tr key={student._id}>
                   <td className="border h6 text-center align-middle text-nowrap">
                     {idx + 1}

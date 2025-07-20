@@ -1,43 +1,32 @@
 import React, { useState } from "react";
 import {
-  useGetTeacherLessonsCoveredMonthlySummaryQuery,
-  useGetTeacherLessonsCoveredYearlySummaryQuery,
+  useGetLessonsCoveredMonthlySummaryQuery,
+  useGetLessonsCoveredYearlySummaryQuery,
   usePublishMultipleLessonsMutation,
 } from "../../redux/features/lessons_covered/lessons_coveredApi";
 import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
-import useAuth from "../../hooks/useAuth";
-import { useGetTeacherByEmailQuery } from "../../redux/features/teachers/teachersApi";
-import Swal from "sweetalert2";
 import toast from "react-hot-toast";
+import Swal from "sweetalert2";
 
-export default function ReportsSummary() {
+export default function ReportsSummaryAdmin() {
   const [month, setMonth] = useState("");
   const currentYear = new Date().getFullYear();
   const [year, setYear] = useState(currentYear);
   const [showOverallSummary, setShowOverallSummary] = useState(false);
-  const { user } = useAuth();
   const [publishMultipleLessons] = usePublishMultipleLessonsMutation();
-
-  // Fetch teacher data
-  const { data: teacher, isLoading: isLoadingTeacher } =
-    useGetTeacherByEmailQuery(user?.email, {
-      skip: !user?.email,
-    });
-
   // Fetch lessons data
   const {
     data: lessonsCovered = [],
     isLoading: isLoadingMonthly,
     isError: isMonthlyError,
     error: monthlyError,
-  } = useGetTeacherLessonsCoveredMonthlySummaryQuery(
+  } = useGetLessonsCoveredMonthlySummaryQuery(
     {
-      id: teacher?._id,
       month,
       year: year.toString(),
     },
     {
-      skip: !teacher?._id || showOverallSummary, // Skip if showing overall summary
+      skip: showOverallSummary, // Skip if showing overall summary
     }
   );
 
@@ -46,21 +35,18 @@ export default function ReportsSummary() {
     data: overallSummary = [],
     isLoading: isLoadingYearly,
     isError: isYearlyError,
-  } = useGetTeacherLessonsCoveredYearlySummaryQuery(
+  } = useGetLessonsCoveredYearlySummaryQuery(
     {
-      id: teacher?._id,
       year: year.toString(),
     },
     {
-      skip: !teacher?._id || !showOverallSummary, // Skip if not showing overall summary
+      skip: !showOverallSummary, // Skip if not showing overall summary
     }
   );
 
-  console.log(overallSummary);
+  //   console.log(overallSummary);
 
-  const isLoading =
-    isLoadingTeacher ||
-    (showOverallSummary ? isLoadingYearly : isLoadingMonthly);
+  const isLoading = showOverallSummary ? isLoadingYearly : isLoadingMonthly;
   const isError = showOverallSummary ? isYearlyError : isMonthlyError;
   const isNoDataError = monthlyError?.data?.message?.includes("No data found");
 

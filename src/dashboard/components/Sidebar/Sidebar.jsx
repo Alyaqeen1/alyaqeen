@@ -169,6 +169,12 @@ export default function Sidebar() {
                   label="Merit Students"
                   to="merit-students"
                 />
+
+                <MenuItem
+                  icon={<TbFileReport className="mx-2 fs-5" />}
+                  label="Reports Summary"
+                  to="reports-summary"
+                />
               </>
             )}
 
@@ -241,15 +247,16 @@ export default function Sidebar() {
                   isSubMenuOpen={isSubMenuOpen}
                   handleToggleMenu={handleToggleMenu}
                 />
-                {/* <MenuItem
-                  icon={<TbFileReport className="mx-2" />}
-                  label="Reports"
-                  to="/dashboard/reports"
-                  openSubMenu={openSubMenu}
-                  handleSubmenu={handleSubmenu}
-                  isSubMenuOpen={isSubMenuOpen}
-                  handleToggleMenu={handleToggleMenu}
-                /> */}
+              </>
+            )}
+
+            {data?.role === "parent" && (
+              <>
+                <MenuItem
+                  icon={<TbFileReport className="mx-2 fs-5" />}
+                  label="Reports Summary"
+                  to="parent/reports-summary"
+                />
               </>
             )}
           </ul>
