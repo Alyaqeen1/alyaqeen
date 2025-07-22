@@ -46,8 +46,6 @@ export default function FeeChoiceModal({ refetch }) {
         feeChoice: selectedChoice,
       }).unwrap();
 
-      console.log(response); // Always inspect first to confirm structure
-
       if (response?.modifiedCount) {
         toast.success("Fee choice updated successfully!");
         refetch();

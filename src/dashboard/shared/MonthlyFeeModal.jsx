@@ -16,7 +16,6 @@ export default function MonthlyFeeModal({
     }
   };
   const grandTotal = unpaidRows.reduce((acc, row) => acc + row.totalAmount, 0);
-  console.log(paymentDetails);
 
   return (
     <div>

@@ -44,8 +44,6 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
 
   const [unpaidRows, setUnpaidRows] = useState([]);
 
-  console.log(unpaidRows);
-
   useEffect(() => {
     if (students && fees) {
       const calculatedUnpaid = getUnpaidFees({

@@ -23,7 +23,7 @@ const VacancyDetails = () => {
     isError,
     refetch,
   } = useGetVacanciesQuery();
-  // console.log(id, vacancy);
+
   useEffect(() => {
     refetch(); // Force refetch when component mounts
   }, [refetch]);

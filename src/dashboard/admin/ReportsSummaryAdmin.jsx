@@ -44,8 +44,6 @@ export default function ReportsSummaryAdmin() {
     }
   );
 
-  //   console.log(overallSummary);
-
   const isLoading = showOverallSummary ? isLoadingYearly : isLoadingMonthly;
   const isError = showOverallSummary ? isYearlyError : isMonthlyError;
   const isNoDataError = monthlyError?.data?.message?.includes("No data found");

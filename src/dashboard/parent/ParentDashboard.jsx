@@ -307,8 +307,6 @@ export default function ParentDashboard({ family, refetch }) {
       refetch();
     }
   };
-  // const paymentDetails =
-  console.log(feeDetails);
 
   return (
     <div>

@@ -47,7 +47,6 @@ export default function PendingTeacher() {
         deleteTeacher(id)
           .unwrap()
           .then((res) => {
-            console.log(res);
             // You can optionally check res.status === 200
             if (res?.deletedCount) {
               Swal.fire({

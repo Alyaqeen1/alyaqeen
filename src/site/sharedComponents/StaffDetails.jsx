@@ -12,7 +12,7 @@ export default function StaffDetails() {
   useEffect(() => {
     const fetchData = async () => {
       const { data } = await axios.get("/staff.json");
-      // console.log(data);
+
       const singleStaff = data.find((single) => single?.id === id);
       setStaffData(singleStaff);
     };

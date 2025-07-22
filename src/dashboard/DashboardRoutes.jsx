@@ -5,6 +5,7 @@ import AddTeacher from "./admin/AddTeacher";
 import Classes from "./admin/Classes";
 import Departments from "./admin/Departments";
 import FeeSettings from "./admin/FeeSettings";
+import HolidayUpdate from "./admin/HolidayUpdate";
 import InactiveTeachers from "./admin/InactiveTeachers";
 import MeritStudents from "./admin/MeritStudents";
 import PendingPayments from "./admin/PendingPayments";
@@ -279,6 +280,14 @@ const dashboardRoutes = [
         element: (
           <PrivateRoute>
             <ReportsSummaryParent></ReportsSummaryParent>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "holiday/time-update",
+        element: (
+          <PrivateRoute>
+            <HolidayUpdate></HolidayUpdate>
           </PrivateRoute>
         ),
       },

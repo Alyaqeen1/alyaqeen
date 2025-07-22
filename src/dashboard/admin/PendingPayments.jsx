@@ -25,7 +25,6 @@ export default function PendingPayments() {
     refetch,
   } = useGetFeesByStatusQuery("pending");
 
-  console.log(fees);
   const handleShow = (id) => {
     setSelectedFeeId(id);
     setShowModal(true);

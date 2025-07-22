@@ -56,8 +56,6 @@ export default function ReportsSummary() {
     }
   );
 
-  console.log(overallSummary);
-
   const isLoading =
     isLoadingTeacher ||
     (showOverallSummary ? isLoadingYearly : isLoadingMonthly);

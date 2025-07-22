@@ -5,7 +5,7 @@ import LoadingSpinnerDash from "../dashboard/components/LoadingSpinnerDash";
 export default function PrivateRoute({ children }) {
   const { user, loading } = useAuth();
   const location = useLocation();
-  console.log(loading);
+
   if (loading) {
     return <LoadingSpinnerDash></LoadingSpinnerDash>;
   }

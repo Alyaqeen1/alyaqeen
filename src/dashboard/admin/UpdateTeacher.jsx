@@ -190,7 +190,6 @@ export default function UpdateTeacher() {
         form.reset(); // Reset the form
       }
     } catch (error) {
-      console.log(error);
       return toast.error(error?.message);
     }
   };

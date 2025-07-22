@@ -12,7 +12,7 @@ const PrayerComp = () => {
   // const [times, setTimes] = useState([]);
   const date = new Date();
   const { data: times, isLoading, isError } = useGetPrayerTimesQuery();
-  // console.log(data);
+
   const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const currentDate = new Intl.DateTimeFormat("en-US", {
     timeZone: userTimeZone,

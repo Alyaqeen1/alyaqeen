@@ -75,7 +75,6 @@ export default function LessonCoveredUpdateModal({
   };
 
   if (!showModal) return null;
-  console.log(beginningData);
 
   return (
     <div>

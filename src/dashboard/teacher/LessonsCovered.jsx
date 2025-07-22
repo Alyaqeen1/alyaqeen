@@ -163,7 +163,6 @@ export default function LessonsCovered() {
         setBook_name("");
       }
     } catch (error) {
-      console.log(error);
       toast.error(error?.data?.message || "Failed to add lessons covered.");
     }
   };

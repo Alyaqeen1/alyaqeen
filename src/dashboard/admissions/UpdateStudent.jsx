@@ -65,7 +65,7 @@ export default function UpdateStudent() {
     dept_id,
     class_id,
   } = academic || {};
-  console.log(department);
+
   const [dept_state, setDept_state] = useState("");
   const [session_state, setSession_state] = useState("");
   const [time_state, setTime_state] = useState("");

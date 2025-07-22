@@ -10,7 +10,6 @@ export default function ShowFeeDataModal({ feeId, handleClose, showModal }) {
     }
   };
 
-  console.log(fee, feeId);
   if (!showModal) return null;
 
   return (

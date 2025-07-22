@@ -153,7 +153,6 @@ const TeacherComp = () => {
         }
       }
     } catch (error) {
-      console.log(error);
       setLocalLoading(false);
       return toast.error(error?.message);
     } finally {

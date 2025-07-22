@@ -24,7 +24,6 @@ export default function Payments({
         });
         if (data) {
           setClientSecret(data.clientSecret);
-          console.log(data);
         }
       } catch (error) {
         console.error("Error fetching payments:", error);

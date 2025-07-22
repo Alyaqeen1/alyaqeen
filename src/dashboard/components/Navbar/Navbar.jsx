@@ -44,7 +44,7 @@ export default function Navbar() {
   const handleNotificationClick = async (id, link) => {
     setShowDropdown(false);
     const { data } = await axiosPublic.patch(`/notifications/${id}`);
-    console.log(data);
+
     if (data.modifiedCount) {
       navigate(link);
       refetch();
@@ -87,14 +87,14 @@ export default function Navbar() {
           </motion.button>
 
           {/* Cart */}
-          <motion.button
+          {/* <motion.button
             whileHover={{ backgroundColor: "#F1F1F6" }}
             transition={{ duration: 0 }}
             style={btnStyle}
             className="d-none d-lg-block"
           >
             <IoCartOutline className="fs-4" />
-          </motion.button>
+          </motion.button> */}
 
           {/* Notifications */}
           <div style={{ position: "relative" }}>

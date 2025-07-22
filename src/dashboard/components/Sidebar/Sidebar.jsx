@@ -26,8 +26,6 @@ export default function Sidebar() {
     skip: !user?.email, // avoid fetching if no ID
   });
 
-  // console.log(role);
-
   const handleSubmenu = (submenuId) => {
     if (openSubMenu === submenuId) {
       setOpenSubMenu(null); // Close if already open
@@ -38,10 +36,8 @@ export default function Sidebar() {
 
   const isSubMenuOpen = (submenuId) => openSubMenu === submenuId;
 
-  const handleToggleMenu = (open) => {
-    console.log("Toggle menu:", open);
-  };
-  if (isLoading) return <LoadingSpinnerDash></LoadingSpinnerDash>;
+  const handleToggleMenu = (open) => {};
+  // if (isLoading) return <LoadingSpinnerDash></LoadingSpinnerDash>;
 
   return (
     <div
@@ -63,200 +59,196 @@ export default function Sidebar() {
             MAIN
           </p>
           <ul className="list-unstyled">
-            {/* Dashboard (no submenu) */}
-            <MenuItem
-              icon={<TiHomeOutline className="mx-2 fs-5" />}
-              label="Dashboard"
-              to="/dashboard"
-            />
-            {/* <MenuItem
-              icon={<TiHomeOutline className="mx-2 fs-5" />}
-              label="Admissions"
-              to="admissions"
-            /> */}
-
-            {/* Users (with submenu) */}
-            {data?.role === "admin" && (
+            {isLoading ? (
+              <div className="text-center my-3">
+                <LoadingSpinnerDash />
+              </div>
+            ) : (
               <>
+                {/* Dashboard (no submenu) */}
                 <MenuItem
-                  icon={<FaUsers className="mx-2 fs-5" />}
-                  label="Academics"
-                  identifier="academics"
-                  submenuItems={[
-                    { label: "Departments", to: "departments" },
-                    { label: "Classes", to: "classes" },
-                    { label: "Subjects", to: "subjects" },
-                  ]}
-                  openSubMenu={openSubMenu}
-                  handleSubmenu={handleSubmenu}
-                  isSubMenuOpen={isSubMenuOpen}
-                  handleToggleMenu={handleToggleMenu}
-                />
-                <MenuItem
-                  icon={<FaUsers className="mx-2 fs-5" />}
-                  label="Students"
-                  identifier="students"
-                  submenuItems={[
-                    { label: "Add New", to: "add-student" },
-                    // { label: "Active Students", to: "active-students" },
-                    // { label: "Inactive Students", to: "inactive-students" },
-                    { label: "Online Admission", to: "online-admissions" },
-                  ]}
-                  openSubMenu={openSubMenu}
-                  handleSubmenu={handleSubmenu}
-                  isSubMenuOpen={isSubMenuOpen}
-                  handleToggleMenu={handleToggleMenu}
-                />
-                <MenuItem
-                  icon={<GiTeacher className="mx-2 fs-5" />}
-                  label="Teachers"
-                  identifier="teachers"
-                  submenuItems={[
-                    { label: "Add New", to: "add-teacher" },
-                    { label: "Pending Teachers", to: "pending-teachers" },
-                    { label: "Active Teachers", to: "active-teachers" },
-                    { label: "Inactive Teachers", to: "inactive-teachers" },
-                  ]}
-                  openSubMenu={openSubMenu}
-                  handleSubmenu={handleSubmenu}
-                  isSubMenuOpen={isSubMenuOpen}
-                  handleToggleMenu={handleToggleMenu}
-                />
-                <MenuItem
-                  icon={<FaPersonCircleCheck className="mx-2 fs-5" />}
-                  label="Attendance"
-                  identifier="attendance"
-                  submenuItems={[
-                    {
-                      label: "Student Attendance",
-                      to: "student-attendance-admin",
-                    },
-                    { label: "Staff Attendance", to: "staff-attendance" },
-                  ]}
-                  openSubMenu={openSubMenu}
-                  handleSubmenu={handleSubmenu}
-                  isSubMenuOpen={isSubMenuOpen}
-                  handleToggleMenu={handleToggleMenu}
-                />
-                <MenuItem
-                  icon={<FaUsers className="mx-2 fs-5" />}
-                  label="Fee Management"
-                  identifier="fees"
-                  submenuItems={[
-                    { label: "Fee Settings", to: "fee-settings" },
-                    // { label: "Unpaid List", to: "unpaid-list" },
-                    { label: "Pending Payments", to: "pending-payments" },
-                  ]}
-                  openSubMenu={openSubMenu}
-                  handleSubmenu={handleSubmenu}
-                  isSubMenuOpen={isSubMenuOpen}
-                  handleToggleMenu={handleToggleMenu}
-                />
-                <MenuItem
-                  icon={<IoTimer className="mx-2 fs-5" />}
-                  label="Prayer Timetable"
-                  identifier="prayer-timetable"
-                  submenuItems={[
-                    { label: "Time Update", to: "prayer/time-update" },
-                  ]}
-                  openSubMenu={openSubMenu}
-                  handleSubmenu={handleSubmenu}
-                  isSubMenuOpen={isSubMenuOpen}
-                  handleToggleMenu={handleToggleMenu}
-                />
-                <MenuItem
-                  icon={<PiStudentBold className="mx-2 fs-5" />}
-                  label="Merit Students"
-                  to="merit-students"
+                  icon={<TiHomeOutline className="mx-2 fs-5" />}
+                  label="Dashboard"
+                  to="/dashboard"
                 />
 
-                <MenuItem
-                  icon={<TbFileReport className="mx-2 fs-5" />}
-                  label="Reports Summary"
-                  to="reports-summary"
-                />
-              </>
-            )}
+                {/* Users (with submenu) */}
+                {data?.role === "admin" && (
+                  <>
+                    <MenuItem
+                      icon={<FaUsers className="mx-2 fs-5" />}
+                      label="Academics"
+                      identifier="academics"
+                      submenuItems={[
+                        { label: "Departments", to: "departments" },
+                        { label: "Classes", to: "classes" },
+                        { label: "Subjects", to: "subjects" },
+                      ]}
+                      openSubMenu={openSubMenu}
+                      handleSubmenu={handleSubmenu}
+                      isSubMenuOpen={isSubMenuOpen}
+                      handleToggleMenu={handleToggleMenu}
+                    />
+                    <MenuItem
+                      icon={<FaUsers className="mx-2 fs-5" />}
+                      label="Students"
+                      identifier="students"
+                      submenuItems={[
+                        { label: "Add New", to: "add-student" },
+                        // { label: "Active Students", to: "active-students" },
+                        // { label: "Inactive Students", to: "inactive-students" },
+                        { label: "Online Admission", to: "online-admissions" },
+                      ]}
+                      openSubMenu={openSubMenu}
+                      handleSubmenu={handleSubmenu}
+                      isSubMenuOpen={isSubMenuOpen}
+                      handleToggleMenu={handleToggleMenu}
+                    />
+                    <MenuItem
+                      icon={<GiTeacher className="mx-2 fs-5" />}
+                      label="Teachers"
+                      identifier="teachers"
+                      submenuItems={[
+                        { label: "Add New", to: "add-teacher" },
+                        { label: "Pending Teachers", to: "pending-teachers" },
+                        { label: "Active Teachers", to: "active-teachers" },
+                        { label: "Inactive Teachers", to: "inactive-teachers" },
+                      ]}
+                      openSubMenu={openSubMenu}
+                      handleSubmenu={handleSubmenu}
+                      isSubMenuOpen={isSubMenuOpen}
+                      handleToggleMenu={handleToggleMenu}
+                    />
+                    <MenuItem
+                      icon={<FaPersonCircleCheck className="mx-2 fs-5" />}
+                      label="Attendance"
+                      identifier="attendance"
+                      submenuItems={[
+                        {
+                          label: "Student Attendance",
+                          to: "student-attendance-admin",
+                        },
+                        { label: "Staff Attendance", to: "staff-attendance" },
+                      ]}
+                      openSubMenu={openSubMenu}
+                      handleSubmenu={handleSubmenu}
+                      isSubMenuOpen={isSubMenuOpen}
+                      handleToggleMenu={handleToggleMenu}
+                    />
+                    <MenuItem
+                      icon={<FaUsers className="mx-2 fs-5" />}
+                      label="Fee Management"
+                      identifier="fees"
+                      submenuItems={[
+                        { label: "Fee Settings", to: "fee-settings" },
+                        // { label: "Unpaid List", to: "unpaid-list" },
+                        { label: "Pending Payments", to: "pending-payments" },
+                      ]}
+                      openSubMenu={openSubMenu}
+                      handleSubmenu={handleSubmenu}
+                      isSubMenuOpen={isSubMenuOpen}
+                      handleToggleMenu={handleToggleMenu}
+                    />
+                    <MenuItem
+                      icon={<IoTimer className="mx-2 fs-5" />}
+                      label="Time Update"
+                      identifier="time-update"
+                      submenuItems={[
+                        {
+                          label: "Prayer Time Update",
+                          to: "prayer/time-update",
+                        },
+                        { label: "Holiday Update", to: "holiday/time-update" },
+                      ]}
+                      openSubMenu={openSubMenu}
+                      handleSubmenu={handleSubmenu}
+                      isSubMenuOpen={isSubMenuOpen}
+                      handleToggleMenu={handleToggleMenu}
+                    />
+                    <MenuItem
+                      icon={<PiStudentBold className="mx-2 fs-5" />}
+                      label="Merit Students"
+                      to="merit-students"
+                    />
 
-            {/* {data?.role === "parent" && (
-              <MenuItem
-                icon={<RiMoneyEuroCircleLine className="mx-2 fs-5" />}
-                label="Payment Summary"
-                to="/dashboard/payment-summary"
-                openSubMenu={openSubMenu}
-                handleSubmenu={handleSubmenu}
-                isSubMenuOpen={isSubMenuOpen}
-                handleToggleMenu={handleToggleMenu}
-              />
-            )} */}
-            {data?.role === "teacher" && (
-              <>
-                <MenuItem
-                  icon={<FaEye className="mx-2" />}
-                  label="View Profile"
-                  to="/dashboard/view-profile"
-                  openSubMenu={openSubMenu}
-                  handleSubmenu={handleSubmenu}
-                  isSubMenuOpen={isSubMenuOpen}
-                  handleToggleMenu={handleToggleMenu}
-                />
-                <MenuItem
-                  icon={<FaCalendar className="mx-2" />}
-                  label="Time Table"
-                  to="/dashboard/time-table"
-                  openSubMenu={openSubMenu}
-                  handleSubmenu={handleSubmenu}
-                  isSubMenuOpen={isSubMenuOpen}
-                  handleToggleMenu={handleToggleMenu}
-                />
-                <MenuItem
-                  icon={<FaCalendarCheck className="mx-2" />}
-                  label="Student Attendance"
-                  to="/dashboard/student-attendance"
-                  openSubMenu={openSubMenu}
-                  handleSubmenu={handleSubmenu}
-                  isSubMenuOpen={isSubMenuOpen}
-                  handleToggleMenu={handleToggleMenu}
-                />
-                <MenuItem
-                  icon={<FaTrophy className="mx-2" />}
-                  label="Merits"
-                  to="/dashboard/teacher/merits"
-                  openSubMenu={openSubMenu}
-                  handleSubmenu={handleSubmenu}
-                  isSubMenuOpen={isSubMenuOpen}
-                  handleToggleMenu={handleToggleMenu}
-                />
+                    <MenuItem
+                      icon={<TbFileReport className="mx-2 fs-5" />}
+                      label="Reports Summary"
+                      to="reports-summary"
+                    />
+                  </>
+                )}
 
-                <MenuItem
-                  icon={<TbFileReport className="mx-2 fs-5" />}
-                  label="Reports"
-                  identifier="report"
-                  submenuItems={[
-                    {
-                      label: "Lessons Covered",
-                      to: "teacher/lessons-covered",
-                    },
-                    {
-                      label: "Reports Summary",
-                      to: "teacher/reports-summary",
-                    },
-                  ]}
-                  openSubMenu={openSubMenu}
-                  handleSubmenu={handleSubmenu}
-                  isSubMenuOpen={isSubMenuOpen}
-                  handleToggleMenu={handleToggleMenu}
-                />
-              </>
-            )}
+                {data?.role === "teacher" && (
+                  <>
+                    <MenuItem
+                      icon={<FaEye className="mx-2" />}
+                      label="View Profile"
+                      to="/dashboard/view-profile"
+                      openSubMenu={openSubMenu}
+                      handleSubmenu={handleSubmenu}
+                      isSubMenuOpen={isSubMenuOpen}
+                      handleToggleMenu={handleToggleMenu}
+                    />
+                    <MenuItem
+                      icon={<FaCalendar className="mx-2" />}
+                      label="Time Table"
+                      to="/dashboard/time-table"
+                      openSubMenu={openSubMenu}
+                      handleSubmenu={handleSubmenu}
+                      isSubMenuOpen={isSubMenuOpen}
+                      handleToggleMenu={handleToggleMenu}
+                    />
+                    <MenuItem
+                      icon={<FaCalendarCheck className="mx-2" />}
+                      label="Student Attendance"
+                      to="/dashboard/student-attendance"
+                      openSubMenu={openSubMenu}
+                      handleSubmenu={handleSubmenu}
+                      isSubMenuOpen={isSubMenuOpen}
+                      handleToggleMenu={handleToggleMenu}
+                    />
+                    <MenuItem
+                      icon={<FaTrophy className="mx-2" />}
+                      label="Merits"
+                      to="/dashboard/teacher/merits"
+                      openSubMenu={openSubMenu}
+                      handleSubmenu={handleSubmenu}
+                      isSubMenuOpen={isSubMenuOpen}
+                      handleToggleMenu={handleToggleMenu}
+                    />
 
-            {data?.role === "parent" && (
-              <>
-                <MenuItem
-                  icon={<TbFileReport className="mx-2 fs-5" />}
-                  label="Reports Summary"
-                  to="parent/reports-summary"
-                />
+                    <MenuItem
+                      icon={<TbFileReport className="mx-2 fs-5" />}
+                      label="Reports"
+                      identifier="report"
+                      submenuItems={[
+                        {
+                          label: "Lessons Covered",
+                          to: "teacher/lessons-covered",
+                        },
+                        {
+                          label: "Reports Summary",
+                          to: "teacher/reports-summary",
+                        },
+                      ]}
+                      openSubMenu={openSubMenu}
+                      handleSubmenu={handleSubmenu}
+                      isSubMenuOpen={isSubMenuOpen}
+                      handleToggleMenu={handleToggleMenu}
+                    />
+                  </>
+                )}
+
+                {data?.role === "parent" && (
+                  <>
+                    <MenuItem
+                      icon={<TbFileReport className="mx-2 fs-5" />}
+                      label="Reports Summary"
+                      to="parent/reports-summary"
+                    />
+                  </>
+                )}
               </>
             )}
           </ul>

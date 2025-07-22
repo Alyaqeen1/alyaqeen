@@ -138,7 +138,7 @@ export default function AddTeacher() {
         displayName: name,
         // photoURL: photoUrl,
       });
-      console.log(res);
+
       const userData = {
         uid: res?.data?.uid,
         name,
@@ -162,7 +162,6 @@ export default function AddTeacher() {
         }
       }
     } catch (error) {
-      console.log(error);
       setLocalLoading(false);
       return toast.error(error?.message);
     } finally {

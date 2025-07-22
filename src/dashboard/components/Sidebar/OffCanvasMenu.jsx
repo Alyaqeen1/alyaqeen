@@ -47,9 +47,7 @@ export default function OffCanvasMenu() {
   };
   const isSubMenuOpen = (submenuId) => openSubMenu === submenuId;
 
-  const handleToggleMenu = (open) => {
-    console.log("Toggle menu:", open);
-  };
+  const handleToggleMenu = (open) => {};
 
   return (
     <div>

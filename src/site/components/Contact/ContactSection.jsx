@@ -27,7 +27,7 @@ const ContactSection = () => {
       description,
       madrasha_id,
     };
-    // console.log(data);
+
     addContact(contactData);
     toast.success("Contact form submitted successfully!");
     form.reset();

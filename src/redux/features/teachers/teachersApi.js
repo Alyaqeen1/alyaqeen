@@ -10,6 +10,10 @@ export const teachersApi = apiSlice.injectEndpoints({
       query: (id) => `/teachers/by-id/${id}`,
       providesTags: ["Teacher"],
     }),
+    getTeacherCount: builder.query({
+      query: () => `/teachers/count`,
+      providesTags: ["Teacher"],
+    }),
     getTeacherByStatus: builder.query({
       query: (status) => `/teachers/by-status/${status}`,
       providesTags: ["Teacher"],
@@ -84,6 +88,7 @@ export const teachersApi = apiSlice.injectEndpoints({
 export const {
   useGetTeachersQuery,
   useGetTeacherByIdQuery,
+  useGetTeacherCountQuery,
   useGetTeacherByStatusQuery,
   useGetTeacherByEmailQuery,
   useGetTeacherByActivityQuery,

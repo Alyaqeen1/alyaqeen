@@ -42,7 +42,7 @@ const AboutSection = () => {
       madrasha_id,
       rating,
     };
-    // console.log(reviewData);
+
     addReview(reviewData);
     toast.success("Review submitted successfully!");
     form.reset();

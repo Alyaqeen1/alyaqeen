@@ -10,6 +10,10 @@ export const attendancesApi = apiSlice.injectEndpoints({
       query: (id) => `/attendances/${id}`,
       providesTags: ["Attendance"],
     }),
+    getAttendancePresentCount: builder.query({
+      query: (type) => `/attendances/present-today/${type}`,
+      providesTags: ["Attendance"],
+    }),
     getAttendanceByTeacherAndDate: builder.query({
       query: ({ teacherId, date }) =>
         `/attendances/teacher/${teacherId}/date/${date}`,
@@ -54,6 +58,7 @@ export const attendancesApi = apiSlice.injectEndpoints({
 export const {
   useGetAttendancesQuery,
   useGetAttendanceQuery,
+  useGetAttendancePresentCountQuery,
   useGetAttendanceByTeacherAndDateQuery,
   useAddAttendanceMutation,
   useUpdateAttendanceMutation,

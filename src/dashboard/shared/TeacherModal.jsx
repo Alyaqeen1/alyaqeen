@@ -19,7 +19,6 @@ export default function TeacherModal({ teacherId, handleClose, showModal }) {
   });
 
   const [updateTeacherStatus] = useUpdateTeacherStatusMutation();
-  //   console.log(teacher, isError);
 
   const {
     name,

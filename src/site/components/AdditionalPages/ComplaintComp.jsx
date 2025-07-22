@@ -34,7 +34,7 @@ const ComplaintComp = () => {
       description,
       madrasha_id,
     };
-    // console.log(complaintData);
+
     addComplaint(complaintData);
     toast.success("Complaint submitted successfully");
     form.reset();

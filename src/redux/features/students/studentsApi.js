@@ -10,6 +10,10 @@ export const studentsApi = apiSlice.injectEndpoints({
       query: (id) => `/students/by-id/${id}`,
       providesTags: ["Student"],
     }),
+    getStudentCount: builder.query({
+      query: () => `/students/count`,
+      providesTags: ["Student"],
+    }),
     getStudentsByStatus: builder.query({
       query: (status) => `/students/get-by-status/${status}`,
       providesTags: ["Student"],
@@ -58,6 +62,7 @@ export const studentsApi = apiSlice.injectEndpoints({
 export const {
   useGetStudentsQuery,
   useGetStudentQuery,
+  useGetStudentCountQuery,
   useGetStudentsByStatusQuery,
   useGetStudentsByGroupQuery,
   useGetWithoutEnrolledStudentsQuery,

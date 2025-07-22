@@ -90,7 +90,6 @@ export default function FeeSettings() {
         deleteFamilyData(id)
           .unwrap()
           .then((res) => {
-            console.log(res);
             if (res?.deletedCount > 0) {
               Swal.fire({
                 title: "Deleted!",
