@@ -109,7 +109,7 @@ export default function UpdateStudent() {
     const medical_condition = form.medical_condition.value;
     const student_class = form.student_class.value;
     const starting_date = form.starting_date.value;
-    const monthly_fee = feeStructure?.monthlyFees?.[department]?.[std_session];
+    const monthly_fee = feeStructure?.monthlyFees?.[department]?.[session];
     const today = new Date().setHours(0, 0, 0, 0); // current date at midnight
     const selectedDate = new Date(starting_date).setHours(0, 0, 0, 0); // user date at midnight
 

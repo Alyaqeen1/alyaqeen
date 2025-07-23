@@ -22,7 +22,9 @@ export default function AddStudent() {
   const { setLoading } = useAuth();
   const [error, setError] = useState("");
   const { data: departments, isLoading } = useGetDepartmentsQuery();
-
+  const departmentName = departments?.find(
+    (dept) => dept?._id === department
+  )?.dept_name;
   const sigRef = useRef();
 
   const clearSignature = () => sigRef.current.clear();
@@ -112,6 +114,7 @@ export default function AddStudent() {
 
     const password = form.password.value;
     const confirmPassword = form.confirmPassword.value;
+    const monthly_fee = feeStructure?.monthlyFees?.[departmentName]?.[session];
     const today = new Date().setHours(0, 0, 0, 0); // current date at midnight
     const selectedDate = new Date(starting_date).setHours(0, 0, 0, 0); // user date at midnight
 
@@ -198,77 +201,80 @@ export default function AddStudent() {
 
       // ✅ 2. Generate student UID
 
-      // ✅ 2. Prepare student data
-      const studentData = {
-        uid: studentUid,
-        name: student_name,
-        email: student_email,
-        dob: student_dob,
-        parentUid,
-        student_age,
-        gender: student_gender,
-        school_year,
-        status: "under review",
-        activity: "active",
-        language,
-        parent_email,
-        emergency_number,
-        family_name,
-        mother: {
-          name: mother_name,
-          occupation: mother_occupation,
-          number: mother_number,
-        },
-        father: {
-          name: father_name,
-          occupation: father_occupation,
-          number: father_number,
-        },
-        academic: {
-          dept_id: std_department,
-          time: std_time,
-          session: std_session,
-          class_id: student_class,
-        },
-        medical: {
-          doctorName: doctor_name,
-          surgeryAddress: surgery_address,
-          surgeryNumber: surgery_number,
-          allergies,
-          condition: medical_condition,
-        },
-        startingDate: starting_date,
-        signature,
-        createdAt: new Date(),
-      };
-      const notification = {
-        type: "admission",
-        message: `${student_name} has joined.`,
-        isRead: false,
-        createdAt: new Date(),
-        link: "/dashboard/online-admissions",
-      };
+      if (monthly_fee) {
+        // ✅ 2. Prepare student data
+        const studentData = {
+          uid: studentUid,
+          name: student_name,
+          email: student_email,
+          dob: student_dob,
+          parentUid,
+          student_age,
+          gender: student_gender,
+          school_year,
+          status: "under review",
+          activity: "active",
+          language,
+          parent_email,
+          emergency_number,
+          family_name,
+          mother: {
+            name: mother_name,
+            occupation: mother_occupation,
+            number: mother_number,
+          },
+          father: {
+            name: father_name,
+            occupation: father_occupation,
+            number: father_number,
+          },
+          academic: {
+            dept_id: std_department,
+            time: std_time,
+            session: std_session,
+            class_id: student_class,
+          },
+          medical: {
+            doctorName: doctor_name,
+            surgeryAddress: surgery_address,
+            surgeryNumber: surgery_number,
+            allergies,
+            condition: medical_condition,
+          },
+          startingDate: starting_date,
+          signature,
+          monthly_fee,
+          createdAt: new Date(),
+        };
+        const notification = {
+          type: "admission",
+          message: `${student_name} has joined.`,
+          isRead: false,
+          createdAt: new Date(),
+          link: "/dashboard/online-admissions",
+        };
 
-      // ✅ 4. Save student and notification
-      await axiosPublic.post("/students", studentData);
-      await axiosPublic.post("/notifications", notification);
+        // ✅ 4. Save student and notification
+        await axiosPublic.post("/students", studentData);
+        await axiosPublic.post("/notifications", notification);
 
-      // ✅ 5. If parent existed, add student UID
-      if (existingParent) {
-        await axiosPublic.patch(`/families/${student_email}/add-child`, {
-          studentUid,
+        // ✅ 5. If parent existed, add student UID
+        if (existingParent) {
+          await axiosPublic.patch(`/families/${student_email}/add-child`, {
+            studentUid,
+          });
+        }
+        // --- 5. Success Notification ---
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Student added successfully!",
+          showConfirmButton: false,
+          timer: 1500,
         });
+        form.reset();
+        navigate("/dashboard");
       }
-      // --- 5. Success Notification ---
-      Swal.fire({
-        position: "center",
-        icon: "success",
-        title: "Student added successfully!",
-        showConfirmButton: false,
-        timer: 1500,
-      });
-      form.reset();
-      navigate("/dashboard");
     } catch (error) {
       console.error(error);
       toast.error(error.response?.data?.message || "Registration failed");

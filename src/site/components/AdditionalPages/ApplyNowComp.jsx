@@ -11,6 +11,7 @@ import toast from "react-hot-toast";
 import useAxiosPublic from "../../../hooks/useAxiosPublic";
 import { useGetDepartmentsQuery } from "../../../redux/features/departments/departmentsApi";
 import LoadingSpinner from "../LoadingSpinner";
+import feeStructure from "../../../utils/feeStructure";
 
 const image_hosting_key = import.meta.env.VITE_Image_Hosting_Key;
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
@@ -26,6 +27,9 @@ const ApplyNowComp = () => {
   const [localLoading, setLocalLoading] = useState(false);
   const navigate = useNavigate();
   const { data: departments, isLoading } = useGetDepartmentsQuery();
+  const departmentName = departments?.find(
+    (dept) => dept?._id === department
+  )?.dept_name;
 
   const axiosPublic = useAxiosPublic();
 
@@ -122,7 +126,7 @@ const ApplyNowComp = () => {
     const password = form.password.value;
     const confirmPassword = form.confirmPassword.value;
     const student_class = null;
-
+    const monthly_fee = feeStructure?.monthlyFees?.[departmentName]?.[session];
     const today = new Date().setHours(0, 0, 0, 0); // current date at midnight
     const selectedDate = new Date(starting_date).setHours(0, 0, 0, 0); // user date at midnight
 
@@ -214,72 +218,79 @@ const ApplyNowComp = () => {
         await axiosPublic.post("/users", parentData);
       }
 
-      // ✅ 2. Prepare student data
-      const studentData = {
-        uid: studentUid,
-        name: student_name,
-        email: student_email,
-        dob: student_dob,
-        parentUid,
-        student_age,
-        gender: student_gender,
-        school_year,
-        status: "under review",
-        activity: "active",
-        language,
-        parent_email,
-        emergency_number,
-        family_name,
-        mother: {
-          name: mother_name,
-          occupation: mother_occupation,
-          number: mother_number,
-        },
-        father: {
-          name: father_name,
-          occupation: father_occupation,
-          number: father_number,
-        },
-        academic: {
-          dept_id: std_department,
-          time: std_time,
-          session: std_session,
-          class_id: student_class,
-        },
-        medical: {
-          doctorName: doctor_name,
-          surgeryAddress: surgery_address,
-          surgeryNumber: surgery_number,
-          allergies,
-          condition: medical_condition,
-        },
-        startingDate: starting_date,
-        signature,
-        createdAt: new Date(),
-      };
+      if (monthly_fee) {
+        // ✅ 2. Prepare student data
+        const studentData = {
+          uid: studentUid,
+          name: student_name,
+          email: student_email,
+          dob: student_dob,
+          parentUid,
+          student_age,
+          gender: student_gender,
+          school_year,
+          status: "under review",
+          activity: "active",
+          language,
+          parent_email,
+          emergency_number,
+          family_name,
+          mother: {
+            name: mother_name,
+            occupation: mother_occupation,
+            number: mother_number,
+          },
+          father: {
+            name: father_name,
+            occupation: father_occupation,
+            number: father_number,
+          },
+          academic: {
+            dept_id: std_department,
+            time: std_time,
+            session: std_session,
+            class_id: student_class,
+          },
+          medical: {
+            doctorName: doctor_name,
+            surgeryAddress: surgery_address,
+            surgeryNumber: surgery_number,
+            allergies,
+            condition: medical_condition,
+          },
+          startingDate: starting_date,
+          signature,
+          monthly_fee,
+          createdAt: new Date(),
+        };
 
-      const notification = {
-        type: "admission",
-        message: `${student_name} has joined.`,
-        isRead: false,
-        createdAt: new Date(),
-        link: "/dashboard/online-admissions",
-      };
+        const notification = {
+          type: "admission",
+          message: `${student_name} has joined.`,
+          isRead: false,
+          createdAt: new Date(),
+          link: "/dashboard/online-admissions",
+        };
 
-      // ✅ 3. Save student and notify
-      await axiosPublic.post("/students", studentData);
-      await axiosPublic.post("/notifications", notification);
+        // ✅ 3. Save student and notify
+        await axiosPublic.post("/students", studentData);
+        await axiosPublic.post("/notifications", notification);
 
-      // ✅ 4. If parent existed, patch to add student UID
-      if (existingParent) {
-        await axiosPublic.patch(`/families/${student_email}/add-child`, {
-          studentUid,
-        });
+        // ✅ 4. If parent existed, patch to add student UID
+        if (existingParent) {
+          await axiosPublic.patch(`/families/${student_email}/add-child`, {
+            studentUid,
+          });
+        }
+
+        toast.success("Registration successful");
+        navigate("/dashboard");
+        form.reset();
+      } else {
+        return toast.error(
+          "Monthly fee not found for this department and session"
+        );
       }
-
-      toast.success("Registration successful");
-      navigate("/dashboard");
-      form.reset();
     } catch (error) {
       console.error(error);
       toast.error(error.message || "Registration failed");

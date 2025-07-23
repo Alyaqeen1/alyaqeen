@@ -257,7 +257,6 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
                 <th>Discount</th>
                 <th>Amount</th>
                 <th>Status</th>
-                <th>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -274,15 +273,6 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
                   </td>
                   <td>{row?.totalAmount}</td>
                   <td className="text-danger">Unpaid</td>
-                  <td>
-                    <button
-                      // onClick={}
-                      className="py-1 px-2 rounded-2 border border-black"
-                      // style={{ backgroundColor: "var(--border2)" }}
-                    >
-                      <FaEye></FaEye>
-                    </button>
-                  </td>
                 </tr>
               ))}
             </tbody>

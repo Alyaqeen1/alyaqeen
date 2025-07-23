@@ -58,7 +58,7 @@ export default function ReportsSummaryParent() {
     return (
       <div className="container py-5">
         <div className="alert alert-info text-center">
-          No enrolled students found in your family account.
+          No student is found enrolled in your family account.
         </div>
       </div>
     );

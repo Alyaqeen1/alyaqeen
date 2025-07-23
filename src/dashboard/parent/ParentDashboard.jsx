@@ -98,7 +98,7 @@ export default function ParentDashboard({ family, refetch }) {
   const feeDetails = approvedStudents.map((student, index) => {
     const startDate = new Date(student?.startingDate);
     const joinDay = startDate.getDate();
-    const joiningMonth = startDate.getMonth(); // 0-indexed
+    const joiningMonth = startDate.getMonth() + 1; // Now returns 1-12
     const joiningYear = startDate.getFullYear();
 
     const baseAdmissionFee = 20;

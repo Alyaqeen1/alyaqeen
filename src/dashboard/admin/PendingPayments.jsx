@@ -44,6 +44,86 @@ export default function PendingPayments() {
 
   const handleStatus = async (students, newStatus, feeId, paymentType) => {
     try {
+      // if (paymentType === "admissionOnHold") {
+      //   const updatePromises = students.map((student) =>
+      //     updateStudentStatus({ id: student.studentId, status: newStatus })
+      //       .unwrap()
+      //       .catch((err) => {
+      //         console.error(`Failed to update ${student.name}`, err);
+      //         return null;
+      //       })
+      //   );
+      //   await Promise.allSettled(updatePromises);
+
+      //   if (newStatus === "enrolled") {
+      //     // await axiosPublic.patch(`/fees/update-status-mode/${feeId}`, {
+      //     //   status: "paid",
+      //     //   paymentType: "admission",
+      //     // });
+      //     const data = await updateFeeData({
+      //       id: feeId,
+      //       data: {
+      //         status: "paid",
+      //         paymentType: "admission",
+      //       },
+      //     });
+      //     if (data?.modifiedCount) {
+      //       Swal.fire({
+      //         icon: "success",
+      //         title: "Students Enrolled and Payment Approved",
+      //         timer: 1500,
+      //         showConfirmButton: false,
+      //       });
+      //     }
+      //   } else if (newStatus === "approved") {
+      //     Swal.fire({
+      //       title: "Are you sure?",
+      //       text: "You won't be able to revert this! Student Status will again be approved and the student would need to pay again through dashboard",
+      //       icon: "warning",
+      //       showCancelButton: true,
+      //       confirmButtonColor: "#3085d6",
+      //       cancelButtonColor: "#d33",
+      //       confirmButtonText: "Yes, delete it!",
+      //     }).then((result) => {
+      //       if (result.isConfirmed) {
+      //         updateFeeData({
+      //           id: feeId,
+      //           data: {
+      //             status: "rejected",
+      //             paymentType: "admission",
+      //           },
+      //         })
+      //           .then((res) => {
+      //             if (res?.modifiedCount) {
+      //               Swal.fire({
+      //                 title: "Deleted!",
+      //                 text: "Admission Declined & Fee Entry Rejected",
+      //                 icon: "success",
+      //               });
+      //               refetch();
+      //             } else {
+      //               Swal.fire({
+      //                 title: "Error",
+      //                 text: "Something went wrong.",
+      //                 icon: "error",
+      //               });
+      //             }
+      //           })
+      //           .catch((error) => {
+      //             Swal.fire({
+      //               title: "Error",
+      //               text:
+      //                 error.response?.data?.message ||
+      //                 "Failed to delete student.",
+      //               icon: "error",
+      //             });
+      //           });
+      //       }
+      //     });
+      //   }
+      //   refetch();
+      // }
+
       if (paymentType === "admissionOnHold") {
         const updatePromises = students.map((student) =>
           updateStudentStatus({ id: student.studentId, status: newStatus })
@@ -53,75 +133,68 @@ export default function PendingPayments() {
               return null;
             })
         );
-        await Promise.allSettled(updatePromises);
+
+        const results = await Promise.allSettled(updatePromises);
+        const failedUpdates = results.filter((r) => r.status === "rejected");
+
+        if (failedUpdates.length > 0) {
+          throw new Error(`${failedUpdates.length} student updates failed`);
+        }
 
         if (newStatus === "enrolled") {
-          // await axiosPublic.patch(`/fees/update-status-mode/${feeId}`, {
-          //   status: "paid",
-          //   paymentType: "admission",
-          // });
           const data = await updateFeeData({
             id: feeId,
             data: {
               status: "paid",
               paymentType: "admission",
             },
-          });
-          if (data?.modifiedCount) {
-            Swal.fire({
+          }).unwrap();
+
+          if (data?.modifiedCount > 0) {
+            await Swal.fire({
               icon: "success",
-              title: "Students Enrolled and Payment Approved",
-              timer: 1500,
+              title: "Success!",
+              text: "Students enrolled and payment approved successfully!",
+              timer: 2000,
               showConfirmButton: false,
             });
+            refetch();
+          } else {
+            throw new Error("Failed to update fee status");
           }
         } else if (newStatus === "approved") {
-          Swal.fire({
+          // Keep your existing rejection logic
+          const result = await Swal.fire({
             title: "Are you sure?",
             text: "You won't be able to revert this! Student Status will again be approved and the student would need to pay again through dashboard",
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, delete it!",
-          }).then((result) => {
-            if (result.isConfirmed) {
-              updateFeeData({
-                id: feeId,
-                data: {
-                  status: "rejected",
-                  paymentType: "admission",
-                },
-              })
-                .then((res) => {
-                  if (res?.modifiedCount) {
-                    Swal.fire({
-                      title: "Deleted!",
-                      text: "Admission Declined & Fee Entry Rejected",
-                      icon: "success",
-                    });
-                    refetch();
-                  } else {
-                    Swal.fire({
-                      title: "Error",
-                      text: "Something went wrong.",
-                      icon: "error",
-                    });
-                  }
-                })
-                .catch((error) => {
-                  Swal.fire({
-                    title: "Error",
-                    text:
-                      error.response?.data?.message ||
-                      "Failed to delete student.",
-                    icon: "error",
-                  });
-                });
-            }
+            confirmButtonText: "Yes, reject it!",
           });
+
+          if (result.isConfirmed) {
+            const { data } = await updateFeeData({
+              id: feeId,
+              data: {
+                status: "rejected",
+                paymentType: "admission",
+              },
+            }).unwrap();
+
+            if (data?.modifiedCount > 0) {
+              await Swal.fire({
+                title: "Rejected!",
+                text: "Admission declined and fee entry rejected",
+                icon: "success",
+              });
+              refetch();
+            } else {
+              throw new Error("Failed to reject fee");
+            }
+          }
         }
-        refetch();
       }
 
       // ✅ For monthlyOnHold payments

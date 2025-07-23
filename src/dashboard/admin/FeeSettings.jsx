@@ -121,9 +121,24 @@ export default function FeeSettings() {
       return null;
     }
 
-    // Automatically treat joining month as "paid" due to admission fee
+    // Check all payment types that could cover admission
+    const admissionPayments = feePayments?.filter(
+      (payment) =>
+        payment.paymentType === "admission" ||
+        payment.paymentType === "admissionOnHold"
+    );
+
+    // If this is the joining month, check admission payments
     if (selectedYear === joiningYear && month === joiningMonth) {
-      return "paid";
+      for (const payment of admissionPayments || []) {
+        const studentPayment = payment.students?.find(
+          (s) => s.studentId === student._id
+        );
+        if (studentPayment) {
+          return payment.status; // Return the actual status (paid/pending)
+        }
+      }
+      return "unpaid"; // No admission payment found
     }
 
     // Check regular monthly payments
@@ -148,7 +163,6 @@ export default function FeeSettings() {
 
     return "unpaid";
   };
-
   if (isLoading || loading) {
     return <LoadingSpinnerDash />;
   }
