@@ -2,13 +2,25 @@ import React from "react";
 import { useGetTeacherCountQuery } from "../../redux/features/teachers/teachersApi";
 import { useGetAttendancePresentCountQuery } from "../../redux/features/attendances/attendancesApi";
 import { useGetStudentCountQuery } from "../../redux/features/students/studentsApi";
+import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 
 export default function AdminDashboard() {
-  const { data: teachersCount } = useGetTeacherCountQuery();
-  const { data: staffPresence } = useGetAttendancePresentCountQuery("staff");
-  const { data: studentPresence } =
+  const { data: teachersCount, isLoading: isLoadingTeachersCount } =
+    useGetTeacherCountQuery();
+  const { data: staffPresence, isLoading: isLoadingStaffPresence } =
+    useGetAttendancePresentCountQuery("staff");
+  const { data: studentPresence, isLoading: isLoadingStudentPresence } =
     useGetAttendancePresentCountQuery("student");
-  const { data: studentsCount } = useGetStudentCountQuery();
+  const { data: studentsCount, isLoading: isLoadingStudentsCount } =
+    useGetStudentCountQuery();
+
+  if (
+    isLoadingTeachersCount ||
+    isLoadingStaffPresence ||
+    isLoadingStudentsCount ||
+    isLoadingStudentPresence
+  )
+    return <LoadingSpinnerDash></LoadingSpinnerDash>;
 
   return (
     <div className="mt-3">

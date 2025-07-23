@@ -42,12 +42,24 @@ export default function Sidebar() {
   return (
     <div
       className="col-md-3 col-xl-2 p-0 d-none d-md-block"
-      style={{ minHeight: "100vh", backgroundColor: "var(--border2)" }}
-      id="sidebar"
+      style={{
+        maxHeight: "100vh",
+        overflowY: "auto",
+        backgroundColor: "var(--border2)",
+      }} // ✅ Add this      id="sidebar"
     >
       <div
-        className="d-flex flex-column fixed-top"
-        style={{ width: "inherit" }}
+        className="d-flex flex-column"
+        style={{
+          width: "inherit",
+          position: "fixed",
+          top: 0,
+          left: 0, // or wherever your sidebar should be horizontally
+          height: "100vh",
+          overflowY: "auto",
+          backgroundColor: "var(--border2)",
+          zIndex: 1030, // same as bootstrap fixed-top z-index
+        }}
       >
         <Link to="/" className="py-2 text-white text-center">
           <img src={logo} style={{ width: "60px" }} alt="Logo" />

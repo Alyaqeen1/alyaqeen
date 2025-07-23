@@ -108,8 +108,13 @@ export default function ActiveTeachers() {
 
   return (
     <div>
-      <div className="table-responsive mb-3" style={{ overflow: "visible" }}>
-        <table className="table mb-0" style={{ minWidth: 700 }}>
+      <div className="table-responsive mb-3">
+        <table
+          className="table mb-0"
+          style={{
+            minWidth: 700,
+          }}
+        >
           <thead>
             <tr>
               {[

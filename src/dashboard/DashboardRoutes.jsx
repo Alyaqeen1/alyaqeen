@@ -1,5 +1,7 @@
 import AdminRoute from "../routes/AdminRoute";
+import ParentRoute from "../routes/ParentRoute";
 import PrivateRoute from "../routes/PrivateRoute";
+import TeacherRoute from "../routes/TeacherRoute";
 import ActiveTeachers from "./admin/ActiveTeachers";
 import AddTeacher from "./admin/AddTeacher";
 import Classes from "./admin/Classes";
@@ -83,19 +85,21 @@ const dashboardRoutes = [
       //     </PrivateRoute>
       //   ),
       // },
-      {
-        path: "payment-summary",
-        element: (
-          <PrivateRoute>
-            <PaymentSummary></PaymentSummary>
-          </PrivateRoute>
-        ),
-      },
+      // {
+      //   path: "payment-summary",
+      //   element: (
+      //     <PrivateRoute>
+      //       <PaymentSummary></PaymentSummary>
+      //     </PrivateRoute>
+      //   ),
+      // },
       {
         path: "fee-settings",
         element: (
           <PrivateRoute>
-            <FeeSettings></FeeSettings>
+            <AdminRoute>
+              <FeeSettings></FeeSettings>
+            </AdminRoute>
           </PrivateRoute>
         ),
       },
@@ -111,7 +115,9 @@ const dashboardRoutes = [
         path: "pending-payments",
         element: (
           <PrivateRoute>
-            <PendingPayments></PendingPayments>
+            <AdminRoute>
+              <PendingPayments></PendingPayments>
+            </AdminRoute>
           </PrivateRoute>
         ),
       },
@@ -119,7 +125,9 @@ const dashboardRoutes = [
         path: "time-table",
         element: (
           <PrivateRoute>
-            <TimeTable></TimeTable>
+            <TeacherRoute>
+              <TimeTable></TimeTable>
+            </TeacherRoute>
           </PrivateRoute>
         ),
       },
@@ -127,7 +135,9 @@ const dashboardRoutes = [
         path: "student-attendance",
         element: (
           <PrivateRoute>
-            <StudentAttendance></StudentAttendance>
+            <TeacherRoute>
+              <StudentAttendance></StudentAttendance>
+            </TeacherRoute>
           </PrivateRoute>
         ),
       },
@@ -135,7 +145,9 @@ const dashboardRoutes = [
         path: "add-teacher",
         element: (
           <PrivateRoute>
-            <AddTeacher></AddTeacher>
+            <AdminRoute>
+              <AddTeacher></AddTeacher>
+            </AdminRoute>
           </PrivateRoute>
         ),
       },
@@ -143,7 +155,9 @@ const dashboardRoutes = [
         path: "pending-teachers",
         element: (
           <PrivateRoute>
-            <PendingTeacher></PendingTeacher>
+            <AdminRoute>
+              <PendingTeacher></PendingTeacher>
+            </AdminRoute>
           </PrivateRoute>
         ),
       },
@@ -151,7 +165,9 @@ const dashboardRoutes = [
         path: "teacher/update/:id",
         element: (
           <PrivateRoute>
-            <UpdateTeacher></UpdateTeacher>
+            <AdminRoute>
+              <UpdateTeacher></UpdateTeacher>
+            </AdminRoute>
           </PrivateRoute>
         ),
       },
@@ -159,7 +175,9 @@ const dashboardRoutes = [
         path: "departments",
         element: (
           <PrivateRoute>
-            <Departments></Departments>
+            <AdminRoute>
+              <Departments></Departments>
+            </AdminRoute>
           </PrivateRoute>
         ),
       },
@@ -167,7 +185,9 @@ const dashboardRoutes = [
         path: "subjects",
         element: (
           <PrivateRoute>
-            <Subjects></Subjects>
+            <AdminRoute>
+              <Subjects></Subjects>
+            </AdminRoute>
           </PrivateRoute>
         ),
       },
@@ -175,7 +195,9 @@ const dashboardRoutes = [
         path: "classes",
         element: (
           <PrivateRoute>
-            <Classes></Classes>
+            <AdminRoute>
+              <Classes></Classes>
+            </AdminRoute>
           </PrivateRoute>
         ),
       },
@@ -183,7 +205,9 @@ const dashboardRoutes = [
         path: "active-teachers",
         element: (
           <PrivateRoute>
-            <ActiveTeachers></ActiveTeachers>
+            <AdminRoute>
+              <ActiveTeachers></ActiveTeachers>
+            </AdminRoute>
           </PrivateRoute>
         ),
       },
@@ -191,7 +215,9 @@ const dashboardRoutes = [
         path: "inactive-teachers",
         element: (
           <PrivateRoute>
-            <InactiveTeachers></InactiveTeachers>
+            <AdminRoute>
+              <InactiveTeachers></InactiveTeachers>
+            </AdminRoute>
           </PrivateRoute>
         ),
       },
@@ -199,7 +225,9 @@ const dashboardRoutes = [
         path: "teacher/details/:id",
         element: (
           <PrivateRoute>
-            <TeacherDetails></TeacherDetails>
+            <AdminRoute>
+              <TeacherDetails></TeacherDetails>
+            </AdminRoute>
           </PrivateRoute>
         ),
       },
@@ -207,7 +235,9 @@ const dashboardRoutes = [
         path: "prayer/time-update",
         element: (
           <PrivateRoute>
-            <PrayerTimeUpdate></PrayerTimeUpdate>
+            <AdminRoute>
+              <PrayerTimeUpdate></PrayerTimeUpdate>
+            </AdminRoute>
           </PrivateRoute>
         ),
       },
@@ -215,7 +245,9 @@ const dashboardRoutes = [
         path: "student-attendance-admin",
         element: (
           <PrivateRoute>
-            <StudentAttendanceAdmin></StudentAttendanceAdmin>
+            <AdminRoute>
+              <StudentAttendanceAdmin></StudentAttendanceAdmin>
+            </AdminRoute>
           </PrivateRoute>
         ),
       },
@@ -223,7 +255,9 @@ const dashboardRoutes = [
         path: "staff-attendance",
         element: (
           <PrivateRoute>
-            <StaffAttendance></StaffAttendance>
+            <AdminRoute>
+              <StaffAttendance></StaffAttendance>
+            </AdminRoute>
           </PrivateRoute>
         ),
       },
@@ -231,7 +265,9 @@ const dashboardRoutes = [
         path: "view-profile",
         element: (
           <PrivateRoute>
-            <ViewProfile></ViewProfile>
+            <TeacherRoute>
+              <ViewProfile></ViewProfile>
+            </TeacherRoute>
           </PrivateRoute>
         ),
       },
@@ -239,7 +275,9 @@ const dashboardRoutes = [
         path: "teacher/merits",
         element: (
           <PrivateRoute>
-            <Merits></Merits>
+            <TeacherRoute>
+              <Merits></Merits>
+            </TeacherRoute>
           </PrivateRoute>
         ),
       },
@@ -247,7 +285,9 @@ const dashboardRoutes = [
         path: "merit-students",
         element: (
           <PrivateRoute>
-            <MeritStudents></MeritStudents>
+            <AdminRoute>
+              <MeritStudents></MeritStudents>
+            </AdminRoute>
           </PrivateRoute>
         ),
       },
@@ -255,7 +295,9 @@ const dashboardRoutes = [
         path: "teacher/lessons-covered",
         element: (
           <PrivateRoute>
-            <LessonsCovered></LessonsCovered>
+            <TeacherRoute>
+              <LessonsCovered></LessonsCovered>
+            </TeacherRoute>
           </PrivateRoute>
         ),
       },
@@ -263,7 +305,9 @@ const dashboardRoutes = [
         path: "teacher/reports-summary",
         element: (
           <PrivateRoute>
-            <ReportsSummary></ReportsSummary>
+            <TeacherRoute>
+              <ReportsSummary></ReportsSummary>
+            </TeacherRoute>
           </PrivateRoute>
         ),
       },
@@ -271,7 +315,9 @@ const dashboardRoutes = [
         path: "reports-summary",
         element: (
           <PrivateRoute>
-            <ReportsSummaryAdmin></ReportsSummaryAdmin>
+            <AdminRoute>
+              <ReportsSummaryAdmin></ReportsSummaryAdmin>
+            </AdminRoute>
           </PrivateRoute>
         ),
       },
@@ -279,7 +325,9 @@ const dashboardRoutes = [
         path: "parent/reports-summary",
         element: (
           <PrivateRoute>
-            <ReportsSummaryParent></ReportsSummaryParent>
+            <ParentRoute>
+              <ReportsSummaryParent></ReportsSummaryParent>
+            </ParentRoute>
           </PrivateRoute>
         ),
       },
@@ -287,7 +335,9 @@ const dashboardRoutes = [
         path: "holiday/time-update",
         element: (
           <PrivateRoute>
-            <HolidayUpdate></HolidayUpdate>
+            <AdminRoute>
+              <HolidayUpdate></HolidayUpdate>
+            </AdminRoute>
           </PrivateRoute>
         ),
       },

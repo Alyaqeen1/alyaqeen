@@ -185,7 +185,7 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
 
   return (
     <div className="pt-5">
-      <h3 className="fs-1 fw-bold text-center mb-4">Fee Summary</h3>
+      <h3 className="fs-2 fw-bold text-center">Fee Summary</h3>
 
       {/* Paid History Table */}
       <h4 className="text-success">Paid Fee History</h4>
