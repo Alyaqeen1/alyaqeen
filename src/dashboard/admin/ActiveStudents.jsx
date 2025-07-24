@@ -8,20 +8,38 @@ import { FaChevronCircleDown } from "react-icons/fa";
 import Swal from "sweetalert2";
 import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 import { Link } from "react-router";
+import {
+  useDeleteStudentDataMutation,
+  useGetStudentByActivityQuery,
+  useUpdateStudentActivityMutation,
+} from "../../redux/features/students/studentsApi";
+import toast from "react-hot-toast";
+import StudentModal from "../shared/StudentModal";
 
-export default function InactiveTeachers() {
+export default function ActiveStudents() {
   const {
-    data: teachers,
+    data: students,
     isLoading,
     refetch,
-  } = useGetTeacherByActivityQuery("inactive");
+  } = useGetStudentByActivityQuery("active");
   const [activeRow, setActiveRow] = useState(null);
-  const [dropdownPos, setDropdownPos] = useState(null);
   const dropdownRef = useRef(null);
-  const [deleteTeacher, { isLoading: localLoading }] =
-    useDeleteTeacherMutation();
-  const [updateTeacherActivity, { isLoading: updateLoading }] =
-    useUpdateTeacherActivityMutation();
+  const [dropdownPos, setDropdownPos] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedStudentId, setSelectedStudentId] = useState(null);
+
+  const [deleteStudentData, { isLoading: localLoading }] =
+    useDeleteStudentDataMutation();
+  const [updateStudentActivity, { isLoading: updateLoading }] =
+    useUpdateStudentActivityMutation();
+  // Toggle modal visibility
+  const handleShow = (id) => {
+    setSelectedStudentId(id);
+    setShowModal(true);
+  };
+  useEffect(() => {
+    refetch();
+  }, []);
 
   const toggleActions = (event, id) => {
     const rect = event.currentTarget.getBoundingClientRect();
@@ -32,26 +50,25 @@ export default function InactiveTeachers() {
     }); // adjust width
   };
 
-  const handleMakeActive = async (teacherId) => {
+  const handleMakeInactive = async (studentId) => {
     try {
-      const data = await updateTeacherActivity({
-        id: teacherId,
-        activity: "active",
+      const data = await updateStudentActivity({
+        id: studentId,
+        activity: "inactive",
       }).unwrap();
 
       if (data?.modifiedCount) {
         Swal.fire({
           position: "center",
           icon: "success",
-          title: `Teacher made active successfully`,
+          title: `Student made inactive successfully`,
           showConfirmButton: false,
           timer: 1500,
         });
         refetch();
       }
     } catch (err) {
-      // }
-      console.error("Failed to update activity:", err);
+      toast.error(err?.message);
     }
   };
 
@@ -78,13 +95,14 @@ export default function InactiveTeachers() {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        deleteTeacher(id)
+        deleteStudentData(id)
           .unwrap()
           .then((res) => {
+            console.log(res);
             if (res?.deletedCount) {
               Swal.fire({
                 title: "Deleted!",
-                text: "Teacher has been deleted successfully.",
+                text: "Student has been deleted successfully.",
                 icon: "success",
               });
               refetch();
@@ -100,7 +118,7 @@ export default function InactiveTeachers() {
             Swal.fire({
               title: "Error",
               text:
-                error.response?.data?.message || "Failed to delete teacher.",
+                error.response?.data?.message || "Failed to delete student.",
               icon: "error",
             });
           });
@@ -108,14 +126,13 @@ export default function InactiveTeachers() {
     });
   };
 
+  const handleClose = () => setShowModal(false);
   if (isLoading) {
     return <LoadingSpinnerDash></LoadingSpinnerDash>;
   }
-
   return (
     <div>
-      <h3 className={`fs-1 fw-bold text-center`}>Inactive Teachers</h3>
-
+      <h3 className={`fs-1 fw-bold text-center`}>Active Students</h3>
       <div className="table-responsive mb-3">
         <table
           className="table mb-0"
@@ -127,10 +144,10 @@ export default function InactiveTeachers() {
             <tr>
               {[
                 "#",
-                "Name",
+                "Student Name",
+                "Email",
                 "Department",
-                "Designation",
-                "Mobile No",
+                "Class",
                 "Status",
                 "Actions",
               ].map((header, index) => (
@@ -145,80 +162,33 @@ export default function InactiveTeachers() {
             </tr>
           </thead>
           <tbody style={{ position: "relative", overflow: "visible" }}>
-            {teachers?.length > 0 ? (
-              teachers.map((teacher, idx) => (
-                <React.Fragment key={teacher._id}>
+            {students?.length > 0 ? (
+              students.map((student, idx) => (
+                <React.Fragment key={student._id}>
                   <tr>
                     <td className="border h6 text-center align-middle">
                       {idx + 1}
                     </td>
-                    <td className="border d-flex gap-2 align-items-center align-middle">
-                      <img
-                        style={{ width: "50px" }}
-                        className="rounded-5"
-                        src={teacher?.teacher_photo}
-                        alt="teacher"
-                      />
-                      {teacher?.name}
+                    <td className="border h6 text-center align-middle">
+                      {student?.name}
                     </td>
                     <td className="border text-center align-middle">
-                      {teacher?.department}
+                      {student?.email}
                     </td>
                     <td className="border text-center align-middle">
-                      {teacher?.designation}
+                      {student?.academic?.department}
                     </td>
                     <td className="border text-center align-middle">
-                      {teacher?.number}
+                      {student?.academic?.class}
                     </td>
                     <td className="border text-center align-middle">
-                      {teacher?.activity}
+                      {student?.activity}
                     </td>
                     <td className="border text-center align-middle position-relative">
                       <FaChevronCircleDown
                         style={{ cursor: "pointer" }}
-                        onClick={(e) => toggleActions(e, teacher._id)}
+                        onClick={(e) => toggleActions(e, student._id)}
                       />
-                      {activeRow && dropdownPos && (
-                        <div
-                          ref={dropdownRef}
-                          className="position-fixed bg-light border rounded p-2"
-                          style={{
-                            top: `${dropdownPos.top}px`,
-                            left: `${dropdownPos.left}px`,
-                            zIndex: 9999,
-                            minWidth: "160px",
-                            boxShadow: "0px 4px 8px rgba(0,0,0,0.1)",
-                          }}
-                        >
-                          <Link
-                            to={`/dashboard/teacher/details/${activeRow}`}
-                            className="btn btn-sm btn-primary w-100 mb-1"
-                          >
-                            View Staff Details
-                          </Link>
-
-                          <Link
-                            to={`/dashboard/teacher/update/${activeRow}`}
-                            className="btn btn-sm btn-secondary w-100 mb-1"
-                            // onClick={() => handleMakeInactive(teacher.name)}
-                          >
-                            Edit Staff Details
-                          </Link>
-                          <button
-                            className="btn btn-sm btn-warning w-100 mb-1"
-                            onClick={() => handleMakeActive(activeRow)}
-                          >
-                            Make Active
-                          </button>
-                          <button
-                            className="btn btn-sm btn-danger w-100"
-                            disabled={localLoading}
-                            onClick={() => handleDelete(activeRow)}
-                          >
-                            Delete Record
-                          </button>
-                        </div>
-                      )}
                     </td>
                   </tr>
                 </React.Fragment>
@@ -226,13 +196,57 @@ export default function InactiveTeachers() {
             ) : (
               <tr>
                 <td colSpan={7}>
-                  <h5 className="text-center my-2">No teachers available.</h5>
+                  <h5 className="text-center my-2">No students available.</h5>
                 </td>
               </tr>
             )}
           </tbody>
         </table>
       </div>
+      {activeRow && dropdownPos && (
+        <div
+          ref={dropdownRef}
+          className="position-fixed bg-light border rounded p-2"
+          style={{
+            top: `${dropdownPos.top}px`,
+            left: `${dropdownPos.left}px`,
+            zIndex: 9999,
+            minWidth: "160px",
+            boxShadow: "0px 4px 8px rgba(0,0,0,0.1)",
+          }}
+        >
+          <button
+            className="btn btn-sm btn-primary w-100 mb-1"
+            onClick={() => handleShow(activeRow)}
+          >
+            View Student Details
+          </button>
+          <Link
+            to={`/dashboard/online-admissions/update/${activeRow}`}
+            className="btn btn-sm btn-secondary w-100 mb-1"
+          >
+            Edit Student Details
+          </Link>
+          <button
+            className="btn btn-sm btn-warning w-100 mb-1"
+            onClick={() => handleMakeInactive(activeRow)}
+          >
+            Make Inactive
+          </button>
+          <button
+            className="btn btn-sm btn-danger w-100"
+            disabled={localLoading}
+            onClick={() => handleDelete(activeRow)}
+          >
+            Delete Record
+          </button>
+        </div>
+      )}
+      <StudentModal
+        studentId={selectedStudentId}
+        showModal={showModal}
+        handleClose={handleClose}
+      ></StudentModal>
     </div>
   );
 }

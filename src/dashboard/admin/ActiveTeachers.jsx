@@ -17,15 +17,20 @@ export default function ActiveTeachers() {
   } = useGetTeacherByActivityQuery("active");
   const [activeRow, setActiveRow] = useState(null);
   const dropdownRef = useRef(null);
+  const [dropdownPos, setDropdownPos] = useState(null);
   const [deleteTeacher, { isLoading: localLoading }] =
     useDeleteTeacherMutation();
   const [updateTeacherActivity, { isLoading: updateLoading }] =
     useUpdateTeacherActivityMutation();
 
-  const toggleActions = (id) => {
+  const toggleActions = (event, id) => {
+    const rect = event.currentTarget.getBoundingClientRect();
     setActiveRow((prev) => (prev === id ? null : id));
+    setDropdownPos({
+      top: rect.bottom + window.scrollY,
+      left: rect.right - 160,
+    }); // adjust width
   };
-
   const handleMakeInactive = async (teacherId) => {
     try {
       const data = await updateTeacherActivity({
@@ -108,6 +113,8 @@ export default function ActiveTeachers() {
 
   return (
     <div>
+      <h3 className={`fs-1 fw-bold text-center`}>Active Teachers</h3>
+
       <div className="table-responsive mb-3">
         <table
           className="table mb-0"
@@ -168,48 +175,8 @@ export default function ActiveTeachers() {
                     <td className="border text-center align-middle position-relative">
                       <FaChevronCircleDown
                         style={{ cursor: "pointer" }}
-                        onClick={() => toggleActions(teacher._id)}
+                        onClick={(e) => toggleActions(e, teacher._id)}
                       />
-                      {activeRow === teacher._id && (
-                        <div
-                          ref={dropdownRef}
-                          className="position-absolute bg-light border rounded p-2 z-5"
-                          style={{
-                            top: "35px",
-                            right: "0",
-                            zIndex: 999,
-                            minWidth: "150px",
-                            boxShadow: "0px 4px 8px rgba(0,0,0,0.1)",
-                          }}
-                        >
-                          <Link
-                            to={`/dashboard/teacher/details/${teacher?._id}`}
-                            className="btn btn-sm btn-primary w-100 mb-1"
-                          >
-                            View Staff Details
-                          </Link>
-                          <Link
-                            to={`/dashboard/teacher/update/${teacher?._id}`}
-                            className="btn btn-sm btn-secondary w-100 mb-1"
-                            // onClick={() => handleMakeInactive(teacher.name)}
-                          >
-                            Edit Staff Details
-                          </Link>
-                          <button
-                            className="btn btn-sm btn-warning w-100 mb-1"
-                            onClick={() => handleMakeInactive(teacher?._id)}
-                          >
-                            Make Inactive
-                          </button>
-                          <button
-                            className="btn btn-sm btn-danger w-100"
-                            disabled={localLoading}
-                            onClick={() => handleDelete(teacher?._id)}
-                          >
-                            Delete Record
-                          </button>
-                        </div>
-                      )}
                     </td>
                   </tr>
                 </React.Fragment>
@@ -224,6 +191,46 @@ export default function ActiveTeachers() {
           </tbody>
         </table>
       </div>
+      {activeRow && dropdownPos && (
+        <div
+          ref={dropdownRef}
+          className="position-fixed bg-light border rounded p-2"
+          style={{
+            top: `${dropdownPos.top}px`,
+            left: `${dropdownPos.left}px`,
+            zIndex: 9999,
+            minWidth: "160px",
+            boxShadow: "0px 4px 8px rgba(0,0,0,0.1)",
+          }}
+        >
+          <Link
+            to={`/dashboard/teacher/details/${activeRow}`}
+            className="btn btn-sm btn-primary w-100 mb-1"
+          >
+            View Staff Details
+          </Link>
+          <Link
+            to={`/dashboard/teacher/update/${activeRow}`}
+            className="btn btn-sm btn-secondary w-100 mb-1"
+            // onClick={() => handleMakeInactive(teacher.name)}
+          >
+            Edit Staff Details
+          </Link>
+          <button
+            className="btn btn-sm btn-warning w-100 mb-1"
+            onClick={() => handleMakeInactive(activeRow)}
+          >
+            Make Inactive
+          </button>
+          <button
+            className="btn btn-sm btn-danger w-100"
+            disabled={localLoading}
+            onClick={() => handleDelete(activeRow)}
+          >
+            Delete Record
+          </button>
+        </div>
+      )}
     </div>
   );
 }

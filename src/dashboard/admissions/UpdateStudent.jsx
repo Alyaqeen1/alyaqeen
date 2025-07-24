@@ -724,14 +724,17 @@ export default function UpdateStudent() {
 
         {/* Submit Button */}
         <div className="col-12 d-flex gap-2 align-items-center justify-content-evenly text-center py-3">
-          <button
-            type="button"
-            style={{ backgroundColor: "var(--border2)" }}
-            className="btn text-white"
-            onClick={() => handleStatus("approved")}
-          >
-            Approve
-          </button>
+          {!["enrolled", "hold"].includes(status) && (
+            <button
+              type="button"
+              style={{ backgroundColor: "var(--border2)" }}
+              className="btn text-white"
+              onClick={() => handleStatus("approved")}
+            >
+              Approve
+            </button>
+          )}
+
           <button
             type="submit"
             style={{ backgroundColor: "var(--border2)" }}
@@ -739,14 +742,16 @@ export default function UpdateStudent() {
           >
             Update
           </button>
-          <button
-            type="button"
-            onClick={() => handleStatus("rejected")}
-            style={{ backgroundColor: "var(--border2)" }}
-            className="btn text-white"
-          >
-            Reject
-          </button>
+          {!["enrolled", "hold"].includes(status) && (
+            <button
+              type="button"
+              onClick={() => handleStatus("rejected")}
+              style={{ backgroundColor: "var(--border2)" }}
+              className="btn text-white"
+            >
+              Reject
+            </button>
+          )}
         </div>
       </form>
     </div>

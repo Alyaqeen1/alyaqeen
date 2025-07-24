@@ -44,7 +44,7 @@ export default function Admissions() {
         deleteStudentData(id)
           .then((res) => {
             // You can optionally check res.status === 200
-            if (res?.message) {
+            if (res?.deletedCount) {
               Swal.fire({
                 title: "Deleted!",
                 text: res.data.message,

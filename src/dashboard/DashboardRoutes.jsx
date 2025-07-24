@@ -2,12 +2,14 @@ import AdminRoute from "../routes/AdminRoute";
 import ParentRoute from "../routes/ParentRoute";
 import PrivateRoute from "../routes/PrivateRoute";
 import TeacherRoute from "../routes/TeacherRoute";
+import ActiveStudents from "./admin/ActiveStudents";
 import ActiveTeachers from "./admin/ActiveTeachers";
 import AddTeacher from "./admin/AddTeacher";
 import Classes from "./admin/Classes";
 import Departments from "./admin/Departments";
 import FeeSettings from "./admin/FeeSettings";
 import HolidayUpdate from "./admin/HolidayUpdate";
+import InactiveStudents from "./admin/InactiveStudents";
 import InactiveTeachers from "./admin/InactiveTeachers";
 import MeritStudents from "./admin/MeritStudents";
 import PendingPayments from "./admin/PendingPayments";
@@ -337,6 +339,26 @@ const dashboardRoutes = [
           <PrivateRoute>
             <AdminRoute>
               <HolidayUpdate></HolidayUpdate>
+            </AdminRoute>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "active-students",
+        element: (
+          <PrivateRoute>
+            <AdminRoute>
+              <ActiveStudents></ActiveStudents>
+            </AdminRoute>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "inactive-students",
+        element: (
+          <PrivateRoute>
+            <AdminRoute>
+              <InactiveStudents></InactiveStudents>
             </AdminRoute>
           </PrivateRoute>
         ),

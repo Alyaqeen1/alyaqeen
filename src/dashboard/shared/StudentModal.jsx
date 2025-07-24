@@ -125,10 +125,16 @@ export default function StudentModal({ studentId, handleClose, showModal }) {
                 <h2 className="text-xl font-bold mb-2">{name && name}</h2>
                 <button
                   type="button"
-                  className={`btn  ${
-                    status === "under review" && "btn-primary"
-                  } ${status === "approved" && "btn-success"} ${
-                    status === "rejected" && "btn-danger"
+                  className={`btn ${
+                    status === "under review"
+                      ? "btn-primary"
+                      : status === "approved" ||
+                        status === "enrolled" ||
+                        status === "hold"
+                      ? "btn-success"
+                      : status === "rejected"
+                      ? "btn-danger"
+                      : ""
                   }`}
                 >
                   {status}
@@ -231,20 +237,24 @@ export default function StudentModal({ studentId, handleClose, showModal }) {
                 </div>
               </div>
               <div className="d-flex justify-content-center gap-2 mt-3">
-                <button
-                  onClick={() => handleStatus("approved")}
-                  className="text-success fs-5 py-1 px-2 rounded-2"
-                  style={{ backgroundColor: "var(--border2)" }}
-                >
-                  <FaCheck></FaCheck>
-                </button>
-                <button
-                  onClick={() => handleStatus("rejected")}
-                  className="text-danger py-1 px-2 rounded-2"
-                  style={{ backgroundColor: "var(--border2)" }}
-                >
-                  <ImCross />
-                </button>
+                {!["enrolled", "hold"].includes(status) && (
+                  <button
+                    onClick={() => handleStatus("approved")}
+                    className="text-success fs-5 py-1 px-2 rounded-2"
+                    style={{ backgroundColor: "var(--border2)" }}
+                  >
+                    <FaCheck></FaCheck>
+                  </button>
+                )}
+                {!["enrolled", "hold"].includes(status) && (
+                  <button
+                    onClick={() => handleStatus("rejected")}
+                    className="text-danger py-1 px-2 rounded-2"
+                    style={{ backgroundColor: "var(--border2)" }}
+                  >
+                    <ImCross />
+                  </button>
+                )}
               </div>
             </div>
           </div>
