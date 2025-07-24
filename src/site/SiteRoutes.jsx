@@ -38,6 +38,7 @@ import NewsDetails from "./sharedComponents/NewsDetails";
 import VacancyDetails from "./sharedComponents/VacancyDetails";
 import Complaint from "./pages/AdditionalPages/Complaint";
 import Register from "./pages/Authentication/Register";
+import ForgotPassword from "./pages/Authentication/ForgotPassword";
 
 const siteRoutes = [
   {
@@ -188,6 +189,10 @@ const siteRoutes = [
       {
         path: "/register",
         element: <Register></Register>,
+      },
+      {
+        path: "/forgot-password",
+        element: <ForgotPassword></ForgotPassword>,
       },
       {
         path: "*",

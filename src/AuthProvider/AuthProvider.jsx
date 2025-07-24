@@ -8,6 +8,7 @@ import {
   signInWithPopup,
   signOut,
   updateProfile,
+  sendPasswordResetEmail, // ✅ Add this
 } from "firebase/auth";
 import auth from "../firebase/firebase.config";
 import axios from "axios";
@@ -29,6 +30,10 @@ export default function AuthProvider({ children }) {
   const signInUser = (email, password) => {
     setLoading(true);
     return signInWithEmailAndPassword(auth, email, password);
+  };
+  const resetPassword = (email) => {
+    setLoading(true);
+    return sendPasswordResetEmail(auth, email);
   };
 
   const updateUser = (profileData) => {
@@ -69,6 +74,7 @@ export default function AuthProvider({ children }) {
     signInUser,
     signOutUser,
     updateUser,
+    resetPassword, // ✅ Include this here
   };
   return (
     <authContext.Provider value={authInfo}>{children}</authContext.Provider>
