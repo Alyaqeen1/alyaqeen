@@ -8,7 +8,7 @@ import { useParams } from "react-router";
 import useAuth from "../../hooks/useAuth";
 import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 import Swal from "sweetalert2";
-import feeStructure from "../../utils/feeStructure";
+
 import toast from "react-hot-toast";
 import { useGetDepartmentsQuery } from "../../redux/features/departments/departmentsApi";
 import { useGetClassesQuery } from "../../redux/features/classes/classesApi";
@@ -114,7 +114,7 @@ export default function UpdateStudent() {
     const medical_condition = form.medical_condition.value;
     const student_class = form.student_class.value;
     const starting_date = form.starting_date.value;
-    // const monthly_fee = feeStructure?.monthlyFees?.[department]?.[session];
+
     const monthly_fee =
       session === "weekend"
         ? selectedDepartment?.weekend_fee

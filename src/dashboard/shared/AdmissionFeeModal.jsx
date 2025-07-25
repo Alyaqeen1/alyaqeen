@@ -1,6 +1,6 @@
 import React from "react";
 import Payments from "../payments/Payments";
-import feeStructure from "../../utils/feeStructure";
+
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 

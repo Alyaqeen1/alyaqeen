@@ -7,7 +7,6 @@ import SignatureCanvas from "react-signature-canvas";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import toast from "react-hot-toast";
 import { useGetDepartmentsQuery } from "../../redux/features/departments/departmentsApi";
-import feeStructure from "../../utils/feeStructure";
 
 const image_hosting_key = import.meta.env.VITE_Image_Hosting_Key;
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
@@ -115,7 +114,7 @@ export default function AddStudent() {
 
     const password = form.password.value;
     const confirmPassword = form.confirmPassword.value;
-    // const monthly_fee = feeStructure?.monthlyFees?.[departmentName]?.[session];
+
     const monthly_fee =
       session === "weekend"
         ? selectedDepartment?.weekend_fee

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router";
 import PaymentModal from "../shared/PaymentModal";
-import feeStructure from "../../utils/feeStructure";
 
 export default function PaymentSummary() {
   const [showModal, setShowModal] = useState(false);
@@ -10,15 +9,6 @@ export default function PaymentSummary() {
     setSelectedPaymentId(id);
     setShowModal(true);
   };
-
-  // const getMonthlyFee = (student) => {
-  //   const department = student.academic?.department;
-  //   const session = student.academic?.session?.toLowerCase();
-
-  //   if (!department || !session) return 0;
-  //   const category = feeStructure.monthlyFees[department];
-  //   return category?.[session] || 0;
-  // };
 
   const handleClose = () => setShowModal(false);
   const monthData = [
