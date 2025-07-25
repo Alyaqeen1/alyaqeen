@@ -11,7 +11,6 @@ import toast from "react-hot-toast";
 import useAxiosPublic from "../../../hooks/useAxiosPublic";
 import { useGetDepartmentsQuery } from "../../../redux/features/departments/departmentsApi";
 import LoadingSpinner from "../LoadingSpinner";
-import feeStructure from "../../../utils/feeStructure";
 
 const image_hosting_key = import.meta.env.VITE_Image_Hosting_Key;
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
@@ -27,9 +26,9 @@ const ApplyNowComp = () => {
   const [localLoading, setLocalLoading] = useState(false);
   const navigate = useNavigate();
   const { data: departments, isLoading } = useGetDepartmentsQuery();
-  const departmentName = departments?.find(
+  const selectedDepartment = departments?.find(
     (dept) => dept?._id === department
-  )?.dept_name;
+  );
 
   const axiosPublic = useAxiosPublic();
 
@@ -126,7 +125,11 @@ const ApplyNowComp = () => {
     const password = form.password.value;
     const confirmPassword = form.confirmPassword.value;
     const student_class = null;
-    const monthly_fee = feeStructure?.monthlyFees?.[departmentName]?.[session];
+
+    const monthly_fee =
+      session === "weekend"
+        ? selectedDepartment?.weekend_fee
+        : selectedDepartment?.weekdays_fee;
     const today = new Date().setHours(0, 0, 0, 0); // current date at midnight
     const selectedDate = new Date(starting_date).setHours(0, 0, 0, 0); // user date at midnight
 

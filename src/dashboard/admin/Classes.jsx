@@ -309,16 +309,16 @@ export default function Classes() {
                       )}
                     </motion.div>
                   )}
-                  <UpdateClassModal
-                    classId={selectedClassId}
-                    showModal={showModal}
-                    handleClose={handleClose}
-                  />
                 </AnimatePresence>
               </div>
             );
           })}
         </div>
+        <UpdateClassModal
+          classId={selectedClassId}
+          showModal={showModal}
+          handleClose={handleClose}
+        />
       </div>
     </div>
   );

@@ -23,9 +23,9 @@ export default function AddStudent() {
   const { setLoading } = useAuth();
   const [error, setError] = useState("");
   const { data: departments, isLoading } = useGetDepartmentsQuery();
-  const departmentName = departments?.find(
+  const selectedDepartment = departments?.find(
     (dept) => dept?._id === department
-  )?.dept_name;
+  );
   const sigRef = useRef();
 
   const clearSignature = () => sigRef.current.clear();
@@ -115,7 +115,11 @@ export default function AddStudent() {
 
     const password = form.password.value;
     const confirmPassword = form.confirmPassword.value;
-    const monthly_fee = feeStructure?.monthlyFees?.[departmentName]?.[session];
+    // const monthly_fee = feeStructure?.monthlyFees?.[departmentName]?.[session];
+    const monthly_fee =
+      session === "weekend"
+        ? selectedDepartment?.weekend_fee
+        : selectedDepartment?.weekdays_fee;
     const today = new Date().setHours(0, 0, 0, 0); // current date at midnight
     const selectedDate = new Date(starting_date).setHours(0, 0, 0, 0); // user date at midnight
 

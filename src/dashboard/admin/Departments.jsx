@@ -9,6 +9,7 @@ import Swal from "sweetalert2";
 import { Link } from "react-router";
 import { FaPen, FaTrashAlt } from "react-icons/fa";
 import UpdateDepartmentModal from "../shared/UpdateDepartmentModal";
+import toast from "react-hot-toast";
 
 export default function Departments() {
   const [toggle, setToggle] = useState(false);
@@ -17,6 +18,8 @@ export default function Departments() {
   const [addDepartment] = useAddDepartmentMutation();
   const [removeDepartment] = useRemoveDepartmentMutation();
   const [dept_name, setDept_name] = useState("");
+  const [weekdays_fee, setWeekdays_fee] = useState("");
+  const [weekend_fee, setWeekend_fee] = useState("");
   const { data: departments, refetch, isLoading } = useGetDepartmentsQuery();
 
   const handleShow = (id) => {
@@ -28,7 +31,17 @@ export default function Departments() {
   }, []);
 
   const handleSubmit = async () => {
-    const res = await addDepartment({ dept_name }).unwrap();
+    if (!dept_name | !weekdays_fee | !weekend_fee) {
+      return toast.error("Please fulfil all fields");
+    }
+    const weekdays_fee_num = Number(weekdays_fee);
+    const weekend_fee_num = Number(weekend_fee);
+
+    const res = await addDepartment({
+      dept_name,
+      weekdays_fee: weekdays_fee_num,
+      weekend_fee: weekend_fee_num,
+    }).unwrap();
     if (res.insertedId) {
       Swal.fire({
         position: "center",
@@ -38,6 +51,8 @@ export default function Departments() {
         timer: 1500,
       });
       setDept_name("");
+      setWeekdays_fee("");
+      setWeekend_fee("");
       setToggle(false);
       refetch();
     }
@@ -108,18 +123,43 @@ export default function Departments() {
             style={{ originY: 0, willChange: "transform, opacity" }}
             className="row align-items-end border border-black shadow-sm p-3 mt-2 rounded-3"
           >
-            <div className="col-md-8">
+            <div className="col-lg-3">
               <label className="form-label">Department Name *</label>
               <input
                 style={{ borderColor: "var(--border2)" }}
                 className="form-control bg-light"
+                value={dept_name}
                 onChange={(e) => setDept_name(e.target.value)}
                 type="text"
                 name="department"
                 required
               />
             </div>
-            <div className="col-md-4">
+            <div className="col-lg-3">
+              <label className="form-label">Weekdays Monthly Fee *</label>
+              <input
+                style={{ borderColor: "var(--border2)" }}
+                className="form-control bg-light"
+                value={weekdays_fee}
+                onChange={(e) => setWeekdays_fee(e.target.value)}
+                type="number"
+                name="weekdays_fee"
+                required
+              />
+            </div>
+            <div className="col-lg-3">
+              <label className="form-label">Weekend Monthly Fee *</label>
+              <input
+                style={{ borderColor: "var(--border2)" }}
+                className="form-control bg-light"
+                value={weekend_fee}
+                onChange={(e) => setWeekend_fee(e.target.value)}
+                type="number"
+                name="weekend_fee"
+                required
+              />
+            </div>
+            <div className="col-lg-3">
               <button
                 style={{ backgroundColor: "var(--border2)" }}
                 className="btn text-white w-100"
@@ -155,6 +195,18 @@ export default function Departments() {
                 >
                   Department Name
                 </th>
+                <th
+                  className="font-danger text-white fw-bolder border h6 text-center align-middle"
+                  style={{ backgroundColor: "var(--border2)" }}
+                >
+                  Weekdays Fee
+                </th>
+                <th
+                  className="font-danger text-white fw-bolder border h6 text-center align-middle"
+                  style={{ backgroundColor: "var(--border2)" }}
+                >
+                  Weekend Fee
+                </th>
 
                 <th
                   className="font-danger text-white fw-bolder border h6 text-center align-middle"
@@ -177,6 +229,16 @@ export default function Departments() {
                       className={` border h6 text-center align-middle text-nowrap`}
                     >
                       {department?.dept_name}
+                    </td>
+                    <td
+                      className={` border h6 text-center align-middle text-nowrap`}
+                    >
+                      {department?.weekdays_fee}
+                    </td>
+                    <td
+                      className={` border h6 text-center align-middle text-nowrap`}
+                    >
+                      {department?.weekend_fee}
                     </td>
 
                     <td

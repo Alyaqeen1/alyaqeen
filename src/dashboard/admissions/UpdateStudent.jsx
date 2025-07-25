@@ -77,6 +77,11 @@ export default function UpdateStudent() {
     setTime_state(time);
     setClass_state(class_id);
   }, [dept_id, session, time, class_id]);
+
+  const selectedDepartment = departments?.find(
+    (dept) => dept?._id === dept_state
+  );
+
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     const form = e.target;
@@ -109,7 +114,11 @@ export default function UpdateStudent() {
     const medical_condition = form.medical_condition.value;
     const student_class = form.student_class.value;
     const starting_date = form.starting_date.value;
-    const monthly_fee = feeStructure?.monthlyFees?.[department]?.[session];
+    // const monthly_fee = feeStructure?.monthlyFees?.[department]?.[session];
+    const monthly_fee =
+      session === "weekend"
+        ? selectedDepartment?.weekend_fee
+        : selectedDepartment?.weekdays_fee;
     const today = new Date().setHours(0, 0, 0, 0); // current date at midnight
     const selectedDate = new Date(starting_date).setHours(0, 0, 0, 0); // user date at midnight
 
