@@ -5,7 +5,10 @@ export const roleApi = apiSlice.injectEndpoints({
     getRole: builder.query({
       query: (email) => `/users/role/${email}`,
     }),
+    getUser: builder.query({
+      query: (email) => `/users/by-email/${email}`,
+    }),
   }),
 });
 
-export const { useGetRoleQuery } = apiSlice;
+export const { useGetRoleQuery, useGetUserQuery } = apiSlice;

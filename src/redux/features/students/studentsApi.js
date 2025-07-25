@@ -14,12 +14,18 @@ export const studentsApi = apiSlice.injectEndpoints({
       query: () => `/students/count`,
       providesTags: ["Student"],
     }),
+
     getStudentsByStatus: builder.query({
       query: (status) => `/students/get-by-status/${status}`,
       providesTags: ["Student"],
     }),
+    // In your studentsApi.js (or wherever your endpoints are defined)
     getStudentByActivity: builder.query({
-      query: (activity) => `/students/by-activity/${activity}`,
+      query: ({ activity, search }) => {
+        const params = new URLSearchParams();
+        if (search) params.append("search", search);
+        return `/students/by-activity/${activity}?${params.toString()}`;
+      },
       providesTags: ["Student"],
     }),
     getWithoutEnrolledStudents: builder.query({

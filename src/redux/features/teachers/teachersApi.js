@@ -22,8 +22,13 @@ export const teachersApi = apiSlice.injectEndpoints({
       query: (email) => `/teachers/by-email/${email}`,
       providesTags: ["Teacher"],
     }),
+    // In your teachersApi.js
     getTeacherByActivity: builder.query({
-      query: (activity) => `/teachers/by-activity/${activity}`,
+      query: ({ activity, search }) => {
+        const params = new URLSearchParams();
+        if (search) params.append("search", search);
+        return `/teachers/by-activity/${activity}?${params.toString()}`;
+      },
       providesTags: ["Teacher"],
     }),
     getPendingRejectedTeacher: builder.query({

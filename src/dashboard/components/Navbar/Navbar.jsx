@@ -14,10 +14,14 @@ import img from "../../../site/assets/img/team/team01.jpeg";
 import logo from "../../dashboard-assets/favicon.png";
 import useAuth from "../../../hooks/useAuth";
 import toast from "react-hot-toast";
-import { useGetRoleQuery } from "../../../redux/features/role/roleApi";
+import {
+  useGetRoleQuery,
+  useGetUserQuery,
+} from "../../../redux/features/role/roleApi";
 import { useGetStudentsQuery } from "../../../redux/features/students/studentsApi";
 import { useGetUnreadNotificationsQuery } from "../../../redux/features/notifications/notificationsApi";
 import useAxiosPublic from "../../../hooks/useAxiosPublic";
+import LoadingSpinnerDash from "../LoadingSpinnerDash";
 
 export default function Navbar() {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
@@ -27,6 +31,12 @@ export default function Navbar() {
   const { data, isLoading } = useGetRoleQuery(user?.email, {
     skip: !user?.email, // avoid fetching if no ID
   });
+  const { data: userDb, isLoading: isUserDbLoading } = useGetUserQuery(
+    user?.email,
+    {
+      skip: !user?.email, // avoid fetching if no ID
+    }
+  );
   const axiosPublic = useAxiosPublic();
   const { data: unreadNotifications, refetch } =
     useGetUnreadNotificationsQuery();
@@ -59,7 +69,9 @@ export default function Navbar() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
+  if (isLoading || isUserDbLoading) {
+    return <LoadingSpinnerDash></LoadingSpinnerDash>;
+  }
   return (
     <nav className="navbar bg-white sticky-top">
       <div className="container-fluid">
@@ -162,10 +174,10 @@ export default function Navbar() {
             />
             <div className="d-none d-lg-block">
               <h6 className="fw-bold" style={{ fontSize: "14px" }}>
-                {user?.displayName || "Anonymous User"}
+                {userDb?.name || "Anonymous User"}
               </h6>
               <h6 className="text-lowercase" style={{ fontSize: "12px" }}>
-                {user?.email}
+                {userDb?.email}
               </h6>
             </div>
           </div>

@@ -60,7 +60,7 @@ export default function TeacherDetails() {
                   style={{
                     width: "100px",
                     height: "100px",
-                    backgroundColor: "#91A183",
+                    backgroundColor: "var(--border2)",
                     color: "#fff",
                     fontSize: "36px",
                     fontWeight: "bold",

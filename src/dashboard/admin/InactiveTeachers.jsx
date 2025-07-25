@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { usePopper } from "react-popper";
 import {
   useDeleteTeacherMutation,
   useGetTeacherByActivityQuery,
@@ -9,27 +10,67 @@ import Swal from "sweetalert2";
 import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 import { Link } from "react-router";
 
-export default function InactiveTeachers() {
-  const {
-    data: teachers,
-    isLoading,
-    refetch,
-  } = useGetTeacherByActivityQuery("inactive");
+export default function ActiveTeachers() {
   const [activeRow, setActiveRow] = useState(null);
-  const [dropdownPos, setDropdownPos] = useState(null);
-  const dropdownRef = useRef(null);
   const [deleteTeacher, { isLoading: localLoading }] =
     useDeleteTeacherMutation();
   const [updateTeacherActivity, { isLoading: updateLoading }] =
     useUpdateTeacherActivityMutation();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
+  useEffect(() => {
+    const timerId = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 500);
+
+    return () => {
+      clearTimeout(timerId);
+    };
+  }, [searchTerm]);
+  const {
+    data: teachers,
+    isLoading,
+    refetch,
+  } = useGetTeacherByActivityQuery({
+    activity: "inactive",
+    search: debouncedSearchTerm,
+  });
+  // Popper.js setup
+  const [referenceElement, setReferenceElement] = useState(null);
+  const [popperElement, setPopperElement] = useState(null);
+  const { styles, attributes } = usePopper(referenceElement, popperElement, {
+    placement: "bottom-end",
+    modifiers: [
+      {
+        name: "preventOverflow",
+        options: {
+          boundary: "viewport",
+          padding: 10,
+        },
+      },
+      {
+        name: "flip",
+        options: {
+          fallbackPlacements: ["top-end", "bottom-start"],
+        },
+      },
+      {
+        name: "offset",
+        options: {
+          offset: [0, 8], // [skid, distance]
+        },
+      },
+    ],
+  });
 
   const toggleActions = (event, id) => {
-    const rect = event.currentTarget.getBoundingClientRect();
+    event.stopPropagation(); // Prevent event bubbling
     setActiveRow((prev) => (prev === id ? null : id));
-    setDropdownPos({
-      top: rect.bottom + window.scrollY,
-      left: rect.right - 160,
-    }); // adjust width
+    setReferenceElement(event.currentTarget);
+  };
+  const handleAction = async (actionFn, id) => {
+    setActiveRow(null); // Close dropdown first
+    await actionFn(id); // Then perform action
   };
 
   const handleMakeActive = async (teacherId) => {
@@ -50,7 +91,6 @@ export default function InactiveTeachers() {
         refetch();
       }
     } catch (err) {
-      // }
       console.error("Failed to update activity:", err);
     }
   };
@@ -58,14 +98,19 @@ export default function InactiveTeachers() {
   // Close on outside click
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      if (
+        popperElement &&
+        !popperElement.contains(event.target) &&
+        referenceElement &&
+        !referenceElement.contains(event.target)
+      ) {
         setActiveRow(null);
       }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  }, [popperElement, referenceElement]);
 
   const handleDelete = (id) => {
     Swal.fire({
@@ -109,20 +154,29 @@ export default function InactiveTeachers() {
   };
 
   if (isLoading) {
-    return <LoadingSpinnerDash></LoadingSpinnerDash>;
+    return <LoadingSpinnerDash />;
   }
 
   return (
     <div>
-      <h3 className={`fs-1 fw-bold text-center`}>Inactive Teachers</h3>
-
+      <div className="row mb-4 align-items-center">
+        <div className="col-md-6">
+          <h3 className="fs-2 fw-bold">Inactive Students</h3>
+        </div>
+        <div className="col-md-6 mt-3 mt-md-0">
+          <input
+            type="text"
+            name="student_name"
+            placeholder="Search by name"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            style={{ borderColor: "var(--border2)" }}
+            className="form-control bg-light"
+          />
+        </div>
+      </div>
       <div className="table-responsive mb-3">
-        <table
-          className="table mb-0"
-          style={{
-            minWidth: 700,
-          }}
-        >
+        <table className="table mb-0" style={{ minWidth: 700 }}>
           <thead>
             <tr>
               {[
@@ -153,12 +207,31 @@ export default function InactiveTeachers() {
                       {idx + 1}
                     </td>
                     <td className="border d-flex gap-2 align-items-center align-middle">
-                      <img
-                        style={{ width: "50px" }}
-                        className="rounded-5"
-                        src={teacher?.teacher_photo}
-                        alt="teacher"
-                      />
+                      {teacher?.teacher_photo ? (
+                        <img
+                          style={{ width: "50px" }}
+                          className="rounded-5"
+                          src={teacher_photo}
+                          alt=""
+                        />
+                      ) : (
+                        <div
+                          className="rounded-circle d-flex align-items-center justify-content-center"
+                          style={{
+                            width: "50px",
+                            height: "50px",
+                            backgroundColor: "var(--border2)",
+                            color: "#fff",
+                            fontSize: "26px",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          {teacher?.name
+                            ?.split(" ")
+                            .map((n) => n[0])
+                            .join("")}
+                        </div>
+                      )}
                       {teacher?.name}
                     </td>
                     <td className="border text-center align-middle">
@@ -175,50 +248,10 @@ export default function InactiveTeachers() {
                     </td>
                     <td className="border text-center align-middle position-relative">
                       <FaChevronCircleDown
+                        ref={setReferenceElement}
                         style={{ cursor: "pointer" }}
                         onClick={(e) => toggleActions(e, teacher._id)}
                       />
-                      {activeRow && dropdownPos && (
-                        <div
-                          ref={dropdownRef}
-                          className="position-fixed bg-light border rounded p-2"
-                          style={{
-                            top: `${dropdownPos.top}px`,
-                            left: `${dropdownPos.left}px`,
-                            zIndex: 9999,
-                            minWidth: "160px",
-                            boxShadow: "0px 4px 8px rgba(0,0,0,0.1)",
-                          }}
-                        >
-                          <Link
-                            to={`/dashboard/teacher/details/${activeRow}`}
-                            className="btn btn-sm btn-primary w-100 mb-1"
-                          >
-                            View Staff Details
-                          </Link>
-
-                          <Link
-                            to={`/dashboard/teacher/update/${activeRow}`}
-                            className="btn btn-sm btn-secondary w-100 mb-1"
-                            // onClick={() => handleMakeInactive(teacher.name)}
-                          >
-                            Edit Staff Details
-                          </Link>
-                          <button
-                            className="btn btn-sm btn-warning w-100 mb-1"
-                            onClick={() => handleMakeActive(activeRow)}
-                          >
-                            Make Active
-                          </button>
-                          <button
-                            className="btn btn-sm btn-danger w-100"
-                            disabled={localLoading}
-                            onClick={() => handleDelete(activeRow)}
-                          >
-                            Delete Record
-                          </button>
-                        </div>
-                      )}
                     </td>
                   </tr>
                 </React.Fragment>
@@ -233,6 +266,47 @@ export default function InactiveTeachers() {
           </tbody>
         </table>
       </div>
+
+      {activeRow && (
+        <div
+          ref={setPopperElement}
+          style={{
+            ...styles.popper,
+            zIndex: 9999,
+            width: "180px",
+          }}
+          {...attributes.popper}
+          className="bg-light border rounded p-2 shadow"
+        >
+          <Link
+            to={`/dashboard/teacher/details/${activeRow}`}
+            className="btn btn-sm btn-primary w-100 mb-1"
+            onClick={() => setActiveRow(null)} // Close dropdown
+          >
+            View Staff Details
+          </Link>
+          <Link
+            to={`/dashboard/teacher/update/${activeRow}`}
+            className="btn btn-sm btn-secondary w-100 mb-1"
+            onClick={() => setActiveRow(null)} // Close dropdown
+          >
+            Edit Staff Details
+          </Link>
+          <button
+            className="btn btn-sm btn-warning w-100 mb-1"
+            onClick={() => handleAction(handleMakeActive, activeRow)}
+          >
+            Make Active
+          </button>
+          <button
+            className="btn btn-sm btn-danger w-100"
+            disabled={localLoading}
+            onClick={() => handleAction(handleDelete, activeRow)}
+          >
+            Delete Record
+          </button>
+        </div>
+      )}
     </div>
   );
 }

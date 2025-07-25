@@ -1,57 +1,91 @@
-import React, { useEffect, useRef, useState } from "react";
-import {
-  useDeleteTeacherMutation,
-  useGetTeacherByActivityQuery,
-  useUpdateTeacherActivityMutation,
-} from "../../redux/features/teachers/teachersApi";
-import { FaChevronCircleDown } from "react-icons/fa";
-import Swal from "sweetalert2";
-import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
-import { Link } from "react-router";
+import React, { useEffect, useState } from "react";
+import { usePopper } from "react-popper";
 import {
   useDeleteStudentDataMutation,
   useGetStudentByActivityQuery,
   useUpdateStudentActivityMutation,
 } from "../../redux/features/students/studentsApi";
+import { FaChevronCircleDown } from "react-icons/fa";
+import Swal from "sweetalert2";
+import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
+import { Link } from "react-router";
 import toast from "react-hot-toast";
 import StudentModal from "../shared/StudentModal";
 
 export default function InactiveStudents() {
-  const {
-    data: students,
-    isLoading,
-    refetch,
-  } = useGetStudentByActivityQuery("inactive");
   const [activeRow, setActiveRow] = useState(null);
-  const dropdownRef = useRef(null);
-  const [dropdownPos, setDropdownPos] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [selectedStudentId, setSelectedStudentId] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
+  useEffect(() => {
+    const timerId = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 500);
+
+    return () => {
+      clearTimeout(timerId);
+    };
+  }, [searchTerm]);
+  const {
+    data: students = [],
+    isLoading,
+    isFetching,
+    refetch,
+  } = useGetStudentByActivityQuery({
+    activity: "inactive",
+    search: debouncedSearchTerm,
+  });
+
+  // Popper.js setup
+  const [referenceElement, setReferenceElement] = useState(null);
+  const [popperElement, setPopperElement] = useState(null);
+  const { styles, attributes } = usePopper(referenceElement, popperElement, {
+    placement: "bottom-end",
+    modifiers: [
+      {
+        name: "preventOverflow",
+        options: {
+          boundary: "viewport",
+          padding: 10,
+        },
+      },
+      {
+        name: "flip",
+        options: {
+          fallbackPlacements: ["top-end", "bottom-start"],
+        },
+      },
+      {
+        name: "offset",
+        options: {
+          offset: [0, 8], // [skid, distance]
+        },
+      },
+    ],
+  });
 
   const [deleteStudentData, { isLoading: localLoading }] =
     useDeleteStudentDataMutation();
   const [updateStudentActivity, { isLoading: updateLoading }] =
     useUpdateStudentActivityMutation();
+
   // Toggle modal visibility
   const handleShow = (id) => {
+    setActiveRow(null); // Close dropdown first
     setSelectedStudentId(id);
     setShowModal(true);
   };
-  useEffect(() => {
-    refetch();
-  }, []);
 
   const toggleActions = (event, id) => {
-    const rect = event.currentTarget.getBoundingClientRect();
+    event.stopPropagation();
+    setReferenceElement(event.currentTarget);
     setActiveRow((prev) => (prev === id ? null : id));
-    setDropdownPos({
-      top: rect.bottom + window.scrollY,
-      left: rect.right - 160,
-    }); // adjust width
   };
 
   const handleMakeActive = async (studentId) => {
     try {
+      setActiveRow(null); // Close dropdown
       const data = await updateStudentActivity({
         id: studentId,
         activity: "active",
@@ -75,16 +109,22 @@ export default function InactiveStudents() {
   // Close on outside click
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      if (
+        popperElement &&
+        !popperElement.contains(event.target) &&
+        referenceElement &&
+        !referenceElement.contains(event.target)
+      ) {
         setActiveRow(null);
       }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  }, [popperElement, referenceElement]);
 
   const handleDelete = (id) => {
+    setActiveRow(null); // Close dropdown first
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -98,7 +138,6 @@ export default function InactiveStudents() {
         deleteStudentData(id)
           .unwrap()
           .then((res) => {
-            console.log(res);
             if (res?.deletedCount) {
               Swal.fire({
                 title: "Deleted!",
@@ -127,19 +166,31 @@ export default function InactiveStudents() {
   };
 
   const handleClose = () => setShowModal(false);
+
   if (isLoading) {
-    return <LoadingSpinnerDash></LoadingSpinnerDash>;
+    return <LoadingSpinnerDash />;
   }
+
   return (
     <div>
-      <h3 className={`fs-1 fw-bold text-center`}>Inactive Students</h3>
+      <div className="row mb-4 align-items-center">
+        <div className="col-md-6">
+          <h3 className="fs-2 fw-bold">Inactive Students</h3>
+        </div>
+        <div className="col-md-6 mt-3 mt-md-0">
+          <input
+            type="text"
+            name="student_name"
+            placeholder="Search by name"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            style={{ borderColor: "var(--border2)" }}
+            className="form-control bg-light"
+          />
+        </div>
+      </div>
       <div className="table-responsive mb-3">
-        <table
-          className="table mb-0"
-          style={{
-            minWidth: 700,
-          }}
-        >
+        <table className="table mb-0" style={{ minWidth: 700 }}>
           <thead>
             <tr>
               {[
@@ -186,6 +237,7 @@ export default function InactiveStudents() {
                     </td>
                     <td className="border text-center align-middle position-relative">
                       <FaChevronCircleDown
+                        ref={setReferenceElement}
                         style={{ cursor: "pointer" }}
                         onClick={(e) => toggleActions(e, student._id)}
                       />
@@ -203,50 +255,54 @@ export default function InactiveStudents() {
           </tbody>
         </table>
       </div>
-      {activeRow && dropdownPos && (
+
+      {activeRow && (
         <div
-          ref={dropdownRef}
-          className="position-fixed bg-light border rounded p-2"
+          ref={setPopperElement}
           style={{
-            top: `${dropdownPos.top}px`,
-            left: `${dropdownPos.left}px`,
+            ...styles.popper,
             zIndex: 9999,
-            minWidth: "160px",
-            boxShadow: "0px 4px 8px rgba(0,0,0,0.1)",
+            width: "180px",
           }}
+          {...attributes.popper}
+          className="bg-light border rounded p-2 shadow"
         >
-          <button
-            className="btn btn-sm btn-primary w-100 mb-1"
-            onClick={() => handleShow(activeRow)}
-          >
-            View Student Details
-          </button>
-          <Link
-            to={`/dashboard/online-admissions/update/${activeRow}`}
-            className="btn btn-sm btn-secondary w-100 mb-1"
-          >
-            Edit Student Details
-          </Link>
-          <button
-            className="btn btn-sm btn-warning w-100 mb-1"
-            onClick={() => handleMakeActive(activeRow)}
-          >
-            Make Active
-          </button>
-          <button
-            className="btn btn-sm btn-danger w-100"
-            disabled={localLoading}
-            onClick={() => handleDelete(activeRow)}
-          >
-            Delete Record
-          </button>
+          <div className="d-flex flex-column gap-1">
+            <button
+              className="btn btn-sm btn-primary text-nowrap"
+              onClick={() => handleShow(activeRow)}
+            >
+              View Student Details
+            </button>
+            <Link
+              to={`/dashboard/online-admissions/update/${activeRow}`}
+              className="btn btn-sm btn-secondary text-nowrap"
+              onClick={() => setActiveRow(null)}
+            >
+              Edit Student Details
+            </Link>
+            <button
+              className="btn btn-sm btn-warning text-nowrap"
+              onClick={() => handleMakeActive(activeRow)}
+            >
+              Make Active
+            </button>
+            <button
+              className="btn btn-sm btn-danger text-nowrap"
+              disabled={localLoading}
+              onClick={() => handleDelete(activeRow)}
+            >
+              Delete Record
+            </button>
+          </div>
         </div>
       )}
+
       <StudentModal
         studentId={selectedStudentId}
         showModal={showModal}
         handleClose={handleClose}
-      ></StudentModal>
+      />
     </div>
   );
 }
