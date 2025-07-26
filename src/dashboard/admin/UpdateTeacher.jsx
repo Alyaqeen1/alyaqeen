@@ -7,7 +7,7 @@ import {
   useUpdateTeacherMutation,
   useUpdateTeacherStatusMutation,
 } from "../../redux/features/teachers/teachersApi";
-import { useNavigate, useParams } from "react-router";
+import { useLocation, useNavigate, useParams } from "react-router";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 import uploadToCloudinary from "../../utils/uploadToCloudinary";
 import useAuth from "../../hooks/useAuth";
@@ -127,26 +127,35 @@ export default function UpdateTeacher() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.target;
-    const name = form.full_name.value;
-    const email = form.email.value;
-    const number = form.number.value;
-    const dob = form.dob.value;
-    const joining_date = form.joining_date.value;
-    const qualification = form.qualification.value;
-    const address = form.address.value;
-    const post_code = form.post_code.value;
-    const marital_status = form.marital_status.value;
-    const gender = form.gender.value;
-    const department = form.department.value;
-    const experience = form.experience.value;
-    const designation = form.designation.value;
-    const emergency_number = form.emergency_number.value;
-    const account_holder_name = form.account_holder_name.value;
-    const bank_account_number = form.bank_account_number.value;
-    const sord_code = form.sord_code.value;
+
+    // Add null checks for form elements
+    const name = form.full_name?.value || "";
+    const email = form.email?.value || "";
+    const number = form.number?.value || "";
+    const dob = form.dob?.value || "";
+    const joining_date = form.joining_date?.value || "";
+    const qualification = form.qualification?.value || "";
+    const address = form.address?.value || "";
+    const post_code = form.post_code?.value || "";
+    const marital_status = form.marital_status?.value || "";
+    const gender = form.gender?.value || "";
+    const department = form.department?.value || "";
+    const experience = form.experience?.value || "";
+    const designation = form.designation?.value || "";
+    const emergency_number = form.emergency_number?.value || "";
+    const account_holder_name = form.account_holder_name?.value || "";
+    const bank_account_number = form.bank_account_number?.value || "";
+    const sord_code = form.sord_code?.value || "";
+
+    // Check if required fields are filled
+    if (!name || !email) {
+      setError("Please fill all required fields");
+      return;
+    }
 
     const teacherData = {
       name,
+      email, // Make sure to include email in your data
       number,
       dob,
       joining_date,
@@ -158,23 +167,22 @@ export default function UpdateTeacher() {
       department,
       experience,
       designation,
-      teacher_photo: photoUrl || teacher?.teacher_photo,
-      dbs_crb: dbsUrl || teacher?.dbs_crb,
-      cv: cvUrl || teacher?.cv,
+      teacher_photo: photoUrl || teacher?.teacher_photo || "",
+      dbs_crb: dbsUrl || teacher?.dbs_crb || "",
+      cv: cvUrl || teacher?.cv || "",
       highest_degree_certificate:
-        certificateUrl || teacher?.highest_degree_certificate,
-
+        certificateUrl || teacher?.highest_degree_certificate || "",
       sord_code,
       emergency_number,
       account_holder_name,
       bank_account_number,
       createdAt: new Date(),
-      dept_ids: selectedDepartments.map((d) => d._id),
-      class_ids: selectedClasses?.map((c) => c._id),
-      subject_ids: selectedSubjects?.map((s) => s._id),
+      dept_ids: selectedDepartments?.map((d) => d?._id) || [],
+      class_ids: selectedClasses?.map((c) => c?._id) || [],
+      subject_ids: selectedSubjects?.map((s) => s?._id) || [],
     };
 
-    if (localLoading) return; // Extra guard
+    if (localLoading) return;
 
     try {
       const data = await updateTeacher({ id, teacherData }).unwrap();
@@ -186,11 +194,11 @@ export default function UpdateTeacher() {
           showConfirmButton: false,
           timer: 1500,
         });
-        navigate("/dashboard/pending-teachers");
-        form.reset(); // Reset the form
+
+        navigate("/dashboard/active-teachers");
       }
     } catch (error) {
-      return toast.error(error?.message);
+      toast.error(error?.message || "Failed to update teacher");
     }
   };
 
@@ -362,9 +370,19 @@ export default function UpdateTeacher() {
         {/* marital */}
         <div className="col-md-4">
           <label className="form-label">Marital Status*</label>
-          {marital_status && (
+          {marital_status ? (
             <select
               defaultValue={marital_status}
+              style={{ borderColor: "var(--border2)" }}
+              name="marital_status"
+              className="form-control"
+            >
+              <option value="">Select marital status</option>
+              <option value="single">Single</option>
+              <option value="married">Married</option>
+            </select>
+          ) : (
+            <select
               style={{ borderColor: "var(--border2)" }}
               name="marital_status"
               className="form-control"
@@ -378,9 +396,19 @@ export default function UpdateTeacher() {
         {/* gender */}
         <div className="col-md-4">
           <label className="form-label">Gender</label>
-          {gender && (
+          {gender ? (
             <select
               defaultValue={gender}
+              style={{ borderColor: "var(--border2)" }}
+              name="gender"
+              className="form-control"
+            >
+              <option value="">Select gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+          ) : (
+            <select
               style={{ borderColor: "var(--border2)" }}
               name="gender"
               className="form-control"

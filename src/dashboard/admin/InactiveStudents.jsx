@@ -236,11 +236,17 @@ export default function InactiveStudents() {
                       {student?.activity}
                     </td>
                     <td className="border text-center align-middle position-relative">
-                      <FaChevronCircleDown
+                      <button
+                        style={{
+                          background: "none",
+                          border: "none",
+                          cursor: "pointer",
+                        }}
+                        onClick={(e) => toggleActions(e, teacher._id)}
                         ref={setReferenceElement}
-                        style={{ cursor: "pointer" }}
-                        onClick={(e) => toggleActions(e, student._id)}
-                      />
+                      >
+                        <FaChevronCircleDown />
+                      </button>
                     </td>
                   </tr>
                 </React.Fragment>

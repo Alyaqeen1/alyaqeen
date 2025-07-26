@@ -211,7 +211,7 @@ export default function ActiveTeachers() {
                         <img
                           style={{ width: "50px" }}
                           className="rounded-5"
-                          src={teacher_photo}
+                          src={teacher?.teacher_photo}
                           alt=""
                         />
                       ) : (
@@ -247,11 +247,17 @@ export default function ActiveTeachers() {
                       {teacher?.activity}
                     </td>
                     <td className="border text-center align-middle position-relative">
-                      <FaChevronCircleDown
-                        ref={setReferenceElement}
-                        style={{ cursor: "pointer" }}
+                      <button
+                        style={{
+                          background: "none",
+                          border: "none",
+                          cursor: "pointer",
+                        }}
                         onClick={(e) => toggleActions(e, teacher._id)}
-                      />
+                        ref={setReferenceElement}
+                      >
+                        <FaChevronCircleDown />
+                      </button>
                     </td>
                   </tr>
                 </React.Fragment>
