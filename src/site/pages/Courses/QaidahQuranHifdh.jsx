@@ -8,6 +8,8 @@ export default function QaidahQuranHifdh() {
       <CmnBanner title="Arabic Qaidah, Quran & Hifdh"></CmnBanner>
       <CourseDetails
         image={one}
+        classNum={5}
+        classTeacher={"Mrs Khetam"}
         title="Arabic Qaidah, Quran & Hifdh"
         subtitle1="Descriptions"
         descriptionPara1="Allah swt the most says in the Quran : “and recite the Quran (aloud) in a slow , (Pleasent tone and) style - Sura Al Muzzamil - 73:1-4"

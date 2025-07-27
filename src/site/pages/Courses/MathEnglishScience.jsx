@@ -9,6 +9,8 @@ export default function MathEnglishScience() {
       <CmnBanner title="Maths, English & Science"></CmnBanner>
       <CourseDetails
         image={one}
+        classNum={5}
+        classTeacher={"Miss Amina and Jabir. ludhi G1 and G2"}
         title="Maths, English & Science"
         subtitle1="Descriptions"
         descriptionPara1="At Alyaqeen Academy, we have a team of dedicated tutors who are committed to providing quality education. Our tutors ensure that students are taught according to the national curriculum syllabus while also catering to their individual learning needs."

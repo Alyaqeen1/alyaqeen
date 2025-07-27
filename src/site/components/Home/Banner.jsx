@@ -12,6 +12,7 @@ import seven from "../../assets/img/hero/right.png";
 import eight from "../../assets/img/hero/star.png";
 import nine from "../../assets/img/home/image8.png";
 import ten from "../../assets/img/hero/hero-shape.png";
+import eleven from "../../assets/img/home/testimonial.png";
 
 const Banner = () => {
   const [isOpen, setOpen] = useState(false);
@@ -132,7 +133,7 @@ const Banner = () => {
                 data-aos-delay="400"
               >
                 <img
-                  src={nine}
+                  src={eleven}
                   style={{
                     filter: "drop-shadow(0 0 10px rgba(0, 0, 0, 0.2))",
                   }}

@@ -24,11 +24,11 @@ export default function Home() {
       <Banner></Banner>
       {/* <LanguageModal></LanguageModal> */}
 
+      <News></News>
       <ProgramSection></ProgramSection>
       <WorkProcess></WorkProcess>
       <AboutActivities></AboutActivities>
       <FeeStructure></FeeStructure>
-      <News></News>
       <Marquee></Marquee>
       <Certificate></Certificate>
       <Team></Team>
@@ -37,7 +37,7 @@ export default function Home() {
       <CTA></CTA>
       <Blogs></Blogs>
       <MainCta></MainCta>
-      <Instagram></Instagram>
+      {/* <Instagram></Instagram> */}
       <AdditionalServices></AdditionalServices>
       <AboutSection></AboutSection>
     </div>

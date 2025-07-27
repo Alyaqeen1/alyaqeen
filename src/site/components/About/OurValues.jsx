@@ -43,8 +43,9 @@ const OurValues = () => {
                 <div className="content">
                   <h5>Teacher Training and Progress </h5>
                   <p>
-                    Adipiscing elit Praesent luctus laoreet iaculis Curabitur
-                    rutrum lectus augue, ut pulvinar.
+                    Regular training in Islamic pedagogy, child psychology, and
+                    modern methods helps our teachers grow alongside their
+                    students.
                   </p>
                 </div>
               </div>
@@ -60,8 +61,8 @@ const OurValues = () => {
                 <div className="content">
                   <h5>Nanny Selection 24/7</h5>
                   <p>
-                    Adipiscing elit Praesent luctus laoreet iaculis Curabitur
-                    rutrum lectus augue, ut pulvinar.
+                    Carefully vetted support staff ensure your child’s safety
+                    and well-being at all times.
                   </p>
                 </div>
               </div>
@@ -96,10 +97,10 @@ const OurValues = () => {
                 data-aos-delay="300"
               >
                 <div className="content">
-                  <h5>Advanced Placement Courses</h5>
+                  <h5>Advanced Curriculum</h5>
                   <p>
-                    Adipiscing elit Praesent luctus laoreet iaculis Curabitur
-                    rutrum lectus augue, ut pulvinar.
+                    Balanced learning in Qur’an, Arabic, Islamic Studies, and UK
+                    core subjects to nurture faith and academic growth.
                   </p>
                 </div>
                 <div className="icon color-3">
@@ -113,10 +114,10 @@ const OurValues = () => {
                 data-aos-delay="500"
               >
                 <div className="content">
-                  <h5>Self-contained gifted programs</h5>
+                  <h5>Enrichment Programs</h5>
                   <p>
-                    Adipiscing elit Praesent luctus laoreet iaculis Curabitur
-                    rutrum lectus augue, ut pulvinar.
+                    Tailored support and programs for students who excel in Deen
+                    and Dunya.
                   </p>
                 </div>
                 <div className="icon color-2 color-4">

@@ -19,7 +19,7 @@ const AboutSection = () => {
   const handleChange = (value) => {
     setRating(value);
   };
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.target;
     const name = form.name.value;
@@ -27,7 +27,6 @@ const AboutSection = () => {
     const phone = form.phone.value;
     const title = form.title.value;
     const description = form.description.value;
-    const madrasha_id = 2;
 
     if (!rating) {
       return toast.error("please provide a rating");
@@ -39,14 +38,19 @@ const AboutSection = () => {
       phone,
       title,
       description,
-      madrasha_id,
       rating,
     };
 
-    addReview(reviewData);
-    toast.success("Review submitted successfully!");
-    form.reset();
-    setRating(0);
+    try {
+      const data = await addReview(reviewData).unwrap();
+      if (data?.insertedId) {
+        toast.success("Review submitted successfully!");
+      }
+      form.reset();
+      setRating(0);
+    } catch (error) {
+      toast.error(error);
+    }
   };
   return (
     <section className="about-section section-padding" id="about">

@@ -30,7 +30,6 @@ export default function AboutFounder() {
       <CounterMain></CounterMain>
       <AboutTeam></AboutTeam>
       <AboutTestimonial></AboutTestimonial>
-      <Instagram></Instagram>
     </div>
   );
 }

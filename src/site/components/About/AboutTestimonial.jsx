@@ -28,7 +28,7 @@ const AboutTestimonial = () => {
               Testimonials
             </span>
             <h2 data-aos-duration="800" data-aos="fade-up" data-aos-delay="300">
-              What clients say
+              What parents say
             </h2>
           </div>
           <div className="swiper testimonial-slider-2">
@@ -52,8 +52,8 @@ const AboutTestimonial = () => {
               }}
               className="swiper-wrapper"
             >
-              {reviews?.data?.length > 0 ? (
-                reviews?.data?.map((review) => (
+              {reviews?.length > 0 ? (
+                reviews?.map((review) => (
                   <SwiperSlide key={review?.id}>
                     <div className="swiper-slide">
                       <div className="testimonial-box-items">

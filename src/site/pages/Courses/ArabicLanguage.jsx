@@ -9,6 +9,8 @@ export default function ArabicLanguage() {
       <CmnBanner title="Arabic Language"></CmnBanner>
       <CourseDetails
         image={one}
+        classNum={5}
+        classTeacher={"Mrs Khetam"}
         title="Arabic Language"
         subtitle1="Descriptions"
         descriptionPara1="Islam is just not religion that Muslims follow, but it is a way of life."

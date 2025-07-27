@@ -37,7 +37,7 @@ const NewsList = () => {
     return <LoadingSpinner></LoadingSpinner>;
   }
   if (isError) {
-    return <h2 className="text-center my-4">Error loading news</h2>;
+    return <h2 className="text-center my-4">Error loading</h2>;
   }
   const filteredNewsItems = currentNewsItems.filter((single) =>
     single?.title?.toLowerCase().includes(searchText.toLowerCase())

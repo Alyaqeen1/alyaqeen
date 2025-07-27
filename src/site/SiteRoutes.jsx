@@ -81,7 +81,7 @@ const siteRoutes = [
         element: <ArabicLanguage></ArabicLanguage>,
       },
       {
-        path: "/modern-foreign-languages",
+        path: "/urdu-bangla-languages",
         element: <ModernForeignLanguages></ModernForeignLanguages>,
       },
       // additional pages
@@ -113,10 +113,10 @@ const siteRoutes = [
         path: "/faq",
         element: <Faq></Faq>,
       },
-      {
-        path: "/shop",
-        element: <Shop></Shop>,
-      },
+      // {
+      //   path: "/shop",
+      //   element: <Shop></Shop>,
+      // },
       {
         path: "/photos-videos",
         element: <PhotosVideos></PhotosVideos>,

@@ -27,7 +27,7 @@ export default function WhoWeAre() {
         subtitle="Our Experts"
       ></AboutTeam>
       <AboutTestimonial></AboutTestimonial>
-      <Instagram></Instagram>
+      {/* <Instagram></Instagram> */}
     </div>
   );
 }

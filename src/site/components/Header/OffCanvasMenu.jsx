@@ -159,9 +159,9 @@ const OffCanvasMenu = ({ toggleMenu, handleToggleMenu }) => {
                           <li>
                             <Link
                               onClick={() => handleToggleMenu(false)}
-                              to="/modern-foreign-languages"
+                              to="/urdu-bangla-languages"
                             >
-                              Modern Foreign Languages
+                              Urdu / Bangla Language
                             </Link>
                           </li>
                         </ul>
@@ -244,14 +244,14 @@ const OffCanvasMenu = ({ toggleMenu, handleToggleMenu }) => {
                               FAQ&apos;S
                             </Link>
                           </li>
-                          <li>
+                          {/* <li>
                             <Link
                               onClick={() => handleToggleMenu(false)}
                               to="/shop"
                             >
                               Shop
                             </Link>
-                          </li>
+                          </li> */}
                           <li>
                             <Link
                               onClick={() => handleToggleMenu(false)}

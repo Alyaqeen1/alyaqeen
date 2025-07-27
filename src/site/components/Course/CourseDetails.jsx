@@ -15,6 +15,8 @@ import nine from "../../assets/img/program/p-author.jpg";
 import img from "../../assets/img/home/photo-5.jpg";
 
 const CourseDetails = ({
+  classNum,
+  classTeacher,
   image,
   title,
   subtitle1,
@@ -62,17 +64,12 @@ const CourseDetails = ({
                   <h2 className="mb-0">{title}</h2>
                   <div className="details-author-area">
                     <div className="author-items">
-                      <img src={two} alt="img" />
-                      <p>Savannah Nguyen</p>
+                      <p>{classTeacher}</p>
                     </div>
                     <ul className="class-list">
                       <li>
                         <i className="fa-regular fa-circle-play me-2"></i>
-                        30 Classes
-                      </li>
-                      <li>
-                        <i className="fas fa-star me-2"></i>
-                        3.4 (36 Review)
+                        {classNum} Classes
                       </li>
                     </ul>
                   </div>
@@ -174,7 +171,7 @@ const CourseDetails = ({
                     </div> */}
                   </div>
 
-                  <h2>Requirements for The Classes</h2>
+                  {/* <h2>Requirements for The Classes</h2>
                   <p>
                     Nulla facilisi. Vestibulum tristique sem in eros eleifend
                     imperdiet. Donec quis convallis neque. In id lacus pulvinar
@@ -199,7 +196,7 @@ const CourseDetails = ({
                       <i className="fa-solid fa-check"></i>
                       ante rutrum sed the is sodales augue consequat.
                     </li>
-                  </ul>
+                  </ul> */}
                 </div>
               </div>
             </div>
@@ -389,7 +386,7 @@ const CourseDetails = ({
                 </div>
               </div>
             </div>
-            <div className="col-lg-12">
+            {/* <div className="col-lg-12">
               <div className="program-author-items">
                 <div className="thumb">
                   <img src={nine} alt="img" />
@@ -430,7 +427,7 @@ const CourseDetails = ({
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

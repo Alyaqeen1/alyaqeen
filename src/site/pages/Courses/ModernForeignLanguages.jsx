@@ -6,10 +6,10 @@ import one from "../../assets/img/program/image22.jpg";
 export default function ModernForeignLanguages() {
   return (
     <div>
-      <CmnBanner title="Modern Foreign Languages"></CmnBanner>
+      <CmnBanner title="Urdu / Bangla Language"></CmnBanner>
       <CourseDetails
         image={one}
-        title="Modern Foreign Languages"
+        title="Urdu / Bangla Language"
         subtitle1="Descriptions"
         descriptionPara1="Allah the Master of the universe states in the Quran: “O mankind, We created you from one man and one woman, and then divided you into nations and tribes so that you may recognize one another”."
         descriptionPara2="We at Alyaqeen academy understand the importance of diversity and interaction with other cultures and backgrounds. We therefore provide an opportunity to learn the following languages at the academy:"

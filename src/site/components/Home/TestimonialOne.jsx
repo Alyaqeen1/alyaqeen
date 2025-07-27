@@ -3,10 +3,11 @@ import { Autoplay, Navigation } from "swiper/modules";
 import "swiper/swiper-bundle.css";
 import { Trans, useTranslation } from "react-i18next";
 import { useGetReviewsQuery } from "../../../redux/features/reviews/reviewsApi";
+import AwesomeStarsRating from "react-awesome-stars-rating";
 import LoadingSpinner from "../LoadingSpinner";
 import one from "../../assets/img/client/pencil.png";
 import two from "../../assets/img/home/quran-quran-svgrepo-com.svg";
-import three from "../../assets/img/home/testimonial.png";
+import three from "../../assets/img/home/image8.png";
 import four from "../../assets/img/client/01.png";
 import five from "../../assets/img/client/quote.png";
 
@@ -58,7 +59,11 @@ const TestimonialOne = () => {
               data-aos-delay="400"
             >
               <div className="testimonial-image">
-                <img className="object-fit-cover" src={three} alt="image" />
+                <img
+                  className="object-fit-cover rounded-5"
+                  src={three}
+                  alt="image"
+                />
               </div>
             </div>
             <div className="col-lg-6">
@@ -107,18 +112,20 @@ const TestimonialOne = () => {
                     }}
                     className="swiper-wrapper"
                   >
-                    {reviews?.data?.length > 0 ? (
-                      reviews?.data?.map((review) => (
+                    {reviews?.length > 0 ? (
+                      reviews?.map((review) => (
                         <SwiperSlide key={review?.id}>
                           <div className="swiper-slide">
                             <div className="testimonial-content mt-4 mt-md-0">
-                              <div className="star">
-                                <i className="fas fa-star"></i>
-                                <i className="fas fa-star"></i>
-                                <i className="fas fa-star"></i>
-                                <i className="fas fa-star"></i>
-                                <i className="fas fa-star color-star"></i>
-                              </div>
+                              <AwesomeStarsRating
+                                value={review?.rating}
+                                // onChange={handleChange}
+                                isEdit={false}
+                                half={true} // Optional: for half-star ratings
+                                size={24} // Optional: size of the stars
+                                className="my-custom-rating" // Optional: for extra styling
+                              />
+
                               <p>{review?.description}</p>
                               <div className="client-info">
                                 <div className="content">

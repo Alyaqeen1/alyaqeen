@@ -206,7 +206,7 @@ const Header = () => {
                               </Link>
                             </li>
                             <li>
-                              <Link to="/modern-foreign-languages">
+                              <Link to="/urdu-bangla-languages">
                                 {modernForeign}
                               </Link>
                             </li>
@@ -249,9 +249,9 @@ const Header = () => {
                             <li>
                               <Link to="/faq">{faq}</Link>
                             </li>
-                            <li>
+                            {/* <li>
                               <Link to="/shop">{shop}</Link>
-                            </li>
+                            </li> */}
                             <li>
                               <Link to="/photos-videos">{photosVideos}</Link>
                             </li>

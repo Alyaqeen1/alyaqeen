@@ -35,7 +35,7 @@ const CounterMain = () => {
                 <div className="content">
                   <h2>
                     <span className="count">
-                      <Counter value={25} />
+                      <Counter value={20} />
                     </span>
                     +
                   </h2>
@@ -56,7 +56,7 @@ const CounterMain = () => {
                 <div className="content">
                   <h2>
                     <span className="count">
-                      <Counter value={6500} />
+                      <Counter value={120} />
                     </span>
                     +
                   </h2>
@@ -77,7 +77,7 @@ const CounterMain = () => {
                 <div className="content">
                   <h2>
                     <span className="count">
-                      <Counter value={100} />
+                      <Counter value={10} />
                     </span>
                     +
                   </h2>
@@ -98,7 +98,7 @@ const CounterMain = () => {
                 <div className="content">
                   <h2>
                     <span className="count">
-                      <Counter value={6561} />
+                      <Counter value={1000} />
                     </span>
                     +
                   </h2>
