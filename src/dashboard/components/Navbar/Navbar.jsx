@@ -69,9 +69,9 @@ export default function Navbar() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-  if (isLoading || isUserDbLoading) {
-    return <LoadingSpinnerDash></LoadingSpinnerDash>;
-  }
+  // if (isLoading || isUserDbLoading) {
+  //   return <LoadingSpinnerDash></LoadingSpinnerDash>;
+  // }
   return (
     <nav className="navbar bg-white sticky-top">
       <div className="container-fluid">
