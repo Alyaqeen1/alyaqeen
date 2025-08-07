@@ -72,17 +72,16 @@ export default function OffCanvasMenu() {
       </div>
 
       <div
-        className="offcanvas offcanvas-start"
-        data-bs-scroll="true"
-        data-bs-backdrop="false"
-        tabIndex="-1"
-        id="offcanvasScrolling"
-        aria-labelledby="offcanvasScrollingLabel"
-        // style={{
-        //   maxHeight: "100vh",
-        //   overflowY: "auto",
-        //   backgroundColor: "var(--border2)",
-        // }} // ✅ Add this
+        className="offcanvas offcanvas-start show"
+        style={{
+          height: "100vh",
+          backgroundColor: "var(--border2)",
+          visibility: showSidebar ? "visible" : "hidden",
+          transform: showSidebar ? "translateX(0%)" : "translateX(-100%)",
+          transition: "transform 0.3s ease-in-out",
+          zIndex: 1050,
+          width: "280px",
+        }}
       >
         <div
           className="d-flex flex-column"
@@ -136,6 +135,7 @@ export default function OffCanvasMenu() {
                     icon={<TiHomeOutline className="mx-2 fs-5" />}
                     label="Dashboard"
                     to="/dashboard"
+                    onNavigate={() => setShowSidebar(false)}
                   />
 
                   {/* Users (with submenu) */}
@@ -154,6 +154,7 @@ export default function OffCanvasMenu() {
                         handleSubmenu={handleSubmenu}
                         isSubMenuOpen={isSubMenuOpen}
                         handleToggleMenu={handleToggleMenu}
+                        onNavigate={() => setShowSidebar(false)}
                       />
                       <MenuItem
                         icon={<FaUsers className="mx-2 fs-5" />}
@@ -175,6 +176,7 @@ export default function OffCanvasMenu() {
                         handleSubmenu={handleSubmenu}
                         isSubMenuOpen={isSubMenuOpen}
                         handleToggleMenu={handleToggleMenu}
+                        onNavigate={() => setShowSidebar(false)}
                       />
                       <MenuItem
                         icon={<GiTeacher className="mx-2 fs-5" />}
@@ -193,6 +195,7 @@ export default function OffCanvasMenu() {
                         handleSubmenu={handleSubmenu}
                         isSubMenuOpen={isSubMenuOpen}
                         handleToggleMenu={handleToggleMenu}
+                        onNavigate={() => setShowSidebar(false)}
                       />
                       <MenuItem
                         icon={<FaPersonCircleCheck className="mx-2 fs-5" />}
@@ -209,6 +212,7 @@ export default function OffCanvasMenu() {
                         handleSubmenu={handleSubmenu}
                         isSubMenuOpen={isSubMenuOpen}
                         handleToggleMenu={handleToggleMenu}
+                        onNavigate={() => setShowSidebar(false)}
                       />
                       <MenuItem
                         icon={<FaUsers className="mx-2 fs-5" />}
@@ -223,6 +227,7 @@ export default function OffCanvasMenu() {
                         handleSubmenu={handleSubmenu}
                         isSubMenuOpen={isSubMenuOpen}
                         handleToggleMenu={handleToggleMenu}
+                        onNavigate={() => setShowSidebar(false)}
                       />
                       <MenuItem
                         icon={<IoTimer className="mx-2 fs-5" />}
@@ -242,16 +247,19 @@ export default function OffCanvasMenu() {
                         handleSubmenu={handleSubmenu}
                         isSubMenuOpen={isSubMenuOpen}
                         handleToggleMenu={handleToggleMenu}
+                        onNavigate={() => setShowSidebar(false)}
                       />
                       <MenuItem
                         icon={<PiStudentBold className="mx-2 fs-5" />}
                         label="Merit Students"
+                        onNavigate={() => setShowSidebar(false)}
                         to="merit-students"
                       />
 
                       <MenuItem
                         icon={<TbFileReport className="mx-2 fs-5" />}
                         label="Reports Summary"
+                        onNavigate={() => setShowSidebar(false)}
                         to="reports-summary"
                       />
                     </>
@@ -267,6 +275,8 @@ export default function OffCanvasMenu() {
                         handleSubmenu={handleSubmenu}
                         isSubMenuOpen={isSubMenuOpen}
                         handleToggleMenu={handleToggleMenu}
+                        setShowSidebar={setShowSidebar}
+                        onNavigate={() => setShowSidebar(false)} // ✅ Only offcanvas needs this
                       />
                       <MenuItem
                         icon={<FaCalendar className="mx-2" />}
@@ -276,6 +286,7 @@ export default function OffCanvasMenu() {
                         handleSubmenu={handleSubmenu}
                         isSubMenuOpen={isSubMenuOpen}
                         handleToggleMenu={handleToggleMenu}
+                        onNavigate={() => setShowSidebar(false)}
                       />
                       <MenuItem
                         icon={<FaCalendarCheck className="mx-2" />}
@@ -285,6 +296,7 @@ export default function OffCanvasMenu() {
                         handleSubmenu={handleSubmenu}
                         isSubMenuOpen={isSubMenuOpen}
                         handleToggleMenu={handleToggleMenu}
+                        onNavigate={() => setShowSidebar(false)}
                       />
                       <MenuItem
                         icon={<FaTrophy className="mx-2" />}
@@ -294,6 +306,7 @@ export default function OffCanvasMenu() {
                         handleSubmenu={handleSubmenu}
                         isSubMenuOpen={isSubMenuOpen}
                         handleToggleMenu={handleToggleMenu}
+                        onNavigate={() => setShowSidebar(false)}
                       />
 
                       <MenuItem
@@ -314,6 +327,7 @@ export default function OffCanvasMenu() {
                         handleSubmenu={handleSubmenu}
                         isSubMenuOpen={isSubMenuOpen}
                         handleToggleMenu={handleToggleMenu}
+                        onNavigate={() => setShowSidebar(false)}
                       />
                     </>
                   )}
@@ -321,6 +335,7 @@ export default function OffCanvasMenu() {
                   {data?.role === "parent" && (
                     <>
                       <MenuItem
+                        onNavigate={() => setShowSidebar(false)}
                         icon={<TbFileReport className="mx-2 fs-5" />}
                         label="Reports Summary"
                         to="parent/reports-summary"

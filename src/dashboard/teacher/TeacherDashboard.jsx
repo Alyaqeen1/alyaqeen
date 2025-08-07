@@ -78,7 +78,7 @@ export default function TeacherDashboard() {
 
   return (
     <div>
-      <div className="border border-black shadow-md rounded-3 p-4 col-4">
+      <div className="border border-black shadow-md rounded-3 p-4 col-lg-4">
         {!todayAttendance?.total_hours && (
           <p>
             {!todayAttendance?.time_in

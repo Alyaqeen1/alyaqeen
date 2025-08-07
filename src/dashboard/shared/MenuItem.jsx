@@ -12,6 +12,7 @@ const MenuItem = ({
   isSubMenuOpen,
   handleToggleMenu,
   identifier,
+  onNavigate, // optional
 }) => {
   const hasDropdown = submenuItems.length > 0;
 
@@ -53,7 +54,9 @@ const MenuItem = ({
         <NavLink
           className="border-0 p-0 d-block mt-1"
           to={to}
-          //   onClick={() => handleToggleMenu(false)}
+          onClick={() => {
+            if (onNavigate) onNavigate();
+          }}
           style={({ isActive }) => ({
             color: isActive ? "white" : "#A2AED0",
             textDecoration: "none",
@@ -72,6 +75,7 @@ const MenuItem = ({
         </NavLink>
       ) : null}
 
+      {/* Submenu Items */}
       {hasDropdown && (
         <ul
           className={`submenu ${
@@ -82,8 +86,11 @@ const MenuItem = ({
             <li key={index}>
               <NavLink
                 className="border-0 p-0"
-                onClick={() => handleToggleMenu(false)}
                 to={item.to}
+                onClick={() => {
+                  handleToggleMenu(false);
+                  if (onNavigate) onNavigate();
+                }}
                 style={({ isActive }) => ({
                   color: isActive ? "white" : "#A2AED0",
                   textDecoration: "none",

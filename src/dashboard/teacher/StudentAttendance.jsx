@@ -166,9 +166,9 @@ export default function StudentAttendanceAdmin() {
   return (
     <div>
       {/* ── TOP BAR ─────────────────────────────────── */}
-      <div className="d-flex justify-content-between align-items-center my-2">
-        <h3>Student Attendance</h3>
-        <div>
+      <div className="row my-2">
+        <h3 className="col-md-6">Student Attendance</h3>
+        <div className="col-md-6 d-flex justify-content-end align-items-center">
           <button
             style={{ backgroundColor: "var(--border2)" }}
             className="btn text-white"

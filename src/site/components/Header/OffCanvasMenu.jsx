@@ -12,6 +12,7 @@ const OffCanvasMenu = ({ toggleMenu, handleToggleMenu }) => {
     signOutUser().then(() => {
       toast.success("Logout successful");
     });
+    handleToggleMenu(false);
   };
 
   const handleSubmenu = (submenu) => {
@@ -315,16 +316,31 @@ const OffCanvasMenu = ({ toggleMenu, handleToggleMenu }) => {
                       {!user ? (
                         <>
                           <li>
-                            <Link to="/login">Login</Link>
+                            <Link
+                              onClick={() => handleToggleMenu(false)}
+                              to="/login"
+                            >
+                              Login
+                            </Link>
                           </li>
                           <li>
-                            <Link to="/register">Register</Link>
+                            <Link
+                              onClick={() => handleToggleMenu(false)}
+                              to="/register"
+                            >
+                              Register
+                            </Link>
                           </li>
                         </>
                       ) : (
                         <>
                           <li>
-                            <Link to="/dashboard">Dashboard</Link>
+                            <Link
+                              onClick={() => handleToggleMenu(false)}
+                              to="/dashboard"
+                            >
+                              Dashboard
+                            </Link>
                           </li>
                           <li>
                             <button
