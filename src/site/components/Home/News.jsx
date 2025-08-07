@@ -102,7 +102,7 @@ const News = () => {
         <div className="news-wrapper">
           <div className="row align-items-center">
             {/* announcement section */}
-            <div className="col-lg-6 p-3">
+            <div className="col-lg-6 order-2 order-lg-1 p-3">
               <div className="testimonial-wrapper section-padding-feb11-news-home-page">
                 <div className="testimonial-bg-feb17"></div>
                 <div className="section-title text-center">
@@ -208,7 +208,7 @@ const News = () => {
               </div>
             </div>
             {/* best teacher and best student of the month section */}
-            <div className="col-xl-6 col-lg-8 mt-5 mt-xl-0">
+            <div className="col-xl-6 col-lg-8 order-1 order-lg-2 mt-5 mt-xl-0">
               <div>
                 <div className="d-flex justify-content-between align-items-center">
                   <h3 className="fs-2">Prayer Times</h3>
