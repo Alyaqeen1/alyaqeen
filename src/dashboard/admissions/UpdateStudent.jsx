@@ -122,10 +122,10 @@ export default function UpdateStudent() {
     const today = new Date().setHours(0, 0, 0, 0); // current date at midnight
     const selectedDate = new Date(starting_date).setHours(0, 0, 0, 0); // user date at midnight
 
-    if (selectedDate < today) {
-      setLoading(false); // ✅ Block double click
-      return toast.error("Starting date cannot be in the past");
-    }
+    // if (selectedDate < today) {
+    //   setLoading(false); // ✅ Block double click
+    //   return toast.error("Starting date cannot be in the past");
+    // }
 
     const studentData = {
       name: student_name,
@@ -217,6 +217,28 @@ export default function UpdateStudent() {
   if (isLoading || loading) {
     return <LoadingSpinnerDash></LoadingSpinnerDash>;
   }
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+
+    // Check if it's already a valid YYYY-MM-DD
+    const isValidFormat = /^\d{4}-\d{2}-\d{2}$/.test(dateString);
+    if (isValidFormat) {
+      const [yyyy, mm, dd] = dateString.split("-").map(Number);
+      if (mm >= 1 && mm <= 12 && dd >= 1 && dd <= 31) {
+        return dateString; // already in correct format
+      }
+    }
+
+    // If not, attempt to fix (assuming format is YYYY-DD-MM)
+    const parts = dateString.split("-");
+    if (parts.length === 3) {
+      const [year, day, month] = parts.map((part) => part.padStart(2, "0"));
+      return `${year}-${month}-${day}`;
+    }
+
+    return "";
+  };
+
   return (
     <div>
       <h3 className={`fs-1 fw-bold text-center`}>Update Student</h3>
@@ -242,17 +264,17 @@ export default function UpdateStudent() {
         {/* dob */}
         <div className="col-md-4">
           <label className="form-label">Date of Birth</label>
+
           <input
             style={{ borderColor: "var(--border2)" }}
             className="form-control bg-light"
-            defaultValue={dob}
+            defaultValue={formatDate(dob)}
             type="date"
             name="std_dob"
-            required
           />
         </div>
         {/* age */}
-        {student_age && (
+        {student_age ? (
           <div className="col-md-4">
             <label className="form-label">Age</label>
             <select
@@ -260,7 +282,31 @@ export default function UpdateStudent() {
               name="student_age"
               defaultValue={student_age}
               className="form-control"
-              required
+            >
+              <option value="">Select age</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+              <option value="11">11</option>
+              <option value="12">12</option>
+              <option value="13">13</option>
+              <option value="14">14</option>
+              <option value="15">15</option>
+              <option value="16">16</option>
+              <option value="17">17</option>
+            </select>
+          </div>
+        ) : (
+          <div className="col-md-4">
+            <label className="form-label">Age</label>
+            <select
+              style={{ borderColor: "var(--border2)" }}
+              name="student_age"
+              className="form-control"
             >
               <option value="">Select age</option>
               <option value="4">4</option>
@@ -282,7 +328,7 @@ export default function UpdateStudent() {
         )}
 
         {/* gender */}
-        {gender && (
+        {gender ? (
           <div className="col-md-4">
             <label className="form-label">Gender</label>
             <select
@@ -290,7 +336,19 @@ export default function UpdateStudent() {
               name="std_gender"
               defaultValue={gender}
               className="form-control"
-              required
+            >
+              <option value="">Select gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+          </div>
+        ) : (
+          <div className="col-md-4">
+            <label className="form-label">Gender</label>
+            <select
+              style={{ borderColor: "var(--border2)" }}
+              name="std_gender"
+              className="form-control"
             >
               <option value="">Select gender</option>
               <option value="Male">Male</option>
@@ -300,7 +358,7 @@ export default function UpdateStudent() {
         )}
 
         {/* school year */}
-        {school_year && (
+        {school_year ? (
           <div className="col-md-4">
             <label className="form-label">School Year</label>
             <select
@@ -308,7 +366,32 @@ export default function UpdateStudent() {
               name="school_year"
               defaultValue={school_year}
               className="form-control"
-              required
+            >
+              <option value="">Select year</option>
+              <option value="reception">Reception</option>
+              <option value="Year 1">Year 1</option>
+              <option value="Year 2">Year 2</option>
+              <option value="Year 3">Year 3</option>
+              <option value="Year 4">Year 4</option>
+              <option value="Year 5">Year 5</option>
+              <option value="Year 6">Year 6</option>
+              <option value="Year 7">Year 7</option>
+              <option value="Year 8">Year 8</option>
+              <option value="Year 9">Year 9</option>
+              <option value="Year 10">Year 10</option>
+              <option value="Year 11">Year 11</option>
+              <option value="A level 1st Year">A level 1st Year</option>
+              <option value="A level 2nd Year">A level 2nd Year</option>
+              <option value="University">University</option>
+            </select>
+          </div>
+        ) : (
+          <div className="col-md-4">
+            <label className="form-label">School Year</label>
+            <select
+              style={{ borderColor: "var(--border2)" }}
+              name="school_year"
+              className="form-control"
             >
               <option value="">Select year</option>
               <option value="reception">Reception</option>
@@ -341,7 +424,6 @@ export default function UpdateStudent() {
             id="name"
             placeholder=""
             className="form-control bg-light"
-            required
           />
         </div>
         {/* family name */}
@@ -355,7 +437,6 @@ export default function UpdateStudent() {
             placeholder="e.g. Rahman / Khan"
             className="form-control bg-light"
             id="name"
-            required
           />
         </div>
         {/* contact */}
@@ -369,7 +450,6 @@ export default function UpdateStudent() {
             name="emergency_number"
             id="number"
             placeholder=""
-            required
           />
         </div>
         {/* email */}
@@ -386,7 +466,6 @@ export default function UpdateStudent() {
             name="student_email"
             id="name"
             placeholder=""
-            required
           />
         </div>
 
@@ -435,7 +514,6 @@ export default function UpdateStudent() {
             defaultValue={motherNumber}
             id="name"
             placeholder=""
-            required
           />
         </div>
 
@@ -450,7 +528,6 @@ export default function UpdateStudent() {
             defaultValue={fatherName}
             id="name"
             placeholder=""
-            required
           />
         </div>
         {/* father occupation */}
@@ -464,7 +541,6 @@ export default function UpdateStudent() {
             id="name"
             defaultValue={fatherOcc}
             placeholder=""
-            required
           />
         </div>
         {/*father contact number */}
@@ -478,7 +554,6 @@ export default function UpdateStudent() {
             defaultValue={fatherNumber}
             id="name"
             placeholder=""
-            required
           />
         </div>
         {/* parent email */}
@@ -493,7 +568,6 @@ export default function UpdateStudent() {
             defaultValue={parent_email}
             id="name"
             placeholder=""
-            required
           />
         </div>
         {/* Academic Details */}
@@ -503,7 +577,7 @@ export default function UpdateStudent() {
         >
           Academic Details
         </div>
-        {dept_state && (
+        {dept_state ? (
           <div className="col-md-6">
             <label className="form-label">Departments</label>
             <select
@@ -513,7 +587,37 @@ export default function UpdateStudent() {
               value={dept_state}
               onChange={(e) => setDept_state(e.target.value)}
               // defaultValue={dept_id}
-              required
+            >
+              <option value="">Select department</option>
+              {departments?.map((dept) => (
+                <option key={dept?._id} value={dept?._id}>
+                  {dept?.dept_name}
+                </option>
+              ))}
+
+              {/* <option value="Qaidah, Quran & Islamic Studies">
+                Qaidah, Quran & Islamic Studies
+              </option>
+              <option value="Primary Maths & English Tuition">
+                Primary Maths & English Tuition
+              </option>
+              <option value="GCSE Maths English & Science Tuition">
+                GCSE Maths English & Science Tuition
+              </option>
+              <option value="Hifz Memorisation">Hifz Memorisation</option>
+              <option value="Arabic Language">Arabic Language</option> */}
+            </select>
+          </div>
+        ) : (
+          <div className="col-md-6">
+            <label className="form-label">Departments</label>
+            <select
+              name="std_department"
+              style={{ borderColor: "var(--border2)" }}
+              className="form-control bg-light"
+              value={dept_state}
+              onChange={(e) => setDept_state(e.target.value)}
+              // defaultValue={dept_id}
             >
               <option value="">Select department</option>
               {departments?.map((dept) => (
@@ -538,14 +642,29 @@ export default function UpdateStudent() {
         )}
 
         {/* session */}
-        {session_state && (
+        {session_state ? (
           <div className="col-md-6">
             <label className="form-label">Session</label>
             <select
               name="std_session"
               style={{ borderColor: "var(--border2)" }}
               className="form-control bg-light"
-              required
+              value={session_state}
+              onChange={(e) => setSession_state(e.target.value)}
+              // defaultValue={session}
+            >
+              <option value="">Select Session</option>
+              <option value="weekdays">Weekdays</option>
+              <option value="weekend">Weekend</option>
+            </select>
+          </div>
+        ) : (
+          <div className="col-md-6">
+            <label className="form-label">Session</label>
+            <select
+              name="std_session"
+              style={{ borderColor: "var(--border2)" }}
+              className="form-control bg-light"
               value={session_state}
               onChange={(e) => setSession_state(e.target.value)}
               // defaultValue={session}
@@ -565,7 +684,6 @@ export default function UpdateStudent() {
               name="std_time"
               style={{ borderColor: "var(--border2)" }}
               className="form-control bg-light"
-              required
               value={time_state}
               onChange={(e) => setTime_state(e.target.value)}
               // defaultValue={time}
@@ -595,8 +713,6 @@ export default function UpdateStudent() {
               name="std_time"
               style={{ borderColor: "var(--border2)" }}
               className="form-control bg-light"
-              required
-              value={time_state}
               onChange={(e) => setTime_state(e.target.value)}
               // defaultValue={time}
             >
@@ -630,7 +746,7 @@ export default function UpdateStudent() {
             defaultValue={studentClass === null ? "Not Provided" : studentClass}
             name="student_class"
             placeholder=""
-            required
+            
           />
         </div> */}
 
@@ -689,7 +805,6 @@ export default function UpdateStudent() {
             name="doctor_name"
             id="name"
             placeholder=""
-            required
           />
         </div>
         {/* address */}
@@ -703,7 +818,6 @@ export default function UpdateStudent() {
             id="name"
             defaultValue={surgeryAddress}
             placeholder=""
-            required
           />
         </div>
         {/* surgery contact */}
@@ -717,7 +831,6 @@ export default function UpdateStudent() {
             name="surgery_number"
             id="name"
             placeholder=""
-            required
           />
         </div>
         {/* known allergy */}
@@ -731,7 +844,6 @@ export default function UpdateStudent() {
             name="allergies"
             id="name"
             placeholder=""
-            required
           />
         </div>
         {/* medical condition */}
@@ -745,7 +857,6 @@ export default function UpdateStudent() {
             name="medical_condition"
             id="name"
             placeholder=""
-            required
           />
         </div>
         {/* starting date */}
@@ -757,7 +868,6 @@ export default function UpdateStudent() {
             className="form-control bg-light"
             type="date"
             name="starting_date"
-            required
           />
         </div>
 
