@@ -242,7 +242,7 @@ export default function InactiveStudents() {
                           border: "none",
                           cursor: "pointer",
                         }}
-                        onClick={(e) => toggleActions(e, teacher._id)}
+                        onClick={(e) => toggleActions(e, student._id)}
                         ref={setReferenceElement}
                       >
                         <FaChevronCircleDown />

@@ -558,7 +558,37 @@ export default function UpdateStudent() {
         )}
 
         {/* time */}
-        {time_state && (
+        {time_state ? (
+          <div className="col-md-6">
+            <label className="form-label">Session Time</label>
+            <select
+              name="std_time"
+              style={{ borderColor: "var(--border2)" }}
+              className="form-control bg-light"
+              required
+              value={time_state}
+              onChange={(e) => setTime_state(e.target.value)}
+              // defaultValue={time}
+            >
+              <option value="">Select Session Time</option>
+              {dept_state && session_state === "weekdays" ? (
+                <>
+                  <option value="S1">Early - 4:30 PM – 6:00 PM (1½ hrs)</option>
+                  <option value="S2">Late - 5:45 PM – 7:15 PM (1½ hrs)</option>
+                </>
+              ) : dept_state && session_state === "weekend" ? (
+                <>
+                  <option value="WM">
+                    Morning - 10:00 AM – 12:30 PM (1½ hrs)
+                  </option>
+                  <option value="WA">
+                    Afternoon - 12:30 PM – 2:30 PM (1½ hrs)
+                  </option>
+                </>
+              ) : null}
+            </select>
+          </div>
+        ) : (
           <div className="col-md-6">
             <label className="form-label">Session Time</label>
             <select
