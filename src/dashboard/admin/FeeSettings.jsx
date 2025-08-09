@@ -46,8 +46,8 @@ export default function FeeSettings() {
     };
   });
   // Keep all your original queries
-  const { data: fees } = useGetFeesByStatusQuery("paid");
-  const { data: familiesByStatus } = useGetEnrolledFullFamilyWithFeesQuery();
+  const { data: familiesByStatus, isLoadingFee } =
+    useGetEnrolledFullFamilyWithFeesQuery();
   const {
     data: families,
     isLoading,
@@ -104,9 +104,67 @@ export default function FeeSettings() {
   };
 
   // Modify getPaymentStatus to use selected year
-  const getPaymentStatus = (student, month, feePayments) => {
-    const monthStr = month.toString().padStart(2, "0");
+  // const getPaymentStatus = (student, month, feePayments) => {
+  //   const monthStr = month.toString().padStart(2, "0");
 
+  //   if (!student.startingDate) return "unpaid";
+
+  //   const joining = new Date(student.startingDate);
+  //   const joiningMonth = joining.getMonth() + 1;
+  //   const joiningYear = joining.getFullYear();
+
+  //   // Skip if student joined after this month/year
+  //   if (
+  //     selectedYear < joiningYear ||
+  //     (selectedYear === joiningYear && month < joiningMonth)
+  //   ) {
+  //     return null;
+  //   }
+
+  //   // Check all payment types that could cover admission
+  //   const admissionPayments = feePayments?.filter(
+  //     (payment) =>
+  //       payment.paymentType === "admission" ||
+  //       payment.paymentType === "admissionOnHold"
+  //   );
+
+  //   // If this is the joining month, check admission payments
+  //   if (selectedYear === joiningYear && month === joiningMonth) {
+  //     for (const payment of admissionPayments || []) {
+  //       const studentPayment = payment.students?.find(
+  //         (s) => s.studentId === student._id
+  //       );
+  //       if (studentPayment) {
+  //         return payment.status; // Return the actual status (paid/pending)
+  //       }
+  //     }
+  //     return "unpaid"; // No admission payment found
+  //   }
+
+  //   // Check regular monthly payments
+  //   for (const payment of feePayments || []) {
+  //     if (
+  //       payment.paymentType === "monthly" ||
+  //       payment.paymentType === "monthlyOnHold"
+  //     ) {
+  //       const studentPayment = payment.students?.find(
+  //         (s) => s.studentId === student._id
+  //       );
+  //       if (studentPayment?.monthsPaid) {
+  //         const monthPaid = studentPayment.monthsPaid.find(
+  //           (m) => m.month === monthStr && m.year === selectedYear
+  //         );
+  //         if (monthPaid) {
+  //           return payment.status; // paid or pending
+  //         }
+  //       }
+  //     }
+  //   }
+
+  //   return "unpaid";
+  // };
+
+  const getPaymentStatus = (student, month, feePayments) => {
     if (!student.startingDate) return "unpaid";
 
     const joining = new Date(student.startingDate);
@@ -121,49 +179,35 @@ export default function FeeSettings() {
       return null;
     }
 
-    // Check all payment types that could cover admission
-    const admissionPayments = feePayments?.filter(
-      (payment) =>
-        payment.paymentType === "admission" ||
-        payment.paymentType === "admissionOnHold"
-    );
+    // Convert to comparable formats
+    const targetMonth = month.toString();
+    const targetYear = selectedYear.toString();
+    const targetMonthPadded = month.toString().padStart(2, "0");
 
-    // If this is the joining month, check admission payments
-    if (selectedYear === joiningYear && month === joiningMonth) {
-      for (const payment of admissionPayments || []) {
-        const studentPayment = payment.students?.find(
-          (s) => s.studentId === student._id
-        );
-        if (studentPayment) {
-          return payment.status; // Return the actual status (paid/pending)
-        }
-      }
-      return "unpaid"; // No admission payment found
-    }
-
-    // Check regular monthly payments
     for (const payment of feePayments || []) {
-      if (
-        payment.paymentType === "monthly" ||
-        payment.paymentType === "monthlyOnHold"
-      ) {
-        const studentPayment = payment.students?.find(
-          (s) => s.studentId === student._id
+      if (payment.paymentType !== "monthly") continue;
+
+      const studentPayment = payment.students?.find(
+        (s) => String(s.studentId) === String(student._id)
+      );
+
+      if (studentPayment?.monthsPaid) {
+        const isPaid = studentPayment.monthsPaid.some(
+          (m) =>
+            // Compare with both padded and unpadded month
+            (String(m.month) === targetMonth ||
+              String(m.month) === targetMonthPadded) &&
+            String(m.year) === targetYear
         );
-        if (studentPayment?.monthsPaid) {
-          const monthPaid = studentPayment.monthsPaid.find(
-            (m) => m.month === monthStr && m.year === selectedYear
-          );
-          if (monthPaid) {
-            return payment.status; // paid or pending
-          }
-        }
+
+        if (isPaid) return payment.status;
       }
     }
 
     return "unpaid";
   };
-  if (isLoading || loading) {
+
+  if (isLoading || loading || isLoadingFee) {
     return <LoadingSpinnerDash />;
   }
 
@@ -317,7 +361,7 @@ export default function FeeSettings() {
             )
           ) : (
             <tr>
-              <td colSpan={16} className="text-center py-4">
+              <td colSpan={17} className="text-center py-4">
                 <h5>No enrolled families found</h5>
               </td>
             </tr>
