@@ -175,7 +175,9 @@ export default function ActiveStudents() {
     <div>
       <div className="row mb-4 align-items-center">
         <div className="col-md-6">
-          <h3 className="fs-2 fw-bold">Active Students</h3>
+          <h3 className="fs-2 fw-bold">
+            Active Students ({students.length} students)
+          </h3>
         </div>
         <div className="col-md-6 mt-3 mt-md-0">
           <input

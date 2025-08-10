@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   useDeleteFamilyDataMutation,
   useGetEnrolledFullFamilyWithFeesQuery,
@@ -39,6 +39,7 @@ export default function FeeSettings() {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const { user, loading } = useAuth();
   const [deleteFamilyData] = useDeleteFamilyDataMutation();
+  const [searchTerm, setSearchTerm] = useState("");
 
   // Generate year options (current year ± 2 years)
   const yearOptions = Array.from({ length: 5 }, (_, i) => {
@@ -85,7 +86,21 @@ export default function FeeSettings() {
   const handleClose = () => setShowModal(false);
   const handleAdminClose = () => setAdminShowModal(false);
   const handleAdminManualClose = () => setAdminManualShowModal(false);
+  const filteredFamilies = useMemo(() => {
+    if (!familiesByStatus) return [];
+    if (!searchTerm.trim()) return familiesByStatus;
 
+    const term = searchTerm.toLowerCase();
+    return familiesByStatus.filter((family) => {
+      // Search family name
+      if (family.name.toLowerCase().includes(term)) return true;
+
+      // Search student names
+      return family.childrenDocs?.some((student) =>
+        student.name.toLowerCase().includes(term)
+      );
+    });
+  }, [familiesByStatus, searchTerm]);
   const handleDelete = (id) => {
     Swal.fire({
       title: "Are you sure?",
@@ -236,8 +251,24 @@ export default function FeeSettings() {
   return (
     <div className=" mb-3">
       {/* Year Selection Dropdown */}
-      <div className="d-flex justify-content-end mb-3">
-        <div className="input-group" style={{ width: "150px" }}>
+      <div className="d-flex justify-content-end mb-3 gap-5">
+        <div className="input-group">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Search families or students..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <button
+            className="btn btn-outline-secondary"
+            type="button"
+            onClick={() => setSearchTerm("")}
+          >
+            Clear
+          </button>
+        </div>
+        <div className="input-group">
           <label className="input-group-text">Year:</label>
           <select
             className="form-select"
@@ -300,8 +331,8 @@ export default function FeeSettings() {
           </tr>
         </thead>
         <tbody>
-          {familiesByStatus?.length > 0 ? (
-            familiesByStatus.flatMap((family, familyIdx) =>
+          {filteredFamilies?.length > 0 ? (
+            filteredFamilies.flatMap((family, familyIdx) =>
               family.childrenDocs?.map((student, studentIdx) => (
                 <tr key={`${family._id}-${student._id}`}>
                   {studentIdx === 0 && (
