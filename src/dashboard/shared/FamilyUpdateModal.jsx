@@ -14,6 +14,7 @@ export default function FamilyUpdateModal({
   handleClose,
   showModal,
   refetch: familiesRefetch,
+  refetchFee,
 }) {
   // const axiosPublic = useAxiosPublic();
   const [updateFamilyData] = useUpdateFamilyDataMutation();
@@ -88,6 +89,7 @@ export default function FamilyUpdateModal({
         handleClose();
         refetch();
         familiesRefetch();
+        refetchFee();
       }
 
       // }

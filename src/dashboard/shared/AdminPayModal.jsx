@@ -18,6 +18,7 @@ export default function AdminPayModal({
   handleAdminClose,
   adminShowModal,
   refetch: familiesRefetch,
+  refetchFee,
 }) {
   const [unpaidRows, setUnpaidRows] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
@@ -135,6 +136,7 @@ export default function AdminPayModal({
           `Payment of $${grandTotal.toFixed(2)} recorded successfully`
         );
         familiesRefetch();
+        refetchFee();
         handleAdminClose();
       }
     } catch (error) {

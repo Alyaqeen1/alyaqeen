@@ -126,7 +126,6 @@ export default function UpdateStudent() {
     //   setLoading(false); // ✅ Block double click
     //   return toast.error("Starting date cannot be in the past");
     // }
-
     const studentData = {
       name: student_name,
       dob: student_dob,
@@ -164,21 +163,21 @@ export default function UpdateStudent() {
       monthly_fee,
     };
 
-    if (monthly_fee) {
-      // const { data } = await axiosPublic.put(`/students/${id}`, studentData);
-      const data = await updateAllStudentData({ id, studentData }).unwrap();
-      if (data.modifiedCount) {
-        Swal.fire({
-          position: "center",
-          icon: "success",
-          title: "Student updated successfully",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-        refetch();
-      }
+    // if (monthly_fee) {
+    // const { data } = await axiosPublic.put(`/students/${id}`, studentData);
+    const data = await updateAllStudentData({ id, studentData }).unwrap();
+    if (data.modifiedCount) {
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Student updated successfully",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      refetch();
     }
   };
+  // };
   const handleStatus = async (newStatus) => {
     if (newStatus === "approved" && !class_id) {
       Swal.fire({

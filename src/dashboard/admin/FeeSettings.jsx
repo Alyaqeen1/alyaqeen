@@ -11,6 +11,7 @@ import Swal from "sweetalert2";
 import FamilyUpdateModal from "../shared/FamilyUpdateModal";
 import AdminPayModal from "../shared/AdminPayModal";
 import { useGetFeesByStatusQuery } from "../../redux/features/fees/feesApi";
+import AdminManualPayModal from "../shared/AdminManualPayModal";
 
 const PaymentStatusCell = ({ status }) => {
   const statusConfig = {
@@ -31,8 +32,10 @@ const PaymentStatusCell = ({ status }) => {
 export default function FeeSettings() {
   const [showModal, setShowModal] = useState(false);
   const [adminShowModal, setAdminShowModal] = useState(false);
+  const [adminManualShowModal, setAdminManualShowModal] = useState(false);
   const [selectedFamilyId, setSelectedFamilyId] = useState(null);
   const [selectedAdminFamilyId, setSelectedAdminFamilyId] = useState(null);
+  const [selectedAdminFamilyId2, setSelectedAdminFamilyId2] = useState(null);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const { user, loading } = useAuth();
   const [deleteFamilyData] = useDeleteFamilyDataMutation();
@@ -46,8 +49,11 @@ export default function FeeSettings() {
     };
   });
   // Keep all your original queries
-  const { data: familiesByStatus, isLoadingFee } =
-    useGetEnrolledFullFamilyWithFeesQuery();
+  const {
+    data: familiesByStatus,
+    isLoading: isLoadingFee,
+    refetch: refetchFee,
+  } = useGetEnrolledFullFamilyWithFeesQuery();
   const {
     data: families,
     isLoading,
@@ -71,9 +77,14 @@ export default function FeeSettings() {
     setSelectedAdminFamilyId(id);
     setAdminShowModal(true);
   };
+  const handleAdminManualShow = (id) => {
+    setSelectedAdminFamilyId2(id);
+    setAdminManualShowModal(true);
+  };
 
   const handleClose = () => setShowModal(false);
   const handleAdminClose = () => setAdminShowModal(false);
+  const handleAdminManualClose = () => setAdminManualShowModal(false);
 
   const handleDelete = (id) => {
     Swal.fire({
@@ -97,6 +108,7 @@ export default function FeeSettings() {
                 icon: "success",
               });
               refetch();
+              refetchFee();
             }
           });
       }
@@ -181,20 +193,30 @@ export default function FeeSettings() {
 
     // Convert to comparable formats
     const targetMonth = month.toString();
-    const targetYear = selectedYear.toString();
     const targetMonthPadded = month.toString().padStart(2, "0");
+    const targetYear = selectedYear.toString();
 
+    // Check all fee payments for this student
     for (const payment of feePayments || []) {
-      if (payment.paymentType !== "monthly") continue;
-
       const studentPayment = payment.students?.find(
         (s) => String(s.studentId) === String(student._id)
       );
 
-      if (studentPayment?.monthsPaid) {
+      if (!studentPayment) continue;
+
+      // Check admission payments (for joining month only)
+      if (
+        payment.paymentType === "admission" &&
+        selectedYear === joiningYear &&
+        month === joiningMonth
+      ) {
+        return payment.status;
+      }
+
+      // Check monthly payments
+      if (payment.paymentType === "monthly" && studentPayment.monthsPaid) {
         const isPaid = studentPayment.monthsPaid.some(
           (m) =>
-            // Compare with both padded and unpadded month
             (String(m.month) === targetMonth ||
               String(m.month) === targetMonthPadded) &&
             String(m.year) === targetYear
@@ -345,13 +367,26 @@ export default function FeeSettings() {
                               <FaTrashAlt />
                             </button>
                           </div>
-                          <button
-                            className="text-white py-1 px-3 rounded-2"
-                            style={{ backgroundColor: "var(--border2)" }}
-                            onClick={() => handleAdminShow(family._id)}
-                          >
-                            Pay
-                          </button>
+                          <div className="d-flex flex-column gap-2 justify-content-center align-items-center h-100">
+                            <div className="d-flex gap-1 justify-content-center align-items-center">
+                              <button
+                                className="text-white py-1 px-2 rounded-2"
+                                style={{ backgroundColor: "var(--border2)" }}
+                                onClick={() => handleAdminShow(family._id)}
+                              >
+                                Pay
+                              </button>
+                              <button
+                                className="text-white py-1 px-2 rounded-2"
+                                style={{ backgroundColor: "var(--border2)" }}
+                                onClick={() =>
+                                  handleAdminManualShow(family._id)
+                                }
+                              >
+                                Manual
+                              </button>
+                            </div>
+                          </div>
                         </div>
                       </td>
                     </>
@@ -377,6 +412,17 @@ export default function FeeSettings() {
           adminShowModal={adminShowModal}
           handleAdminClose={handleAdminClose}
           refetch={refetch}
+          refetchFee={refetchFee}
+        />
+      )}
+      {selectedAdminFamilyId2 && (
+        <AdminManualPayModal
+          key={`admin-pay-${selectedAdminFamilyId2}`}
+          familyId={selectedAdminFamilyId2}
+          adminShowModal={adminManualShowModal}
+          handleAdminClose={handleAdminManualClose}
+          refetch={refetch}
+          refetchFee={refetchFee}
         />
       )}
 
@@ -386,6 +432,7 @@ export default function FeeSettings() {
         showModal={showModal}
         handleClose={handleClose}
         refetch={refetch}
+        refetchFee={refetchFee}
       />
     </div>
   );
