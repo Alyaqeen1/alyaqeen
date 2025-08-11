@@ -388,18 +388,31 @@ export default function StudentAttendanceAdmin() {
                                 {!status && (
                                   <div className="d-flex justify-content-center gap-1">
                                     <button
+                                      style={{
+                                        width: 25,
+                                        height: 25,
+                                      }}
                                       className="btn btn-sm btn-success"
                                       onClick={() =>
                                         saveStatus(stu._id, dateISO, "present")
                                       }
                                     />
                                     <button
+                                      style={{
+                                        width: 25,
+                                        height: 25,
+                                      }}
                                       className="btn btn-sm btn-primary border border-white"
                                       onClick={() =>
                                         saveStatus(stu._id, dateISO, "late")
                                       }
                                     />
                                     <button
+                                      style={{
+                                        width: 25,
+                                        height: 25,
+                                        // borderRadius: "50%",
+                                      }}
                                       className="btn btn-sm btn-danger border border-white"
                                       onClick={() =>
                                         saveStatus(stu._id, dateISO, "absent")
@@ -425,6 +438,11 @@ export default function StudentAttendanceAdmin() {
 
                                     <div className="position-absolute start-0 ms-1 d-flex gap-1">
                                       <button
+                                        style={{
+                                          width: 15,
+                                          height: 15,
+                                          borderRadius: 50,
+                                        }}
                                         className={`btn btn-xs p-1 border border-white ${
                                           status === "present"
                                             ? "btn-light"
@@ -435,6 +453,11 @@ export default function StudentAttendanceAdmin() {
                                         }
                                       />
                                       <button
+                                        style={{
+                                          width: 15,
+                                          height: 15,
+                                          borderRadius: 50,
+                                        }}
                                         className={`btn btn-xs p-1 border border-white ${
                                           status === "late"
                                             ? "btn-light"
@@ -445,6 +468,11 @@ export default function StudentAttendanceAdmin() {
                                         }
                                       />
                                       <button
+                                        style={{
+                                          width: 15,
+                                          height: 15,
+                                          borderRadius: 50,
+                                        }}
                                         className={`btn btn-xs p-1 border border-white ${
                                           status === "absent"
                                             ? "btn-light"

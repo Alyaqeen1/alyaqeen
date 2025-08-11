@@ -42,6 +42,7 @@ export default function Admissions() {
     }).then((result) => {
       if (result.isConfirmed) {
         deleteStudentData(id)
+          .unwrap()
           .then((res) => {
             // You can optionally check res.status === 200
             if (res?.deletedCount) {

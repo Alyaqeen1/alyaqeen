@@ -151,65 +151,15 @@ export default function ParentDashboard({ family, refetch }) {
       );
     }
 
-    // if (!approvedStudents || approvedStudents.length === 0) {
-    //   return Swal.fire("No approved students to process", "", "info");
-    // }
-
-    // ✅ Use each student's actual monthly_fee
-    // const feeDetails = approvedStudents.map((student) => {
-    //   const studentMonthlyFee = student.monthly_fee || 0;
-    //   const subtotal = admissionFee + studentMonthlyFee;
-    //   return {
-    //     name: student.name,
-    //     admissionFee,
-    //     monthlyFee: studentMonthlyFee,
-    //     subtotal,
-    //   };
-    // });
-    // alternative one if only for the third child will get 10% discount
-    // const feeDetails = approvedStudents.map((student, index) => {
-    //   const baseAdmissionFee = 20;
-    //   const isThirdOrLaterStudent = index >= 2;
-    //   const studentAdmissionFee = isThirdOrLaterStudent
-    //     ? baseAdmissionFee * 0.9
-    //     : baseAdmissionFee;
-
-    //   const monthlyFee = student.monthly_fee || 0;
-
-    //   // Calculate pro-rated monthly fee if applicable
-    //   const startDate = new Date(student.startingDate);
-    //   const joinDate = startDate.getDate();
-    //   let adjustedMonthlyFee = monthlyFee;
-
-    //   if (family.feeChoice === "proRated" && joinDate > 10) {
-    //     if (joinDate <= 20) {
-    //       adjustedMonthlyFee = (2 / 3) * monthlyFee;
-    //     } else {
-    //       adjustedMonthlyFee = (1 / 3) * monthlyFee;
-    //     }
-    //   }
-
-    //   const subtotal = studentAdmissionFee + adjustedMonthlyFee;
-
-    //   return {
-    //     name: student.name,
-    //     admissionFee: studentAdmissionFee,
-    //     monthlyFee: adjustedMonthlyFee,
-    //     subtotal,
-    //   };
-    // });
-
-    // const grandTotal = feeDetails.reduce((acc, cur) => acc + cur.subtotal, 0);
-
     const tableHTML = `
-    <div class="table-responsive">
-      <table class="table table-bordered" style="width: 100%; border-collapse: collapse;">
+    <div class="table-responsive" style="overflow-x: auto;">
+      <table class="table table-bordered" style="width: 100%; border-collapse: collapse; min-width: 300px;">
         <thead>
           <tr style="background-color: #444; color: #fff;">
-            <th style="padding: 6px; border: 1px solid #ccc;">Child Name</th>
-            <th style="padding: 6px; border: 1px solid #ccc;">Admission Fee ($)</th>
-            <th style="padding: 6px; border: 1px solid #ccc;">Monthly Fee ($)</th>
-            <th style="padding: 6px; border: 1px solid #ccc;">Subtotal ($)</th>
+            <th style="padding: 8px 4px; border: 1px solid #ccc; white-space: nowrap;">Child Name</th>
+            <th style="padding: 8px 4px; border: 1px solid #ccc; white-space: nowrap;">Admission Fee ($)</th>
+            <th style="padding: 8px 4px; border: 1px solid #ccc; white-space: nowrap;">Monthly Fee ($)</th>
+            <th style="padding: 8px 4px; border: 1px solid #ccc; white-space: nowrap;">Subtotal ($)</th>
           </tr>
         </thead>
         <tbody>
@@ -217,16 +167,16 @@ export default function ParentDashboard({ family, refetch }) {
             .map(
               (child) => `
             <tr>
-              <td style="padding: 6px; border: 1px solid #ccc;">${
+              <td style="padding: 8px 4px; border: 1px solid #ccc; white-space: nowrap;">${
                 child.name
               }</td>
-              <td style="padding: 6px; border: 1px solid #ccc;">${child.admissionFee.toFixed(
+              <td style="padding: 8px 4px; border: 1px solid #ccc; white-space: nowrap;">${child.admissionFee.toFixed(
                 2
               )}</td>
-              <td style="padding: 6px; border: 1px solid #ccc;">${child.monthlyFee.toFixed(
+              <td style="padding: 8px 4px; border: 1px solid #ccc; white-space: nowrap;">${child.monthlyFee.toFixed(
                 2
               )}</td>
-              <td style="padding: 6px; border: 1px solid #ccc;">${child.subtotal.toFixed(
+              <td style="padding: 8px 4px; border: 1px solid #ccc; white-space: nowrap;">${child.subtotal.toFixed(
                 2
               )}</td>
             </tr>
@@ -235,7 +185,7 @@ export default function ParentDashboard({ family, refetch }) {
             .join("")}
         </tbody>
       </table>
-      <div style="text-align: right; margin-top: 10px; font-weight: bold;">
+      <div style="text-align: right; margin-top: 10px; font-weight: bold; white-space: nowrap;">
         Grand Total: $${grandTotal.toFixed(2)}
       </div>
     </div>
@@ -244,7 +194,8 @@ export default function ParentDashboard({ family, refetch }) {
     const result = await Swal.fire({
       title: `Confirm Payment via ${method}`,
       html: tableHTML,
-      width: "60%",
+      width: "90%", // More responsive width
+      maxWidth: "800px", // But don't get too wide on desktop
       showCancelButton: true,
       confirmButtonText: "Confirm",
       cancelButtonText: "Cancel",

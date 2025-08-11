@@ -252,16 +252,31 @@ export default function StaffAttendance() {
                         {!status && hoverKey === cellKey && (
                           <div className="d-flex justify-content-center gap-1">
                             <button
+                              style={{
+                                width: 25,
+                                height: 25,
+                                // borderRadius: "50%",
+                              }}
                               className="btn btn-sm btn-success"
                               onClick={() =>
                                 saveStatus(t._id, dateISO, "present")
                               }
                             />
                             <button
+                              style={{
+                                width: 25,
+                                height: 25,
+                                // borderRadius: "50%",
+                              }}
                               className="btn btn-sm btn-primary border border-white"
                               onClick={() => saveStatus(t._id, dateISO, "late")}
                             />
                             <button
+                              style={{
+                                width: 25,
+                                height: 25,
+                                // borderRadius: "50%",
+                              }}
                               className="btn btn-sm btn-danger border border-white"
                               onClick={() =>
                                 saveStatus(t._id, dateISO, "absent")
