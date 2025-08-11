@@ -161,8 +161,13 @@ export default function StaffAttendance() {
       </div>
 
       {/* ───── Table ───── */}
-      <div className="border border-black p-3">
-        <table className="table mb-0">
+      <div className="table-responsive mb-3">
+        <table
+          className="table mb-0"
+          style={{
+            minWidth: 700,
+          }}
+        >
           <thead>
             <tr>
               <th

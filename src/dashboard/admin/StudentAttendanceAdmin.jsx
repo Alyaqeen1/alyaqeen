@@ -300,211 +300,225 @@ export default function StudentAttendanceAdmin() {
           </div> */}
         </div>
 
-        <table className="table mb-0">
-          <thead>
-            <tr>
-              <th
-                style={{ backgroundColor: "var(--border2)" }}
-                className="text-white text-center border"
-              >
-                #
-              </th>
-              <th
-                style={{ backgroundColor: "var(--border2)" }}
-                className="text-white text-center border"
-              >
-                Student Name
-              </th>
-              {weekDates.map((d) => (
+        <div className="table-responsive mb-3">
+          <table
+            className="table mb-0"
+            style={{
+              minWidth: 700,
+            }}
+          >
+            <thead>
+              <tr>
                 <th
-                  key={format(d, "yyyy-MM-dd")}
                   style={{ backgroundColor: "var(--border2)" }}
                   className="text-white text-center border"
                 >
-                  {format(d, "EEEE")} <br /> {format(d, "dd-MM-yyyy")}
+                  #
                 </th>
-              ))}
-            </tr>
-          </thead>
+                <th
+                  style={{ backgroundColor: "var(--border2)" }}
+                  className="text-white text-center border"
+                >
+                  Student Name
+                </th>
+                {weekDates.map((d) => (
+                  <th
+                    key={format(d, "yyyy-MM-dd")}
+                    style={{ backgroundColor: "var(--border2)" }}
+                    className="text-white text-center border"
+                  >
+                    {format(d, "EEEE")} <br /> {format(d, "dd-MM-yyyy")}
+                  </th>
+                ))}
+              </tr>
+            </thead>
 
-          <tbody>
-            {students.length ? (
-              students.map((stu, idx) => (
-                <tr key={stu._id}>
-                  <td className="text-center border align-middle">{idx + 1}</td>
-                  <td className="text-center border align-middle">
-                    {stu.name}
-                  </td>
+            <tbody>
+              {students.length ? (
+                students.map((stu, idx) => (
+                  <tr key={stu._id}>
+                    <td className="text-center border align-middle">
+                      {idx + 1}
+                    </td>
+                    <td className="text-center border align-middle">
+                      {stu.name}
+                    </td>
 
-                  {weekDates.map((date) => {
-                    const dateISO = format(date, "yyyy-MM-dd");
-                    const cellKey = `${stu._id}-${dateISO}`;
-                    const isHoliday = holidaySet.has(dateISO);
+                    {weekDates.map((date) => {
+                      const dateISO = format(date, "yyyy-MM-dd");
+                      const cellKey = `${stu._id}-${dateISO}`;
+                      const isHoliday = holidaySet.has(dateISO);
 
-                    // Find attendance record from global attendance list
-                    const record = attendances?.find(
-                      (a) => a.student_id === stu._id && a.date === dateISO
-                    );
-                    const status = record?.status;
+                      // Find attendance record from global attendance list
+                      const record = attendances?.find(
+                        (a) => a.student_id === stu._id && a.date === dateISO
+                      );
+                      const status = record?.status;
 
-                    const statusColor =
-                      status === "present"
-                        ? "bg-success"
-                        : status === "late"
-                        ? "bg-primary"
-                        : status === "absent"
-                        ? "bg-danger"
-                        : "";
+                      const statusColor =
+                        status === "present"
+                          ? "bg-success"
+                          : status === "late"
+                          ? "bg-primary"
+                          : status === "absent"
+                          ? "bg-danger"
+                          : "";
 
-                    return (
-                      <td
-                        key={dateISO}
-                        className={`text-center border align-middle position-relative ${
-                          status ? statusColor : ""
-                        }`}
-                        style={{
-                          minWidth: 90,
-                          backgroundColor: isHoliday ? "#eee" : undefined,
-                          color: isHoliday ? "#999" : undefined,
-                          cursor: isHoliday ? "not-allowed" : "pointer",
-                          opacity: isHoliday ? 0.6 : 1,
-                        }}
-                        onMouseEnter={() => setHoverKey(cellKey)}
-                        onMouseLeave={() => setHoverKey(null)}
-                      >
-                        {isHoliday ? (
-                          <span title="Holiday">—</span>
-                        ) : (
-                          <>
-                            {/* Content for non-hover state */}
-                            {!status && hoverKey !== cellKey && (
-                              <span>&nbsp;</span>
-                            )}
+                      return (
+                        <td
+                          key={dateISO}
+                          className={`text-center border align-middle position-relative ${
+                            status ? statusColor : ""
+                          }`}
+                          style={{
+                            minWidth: 90,
+                            backgroundColor: isHoliday ? "#eee" : undefined,
+                            color: isHoliday ? "#999" : undefined,
+                            cursor: isHoliday ? "not-allowed" : "pointer",
+                            opacity: isHoliday ? 0.6 : 1,
+                          }}
+                          onMouseEnter={() => setHoverKey(cellKey)}
+                          onMouseLeave={() => setHoverKey(null)}
+                        >
+                          {isHoliday ? (
+                            <span title="Holiday">—</span>
+                          ) : (
+                            <>
+                              {/* Content for non-hover state */}
+                              {!status && hoverKey !== cellKey && (
+                                <span>&nbsp;</span>
+                              )}
 
-                            {/* Hover elements - only show for this specific cell */}
-                            {hoverKey === cellKey && (
-                              <>
-                                {/* Show status buttons in center when no status is set */}
-                                {!status && (
-                                  <div className="d-flex justify-content-center gap-1">
-                                    <button
-                                      style={{
-                                        width: 25,
-                                        height: 25,
-                                      }}
-                                      className="btn btn-sm btn-success"
-                                      onClick={() =>
-                                        saveStatus(stu._id, dateISO, "present")
-                                      }
-                                    />
-                                    <button
-                                      style={{
-                                        width: 25,
-                                        height: 25,
-                                      }}
-                                      className="btn btn-sm btn-primary border border-white"
-                                      onClick={() =>
-                                        saveStatus(stu._id, dateISO, "late")
-                                      }
-                                    />
-                                    <button
-                                      style={{
-                                        width: 25,
-                                        height: 25,
-                                        // borderRadius: "50%",
-                                      }}
-                                      className="btn btn-sm btn-danger border border-white"
-                                      onClick={() =>
-                                        saveStatus(stu._id, dateISO, "absent")
-                                      }
-                                    />
-                                  </div>
-                                )}
-
-                                {/* Show trash and update buttons when status exists */}
-                                {status && (
-                                  <>
-                                    <FaTrashAlt
-                                      className="position-absolute end-0 me-1 text-white"
-                                      style={{
-                                        cursor: "pointer",
-                                        top: "50%",
-                                        transform: "translateY(-50%)",
-                                      }}
-                                      onClick={() =>
-                                        record?._id && removeStatus(record._id)
-                                      }
-                                    />
-
-                                    <div className="position-absolute start-0 ms-1 d-flex gap-1">
+                              {/* Hover elements - only show for this specific cell */}
+                              {hoverKey === cellKey && (
+                                <>
+                                  {/* Show status buttons in center when no status is set */}
+                                  {!status && (
+                                    <div className="d-flex justify-content-center gap-1">
                                       <button
                                         style={{
-                                          width: 15,
-                                          height: 15,
-                                          borderRadius: 50,
+                                          width: 25,
+                                          height: 25,
                                         }}
-                                        className={`btn btn-xs p-1 border border-white ${
-                                          status === "present"
-                                            ? "btn-light"
-                                            : "btn-success"
-                                        }`}
+                                        className="btn btn-sm btn-success"
                                         onClick={() =>
-                                          changeStatus(record._id, "present")
+                                          saveStatus(
+                                            stu._id,
+                                            dateISO,
+                                            "present"
+                                          )
                                         }
                                       />
                                       <button
                                         style={{
-                                          width: 15,
-                                          height: 15,
-                                          borderRadius: 50,
+                                          width: 25,
+                                          height: 25,
                                         }}
-                                        className={`btn btn-xs p-1 border border-white ${
-                                          status === "late"
-                                            ? "btn-light"
-                                            : "btn-primary"
-                                        }`}
+                                        className="btn btn-sm btn-primary border border-white"
                                         onClick={() =>
-                                          changeStatus(record._id, "late")
+                                          saveStatus(stu._id, dateISO, "late")
                                         }
                                       />
                                       <button
                                         style={{
-                                          width: 15,
-                                          height: 15,
-                                          borderRadius: 50,
+                                          width: 25,
+                                          height: 25,
+                                          // borderRadius: "50%",
                                         }}
-                                        className={`btn btn-xs p-1 border border-white ${
-                                          status === "absent"
-                                            ? "btn-light"
-                                            : "btn-danger"
-                                        }`}
+                                        className="btn btn-sm btn-danger border border-white"
                                         onClick={() =>
-                                          changeStatus(record._id, "absent")
+                                          saveStatus(stu._id, dateISO, "absent")
                                         }
                                       />
                                     </div>
-                                  </>
-                                )}
-                              </>
-                            )}
-                          </>
-                        )}
-                      </td>
-                    );
-                  })}
+                                  )}
+
+                                  {/* Show trash and update buttons when status exists */}
+                                  {status && (
+                                    <>
+                                      <FaTrashAlt
+                                        className="position-absolute end-0 me-1 text-white"
+                                        style={{
+                                          cursor: "pointer",
+                                          top: "50%",
+                                          transform: "translateY(-50%)",
+                                        }}
+                                        onClick={() =>
+                                          record?._id &&
+                                          removeStatus(record._id)
+                                        }
+                                      />
+
+                                      <div className="position-absolute start-0 ms-1 d-flex gap-1">
+                                        <button
+                                          style={{
+                                            width: 15,
+                                            height: 15,
+                                            borderRadius: 50,
+                                          }}
+                                          className={`btn btn-xs p-1 border border-white ${
+                                            status === "present"
+                                              ? "btn-light"
+                                              : "btn-success"
+                                          }`}
+                                          onClick={() =>
+                                            changeStatus(record._id, "present")
+                                          }
+                                        />
+                                        <button
+                                          style={{
+                                            width: 15,
+                                            height: 15,
+                                            borderRadius: 50,
+                                          }}
+                                          className={`btn btn-xs p-1 border border-white ${
+                                            status === "late"
+                                              ? "btn-light"
+                                              : "btn-primary"
+                                          }`}
+                                          onClick={() =>
+                                            changeStatus(record._id, "late")
+                                          }
+                                        />
+                                        <button
+                                          style={{
+                                            width: 15,
+                                            height: 15,
+                                            borderRadius: 50,
+                                          }}
+                                          className={`btn btn-xs p-1 border border-white ${
+                                            status === "absent"
+                                              ? "btn-light"
+                                              : "btn-danger"
+                                          }`}
+                                          onClick={() =>
+                                            changeStatus(record._id, "absent")
+                                          }
+                                        />
+                                      </div>
+                                    </>
+                                  )}
+                                </>
+                              )}
+                            </>
+                          )}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={weekDates.length + 2} className="text-center">
+                    {groupId
+                      ? "No students found."
+                      : "Select filters to view attendance."}
+                  </td>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan={weekDates.length + 2} className="text-center">
-                  {groupId
-                    ? "No students found."
-                    : "Select filters to view attendance."}
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
