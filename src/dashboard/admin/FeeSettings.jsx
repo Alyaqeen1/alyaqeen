@@ -28,6 +28,20 @@ const PaymentStatusCell = ({ status }) => {
     </td>
   );
 };
+// In your React component where you display dates:
+const formatDateToDmy = (dateStr) => {
+  if (!dateStr) return "N/A";
+
+  // Handle both YYYY-MM-DD and YYYY-DD-MM formats
+  const [part1, part2, part3] = dateStr.split("-");
+
+  // Determine which part is day/month/year (assuming year is always first)
+  const year = part1;
+  const day = part3?.length === 2 ? part3 : part2; // Fallback to part2 if needed
+  const month = part3?.length === 2 ? part2 : part3; // Fallback to part3 if needed
+
+  return `${day}-${month}-${year}`;
+};
 
 export default function FeeSettings() {
   const [showModal, setShowModal] = useState(false);
@@ -359,7 +373,7 @@ export default function FeeSettings() {
                     )}
                     <td className="border h6 text-center align-middle">
                       {student.name}
-                      <br />({student?.startingDate})
+                      <br />({formatDateToDmy(student?.startingDate)})
                     </td>
                     {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((month) => {
                       const status = getPaymentStatus(

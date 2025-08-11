@@ -7,6 +7,9 @@ export function getUnpaidFees({ students, fees, feeChoice, discount = 0 }) {
   const currentDate = now.getDate();
   const cutoffDay = 10;
   const cutoffDay2 = 1;
+  // set earliest month/year to bill
+  const earliestYear = 2025;
+  const earliestMonth = 9; // September
 
   const monthlyPaidMap = {};
 
@@ -98,11 +101,49 @@ export function getUnpaidFees({ students, fees, feeChoice, discount = 0 }) {
         payableMonth = 1;
         payableYear++;
       }
+      //If want old
 
+      // while (
+      //   payableYear < currentYear ||
+      //   (payableYear === currentYear && payableMonth <= currentMonth)
+      // ) {
+      //   const skipCurrentMonth =
+      //     payableYear === currentYear &&
+      //     payableMonth === currentMonth &&
+      //     currentDate < cutoffDay2;
+
+      //   if (!skipCurrentMonth) {
+      //     const monthStr = `${payableYear}-${payableMonth
+      //       .toString()
+      //       .padStart(2, "0")}`;
+      //     addUnpaidMonth(monthStr);
+      //   }
+
+      //   payableMonth++;
+      //   if (payableMonth > 12) {
+      //     payableMonth = 1;
+      //     payableYear++;
+      //   }
+      // }
+
+      // If want new
       while (
         payableYear < currentYear ||
         (payableYear === currentYear && payableMonth <= currentMonth)
       ) {
+        // Skip months before September 2025
+        if (
+          payableYear < earliestYear ||
+          (payableYear === earliestYear && payableMonth < earliestMonth)
+        ) {
+          payableMonth++;
+          if (payableMonth > 12) {
+            payableMonth = 1;
+            payableYear++;
+          }
+          continue;
+        }
+
         const skipCurrentMonth =
           payableYear === currentYear &&
           payableMonth === currentMonth &&
