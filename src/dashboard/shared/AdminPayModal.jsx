@@ -274,7 +274,7 @@ export default function AdminPayModal({
                           className="list-group-item d-flex justify-content-between"
                         >
                           <span>{row.month}</span>
-                          <span>€{row.totalAmount.toFixed(2)}</span>
+                          <span>£{row.totalAmount.toFixed(2)}</span>
                         </li>
                       ))}
                     </ul>

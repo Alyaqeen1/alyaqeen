@@ -399,7 +399,7 @@ export default function FeeSettings() {
                           rowSpan={family.childrenDocs?.length}
                           className="border h6 text-center align-middle"
                         >
-                          €
+                          £
                           {family.childrenDocs
                             ? family.childrenDocs.reduce(
                                 (total, student) =>
