@@ -284,156 +284,174 @@ export default function FeeSettings() {
         </div>
       </div>
 
-      <table className="table mb-0 table-responsive" style={{ minWidth: 700 }}>
-        <thead>
-          <tr>
-            <th
-              style={{ backgroundColor: "var(--border2)" }}
-              className="font-danger text-white fw-bolder border h6 text-center align-middle"
-            >
-              #
-            </th>
-            <th
-              style={{ backgroundColor: "var(--border2)" }}
-              className="font-danger text-white fw-bolder border h6 text-center align-middle"
-            >
-              Family
-            </th>
-            <th
-              style={{ backgroundColor: "var(--border2)" }}
-              className="font-danger text-white fw-bolder border h6 text-center align-middle"
-            >
-              Student
-            </th>
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((month) => (
+      <div className="table-responsive mb-3">
+        <table
+          className="table mb-0"
+          style={{
+            minWidth: 700,
+          }}
+        >
+          <thead>
+            <tr>
               <th
-                key={month}
                 style={{ backgroundColor: "var(--border2)" }}
                 className="font-danger text-white fw-bolder border h6 text-center align-middle"
               >
-                {new Date(2025, month - 1).toLocaleString("default", {
-                  month: "short",
-                })}
+                #
               </th>
-            ))}
-            <th
-              style={{ backgroundColor: "var(--border2)" }}
-              className="font-danger text-white fw-bolder border h6 text-center align-middle"
-            >
-              Discount
-            </th>
-            <th
-              style={{ backgroundColor: "var(--border2)" }}
-              className="font-danger text-white fw-bolder border h6 text-center align-middle"
-            >
-              Actions
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredFamilies?.length > 0 ? (
-            filteredFamilies.flatMap((family, familyIdx) =>
-              family.childrenDocs?.map((student, studentIdx) => (
-                <tr key={`${family._id}-${student._id}`}>
-                  {studentIdx === 0 && (
-                    <>
-                      <td
-                        rowSpan={family.childrenDocs?.length}
-                        className="border h6 text-center align-middle"
-                      >
-                        {familyIdx + 1}
-                      </td>
-                      <td
-                        rowSpan={family.childrenDocs?.length}
-                        className="border h6 text-center align-middle"
-                      >
-                        {family.name}
-                      </td>
-                    </>
-                  )}
-                  <td className="border h6 text-center align-middle">
-                    {student.name}
-                  </td>
-                  {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((month) => {
-                    const status = getPaymentStatus(
-                      student,
-                      month,
-                      family.feePayments
-                    );
-                    return status ? (
-                      <PaymentStatusCell key={month} status={status} />
-                    ) : (
-                      <td key={month} className="text-center align-middle p-1">
-                        —
-                      </td>
-                    );
+              <th
+                style={{ backgroundColor: "var(--border2)" }}
+                className="font-danger text-white fw-bolder border h6 text-center align-middle"
+              >
+                Family
+              </th>
+              <th
+                style={{ backgroundColor: "var(--border2)" }}
+                className="font-danger text-white fw-bolder border h6 text-center align-middle"
+              >
+                Student
+              </th>
+              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((month) => (
+                <th
+                  key={month}
+                  style={{ backgroundColor: "var(--border2)" }}
+                  className="font-danger text-white fw-bolder border h6 text-center align-middle"
+                >
+                  {new Date(2025, month - 1).toLocaleString("default", {
+                    month: "short",
                   })}
+                </th>
+              ))}
+              <th
+                style={{ backgroundColor: "var(--border2)" }}
+                className="font-danger text-white fw-bolder border h6 text-center align-middle"
+              >
+                Fee
+              </th>
+              <th
+                style={{ backgroundColor: "var(--border2)" }}
+                className="font-danger text-white fw-bolder border h6 text-center align-middle"
+              >
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredFamilies?.length > 0 ? (
+              filteredFamilies.flatMap((family, familyIdx) =>
+                family.childrenDocs?.map((student, studentIdx) => (
+                  <tr key={`${family._id}-${student._id}`}>
+                    {studentIdx === 0 && (
+                      <>
+                        <td
+                          rowSpan={family.childrenDocs?.length}
+                          className="border h6 text-center align-middle"
+                        >
+                          {familyIdx + 1}
+                        </td>
+                        <td
+                          rowSpan={family.childrenDocs?.length}
+                          className="border h6 text-center align-middle"
+                        >
+                          {family.name}
+                        </td>
+                      </>
+                    )}
+                    <td className="border h6 text-center align-middle">
+                      {student.name}
+                      <br />({student?.startingDate})
+                    </td>
+                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((month) => {
+                      const status = getPaymentStatus(
+                        student,
+                        month,
+                        family.feePayments
+                      );
+                      return status ? (
+                        <PaymentStatusCell key={month} status={status} />
+                      ) : (
+                        <td
+                          key={month}
+                          className="text-center align-middle p-1 bg-secondary-subtle"
+                        >
+                          N/A
+                        </td>
+                      );
+                    })}
 
-                  {studentIdx === 0 && (
-                    <>
-                      <td
-                        rowSpan={family.childrenDocs?.length}
-                        className="border h6 text-center align-middle"
-                      >
-                        {family.discount ? family.discount : 0}%
-                      </td>
-                      <td
-                        rowSpan={family.childrenDocs?.length}
-                        className="border text-center align-middle"
-                      >
-                        <div className="d-flex flex-column gap-2 justify-content-center align-items-center h-100">
-                          <div className="d-flex gap-2 justify-content-center align-items-center">
-                            <button
-                              className="text-white py-1 px-2 rounded-2"
-                              style={{ backgroundColor: "var(--border2)" }}
-                              onClick={() => handleShow(family._id)}
-                            >
-                              <FaPen />
-                            </button>
-                            <button
-                              className="text-white py-1 px-2 rounded-2"
-                              style={{ backgroundColor: "var(--border2)" }}
-                              onClick={() => handleDelete(family._id)}
-                            >
-                              <FaTrashAlt />
-                            </button>
-                          </div>
+                    {studentIdx === 0 && (
+                      <>
+                        <td
+                          rowSpan={family.childrenDocs?.length}
+                          className="border h6 text-center align-middle"
+                        >
+                          {family.childrenDocs
+                            ? family.childrenDocs.reduce(
+                                (total, student) =>
+                                  total + (student.monthly_fee || 0),
+                                0
+                              )
+                            : 0}
+                        </td>
+
+                        <td
+                          rowSpan={family.childrenDocs?.length}
+                          className="border text-center align-middle"
+                        >
                           <div className="d-flex flex-column gap-2 justify-content-center align-items-center h-100">
-                            <div className="d-flex gap-1 justify-content-center align-items-center">
+                            <div className="d-flex gap-2 justify-content-center align-items-center">
                               <button
                                 className="text-white py-1 px-2 rounded-2"
                                 style={{ backgroundColor: "var(--border2)" }}
-                                onClick={() => handleAdminShow(family._id)}
+                                onClick={() => handleShow(family._id)}
                               >
-                                Pay
+                                <FaPen />
                               </button>
                               <button
                                 className="text-white py-1 px-2 rounded-2"
                                 style={{ backgroundColor: "var(--border2)" }}
-                                onClick={() =>
-                                  handleAdminManualShow(family._id)
-                                }
+                                onClick={() => handleDelete(family._id)}
                               >
-                                Manual
+                                <FaTrashAlt />
                               </button>
                             </div>
+                            <div className="d-flex flex-column gap-2 justify-content-center align-items-center h-100">
+                              <div className="d-flex gap-1 justify-content-center align-items-center">
+                                <button
+                                  className="text-white py-1 px-2 rounded-2"
+                                  style={{ backgroundColor: "var(--border2)" }}
+                                  onClick={() => handleAdminShow(family._id)}
+                                >
+                                  Pay
+                                </button>
+                                <button
+                                  className="text-white py-1 px-2 rounded-2"
+                                  style={{ backgroundColor: "var(--border2)" }}
+                                  onClick={() =>
+                                    handleAdminManualShow(family._id)
+                                  }
+                                >
+                                  Manual
+                                </button>
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      </td>
-                    </>
-                  )}
-                </tr>
-              ))
-            )
-          ) : (
-            <tr>
-              <td colSpan={17} className="text-center py-4">
-                <h5>No enrolled families found</h5>
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+                        </td>
+                      </>
+                    )}
+                  </tr>
+                ))
+              )
+            ) : (
+              <tr>
+                <td colSpan={17} className="text-center py-4">
+                  <h5>No enrolled families found</h5>
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
 
       {/* Keep all your original modals */}
       {selectedAdminFamilyId && (
