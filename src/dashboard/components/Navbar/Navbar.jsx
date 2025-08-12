@@ -82,6 +82,8 @@ export default function Navbar() {
         <div className="d-flex align-items-center gap-3">
           {/* Search */}
           <motion.button
+            type="button" // <-- prevents form submission
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             whileHover={{ backgroundColor: "#F1F1F6" }}
             transition={{ duration: 0 }}
             style={btnStyle}
