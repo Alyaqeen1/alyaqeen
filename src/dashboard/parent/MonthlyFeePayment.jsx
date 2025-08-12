@@ -104,7 +104,7 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
             <th style="padding: 6px; border: 1px solid #ccc;">Student Name</th>
             <th style="padding: 6px; border: 1px solid #ccc;">Month</th>
             <th style="padding: 6px; border: 1px solid #ccc;">Discount</th>
-            <th style="padding: 6px; border: 1px solid #ccc;">Total Amount ($)</th>
+            <th style="padding: 6px; border: 1px solid #ccc;">Total Amount (£)</th>
           </tr>
         </thead>
         <tbody>
@@ -132,7 +132,7 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
         </tbody>
       </table>
       <div style="text-align: right; margin-top: 10px; font-weight: bold;">
-        Grand Total: $${grandTotal.toFixed(2)}
+        Grand Total: £${grandTotal.toFixed(2)}
       </div>
     </div>
   `;
@@ -292,17 +292,7 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
               className="col-lg-2 text-white py-1 px-2 rounded-2"
               style={{ backgroundColor: "var(--border2)" }}
             >
-              Pay Now
-            </button>
-            <p className="col-lg-1 d-flex align-items-center justify-content-center">
-              or
-            </p>
-            <button
-              className="col-lg-2 text-white py-1 px-2 rounded-2"
-              style={{ backgroundColor: "var(--border2)" }}
-              onClick={() => handleOtherPayment("office payment")}
-            >
-              Pay in the office
+              Pay Now by Card
             </button>
             <p className="col-lg-1 d-flex align-items-center justify-content-center">
               or
@@ -312,8 +302,18 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
               style={{ backgroundColor: "var(--border2)" }}
               onClick={() => handleOtherPayment("bank transfer")}
             >
-              Pay With Bank <br />
-              (within 7 days)
+              Pay by Bank Transfer (Account-to-Account Transfer)
+            </button>
+
+            <p className="col-lg-1 d-flex align-items-center justify-content-center">
+              or
+            </p>
+            <button
+              className="col-lg-2 text-white py-1 px-2 rounded-2"
+              style={{ backgroundColor: "var(--border2)" }}
+              onClick={() => handleOtherPayment("office payment")}
+            >
+              Set up a Standing Order or Direct Debit
             </button>
             <p className="col-lg-1 d-flex align-items-center justify-content-center">
               or
@@ -323,8 +323,7 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
               style={{ backgroundColor: "var(--border2)" }}
               onClick={() => handleOtherPayment("cash or card machine")}
             >
-              Pay With Cash / Card Machine <br />
-              (within 7 days)
+              Pay in Office by Card Machine or Cash
             </button>
           </div>
         </>

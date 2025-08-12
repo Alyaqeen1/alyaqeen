@@ -204,7 +204,7 @@ export default function AdminPayModal({
                             {row.studentNames}
                           </td>
                           <td onClick={() => toggleMonthExpand(row.month)}>
-                            ${row.totalAmount.toFixed(2)}
+                            £{row.totalAmount.toFixed(2)}
                           </td>
                           <td
                             className="text-danger"
@@ -241,12 +241,12 @@ export default function AdminPayModal({
                                 </div>
                               </td>
                               <td>
-                                $
+                                £
                                 {student.monthsUnpaid[0].discountedFee.toFixed(
                                   2
                                 )}
                                 <small className="text-muted ms-2">
-                                  (Original: $
+                                  (Original: £
                                   {student.monthsUnpaid[0].monthlyFee.toFixed(
                                     2
                                   )}
@@ -283,7 +283,7 @@ export default function AdminPayModal({
                     <div className="d-flex justify-content-between align-items-center mb-3">
                       <h5 className="mb-0">Total Amount:</h5>
                       <h4 className="mb-0 text-primary">
-                        ${grandTotal.toFixed(2)}
+                        £{grandTotal.toFixed(2)}
                       </h4>
                     </div>
                     <div className="d-flex justify-content-end gap-3">

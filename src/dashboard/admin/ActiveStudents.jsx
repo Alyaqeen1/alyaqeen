@@ -11,7 +11,20 @@ import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 import { Link } from "react-router";
 import toast from "react-hot-toast";
 import StudentModal from "../shared/StudentModal";
+import sessionMap from "../../utils/sessionMap";
+const formatDateToDmy = (dateStr) => {
+  if (!dateStr) return "N/A";
 
+  // Handle both YYYY-MM-DD and YYYY-DD-MM formats
+  const [part1, part2, part3] = dateStr.split("-");
+
+  // Determine which part is day/month/year (assuming year is always first)
+  const year = part1;
+  const day = part3?.length === 2 ? part3 : part2; // Fallback to part2 if needed
+  const month = part3?.length === 2 ? part2 : part3; // Fallback to part3 if needed
+
+  return `${day}-${month}-${year}`;
+};
 export default function ActiveStudents() {
   const [activeRow, setActiveRow] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -198,10 +211,11 @@ export default function ActiveStudents() {
               {[
                 "#",
                 "Student Name",
-                "Email",
+                "Starting Date",
                 "Department",
+                "Time",
                 "Class",
-                "Status",
+                "Fee",
                 "Actions",
               ].map((header, index) => (
                 <th
@@ -225,18 +239,36 @@ export default function ActiveStudents() {
                     <td className="border h6 text-center align-middle">
                       {student?.name}
                     </td>
-                    <td className="border text-center align-middle">
-                      {student?.email}
+                    <td className="border h6 text-center align-middle">
+                      {formatDateToDmy(student?.startingDate)}
                     </td>
                     <td className="border text-center align-middle">
                       {student?.academic?.department}
                     </td>
+
+                    <td className="border text-center align-middle">
+                      {student?.academic?.time === "S1"
+                        ? "Weekdays Early"
+                        : student?.academic?.time === "S2"
+                        ? "Weekdays Late"
+                        : student?.academic?.time === "WM"
+                        ? "Weekend Morning"
+                        : "Weekend Afternoon"}
+
+                      {/* {student?.academic?.time
+                        ? sessionMap[student?.academic?.time]
+                        : "not available"} */}
+                    </td>
+
                     <td className="border text-center align-middle">
                       {student?.academic?.class}
                     </td>
                     <td className="border text-center align-middle">
-                      {student?.activity}
+                      {student?.monthly_fee}
                     </td>
+                    {/* <td className="border text-center align-middle">
+                      {student?.activity}
+                    </td> */}
                     <td className="border text-center align-middle position-relative">
                       <FaChevronCircleDown
                         ref={setReferenceElement}

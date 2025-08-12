@@ -9,7 +9,10 @@ import {
 } from "react-icons/fa";
 import { format, addWeeks, startOfWeek, addDays, isSameWeek } from "date-fns";
 
-import { useGetTeachersQuery } from "../../redux/features/teachers/teachersApi";
+import {
+  useGetTeacherByActivityQuery,
+  useGetTeachersQuery,
+} from "../../redux/features/teachers/teachersApi";
 import {
   useAddAttendanceMutation,
   useGetAttendancesQuery,
@@ -18,6 +21,7 @@ import {
 } from "../../redux/features/attendances/attendancesApi";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
+import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 
 /* ───────────────────────── constants ───────────────────────── */
 const EXCLUDED_DAYS = ["Friday"]; // 👈 Remove Friday
@@ -38,7 +42,13 @@ export default function StaffAttendance() {
   const isCurrentWeek = isSameWeek(baseMonday, new Date(), { weekStartsOn: 1 });
 
   // 🟢 No filters: get all teachers
-  const { data: teachers = [] } = useGetTeachersQuery();
+  const {
+    data: teachers,
+    isLoading,
+    refetch,
+  } = useGetTeacherByActivityQuery({
+    activity: "active",
+  });
   const { data: attendances = [] } = useGetAttendancesQuery();
 
   const [addAttendance] = useAddAttendanceMutation();
@@ -122,6 +132,9 @@ export default function StaffAttendance() {
         .join(" ") || "0m"
     );
   };
+  if (isLoading) {
+    return <LoadingSpinnerDash></LoadingSpinnerDash>;
+  }
   return (
     <div>
       {/* ───── Header ───── */}

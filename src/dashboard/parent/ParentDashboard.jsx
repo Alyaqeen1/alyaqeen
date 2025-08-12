@@ -157,9 +157,9 @@ export default function ParentDashboard({ family, refetch }) {
         <thead>
           <tr style="background-color: #444; color: #fff;">
             <th style="padding: 8px 4px; border: 1px solid #ccc; white-space: nowrap;">Child Name</th>
-            <th style="padding: 8px 4px; border: 1px solid #ccc; white-space: nowrap;">Admission Fee ($)</th>
-            <th style="padding: 8px 4px; border: 1px solid #ccc; white-space: nowrap;">Monthly Fee ($)</th>
-            <th style="padding: 8px 4px; border: 1px solid #ccc; white-space: nowrap;">Subtotal ($)</th>
+            <th style="padding: 8px 4px; border: 1px solid #ccc; white-space: nowrap;">Admission Fee (£)</th>
+            <th style="padding: 8px 4px; border: 1px solid #ccc; white-space: nowrap;">Monthly Fee (£)</th>
+            <th style="padding: 8px 4px; border: 1px solid #ccc; white-space: nowrap;">Subtotal (£)</th>
           </tr>
         </thead>
         <tbody>
@@ -186,7 +186,7 @@ export default function ParentDashboard({ family, refetch }) {
         </tbody>
       </table>
       <div style="text-align: right; margin-top: 10px; font-weight: bold; white-space: nowrap;">
-        Grand Total: $${grandTotal.toFixed(2)}
+        Grand Total: £${grandTotal.toFixed(2)}
       </div>
     </div>
   `;
@@ -353,17 +353,7 @@ export default function ParentDashboard({ family, refetch }) {
                 className="col-lg-2 text-white py-1 px-2 rounded-2"
                 style={{ backgroundColor: "var(--border2)" }}
               >
-                Pay Now
-              </button>
-              <p className="col-lg-1 d-flex align-items-center justify-content-center">
-                or
-              </p>
-              <button
-                className="col-lg-2 text-white py-1 px-2 rounded-2"
-                style={{ backgroundColor: "var(--border2)" }}
-                onClick={() => handleOtherPayment("office payment")}
-              >
-                Pay in the office from the start day
+                Pay Now by Card
               </button>
               <p className="col-lg-1 d-flex align-items-center justify-content-center">
                 or
@@ -373,8 +363,18 @@ export default function ParentDashboard({ family, refetch }) {
                 style={{ backgroundColor: "var(--border2)" }}
                 onClick={() => handleOtherPayment("bank transfer")}
               >
-                Pay With Bank <br />
-                (within 7 days)
+                Pay by Bank Transfer (Account-to-Account Transfer)
+              </button>
+
+              <p className="col-lg-1 d-flex align-items-center justify-content-center">
+                or
+              </p>
+              <button
+                className="col-lg-2 text-white py-1 px-2 rounded-2"
+                style={{ backgroundColor: "var(--border2)" }}
+                onClick={() => handleOtherPayment("office payment")}
+              >
+                Set up a Standing Order or Direct Debit
               </button>
               <p className="col-lg-1 d-flex align-items-center justify-content-center">
                 or
@@ -384,8 +384,7 @@ export default function ParentDashboard({ family, refetch }) {
                 style={{ backgroundColor: "var(--border2)" }}
                 onClick={() => handleOtherPayment("cash or card machine")}
               >
-                Pay With Cash / Card Machine <br />
-                (within 7 days)
+                Pay in Office by Card Machine or Cash
               </button>
             </div>
           ) : (
