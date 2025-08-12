@@ -253,7 +253,7 @@ export default function StudentAttendanceAdmin() {
                     Morning - 10:00 AM – 12:30 PM (2½ hrs)
                   </option>
                   <option value="WA">
-                    Afternoon - 12:30 PM – 2:30 PM (2½ hrs)
+                    Afternoon - 12:30 PM – 2:30 PM (2 hrs)
                   </option>
                 </>
               )}

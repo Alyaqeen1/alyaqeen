@@ -42,35 +42,41 @@ export default function AdminManualPayModal({
     if (!feeType || !familyId) return false;
 
     if (feeType === "admission") {
-      // Check if any admission payment exists for this family
-      return fees.some(
-        (fee) =>
-          fee.familyId === familyId &&
-          fee.paymentType === "admission" &&
-          fee.status === "paid"
+      // Only mark as existing if *all targeted students* already have admission paid
+      return enrolledFamily?.childrenDocs?.every((student) =>
+        fees.some(
+          (fee) =>
+            fee.familyId === familyId &&
+            fee.paymentType === "admission" &&
+            fee.status === "paid" &&
+            fee.students?.some((s) => s.studentId === student._id)
+        )
       );
-    } else if (feeType === "monthly") {
-      if (!feeMonth) return false;
-      // Check if monthly payment for this month/year exists
-      return fees.some((fee) => {
-        if (
-          fee.familyId === familyId &&
-          fee.paymentType === "monthly" &&
-          fee.status === "paid"
-        ) {
-          // Check if any student in this fee has monthsPaid matching month/year
-          return fee.students?.some((student) =>
-            student.monthsPaid?.some(
-              (mp) =>
-                mp.month === feeMonth.padStart(2, "0") && mp.year === feeYear
-            )
-          );
-        }
-        return false;
-      });
     }
+
+    if (feeType === "monthly" && feeMonth) {
+      return enrolledFamily?.childrenDocs?.every((student) =>
+        fees.some(
+          (fee) =>
+            fee.familyId === familyId &&
+            fee.paymentType === "monthly" &&
+            fee.status === "paid" &&
+            fee.students?.some(
+              (s) =>
+                s.studentId === student._id &&
+                s.monthsPaid?.some(
+                  (mp) =>
+                    mp.month === feeMonth.padStart(2, "0") &&
+                    mp.year === feeYear
+                )
+            )
+        )
+      );
+    }
+
     return false;
-  }, [fees, familyId, feeMonth, feeYear, feeType]);
+  }, [fees, familyId, feeMonth, feeYear, feeType, enrolledFamily]);
+
   // 1. Check admission payment status separately
   const admissionPaid = useMemo(() => {
     return fees.some(
