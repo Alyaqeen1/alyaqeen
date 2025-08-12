@@ -254,17 +254,13 @@ export default function ActiveStudents() {
                         : student?.academic?.time === "WM"
                         ? "Weekend Morning"
                         : "Weekend Afternoon"}
-
-                      {/* {student?.academic?.time
-                        ? sessionMap[student?.academic?.time]
-                        : "not available"} */}
                     </td>
 
                     <td className="border text-center align-middle">
                       {student?.academic?.class}
                     </td>
                     <td className="border text-center align-middle">
-                      {student?.monthly_fee}
+                      £{student?.monthly_fee}
                     </td>
                     {/* <td className="border text-center align-middle">
                       {student?.activity}
