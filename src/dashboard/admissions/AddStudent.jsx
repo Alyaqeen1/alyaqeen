@@ -186,18 +186,18 @@ export default function AddStudent() {
       setLoading(false);
       return setError("Passwords do not match");
     }
-    if (!/[A-Z]/.test(password)) {
-      setLocalLoading(false); // ✅ Unblock double click
+    // if (!/[A-Z]/.test(password)) {
+    //   setLocalLoading(false); // ✅ Unblock double click
 
-      setLoading(false);
-      return setError("Password must contain an uppercase letter");
-    }
-    if (!/[a-z]/.test(password)) {
-      setLocalLoading(false); // ✅ Unblock double click
+    //   setLoading(false);
+    //   return setError("Password must contain an uppercase letter");
+    // }
+    // if (!/[a-z]/.test(password)) {
+    //   setLocalLoading(false); // ✅ Unblock double click
 
-      setLoading(false);
-      return setError("Password must contain a lowercase letter");
-    }
+    //   setLoading(false);
+    //   return setError("Password must contain a lowercase letter");
+    // }
     if (password.length < 6) {
       setLocalLoading(false); // ✅ Unblock double click
 
