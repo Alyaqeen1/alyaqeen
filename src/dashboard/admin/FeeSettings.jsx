@@ -367,8 +367,11 @@ export default function FeeSettings() {
                       </>
                     )}
                     <td className="border h6 text-center align-middle">
-                      {student.name}
-                      <br />({formatDateToDmy(student?.startingDate)})
+                      {student?.activity === "active" ? student?.name : ""}
+                      <br />
+                      {student?.activity === "active"
+                        ? `(${formatDateToDmy(student?.startingDate)})`
+                        : ""}
                     </td>
                     {monthsToDisplay.map((month) => {
                       const status = getPaymentStatus(
