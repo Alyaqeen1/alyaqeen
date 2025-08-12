@@ -170,7 +170,9 @@ export default function FeeSettings() {
       }
     });
   };
-
+  useEffect(() => {
+    refetch();
+  }, []);
   const monthsToDisplay = useMemo(() => {
     if (semesterFilter === "semester1") {
       return academicMonths.slice(0, 6); // Sep-Feb
@@ -397,14 +399,25 @@ export default function FeeSettings() {
                           className="border h6 text-center align-middle"
                         >
                           £
-                          {family.childrenDocs
-                            ? family.childrenDocs.reduce(
-                                (total, student) =>
-                                  total + (student.monthly_fee || 0),
-                                0
-                              )
-                            : 0}
+                          {(() => {
+                            const activeTotal =
+                              family.childrenDocs
+                                ?.filter((s) => s.activity === "active")
+                                .reduce(
+                                  (total, student) =>
+                                    total + (student.monthly_fee || 0),
+                                  0
+                                ) || 0;
+
+                            const discount = family.discount || 0; // if 10, means 10%
+
+                            const discountedTotal =
+                              activeTotal - (activeTotal * discount) / 100;
+
+                            return discountedTotal;
+                          })()}
                         </td>
+
                         <td
                           rowSpan={family.childrenDocs?.length}
                           className="border text-center align-middle"
@@ -488,13 +501,16 @@ export default function FeeSettings() {
           refetchFee={refetchFee}
         />
       )}
-      <FamilyUpdateModal
-        familyId={selectedFamilyId}
-        showModal={showModal}
-        handleClose={handleClose}
-        refetch={refetch}
-        refetchFee={refetchFee}
-      />
+      {selectedFamilyId && (
+        <FamilyUpdateModal
+          key={`update-${selectedFamilyId}`}
+          familyId={selectedFamilyId}
+          showModal={showModal}
+          handleClose={handleClose}
+          refetch={refetch}
+          refetchFee={refetchFee}
+        />
+      )}
     </div>
   );
 }
