@@ -234,7 +234,7 @@ export default function ActiveStudents() {
                 <React.Fragment key={student._id}>
                   <tr>
                     <td className="border h6 text-center align-middle">
-                      {idx + 1}
+                      {students?.length - idx}
                     </td>
                     <td className="border h6 text-center align-middle">
                       {student?.name}
