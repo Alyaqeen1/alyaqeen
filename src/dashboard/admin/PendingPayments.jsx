@@ -489,7 +489,7 @@ export default function PendingPayments() {
             ) : (
               <tr>
                 <td colSpan={12}>
-                  <h5>No students available.</h5>
+                  <h5>No pending payments available.</h5>
                 </td>
               </tr>
             )}

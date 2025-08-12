@@ -135,10 +135,24 @@ export default function AdminManualPayModal({
       setIsProcessing(false);
       return;
     }
-    // New: Prevent monthly fee if admission fee not paid
-    if (feeType === "monthly" && !admissionPaid) {
+    // // New: Prevent monthly fee if admission fee not paid
+    // if (feeType === "monthly" && !admissionPaid) {
+    //   toast.error(
+    //     "Admission fee not paid yet. Please record admission payment first."
+    //   );
+    //   setIsProcessing(false);
+    //   return;
+    // }
+
+    // NEW CHECK: Are there any students not enrolled (status "approved")?
+    const notEnrolledStudents = enrolledFamily?.childrenDocs?.filter(
+      (student) => student.status === "approved"
+    );
+
+    if (notEnrolledStudents && notEnrolledStudents.length > 0) {
+      const names = notEnrolledStudents.map((s) => s.name).join(", ");
       toast.error(
-        "Admission fee not paid yet. Please record admission payment first."
+        `Payment blocked. The following student(s) are not enrolled yet: ${names}`
       );
       setIsProcessing(false);
       return;

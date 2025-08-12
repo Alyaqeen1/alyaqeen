@@ -121,7 +121,58 @@ export default function AddStudent() {
         : selectedDepartment?.weekdays_fee;
     const today = new Date().setHours(0, 0, 0, 0); // current date at midnight
     const selectedDate = new Date(starting_date).setHours(0, 0, 0, 0); // user date at midnight
+    const validateRequiredFields = (form) => {
+      const requiredFields = [
+        { name: "student_name", label: "Student Name" },
+        { name: "student_email", label: "Student Email", type: "email" },
+        { name: "std_dob", label: "Date of Birth" },
+        { name: "student_age", label: "Student Age" },
+        { name: "family_name", label: "Family Name" },
+        { name: "std_gender", label: "Gender" },
+        { name: "school_year", label: "School Year" },
+        { name: "language", label: "Language" },
+        { name: "emergency_number", label: "Emergency Number" },
+        { name: "mother_name", label: "Mother Name" },
+        { name: "mother_occupation", label: "Mother Occupation" },
+        { name: "mother_number", label: "Mother Contact Number" },
+        { name: "father_name", label: "Father Name" },
+        { name: "father_occupation", label: "Father Occupation" },
+        { name: "father_number", label: "Father Contact Number" },
+        { name: "parent_email", label: "Parent Email", type: "email" },
+        { name: "std_department", label: "Department" },
+        { name: "std_session", label: "Session" },
+        { name: "std_time", label: "Session Time" },
+        { name: "doctor_name", label: "Doctor Name" },
+        { name: "surgery_address", label: "Surgery Address" },
+        { name: "surgery_number", label: "Surgery Number" },
+        { name: "allergies", label: "Allergies" },
+        { name: "medical_condition", label: "Medical Condition" },
+        { name: "password", label: "Password" },
+        { name: "confirmPassword", label: "Confirm Password" },
+        { name: "starting_date", label: "Starting Date" },
+      ];
 
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      for (let field of requiredFields) {
+        const value = form[field.name]?.value.trim();
+        if (!value) {
+          toast.error(`${field.label} is required`);
+          return false; // Stop at the first error
+        }
+        if (field.type === "email" && !emailRegex.test(value)) {
+          toast.error(`${field.label} is not a valid email`);
+          return false;
+        }
+      }
+
+      return true;
+    };
+    if (!validateRequiredFields(form)) {
+      setLocalLoading(false);
+      setLoading(false);
+      return; // Stop before doing anything else
+    }
     if (selectedDate < today) {
       setLocalLoading(false); // ✅ Unblock double click
       setLoading(false);
@@ -295,7 +346,7 @@ export default function AddStudent() {
         Manage all students here—approve, track, and ensure the right
         connections are made.
       </p> */}
-      <form onSubmit={handleFormSubmit} className="row g-3">
+      <form onSubmit={handleFormSubmit} className="row g-3" noValidate>
         {/* basic details */}
         <div
           style={{ backgroundColor: "var(--border2)" }}
