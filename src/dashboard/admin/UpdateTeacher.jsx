@@ -130,7 +130,7 @@ export default function UpdateTeacher() {
 
     // Add null checks for form elements
     const name = form.full_name?.value || "";
-    const email = form.email?.value || "";
+    const email = form.email.value.toLowerCase().trim() || "";
     const number = form.number?.value || "";
     const dob = form.dob?.value || "";
     const joining_date = form.joining_date?.value || "";

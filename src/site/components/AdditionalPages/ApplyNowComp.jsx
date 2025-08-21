@@ -94,7 +94,7 @@ const ApplyNowComp = () => {
 
     // Extract form values
     const student_name = form.student_name.value;
-    const student_email = form.student_email.value;
+    const student_email = form.student_email.value.toLowerCase().trim();
     const student_dob = form.std_dob.value;
     const student_age = form.student_age.value;
     const family_name = form.family_name.value.trim();

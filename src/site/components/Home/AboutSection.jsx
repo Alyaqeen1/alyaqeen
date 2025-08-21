@@ -23,7 +23,7 @@ const AboutSection = () => {
     e.preventDefault();
     const form = e.target;
     const name = form.name.value;
-    const email = form.email.value;
+    const email = form.email.value.toLowerCase().trim();
     const phone = form.phone.value;
     const title = form.title.value;
     const description = form.description.value;

@@ -15,7 +15,7 @@ const LoginComp = () => {
   const handleLogin = (e) => {
     e.preventDefault();
     const form = e.target;
-    const email = form.email.value;
+    const email = form.email.value.toLowerCase().trim();
     const password = form.password.value;
     // const data = { email, password };
     signInUser(email, password)

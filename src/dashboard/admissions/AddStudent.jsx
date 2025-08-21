@@ -80,7 +80,7 @@ export default function AddStudent() {
 
     // --- Basic Info ---
     const student_name = form.student_name.value.trim();
-    const student_email = form.student_email.value.trim();
+    const student_email = form.student_email.value.toLowerCase().trim();
     const student_dob = form.std_dob.value;
     const student_age = form.student_age.value.trim();
     const family_name = form.family_name.value.trim();
