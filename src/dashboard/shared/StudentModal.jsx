@@ -63,8 +63,12 @@ export default function StudentModal({ studentId, handleClose, showModal }) {
       handleClose();
     }
   };
+  console.log(student_class);
   const handleStatus = async (newStatus) => {
-    if (newStatus === "approved" && !student_class) {
+    if (
+      newStatus === "approved" &&
+      (student_class === "Unknown Class" || !student_class)
+    ) {
       Swal.fire({
         icon: "warning",
         title: "Assign a class first!",

@@ -189,94 +189,107 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
 
       {/* Paid History Table */}
       <h4 className="text-success">Paid Fee History</h4>
-      <table className="table table-bordered table-hover mt-2">
-        <thead className="table-light">
-          <tr>
-            <th>Students</th>
-            <th>Type</th>
-            {/* <th>Month</th> */}
-            <th>Amount(s)</th>
-            <th>Status</th>
-            <th>Paid Date</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {fees?.map((fee) => (
-            <tr key={fee._id}>
-              <td>{fee.students?.map((s) => s.name).join(", ")}</td>
-              <td className="text-capitalize">{fee.paymentType}</td>
-              {/* <td>{fee?.month || "_"}</td> */}
-              <td>{fee?.amount}</td>
-              <td>
-                <span
-                  className={`py-1 px-2 rounded-3 text-white ${
-                    fee?.status === "paid"
-                      ? "bg-success"
-                      : fee?.status === "pending"
-                      ? "bg-warning"
-                      : "bg-danger"
-                  }`}
-                >
-                  {fee.status}
-                </span>
-              </td>
-              <td>
-                {fee.date
-                  ? new Date(fee.date).toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "short",
-                      day: "numeric",
-                    })
-                  : "N/A"}
-              </td>
-              <td>
-                <button
-                  className="py-1 px-2 rounded-2 border border-black"
-                  // style={{ backgroundColor: "var(--border2)" }}
-                  onClick={() => handleDataShow(fee?._id)}
-                >
-                  <FaEye></FaEye>
-                </button>
-              </td>
+      <div className="table-responsive mb-3">
+        <table
+          className="table mb-0 table-bordered"
+          style={{
+            minWidth: 700,
+          }}
+        >
+          <thead className="table-light">
+            <tr>
+              <th>Students</th>
+              <th>Type</th>
+              {/* <th>Month</th> */}
+              <th>Amount(s)</th>
+              <th>Status</th>
+              <th>Paid Date</th>
+              <th>Action</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-
+          </thead>
+          <tbody>
+            {fees?.map((fee) => (
+              <tr key={fee._id}>
+                <td>{fee.students?.map((s) => s.name).join(", ")}</td>
+                <td className="text-capitalize">{fee.paymentType}</td>
+                {/* <td>{fee?.month || "_"}</td> */}
+                <td>{fee?.amount}</td>
+                <td>
+                  <span
+                    className={`py-1 px-2 rounded-3 text-white ${
+                      fee?.status === "paid"
+                        ? "bg-success"
+                        : fee?.status === "pending"
+                        ? "bg-warning"
+                        : "bg-danger"
+                    }`}
+                  >
+                    {fee.status}
+                  </span>
+                </td>
+                <td>
+                  {fee.date
+                    ? new Date(fee.date).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      })
+                    : "N/A"}
+                </td>
+                <td>
+                  <button
+                    className="py-1 px-2 rounded-2 border border-black"
+                    // style={{ backgroundColor: "var(--border2)" }}
+                    onClick={() => handleDataShow(fee?._id)}
+                  >
+                    <FaEye></FaEye>
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
       {/* Unpaid Fee Table */}
       {unpaidRows.length > 0 && (
         <>
           <h4 className="text-danger mt-5">Pending Monthly Fees</h4>
-          <table className="table table-bordered table-hover mt-2">
-            <thead className="table-warning">
-              <tr>
-                <th>Student</th>
+          <div className="table-responsive mb-3">
+            <table
+              className="table mb-0 table-bordered table-hover"
+              style={{
+                minWidth: 700,
+              }}
+            >
+              <thead className="table-warning">
+                <tr>
+                  <th>Student</th>
 
-                <th>Month</th>
-                <th>Discount</th>
-                <th>Amount</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {unpaidRows.map((row, index) => (
-                <tr
-                  key={`unpaid-${row.studentId}-${row.month}-${index}`}
-                  className="table-warning"
-                >
-                  <td>{row?.studentNames}</td>
-
-                  <td>{row?.month}</td>
-                  <td>
-                    {enrolledFamily?.discount ? enrolledFamily?.discount : 0}%
-                  </td>
-                  <td>{row?.totalAmount}</td>
-                  <td className="text-danger">Unpaid</td>
+                  <th>Month</th>
+                  <th>Discount</th>
+                  <th>Amount</th>
+                  <th>Status</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {unpaidRows.map((row, index) => (
+                  <tr
+                    key={`unpaid-${row.studentId}-${row.month}-${index}`}
+                    className="table-warning"
+                  >
+                    <td>{row?.studentNames}</td>
+
+                    <td>{row?.month}</td>
+                    <td>
+                      {enrolledFamily?.discount ? enrolledFamily?.discount : 0}%
+                    </td>
+                    <td>{row?.totalAmount}</td>
+                    <td className="text-danger">Unpaid</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </>
       )}
 
