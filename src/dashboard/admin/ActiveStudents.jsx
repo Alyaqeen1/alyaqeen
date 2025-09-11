@@ -11,7 +11,36 @@ import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 import { Link } from "react-router";
 import toast from "react-hot-toast";
 import StudentModal from "../shared/StudentModal";
-import sessionMap from "../../utils/sessionMap";
+
+// utils/colorMap.js
+const colors = [
+  "#e57373", // red
+  "#64b5f6", // blue
+  "#81c784", // green
+  "#ffb74d", // orange
+  "#ba68c8", // purple
+  "#4dd0e1", // teal
+  "#ffd54f", // yellow
+  "#90a4ae", // grey
+];
+
+export function getColorForName(name) {
+  if (!name) return "#ccc";
+  const firstChar = name[0].toUpperCase();
+  const index = firstChar.charCodeAt(0) % colors.length;
+  return colors[index];
+}
+export function getInitials(name = "") {
+  if (!name) return "";
+  const parts = name.trim().split(" ").filter(Boolean);
+
+  if (parts.length >= 2) {
+    return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
+  } else {
+    return parts[0].substring(0, 2).toUpperCase();
+  }
+}
+
 const formatDateToDmy = (dateStr) => {
   if (!dateStr) return "N/A";
 
@@ -237,7 +266,24 @@ export default function ActiveStudents() {
                       {students?.length - idx}
                     </td>
                     <td className="border h6 text-center align-middle">
-                      {student?.name}
+                      <div className="d-flex align-items-center gap-2">
+                        <div
+                          style={{
+                            backgroundColor: getColorForName(student?.name),
+                            width: "35px",
+                            height: "35px",
+                            borderRadius: "50%",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            color: "#fff",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          {getInitials(student?.name)}
+                        </div>
+                        <span>{student?.name}</span>
+                      </div>
                     </td>
                     <td className="border h6 text-center align-middle">
                       {formatDateToDmy(student?.startingDate)}
