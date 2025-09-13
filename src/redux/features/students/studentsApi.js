@@ -19,6 +19,10 @@ export const studentsApi = apiSlice.injectEndpoints({
       query: (status) => `/students/get-by-status/${status}`,
       providesTags: ["Student"],
     }),
+    getStudentsByEmail: builder.query({
+      query: (email) => `/students/by-email/${email}`,
+      providesTags: ["Student"],
+    }),
     // In your studentsApi.js (or wherever your endpoints are defined)
     getStudentByActivity: builder.query({
       query: ({ activity, search }) => {
@@ -85,6 +89,7 @@ export const {
   useGetStudentQuery,
   useGetStudentCountQuery,
   useGetStudentsByStatusQuery,
+  useGetStudentsByEmailQuery,
   useGetStudentByActivityQuery,
   useGetStudentsByGroupQuery,
   useGetWithoutEnrolledStudentsQuery,

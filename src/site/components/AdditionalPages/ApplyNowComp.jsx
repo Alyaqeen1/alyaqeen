@@ -11,10 +11,54 @@ import toast from "react-hot-toast";
 import useAxiosPublic from "../../../hooks/useAxiosPublic";
 import { useGetDepartmentsQuery } from "../../../redux/features/departments/departmentsApi";
 import LoadingSpinner from "../LoadingSpinner";
-
+import { useGetStudentsByEmailQuery } from "../../../redux/features/students/studentsApi";
+import Select from "react-select";
 const image_hosting_key = import.meta.env.VITE_Image_Hosting_Key;
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
-
+// const customSelectStyles = {
+//   container: (provided) => ({
+//     ...provided,
+//     zIndex: 9999,
+//     position: "relative",
+//   }),
+//   control: (provided) => ({
+//     ...provided,
+//     backgroundColor: "var(--theme2)",
+//     borderColor: "#ccc",
+//     minHeight: "44px",
+//     borderRadius: "4px",
+//   }),
+//   menu: (provided) => ({
+//     ...provided,
+//     zIndex: 9999,
+//     position: "absolute",
+//   }),
+//   menuList: (provided) => ({
+//     ...provided,
+//     zIndex: 9999,
+//   }),
+//   option: (provided, state) => ({
+//     ...provided,
+//     backgroundColor: state.isSelected ? "var(--theme)" : "white",
+//     color: state.isSelected ? "white" : "black",
+//     "&:hover": {
+//       backgroundColor: "var(--theme2)",
+//       color: "white",
+//     },
+//   }),
+//   singleValue: (provided) => ({
+//     ...provided,
+//     color: "white",
+//   }),
+//   input: (provided) => ({
+//     ...provided,
+//     color: "white",
+//   }),
+//   placeholder: (provided) => ({
+//     ...provided,
+//     color: "#ccc",
+//   }),
+// };
 const ApplyNowComp = () => {
   const [department, setDepartment] = useState("");
   const [session, setSession] = useState("");
@@ -29,8 +73,103 @@ const ApplyNowComp = () => {
   const selectedDepartment = departments?.find(
     (dept) => dept?._id === department
   );
+  const [email, setEmail] = useState("");
+  const [students, setStudents] = useState([]);
+  const [selectedStudent, setSelectedStudent] = useState(null);
+  const [isFinding, setIsFinding] = useState(false);
+  const [studentOptions, setStudentOptions] = useState([]);
+  const [selectedOption, setSelectedOption] = useState(null);
 
   const axiosPublic = useAxiosPublic();
+
+  // Function to find students by email
+  const handleFindStudent = async () => {
+    if (!email) {
+      return toast.error("Please enter an email to search");
+    }
+
+    // Reset previous selections
+    setSelectedStudent(null);
+    setSelectedOption(null);
+    setStudents([]);
+    setStudentOptions([]);
+
+    setIsFinding(true);
+    try {
+      const response = await axiosPublic.get(`/students/by-email/${email}`);
+      if (response.data && response.data.length > 0) {
+        setStudents(response.data);
+
+        // Format students for react-select options
+        const options = response.data.map((student) => ({
+          value: student._id,
+          label: student.name,
+        }));
+        setStudentOptions(options);
+
+        toast.success(`Found ${response.data.length} student(s)`);
+      } else {
+        setStudents([]);
+        setStudentOptions([]);
+        toast.error("No students found with this email");
+      }
+    } catch (error) {
+      console.error("Error finding students:", error);
+      toast.error("Failed to find students");
+    } finally {
+      setIsFinding(false);
+    }
+  };
+
+  // Function to fetch complete student data when selected
+  const fetchStudentDetails = async (studentId) => {
+    try {
+      const response = await axiosPublic.get(`/students/by-id/${studentId}`);
+      setSelectedStudent(response.data);
+    } catch (error) {
+      console.error("Error fetching student details:", error);
+      toast.error("Failed to load student details");
+    }
+  };
+
+  const {
+    name,
+    email: emailOld,
+    dob,
+    gender,
+    school_year,
+    language,
+    status,
+    emergency_number,
+
+    student_age,
+    family_name,
+    activity,
+    mother,
+    father,
+    academic,
+    medical,
+    startingDate,
+    parent_email,
+  } = selectedStudent || {};
+  const { doctorName, surgeryAddress, surgeryNumber, allergies, condition } =
+    medical || {};
+  const {
+    name: fatherName,
+    occupation: fatherOcc,
+    number: fatherNumber,
+  } = father || {};
+
+  const { name: motherName, occupation, number: motherNumber } = mother || {};
+
+  const {
+    session: sessionOld,
+    department: deptOld,
+    time,
+    class: studentClass,
+    dept_id,
+    class_id,
+  } = academic || {};
 
   const { createUser, setUser, updateUser, signInUser, setLoading } = useAuth();
 
@@ -353,6 +492,18 @@ const ApplyNowComp = () => {
       setLocalLoading(false);
     }
   };
+  const handleEmailChange = (e) => {
+    const newEmail = e.target.value;
+    setEmail(newEmail);
+
+    // If email changes, reset the student selections
+    if (newEmail !== email) {
+      setSelectedStudent(null);
+      setSelectedOption(null);
+      setStudents([]);
+      setStudentOptions([]);
+    }
+  };
 
   if (isLoading) {
     return <LoadingSpinner></LoadingSpinner>;
@@ -386,7 +537,91 @@ const ApplyNowComp = () => {
             Download Form In PDF File
           </a>
         </div>
-        <div className="contact-wrapper">
+        <div>
+          {/* Student Search Section */}
+          <div
+            className="card mb-4"
+            style={{
+              position: "relative",
+              zIndex: 1000,
+              borderColor: "var(--theme)",
+            }}
+          >
+            <div className="card-body">
+              <h5 className="card-title">Find Existing Student</h5>
+              <div className="row">
+                <div className="col-md-8">
+                  <div className="form-group">
+                    <label>Email Address</label>
+                    <input
+                      type="email"
+                      style={{ borderColor: "var(--theme)" }}
+                      className="form-control"
+                      placeholder="Enter student email"
+                      value={email}
+                      onChange={handleEmailChange}
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="col-md-4 d-flex align-items-end">
+                  <button
+                    type="button"
+                    // style={{ backgroundColor: "var(--theme)" }}
+                    onClick={handleFindStudent}
+                    style={{ backgroundColor: "var(--theme)" }}
+                    className="btn text-white w-100"
+                    disabled={isFinding}
+                  >
+                    {isFinding ? "Searching..." : "Find Students"}
+                  </button>
+                </div>
+              </div>
+
+              {studentOptions.length > 0 && (
+                <div className="row mt-3">
+                  <div className="col-12">
+                    <div className="form-group">
+                      <label>Select Student</label>
+                      <Select
+                        options={studentOptions}
+                        value={selectedOption}
+                        styles={{
+                          control: (base, state) => ({
+                            ...base,
+                            borderColor: state.isFocused
+                              ? "var(--theme)"
+                              : "var(--theme)", // 🔹 green when focused, red otherwise
+                            boxShadow: "none", // remove blue shadow
+                            "&:hover": {
+                              borderColor: "var(--theme)", // on hover
+                            },
+                          }),
+                        }}
+                        onChange={(selectedOption) => {
+                          setSelectedOption(selectedOption);
+                          if (selectedOption) {
+                            fetchStudentDetails(selectedOption.value);
+                          } else {
+                            setSelectedStudent(null);
+                          }
+                        }}
+                        placeholder="Select a student..."
+                        isClearable
+                        isSearchable
+                        classNamePrefix="react-select"
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+        <div
+          className="contact-wrapper"
+          style={{ position: "relative", zIndex: 0 }}
+        >
           <div className="row">
             <div className="col-lg-12">
               <div className="contact-content">
@@ -569,6 +804,7 @@ const ApplyNowComp = () => {
                         <span>Mother Language*</span>
                         <input
                           type="text"
+                          defaultValue={language || ""}
                           name="language"
                           id="name"
                           placeholder=""
@@ -587,6 +823,7 @@ const ApplyNowComp = () => {
                         <span>Family Name (used to group your family)*</span>
                         <input
                           type="text"
+                          defaultValue={family_name || ""}
                           name="family_name"
                           placeholder="e.g. Rahman / Khan"
                           id="name"
@@ -606,6 +843,7 @@ const ApplyNowComp = () => {
                         <span>Preferred Contact Number*</span>
                         <input
                           type="tel"
+                          defaultValue={emergency_number || ""}
                           name="emergency_number"
                           id="number"
                           placeholder=""
@@ -626,6 +864,7 @@ const ApplyNowComp = () => {
                         </span>
                         <input
                           type="email"
+                          defaultValue={emailOld || ""}
                           name="student_email"
                           id="name"
                           placeholder=""
@@ -660,6 +899,7 @@ const ApplyNowComp = () => {
                         <span>Mother Name*</span>
                         <input
                           type="text"
+                          defaultValue={motherName || ""}
                           name="mother_name"
                           id="name"
                           placeholder=""
@@ -677,6 +917,7 @@ const ApplyNowComp = () => {
                         <span>Occupation:*</span>
                         <input
                           type="text"
+                          defaultValue={occupation || ""}
                           name="mother_occupation"
                           id="name"
                           placeholder=""
@@ -694,6 +935,7 @@ const ApplyNowComp = () => {
                         <span>Contact Number:*</span>
                         <input
                           type="tel"
+                          defaultValue={motherNumber || ""}
                           name="mother_number"
                           id="name"
                           placeholder=""
@@ -712,6 +954,7 @@ const ApplyNowComp = () => {
                         <span>Father Name*</span>
                         <input
                           type="text"
+                          defaultValue={fatherName || ""}
                           name="father_name"
                           id="name"
                           placeholder=""
@@ -730,6 +973,7 @@ const ApplyNowComp = () => {
                         <span>Occupation:*</span>
                         <input
                           type="text"
+                          defaultValue={fatherOcc || ""}
                           name="father_occupation"
                           id="name"
                           placeholder=""
@@ -748,6 +992,7 @@ const ApplyNowComp = () => {
                         <span>Contact Number:*</span>
                         <input
                           type="tel"
+                          defaultValue={fatherNumber || ""}
                           name="father_number"
                           id="name"
                           placeholder=""
@@ -766,6 +1011,7 @@ const ApplyNowComp = () => {
                       <div className="form-clt">
                         <span>One of the other parents email*</span>
                         <input
+                          defaultValue={parent_email || ""}
                           // style={{ backgroundColor: "var(--theme2)" }}
                           type="email"
                           name="parent_email"
@@ -971,6 +1217,7 @@ const ApplyNowComp = () => {
                         <span>Surgery/Doctor name*</span>
                         <input
                           type="text"
+                          defaultValue={doctorName || ""}
                           name="doctor_name"
                           id="name"
                           placeholder=""
@@ -989,6 +1236,7 @@ const ApplyNowComp = () => {
                         <span>Surgery address*</span>
                         <input
                           type="text"
+                          defaultValue={surgeryAddress || ""}
                           name="surgery_address"
                           id="name"
                           placeholder=""
@@ -1007,6 +1255,7 @@ const ApplyNowComp = () => {
                         <span>Surgery contact*</span>
                         <input
                           type="tel"
+                          defaultValue={surgeryNumber || ""}
                           name="surgery_number"
                           id="name"
                           placeholder=""
@@ -1027,6 +1276,7 @@ const ApplyNowComp = () => {
 
                         <input
                           type="text"
+                          defaultValue={allergies || ""}
                           name="allergies"
                           id="name"
                           placeholder=""
@@ -1047,6 +1297,7 @@ const ApplyNowComp = () => {
                         <input
                           type="text"
                           name="medical_condition"
+                          defaultValue={condition || ""}
                           id="name"
                           placeholder=""
                           required
