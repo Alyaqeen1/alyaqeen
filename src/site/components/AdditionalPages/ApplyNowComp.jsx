@@ -69,7 +69,9 @@ const ApplyNowComp = () => {
   const [signature, setSignature] = useState("");
   const [localLoading, setLocalLoading] = useState(false);
   const navigate = useNavigate();
-  const { data: departments, isLoading } = useGetDepartmentsQuery();
+  const { data, isLoading } = useGetDepartmentsQuery();
+  console.log(data);
+  const departments = data || [];
   const selectedDepartment = departments?.find(
     (dept) => dept?._id === department
   );
@@ -504,6 +506,14 @@ const ApplyNowComp = () => {
       setStudentOptions([]);
     }
   };
+  const reorderedDepartments = [...departments];
+
+  if (reorderedDepartments.length >= 5) {
+    // take Arabic (5th index)
+    const arabicDept = reorderedDepartments.splice(4, 1)[0];
+    // insert Arabic before Urdu (4th index)
+    reorderedDepartments.splice(3, 0, arabicDept);
+  }
 
   if (isLoading) {
     return <LoadingSpinner></LoadingSpinner>;
@@ -542,8 +552,6 @@ const ApplyNowComp = () => {
           <div
             className="card mb-4"
             style={{
-              position: "relative",
-              zIndex: 1000,
               borderColor: "var(--theme)",
             }}
           >
@@ -1032,7 +1040,7 @@ const ApplyNowComp = () => {
                         }}
                       >
                         <h6 className="text-white font-weight-bold rounded mb-0 text-uppercase p-2">
-                          Academic Details
+                          Select Course
                         </h6>
                       </div>
                     </div>
@@ -1045,7 +1053,7 @@ const ApplyNowComp = () => {
                       data-aos-delay="300"
                     >
                       <div className="form-clt">
-                        <span>Departments*</span>
+                        <span>Select Subject*</span>
                         <select
                           onChange={(e) => setDepartment(e.target.value)}
                           name="std_department"
@@ -1055,7 +1063,7 @@ const ApplyNowComp = () => {
                           required
                         >
                           <option value="">Select department</option>
-                          {departments?.map((dept) => (
+                          {reorderedDepartments?.map((dept) => (
                             <option key={dept?._id} value={dept?._id}>
                               {dept?.dept_name}
                             </option>
@@ -1464,29 +1472,60 @@ const ApplyNowComp = () => {
                         Important Guidelines for Parents & Guardians::
                       </h5>
                       <p>
-                        1. Admission Fee: A one-time, non-refundable fee of £20
-                        per course is required before the start of classes.
+                        1. Admission Fee: A one-time fee of £20 per course is
+                        required before the start of classes.
                       </p>
                       <div>
-                        2. Monthly Fees Policy: Parents have two options for
-                        paying tuition fees based on the admission date:
-                        <p className="ms-4">
-                          a.{" "}
-                          <strong>
-                            Admission After the 10th of the Month:
-                          </strong>{" "}
-                          Pay a pro-rated fee (such as 1/3 or 2/3 of the monthly
-                          fee) for the remaining days of the current month, and
-                          Begin regular full-month payments starting from the
-                          first week of the next month.
-                          <br />
-                          b. <strong>Full-Month Enrollment:</strong>{" "}
-                          Alternatively, if parents prefer the student to be
-                          considered enrolled for the entire current month, the
-                          full monthly fee must be paid within 7 days of
-                          admission (e.g., admitted on the 10th → pay by the
-                          17th).
-                        </p>
+                        2. Monthly Fees Policy
+                        <div className="ms-4">
+                          <ul
+                            className="list-inside ml-5 space-y-2"
+                            style={{ listStyleType: "disc", color: "white" }}
+                          >
+                            <li>
+                              Admission before the 10th: Full monthly fee is
+                              due, payable within the first 7 days of each
+                              month.
+                            </li>
+                            <li>
+                              Admission after the 10th: You have two options:
+                              <ol
+                                className="list-decimal list-inside ml-6 space-y-1"
+                                style={{ color: "white" }}
+                              >
+                                <li>
+                                  Pay only for the remaining days of that month,
+                                  then continue with regular monthly payments in
+                                  the first week of each month.
+                                </li>
+                                <li>
+                                  Fix the fee date according to the admission
+                                  date (e.g., if admitted on the 15th, then
+                                  every month the fee is due on the 15th).
+                                </li>
+                              </ol>
+                            </li>
+                          </ul>
+
+                          {/* <p>
+                            a.{" "}
+                            <strong>
+                              Admission After the 10th of the Month:
+                            </strong>{" "}
+                            Pay a pro-rated fee (such as 1/3 or 2/3 of the
+                            monthly fee) for the remaining days of the current
+                            month, and Begin regular full-month payments
+                            starting from the first week of the next month.
+                          </p>
+                          <p>
+                            b. <strong>Full-Month Enrollment:</strong>{" "}
+                            Alternatively, if parents prefer the student to be
+                            considered enrolled for the entire current month,
+                            the full monthly fee must be paid within 7 days of
+                            admission (e.g., admitted on the 10th → pay by the
+                            17th).
+                          </p> */}
+                        </div>
                       </div>
                       <p>
                         3. Student Supervision: The Academy is only responsible

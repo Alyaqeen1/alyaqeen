@@ -32,7 +32,7 @@ export default function Register() {
             Student
           </a>
         </li>
-        <li
+        {/* <li
           className="nav-item "
           data-aos-duration="800"
           data-aos="fade-up"
@@ -46,22 +46,6 @@ export default function Register() {
             onClick={() => handleTabClick(1)}
           >
             Teacher
-          </a>
-        </li>
-        {/* <li
-          className="nav-item "
-          data-aos-duration="800"
-          data-aos="fade-up"
-          data-aos-delay="500"
-          role="presentation"
-        >
-          <a
-            className={`nav-link text-uppercase box-shadow px-3 ${
-              activeTabIndex === 2 ? " active" : ""
-            }`}
-            onClick={() => handleTabClick(2)}
-          >
-            Parent
           </a>
         </li> */}
       </ul>

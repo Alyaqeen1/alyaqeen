@@ -29,13 +29,15 @@ export default function LessonsCovered() {
   const [time_of_month, setTime_of_month] = useState("");
   const [book_name, setBook_name] = useState("");
   const [isEditMode, setIsEditMode] = useState(false);
-  const [month, setMonth] = useState("");
+  const currentMonth = new Date().toLocaleString("default", { month: "long" });
+  const [month, setMonth] = useState(currentMonth);
   const currentYear = new Date().getFullYear();
   const [year, setYear] = useState(currentYear.toString());
   const [filterMonth, setFilterMonth] = useState("");
   const [filterName, setFilterName] = useState("");
   const [filterYear, setFilterYear] = useState(currentYear.toString());
   const [addLessonCovered] = useAddLessonCoveredMutation();
+  const [type, setType] = useState("");
 
   // Get all lessons covered by this teacher by default
 
@@ -310,7 +312,7 @@ export default function LessonsCovered() {
           // SHOW INPUT FORM FOR EACH STUDENT WHEN IN EDIT MODE
           <div className="mt-2">
             <div className="row mb-4">
-              <div className="col-lg-3">
+              <div className="col-lg-2">
                 <label className="form-label">Month</label>
                 <select
                   style={{ borderColor: "var(--border2)" }}
@@ -334,7 +336,7 @@ export default function LessonsCovered() {
                   <option value="December">December</option>
                 </select>
               </div>
-              <div className="col-lg-3">
+              <div className="col-lg-2">
                 <label className="form-label">Year</label>
                 <select
                   style={{ borderColor: "var(--border2)" }}
@@ -368,16 +370,45 @@ export default function LessonsCovered() {
                   <option value="ending">End Of The Month</option>
                 </select>
               </div>
+              <div className="col-lg-2">
+                <label className="form-label">Type Of Education</label>
+                <select
+                  style={{ borderColor: "var(--border2)" }}
+                  className="form-control bg-light"
+                  required
+                  value={type}
+                  onChange={(e) => setType(e.target.value)}
+                >
+                  <option value="">Select Type</option>
+                  <option value="normal">Normal Education</option>
+                  <option value="gift_muslim">Gift For Muslim</option>
+                </select>
+              </div>
               <div className="col-lg-3">
                 <label className="form-label">Book Name</label>
-                <input
-                  type="text"
+                <select
                   style={{ borderColor: "var(--border2)" }}
-                  className="form-control"
+                  className="form-control bg-light"
+                  required
                   value={book_name}
                   onChange={(e) => setBook_name(e.target.value)}
-                  required
-                />
+                >
+                  <option value="">Select Book</option>
+                  {type === "normal" ? (
+                    <>
+                      <option value="qaidah_quran">
+                        Qaidah / Tajweed / Quran / Hifz
+                      </option>
+                      <option value="dua_surah">Dua / Surahs</option>
+                      <option value="islamic_studies">Islamic Studies</option>
+                    </>
+                  ) : (
+                    <>
+                      <option value="dua_surah">Dua / Surahs</option>
+                      <option value="islamic_studies">Islamic Studies</option>
+                    </>
+                  )}
+                </select>
               </div>
             </div>
             {students.map((student, index) => (
