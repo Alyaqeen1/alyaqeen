@@ -69,6 +69,7 @@ const ApplyNowComp = () => {
   const [signature, setSignature] = useState("");
   const [localLoading, setLocalLoading] = useState(false);
   const navigate = useNavigate();
+  const submitButtonRef = useRef();
   const { data, isLoading } = useGetDepartmentsQuery();
   console.log(data);
   const departments = data || [];
@@ -143,16 +144,15 @@ const ApplyNowComp = () => {
     language,
     status,
     emergency_number,
-
-    student_age,
     family_name,
     activity,
+    post_code,
+    address,
     mother,
     father,
     academic,
     medical,
     startingDate,
-    parent_email,
   } = selectedStudent || {};
   const { doctorName, surgeryAddress, surgeryNumber, allergies, condition } =
     medical || {};
@@ -215,6 +215,14 @@ const ApplyNowComp = () => {
       const url = res.data?.data?.display_url;
       setSignature(url);
       toast.success("Signature uploaded!");
+
+      // Scroll to submit button after saving signature
+      if (submitButtonRef.current) {
+        submitButtonRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      }
     } catch (err) {
       toast.error("Upload failed");
     }
@@ -237,12 +245,14 @@ const ApplyNowComp = () => {
     const student_name = form.student_name.value;
     const student_email = form.student_email.value.toLowerCase().trim();
     const student_dob = form.std_dob.value;
-    const student_age = form.student_age.value;
+    // const student_age = form.student_age.value;
     const family_name = form.family_name.value.trim();
     const student_gender = form.std_gender.value;
     const school_year = form.school_year.value;
     const language = form.language.value;
     const emergency_number = form.emergency_number.value;
+    const address = form.address.value;
+    const post_code = form.post_code.value;
 
     const mother_name = form.mother_name.value;
     const mother_occupation = form.mother_occupation.value;
@@ -250,7 +260,6 @@ const ApplyNowComp = () => {
     const father_name = form.father_name.value;
     const father_occupation = form.father_occupation.value;
     const father_number = form.father_number.value;
-    const parent_email = form.parent_email.value;
 
     const std_department = form.std_department.value;
     const std_time = form.std_time.value;
@@ -278,19 +287,19 @@ const ApplyNowComp = () => {
         { name: "student_name", label: "Student Name" },
         { name: "student_email", label: "Student Email", type: "email" },
         { name: "std_dob", label: "Date of Birth" },
-        { name: "student_age", label: "Student Age" },
         { name: "family_name", label: "Family Name" },
         { name: "std_gender", label: "Gender" },
         { name: "school_year", label: "School Year" },
         { name: "language", label: "Language" },
         { name: "emergency_number", label: "Emergency Number" },
+        { name: "address", label: "Home Address" },
+        { name: "post_code", label: "Post Code" },
         { name: "mother_name", label: "Mother Name" },
         { name: "mother_occupation", label: "Mother Occupation" },
         { name: "mother_number", label: "Mother Contact Number" },
         { name: "father_name", label: "Father Name" },
         { name: "father_occupation", label: "Father Occupation" },
         { name: "father_number", label: "Father Contact Number" },
-        { name: "parent_email", label: "Parent Email", type: "email" },
         { name: "std_department", label: "Department" },
         { name: "std_session", label: "Session" },
         { name: "std_time", label: "Session Time" },
@@ -336,16 +345,6 @@ const ApplyNowComp = () => {
       setLoading(false);
       return setError("Passwords do not match");
     }
-    // if (!/[A-Z]/.test(password)) {
-    //   setLocalLoading(false); // ✅ Unblock double click
-    //   setLoading(false);
-    //   return setError(" Must include an uppercase letter");
-    // }
-    // if (!/[a-z]/.test(password)) {
-    //   setLocalLoading(false); // ✅ Unblock double click
-    //   setLoading(false);
-    //   return setError("Must include a lowercase letter");
-    // }
     if (password.length < 6) {
       setLocalLoading(false); // ✅ Unblock double click
       setLoading(false);
@@ -421,13 +420,13 @@ const ApplyNowComp = () => {
           email: student_email,
           dob: student_dob,
           parentUid,
-          student_age,
+          address,
+          post_code,
           gender: student_gender,
           school_year,
           status: "under review",
           activity: "active",
           language,
-          parent_email,
           emergency_number,
           family_name,
           mother: {
@@ -765,39 +764,7 @@ const ApplyNowComp = () => {
                         <input type="date" name="std_dob" required />
                       </div>
                     </div>
-                    {/* school year */}
-                    <div
-                      className="col-lg-4 "
-                      data-aos-duration="800"
-                      data-aos="fade-up"
-                      data-aos-delay="300"
-                    >
-                      <div className="form-clt">
-                        <span>Age*</span>
-                        <select
-                          style={{ backgroundColor: "var(--theme2)" }}
-                          name="student_age"
-                          className="form-control"
-                          required
-                        >
-                          <option value="">Select age</option>
-                          <option value="4">4</option>
-                          <option value="5">5</option>
-                          <option value="6">6</option>
-                          <option value="7">7</option>
-                          <option value="8">8</option>
-                          <option value="9">9</option>
-                          <option value="10">10</option>
-                          <option value="11">11</option>
-                          <option value="12">12</option>
-                          <option value="13">13</option>
-                          <option value="14">14</option>
-                          <option value="15">15</option>
-                          <option value="16">16</option>
-                          <option value="17">17</option>
-                        </select>
-                      </div>
-                    </div>
+
                     {/* gender */}
                     <div
                       className="col-lg-4 "
@@ -901,7 +868,7 @@ const ApplyNowComp = () => {
                       className="col-lg-4 "
                       data-aos-duration="800"
                       data-aos="fade-up"
-                      data-aos-delay="500"
+                      data-aos-delay="300"
                     >
                       <div className="form-clt">
                         <span>Preferred Contact Number*</span>
@@ -920,7 +887,7 @@ const ApplyNowComp = () => {
                       className="col-lg-4 "
                       data-aos-duration="800"
                       data-aos="fade-up"
-                      data-aos-delay="700"
+                      data-aos-delay="500"
                     >
                       <div className="form-clt">
                         <span>
@@ -931,6 +898,44 @@ const ApplyNowComp = () => {
                           defaultValue={emailOld || ""}
                           name="student_email"
                           id="name"
+                          placeholder=""
+                          required
+                        />
+                      </div>
+                    </div>
+                    {/* post code */}
+                    <div
+                      className="col-lg-4 "
+                      data-aos-duration="800"
+                      data-aos="fade-up"
+                      data-aos-delay="700"
+                    >
+                      <div className="form-clt">
+                        <span>Post Code</span>
+                        <input
+                          type="text"
+                          defaultValue={post_code || ""}
+                          name="post_code"
+                          id="post_code"
+                          placeholder=""
+                          required
+                        />
+                      </div>
+                    </div>
+                    {/* address */}
+                    <div
+                      className="col-lg-12"
+                      data-aos-duration="800"
+                      data-aos="fade-up"
+                      data-aos-delay="300"
+                    >
+                      <div className="form-clt">
+                        <span>Home Address</span>
+                        <input
+                          type="text"
+                          defaultValue={address || ""}
+                          name="address"
+                          id="address"
                           placeholder=""
                           required
                         />
@@ -1058,27 +1063,6 @@ const ApplyNowComp = () => {
                           type="tel"
                           defaultValue={fatherNumber || ""}
                           name="father_number"
-                          id="name"
-                          placeholder=""
-                          required
-                        />
-                      </div>
-                    </div>
-
-                    {/* parent email */}
-                    <div
-                      className="col-lg-12 "
-                      data-aos-duration="800"
-                      data-aos="fade-up"
-                      data-aos-delay="300"
-                    >
-                      <div className="form-clt">
-                        <span>One of the other parents email*</span>
-                        <input
-                          defaultValue={parent_email || ""}
-                          // style={{ backgroundColor: "var(--theme2)" }}
-                          type="email"
-                          name="parent_email"
                           id="name"
                           placeholder=""
                           required
@@ -1474,6 +1458,18 @@ const ApplyNowComp = () => {
                         <hr className="w-100 my-0 text-white" />
                       </div>
                     </div>
+                    {/* Expected Starting Date */}
+                    <div
+                      className="col-lg-6 mt-5"
+                      data-aos-duration="800"
+                      data-aos="fade-up"
+                      data-aos-delay="500"
+                    >
+                      <div className="form-clt">
+                        <span>Expected Starting Date*</span>
+                        <input type="date" name="starting_date" required />
+                      </div>
+                    </div>
                     {/* Parents Signature */}
                     <div
                       className="col-lg-6 "
@@ -1508,18 +1504,6 @@ const ApplyNowComp = () => {
                             Save & Submit
                           </button>
                         </div>
-                      </div>
-                    </div>
-                    {/* Expected Starting Date */}
-                    <div
-                      className="col-lg-6 mt-5"
-                      data-aos-duration="800"
-                      data-aos="fade-up"
-                      data-aos-delay="500"
-                    >
-                      <div className="form-clt">
-                        <span>Expected Starting Date*</span>
-                        <input type="date" name="starting_date" required />
                       </div>
                     </div>
 
@@ -1669,6 +1653,7 @@ const ApplyNowComp = () => {
                     >
                       <button
                         type="submit"
+                        ref={submitButtonRef}
                         disabled={localLoading}
                         className="theme-btn bg-white text-center"
                       >

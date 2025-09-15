@@ -36,8 +36,8 @@ export default function UpdateStudent() {
     language,
     status,
     emergency_number,
-
-    student_age,
+    address,
+    post_code,
     family_name,
     activity,
     mother,
@@ -45,7 +45,6 @@ export default function UpdateStudent() {
     academic,
     medical,
     startingDate,
-    parent_email,
   } = student || {};
   const { doctorName, surgeryAddress, surgeryNumber, allergies, condition } =
     medical || {};
@@ -88,12 +87,13 @@ export default function UpdateStudent() {
     // basic info
     const student_name = form.student_name.value;
     const student_dob = form.std_dob.value;
-    const student_age = form.student_age.value;
     const family_name = form.family_name.value.trim();
     const student_gender = form.std_gender.value;
     const school_year = form.school_year.value;
     const language = form.language.value;
     const emergency_number = form.emergency_number.value;
+    const address = form.address.value.trim();
+    const post_code = form.post_code.value.trim();
     // parent details
     const mother_name = form.mother_name.value;
     const mother_occupation = form.mother_occupation.value;
@@ -101,7 +101,6 @@ export default function UpdateStudent() {
     const father_name = form.father_name.value;
     const father_occupation = form.father_occupation.value;
     const father_number = form.father_number.value;
-    const parent_email = form.parent_email.value;
     // academic details
     const std_department = form.std_department.value;
     const std_time = form.std_time.value;
@@ -129,13 +128,14 @@ export default function UpdateStudent() {
     const studentData = {
       name: student_name,
       dob: student_dob,
-      student_age,
       gender: student_gender,
       school_year: school_year,
       language,
-      parent_email: parent_email,
+      address,
+      post_code,
       emergency_number: emergency_number,
       family_name: family_name,
+
       mother: {
         name: mother_name,
         occupation: mother_occupation,
@@ -272,59 +272,6 @@ export default function UpdateStudent() {
             name="std_dob"
           />
         </div>
-        {/* age */}
-        {student_age ? (
-          <div className="col-md-4">
-            <label className="form-label">Age</label>
-            <select
-              style={{ borderColor: "var(--border2)" }}
-              name="student_age"
-              defaultValue={student_age}
-              className="form-control"
-            >
-              <option value="">Select age</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-              <option value="6">6</option>
-              <option value="7">7</option>
-              <option value="8">8</option>
-              <option value="9">9</option>
-              <option value="10">10</option>
-              <option value="11">11</option>
-              <option value="12">12</option>
-              <option value="13">13</option>
-              <option value="14">14</option>
-              <option value="15">15</option>
-              <option value="16">16</option>
-              <option value="17">17</option>
-            </select>
-          </div>
-        ) : (
-          <div className="col-md-4">
-            <label className="form-label">Age</label>
-            <select
-              style={{ borderColor: "var(--border2)" }}
-              name="student_age"
-              className="form-control"
-            >
-              <option value="">Select age</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-              <option value="6">6</option>
-              <option value="7">7</option>
-              <option value="8">8</option>
-              <option value="9">9</option>
-              <option value="10">10</option>
-              <option value="11">11</option>
-              <option value="12">12</option>
-              <option value="13">13</option>
-              <option value="14">14</option>
-              <option value="15">15</option>
-              <option value="16">16</option>
-              <option value="17">17</option>
-            </select>
-          </div>
-        )}
 
         {/* gender */}
         {gender ? (
@@ -467,6 +414,33 @@ export default function UpdateStudent() {
             placeholder=""
           />
         </div>
+        <div className="col-md-4">
+          <label className="form-label">Post Code</label>
+          <input
+            type="text"
+            style={{ borderColor: "var(--border2)" }}
+            defaultValue={post_code}
+            className="form-control bg-light"
+            name="post_code"
+            id="post_code"
+            required
+          />
+        </div>
+
+        <div className="col-md-12">
+          <label className="form-label">Home Address</label>
+          <input
+            type="text"
+            style={{ borderColor: "var(--border2)" }}
+            // disabled
+            className="form-control bg-light"
+            defaultValue={address}
+            name="address"
+            id="address"
+            placeholder=""
+            required
+          />
+        </div>
 
         {/* parents details */}
         <div
@@ -555,20 +529,7 @@ export default function UpdateStudent() {
             placeholder=""
           />
         </div>
-        {/* parent email */}
-        <div className="col-md-12">
-          <label className="form-label">One of the other parents email*</label>
-          <input
-            style={{ borderColor: "var(--border2)" }}
-            className="form-control bg-light"
-            // style={{ backgroundColor: "var(--theme2)" }}
-            type="email"
-            name="parent_email"
-            defaultValue={parent_email}
-            id="name"
-            placeholder=""
-          />
-        </div>
+
         {/* Academic Details */}
         <div
           style={{ backgroundColor: "var(--border2)" }}

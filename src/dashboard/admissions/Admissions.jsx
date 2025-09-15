@@ -39,16 +39,15 @@ export default function Admissions() {
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, delete it!",
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
-        deleteStudentData(id)
+        await deleteStudentData(id)
           .unwrap()
           .then((res) => {
-            // You can optionally check res.status === 200
             if (res?.deletedCount) {
               Swal.fire({
                 title: "Deleted!",
-                text: res.data.message,
+                text: "Student Deleted successfully",
                 icon: "success",
               });
               refetch();

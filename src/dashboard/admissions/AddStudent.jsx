@@ -82,12 +82,13 @@ export default function AddStudent() {
     const student_name = form.student_name.value.trim();
     const student_email = form.student_email.value.toLowerCase().trim();
     const student_dob = form.std_dob.value;
-    const student_age = form.student_age.value.trim();
     const family_name = form.family_name.value.trim();
     const student_gender = form.std_gender.value;
     const school_year = form.school_year.value;
     const language = form.language.value;
     const emergency_number = form.emergency_number.value.trim();
+    const address = form.address.value.trim();
+    const post_code = form.post_code.value.trim();
 
     // --- Parent Info ---
     const mother_name = form.mother_name.value.trim();
@@ -96,7 +97,6 @@ export default function AddStudent() {
     const father_name = form.father_name.value.trim();
     const father_occupation = form.father_occupation.value.trim();
     const father_number = form.father_number.value.trim();
-    const parent_email = form.parent_email.value.trim();
 
     // --- Academic Info ---
     const std_department = form.std_department.value;
@@ -126,19 +126,19 @@ export default function AddStudent() {
         { name: "student_name", label: "Student Name" },
         { name: "student_email", label: "Student Email", type: "email" },
         { name: "std_dob", label: "Date of Birth" },
-        { name: "student_age", label: "Student Age" },
         { name: "family_name", label: "Family Name" },
         { name: "std_gender", label: "Gender" },
         { name: "school_year", label: "School Year" },
         { name: "language", label: "Language" },
         { name: "emergency_number", label: "Emergency Number" },
+        { name: "post_code", label: "Post Code" },
+        { name: "address", label: "Home Address" },
         { name: "mother_name", label: "Mother Name" },
         { name: "mother_occupation", label: "Mother Occupation" },
         { name: "mother_number", label: "Mother Contact Number" },
         { name: "father_name", label: "Father Name" },
         { name: "father_occupation", label: "Father Occupation" },
         { name: "father_number", label: "Father Contact Number" },
-        { name: "parent_email", label: "Parent Email", type: "email" },
         { name: "std_department", label: "Department" },
         { name: "std_session", label: "Session" },
         { name: "std_time", label: "Session Time" },
@@ -264,13 +264,13 @@ export default function AddStudent() {
           email: student_email,
           dob: student_dob,
           parentUid,
-          student_age,
           gender: student_gender,
           school_year,
           status: "under review",
           activity: "active",
           language,
-          parent_email,
+          address,
+          post_code,
           emergency_number,
           family_name,
           mother: {
@@ -375,32 +375,6 @@ export default function AddStudent() {
             required
           />
         </div>
-        {/* age */}
-        <div className="col-md-4">
-          <label className="form-label">Age</label>
-          <select
-            style={{ borderColor: "var(--border2)" }}
-            name="student_age"
-            className="form-control"
-            required
-          >
-            <option value="">Select age</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-            <option value="11">11</option>
-            <option value="12">12</option>
-            <option value="13">13</option>
-            <option value="14">14</option>
-            <option value="15">15</option>
-            <option value="16">16</option>
-            <option value="17">17</option>
-          </select>
-        </div>
 
         {/* gender */}
         <div className="col-md-4">
@@ -501,6 +475,33 @@ export default function AddStudent() {
           />
         </div>
 
+        <div className="col-md-4">
+          <label className="form-label">Post Code</label>
+          <input
+            type="text"
+            style={{ borderColor: "var(--border2)" }}
+            // disabled
+            className="form-control bg-light"
+            name="post_code"
+            id="post_code"
+            required
+          />
+        </div>
+
+        <div className="col-md-12">
+          <label className="form-label">Home Address</label>
+          <input
+            type="text"
+            style={{ borderColor: "var(--border2)" }}
+            // disabled
+            className="form-control bg-light"
+            name="address"
+            id="address"
+            placeholder=""
+            required
+          />
+        </div>
+
         {/* parents details */}
         <div
           style={{ backgroundColor: "var(--border2)" }}
@@ -586,20 +587,7 @@ export default function AddStudent() {
             required
           />
         </div>
-        {/* parent email */}
-        <div className="col-md-12">
-          <label className="form-label">One of the other parents email*</label>
-          <input
-            style={{ borderColor: "var(--border2)" }}
-            className="form-control bg-light"
-            // style={{ backgroundColor: "var(--theme2)" }}
-            type="email"
-            name="parent_email"
-            id="name"
-            placeholder=""
-            required
-          />
-        </div>
+
         {/* Academic Details */}
         <div
           style={{ backgroundColor: "var(--border2)" }}

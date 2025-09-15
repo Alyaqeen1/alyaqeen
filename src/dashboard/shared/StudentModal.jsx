@@ -32,8 +32,8 @@ export default function StudentModal({ studentId, handleClose, showModal }) {
     language,
     status,
     emergency_number,
-
-    student_age,
+    address,
+    post_code,
     family_name,
     activity,
     mother,
@@ -42,7 +42,6 @@ export default function StudentModal({ studentId, handleClose, showModal }) {
     medical,
     startingDate,
     signature,
-    parent_email,
     monthly_fee,
   } = student || {};
   const { doctorName, surgeryAddress, surgeryNumber, allergies, condition } =
@@ -153,7 +152,10 @@ export default function StudentModal({ studentId, handleClose, showModal }) {
                     <strong>DOB:</strong> {dob}
                   </p>
                   <p>
-                    <strong>Student Age:</strong> {student_age}
+                    <strong>Home Address:</strong> {address}
+                  </p>
+                  <p>
+                    <strong>Post Code:</strong> {post_code}
                   </p>
                   <p>
                     <strong>Family Name:</strong> {family_name}
@@ -178,9 +180,7 @@ export default function StudentModal({ studentId, handleClose, showModal }) {
                     <strong>Session Time:</strong>{" "}
                     {time ? sessionMap[time] : "not available"}
                   </p>
-                  <p>
-                    <strong>Parent Email:</strong> {parent_email}
-                  </p>
+
                   <p>
                     <strong>Emergency Number:</strong> {emergency_number}
                   </p>
