@@ -197,6 +197,7 @@ export default function InactiveStudents() {
                 "#",
                 "Student Name",
                 "Email",
+                "ID #",
                 "Department",
                 "Class",
                 "Status",
@@ -225,6 +226,9 @@ export default function InactiveStudents() {
                     </td>
                     <td className="border text-center align-middle">
                       {student?.email}
+                    </td>
+                    <td className="border text-center align-middle">
+                      {student?.student_id}
                     </td>
                     <td className="border text-center align-middle">
                       {student?.academic?.department}

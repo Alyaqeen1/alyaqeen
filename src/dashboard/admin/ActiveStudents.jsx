@@ -11,6 +11,7 @@ import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 import { Link } from "react-router";
 import toast from "react-hot-toast";
 import StudentModal from "../shared/StudentModal";
+import { useGetFamiliesQuery } from "../../redux/features/families/familiesApi";
 
 // utils/colorMap.js
 const colors = [
@@ -60,6 +61,7 @@ export default function ActiveStudents() {
   const [selectedStudentId, setSelectedStudentId] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
+  const { data: families } = useGetFamiliesQuery();
   useEffect(() => {
     const timerId = setTimeout(() => {
       setDebouncedSearchTerm(searchTerm);
@@ -208,6 +210,31 @@ export default function ActiveStudents() {
   };
 
   const handleClose = () => setShowModal(false);
+  const [studentColorMap, setStudentColorMap] = useState({});
+
+  useEffect(() => {
+    if (families?.length) {
+      const map = {};
+      let colorIndex = 0;
+
+      families.forEach((family) => {
+        const familyColor = colors[colorIndex % colors.length];
+        colorIndex++;
+
+        family.children.forEach((childUid) => {
+          map[childUid] = familyColor;
+        });
+      });
+
+      setStudentColorMap(map);
+    }
+  }, [families]);
+  const getColorForStudent = (student) => {
+    if (student?.uid && studentColorMap[student.uid]) {
+      return studentColorMap[student.uid];
+    }
+    return "#ccc"; // fallback if not found
+  };
 
   if (isLoading) {
     return <LoadingSpinnerDash />;
@@ -238,9 +265,10 @@ export default function ActiveStudents() {
           <thead>
             <tr>
               {[
-                "#",
+                "Sr #",
                 "Student Name",
                 "Starting Date",
+                "ID #",
                 "Department",
                 "Time",
                 "Class",
@@ -269,7 +297,7 @@ export default function ActiveStudents() {
                       <div className="d-flex align-items-center gap-2">
                         <div
                           style={{
-                            backgroundColor: getColorForName(student?.name),
+                            backgroundColor: getColorForStudent(student),
                             width: "35px",
                             height: "35px",
                             borderRadius: "50%",
@@ -287,6 +315,9 @@ export default function ActiveStudents() {
                     </td>
                     <td className="border h6 text-center align-middle">
                       {formatDateToDmy(student?.startingDate)}
+                    </td>
+                    <td className="border text-center align-middle">
+                      {student?.student_id}
                     </td>
                     <td className="border text-center align-middle">
                       {student?.academic?.department}
