@@ -514,13 +514,16 @@ const ApplyNowComp = () => {
     // insert Arabic before Urdu (4th index)
     reorderedDepartments.splice(3, 0, arabicDept);
   }
-
+  const [activeTabIndex, setActiveTabIndex] = useState(0);
+  const handleTabClick = (index) => {
+    setActiveTabIndex(index);
+  };
   if (isLoading) {
     return <LoadingSpinner></LoadingSpinner>;
   }
 
   return (
-    <section className="contact-section">
+    <section className="contact-section mt-2">
       <div className="line-1">
         <img src={one} className="w-50" alt="shape-img" />
       </div>
@@ -549,8 +552,61 @@ const ApplyNowComp = () => {
         </div>
         <div>
           {/* Student Search Section */}
+          <ul
+            className="nav gap-2 my-5 flex justify-content-center align-items-center"
+            role="tablist"
+          >
+            <li
+              className="nav-item "
+              data-aos-duration="800"
+              data-aos="fade-up"
+              data-aos-delay="300"
+              role="presentation"
+            >
+              <a
+                className={`nav-link text-uppercase box-shadow px-3 ${
+                  activeTabIndex === 0 ? " active" : ""
+                }`}
+                onClick={() => handleTabClick(0)}
+              >
+                Add a New Student
+                <p style={{ fontSize: "10px" }}>
+                  If this is your first child or not a sibling, start a fresh
+                  form.
+                </p>
+              </a>
+            </li>
+            <li
+              className="nav-item "
+              data-aos-duration="800"
+              data-aos="fade-up"
+              data-aos-delay="500"
+              role="presentation"
+            >
+              <a
+                className={`nav-link text-uppercase box-shadow px-3 ${
+                  activeTabIndex === 1 ? " active" : ""
+                }`}
+                onClick={() => handleTabClick(1)}
+              >
+                Add a Sibling
+                <p style={{ fontSize: "10px" }}>
+                  Adding another child? Select an existing student to auto-fill
+                  details.
+                </p>
+              </a>
+            </li>
+          </ul>
+          {/* <div className="d-flex justify-content-center g-3">
+            <button className="theme-btn text-center">Add a New Student</button>
+            <button className="theme-btn bg-white text-center">
+              Add a Sibling
+            </button>
+          </div> */}
           <div
-            className="card mb-4"
+            className={`card mb-4 c-tab-single ${
+              activeTabIndex === 1 ? "active-tab" : ""
+            }`}
             style={{
               borderColor: "var(--theme)",
             }}
