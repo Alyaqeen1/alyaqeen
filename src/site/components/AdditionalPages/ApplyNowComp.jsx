@@ -569,7 +569,7 @@ const ApplyNowComp = () => {
                 }`}
                 onClick={() => handleTabClick(0)}
               >
-                Add a New Student
+                <p className="fs-4">Add a New Student</p>
                 <p style={{ fontSize: "10px" }}>
                   If this is your first child or not a sibling, start a fresh
                   form.
@@ -589,7 +589,7 @@ const ApplyNowComp = () => {
                 }`}
                 onClick={() => handleTabClick(1)}
               >
-                Add a Sibling
+                <p className="fs-4">Add a Sibling</p>
                 <p style={{ fontSize: "10px" }}>
                   Adding another child? Select an existing student to auto-fill
                   details.
@@ -612,16 +612,16 @@ const ApplyNowComp = () => {
             }}
           >
             <div className="card-body">
-              <h5 className="card-title">Find Existing Student</h5>
+              <h5 className="card-title">Select Existing Student</h5>
               <div className="row">
                 <div className="col-md-8">
-                  <div className="form-group">
-                    <label>Email Address</label>
+                  <div className="form-group mb-2 mb-md-0">
+                    {/* <label>Email Address</label> */}
                     <input
                       type="email"
                       style={{ borderColor: "var(--theme)" }}
                       className="form-control"
-                      placeholder="Enter student email"
+                      placeholder="Enter your email to find your child’s record"
                       value={email}
                       onChange={handleEmailChange}
                       required
