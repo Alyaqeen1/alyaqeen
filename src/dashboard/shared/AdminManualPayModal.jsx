@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {
   useGetEnrolledFullFamilyByIdQuery,
   useGetFamilyQuery,
@@ -31,19 +31,55 @@ export default function AdminManualPayModal({
   const [payNow, setPayNow] = useState("");
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
   const [isProcessing, setIsProcessing] = useState(false);
+  const [selectedStudents, setSelectedStudents] = useState([]);
+  useEffect(() => {
+    if (enrolledFamily?.childrenDocs) {
+      // Set all enrolled students as selected by default
+      const enrolledStudentIds = enrolledFamily.childrenDocs
+        .filter((student) => student.status === "enrolled")
+        .map((student) => student._id);
+      setSelectedStudents(enrolledStudentIds);
+    }
+  }, [enrolledFamily]);
 
-  // Student names string
-  const studentNames = enrolledFamily?.childrenDocs
-    ?.map((s) => s.name)
-    .join(", ");
+  // Handle student selection
+  const handleStudentSelection = (studentId) => {
+    setSelectedStudents((prev) =>
+      prev.includes(studentId)
+        ? prev.filter((id) => id !== studentId)
+        : [...prev, studentId]
+    );
+  };
+
+  // Select/deselect all students
+  const toggleAllStudents = () => {
+    if (selectedStudents.length === enrolledFamily?.childrenDocs?.length) {
+      setSelectedStudents([]);
+    } else {
+      const allStudentIds = enrolledFamily.childrenDocs.map(
+        (student) => student._id
+      );
+      setSelectedStudents(allStudentIds);
+    }
+  };
+
+  // Get selected student objects
+  const selectedStudentObjects = useMemo(() => {
+    return (
+      enrolledFamily?.childrenDocs?.filter((student) =>
+        selectedStudents.includes(student._id)
+      ) || []
+    );
+  }, [enrolledFamily, selectedStudents]);
 
   // Check if payment already exists in fees collection for this family and selected month/year/type
+  // Check if payment already exists for selected students
   const paymentExists = useMemo(() => {
-    if (!feeType || !familyId) return false;
+    if (!feeType || !familyId || selectedStudents.length === 0) return false;
 
     if (feeType === "admission") {
-      // Only mark as existing if *all targeted students* already have admission paid
-      return enrolledFamily?.childrenDocs?.every((student) =>
+      // For admission: check if ALL selected students already have admission paid
+      return selectedStudentObjects.every((student) =>
         fees.some(
           (fee) =>
             fee.familyId === familyId &&
@@ -53,9 +89,8 @@ export default function AdminManualPayModal({
         )
       );
     }
-
     if (feeType === "monthly" && feeMonth) {
-      return enrolledFamily?.childrenDocs?.every((student) =>
+      return selectedStudentObjects.some((student) =>
         fees.some(
           (fee) =>
             fee.familyId === familyId &&
@@ -66,8 +101,9 @@ export default function AdminManualPayModal({
                 s.studentId === student._id &&
                 s.monthsPaid?.some(
                   (mp) =>
-                    mp.month === feeMonth.padStart(2, "0") &&
-                    mp.year === feeYear
+                    String(mp.month).padStart(2, "0") ===
+                      String(feeMonth).padStart(2, "0") &&
+                    String(mp.year) === String(feeYear)
                 )
             )
         )
@@ -75,25 +111,16 @@ export default function AdminManualPayModal({
     }
 
     return false;
-  }, [fees, familyId, feeMonth, feeYear, feeType, enrolledFamily]);
-
-  // 1. Check admission payment status separately
-  const admissionPaid = useMemo(() => {
-    return fees.some(
-      (fee) =>
-        fee.familyId === familyId &&
-        fee.paymentType === "admission" &&
-        fee.status === "paid"
-    );
-  }, [fees, familyId]);
+  }, [fees, familyId, feeMonth, feeYear, feeType, selectedStudentObjects]);
 
   const isBeforeJoiningMonth = useMemo(() => {
-    if (!feeMonth || !feeYear || !enrolledFamily?.childrenDocs) return false;
+    if (!feeMonth || !feeYear || selectedStudentObjects.length === 0)
+      return false;
 
     const selectedMonth = parseInt(feeMonth);
     const selectedYear = parseInt(feeYear);
 
-    return enrolledFamily.childrenDocs.some((student) => {
+    return selectedStudentObjects.some((student) => {
       if (!student.startingDate) return false;
 
       const joiningDate = new Date(student.startingDate);
@@ -105,12 +132,18 @@ export default function AdminManualPayModal({
         (selectedYear === joiningYear && selectedMonth < joiningMonth)
       );
     });
-  }, [feeMonth, feeYear, enrolledFamily]);
+  }, [feeMonth, feeYear, selectedStudentObjects]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     setIsProcessing(true);
-
+    // Validation
+    if (selectedStudents?.length === 0) {
+      toast.error("Please select at least one student");
+      setIsProcessing(false);
+      return;
+    }
     // Validation
     if (!feeType) {
       toast.error("Please select a Payment Type");
@@ -141,17 +174,9 @@ export default function AdminManualPayModal({
       setIsProcessing(false);
       return;
     }
-    // // New: Prevent monthly fee if admission fee not paid
-    // if (feeType === "monthly" && !admissionPaid) {
-    //   toast.error(
-    //     "Admission fee not paid yet. Please record admission payment first."
-    //   );
-    //   setIsProcessing(false);
-    //   return;
-    // }
 
     // NEW CHECK: Are there any students not enrolled (status "approved")?
-    const notEnrolledStudents = enrolledFamily?.childrenDocs?.filter(
+    const notEnrolledStudents = selectedStudentObjects?.filter(
       (student) => student.status === "approved"
     );
 
@@ -186,7 +211,7 @@ export default function AdminManualPayModal({
           date,
           method: feeMethod,
           paymentType: feeType,
-          students: enrolledFamily?.childrenDocs?.map((student) => {
+          students: selectedStudentObjects?.map((student) => {
             const startDate = new Date(student.startingDate);
             const joiningMonth = (startDate.getMonth() + 1)
               .toString()
@@ -206,7 +231,7 @@ export default function AdminManualPayModal({
 
         const data = await createFeeData(admissionData).unwrap();
         // Update student statuses
-        const updatePromises = enrolledFamily?.childrenDocs?.map((student) =>
+        const updatePromises = selectedStudentObjects?.map((student) =>
           updateStudentStatus({
             id: student._id,
             status: "enrolled",
@@ -216,7 +241,7 @@ export default function AdminManualPayModal({
         await Promise.all(updatePromises);
         if (data?.insertedId) {
           toast.success(
-            `Admission payment of $${payNow} recorded successfully`
+            `Admission payment of $${payNow} recorded successfully for ${selectedStudentObjects?.length} student(s)`
           );
         }
       } else {
@@ -230,7 +255,7 @@ export default function AdminManualPayModal({
           date,
           method: feeMethod,
           paymentType: feeType,
-          students: enrolledFamily?.childrenDocs?.map((student) => ({
+          students: selectedStudentObjects?.map((student) => ({
             studentId: student._id,
             name: student.name,
             monthsPaid: [
@@ -247,7 +272,9 @@ export default function AdminManualPayModal({
 
         const data = await createFeeData(monthlyData).unwrap();
         if (data?.insertedId) {
-          toast.success(`Monthly payment of $${payNow} recorded successfully`);
+          toast.success(
+            `Monthly payment of $${payNow} recorded successfully for ${selectedStudentObjects?.length} student(s)`
+          );
         }
       }
       refetchFee();
@@ -315,16 +342,76 @@ export default function AdminManualPayModal({
                   <div className="col-sm-8 pt-2">{family?.name || "-"}</div>
                 </div>
 
-                {/* Students in Family */}
+                {/* Students Selection */}
                 <div className="mb-3 row">
                   <label className="col-sm-4 col-form-label fw-semibold">
-                    Students in Family
+                    Select Students
                   </label>
-                  <div
-                    className="col-sm-8 pt-2"
-                    style={{ color: "green", cursor: "pointer" }}
-                  >
-                    {studentNames || "-"}
+                  <div className="col-sm-8">
+                    {enrolledFamily?.childrenDocs?.length > 0 && (
+                      <div className="border rounded p-2">
+                        <div className="form-check mb-2">
+                          <input
+                            className="form-check-input"
+                            type="checkbox"
+                            id="selectAllStudents"
+                            checked={
+                              selectedStudents.length ===
+                              enrolledFamily.childrenDocs.length
+                            }
+                            onChange={toggleAllStudents}
+                          />
+                          <label
+                            className="form-check-label fw-bold"
+                            htmlFor="selectAllStudents"
+                          >
+                            Select All Students
+                          </label>
+                        </div>
+                        <hr className="my-1" />
+                        <div
+                          className="student-checkboxes"
+                          style={{ maxHeight: "200px", overflowY: "auto" }}
+                        >
+                          {enrolledFamily.childrenDocs.map((student) => (
+                            <div key={student._id} className="form-check">
+                              <input
+                                className="form-check-input"
+                                type="checkbox"
+                                id={`student-${student._id}`}
+                                checked={selectedStudents.includes(student._id)}
+                                onChange={() =>
+                                  handleStudentSelection(student._id)
+                                }
+                                disabled={student.status !== "enrolled"}
+                              />
+                              <label
+                                className="form-check-label"
+                                htmlFor={`student-${student._id}`}
+                                style={{
+                                  color:
+                                    student.status !== "enrolled"
+                                      ? "#6c757d"
+                                      : "inherit",
+                                  cursor:
+                                    student.status !== "enrolled"
+                                      ? "not-allowed"
+                                      : "pointer",
+                                }}
+                              >
+                                {student.name}
+                                {student.status !== "enrolled" &&
+                                  " (Not enrolled)"}
+                              </label>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    <small className="text-muted">
+                      Selected: {selectedStudents.length} of{" "}
+                      {enrolledFamily?.childrenDocs?.length} students
+                    </small>
                   </div>
                 </div>
 

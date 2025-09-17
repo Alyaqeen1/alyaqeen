@@ -12,6 +12,7 @@ import FamilyUpdateModal from "../shared/FamilyUpdateModal";
 import AdminPayModal from "../shared/AdminPayModal";
 import { useGetFeesByStatusQuery } from "../../redux/features/fees/feesApi";
 import AdminManualPayModal from "../shared/AdminManualPayModal";
+import Select from "react-select";
 
 const PaymentStatusCell = ({ status }) => {
   const statusConfig = {
@@ -42,10 +43,6 @@ const formatDateToDmy = (dateStr) => {
 
 // Academic months in order: September (9) to August (8)
 const academicMonths = [
-  { num: 9, name: "Sep" },
-  { num: 10, name: "Oct" },
-  { num: 11, name: "Nov" },
-  { num: 12, name: "Dec" },
   { num: 1, name: "Jan" },
   { num: 2, name: "Feb" },
   { num: 3, name: "Mar" },
@@ -54,6 +51,10 @@ const academicMonths = [
   { num: 6, name: "Jun" },
   { num: 7, name: "Jul" },
   { num: 8, name: "Aug" },
+  { num: 9, name: "Sep" },
+  { num: 10, name: "Oct" },
+  { num: 11, name: "Nov" },
+  { num: 12, name: "Dec" },
 ];
 
 export default function FeeSettings() {
@@ -63,36 +64,30 @@ export default function FeeSettings() {
   const [selectedFamilyId, setSelectedFamilyId] = useState(null);
   const [selectedAdminFamilyId, setSelectedAdminFamilyId] = useState(null);
   const [selectedAdminFamilyId2, setSelectedAdminFamilyId2] = useState(null);
+  const [selectedMonths, setSelectedMonths] = useState([]);
+
   // const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const { user, loading } = useAuth();
   const [deleteFamilyData] = useDeleteFamilyDataMutation();
   const [searchTerm, setSearchTerm] = useState("");
-  const [semesterFilter, setSemesterFilter] = useState("all");
+  // const [semesterFilter, setSemesterFilter] = useState("all");
 
-  // Generate academic year options (current academic year ± 2 years)
-  const academicYearOptions = useMemo(() => {
+  // Generate year options (current year ± 2 years)
+  const yearOptions = useMemo(() => {
     const currentYear = new Date().getFullYear();
-    const currentMonth = new Date().getMonth() + 1; // 1-12
-    const academicYearStart = currentMonth >= 9 ? currentYear : currentYear - 1;
 
+    // Generate 5 years: previous 2, current, and next 2
     return Array.from({ length: 5 }, (_, i) => {
-      const year = academicYearStart - 2 + i;
+      const year = currentYear - 2 + i;
       return {
-        value: `${year}/${year + 1}`,
-        label: `${year}/${year + 1}`,
-        startYear: year,
-        endYear: year + 1,
+        value: year,
+        label: year.toString(),
       };
     });
   }, []);
 
-  // Now set default selected year to "2024/2025" if available, else first option
-  const defaultAcademicYear =
-    academicYearOptions.find((option) => option.value === "2024/2025")?.value ||
-    academicYearOptions[0]?.value ||
-    "";
-
-  const [selectedYear, setSelectedYear] = useState(defaultAcademicYear);
+  // Set default selected year to current year
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
 
   const {
     data: familiesByStatus,
@@ -174,13 +169,79 @@ export default function FeeSettings() {
     refetch();
   }, []);
   const monthsToDisplay = useMemo(() => {
-    if (semesterFilter === "semester1") {
-      return academicMonths.slice(0, 6); // Sep-Feb
-    } else if (semesterFilter === "semester2") {
-      return academicMonths.slice(6); // Mar-Aug
+    if (selectedMonths.length > 0) {
+      return academicMonths.filter((m) => selectedMonths.includes(m.num));
     }
-    return academicMonths; // All months
-  }, [semesterFilter]);
+
+    // Default: show all months from Jan to Dec
+    return academicMonths;
+  }, [selectedMonths]);
+
+  // const getPaymentStatus = (student, month, feePayments) => {
+  //   if (!student.startingDate) return "unpaid";
+
+  //   const joining = new Date(student.startingDate);
+  //   const joiningMonth = joining.getMonth() + 1;
+  //   const joiningYear = joining.getFullYear();
+
+  //   // Get the selected academic year range
+  //   const selectedAcademicYear = academicYearOptions.find(
+  //     (year) => year.value === selectedYear
+  //   );
+  //   if (!selectedAcademicYear) return "unpaid";
+
+  //   // Determine the actual year for each month
+  //   // Months 9-12 (Sep-Dec) belong to startYear, months 1-8 (Jan-Aug) belong to endYear
+  //   const actualYear =
+  //     month >= 9
+  //       ? selectedAcademicYear.startYear
+  //       : selectedAcademicYear.endYear;
+
+  //   // Skip if student joined after this month/year
+  //   if (
+  //     actualYear < joiningYear ||
+  //     (actualYear === joiningYear && month < joiningMonth)
+  //   ) {
+  //     return null; // Student wasn't enrolled yet
+  //   }
+
+  //   // Convert to comparable formats
+  //   const targetMonth = month.toString();
+  //   const targetMonthPadded = month.toString().padStart(2, "0");
+  //   const targetYear = actualYear.toString();
+
+  //   // Check all fee payments for this student
+  //   for (const payment of feePayments || []) {
+  //     const studentPayment = payment.students?.find(
+  //       (s) => String(s.studentId) === String(student._id)
+  //     );
+
+  //     if (!studentPayment) continue;
+
+  //     // Check admission payments (for joining month only)
+  //     if (
+  //       payment.paymentType === "admission" &&
+  //       actualYear === joiningYear &&
+  //       month === joiningMonth
+  //     ) {
+  //       return payment.status;
+  //     }
+
+  //     // Check monthly payments
+  //     if (payment.paymentType === "monthly" && studentPayment.monthsPaid) {
+  //       const isPaid = studentPayment.monthsPaid.some(
+  //         (m) =>
+  //           (String(m.month) === targetMonth ||
+  //             String(m.month) === targetMonthPadded) &&
+  //           String(m.year) === targetYear
+  //       );
+
+  //       if (isPaid) return payment.status;
+  //     }
+  //   }
+
+  //   return "unpaid";
+  // };
 
   const getPaymentStatus = (student, month, feePayments) => {
     if (!student.startingDate) return "unpaid";
@@ -189,23 +250,10 @@ export default function FeeSettings() {
     const joiningMonth = joining.getMonth() + 1;
     const joiningYear = joining.getFullYear();
 
-    // Get the selected academic year range
-    const selectedAcademicYear = academicYearOptions.find(
-      (year) => year.value === selectedYear
-    );
-    if (!selectedAcademicYear) return "unpaid";
-
-    // Determine the actual year for each month
-    // Months 9-12 (Sep-Dec) belong to startYear, months 1-8 (Jan-Aug) belong to endYear
-    const actualYear =
-      month >= 9
-        ? selectedAcademicYear.startYear
-        : selectedAcademicYear.endYear;
-
     // Skip if student joined after this month/year
     if (
-      actualYear < joiningYear ||
-      (actualYear === joiningYear && month < joiningMonth)
+      selectedYear < joiningYear ||
+      (selectedYear === joiningYear && month < joiningMonth)
     ) {
       return null; // Student wasn't enrolled yet
     }
@@ -213,7 +261,7 @@ export default function FeeSettings() {
     // Convert to comparable formats
     const targetMonth = month.toString();
     const targetMonthPadded = month.toString().padStart(2, "0");
-    const targetYear = actualYear.toString();
+    const targetYear = selectedYear.toString();
 
     // Check all fee payments for this student
     for (const payment of feePayments || []) {
@@ -226,7 +274,7 @@ export default function FeeSettings() {
       // Check admission payments (for joining month only)
       if (
         payment.paymentType === "admission" &&
-        actualYear === joiningYear &&
+        selectedYear === joiningYear &&
         month === joiningMonth
       ) {
         return payment.status;
@@ -247,6 +295,10 @@ export default function FeeSettings() {
 
     return "unpaid";
   };
+  const monthOptions = academicMonths.map((m) => ({
+    value: m.num,
+    label: m.name,
+  }));
 
   if (isLoading || loading || isLoadingFee) {
     return <LoadingSpinnerDash />;
@@ -255,50 +307,59 @@ export default function FeeSettings() {
   return (
     <div className="mb-3">
       {/* Filters */}
-      <div className="d-flex justify-content-end mb-3 gap-2">
-        <div className="input-group">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Search families or students..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+      <div className="row mb-3 g-2">
+        {/* Search Field */}
+        <div className="col-lg-4">
+          <div className="input-group">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Search families or students..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <button
+              className="btn btn-outline-secondary"
+              type="button"
+              onClick={() => setSearchTerm("")}
+            >
+              Clear
+            </button>
+          </div>
+        </div>
+
+        {/* Academic Year Selector */}
+        <div className="col-lg-4">
+          <div className="input-group">
+            <label className="input-group-text">Year:</label>
+            <select
+              className="form-select"
+              value={selectedYear}
+              onChange={(e) => setSelectedYear(parseInt(e.target.value))}
+            >
+              {yearOptions.map((year) => (
+                <option key={year.value} value={year.value}>
+                  {year.label}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        {/* Custom Months Multi-Select */}
+        <div className="col-lg-4">
+          <Select
+            isMulti
+            options={monthOptions}
+            value={monthOptions.filter((option) =>
+              selectedMonths.includes(option.value)
+            )}
+            onChange={(selectedOptions) => {
+              setSelectedMonths(selectedOptions.map((opt) => opt.value));
+            }}
+            closeMenuOnSelect={false}
+            placeholder="Select months..."
           />
-          <button
-            className="btn btn-outline-secondary"
-            type="button"
-            onClick={() => setSearchTerm("")}
-          >
-            Clear
-          </button>
-        </div>
-
-        <div className="input-group">
-          <label className="input-group-text">Academic Year:</label>
-          <select
-            className="form-select"
-            value={selectedYear}
-            onChange={(e) => setSelectedYear(e.target.value)}
-          >
-            {academicYearOptions.map((year) => (
-              <option key={year.value} value={year.value}>
-                {year.label}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="input-group">
-          <label className="input-group-text">Semester:</label>
-          <select
-            className="form-select"
-            value={semesterFilter}
-            onChange={(e) => setSemesterFilter(e.target.value)}
-          >
-            <option value="all">All Months (Sep-Aug)</option>
-            <option value="semester1">Semester 1 (Sep-Feb)</option>
-            <option value="semester2">Semester 2 (Mar-Aug)</option>
-          </select>
         </div>
       </div>
 
