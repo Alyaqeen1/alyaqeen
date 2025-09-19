@@ -23,6 +23,10 @@ export const studentsApi = apiSlice.injectEndpoints({
       query: (email) => `/students/by-email/${email}`,
       providesTags: ["Student"],
     }),
+    getStudentsById: builder.query({
+      query: (id) => `/students/by-id/${id}`,
+      providesTags: ["Student"],
+    }),
     // In your studentsApi.js (or wherever your endpoints are defined)
     getStudentByActivity: builder.query({
       query: ({ activity, search }) => {
@@ -90,6 +94,7 @@ export const {
   useGetStudentCountQuery,
   useGetStudentsByStatusQuery,
   useGetStudentsByEmailQuery,
+  useGetStudentsByIdQuery,
   useGetStudentByActivityQuery,
   useGetStudentsByGroupQuery,
   useGetWithoutEnrolledStudentsQuery,

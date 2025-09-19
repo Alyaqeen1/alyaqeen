@@ -9,17 +9,71 @@ export default function LessonCoveredUpdateModal({
 }) {
   const [updateLessonCovered, { isLoading }] = useUpdateLessonCoveredMutation();
 
-  const [beginningData, setBeginningData] = useState({});
-  const [endingData, setEndingData] = useState({});
+  const [beginningData, setBeginningData] = useState({
+    lessons: {
+      qaidah_quran: { selected: "", data: { para: "", page: "", line: "" } },
+      islamic_studies: { lesson_name: "", page: "" },
+      dua_surah: { lesson_name: "", book: "", level: "", page: "", target: "" },
+    },
+    description: "",
+  });
+
+  const [endingData, setEndingData] = useState({
+    lessons: {
+      qaidah_quran: { selected: "", data: { para: "", page: "", line: "" } },
+      islamic_studies: { lesson_name: "", page: "" },
+      dua_surah: { lesson_name: "", book: "", level: "", page: "", target: "" },
+    },
+    description: "",
+  });
 
   useEffect(() => {
     if (student) {
-      const beginning =
-        student.entries.find((e) => e.time_of_month === "beginning") || {};
-      const ending =
-        student.entries.find((e) => e.time_of_month === "ending") || {};
-      setBeginningData(beginning);
-      setEndingData(ending);
+      if (student.beginning) {
+        setBeginningData({
+          ...student.beginning,
+          lessons: {
+            qaidah_quran: student.beginning.lessons?.qaidah_quran || {
+              selected: "",
+              data: { para: "", page: "", line: "" },
+            },
+            islamic_studies: student.beginning.lessons?.islamic_studies || {
+              lesson_name: "",
+              page: "",
+            },
+            dua_surah: student.beginning.lessons?.dua_surah || {
+              lesson_name: "",
+              book: "",
+              level: "",
+              page: "",
+              target: "",
+            },
+          },
+        });
+      }
+
+      if (student.ending) {
+        setEndingData({
+          ...student.ending,
+          lessons: {
+            qaidah_quran: student.ending.lessons?.qaidah_quran || {
+              selected: "",
+              data: { para: "", page: "", line: "" },
+            },
+            islamic_studies: student.ending.lessons?.islamic_studies || {
+              lesson_name: "",
+              page: "",
+            },
+            dua_surah: student.ending.lessons?.dua_surah || {
+              lesson_name: "",
+              book: "",
+              level: "",
+              page: "",
+              target: "",
+            },
+          },
+        });
+      }
     }
   }, [student]);
 
@@ -74,6 +128,40 @@ export default function LessonCoveredUpdateModal({
     }
   };
 
+  const handleLessonChange = (
+    period,
+    subject,
+    field,
+    value,
+    subField = null
+  ) => {
+    const setter = period === "beginning" ? setBeginningData : setEndingData;
+    const currentData = period === "beginning" ? beginningData : endingData;
+
+    setter({
+      ...currentData,
+      lessons: {
+        ...currentData.lessons,
+        [subject]: {
+          ...currentData.lessons[subject],
+          ...(subField
+            ? {
+                [field]: {
+                  ...currentData.lessons[subject][field],
+                  [subField]: value,
+                },
+              }
+            : { [field]: value }),
+        },
+      },
+    });
+  };
+
+  const handleDescriptionChange = (period, value) => {
+    const setter = period === "beginning" ? setBeginningData : setEndingData;
+    setter((prev) => ({ ...prev, description: value }));
+  };
+
   if (!showModal) return null;
 
   return (
@@ -88,11 +176,12 @@ export default function LessonCoveredUpdateModal({
         onMouseDown={handleBackdropClick}
         tabIndex="-1"
       >
-        <div className="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg">
+        <div className="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl">
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title">
-                Edit Lessons - {student?.student_name}
+                Edit Lessons - {student?.student_name} ({student?.month}{" "}
+                {student?.year})
               </h5>
               <button
                 type="button"
@@ -108,163 +197,514 @@ export default function LessonCoveredUpdateModal({
                 style={{ maxHeight: "70vh", overflowY: "auto" }}
               >
                 {/* Beginning of Month */}
-                {Object.keys(beginningData).length > 0 &&
-                  beginningData.constructor === Object && (
-                    <>
-                      {" "}
-                      <h6>Beginning of Month</h6>
-                      <div className="row">
-                        <div className="col-lg-4">
-                          <div className="mb-2">
-                            <label
-                              htmlFor="beginning-qaidahPages"
-                              className="form-label"
-                            >
-                              Quran Qaidah Pages
-                            </label>
-                            <input
-                              id="beginning-qaidahPages"
-                              name="qaidahPages"
+                {beginningData._id && (
+                  <>
+                    <h5 className="text-primary mb-3">Beginning of Month</h5>
+
+                    {/* Quran/Qaidah Section */}
+                    <div className="card mb-3">
+                      <div className="card-header bg-light">
+                        <h6 className="mb-0">Quran/Qaidah</h6>
+                      </div>
+                      <div className="card-body">
+                        <div className="row">
+                          <div className="col-md-3">
+                            <label className="form-label">Selected</label>
+                            <select
                               className="form-control"
-                              value={beginningData.qaidahPages || ""}
+                              value={
+                                beginningData.lessons.qaidah_quran.selected ||
+                                ""
+                              }
                               onChange={(e) =>
-                                setBeginningData({
-                                  ...beginningData,
-                                  qaidahPages: e.target.value,
-                                })
+                                handleLessonChange(
+                                  "beginning",
+                                  "qaidah_quran",
+                                  "selected",
+                                  e.target.value
+                                )
+                              }
+                            >
+                              <option value="">Select Type</option>
+                              <option value="quran">Quran</option>
+                              <option value="qaidah">Qaidah</option>
+                            </select>
+                          </div>
+                          <div className="col-md-3">
+                            <label className="form-label">Para</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              value={
+                                beginningData.lessons.qaidah_quran.data?.para ||
+                                ""
+                              }
+                              onChange={(e) =>
+                                handleLessonChange(
+                                  "beginning",
+                                  "qaidah_quran",
+                                  "data",
+                                  e.target.value,
+                                  "para"
+                                )
                               }
                             />
                           </div>
-                        </div>
-
-                        <div className="col-lg-4">
-                          <div className="mb-2">
-                            <label
-                              htmlFor="beginning-duasSurahs"
-                              className="form-label"
-                            >
-                              Duas / Surahs Done
-                            </label>
+                          <div className="col-md-3">
+                            <label className="form-label">Page</label>
                             <input
-                              id="beginning-duasSurahs"
-                              name="duasSurahs"
+                              type="text"
                               className="form-control"
-                              value={beginningData.duasSurahs || ""}
+                              value={
+                                beginningData.lessons.qaidah_quran.data?.page ||
+                                ""
+                              }
                               onChange={(e) =>
-                                setBeginningData({
-                                  ...beginningData,
-                                  duasSurahs: e.target.value,
-                                })
+                                handleLessonChange(
+                                  "beginning",
+                                  "qaidah_quran",
+                                  "data",
+                                  e.target.value,
+                                  "page"
+                                )
                               }
                             />
                           </div>
-                        </div>
-
-                        <div className="col-lg-4">
-                          <div className="mb-2">
-                            <label
-                              htmlFor="beginning-islamicStudiesPages"
-                              className="form-label"
-                            >
-                              Islamic Studies Pages Done
-                            </label>
+                          <div className="col-md-3">
+                            <label className="form-label">Line</label>
                             <input
-                              id="beginning-islamicStudiesPages"
-                              name="islamicStudiesPages"
+                              type="text"
                               className="form-control"
-                              value={beginningData.islamicStudiesPages || ""}
+                              value={
+                                beginningData.lessons.qaidah_quran.data?.line ||
+                                ""
+                              }
                               onChange={(e) =>
-                                setBeginningData({
-                                  ...beginningData,
-                                  islamicStudiesPages: e.target.value,
-                                })
+                                handleLessonChange(
+                                  "beginning",
+                                  "qaidah_quran",
+                                  "data",
+                                  e.target.value,
+                                  "line"
+                                )
                               }
                             />
                           </div>
                         </div>
                       </div>
-                    </>
-                  )}
+                    </div>
+
+                    {/* Dua/Surah Section */}
+                    <div className="card mb-3">
+                      <div className="card-header bg-light">
+                        <h6 className="mb-0">Dua/Surah</h6>
+                      </div>
+                      <div className="card-body">
+                        <div className="row">
+                          <div className="col-md-3">
+                            <label className="form-label">Lesson Name</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              value={
+                                beginningData.lessons.dua_surah.lesson_name ||
+                                ""
+                              }
+                              onChange={(e) =>
+                                handleLessonChange(
+                                  "beginning",
+                                  "dua_surah",
+                                  "lesson_name",
+                                  e.target.value
+                                )
+                              }
+                            />
+                          </div>
+                          <div className="col-md-2">
+                            <label className="form-label">Book</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              value={beginningData.lessons.dua_surah.book || ""}
+                              onChange={(e) =>
+                                handleLessonChange(
+                                  "beginning",
+                                  "dua_surah",
+                                  "book",
+                                  e.target.value
+                                )
+                              }
+                            />
+                          </div>
+                          <div className="col-md-2">
+                            <label className="form-label">Level</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              value={
+                                beginningData.lessons.dua_surah.level || ""
+                              }
+                              onChange={(e) =>
+                                handleLessonChange(
+                                  "beginning",
+                                  "dua_surah",
+                                  "level",
+                                  e.target.value
+                                )
+                              }
+                            />
+                          </div>
+                          <div className="col-md-2">
+                            <label className="form-label">Page</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              value={beginningData.lessons.dua_surah.page || ""}
+                              onChange={(e) =>
+                                handleLessonChange(
+                                  "beginning",
+                                  "dua_surah",
+                                  "page",
+                                  e.target.value
+                                )
+                              }
+                            />
+                          </div>
+                          <div className="col-md-3">
+                            <label className="form-label">Target</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              value={
+                                beginningData.lessons.dua_surah.target || ""
+                              }
+                              onChange={(e) =>
+                                handleLessonChange(
+                                  "beginning",
+                                  "dua_surah",
+                                  "target",
+                                  e.target.value
+                                )
+                              }
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Islamic Studies Section */}
+                    <div className="card mb-3">
+                      <div className="card-header bg-light">
+                        <h6 className="mb-0">Islamic Studies</h6>
+                      </div>
+                      <div className="card-body">
+                        <div className="row">
+                          <div className="col-md-6">
+                            <label className="form-label">Lesson Name</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              value={
+                                beginningData.lessons.islamic_studies
+                                  .lesson_name || ""
+                              }
+                              onChange={(e) =>
+                                handleLessonChange(
+                                  "beginning",
+                                  "islamic_studies",
+                                  "lesson_name",
+                                  e.target.value
+                                )
+                              }
+                            />
+                          </div>
+                          <div className="col-md-6">
+                            <label className="form-label">Page</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              value={
+                                beginningData.lessons.islamic_studies.page || ""
+                              }
+                              onChange={(e) =>
+                                handleLessonChange(
+                                  "beginning",
+                                  "islamic_studies",
+                                  "page",
+                                  e.target.value
+                                )
+                              }
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Description */}
+                    <div className="mb-3">
+                      <label className="form-label">Description</label>
+                      <textarea
+                        className="form-control"
+                        rows="2"
+                        value={beginningData.description || ""}
+                        onChange={(e) =>
+                          handleDescriptionChange("beginning", e.target.value)
+                        }
+                      />
+                    </div>
+                  </>
+                )}
 
                 {/* Ending of Month */}
+                {endingData._id && (
+                  <>
+                    <hr className="my-4" />
+                    <h5 className="text-primary mb-3">End of Month</h5>
 
-                {Object.keys(endingData).length > 0 &&
-                  endingData.constructor === Object && (
-                    <>
-                      {" "}
-                      <h6>End of Month</h6>
-                      <div className="row">
-                        <div className="col-lg-4">
-                          <div className="mb-2">
-                            <label
-                              htmlFor="ending-qaidahPages"
-                              className="form-label"
-                            >
-                              Quran Qaidah Pages
-                            </label>
-                            <input
-                              id="ending-qaidahPages"
-                              name="qaidahPages"
+                    {/* Quran/Qaidah Section */}
+                    <div className="card mb-3">
+                      <div className="card-header bg-light">
+                        <h6 className="mb-0">Quran/Qaidah</h6>
+                      </div>
+                      <div className="card-body">
+                        <div className="row">
+                          <div className="col-md-3">
+                            <label className="form-label">Selected</label>
+                            <select
                               className="form-control"
-                              value={endingData.qaidahPages || ""}
+                              value={
+                                endingData.lessons.qaidah_quran.selected || ""
+                              }
                               onChange={(e) =>
-                                setEndingData({
-                                  ...endingData,
-                                  qaidahPages: e.target.value,
-                                })
+                                handleLessonChange(
+                                  "ending",
+                                  "qaidah_quran",
+                                  "selected",
+                                  e.target.value
+                                )
+                              }
+                            >
+                              <option value="">Select Type</option>
+                              <option value="quran">Quran</option>
+                              <option value="qaidah">Qaidah</option>
+                            </select>
+                          </div>
+                          <div className="col-md-3">
+                            <label className="form-label">Para</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              value={
+                                endingData.lessons.qaidah_quran.data?.para || ""
+                              }
+                              onChange={(e) =>
+                                handleLessonChange(
+                                  "ending",
+                                  "qaidah_quran",
+                                  "data",
+                                  e.target.value,
+                                  "para"
+                                )
                               }
                             />
                           </div>
-                        </div>
-
-                        <div className="col-lg-4">
-                          <div className="mb-2">
-                            <label
-                              htmlFor="ending-duasSurahs"
-                              className="form-label"
-                            >
-                              Duas / Surahs Done
-                            </label>
+                          <div className="col-md-3">
+                            <label className="form-label">Page</label>
                             <input
-                              id="ending-duasSurahs"
-                              name="duasSurahs"
+                              type="text"
                               className="form-control"
-                              value={endingData.duasSurahs || ""}
+                              value={
+                                endingData.lessons.qaidah_quran.data?.page || ""
+                              }
                               onChange={(e) =>
-                                setEndingData({
-                                  ...endingData,
-                                  duasSurahs: e.target.value,
-                                })
+                                handleLessonChange(
+                                  "ending",
+                                  "qaidah_quran",
+                                  "data",
+                                  e.target.value,
+                                  "page"
+                                )
                               }
                             />
                           </div>
-                        </div>
-
-                        <div className="col-lg-4">
-                          <div className="mb-2">
-                            <label
-                              htmlFor="ending-islamicStudiesPages"
-                              className="form-label"
-                            >
-                              Islamic Studies Pages Done
-                            </label>
+                          <div className="col-md-3">
+                            <label className="form-label">Line</label>
                             <input
-                              id="ending-islamicStudiesPages"
-                              name="islamicStudiesPages"
+                              type="text"
                               className="form-control"
-                              value={endingData.islamicStudiesPages || ""}
+                              value={
+                                endingData.lessons.qaidah_quran.data?.line || ""
+                              }
                               onChange={(e) =>
-                                setEndingData({
-                                  ...endingData,
-                                  islamicStudiesPages: e.target.value,
-                                })
+                                handleLessonChange(
+                                  "ending",
+                                  "qaidah_quran",
+                                  "data",
+                                  e.target.value,
+                                  "line"
+                                )
                               }
                             />
                           </div>
                         </div>
                       </div>
-                    </>
-                  )}
+                    </div>
+
+                    {/* Dua/Surah Section */}
+                    <div className="card mb-3">
+                      <div className="card-header bg-light">
+                        <h6 className="mb-0">Dua/Surah</h6>
+                      </div>
+                      <div className="card-body">
+                        <div className="row">
+                          <div className="col-md-3">
+                            <label className="form-label">Lesson Name</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              value={
+                                endingData.lessons.dua_surah.lesson_name || ""
+                              }
+                              onChange={(e) =>
+                                handleLessonChange(
+                                  "ending",
+                                  "dua_surah",
+                                  "lesson_name",
+                                  e.target.value
+                                )
+                              }
+                            />
+                          </div>
+                          <div className="col-md-2">
+                            <label className="form-label">Book</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              value={endingData.lessons.dua_surah.book || ""}
+                              onChange={(e) =>
+                                handleLessonChange(
+                                  "ending",
+                                  "dua_surah",
+                                  "book",
+                                  e.target.value
+                                )
+                              }
+                            />
+                          </div>
+                          <div className="col-md-2">
+                            <label className="form-label">Level</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              value={endingData.lessons.dua_surah.level || ""}
+                              onChange={(e) =>
+                                handleLessonChange(
+                                  "ending",
+                                  "dua_surah",
+                                  "level",
+                                  e.target.value
+                                )
+                              }
+                            />
+                          </div>
+                          <div className="col-md-2">
+                            <label className="form-label">Page</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              value={endingData.lessons.dua_surah.page || ""}
+                              onChange={(e) =>
+                                handleLessonChange(
+                                  "ending",
+                                  "dua_surah",
+                                  "page",
+                                  e.target.value
+                                )
+                              }
+                            />
+                          </div>
+                          <div className="col-md-3">
+                            <label className="form-label">Target</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              value={endingData.lessons.dua_surah.target || ""}
+                              onChange={(e) =>
+                                handleLessonChange(
+                                  "ending",
+                                  "dua_surah",
+                                  "target",
+                                  e.target.value
+                                )
+                              }
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Islamic Studies Section */}
+                    <div className="card mb-3">
+                      <div className="card-header bg-light">
+                        <h6 className="mb-0">Islamic Studies</h6>
+                      </div>
+                      <div className="card-body">
+                        <div className="row">
+                          <div className="col-md-6">
+                            <label className="form-label">Lesson Name</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              value={
+                                endingData.lessons.islamic_studies
+                                  .lesson_name || ""
+                              }
+                              onChange={(e) =>
+                                handleLessonChange(
+                                  "ending",
+                                  "islamic_studies",
+                                  "lesson_name",
+                                  e.target.value
+                                )
+                              }
+                            />
+                          </div>
+                          <div className="col-md-6">
+                            <label className="form-label">Page</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              value={
+                                endingData.lessons.islamic_studies.page || ""
+                              }
+                              onChange={(e) =>
+                                handleLessonChange(
+                                  "ending",
+                                  "islamic_studies",
+                                  "page",
+                                  e.target.value
+                                )
+                              }
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Description */}
+                    <div className="mb-3">
+                      <label className="form-label">Description</label>
+                      <textarea
+                        className="form-control"
+                        rows="2"
+                        value={endingData.description || ""}
+                        onChange={(e) =>
+                          handleDescriptionChange("ending", e.target.value)
+                        }
+                      />
+                    </div>
+                  </>
+                )}
               </div>
 
               <div className="modal-footer">

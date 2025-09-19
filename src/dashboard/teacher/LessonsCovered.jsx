@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useGetClassByParamsQuery } from "../../redux/features/classes/classesApi";
 import { useGetStudentsByGroupQuery } from "../../redux/features/students/studentsApi";
 import { skipToken } from "@reduxjs/toolkit/query";
@@ -7,15 +7,59 @@ import {
   useGetTeacherByEmailQuery,
   useGetTeacherWithDetailsQuery,
 } from "../../redux/features/teachers/teachersApi";
-import toast from "react-hot-toast";
-import {
-  useAddLessonCoveredMutation,
-  useGetLessonsCoveredMonthlySummaryQuery,
-  useGetLessonsCoveredQuery,
-  useGetTeacherStudentsProgressQuery,
-} from "../../redux/features/lessons_covered/lessons_coveredApi";
-import LessonCoveredSummary from "../shared/LessonCoveredSummary";
+import { useGetTeacherStudentsProgressQuery } from "../../redux/features/lessons_covered/lessons_coveredApi";
+
 import LessonCoveredTable from "./LessonCoveredTable";
+import ReportSubmitModal from "./ReportSubmitModal";
+
+// {
+//   student_id: "...",
+//   teacher_id: "...",
+//   class_id: "...",
+//   subject_id: "...",
+//   department_id: "...",
+
+//   month: "September",
+//   year: "2025",
+//   time_of_month: "beginning" | "ending",
+//   type: "normal" | "gift_muslim",
+//   book_name: "qaidah_quran" | "islamic_studies" | "dua_surah",
+//   quran_qaidah_option: "quran" | "qaidah" | "tajweed" | "hifz", // when applicable
+
+//   lessons: [
+//     {
+//       // For Quran/Hifz
+//       para: 1,
+//       page: 5,
+//       line: 7,
+//     },
+//     {
+//       // For Qaidah/Tajweed
+//       level: "level3",
+//       lesson_name: 2,
+//       page: 4,
+//       line: 10
+//     },
+//     {
+//       // For Islamic Studies
+//       lesson: 10,
+//       page: 45
+//     },
+//     {
+//       // For Dua/Surah
+//       lesson: 3,
+//       book: "book1",
+//       level: "level2",
+//       page: 12,
+//       target: 15
+//     }
+//   ],
+
+//   description: "Optional remarks by teacher",
+//   monthly_publish: false,
+//   yearly_publish: false,
+//   date: ISODate()
+// }
 
 export default function LessonsCovered() {
   const { user } = useAuth();
@@ -26,20 +70,15 @@ export default function LessonsCovered() {
   const [time, setTime] = useState("");
   const [classId, setClassId] = useState("");
   const [subjectId, setSubjectId] = useState("");
-  const [time_of_month, setTime_of_month] = useState("");
-  const [book_name, setBook_name] = useState("");
   const [isEditMode, setIsEditMode] = useState(false);
-  const currentMonth = new Date().toLocaleString("default", { month: "long" });
-  const [month, setMonth] = useState(currentMonth);
   const currentYear = new Date().getFullYear();
-  const [year, setYear] = useState(currentYear.toString());
   const [filterMonth, setFilterMonth] = useState("");
   const [filterName, setFilterName] = useState("");
   const [filterYear, setFilterYear] = useState(currentYear.toString());
-  const [addLessonCovered] = useAddLessonCoveredMutation();
-  const [type, setType] = useState("");
-
+  const [showModal, setShowModal] = useState(false);
+  const [selectedStudentId, setSelectedStudentId] = useState(null);
   // Get all lessons covered by this teacher by default
+  // Toggle modal visibility
 
   // ── APPLIED FILTER STATES ──
   const [appliedFilters, setAppliedFilters] = useState({
@@ -96,79 +135,119 @@ export default function LessonsCovered() {
 
   let groupId = group?._id;
 
-  const { data: students = [] } = useGetStudentsByGroupQuery(groupId, {
+  const { data: students = [], refetch } = useGetStudentsByGroupQuery(groupId, {
     skip: !groupId,
   });
-
-  const handleSubmit = async (e, id) => {
-    e.preventDefault();
-    if (!time_of_month || !book_name) {
-      toast.error("Please fill time of the month and book name first.");
-      return;
-    }
-    if (!subjectId || !classId || !department || !session || !time) {
-      toast.error("Please fill subject class and dept first.");
-      return;
-    }
-
-    const form = e.target;
-    const qaidahPages = form.qaidahPages.value;
-    const duasSurahs = form.duasSurahs.value;
-    const islamicStudiesPages = form.islamicStudiesPages.value;
-
-    const description = form?.description?.value;
-
-    // Define lessonsData once
-    let lessonsData = {
-      time_of_month,
-      book_name,
-      student_id: id,
-      class_id: classId,
-      subject_id: subjectId,
-      teacher_id: teacher?._id,
-      department_id: department,
-      monthly_publish: false,
-      yearly_publish: false,
-      month,
-      year,
-      qaidahPages,
-      duasSurahs,
-      islamicStudiesPages,
-      date: new Date().toISOString(),
-    };
-
-    // Conditionally add description if exists
-    if (description) {
-      lessonsData.description = description;
-    }
-    try {
-      const data = await addLessonCovered(lessonsData).unwrap();
-      if (data?.insertedId) {
-        toast.success("Lessons covered added successfully.");
-
-        // Reset form fields
-        form.reset();
-
-        // Clear filters to reset group and students
-        // setAppliedFilters({
-        //   department: "",
-        //   session: "",
-        //   time: "",
-        //   classId: "",
-        //   subjectId: "",
-        // });
-
-        // Also reset individual filter inputs
-
-        setTime_of_month("");
-        setMonth("");
-        setBook_name("");
-      }
-    } catch (error) {
-      toast.error(error?.data?.message || "Failed to add lessons covered.");
-    }
+  const handleShow = (id) => {
+    setSelectedStudentId(id);
+    setShowModal(true);
   };
 
+  useEffect(() => {
+    if (groupId) {
+      refetch();
+    }
+  }, [groupId]);
+  // const handleSubmit = async (e, id) => {
+  //   e.preventDefault();
+
+  //   if (!time_of_month || !book_name) {
+  //     toast.error("Please fill time of the month and book name first.");
+  //     return;
+  //   }
+  //   if (!classId || !department || !session || !time) {
+  //     toast.error("Please fill subject, class and dept first.");
+  //     return;
+  //   }
+
+  //   const form = e.target;
+  //   const level = form?.level?.value;
+  //   const lesson_name = form?.lesson_name?.value;
+  //   const page = form?.page?.value;
+  //   const line = form?.line?.value;
+  //   const para = form?.para?.value;
+  //   const book = form?.book?.value;
+  //   const target = form?.target?.value;
+  //   const description = form?.description?.value;
+
+  //   const numOrNull = (val) => (val ? parseInt(val, 10) : null);
+
+  //   let lessons = [];
+
+  //   if (book_name === "qaidah_quran") {
+  //     if (quran_qaidah_options === "quran" || quran_qaidah_options === "hifz") {
+  //       lessons.push({
+  //         para: numOrNull(para),
+  //         page: numOrNull(page),
+  //         line: numOrNull(line),
+  //       });
+  //     } else if (
+  //       quran_qaidah_options === "qaidah" ||
+  //       quran_qaidah_options === "tajweed"
+  //     ) {
+  //       lessons.push({
+  //         level,
+  //         lesson_name: numOrNull(lesson_name),
+  //         page: numOrNull(page),
+  //         line: numOrNull(line),
+  //       });
+  //     }
+  //   }
+
+  //   if (book_name === "islamic_studies") {
+  //     lessons.push({
+  //       lesson_name, // text field, keep as string
+  //       page: numOrNull(page),
+  //     });
+  //   }
+
+  //   if (book_name === "dua_surah") {
+  //     lessons.push({
+  //       lesson_name, // text field, keep as string
+  //       book,
+  //       level,
+  //       page: numOrNull(page),
+  //       target: numOrNull(target),
+  //     });
+  //   }
+
+  //   let lessonsData = {
+  //     student_id: id,
+  //     teacher_id: teacher?._id,
+  //     class_id: classId,
+  //     subject_id: subjectId,
+  //     department_id: department,
+  //     month,
+  //     year,
+  //     time_of_month,
+  //     type,
+  //     book_name,
+  //     quran_qaidah_option: quran_qaidah_options || null,
+  //     lessons,
+  //     monthly_publish: false,
+  //     yearly_publish: false,
+  //     date: new Date().toISOString(),
+  //   };
+
+  //   if (description) lessonsData.description = description;
+
+  //   console.log(lessonsData);
+
+  //   // try {
+  //   //   const data = await addLessonCovered(lessonsData).unwrap();
+  //   //   if (data?.insertedId || data?.updatedId) {
+  //   //     toast.success("Lessons covered saved successfully.");
+
+  //   //     form.reset();
+  //   //     setTime_of_month("");
+  //   //     setBook_name("");
+  //   //     setQuran_qaidah_options("");
+  //   //   }
+  //   // } catch (error) {
+  //   //   toast.error(error?.data?.message || "Failed to save lessons covered.");
+  //   // }
+  // };
+  // const handleClose = () => setShowModal(false);
   return (
     <div>
       <h3 className="mb-2">Lessons Covered</h3>
@@ -311,180 +390,26 @@ export default function LessonsCovered() {
         {isEditMode ? (
           // SHOW INPUT FORM FOR EACH STUDENT WHEN IN EDIT MODE
           <div className="mt-2">
-            <div className="row mb-4">
-              <div className="col-lg-2">
-                <label className="form-label">Month</label>
-                <select
-                  style={{ borderColor: "var(--border2)" }}
-                  className="form-control bg-light"
-                  required
-                  value={month}
-                  onChange={(e) => setMonth(e.target.value)}
-                >
-                  <option value="">Select month</option>
-                  <option value="January">January</option>
-                  <option value="February">February</option>
-                  <option value="March">March</option>
-                  <option value="April">April</option>
-                  <option value="May">May</option>
-                  <option value="June">June</option>
-                  <option value="July">July</option>
-                  <option value="August">August</option>
-                  <option value="September">September</option>
-                  <option value="October">October</option>
-                  <option value="November">November</option>
-                  <option value="December">December</option>
-                </select>
-              </div>
-              <div className="col-lg-2">
-                <label className="form-label">Year</label>
-                <select
-                  style={{ borderColor: "var(--border2)" }}
-                  className="form-control bg-light"
-                  required
-                  value={year}
-                  onChange={(e) => setYear(e.target.value)}
-                >
-                  <option value="">Select year</option>
-                  {Array.from({ length: 5 }, (_, i) => currentYear - 2 + i).map(
-                    (yr) => (
-                      <option key={yr} value={yr}>
-                        {yr}
-                      </option>
-                    )
-                  )}
-                </select>
-              </div>
-
-              <div className="col-lg-3">
-                <label className="form-label">Which time of the month</label>
-                <select
-                  style={{ borderColor: "var(--border2)" }}
-                  className="form-control bg-light"
-                  required
-                  value={time_of_month}
-                  onChange={(e) => setTime_of_month(e.target.value)}
-                >
-                  <option value="">Select time of the month</option>
-                  <option value="beginning">Beginning Of The Month</option>
-                  <option value="ending">End Of The Month</option>
-                </select>
-              </div>
-              <div className="col-lg-2">
-                <label className="form-label">Type Of Education</label>
-                <select
-                  style={{ borderColor: "var(--border2)" }}
-                  className="form-control bg-light"
-                  required
-                  value={type}
-                  onChange={(e) => setType(e.target.value)}
-                >
-                  <option value="">Select Type</option>
-                  <option value="normal">Normal Education</option>
-                  <option value="gift_muslim">Gift For Muslim</option>
-                </select>
-              </div>
-              <div className="col-lg-3">
-                <label className="form-label">Book Name</label>
-                <select
-                  style={{ borderColor: "var(--border2)" }}
-                  className="form-control bg-light"
-                  required
-                  value={book_name}
-                  onChange={(e) => setBook_name(e.target.value)}
-                >
-                  <option value="">Select Book</option>
-                  {type === "normal" ? (
-                    <>
-                      <option value="qaidah_quran">
-                        Qaidah / Tajweed / Quran / Hifz
-                      </option>
-                      <option value="dua_surah">Dua / Surahs</option>
-                      <option value="islamic_studies">Islamic Studies</option>
-                    </>
-                  ) : (
-                    <>
-                      <option value="dua_surah">Dua / Surahs</option>
-                      <option value="islamic_studies">Islamic Studies</option>
-                    </>
-                  )}
-                </select>
-              </div>
-            </div>
             {students.map((student, index) => (
               <div
                 key={student._id}
                 className="border p-4 mb-3 bg-light rounded shadow-sm"
               >
-                <h5 className="mb-3">
-                  {index + 1} - {student.name}
-                </h5>
-                <form
-                  onSubmit={(e) => handleSubmit(e, student?._id)}
-                  className="row"
-                >
-                  <div className="col-lg-4">
-                    <label className="form-label">
-                      Quran Qaidah Pages done
-                    </label>
-                    <input
-                      type="number"
-                      name="qaidahPages"
-                      className="form-control"
-                      style={{ borderColor: "var(--border2)" }}
-                      required
-                    />
-                  </div>
-                  <div className="col-lg-4">
-                    <label className="form-label">Duas / Surahs done</label>
-                    <input
-                      type="number"
-                      name="duasSurahs"
-                      className="form-control"
-                      style={{ borderColor: "var(--border2)" }}
-                      required
-                    />
-                  </div>
-                  <div className="col-lg-4">
-                    <label className="form-label">
-                      Islamic Studies pages done
-                    </label>
-                    <input
-                      type="number"
-                      name="islamicStudiesPages"
-                      className="form-control"
-                      style={{ borderColor: "var(--border2)" }}
-                      required
-                    />
-                  </div>
-                  {time_of_month === "ending" && (
-                    <>
-                      <div className="col-lg-12 mt-3">
-                        <label className="form-label">
-                          Description (Optional)
-                        </label>
-                        <textarea
-                          className="form-control"
-                          name="description"
-                          rows="4"
-                          placeholder="Write detailed description..."
-                          style={{ borderColor: "var(--border2)" }}
-                        ></textarea>
-                      </div>
-                    </>
-                  )}
-
-                  <div className="col-md-12">
-                    <label className="form-label invisible">Apply</label>
-                    <button
-                      type="submit"
-                      style={{ backgroundColor: "var(--border2)" }}
-                      className="btn text-white w-100"
-                    >
-                      Submit
-                    </button>
-                  </div>
-                </form>
+                <div className="d-flex justify-content-between align-items-center">
+                  <h5 className="mb-3">
+                    {index + 1}. {student.name}{" "}
+                  </h5>
+                  <button
+                    style={{
+                      backgroundColor: "var(--border2)",
+                      color: "white",
+                    }}
+                    className="px-4 py-2"
+                    onClick={() => handleShow(student?._id)}
+                  >
+                    Open
+                  </button>
+                </div>
               </div>
             ))}
           </div>
@@ -502,6 +427,15 @@ export default function LessonsCovered() {
             ></LessonCoveredTable>
           </div>
         )}
+        <ReportSubmitModal
+          studentId={selectedStudentId}
+          teacherId={teacher?._id}
+          classId={classId}
+          subjectId={subjectId}
+          departmentId={department}
+          showModal={showModal}
+          setShowModal={setShowModal}
+        ></ReportSubmitModal>
       </div>
     </div>
   );
