@@ -60,88 +60,108 @@ export default function LessonCoveredTable({
     });
   };
 
-  const formatQuranData = (data) => {
-    if (!data) return "N/A";
-    return `Para: ${data.para}, Page: ${data.page}, Line: ${data.line}`;
-  };
+  const renderSubjectDetails = (lessons, subject) => {
+    if (!lessons || !lessons[subject]) return "N/A";
 
-  const formatDuaSurahData = (data) => {
-    if (!data) return "N/A";
-    return `${data.lesson_name} (Book: ${data.book}, Level: ${data.level}, Page: ${data.page})`;
-  };
+    const data = lessons[subject];
 
-  const formatIslamicStudiesData = (data) => {
-    if (!data) return "N/A";
-    return `${data.lesson_name} (Page: ${data.page})`;
+    switch (subject) {
+      case "qaidah_quran":
+        return data.selected === "quran" || data.selected === "hifz"
+          ? `Para: ${data.data?.para || "N/A"}, Page: ${
+              data.data?.page || "N/A"
+            }, Line: ${data.data?.line || "N/A"}`
+          : `Level: ${data.data?.level || "N/A"}, Lesson: ${
+              data.data?.lesson_name || "N/A"
+            }, Page: ${data.data?.page || "N/A"}`;
+
+      case "islamic_studies":
+        return `Book: ${data.book || "N/A"}, Page: ${
+          data.page || "N/A"
+        }, Lesson: ${data.lesson_name || "N/A"}`;
+
+      case "dua_surah":
+        return `Book: ${data.book || "N/A"}, Level: ${
+          data.level || "N/A"
+        }, Page: ${data.page || "N/A"}, Target: ${data.target || "N/A"}`;
+
+      default:
+        return "N/A";
+    }
   };
 
   return (
     <div>
-      <h3 className="text-center">Previously Added Reports</h3>
-      <h4>Table Filters</h4>
-      <div className="row mb-3">
-        <div className="col-lg-4">
-          <label className="form-label">Month</label>
-          <select
-            style={{ borderColor: "var(--border2)" }}
-            className="form-control bg-light"
-            required
-            value={filterMonth}
-            onChange={(e) => setFilterMonth(e.target.value)}
-          >
-            <option value="">Select month</option>
-            <option value="January">January</option>
-            <option value="February">February</option>
-            <option value="March">March</option>
-            <option value="April">April</option>
-            <option value="May">May</option>
-            <option value="June">June</option>
-            <option value="July">July</option>
-            <option value="August">August</option>
-            <option value="September">September</option>
-            <option value="October">October</option>
-            <option value="November">November</option>
-            <option value="December">December</option>
-          </select>
+      <h3 className="text-center mb-4">Previously Added Reports</h3>
+
+      {/* Filters */}
+      <div className="card mb-4">
+        <div className="card-header bg-light">
+          <h5 className="mb-0">Table Filters</h5>
         </div>
-        <div className="col-lg-4">
-          <label className="form-label">Year</label>
-          <select
-            style={{ borderColor: "var(--border2)" }}
-            className="form-control bg-light"
-            required
-            value={filterYear}
-            onChange={(e) => setFilterYear(e.target.value)}
-          >
-            <option value="">Select year</option>
-            {Array.from({ length: 5 }, (_, i) => currentYear - 2 + i).map(
-              (yr) => (
-                <option key={yr} value={yr}>
-                  {yr}
-                </option>
-              )
-            )}
-          </select>
-        </div>
-        <div className="col-lg-4">
-          <label className="form-label">Student Name</label>
-          <input
-            type="text"
-            style={{ borderColor: "var(--border2)" }}
-            className="form-control"
-            value={filterName}
-            onChange={(e) => setFilterName(e.target.value)}
-          />
+        <div className="card-body">
+          <div className="row">
+            <div className="col-md-4 mb-3">
+              <label className="form-label">Month</label>
+              <select
+                className="form-control"
+                value={filterMonth}
+                onChange={(e) => setFilterMonth(e.target.value)}
+              >
+                <option value="">All Months</option>
+                <option value="January">January</option>
+                <option value="February">February</option>
+                <option value="March">March</option>
+                <option value="April">April</option>
+                <option value="May">May</option>
+                <option value="June">June</option>
+                <option value="July">July</option>
+                <option value="August">August</option>
+                <option value="September">September</option>
+                <option value="October">October</option>
+                <option value="November">November</option>
+                <option value="December">December</option>
+              </select>
+            </div>
+            <div className="col-md-4 mb-3">
+              <label className="form-label">Year</label>
+              <select
+                className="form-control"
+                value={filterYear}
+                onChange={(e) => setFilterYear(e.target.value)}
+              >
+                <option value="">All Years</option>
+                {Array.from({ length: 5 }, (_, i) => currentYear - 2 + i).map(
+                  (yr) => (
+                    <option key={yr} value={yr}>
+                      {yr}
+                    </option>
+                  )
+                )}
+              </select>
+            </div>
+            <div className="col-md-4 mb-3">
+              <label className="form-label">Student Name</label>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Search by name..."
+                value={filterName}
+                onChange={(e) => setFilterName(e.target.value)}
+              />
+            </div>
+          </div>
         </div>
       </div>
 
       {lessonsCovered?.length > 0 ? (
-        <div className="table-responsive mb-3">
-          <table className="table mb-0" style={{ minWidth: 700 }}>
-            <thead>
+        <div className="table-responsive">
+          <table className="table table-hover">
+            <thead className="">
               <tr>
                 <th
-                  style={{ backgroundColor: "var(--border2)", width: "30px" }}
+                  className="font-danger text-white fw-bolder border h6 text-center align-middle"
+                  style={{ backgroundColor: "var(--border2)", width: "40px" }}
                 ></th>
                 <th
                   className="font-danger text-white fw-bolder border h6 text-center align-middle"
@@ -171,6 +191,18 @@ export default function LessonCoveredTable({
                   className="font-danger text-white fw-bolder border h6 text-center align-middle"
                   style={{ backgroundColor: "var(--border2)" }}
                 >
+                  Beginning Report
+                </th>
+                <th
+                  className="font-danger text-white fw-bolder border h6 text-center align-middle"
+                  style={{ backgroundColor: "var(--border2)" }}
+                >
+                  Ending Report
+                </th>
+                <th
+                  className="font-danger text-white fw-bolder border h6 text-center align-middle"
+                  style={{ backgroundColor: "var(--border2)" }}
+                >
                   Actions
                 </th>
               </tr>
@@ -179,315 +211,188 @@ export default function LessonCoveredTable({
               {lessonsCovered.map((student, idx) => (
                 <React.Fragment key={idx}>
                   <tr
-                    style={{ cursor: "pointer" }}
+                    className="clickable-row"
                     onClick={() => toggleRowExpansion(idx)}
+                    style={{ cursor: "pointer" }}
                   >
-                    <td className="border text-center align-middle">
-                      {expandedRows.has(idx) ? "▼" : "►"}
+                    <td>{expandedRows.has(idx) ? "▼" : "►"}</td>
+                    <td>{idx + 1}</td>
+                    <td className="fw-bold">{student.student_name}</td>
+                    <td>{student.month}</td>
+                    <td>{student.year}</td>
+                    <td>
+                      {student.beginning ? (
+                        <span className="badge bg-success">Available</span>
+                      ) : (
+                        <span className="badge bg-secondary">Not Added</span>
+                      )}
                     </td>
-                    <td className="border h6 text-center align-middle">
-                      {idx + 1}
+                    <td>
+                      {student.ending ? (
+                        <span className="badge bg-success">Available</span>
+                      ) : (
+                        <span className="badge bg-secondary">Not Added</span>
+                      )}
                     </td>
-                    <td className="border h6 text-center align-middle">
-                      {student.student_name}
-                    </td>
-                    <td className="border h6 text-center align-middle">
-                      {student.month}
-                    </td>
-                    <td className="border h6 text-center align-middle">
-                      {student.year}
-                    </td>
-                    <td className="border d-flex gap-2 justify-content-center align-middle">
-                      <button
-                        className="text-white py-1 px-2 rounded-2"
-                        style={{ backgroundColor: "var(--border2)" }}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDelete(
-                            [
-                              student.beginning?._id,
-                              student.ending?._id,
-                            ].filter(Boolean)
-                          );
-                        }}
-                      >
-                        <FaTrashAlt />
-                      </button>
-                      <button
-                        className="text-white py-1 px-2 rounded-2"
-                        style={{ backgroundColor: "var(--border2)" }}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleShow(student);
-                        }}
-                      >
-                        <FaPen />
-                      </button>
+                    <td>
+                      <div className="d-flex gap-2">
+                        <button
+                          className="btn btn-danger btn-sm"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDelete(
+                              [
+                                student.beginning?._id,
+                                student.ending?._id,
+                              ].filter(Boolean)
+                            );
+                          }}
+                        >
+                          <FaTrashAlt />
+                        </button>
+                        <button
+                          className="btn btn-primary btn-sm"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleShow(student);
+                          }}
+                        >
+                          <FaPen />
+                        </button>
+                      </div>
                     </td>
                   </tr>
+
                   {expandedRows.has(idx) && (
                     <tr>
-                      <td colSpan="6" className="p-0 border-0">
-                        <div className="px-4 py-2 bg-light">
-                          <h6 className="mb-3">
-                            Progress Details for {student.month} {student.year}
+                      <td colSpan="8" className="p-0">
+                        <div className="p-3 bg-light">
+                          <h6 className="mb-3 text-primary">
+                            Progress Details for {student.student_name} -{" "}
+                            {student.month} {student.year}
                           </h6>
 
-                          <div className="row mb-4">
-                            <div className="col-md-6">
-                              <h6 className="text-primary">
-                                Beginning of Month
-                              </h6>
-                              <p className="mb-1">
-                                <strong>Date:</strong>{" "}
-                                {new Date(
-                                  student.beginning?.date
-                                ).toLocaleDateString() || "N/A"}
-                              </p>
-                              <p className="mb-1">
-                                <strong>Description:</strong>{" "}
-                                {student.beginning?.description || "N/A"}
-                              </p>
+                          <div className="row">
+                            {/* Beginning of Month */}
+                            <div className="col-md-6 mb-4">
+                              <div className="card">
+                                <div className="card-header bg-info text-white">
+                                  <h6 className="mb-0">Beginning of Month</h6>
+                                </div>
+                                <div className="card-body">
+                                  {student.beginning ? (
+                                    <>
+                                      <p>
+                                        <strong>Date:</strong>{" "}
+                                        {new Date(
+                                          student.beginning.date
+                                        ).toLocaleDateString()}
+                                      </p>
+                                      <p>
+                                        <strong>Description:</strong>{" "}
+                                        {student.beginning.description ||
+                                          "No description"}
+                                      </p>
+
+                                      <div className="mt-3">
+                                        <h6>Subjects:</h6>
+                                        <ul className="list-group">
+                                          <li className="list-group-item">
+                                            <strong>Quran/Qaidah:</strong>
+                                            <br />
+                                            {renderSubjectDetails(
+                                              student.beginning.lessons,
+                                              "qaidah_quran"
+                                            )}
+                                          </li>
+                                          <li className="list-group-item">
+                                            <strong>Islamic Studies:</strong>
+                                            <br />
+                                            {renderSubjectDetails(
+                                              student.beginning.lessons,
+                                              "islamic_studies"
+                                            )}
+                                          </li>
+                                          <li className="list-group-item">
+                                            <strong>Dua/Surah:</strong>
+                                            <br />
+                                            {renderSubjectDetails(
+                                              student.beginning.lessons,
+                                              "dua_surah"
+                                            )}
+                                          </li>
+                                        </ul>
+                                      </div>
+                                    </>
+                                  ) : (
+                                    <p className="text-muted">
+                                      No beginning report available
+                                    </p>
+                                  )}
+                                </div>
+                              </div>
                             </div>
-                            <div className="col-md-6">
-                              <h6 className="text-primary">End of Month</h6>
-                              <p className="mb-1">
-                                <strong>Date:</strong>{" "}
-                                {new Date(
-                                  student.ending?.date
-                                ).toLocaleDateString() || "N/A"}
-                              </p>
-                              <p className="mb-1">
-                                <strong>Description:</strong>{" "}
-                                {student.ending?.description || "N/A"}
-                              </p>
+
+                            {/* End of Month */}
+                            <div className="col-md-6 mb-4">
+                              <div className="card">
+                                <div className="card-header bg-warning text-dark">
+                                  <h6 className="mb-0">End of Month</h6>
+                                </div>
+                                <div className="card-body">
+                                  {student.ending ? (
+                                    <>
+                                      <p>
+                                        <strong>Date:</strong>{" "}
+                                        {new Date(
+                                          student.ending.date
+                                        ).toLocaleDateString()}
+                                      </p>
+                                      <p>
+                                        <strong>Description:</strong>{" "}
+                                        {student.ending.description ||
+                                          "No description"}
+                                      </p>
+
+                                      <div className="mt-3">
+                                        <h6>Subjects:</h6>
+                                        <ul className="list-group">
+                                          <li className="list-group-item">
+                                            <strong>Quran/Qaidah:</strong>
+                                            <br />
+                                            {renderSubjectDetails(
+                                              student.ending.lessons,
+                                              "qaidah_quran"
+                                            )}
+                                          </li>
+                                          <li className="list-group-item">
+                                            <strong>Islamic Studies:</strong>
+                                            <br />
+                                            {renderSubjectDetails(
+                                              student.ending.lessons,
+                                              "islamic_studies"
+                                            )}
+                                          </li>
+                                          <li className="list-group-item">
+                                            <strong>Dua/Surah:</strong>
+                                            <br />
+                                            {renderSubjectDetails(
+                                              student.ending.lessons,
+                                              "dua_surah"
+                                            )}
+                                          </li>
+                                        </ul>
+                                      </div>
+                                    </>
+                                  ) : (
+                                    <p className="text-muted">
+                                      No end of month report available
+                                    </p>
+                                  )}
+                                </div>
+                              </div>
                             </div>
                           </div>
-
-                          <table className="table table-bordered table-sm">
-                            <thead>
-                              <tr>
-                                <th
-                                  rowSpan="2"
-                                  style={{
-                                    backgroundColor: "var(--border2)",
-                                    color: "white",
-                                  }}
-                                >
-                                  Subject
-                                </th>
-                                <th
-                                  colSpan="4"
-                                  style={{
-                                    backgroundColor: "var(--border2)",
-                                    color: "white",
-                                    textAlign: "center",
-                                  }}
-                                >
-                                  Beginning of Month
-                                </th>
-                                <th
-                                  colSpan="4"
-                                  style={{
-                                    backgroundColor: "var(--border2)",
-                                    color: "white",
-                                    textAlign: "center",
-                                  }}
-                                >
-                                  End of Month
-                                </th>
-                              </tr>
-                              <tr>
-                                {/* Beginning of Month columns */}
-                                <th
-                                  style={{
-                                    backgroundColor: "var(--border2)",
-                                    color: "white",
-                                  }}
-                                >
-                                  Level/Book
-                                </th>
-                                <th
-                                  style={{
-                                    backgroundColor: "var(--border2)",
-                                    color: "white",
-                                  }}
-                                >
-                                  Page
-                                </th>
-                                <th
-                                  style={{
-                                    backgroundColor: "var(--border2)",
-                                    color: "white",
-                                  }}
-                                >
-                                  Line/Name
-                                </th>
-                                <th
-                                  style={{
-                                    backgroundColor: "var(--border2)",
-                                    color: "white",
-                                  }}
-                                >
-                                  Target/Para
-                                </th>
-
-                                {/* End of Month columns */}
-                                <th
-                                  style={{
-                                    backgroundColor: "var(--border2)",
-                                    color: "white",
-                                  }}
-                                >
-                                  Level/Book
-                                </th>
-                                <th
-                                  style={{
-                                    backgroundColor: "var(--border2)",
-                                    color: "white",
-                                  }}
-                                >
-                                  Page
-                                </th>
-                                <th
-                                  style={{
-                                    backgroundColor: "var(--border2)",
-                                    color: "white",
-                                  }}
-                                >
-                                  Line/Name
-                                </th>
-                                <th
-                                  style={{
-                                    backgroundColor: "var(--border2)",
-                                    color: "white",
-                                  }}
-                                >
-                                  Target/Para
-                                </th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {/* Quran/Qaidah Row */}
-                              <tr>
-                                <td>
-                                  <strong>Quran/Qaidah</strong>
-                                </td>
-
-                                {/* Beginning of Month - Quran/Qaidah */}
-                                <td>
-                                  {student.beginning?.lessons?.qaidah_quran
-                                    ?.selected || "N/A"}
-                                </td>
-                                <td>
-                                  {student.beginning?.lessons?.qaidah_quran
-                                    ?.data?.page || "N/A"}
-                                </td>
-                                <td>
-                                  {student.beginning?.lessons?.qaidah_quran
-                                    ?.data?.line || "N/A"}
-                                </td>
-                                <td>
-                                  {student.beginning?.lessons?.qaidah_quran
-                                    ?.data?.para || "N/A"}
-                                </td>
-
-                                {/* End of Month - Quran/Qaidah */}
-                                <td>
-                                  {student.ending?.lessons?.qaidah_quran
-                                    ?.selected || "N/A"}
-                                </td>
-                                <td>
-                                  {student.ending?.lessons?.qaidah_quran?.data
-                                    ?.page || "N/A"}
-                                </td>
-                                <td>
-                                  {student.ending?.lessons?.qaidah_quran?.data
-                                    ?.line || "N/A"}
-                                </td>
-                                <td>
-                                  {student.ending?.lessons?.qaidah_quran?.data
-                                    ?.para || "N/A"}
-                                </td>
-                              </tr>
-
-                              {/* Dua/Surah Row */}
-                              <tr>
-                                <td>
-                                  <strong>Dua/Surah</strong>
-                                </td>
-
-                                {/* Beginning of Month - Dua/Surah */}
-                                <td>
-                                  {student.beginning?.lessons?.dua_surah
-                                    ?.level || "N/A"}
-                                </td>
-                                <td>
-                                  {student.beginning?.lessons?.dua_surah
-                                    ?.page || "N/A"}
-                                </td>
-                                <td>
-                                  {student.beginning?.lessons?.dua_surah
-                                    ?.lesson_name || "N/A"}
-                                </td>
-                                <td>
-                                  {student.beginning?.lessons?.dua_surah
-                                    ?.target || "N/A"}
-                                </td>
-
-                                {/* End of Month - Dua/Surah */}
-                                <td>
-                                  {student.ending?.lessons?.dua_surah?.level ||
-                                    "N/A"}
-                                </td>
-                                <td>
-                                  {student.ending?.lessons?.dua_surah?.page ||
-                                    "N/A"}
-                                </td>
-                                <td>
-                                  {student.ending?.lessons?.dua_surah
-                                    ?.lesson_name || "N/A"}
-                                </td>
-                                <td>
-                                  {student.ending?.lessons?.dua_surah?.target ||
-                                    "N/A"}
-                                </td>
-                              </tr>
-
-                              {/* Islamic Studies Row */}
-                              <tr>
-                                <td>
-                                  <strong>Islamic Studies</strong>
-                                </td>
-                                {/* Beginning of Month - Islamic Studies */}
-                                <td>{"N/A"}</td>{" "}
-                                {/* Islamic Studies doesn't have level/book */}
-                                <td>
-                                  {student.beginning?.lessons?.islamic_studies
-                                    ?.page || "N/A"}
-                                </td>
-                                <td>
-                                  {student.beginning?.lessons?.islamic_studies
-                                    ?.lesson_name || "N/A"}
-                                </td>
-                                <td>{"N/A"}</td>{" "}
-                                {/* Islamic Studies doesn't have target/para */}
-                                {/* End of Month - Islamic Studies */}
-                                <td>{"N/A"}</td>{" "}
-                                {/* Islamic Studies doesn't have level/book */}
-                                <td>
-                                  {student.ending?.lessons?.islamic_studies
-                                    ?.page || "N/A"}
-                                </td>
-                                <td>
-                                  {student.ending?.lessons?.islamic_studies
-                                    ?.lesson_name || "N/A"}
-                                </td>
-                                <td>{"N/A"}</td>{" "}
-                                {/* Islamic Studies doesn't have target/para */}
-                              </tr>
-                            </tbody>
-                          </table>
                         </div>
                       </td>
                     </tr>
@@ -504,8 +409,11 @@ export default function LessonCoveredTable({
           />
         </div>
       ) : (
-        <div className="text-center p-4">
-          <p>No lessons covered data found.</p>
+        <div className="text-center p-5 bg-light rounded">
+          <h5 className="text-muted">No lessons covered data found</h5>
+          <p className="text-muted">
+            Try adjusting your filters or add new reports
+          </p>
         </div>
       )}
     </div>

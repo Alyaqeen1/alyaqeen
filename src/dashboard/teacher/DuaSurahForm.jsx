@@ -6,15 +6,6 @@ export default function DuaSurahForm({}) {
       <h6 className="fw-bold mb-3">Dua & Surah</h6>
       <div className="row g-3">
         <div className="col-md-4">
-          <label className="form-label">Lesson Name</label>
-          <input
-            type="text"
-            name="dua_surah_lesson_name"
-            className="form-control"
-            required
-          />
-        </div>
-        <div className="col-md-4">
           <label className="form-label">Book</label>
           <select className="form-control" name="dua_surah_book" required>
             <option value="">Select Book</option>
@@ -33,7 +24,25 @@ export default function DuaSurahForm({}) {
             ))}
           </select>
         </div>
-        <div className="col-md-6">
+        <div className="col-md-4">
+          <label className="form-label">Target</label>
+          <input
+            type="number"
+            name="dua_surah_target"
+            className="form-control"
+            required
+          />
+        </div>
+        <div className="col-md-4">
+          <label className="form-label">Dua Number</label>
+          <input
+            type="text"
+            name="dua_surah_dua_number"
+            className="form-control"
+            required
+          />
+        </div>
+        <div className="col-md-4">
           <label className="form-label">Page</label>
           <input
             type="number"
@@ -42,11 +51,11 @@ export default function DuaSurahForm({}) {
             required
           />
         </div>
-        <div className="col-md-6">
-          <label className="form-label">Target</label>
+        <div className="col-md-4">
+          <label className="form-label">Lesson Name</label>
           <input
-            type="number"
-            name="dua_surah_target"
+            type="text"
+            name="dua_surah_lesson_name"
             className="form-control"
             required
           />

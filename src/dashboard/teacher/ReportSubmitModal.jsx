@@ -58,6 +58,7 @@ export default function ReportSubmitModal({
     const quran_hifz_line = form.quran_hifz_line?.value?.trim() || "";
     const islamic_studies_lesson_name =
       form.islamic_studies_lesson_name?.value?.trim() || "";
+      const islamic_studies_book = form?.islamic_studies_book?.value?.trim() || ""
     const islamic_studies_page = form.islamic_studies_page?.value?.trim() || "";
     const dua_surah_lesson_name =
       form.dua_surah_lesson_name?.value?.trim() || "";
@@ -65,6 +66,7 @@ export default function ReportSubmitModal({
     const dua_surah_level = form.dua_surah_level?.value?.trim() || "";
     const dua_surah_page = form.dua_surah_page?.value?.trim() || "";
     const dua_surah_target = form.dua_surah_target?.value?.trim() || "";
+    const dua_surah_dua_number = form.dua_surah_dua_number?.value?.trim() || "";
     const description = form.description?.value?.trim() || "";
 
     let quranData = null;
@@ -109,6 +111,7 @@ export default function ReportSubmitModal({
         islamic_studies: {
           lesson_name: islamic_studies_lesson_name,
           page: islamic_studies_page,
+          book: islamic_studies_book
         },
         dua_surah: {
           lesson_name: dua_surah_lesson_name,
@@ -116,6 +119,7 @@ export default function ReportSubmitModal({
           level: dua_surah_level,
           page: dua_surah_page,
           target: dua_surah_target,
+          dua_number: dua_surah_dua_number
         },
       },
     };
