@@ -33,6 +33,7 @@ import LessonsCovered from "./teacher/LessonsCovered";
 import Merits from "./teacher/Merits";
 import ReportsSummary from "./teacher/ReportsSummary";
 import StudentAttendance from "./teacher/StudentAttendance";
+import TeacherSelfUpdate from "./teacher/TeacherSelfUpdate";
 import TimeTable from "./teacher/TimeTable";
 import ViewProfile from "./teacher/ViewProfile";
 
@@ -360,6 +361,16 @@ const dashboardRoutes = [
             <AdminRoute>
               <InactiveStudents></InactiveStudents>
             </AdminRoute>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "teacher/update",
+        element: (
+          <PrivateRoute>
+            <TeacherRoute>
+              <TeacherSelfUpdate></TeacherSelfUpdate>
+            </TeacherRoute>
           </PrivateRoute>
         ),
       },

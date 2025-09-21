@@ -2,6 +2,7 @@ import React from "react";
 import { useGetTeacherByEmailQuery } from "../../redux/features/teachers/teachersApi";
 import useAuth from "../../hooks/useAuth";
 import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
+import { Link } from "react-router";
 
 export default function ViewProfile() {
   const { user } = useAuth();
@@ -41,8 +42,19 @@ export default function ViewProfile() {
   } = teacher || {};
 
   return (
-    <div className="container my-4">
-      <h3 className="mb-4">Your Details</h3>
+    <div className="px-5 py-3 my-4">
+      <div className="d-md-flex justify-content-md-between">
+        <h3 className="mb-4">Your Details</h3>
+        <div>
+          <Link
+            to={`/dashboard/teacher/update`}
+            style={{ backgroundColor: "var(--border2)", color: "white" }}
+            className="px-4 py-2"
+          >
+            Edit Profile
+          </Link>
+        </div>
+      </div>
       <div className="row">
         {/* Left Profile Card */}
         <div className="col-md-4">

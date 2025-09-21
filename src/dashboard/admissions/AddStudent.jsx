@@ -593,10 +593,10 @@ export default function AddStudent() {
           style={{ backgroundColor: "var(--border2)" }}
           className="text-white rounded-3 p-2 fs-5"
         >
-          Academic Details
+          Select Course
         </div>
         <div className="col-md-6">
-          <label className="form-label">Departments</label>
+          <label className="form-label">Select Subject</label>
           <select
             name="std_department"
             onChange={(e) => setDepartment(e.target.value)}

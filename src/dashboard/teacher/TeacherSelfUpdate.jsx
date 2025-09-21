@@ -1,73 +1,32 @@
-import React, { useEffect, useState } from "react";
-import { FaEye, FaEyeSlash } from "react-icons/fa6";
+import { useState } from "react";
 import {
-  useAddTeacherMutation,
-  useGetTeacherByIdQuery,
-  useGetTeacherWithDetailsQuery,
+  useGetTeacherByEmailQuery,
   useUpdateTeacherMutation,
-  useUpdateTeacherStatusMutation,
 } from "../../redux/features/teachers/teachersApi";
-import { useLocation, useNavigate, useParams } from "react-router";
-import useAxiosPublic from "../../hooks/useAxiosPublic";
+import { useNavigate } from "react-router";
 import uploadToCloudinary from "../../utils/uploadToCloudinary";
 import useAuth from "../../hooks/useAuth";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
-import Select from "react-select";
-import { useGetDepartmentsQuery } from "../../redux/features/departments/departmentsApi";
 import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
-import { useGetClassesQuery } from "../../redux/features/classes/classesApi";
-import { useGetSubjectsQuery } from "../../redux/features/subjects/subjectsApi";
 
-export default function UpdateTeacher() {
+export default function TeacherSelfUpdate() {
   const [error, setError] = useState("");
-  const { id } = useParams();
-  const [dept_id, setDept_id] = useState("");
-  //   const [localLoading, setLocalLoading] = useState(false);
   const [cvUrl, setCvUrl] = useState("");
   const [dbsUrl, setDbsUrl] = useState("");
   const [certificateUrl, setCertificateUrl] = useState("");
   const [photoUrl, setPhotoUrl] = useState("");
   const [uploading, setUploading] = useState(false);
-  const [selectedDepartments, setSelectedDepartments] = useState([]);
-
-  const [updateTeacherStatus, { isLoading: updateLoading }] =
-    useUpdateTeacherStatusMutation();
   const [updateTeacher, { isLoading: localLoading }] =
     useUpdateTeacherMutation();
-  const { data: departments } = useGetDepartmentsQuery();
-  const { data: classes } = useGetClassesQuery();
-  const { data: subjects } = useGetSubjectsQuery();
+
   const navigate = useNavigate();
 
-  const [selectedDepartment, setSelectedDepartment] = useState(null);
-  const [selectedClasses, setSelectedClasses] = useState([]);
-  const [selectedSubjects, setSelectedSubjects] = useState([]);
+  const { user } = useAuth();
 
-  const {
-    data: teacher,
-    isLoading,
-    isError,
-    refetch,
-  } = useGetTeacherWithDetailsQuery(id, {
-    skip: !id, // avoid fetching if no ID
+  const { data: teacher, isLoading } = useGetTeacherByEmailQuery(user?.email, {
+    skip: !user?.email,
   });
-  useEffect(() => {
-    if (teacher && departments && classes && subjects) {
-      // ✅ Populate selectedDepartments using dept_ids (array) instead of teacher.department (string)
-      setSelectedDepartments(
-        departments?.filter((d) => teacher?.dept_ids?.includes(d._id))
-      );
-
-      setSelectedClasses(
-        classes?.filter((cls) => teacher?.class_ids?.includes(cls._id))
-      );
-
-      setSelectedSubjects(
-        subjects?.filter((sub) => teacher?.subject_ids?.includes(sub._id))
-      );
-    }
-  }, [teacher, departments, classes, subjects]);
 
   const {
     name,
@@ -176,15 +135,16 @@ export default function UpdateTeacher() {
       emergency_number,
       account_holder_name,
       bank_account_number,
-      dept_ids: selectedDepartments?.map((d) => d?._id) || [],
-      class_ids: selectedClasses?.map((c) => c?._id) || [],
-      subject_ids: selectedSubjects?.map((s) => s?._id) || [],
     };
 
     if (localLoading) return;
 
     try {
-      const data = await updateTeacher({ id, teacherData }).unwrap();
+      const data = await updateTeacher({
+        id: teacher?._id, // <-- use the fetched teacher’s _id
+        teacherData,
+      }).unwrap();
+
       if (data.modifiedCount) {
         Swal.fire({
           position: "center",
@@ -194,72 +154,10 @@ export default function UpdateTeacher() {
           timer: 1500,
         });
 
-        navigate("/dashboard/active-teachers");
+        navigate("/dashboard/view-profile");
       }
     } catch (error) {
       toast.error(error?.message || "Failed to update teacher");
-    }
-  };
-
-  const departmentOptions = departments?.map((d) => ({
-    value: d._id,
-    label: d.dept_name,
-  }));
-
-  const selectedDeptIds = selectedDepartments.map((d) => d._id);
-  const filteredClasses = classes?.filter((cls) =>
-    selectedDeptIds.includes(cls.dept_id)
-  );
-
-  const classOptions = filteredClasses?.map((c) => ({
-    value: c._id,
-    label: c.class_name,
-  }));
-
-  const selectedClassIds = selectedClasses.map((cls) => cls._id);
-  const filteredSubjects = subjects?.filter((subj) =>
-    selectedClassIds.includes(subj.class_id)
-  );
-
-  const subjectOptions = filteredSubjects?.map((s) => ({
-    value: s._id,
-    label: s.subject_name,
-  }));
-
-  const handleStatus = async (newStatus) => {
-    if (
-      newStatus === "approved" &&
-      (departments_info?.length === 0 ||
-        subjects_info?.length === 0 ||
-        classes_info?.length === 0)
-    ) {
-      Swal.fire({
-        icon: "warning",
-        title: "Assign a Group first!",
-        text: "You must assign a department, subject and class before approving the teacher.",
-      });
-      return;
-    }
-
-    try {
-      const data = await updateTeacherStatus({
-        id,
-        status: newStatus,
-      }).unwrap();
-
-      if (data?.modifiedCount) {
-        Swal.fire({
-          position: "center",
-          icon: "success",
-          title: `Teacher ${newStatus} successfully`,
-          showConfirmButton: false,
-          timer: 1500,
-        });
-        refetch();
-      }
-    } catch (err) {
-      // }
-      console.error("Failed to update status:", err);
     }
   };
 
@@ -268,7 +166,7 @@ export default function UpdateTeacher() {
   }
   return (
     <div>
-      <h3 className={`fs-1 fw-bold text-center`}>Update Teacher</h3>
+      <h3 className={`fs-1 fw-bold text-center`}>Update Your Info</h3>
       <form onSubmit={handleSubmit} className="row g-3">
         {/* basic details */}
         <div
@@ -559,113 +457,11 @@ export default function UpdateTeacher() {
             placeholder=""
           />
         </div>
-        {/* Bank Account Details */}
-        <div
-          style={{ backgroundColor: "var(--border2)" }}
-          className="text-white rounded-3 p-2 fs-5"
-        >
-          Assign Groups
-        </div>
-        {/* Department */}
-        <div className="col-md-4">
-          <label className="form-label">Departments</label>
-          <Select
-            isMulti
-            value={selectedDepartments.map((dept) => ({
-              label: dept.dept_name,
-              value: dept._id,
-            }))}
-            onChange={(opts) => {
-              const newSelectedDepts = opts.map((opt) =>
-                departments.find((d) => d._id === opt.value)
-              );
-
-              // Filter classes to keep only those belonging to new departments
-              const preservedClasses = selectedClasses.filter((cls) =>
-                newSelectedDepts.some((dept) => dept._id === cls.dept_id)
-              );
-
-              // Filter subjects to keep only those belonging to preserved classes
-              const preservedSubjects = selectedSubjects.filter((subj) =>
-                preservedClasses.some((cls) => cls._id === subj.class_id)
-              );
-
-              setSelectedDepartments(newSelectedDepts);
-              setSelectedClasses(preservedClasses);
-              setSelectedSubjects(preservedSubjects);
-            }}
-            options={departmentOptions}
-            placeholder="Select Departments"
-            isSearchable
-          />
-        </div>
-
-        {/* Classes based on department */}
-        <div className="col-md-4">
-          <label className="form-label">Classes</label>
-          <Select
-            isMulti
-            options={classOptions}
-            value={selectedClasses?.map((c) => ({
-              label: c.class_name,
-              value: c._id,
-            }))}
-            onChange={(opts) => {
-              const newSelectedClasses = opts?.map((opt) =>
-                filteredClasses?.find((c) => c._id === opt.value)
-              );
-
-              // Filter subjects to keep only those belonging to new classes
-              const preservedSubjects = selectedSubjects.filter((subj) =>
-                newSelectedClasses.some((cls) => cls._id === subj.class_id)
-              );
-
-              setSelectedClasses(newSelectedClasses);
-              setSelectedSubjects(preservedSubjects);
-            }}
-            placeholder="Select Classes"
-            isSearchable
-          />
-        </div>
-
-        {/* Subjects based on selected classes */}
-        <div className="col-md-4">
-          <label className="form-label">Subjects</label>
-          <Select
-            isMulti
-            options={subjectOptions}
-            value={selectedSubjects?.map((s) => ({
-              label: s.subject_name,
-              value: s._id,
-            }))}
-            onChange={(opts) =>
-              setSelectedSubjects(
-                opts?.map((opt) =>
-                  filteredSubjects?.find((s) => s._id === opt.value)
-                )
-              )
-            }
-            placeholder="Select Subjects"
-            isSearchable
-          />
-        </div>
 
         {error && <p className="text-danger text-center col-span-2">{error}</p>}
 
         {/* Submit Button */}
         <div className="col-12 text-center py-3 d-flex gap-2 align-items-center justify-content-evenly">
-          {status !== "approved" && (
-            <button
-              type="button"
-              style={{ backgroundColor: "var(--border2)" }}
-              className="btn text-white"
-              disabled={updateLoading}
-              onClick={() => handleStatus("approved")}
-            >
-              Approve
-            </button>
-          )}
-
           <button
             disabled={localLoading}
             type="submit"
@@ -674,18 +470,6 @@ export default function UpdateTeacher() {
           >
             {localLoading ? "Updating..." : "Update"}
           </button>
-
-          {status !== "approved" && (
-            <button
-              type="button"
-              disabled={updateLoading}
-              onClick={() => handleStatus("rejected")}
-              style={{ backgroundColor: "var(--border2)" }}
-              className="btn text-white"
-            >
-              Reject
-            </button>
-          )}
         </div>
       </form>
     </div>

@@ -515,9 +515,11 @@ export default function AdminManualPayModal({
                       <option value="">Select Method</option>
                       <option value="bank transfer">Bank Transfer</option>
                       <option value="cash or card machine">
-                        Cash or Card Machine
+                        Cash Payment at Office
                       </option>
-                      <option value="office payment">Office Payment</option>
+                      <option value="office payment">
+                        Card Machine at Office
+                      </option>
                     </select>
                   </div>
                 </div>
