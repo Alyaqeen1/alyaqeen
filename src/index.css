@@ -37,3 +37,10 @@ button:focus {
   outline: none !important;
   box-shadow: none !important;
 }
+
+.student-link:hover {
+  color: #000000; /* darker color on hover */
+  font-weight: bolder;
+  font-size: large;
+  text-decoration: none; /* optional: remove underline */
+}

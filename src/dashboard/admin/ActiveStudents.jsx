@@ -310,7 +310,12 @@ export default function ActiveStudents() {
                         >
                           {getInitials(student?.name)}
                         </div>
-                        <span>{student?.name}</span>
+                        <Link
+                          className="text-dark student-link"
+                          to={`/dashboard/admin/view-student/${student?._id}`}
+                        >
+                          {student?.name}
+                        </Link>
                       </div>
                     </td>
                     <td className="border h6 text-center align-middle">

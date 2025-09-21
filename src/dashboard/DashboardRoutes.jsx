@@ -21,6 +21,7 @@ import StudentAttendanceAdmin from "./admin/StudentAttendanceAdmin";
 import Subjects from "./admin/Subjects";
 import TeacherDetails from "./admin/TeacherDetails";
 import UpdateTeacher from "./admin/UpdateTeacher";
+import ViewStudent from "./admin/ViewStudent";
 import AddStudent from "./admissions/AddStudent";
 import Admissions from "./admissions/Admissions";
 import UpdateStudent from "./admissions/UpdateStudent";
@@ -371,6 +372,16 @@ const dashboardRoutes = [
             <TeacherRoute>
               <TeacherSelfUpdate></TeacherSelfUpdate>
             </TeacherRoute>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "admin/view-student/:id",
+        element: (
+          <PrivateRoute>
+            <AdminRoute>
+              <ViewStudent></ViewStudent>
+            </AdminRoute>
           </PrivateRoute>
         ),
       },
