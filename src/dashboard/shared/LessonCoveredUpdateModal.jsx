@@ -24,8 +24,15 @@ export default function LessonCoveredUpdateModal({
         target: "",
         dua_number: "",
       },
+      gift_for_muslim: {
+        lesson_name: "",
+        level: "",
+        page: "",
+        target: "",
+      },
     },
     description: "",
+    type: "normal",
   });
 
   const [endingData, setEndingData] = useState({
@@ -43,15 +50,26 @@ export default function LessonCoveredUpdateModal({
         target: "",
         dua_number: "",
       },
+      gift_for_muslim: {
+        lesson_name: "",
+        level: "",
+        page: "",
+        target: "",
+      },
     },
     description: "",
+    type: "normal",
   });
 
   useEffect(() => {
     if (student) {
+      const beginningType = student.beginning?.type || "normal";
+      const endingType = student.ending?.type || "normal";
+
       if (student.beginning) {
         setBeginningData({
           ...student.beginning,
+          type: beginningType,
           lessons: {
             qaidah_quran: student.beginning.lessons?.qaidah_quran || {
               selected: "",
@@ -60,10 +78,18 @@ export default function LessonCoveredUpdateModal({
             islamic_studies: student.beginning.lessons?.islamic_studies || {
               lesson_name: "",
               page: "",
+              book: "",
             },
             dua_surah: student.beginning.lessons?.dua_surah || {
               lesson_name: "",
               book: "",
+              level: "",
+              page: "",
+              target: "",
+              dua_number: "",
+            },
+            gift_for_muslim: student.beginning.lessons?.gift_for_muslim || {
+              lesson_name: "",
               level: "",
               page: "",
               target: "",
@@ -75,6 +101,7 @@ export default function LessonCoveredUpdateModal({
       if (student.ending) {
         setEndingData({
           ...student.ending,
+          type: endingType,
           lessons: {
             qaidah_quran: student.ending.lessons?.qaidah_quran || {
               selected: "",
@@ -83,10 +110,18 @@ export default function LessonCoveredUpdateModal({
             islamic_studies: student.ending.lessons?.islamic_studies || {
               lesson_name: "",
               page: "",
+              book: "",
             },
             dua_surah: student.ending.lessons?.dua_surah || {
               lesson_name: "",
               book: "",
+              level: "",
+              page: "",
+              target: "",
+              dua_number: "",
+            },
+            gift_for_muslim: student.ending.lessons?.gift_for_muslim || {
+              lesson_name: "",
               level: "",
               page: "",
               target: "",
@@ -289,12 +324,12 @@ export default function LessonCoveredUpdateModal({
                   <option value="">Select Level</option>
                   {selectedOption === "qaidah"
                     ? Array.from({ length: 12 }, (_, i) => (
-                        <option key={i} value={`level${i + 1}`}>
+                        <option key={i} value={`level ${i + 1}`}>
                           Level {i + 1}
                         </option>
                       ))
                     : Array.from({ length: 8 }, (_, i) => (
-                        <option key={i} value={`level${i + 1}`}>
+                        <option key={i} value={`level ${i + 1}`}>
                           Level {i + 1}
                         </option>
                       ))}
@@ -358,6 +393,280 @@ export default function LessonCoveredUpdateModal({
     );
   };
 
+  const renderGiftForMuslimFields = (period, data) => {
+    return (
+      <div className="card mb-3">
+        <div className="card-header bg-light">
+          <h6 className="mb-0">Gift for Muslim</h6>
+        </div>
+        <div className="card-body">
+          <div className="row g-3">
+            <div className="col-md-3">
+              <label className="form-label">Level</label>
+              <select
+                className="form-control"
+                value={data.lessons.gift_for_muslim?.level || ""}
+                onChange={(e) =>
+                  handleLessonChange(
+                    period,
+                    "gift_for_muslim",
+                    "level",
+                    e.target.value
+                  )
+                }
+              >
+                <option value="">Select Level</option>
+                {Array.from({ length: 10 }, (_, i) => (
+                  <option key={i} value={`level ${i + 1}`}>
+                    Level {i + 1}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="col-md-3">
+              <label className="form-label">Page</label>
+              <input
+                type="number"
+                className="form-control"
+                value={data.lessons.gift_for_muslim?.page || ""}
+                onChange={(e) =>
+                  handleLessonChange(
+                    period,
+                    "gift_for_muslim",
+                    "page",
+                    e.target.value
+                  )
+                }
+              />
+            </div>
+            <div className="col-md-3">
+              <label className="form-label">Target</label>
+              <input
+                type="number"
+                className="form-control"
+                value={data.lessons.gift_for_muslim?.target || ""}
+                onChange={(e) =>
+                  handleLessonChange(
+                    period,
+                    "gift_for_muslim",
+                    "target",
+                    e.target.value
+                  )
+                }
+              />
+            </div>
+            <div className="col-md-3">
+              <label className="form-label">Lesson Name</label>
+              <input
+                type="text"
+                className="form-control"
+                value={data.lessons.gift_for_muslim?.lesson_name || ""}
+                onChange={(e) =>
+                  handleLessonChange(
+                    period,
+                    "gift_for_muslim",
+                    "lesson_name",
+                    e.target.value
+                  )
+                }
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const renderNormalEducationFields = (period, data) => {
+    return (
+      <>
+        {/* Islamic Studies Section */}
+        <div className="card mb-3">
+          <div className="card-header bg-light">
+            <h6 className="mb-0">Islamic Studies</h6>
+          </div>
+          <div className="card-body">
+            <div className="row">
+              <div className="col-md-4">
+                <label className="form-label">Book</label>
+                <select
+                  className="form-control"
+                  value={data.lessons.islamic_studies?.book || ""}
+                  onChange={(e) =>
+                    handleLessonChange(
+                      period,
+                      "islamic_studies",
+                      "book",
+                      e.target.value
+                    )
+                  }
+                >
+                  <option value="">Select Book</option>
+                  <option value="book 1">Book 1</option>
+                  <option value="book 2">Book 2</option>
+                  <option value="book 3">Book 3</option>
+                  <option value="book 4">Book 4</option>
+                  <option value="book 5">Book 5</option>
+                  <option value="book 6">Book 6</option>
+                  <option value="book 7">Book 7</option>
+                  <option value="book 8">Book 8</option>
+                </select>
+              </div>
+              <div className="col-md-4">
+                <label className="form-label">Page</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={data.lessons.islamic_studies?.page || ""}
+                  onChange={(e) =>
+                    handleLessonChange(
+                      period,
+                      "islamic_studies",
+                      "page",
+                      e.target.value
+                    )
+                  }
+                />
+              </div>
+              <div className="col-md-4">
+                <label className="form-label">Lesson Name</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={data.lessons.islamic_studies?.lesson_name || ""}
+                  onChange={(e) =>
+                    handleLessonChange(
+                      period,
+                      "islamic_studies",
+                      "lesson_name",
+                      e.target.value
+                    )
+                  }
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Dua/Surah Section */}
+        <div className="card mb-3">
+          <div className="card-header bg-light">
+            <h6 className="mb-0">Dua/Surah</h6>
+          </div>
+          <div className="card-body">
+            <div className="row">
+              <div className="col-md-4">
+                <label className="form-label">Book</label>
+                <select
+                  className="form-control"
+                  value={data.lessons.dua_surah?.book || ""}
+                  onChange={(e) =>
+                    handleLessonChange(
+                      period,
+                      "dua_surah",
+                      "book",
+                      e.target.value
+                    )
+                  }
+                >
+                  <option value="">Select Book</option>
+                  <option value="book 1">Book 1</option>
+                  <option value="book 2">Book 2</option>
+                </select>
+              </div>
+              <div className="col-md-4">
+                <label className="form-label">Level</label>
+                <select
+                  className="form-control"
+                  value={data.lessons.dua_surah?.level || ""}
+                  onChange={(e) =>
+                    handleLessonChange(
+                      period,
+                      "dua_surah",
+                      "level",
+                      e.target.value
+                    )
+                  }
+                >
+                  <option value="">Select Level</option>
+                  {[1, 2, 3, 4, 5].map((lvl) => (
+                    <option key={lvl} value={`level ${lvl}`}>
+                      Level {lvl}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="col-md-4">
+                <label className="form-label">Target</label>
+                <input
+                  type="number"
+                  className="form-control"
+                  value={data.lessons.dua_surah?.target || ""}
+                  onChange={(e) =>
+                    handleLessonChange(
+                      period,
+                      "dua_surah",
+                      "target",
+                      e.target.value
+                    )
+                  }
+                />
+              </div>
+              <div className="col-md-4">
+                <label className="form-label">Dua Number</label>
+                <input
+                  type="number"
+                  className="form-control"
+                  value={data.lessons.dua_surah?.dua_number || ""}
+                  onChange={(e) =>
+                    handleLessonChange(
+                      period,
+                      "dua_surah",
+                      "dua_number",
+                      e.target.value
+                    )
+                  }
+                />
+              </div>
+              <div className="col-md-4">
+                <label className="form-label">Page</label>
+                <input
+                  type="number"
+                  className="form-control"
+                  value={data.lessons.dua_surah?.page || ""}
+                  onChange={(e) =>
+                    handleLessonChange(
+                      period,
+                      "dua_surah",
+                      "page",
+                      e.target.value
+                    )
+                  }
+                />
+              </div>
+              <div className="col-md-4">
+                <label className="form-label">Lesson Name</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={data.lessons.dua_surah?.lesson_name || ""}
+                  onChange={(e) =>
+                    handleLessonChange(
+                      period,
+                      "dua_surah",
+                      "lesson_name",
+                      e.target.value
+                    )
+                  }
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  };
+
   if (!showModal) return null;
 
   return (
@@ -396,217 +705,20 @@ export default function LessonCoveredUpdateModal({
                 {beginningData._id && (
                   <>
                     <h5 className="text-primary mb-3">Beginning of Month</h5>
+                    <div className="mb-3">
+                      <span className="badge bg-info">
+                        Type:{" "}
+                        {beginningData.type === "gift_muslim"
+                          ? "Gift For Muslim"
+                          : "Normal Education"}
+                      </span>
+                    </div>
 
                     {renderQuranQaidahFields("beginning", beginningData)}
 
-                    {/* Islamic Studies Section */}
-                    <div className="card mb-3">
-                      <div className="card-header bg-light">
-                        <h6 className="mb-0">Islamic Studies</h6>
-                      </div>
-                      <div className="card-body">
-                        <div className="row">
-                          <div className="col-md-4">
-                            <label className="form-label">Book</label>
-                            <select
-                              className="form-control"
-                              value={
-                                beginningData.lessons.islamic_studies?.book ||
-                                ""
-                              }
-                              onChange={(e) =>
-                                handleLessonChange(
-                                  "beginning",
-                                  "islamic_studies",
-                                  "book",
-                                  e.target.value
-                                )
-                              }
-                              name="islamic_studies_book"
-                              required
-                            >
-                              <option value="">Select Book</option>
-                              <option value="book1">Book 1</option>
-                              <option value="book2">Book 2</option>
-                              <option value="book3">Book 3</option>
-                              <option value="book4">Book 4</option>
-                              <option value="book5">Book 5</option>
-                              <option value="book6">Book 6</option>
-                              <option value="book7">Book 7</option>
-                              <option value="book8">Book 8</option>
-                            </select>
-                          </div>
-                          <div className="col-md-4">
-                            <label className="form-label">Page</label>
-                            <input
-                              type="text"
-                              className="form-control"
-                              value={
-                                beginningData.lessons.islamic_studies.page || ""
-                              }
-                              onChange={(e) =>
-                                handleLessonChange(
-                                  "beginning",
-                                  "islamic_studies",
-                                  "page",
-                                  e.target.value
-                                )
-                              }
-                            />
-                          </div>
-                          <div className="col-md-4">
-                            <label className="form-label">Lesson Name</label>
-                            <input
-                              type="text"
-                              className="form-control"
-                              value={
-                                beginningData.lessons.islamic_studies
-                                  .lesson_name || ""
-                              }
-                              onChange={(e) =>
-                                handleLessonChange(
-                                  "beginning",
-                                  "islamic_studies",
-                                  "lesson_name",
-                                  e.target.value
-                                )
-                              }
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Dua/Surah Section */}
-                    <div className="card mb-3">
-                      <div className="card-header bg-light">
-                        <h6 className="mb-0">Dua/Surah</h6>
-                      </div>
-                      <div className="card-body">
-                        <div className="row">
-                          <div className="col-md-4">
-                            <label className="form-label">Book</label>
-
-                            <select
-                              className="form-control"
-                              value={beginningData.lessons.dua_surah.book || ""}
-                              onChange={(e) =>
-                                handleLessonChange(
-                                  "beginning",
-                                  "dua_surah",
-                                  "book",
-                                  e.target.value
-                                )
-                              }
-                              name="dua_surah_book"
-                              required
-                            >
-                              <option value="">Select Book</option>
-                              <option value="book1">Book 1</option>
-                              <option value="book2">Book 2</option>
-                            </select>
-                          </div>
-                          <div className="col-md-4">
-                            <label className="form-label">Level</label>
-
-                            <select
-                              className="form-control"
-                              value={
-                                beginningData.lessons.dua_surah.level || ""
-                              }
-                              onChange={(e) =>
-                                handleLessonChange(
-                                  "beginning",
-                                  "dua_surah",
-                                  "level",
-                                  e.target.value
-                                )
-                              }
-                              name="dua_surah_level"
-                              required
-                            >
-                              <option value="">Select Level</option>
-                              {[1, 2, 3, 4, 5].map((lvl) => (
-                                <option key={lvl} value={`level${lvl}`}>
-                                  Level {lvl}
-                                </option>
-                              ))}
-                            </select>
-                          </div>
-                          <div className="col-md-4">
-                            <label className="form-label">Target</label>
-                            <input
-                              type="number"
-                              className="form-control"
-                              value={
-                                beginningData.lessons.dua_surah.target || ""
-                              }
-                              onChange={(e) =>
-                                handleLessonChange(
-                                  "beginning",
-                                  "dua_surah",
-                                  "target",
-                                  e.target.value
-                                )
-                              }
-                            />
-                          </div>
-                          <div className="col-md-4">
-                            <label className="form-label">Dua Number</label>
-                            <input
-                              type="number"
-                              className="form-control"
-                              value={
-                                beginningData.lessons.dua_surah.dua_number || ""
-                              }
-                              onChange={(e) =>
-                                handleLessonChange(
-                                  "beginning",
-                                  "dua_surah",
-                                  "dua_number",
-                                  e.target.value
-                                )
-                              }
-                            />
-                          </div>
-                          <div className="col-md-4">
-                            <label className="form-label">Page</label>
-                            <input
-                              type="number"
-                              className="form-control"
-                              value={beginningData.lessons.dua_surah.page || ""}
-                              onChange={(e) =>
-                                handleLessonChange(
-                                  "beginning",
-                                  "dua_surah",
-                                  "page",
-                                  e.target.value
-                                )
-                              }
-                            />
-                          </div>
-                          <div className="col-md-4">
-                            <label className="form-label">Lesson Name</label>
-                            <input
-                              type="text"
-                              className="form-control"
-                              value={
-                                beginningData.lessons.dua_surah.lesson_name ||
-                                ""
-                              }
-                              onChange={(e) =>
-                                handleLessonChange(
-                                  "beginning",
-                                  "dua_surah",
-                                  "lesson_name",
-                                  e.target.value
-                                )
-                              }
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                    {beginningData.type === "gift_muslim"
+                      ? renderGiftForMuslimFields("beginning", beginningData)
+                      : renderNormalEducationFields("beginning", beginningData)}
                   </>
                 )}
 
@@ -615,211 +727,20 @@ export default function LessonCoveredUpdateModal({
                   <>
                     <hr className="my-4" />
                     <h5 className="text-primary mb-3">End of Month</h5>
+                    <div className="mb-3">
+                      <span className="badge bg-info">
+                        Type:{" "}
+                        {endingData.type === "gift_muslim"
+                          ? "Gift For Muslim"
+                          : "Normal Education"}
+                      </span>
+                    </div>
 
                     {renderQuranQaidahFields("ending", endingData)}
 
-                    {/* Islamic Studies Section */}
-                    <div className="card mb-3">
-                      <div className="card-header bg-light">
-                        <h6 className="mb-0">Islamic Studies</h6>
-                      </div>
-                      <div className="card-body">
-                        <div className="row">
-                          <div className="col-md-4">
-                            <label className="form-label">Book</label>
-                            <select
-                              className="form-control"
-                              value={
-                                endingData.lessons.islamic_studies?.book || ""
-                              }
-                              onChange={(e) =>
-                                handleLessonChange(
-                                  "ending",
-                                  "islamic_studies",
-                                  "book",
-                                  e.target.value
-                                )
-                              }
-                              name="islamic_studies_book"
-                              required
-                            >
-                              <option value="">Select Book</option>
-                              <option value="book1">Book 1</option>
-                              <option value="book2">Book 2</option>
-                              <option value="book3">Book 3</option>
-                              <option value="book4">Book 4</option>
-                              <option value="book5">Book 5</option>
-                              <option value="book6">Book 6</option>
-                              <option value="book7">Book 7</option>
-                              <option value="book8">Book 8</option>
-                            </select>
-                          </div>
-                          <div className="col-md-4">
-                            <label className="form-label">Page</label>
-                            <input
-                              type="text"
-                              className="form-control"
-                              value={
-                                endingData.lessons.islamic_studies.page || ""
-                              }
-                              onChange={(e) =>
-                                handleLessonChange(
-                                  "ending",
-                                  "islamic_studies",
-                                  "page",
-                                  e.target.value
-                                )
-                              }
-                            />
-                          </div>
-                          <div className="col-md-4">
-                            <label className="form-label">Lesson Name</label>
-                            <input
-                              type="text"
-                              className="form-control"
-                              value={
-                                endingData.lessons.islamic_studies
-                                  .lesson_name || ""
-                              }
-                              onChange={(e) =>
-                                handleLessonChange(
-                                  "ending",
-                                  "islamic_studies",
-                                  "lesson_name",
-                                  e.target.value
-                                )
-                              }
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Dua/Surah Section */}
-                    <div className="card mb-3">
-                      <div className="card-header bg-light">
-                        <h6 className="mb-0">Dua/Surah</h6>
-                      </div>
-                      <div className="card-body">
-                        <div className="row">
-                          <div className="col-md-4">
-                            <label className="form-label">Book</label>
-
-                            <select
-                              className="form-control"
-                              value={endingData.lessons.dua_surah.book || ""}
-                              onChange={(e) =>
-                                handleLessonChange(
-                                  "ending",
-                                  "dua_surah",
-                                  "book",
-                                  e.target.value
-                                )
-                              }
-                              name="dua_surah_book"
-                              required
-                            >
-                              <option value="">Select Book</option>
-                              <option value="book1">Book 1</option>
-                              <option value="book2">Book 2</option>
-                            </select>
-                          </div>
-                          <div className="col-md-4">
-                            <label className="form-label">Level</label>
-
-                            <select
-                              className="form-control"
-                              value={endingData.lessons.dua_surah.level || ""}
-                              onChange={(e) =>
-                                handleLessonChange(
-                                  "ending",
-                                  "dua_surah",
-                                  "level",
-                                  e.target.value
-                                )
-                              }
-                              name="dua_surah_level"
-                              required
-                            >
-                              <option value="">Select Level</option>
-                              {[1, 2, 3, 4, 5].map((lvl) => (
-                                <option key={lvl} value={`level${lvl}`}>
-                                  Level {lvl}
-                                </option>
-                              ))}
-                            </select>
-                          </div>
-                          <div className="col-md-4">
-                            <label className="form-label">Target</label>
-                            <input
-                              type="number"
-                              className="form-control"
-                              value={endingData.lessons.dua_surah.target || ""}
-                              onChange={(e) =>
-                                handleLessonChange(
-                                  "ending",
-                                  "dua_surah",
-                                  "target",
-                                  e.target.value
-                                )
-                              }
-                            />
-                          </div>
-                          <div className="col-md-4">
-                            <label className="form-label">Dua Number</label>
-                            <input
-                              type="number"
-                              className="form-control"
-                              value={
-                                endingData.lessons.dua_surah?.dua_number || ""
-                              }
-                              onChange={(e) =>
-                                handleLessonChange(
-                                  "ending",
-                                  "dua_surah",
-                                  "dua_number",
-                                  e.target.value
-                                )
-                              }
-                            />
-                          </div>
-                          <div className="col-md-4">
-                            <label className="form-label">Page</label>
-                            <input
-                              type="number"
-                              className="form-control"
-                              value={endingData.lessons.dua_surah.page || ""}
-                              onChange={(e) =>
-                                handleLessonChange(
-                                  "ending",
-                                  "dua_surah",
-                                  "page",
-                                  e.target.value
-                                )
-                              }
-                            />
-                          </div>
-                          <div className="col-md-4">
-                            <label className="form-label">Lesson Name</label>
-                            <input
-                              type="text"
-                              className="form-control"
-                              value={
-                                endingData.lessons.dua_surah.lesson_name || ""
-                              }
-                              onChange={(e) =>
-                                handleLessonChange(
-                                  "ending",
-                                  "dua_surah",
-                                  "lesson_name",
-                                  e.target.value
-                                )
-                              }
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                    {endingData.type === "gift_muslim"
+                      ? renderGiftForMuslimFields("ending", endingData)
+                      : renderNormalEducationFields("ending", endingData)}
 
                     {/* Description */}
                     <div className="mb-3">

@@ -11,6 +11,7 @@ import { useGetTeacherStudentsProgressQuery } from "../../redux/features/lessons
 
 import LessonCoveredTable from "./LessonCoveredTable";
 import ReportSubmitModal from "./ReportSubmitModal";
+import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 
 // {
 //   student_id: "...",
@@ -69,7 +70,6 @@ export default function LessonsCovered() {
   const [session, setSession] = useState("");
   const [time, setTime] = useState("");
   const [classId, setClassId] = useState("");
-  const [subjectId, setSubjectId] = useState("");
   const [isEditMode, setIsEditMode] = useState(false);
   const currentYear = new Date().getFullYear();
   const [filterMonth, setFilterMonth] = useState("");
@@ -86,12 +86,11 @@ export default function LessonsCovered() {
     session: "",
     time: "",
     classId: "",
-    subjectId: "",
   });
 
   // ── APPLY FILTER HANDLER ──
   const handleApplyFilters = () => {
-    setAppliedFilters({ department, session, time, classId, subjectId });
+    setAppliedFilters({ department, session, time, classId });
     setIsEditMode(!isEditMode); // enable form display
   };
 
@@ -107,17 +106,18 @@ export default function LessonsCovered() {
     }
   );
 
-  const { data: lessonsCovered = [] } = useGetTeacherStudentsProgressQuery(
-    {
-      teacher_id: teacher?._id,
-      student_name: filterName,
-      month: filterMonth,
-      year: filterYear,
-    },
-    {
-      skip: !teacher?._id,
-    }
-  );
+  const { data: lessonsCovered = [], isLoading: LessonCoveredLoading } =
+    useGetTeacherStudentsProgressQuery(
+      {
+        teacher_id: teacher?._id,
+        student_name: filterName,
+        month: filterMonth,
+        year: filterYear,
+      },
+      {
+        skip: !teacher?._id,
+      }
+    );
 
   const { data: group } = useGetClassByParamsQuery(
     appliedFilters.department &&
@@ -135,7 +135,11 @@ export default function LessonsCovered() {
 
   let groupId = group?._id;
 
-  const { data: students = [], refetch } = useGetStudentsByGroupQuery(groupId, {
+  const {
+    data: students = [],
+    refetch,
+    isLoading,
+  } = useGetStudentsByGroupQuery(groupId, {
     skip: !groupId,
   });
   const handleShow = (id) => {
@@ -248,6 +252,10 @@ export default function LessonsCovered() {
   //   // }
   // };
   // const handleClose = () => setShowModal(false);
+
+  if (isLoading || LessonCoveredLoading) {
+    return <LoadingSpinnerDash></LoadingSpinnerDash>;
+  }
   return (
     <div>
       <h3 className="mb-2">Lessons Covered</h3>
@@ -256,7 +264,7 @@ export default function LessonsCovered() {
       <div className="border border-black p-3 mb-3">
         <div className="row align-items-center">
           {/* Department */}
-          <div className="col-md-4">
+          <div className="col-md-6">
             <label className="form-label">Departments:</label>
             <select
               style={{ borderColor: "var(--border2)" }}
@@ -264,7 +272,6 @@ export default function LessonsCovered() {
               onChange={(e) => {
                 setDepartment(e.target.value);
                 setClassId("");
-                setSubjectId("");
               }}
               className="form-control"
             >
@@ -278,7 +285,7 @@ export default function LessonsCovered() {
           </div>
 
           {/* Session */}
-          <div className="col-md-4">
+          <div className="col-md-6">
             <label className="form-label">Session</label>
             <select
               style={{ borderColor: "var(--border2)" }}
@@ -328,7 +335,6 @@ export default function LessonsCovered() {
               value={classId}
               onChange={(e) => {
                 setClassId(e.target.value);
-                setSubjectId("");
               }}
               className="form-control"
             >
@@ -343,28 +349,6 @@ export default function LessonsCovered() {
                 .map((c) => (
                   <option key={c._id} value={c._id}>
                     {c.class_name}
-                  </option>
-                ))}
-            </select>
-          </div>
-
-          {/* Subject */}
-          <div className="col-md-4">
-            <label className="form-label">Subject</label>
-            <select
-              style={{ borderColor: "var(--border2)" }}
-              value={subjectId}
-              onChange={(e) => setSubjectId(e.target.value)}
-              className="form-control"
-            >
-              <option value="">Select Subject</option>
-              {teacherWithDetails?.subjects_info
-                ?.filter(
-                  (s) => s.dept_id === department && s.class_id === classId
-                )
-                .map((s) => (
-                  <option key={s._id} value={s._id}>
-                    {s.subject_name}
                   </option>
                 ))}
             </select>
@@ -431,7 +415,6 @@ export default function LessonsCovered() {
           studentId={selectedStudentId}
           teacherId={teacher?._id}
           classId={classId}
-          subjectId={subjectId}
           departmentId={department}
           showModal={showModal}
           setShowModal={setShowModal}

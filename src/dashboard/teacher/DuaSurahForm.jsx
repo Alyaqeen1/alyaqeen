@@ -9,8 +9,8 @@ export default function DuaSurahForm({}) {
           <label className="form-label">Book</label>
           <select className="form-control" name="dua_surah_book" required>
             <option value="">Select Book</option>
-            <option value="book1">Book 1</option>
-            <option value="book2">Book 2</option>
+            <option value="book 1">Book 1</option>
+            <option value="book 2">Book 2</option>
           </select>
         </div>
         <div className="col-md-4">
@@ -18,7 +18,7 @@ export default function DuaSurahForm({}) {
           <select className="form-control" name="dua_surah_level" required>
             <option value="">Select Level</option>
             {[1, 2, 3, 4, 5].map((lvl) => (
-              <option key={lvl} value={`level${lvl}`}>
+              <option key={lvl} value={`level ${lvl}`}>
                 Level {lvl}
               </option>
             ))}

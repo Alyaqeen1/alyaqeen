@@ -64,12 +64,12 @@ export default function QuranQaidahForm({ quranOption, setQuranOption }) {
               <option value="">Select Level</option>
               {quranOption === "qaidah"
                 ? Array.from({ length: 12 }, (_, i) => (
-                    <option key={i} value={`level${i + 1}`}>
+                    <option key={i} value={`level ${i + 1}`}>
                       Level {i + 1}
                     </option>
                   ))
                 : Array.from({ length: 8 }, (_, i) => (
-                    <option key={i} value={`level${i + 1}`}>
+                    <option key={i} value={`level ${i + 1}`}>
                       Level {i + 1}
                     </option>
                   ))}

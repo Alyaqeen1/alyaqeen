@@ -6,15 +6,14 @@ import { useGetStudentsByIdQuery } from "../../redux/features/students/studentsA
 import QuranQaidahForm from "./QuranQaidahForm";
 import DuaSurahForm from "./DuaSurahForm";
 import IslamicStudiesForm from "./IslamicStudiesForm";
+import GiftForMuslimForm from "./GiftForMuslim";
 
 export default function ReportSubmitModal({
   studentId,
   teacherId,
   classId,
   departmentId,
-  subjectId,
   showModal,
-  //   handleClose,
   setShowModal,
 }) {
   const [quranOption, setQuranOption] = useState("");
@@ -28,8 +27,7 @@ export default function ReportSubmitModal({
     skip: !studentId,
   });
   const [addLessonCovered] = useAddLessonCoveredMutation();
-  console.log(studentId);
-  // console.log(quranData);
+
   const handleClose = () => {
     setShowModal(false);
     setType("");
@@ -38,16 +36,18 @@ export default function ReportSubmitModal({
     setMonth(currentMonth);
     setYear(currentYear.toString());
   };
+
   const handleBackdropClick = (event) => {
-    // Close modal only if clicked on the backdrop (not modal content)
     if (event.target.classList.contains("modal")) {
       handleClose();
     }
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.target;
 
+    // Common fields
     const qaidah_tajweed_level = form.qaidah_tajweed_level?.value?.trim() || "";
     const qaidah_tajweed_lesson_name =
       form.qaidah_tajweed_lesson_name?.value?.trim() || "";
@@ -56,17 +56,6 @@ export default function ReportSubmitModal({
     const quran_hifz_para = form.quran_hifz_para?.value?.trim() || "";
     const quran_hifz_page = form.quran_hifz_page?.value?.trim() || "";
     const quran_hifz_line = form.quran_hifz_line?.value?.trim() || "";
-    const islamic_studies_lesson_name =
-      form.islamic_studies_lesson_name?.value?.trim() || "";
-      const islamic_studies_book = form?.islamic_studies_book?.value?.trim() || ""
-    const islamic_studies_page = form.islamic_studies_page?.value?.trim() || "";
-    const dua_surah_lesson_name =
-      form.dua_surah_lesson_name?.value?.trim() || "";
-    const dua_surah_book = form.dua_surah_book?.value?.trim() || "";
-    const dua_surah_level = form.dua_surah_level?.value?.trim() || "";
-    const dua_surah_page = form.dua_surah_page?.value?.trim() || "";
-    const dua_surah_target = form.dua_surah_target?.value?.trim() || "";
-    const dua_surah_dua_number = form.dua_surah_dua_number?.value?.trim() || "";
     const description = form.description?.value?.trim() || "";
 
     let quranData = null;
@@ -92,12 +81,12 @@ export default function ReportSubmitModal({
       };
     }
 
-    const reportData = {
+    // Prepare report data based on type
+    let reportData = {
       student_id: studentId,
       teacher_id: teacherId,
       class_id: classId,
       department_id: departmentId,
-      subject_id: subjectId,
       type,
       month,
       year,
@@ -107,22 +96,59 @@ export default function ReportSubmitModal({
       date: new Date().toISOString(),
       description: description || "",
       lessons: {
-        qaidah_quran: quranData, // ✅ clearly shows which one is selected
-        islamic_studies: {
-          lesson_name: islamic_studies_lesson_name,
-          page: islamic_studies_page,
-          book: islamic_studies_book
-        },
-        dua_surah: {
-          lesson_name: dua_surah_lesson_name,
-          book: dua_surah_book,
-          level: dua_surah_level,
-          page: dua_surah_page,
-          target: dua_surah_target,
-          dua_number: dua_surah_dua_number
-        },
+        qaidah_quran: quranData,
       },
     };
+
+    // Add type-specific fields
+    if (type === "normal") {
+      const islamic_studies_lesson_name =
+        form.islamic_studies_lesson_name?.value?.trim() || "";
+      const islamic_studies_book =
+        form?.islamic_studies_book?.value?.trim() || "";
+      const islamic_studies_page =
+        form.islamic_studies_page?.value?.trim() || "";
+      const dua_surah_lesson_name =
+        form.dua_surah_lesson_name?.value?.trim() || "";
+      const dua_surah_book = form.dua_surah_book?.value?.trim() || "";
+      const dua_surah_level = form.dua_surah_level?.value?.trim() || "";
+      const dua_surah_page = form.dua_surah_page?.value?.trim() || "";
+      const dua_surah_target = form.dua_surah_target?.value?.trim() || "";
+      const dua_surah_dua_number =
+        form.dua_surah_dua_number?.value?.trim() || "";
+
+      reportData.lessons.islamic_studies = {
+        lesson_name: islamic_studies_lesson_name,
+        page: islamic_studies_page,
+        book: islamic_studies_book,
+      };
+
+      reportData.lessons.dua_surah = {
+        lesson_name: dua_surah_lesson_name,
+        book: dua_surah_book,
+        level: dua_surah_level,
+        page: dua_surah_page,
+        target: dua_surah_target,
+        dua_number: dua_surah_dua_number,
+      };
+    } else if (type === "gift_muslim") {
+      const gift_for_muslim_lesson_name =
+        form.gift_for_muslim_lesson_name?.value?.trim() || "";
+      const gift_for_muslim_level =
+        form.gift_for_muslim_level?.value?.trim() || "";
+      const gift_for_muslim_page =
+        form.gift_for_muslim_page?.value?.trim() || "";
+      const gift_for_muslim_target =
+        form.gift_for_muslim_target?.value?.trim() || "";
+
+      reportData.lessons.gift_for_muslim = {
+        lesson_name: gift_for_muslim_lesson_name,
+        level: gift_for_muslim_level,
+        page: gift_for_muslim_page,
+        target: gift_for_muslim_target,
+      };
+    }
+
     try {
       const data = await addLessonCovered(reportData).unwrap();
       if (data?.insertedId) {
@@ -142,7 +168,6 @@ export default function ReportSubmitModal({
   return (
     <>
       {/* Backdrop */}
-      {/* Dark Background (Backdrop) */}
       {showModal && <div className="modal-backdrop fade show"></div>}
 
       {/* Modal */}
@@ -154,7 +179,7 @@ export default function ReportSubmitModal({
         style={{
           display: showModal ? "block" : "none",
           zIndex: 1050,
-          overflow: "hidden", // Add this
+          overflow: "hidden",
         }}
         onMouseDown={handleBackdropClick}
       >
@@ -225,7 +250,7 @@ export default function ReportSubmitModal({
                   </div>
 
                   <div className="col-lg-3">
-                    <label className="form-label">time of month</label>
+                    <label className="form-label">Time of month</label>
                     <select
                       className="form-control"
                       required
@@ -260,27 +285,25 @@ export default function ReportSubmitModal({
                     `Starting Point at the beginning of the month`}
                 </h3>
 
+                {/* ---------------- Quran / Qaidah Section (Common for both types) ---------------- */}
+                <QuranQaidahForm
+                  quranOption={quranOption}
+                  setQuranOption={setQuranOption}
+                />
+
+                {/* Type-specific sections */}
                 {type === "normal" ? (
                   <>
-                    {/* ---------------- Quran / Qaidah Section ---------------- */}
-                    <QuranQaidahForm
-                      quranOption={quranOption}
-                      setQuranOption={setQuranOption}
-                    ></QuranQaidahForm>
-
                     {/* ---------------- Islamic Studies Section ---------------- */}
-                    <IslamicStudiesForm></IslamicStudiesForm>
+                    <IslamicStudiesForm />
 
                     {/* ---------------- Dua & Surah Section ---------------- */}
-                    <DuaSurahForm></DuaSurahForm>
+                    <DuaSurahForm />
                   </>
                 ) : type === "gift_muslim" ? (
                   <>
-                    {/* ---------------- Islamic Studies Section ---------------- */}
-                    <IslamicStudiesForm></IslamicStudiesForm>
-
-                    {/* ---------------- Dua & Surah Section ---------------- */}
-                    <DuaSurahForm></DuaSurahForm>
+                    {/* ---------------- Gift For Muslim Section ---------------- */}
+                    <GiftForMuslimForm />
                   </>
                 ) : (
                   <h5>Please Choose a type</h5>
