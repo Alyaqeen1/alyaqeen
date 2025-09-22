@@ -3,17 +3,21 @@ import { useParams } from "react-router";
 import { useGetStudentsByIdQuery } from "../../redux/features/students/studentsApi";
 import sessionMap from "../../utils/sessionMap";
 import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
+import { useGetFeesSummaryQuery } from "../../redux/features/fees/feesApi";
 
 export default function ViewStudent() {
   const { id } = useParams();
   const { data: student, isLoading } = useGetStudentsByIdQuery(id, {
     skip: !id,
   });
-
+  const { data: feeSummary, isLoading: isFeeLoading } = useGetFeesSummaryQuery(
+    id,
+    {
+      skip: !id,
+    }
+  );
+  console.log(feeSummary);
   const [activeTab, setActiveTab] = useState("profile");
-
-  if (isLoading) return <LoadingSpinnerDash></LoadingSpinnerDash>;
-  if (!student) return <div>No student found</div>;
 
   const {
     name,
@@ -33,8 +37,15 @@ export default function ViewStudent() {
     monthly_fee,
     student_id,
     signature,
-  } = student;
+  } = student || {};
 
+  const { summary, paidMonths } = feeSummary || {};
+
+  if (isLoading || isFeeLoading) {
+    return <LoadingSpinnerDash></LoadingSpinnerDash>;
+  }
+  const unpaidFee =
+    Number(summary?.consecutiveUnpaidMonths) * Number(monthly_fee);
   return (
     <div className="container my-4">
       <h3 className="mb-4">Student Profile</h3>
@@ -198,15 +209,15 @@ export default function ViewStudent() {
                 {[
                   ["Admission Fee", "20"],
                   ["Monthly Fee", monthly_fee],
-                  ["Total Paid Monthly", ""],
-                  ["Unpaid Monthly", ""],
-                  ["Outstanding Balance", ""],
+                  ["Total Paid Monthly", summary?.totalMonthlyPaid],
+                  ["Unpaid Monthly", unpaidFee],
+                  ["Outstanding Balance", summary?.outstandingAmount],
                 ].map(([label, value]) => (
                   <div className="row mb-2" key={label}>
                     <div className="col-md-6">
                       <strong>{label}</strong>
                     </div>
-                    <div className="col-md-6">{value || "-"}</div>
+                    <div className="col-md-6">{value}</div>
                   </div>
                 ))}
               </>
