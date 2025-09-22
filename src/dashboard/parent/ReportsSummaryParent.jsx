@@ -29,14 +29,12 @@ export default function ReportsSummaryParent() {
   const [year, setYear] = useState(currentYear);
   const [showOverallSummary, setShowOverallSummary] = useState(false);
 
-  const { data: enrolledFamily = [], isFetching: loadingFamily } =
+  const { data: enrolledFamily = {}, isFetching: loadingFamily } =
     useGetEnrolledFullFamilyQuery(user?.email, {
       skip: loading || !user?.email,
     });
 
-  const studentIds = enrolledFamily?.childrenDocs?.map(
-    (student) => student._id
-  );
+  const studentIds = enrolledFamily?.childrenDocs?.map((s) => s._id);
 
   const { data: monthlySummary = [], isFetching: loadingMonthly } =
     useGetStudentLessonsCoveredMonthlySummaryQuery(
@@ -66,41 +64,33 @@ export default function ReportsSummaryParent() {
 
   const displayData = showOverallSummary ? yearlySummary : monthlySummary;
 
+  // Helper to get correct progress object
+  const getProgress = (item) => (showOverallSummary ? item.progress : item);
+
   return (
     <div className="container py-4">
+      {/* Toggle Buttons */}
       <div className="card shadow-sm mb-4">
         <div className="card-body">
           <h2 className="h4 card-title mb-4">📊 Progress Summary Report</h2>
-
           <div className="d-flex justify-content-center mb-4">
             <div className="btn-group" role="group">
               <button
-                style={{
-                  backgroundColor: !showOverallSummary
-                    ? "var(--border2)"
-                    : "white",
-                  color: !showOverallSummary ? "white" : "var(--border2)",
-                  border: `1px solid var(--border2)`,
-                  padding: "8px 16px",
-                  borderRadius: "4px",
-                  cursor: "pointer",
-                }}
+                className={`px-3 py-2 border ${
+                  !showOverallSummary
+                    ? "bg-primary text-white"
+                    : "bg-white text-primary"
+                }`}
                 onClick={() => setShowOverallSummary(false)}
               >
                 Monthly Summary
               </button>
-
               <button
-                style={{
-                  backgroundColor: showOverallSummary
-                    ? "var(--border2)"
-                    : "white",
-                  color: showOverallSummary ? "white" : "var(--border2)",
-                  border: `1px solid var(--border2)`,
-                  padding: "8px 16px",
-                  borderRadius: "4px",
-                  cursor: "pointer",
-                }}
+                className={`px-3 py-2 border ${
+                  showOverallSummary
+                    ? "bg-primary text-white"
+                    : "bg-white text-primary"
+                }`}
                 onClick={() => setShowOverallSummary(true)}
               >
                 Yearly Summary
@@ -126,7 +116,6 @@ export default function ReportsSummaryParent() {
                 </select>
               </div>
             )}
-
             <div className={showOverallSummary ? "col-md-12" : "col-md-6"}>
               <label className="form-label fw-semibold">Year</label>
               <select
@@ -135,9 +124,9 @@ export default function ReportsSummaryParent() {
                 onChange={(e) => setYear(Number(e.target.value))}
               >
                 {Array.from({ length: 5 }, (_, i) => currentYear - 2 + i).map(
-                  (yr) => (
-                    <option key={yr} value={yr}>
-                      {yr}
+                  (y) => (
+                    <option key={y} value={y}>
+                      {y}
                     </option>
                   )
                 )}
@@ -147,9 +136,10 @@ export default function ReportsSummaryParent() {
         </div>
       </div>
 
+      {/* Student Reports */}
       {enrolledFamily?.childrenDocs?.map((student) => {
         const studentData = displayData?.filter(
-          (item) => item.student_id === student._id
+          (d) => d.student_id === student._id
         );
 
         return (
@@ -160,64 +150,113 @@ export default function ReportsSummaryParent() {
             <div className="card-body">
               <h4 className="h6 mb-3" style={{ color: "var(--border2)" }}>
                 {showOverallSummary
-                  ? "📆 Yearly Summary"
-                  : "📅 Monthly Summary"}{" "}
+                  ? "📆 Yearly Reading Progress Summary"
+                  : "📅 Monthly Reading Progress Summary"}{" "}
                 ({year})
               </h4>
 
               {studentData?.length > 0 ? (
-                studentData.map((item, index) => (
-                  <div key={index} className="mb-4">
-                    {!showOverallSummary && (
-                      <h5 className="fw-semibold mb-3">
-                        {item?.month}, {year}
-                      </h5>
-                    )}
+                studentData.map((item, idx) => {
+                  const progress = getProgress(item);
 
-                    <div className="row">
-                      <div className="col-md-4 mb-3">
-                        <div className="p-3 bg-light rounded">
-                          <h6 className="fw-semibold">
-                            Quran Qaidah Pages Done
-                          </h6>
-                          <p className="mb-0 fs-5">
-                            {item?.qaidahProgress ||
-                              item?.qaidahYearlyProgress ||
-                              0}
-                          </p>
-                        </div>
-                      </div>
+                  return (
+                    <div key={idx} className="mb-4">
+                      {!showOverallSummary && (
+                        <h5 className="fw-semibold mb-3">
+                          {item.month}, {year}
+                        </h5>
+                      )}
+                      <div className="row">
+                        {progress?.qaidah_quran_progress && (
+                          <div className="col-md-4 mb-3">
+                            <div className="p-3 bg-light rounded">
+                              <h6 className="fw-semibold">📖 Quran Qaidah</h6>
+                              <p className="mb-1">
+                                Pages Done:{" "}
+                                {progress.qaidah_quran_progress.page_progress}
+                              </p>
+                              <p className="mb-1">
+                                Lines Done:{" "}
+                                {progress.qaidah_quran_progress.line_progress}
+                              </p>
+                              <p className="mb-0">
+                                Lesson:{" "}
+                                {
+                                  progress.qaidah_quran_progress
+                                    .lesson_name_display
+                                }
+                              </p>
+                            </div>
+                          </div>
+                        )}
 
-                      <div className="col-md-4 mb-3">
-                        <div className="p-3 bg-light rounded">
-                          <h6 className="fw-semibold">Duas / Surahs Done</h6>
-                          <p className="mb-0 fs-5">
-                            {item?.duasSurahsProgress ||
-                              item?.duasSurahsYearlyProgress ||
-                              0}
-                          </p>
-                        </div>
-                      </div>
+                        {progress?.dua_surah_progress && (
+                          <div className="col-md-4 mb-3">
+                            <div className="p-3 bg-light rounded">
+                              <h6 className="fw-semibold">✨ Duas / Surahs</h6>
+                              <p className="mb-1">
+                                Pages Done:{" "}
+                                {progress.dua_surah_progress.page_progress}
+                              </p>
+                              <p className="mb-1">
+                                Target:{" "}
+                                {progress.dua_surah_progress.target_progress}
+                              </p>
+                              <p className="mb-0">
+                                Lesson:{" "}
+                                {
+                                  progress.dua_surah_progress
+                                    .lesson_name_display
+                                }
+                              </p>
+                            </div>
+                          </div>
+                        )}
 
-                      <div className="col-md-4 mb-3">
-                        <div className="p-3 bg-light rounded">
-                          <h6 className="fw-semibold">
-                            Islamic Studies Pages Done
-                          </h6>
-                          <p className="mb-0 fs-5">
-                            {item?.islamicStudiesProgress ||
-                              item?.islamicStudiesYearlyProgress ||
-                              0}
-                          </p>
-                        </div>
+                        {progress?.islamic_studies_progress && (
+                          <div className="col-md-4 mb-3">
+                            <div className="p-3 bg-light rounded">
+                              <h6 className="fw-semibold">
+                                🕌 Islamic Studies
+                              </h6>
+                              <p className="mb-1">
+                                Pages Done:{" "}
+                                {
+                                  progress.islamic_studies_progress
+                                    .page_progress
+                                }
+                              </p>
+                              <p className="mb-0">
+                                Lesson:{" "}
+                                {
+                                  progress.islamic_studies_progress
+                                    .lesson_name_display
+                                }
+                              </p>
+                            </div>
+                          </div>
+                        )}
+
+                        {progress?.gift_for_muslim_progress && (
+                          <div className="col-md-4 mb-3">
+                            <div className="p-3 bg-light rounded">
+                              <h6 className="fw-semibold">
+                                🎁 Gift for Muslim
+                              </h6>
+                              <p className="mb-0">
+                                Progress: {progress.gift_for_muslim_progress}
+                              </p>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </div>
-                  </div>
-                ))
+                  );
+                })
               ) : (
                 <div className="alert alert-info mb-0">
                   This {showOverallSummary ? "year" : "month"} data is not
-                  available
+                  available.
                 </div>
               )}
             </div>

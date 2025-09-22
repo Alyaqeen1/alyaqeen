@@ -196,11 +196,9 @@ export default function ViewStudent() {
                   Fee Information
                 </h6>
                 {[
-                  ["Admission Fee", ""],
-                  ["Paid Admission", ""],
-                  ["Unpaid Admission", ""],
+                  ["Admission Fee", "20"],
                   ["Monthly Fee", monthly_fee],
-                  ["Paid Monthly", ""],
+                  ["Total Paid Monthly", ""],
                   ["Unpaid Monthly", ""],
                   ["Outstanding Balance", ""],
                 ].map(([label, value]) => (

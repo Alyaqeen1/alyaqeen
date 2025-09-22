@@ -321,7 +321,7 @@ export default function ReportsSummary() {
                         : `${item.month} ${item.year}`}
                     </span>
                     <span className="badge bg-info me-2">
-                      {progressData.type === "gift_muslim"
+                      {item.type === "gift_muslim"
                         ? "Gift for Muslim"
                         : "Normal"}
                     </span>
@@ -346,15 +346,13 @@ export default function ReportsSummary() {
                     {Object.entries(progressConfig).map(([key, cfg]) => {
                       const progress = progressData[key];
                       if (!progress) return null;
+
+                      // Determine column size based on student type
+                      const colSize =
+                        item.type === "gift_muslim" ? "col-md-6" : "col-md-4";
+
                       return (
-                        <div
-                          key={key}
-                          className={`${
-                            progressData.type === "gift_muslim"
-                              ? "col-md-6"
-                              : "col-md-4"
-                          } mb-2`}
-                        >
+                        <div key={key} className={`${colSize} mb-2`}>
                           <div className="card bg-light h-100">
                             <div className="card-body py-2">
                               <h6 className="card-title">{cfg.title}</h6>
@@ -380,15 +378,15 @@ export default function ReportsSummary() {
                         {Object.entries(progressConfig).map(([key, cfg]) => {
                           const progress = progressData[key];
                           if (!progress) return null;
+
+                          // Determine column size based on student type
+                          const colSize =
+                            item.type === "gift_muslim"
+                              ? "col-md-6"
+                              : "col-md-4";
+
                           return (
-                            <div
-                              key={key}
-                              className={`${
-                                progressData.type === "gift_muslim"
-                                  ? "col-md-6"
-                                  : "col-md-4"
-                              } mb-2`}
-                            >
+                            <div key={key} className={`${colSize} mb-2`}>
                               <div className={`card border-${cfg.color}`}>
                                 <div
                                   className={`card-header bg-${cfg.color} text-white`}
