@@ -13,6 +13,7 @@ import AdminPayModal from "../shared/AdminPayModal";
 import { useGetFeesByStatusQuery } from "../../redux/features/fees/feesApi";
 import AdminManualPayModal from "../shared/AdminManualPayModal";
 import Select from "react-select";
+import { Link } from "react-router";
 
 const PaymentStatusCell = ({ status }) => {
   const statusConfig = {
@@ -430,7 +431,12 @@ export default function FeeSettings() {
                       </>
                     )}
                     <td className="border h6 text-center align-middle">
-                      {student?.activity === "active" ? student?.name : ""}
+                      <Link
+                        className="text-dark student-link"
+                        to={`/dashboard/admin/view-student/${student?._id}`}
+                      >
+                        {student?.activity === "active" ? student?.name : ""}
+                      </Link>
                       <br />
                       {student?.activity === "active"
                         ? `(${formatDateToDmy(student?.startingDate)})`

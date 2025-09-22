@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useParams } from "react-router";
 import { useGetStudentsByIdQuery } from "../../redux/features/students/studentsApi";
 import sessionMap from "../../utils/sessionMap";
+import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 
 export default function ViewStudent() {
   const { id } = useParams();
@@ -11,7 +12,7 @@ export default function ViewStudent() {
 
   const [activeTab, setActiveTab] = useState("profile");
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <LoadingSpinnerDash></LoadingSpinnerDash>;
   if (!student) return <div>No student found</div>;
 
   const {
