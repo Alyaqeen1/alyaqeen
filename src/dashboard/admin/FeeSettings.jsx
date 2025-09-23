@@ -19,6 +19,7 @@ const PaymentStatusCell = ({ status }) => {
   const statusConfig = {
     paid: { bg: "bg-success", text: "Paid" },
     pending: { bg: "bg-warning text-dark", text: "Pending" },
+    partial: { bg: "bg-warning", text: "Partial" }, // New partial status
     unpaid: { bg: "bg-danger", text: "Unpaid" },
   };
 
@@ -67,17 +68,13 @@ export default function FeeSettings() {
   const [selectedAdminFamilyId2, setSelectedAdminFamilyId2] = useState(null);
   const [selectedMonths, setSelectedMonths] = useState([]);
 
-  // const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const { user, loading } = useAuth();
   const [deleteFamilyData] = useDeleteFamilyDataMutation();
   const [searchTerm, setSearchTerm] = useState("");
-  // const [semesterFilter, setSemesterFilter] = useState("all");
 
   // Generate year options (current year ± 2 years)
   const yearOptions = useMemo(() => {
     const currentYear = new Date().getFullYear();
-
-    // Generate 5 years: previous 2, current, and next 2
     return Array.from({ length: 5 }, (_, i) => {
       const year = currentYear - 2 + i;
       return {
@@ -166,83 +163,17 @@ export default function FeeSettings() {
       }
     });
   };
+
   useEffect(() => {
     refetch();
   }, []);
+
   const monthsToDisplay = useMemo(() => {
     if (selectedMonths.length > 0) {
       return academicMonths.filter((m) => selectedMonths.includes(m.num));
     }
-
-    // Default: show all months from Jan to Dec
     return academicMonths;
   }, [selectedMonths]);
-
-  // const getPaymentStatus = (student, month, feePayments) => {
-  //   if (!student.startingDate) return "unpaid";
-
-  //   const joining = new Date(student.startingDate);
-  //   const joiningMonth = joining.getMonth() + 1;
-  //   const joiningYear = joining.getFullYear();
-
-  //   // Get the selected academic year range
-  //   const selectedAcademicYear = academicYearOptions.find(
-  //     (year) => year.value === selectedYear
-  //   );
-  //   if (!selectedAcademicYear) return "unpaid";
-
-  //   // Determine the actual year for each month
-  //   // Months 9-12 (Sep-Dec) belong to startYear, months 1-8 (Jan-Aug) belong to endYear
-  //   const actualYear =
-  //     month >= 9
-  //       ? selectedAcademicYear.startYear
-  //       : selectedAcademicYear.endYear;
-
-  //   // Skip if student joined after this month/year
-  //   if (
-  //     actualYear < joiningYear ||
-  //     (actualYear === joiningYear && month < joiningMonth)
-  //   ) {
-  //     return null; // Student wasn't enrolled yet
-  //   }
-
-  //   // Convert to comparable formats
-  //   const targetMonth = month.toString();
-  //   const targetMonthPadded = month.toString().padStart(2, "0");
-  //   const targetYear = actualYear.toString();
-
-  //   // Check all fee payments for this student
-  //   for (const payment of feePayments || []) {
-  //     const studentPayment = payment.students?.find(
-  //       (s) => String(s.studentId) === String(student._id)
-  //     );
-
-  //     if (!studentPayment) continue;
-
-  //     // Check admission payments (for joining month only)
-  //     if (
-  //       payment.paymentType === "admission" &&
-  //       actualYear === joiningYear &&
-  //       month === joiningMonth
-  //     ) {
-  //       return payment.status;
-  //     }
-
-  //     // Check monthly payments
-  //     if (payment.paymentType === "monthly" && studentPayment.monthsPaid) {
-  //       const isPaid = studentPayment.monthsPaid.some(
-  //         (m) =>
-  //           (String(m.month) === targetMonth ||
-  //             String(m.month) === targetMonthPadded) &&
-  //           String(m.year) === targetYear
-  //       );
-
-  //       if (isPaid) return payment.status;
-  //     }
-  //   }
-
-  //   return "unpaid";
-  // };
 
   const getPaymentStatus = (student, month, feePayments) => {
     if (!student.startingDate) return "unpaid";
@@ -256,10 +187,9 @@ export default function FeeSettings() {
       selectedYear < joiningYear ||
       (selectedYear === joiningYear && month < joiningMonth)
     ) {
-      return null; // Student wasn't enrolled yet
+      return null;
     }
 
-    // Convert to comparable formats
     const targetMonth = month.toString();
     const targetMonthPadded = month.toString().padStart(2, "0");
     const targetYear = selectedYear.toString();
@@ -278,6 +208,7 @@ export default function FeeSettings() {
         selectedYear === joiningYear &&
         month === joiningMonth
       ) {
+        // Return the actual status (paid, partial, etc.)
         return payment.status;
       }
 
@@ -292,10 +223,26 @@ export default function FeeSettings() {
 
         if (isPaid) return payment.status;
       }
+
+      // Check for partial payments in monthly fees
+      if (payment.paymentType === "monthly" && payment.status === "partial") {
+        // If there's a partial payment for this month, check if this student is included
+        const hasPartialPayment = studentPayment?.monthsPaid?.some(
+          (m) =>
+            (String(m.month) === targetMonth ||
+              String(m.month) === targetMonthPadded) &&
+            String(m.year) === targetYear
+        );
+
+        if (hasPartialPayment) {
+          return "partial";
+        }
+      }
     }
 
     return "unpaid";
   };
+
   const monthOptions = academicMonths.map((m) => ({
     value: m.num,
     label: m.name,
@@ -476,8 +423,7 @@ export default function FeeSettings() {
                                   0
                                 ) || 0;
 
-                            const discount = family.discount || 0; // if 10, means 10%
-
+                            const discount = family.discount || 0;
                             const discountedTotal =
                               activeTotal - (activeTotal * discount) / 100;
 
@@ -536,7 +482,7 @@ export default function FeeSettings() {
             ) : (
               <tr>
                 <td
-                  colSpan={monthsToDisplay.length + 5} // Adjust based on visible columns
+                  colSpan={monthsToDisplay.length + 5}
                   className="text-center py-4"
                 >
                   <h5>No enrolled families found</h5>

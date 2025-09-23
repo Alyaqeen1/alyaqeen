@@ -4,6 +4,8 @@ import { useGetStudentsByIdQuery } from "../../redux/features/students/studentsA
 import sessionMap from "../../utils/sessionMap";
 import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 import { useGetFeesSummaryQuery } from "../../redux/features/fees/feesApi";
+import { FaPen } from "react-icons/fa6";
+import { FaTrashAlt } from "react-icons/fa";
 
 export default function ViewStudent() {
   const { id } = useParams();
@@ -40,7 +42,7 @@ export default function ViewStudent() {
   } = student || {};
 
   const { summary, paidMonths } = feeSummary || {};
-
+  console.log(paidMonths);
   if (isLoading || isFeeLoading) {
     return <LoadingSpinnerDash></LoadingSpinnerDash>;
   }
@@ -232,7 +234,106 @@ export default function ViewStudent() {
             {activeTab === "documents" && (
               <div>Documents content goes here...</div>
             )}
-            {activeTab === "fee" && <>fee</>}
+            {activeTab === "fee" && (
+              <>
+                <div className="table-responsive mb-3">
+                  <table
+                    className="table mb-0"
+                    style={{
+                      minWidth: 700,
+                    }}
+                  >
+                    <thead>
+                      <tr>
+                        <th
+                          className="font-danger text-white fw-bolder border h6 text-center align-middle"
+                          style={{ backgroundColor: "var(--border2)" }}
+                        >
+                          #
+                        </th>
+                        <th
+                          className="font-danger text-white fw-bolder border h6 text-center align-middle"
+                          style={{ backgroundColor: "var(--border2)" }}
+                        >
+                          Fee Paid On
+                        </th>
+                        <th
+                          className="font-danger text-white fw-bolder border h6 text-center align-middle"
+                          style={{ backgroundColor: "var(--border2)" }}
+                        >
+                          Fee Month
+                        </th>
+                        <th
+                          className="font-danger text-white fw-bolder border h6 text-center align-middle"
+                          style={{ backgroundColor: "var(--border2)" }}
+                        >
+                          Amount
+                        </th>
+                        <th
+                          className="font-danger text-white fw-bolder border h6 text-center align-middle"
+                          style={{ backgroundColor: "var(--border2)" }}
+                        >
+                          Actions
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {paidMonths?.length > 0 ? (
+                        paidMonths?.map((fee, idx) => (
+                          <tr key={student?._id}>
+                            <td
+                              className={` border h6 text-center align-middle text-nowrap`}
+                            >
+                              {idx + 1}
+                            </td>
+                            <td
+                              className={` border h6 text-center align-middle text-nowrap`}
+                            >
+                              {fee?.paymentDate}
+                            </td>
+                            <td
+                              className={`fw-medium border text-center align-middle text-nowrap`}
+                            >
+                              {fee?.month}
+                            </td>
+                            <td
+                              className={`border h6 text-center align-middle text-nowrap`}
+                            >
+                              {fee?.month}
+                            </td>
+
+                            <td
+                              className={`border d-flex gap-2 justify-content-center h6 text-center align-middle text-nowrap`}
+                            >
+                              <button
+                                className="text-white py-1 px-2 rounded-2"
+                                style={{ backgroundColor: "var(--border2)" }}
+                                onClick={() => handleDelete(student?._id)}
+                              >
+                                <FaTrashAlt></FaTrashAlt>
+                              </button>
+                              <button
+                                className="text-white py-1 px-2 rounded-2"
+                                style={{ backgroundColor: "var(--border2)" }}
+                              >
+                                <FaPen></FaPen>
+                              </button>
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan={12}>
+                            <h5>No Fee Records available.</h5>
+                          </td>
+                        </tr>
+                      )}
+                      {}
+                    </tbody>
+                  </table>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>
