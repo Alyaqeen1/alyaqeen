@@ -245,29 +245,114 @@ export default function AdminManualPayModal({
           );
         }
       } else {
-        // Monthly payment data
+        // Monthly payment data (smart per-student allocation)
+        const parsedPayNow = Number(payNow);
+
+        // build list of students with their actual monthly fee (supports monthly_fee or monthlyFee)
+        const discountPercent = family?.discount ? Number(family.discount) : 0;
+
+        const studentsFees = selectedStudentObjects.map((student) => {
+          const baseFee =
+            student.monthly_fee ??
+            student.monthlyFee ??
+            student.monthlyFeeAmount ??
+            0;
+
+          const discountedFee = discountPercent
+            ? parseFloat(
+                (baseFee - (baseFee * discountPercent) / 100).toFixed(2)
+              )
+            : baseFee;
+
+          return {
+            studentId: student._id,
+            name: student.name,
+            fee: discountedFee, // use discounted fee for calculations
+            originalFee: baseFee, // optional: store original too
+          };
+        });
+
+        const expectedTotal = studentsFees.reduce((s, st) => s + st.fee, 0);
+
+        // allocations array will hold { studentId, name, fee, paid }
+        let allocations = [];
+
+        if (parsedPayNow >= expectedTotal) {
+          // Full payment for everyone (normal case when total matches sum of fees)
+          allocations = studentsFees.map((s) => ({ ...s, paid: s.fee }));
+        } else {
+          // Partial payment: distribute proportionally based on each student's fee
+          // 1) compute raw allocated amount
+          allocations = studentsFees.map((s) => ({
+            ...s,
+            rawPaid:
+              expectedTotal > 0 ? (s.fee / expectedTotal) * parsedPayNow : 0,
+          }));
+
+          // 2) round down to cents first
+          allocations.forEach((a) => {
+            a.paid = Math.floor(a.rawPaid * 100) / 100; // keep cents
+          });
+
+          // 3) distribute remaining cents fairly (by largest fractional part)
+          let allocatedSum = allocations.reduce((sum, a) => sum + a.paid, 0);
+          let remainderCents = Math.round((parsedPayNow - allocatedSum) * 100); // leftover cents
+
+          if (remainderCents > 0) {
+            // sort by fractional part descending
+            allocations.sort(
+              (a, b) =>
+                b.rawPaid -
+                Math.floor(b.rawPaid * 100) / 100 -
+                (a.rawPaid - Math.floor(a.rawPaid * 100) / 100)
+            );
+
+            for (let i = 0; i < allocations.length && remainderCents > 0; i++) {
+              allocations[i].paid = Number(
+                (allocations[i].paid + 0.01).toFixed(2)
+              );
+              remainderCents--;
+            }
+          }
+
+          // restore original order (optional but keeps predictable ordering)
+          allocations.sort(
+            (a, b) =>
+              studentsFees.findIndex((s) => s.studentId === a.studentId) -
+              studentsFees.findIndex((s) => s.studentId === b.studentId)
+          );
+        }
+
+        // Build students payload for DB
+        const studentsPayload = allocations.map((a) => ({
+          studentId: a.studentId,
+          name: a.name,
+          monthsPaid: [
+            {
+              month: feeMonth.padStart(2, "0"),
+              year: feeYear,
+              monthlyFee: a.originalFee, // before discount
+              discountedFee: a.fee, // after discount
+              paid: parseFloat((a.paid || 0).toFixed(2)), // actual paid this time
+            },
+          ],
+          subtotal: parseFloat((a.paid || 0).toFixed(2)),
+        }));
+
         const monthlyData = {
           familyId,
           name: family?.name,
           email: family?.email,
-          amount: Number(payNow),
-          status: "paid",
+          amount: parsedPayNow,
+          expectedTotal: parseFloat(expectedTotal.toFixed(2)),
+          remaining: parseFloat(
+            Math.max(0, expectedTotal - parsedPayNow).toFixed(2)
+          ),
+          status: parsedPayNow >= expectedTotal ? "paid" : "partial",
           date,
           method: feeMethod,
           paymentType: feeType,
-          students: selectedStudentObjects?.map((student) => ({
-            studentId: student._id,
-            name: student.name,
-            monthsPaid: [
-              {
-                month: feeMonth.padStart(2, "0"),
-                year: feeYear,
-                monthlyFee: Number(payNow),
-                discountedFee: Number(payNow),
-              },
-            ],
-            subtotal: Number(payNow),
-          })),
+          students: studentsPayload,
         };
 
         const data = await createFeeData(monthlyData).unwrap();
@@ -277,6 +362,7 @@ export default function AdminManualPayModal({
           );
         }
       }
+
       refetchFee();
       familiesRefetch();
       handleAdminClose();
