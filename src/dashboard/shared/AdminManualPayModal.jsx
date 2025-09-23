@@ -32,93 +32,15 @@ export default function AdminManualPayModal({
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
   const [isProcessing, setIsProcessing] = useState(false);
   const [selectedStudents, setSelectedStudents] = useState([]);
-
   useEffect(() => {
     if (enrolledFamily?.childrenDocs) {
+      // Set all enrolled students as selected by default
       const enrolledStudentIds = enrolledFamily.childrenDocs
         .filter((student) => student.status === "enrolled")
         .map((student) => student._id);
       setSelectedStudents(enrolledStudentIds);
     }
   }, [enrolledFamily]);
-
-  // REAL-TIME FEE CALCULATION
-  const feeCalculation = useMemo(() => {
-    if (selectedStudents.length === 0 || !feeType) {
-      return {
-        expectedTotal: 0,
-        remaining: 0,
-        admissionTotal: 0,
-        monthlyTotal: 0,
-      };
-    }
-
-    const discountPercent = family?.discount ? Number(family.discount) : 0;
-    const ADMISSION_FEE_PER_STUDENT = 20;
-
-    // Get selected student objects for calculation
-    const selectedStudentObjects =
-      enrolledFamily?.childrenDocs?.filter((student) =>
-        selectedStudents.includes(student._id)
-      ) || [];
-
-    if (feeType === "admission") {
-      const admissionTotal =
-        ADMISSION_FEE_PER_STUDENT * selectedStudentObjects.length;
-
-      const monthlyTotal = selectedStudentObjects.reduce((total, student) => {
-        const baseFee =
-          student.monthly_fee ??
-          student.monthlyFee ??
-          student.monthlyFeeAmount ??
-          0;
-        const discountedFee = discountPercent
-          ? parseFloat((baseFee * (1 - discountPercent / 100)).toFixed(2))
-          : baseFee;
-        return total + discountedFee;
-      }, 0);
-
-      const expectedTotal = admissionTotal + monthlyTotal;
-      const paidAmount = Number(payNow) || 0;
-      const remaining = Math.max(0, expectedTotal - paidAmount);
-
-      return {
-        expectedTotal: parseFloat(expectedTotal.toFixed(2)),
-        remaining: parseFloat(remaining.toFixed(2)),
-        admissionTotal: parseFloat(admissionTotal.toFixed(2)),
-        monthlyTotal: parseFloat(monthlyTotal.toFixed(2)),
-      };
-    } else if (feeType === "monthly") {
-      const monthlyTotal = selectedStudentObjects.reduce((total, student) => {
-        const baseFee =
-          student.monthly_fee ??
-          student.monthlyFee ??
-          student.monthlyFeeAmount ??
-          0;
-        const discountedFee = discountPercent
-          ? parseFloat((baseFee * (1 - discountPercent / 100)).toFixed(2))
-          : baseFee;
-        return total + discountedFee;
-      }, 0);
-
-      const paidAmount = Number(payNow) || 0;
-      const remaining = Math.max(0, monthlyTotal - paidAmount);
-
-      return {
-        expectedTotal: parseFloat(monthlyTotal.toFixed(2)),
-        remaining: parseFloat(remaining.toFixed(2)),
-        admissionTotal: 0,
-        monthlyTotal: parseFloat(monthlyTotal.toFixed(2)),
-      };
-    }
-
-    return {
-      expectedTotal: 0,
-      remaining: 0,
-      admissionTotal: 0,
-      monthlyTotal: 0,
-    };
-  }, [selectedStudents, feeType, payNow, family, enrolledFamily]);
 
   // Handle student selection
   const handleStudentSelection = (studentId) => {
@@ -150,11 +72,13 @@ export default function AdminManualPayModal({
     );
   }, [enrolledFamily, selectedStudents]);
 
-  // Check if payment already exists
+  // Check if payment already exists in fees collection for this family and selected month/year/type
+  // Check if payment already exists for selected students
   const paymentExists = useMemo(() => {
     if (!feeType || !familyId || selectedStudents.length === 0) return false;
 
     if (feeType === "admission") {
+      // For admission: check if ALL selected students already have admission paid
       return selectedStudentObjects.every((student) =>
         fees.some(
           (fee) =>
@@ -200,7 +124,7 @@ export default function AdminManualPayModal({
       if (!student.startingDate) return false;
 
       const joiningDate = new Date(student.startingDate);
-      const joiningMonth = joiningDate.getMonth() + 1;
+      const joiningMonth = joiningDate.getMonth() + 1; // getMonth is 0-indexed
       const joiningYear = joiningDate.getFullYear();
 
       return (
@@ -212,14 +136,15 @@ export default function AdminManualPayModal({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsProcessing(true);
 
+    setIsProcessing(true);
     // Validation
     if (selectedStudents?.length === 0) {
       toast.error("Please select at least one student");
       setIsProcessing(false);
       return;
     }
+    // Validation
     if (!feeType) {
       toast.error("Please select a Payment Type");
       setIsProcessing(false);
@@ -250,9 +175,11 @@ export default function AdminManualPayModal({
       return;
     }
 
+    // NEW CHECK: Are there any students not enrolled (status "approved")?
     const notEnrolledStudents = selectedStudentObjects?.filter(
       (student) => student.status === "approved"
     );
+
     if (notEnrolledStudents && notEnrolledStudents.length > 0) {
       const names = notEnrolledStudents.map((s) => s.name).join(", ");
       toast.error(
@@ -261,6 +188,7 @@ export default function AdminManualPayModal({
       setIsProcessing(false);
       return;
     }
+    // New validation: Check if selected month is before joining month
     if (feeType === "monthly" && isBeforeJoiningMonth) {
       toast.error(
         "Cannot record payment for months before student's joining month"
@@ -268,7 +196,6 @@ export default function AdminManualPayModal({
       setIsProcessing(false);
       return;
     }
-
     try {
       if (feeType === "admission") {
         const admissionFeePerStudent = 20;
@@ -276,24 +203,17 @@ export default function AdminManualPayModal({
           admissionFeePerStudent * selectedStudentObjects.length;
         const totalPayNow = Number(payNow);
 
-        // Validate minimum admission amount
-        if (totalPayNow < totalAdmissionNeeded) {
-          toast.error(
-            `Insufficient amount. Admission requires at least $${totalAdmissionNeeded} for ${selectedStudentObjects.length} student(s).`
-          );
-          setIsProcessing(false);
-          return;
-        }
-
         // Apply family discount
         const discountPercent = family?.discount ? Number(family.discount) : 0;
 
+        // Prepare students with discounted monthly fee
         const studentsFees = selectedStudentObjects.map((student) => {
           const baseFee =
             student.monthly_fee ??
             student.monthlyFee ??
             student.monthlyFeeAmount ??
             0;
+
           const discountedFee = discountPercent
             ? parseFloat(
                 (baseFee - (baseFee * discountPercent) / 100).toFixed(2)
@@ -309,16 +229,19 @@ export default function AdminManualPayModal({
           };
         });
 
+        // Expected total = sum of admission + discounted monthly for all students
         const expectedTotal = studentsFees.reduce(
           (sum, s) => sum + s.admissionFee + s.discountedFee,
           0
         );
 
+        // Calculate leftover for monthly portion
         const leftover = Math.max(0, totalPayNow - totalAdmissionNeeded);
 
         // Allocation logic for monthly portion
         let allocations = [];
         if (leftover >= 0) {
+          // Partial or full monthly distribution proportionally
           allocations = studentsFees.map((s) => {
             const paidMonthly =
               expectedTotal - totalAdmissionNeeded > 0
@@ -334,27 +257,10 @@ export default function AdminManualPayModal({
                   )
                 : 0;
 
-            const startDate = new Date(
-              s.studentId
-                ? selectedStudentObjects.find((st) => st._id === s.studentId)
-                    ?.startingDate
-                : new Date()
-            );
-            const joiningMonth = (startDate.getMonth() + 1)
-              .toString()
-              .padStart(2, "0");
-            const joiningYear = startDate.getFullYear();
-
             return {
-              studentId: s.studentId,
-              name: s.name,
-              admissionFee: admissionFeePerStudent,
-              monthlyFee: s.monthlyFee,
-              discountedFee: s.discountedFee,
+              ...s,
               paidAdmission: admissionFeePerStudent,
               paidMonthly,
-              joiningMonth,
-              joiningYear,
               subtotal: parseFloat(
                 (admissionFeePerStudent + paidMonthly).toFixed(2)
               ),
@@ -367,10 +273,10 @@ export default function AdminManualPayModal({
           name: family?.name,
           email: family?.email,
           amount: totalPayNow,
-          expectedTotal: parseFloat(expectedTotal.toFixed(2)),
+          expectedTotal: parseFloat(expectedTotal.toFixed(2)), // <-- added
           remaining: parseFloat(
             Math.max(0, expectedTotal - totalPayNow).toFixed(2)
-          ),
+          ), // <-- added
           status: totalPayNow >= expectedTotal ? "paid" : "partial",
           date,
           method: feeMethod,
@@ -379,8 +285,11 @@ export default function AdminManualPayModal({
         };
 
         const data = await createFeeData(admissionData).unwrap();
+        toast.success(
+          `Admission payment of $${payNow} recorded successfully for ${selectedStudentObjects.length} student(s)`
+        );
 
-        // Update student statuses
+        // Update student statuses if needed
         await Promise.all(
           selectedStudentObjects.map((student) =>
             updateStudentStatus({
@@ -389,13 +298,11 @@ export default function AdminManualPayModal({
             }).unwrap()
           )
         );
-
-        toast.success(
-          `Admission payment of $${payNow} recorded successfully for ${selectedStudentObjects.length} student(s)`
-        );
       } else {
-        // Monthly payment logic
+        // Monthly payment data (smart per-student allocation)
         const parsedPayNow = Number(payNow);
+
+        // build list of students with their actual monthly fee (supports monthly_fee or monthlyFee)
         const discountPercent = family?.discount ? Number(family.discount) : 0;
 
         const studentsFees = selectedStudentObjects.map((student) => {
@@ -404,6 +311,7 @@ export default function AdminManualPayModal({
             student.monthlyFee ??
             student.monthlyFeeAmount ??
             0;
+
           const discountedFee = discountPercent
             ? parseFloat(
                 (baseFee - (baseFee * discountPercent) / 100).toFixed(2)
@@ -413,31 +321,39 @@ export default function AdminManualPayModal({
           return {
             studentId: student._id,
             name: student.name,
-            fee: discountedFee,
-            originalFee: baseFee,
+            fee: discountedFee, // use discounted fee for calculations
+            originalFee: baseFee, // optional: store original too
           };
         });
 
         const expectedTotal = studentsFees.reduce((s, st) => s + st.fee, 0);
 
+        // allocations array will hold { studentId, name, fee, paid }
         let allocations = [];
+
         if (parsedPayNow >= expectedTotal) {
+          // Full payment for everyone (normal case when total matches sum of fees)
           allocations = studentsFees.map((s) => ({ ...s, paid: s.fee }));
         } else {
+          // Partial payment: distribute proportionally based on each student's fee
+          // 1) compute raw allocated amount
           allocations = studentsFees.map((s) => ({
             ...s,
             rawPaid:
               expectedTotal > 0 ? (s.fee / expectedTotal) * parsedPayNow : 0,
           }));
 
+          // 2) round down to cents first
           allocations.forEach((a) => {
-            a.paid = Math.floor(a.rawPaid * 100) / 100;
+            a.paid = Math.floor(a.rawPaid * 100) / 100; // keep cents
           });
 
+          // 3) distribute remaining cents fairly (by largest fractional part)
           let allocatedSum = allocations.reduce((sum, a) => sum + a.paid, 0);
-          let remainderCents = Math.round((parsedPayNow - allocatedSum) * 100);
+          let remainderCents = Math.round((parsedPayNow - allocatedSum) * 100); // leftover cents
 
           if (remainderCents > 0) {
+            // sort by fractional part descending
             allocations.sort(
               (a, b) =>
                 b.rawPaid -
@@ -453,6 +369,7 @@ export default function AdminManualPayModal({
             }
           }
 
+          // restore original order (optional but keeps predictable ordering)
           allocations.sort(
             (a, b) =>
               studentsFees.findIndex((s) => s.studentId === a.studentId) -
@@ -460,6 +377,7 @@ export default function AdminManualPayModal({
           );
         }
 
+        // Build students payload for DB
         const studentsPayload = allocations.map((a) => ({
           studentId: a.studentId,
           name: a.name,
@@ -467,9 +385,9 @@ export default function AdminManualPayModal({
             {
               month: feeMonth.padStart(2, "0"),
               year: feeYear,
-              monthlyFee: a.originalFee,
-              discountedFee: a.fee,
-              paid: parseFloat((a.paid || 0).toFixed(2)),
+              monthlyFee: a.originalFee, // before discount
+              discountedFee: a.fee, // after discount
+              paid: parseFloat((a.paid || 0).toFixed(2)), // actual paid this time
             },
           ],
           subtotal: parseFloat((a.paid || 0).toFixed(2)),
@@ -499,12 +417,8 @@ export default function AdminManualPayModal({
         }
       }
 
-      // Wait for refetch to complete
-      await Promise.all([refetchFee(), familiesRefetch()]);
-
-      // Small delay to ensure data is loaded
-      await new Promise((resolve) => setTimeout(resolve, 500));
-
+      refetchFee();
+      familiesRefetch();
       handleAdminClose();
     } catch (error) {
       toast.error(error?.data?.message || "Payment recording failed");
@@ -514,7 +428,6 @@ export default function AdminManualPayModal({
       setFeeMethod("");
       setFeeMonth("");
       setFeeType("");
-      setPayNow("");
     }
   };
 
@@ -641,50 +554,6 @@ export default function AdminManualPayModal({
                     </small>
                   </div>
                 </div>
-
-                {/* FEE CALCULATION DISPLAY - ADDED THIS SECTION */}
-                {(feeType === "admission" || feeType === "monthly") &&
-                  selectedStudents.length > 0 && (
-                    <div className="mb-3 p-3 border rounded bg-light">
-                      <h6 className="fw-bold">Fee Calculation</h6>
-                      {feeType === "admission" && (
-                        <>
-                          <div className="d-flex justify-content-between">
-                            <span>
-                              Admission Fee ({selectedStudents.length} students
-                              × $20):
-                            </span>
-                            <span>${feeCalculation.admissionTotal}</span>
-                          </div>
-                          <div className="d-flex justify-content-between">
-                            <span>
-                              First Month Fee ({selectedStudents.length}{" "}
-                              students):
-                            </span>
-                            <span>${feeCalculation.monthlyTotal}</span>
-                          </div>
-                          <hr />
-                        </>
-                      )}
-                      <div className="d-flex justify-content-between fw-bold">
-                        <span>Expected Total:</span>
-                        <span>${feeCalculation.expectedTotal}</span>
-                      </div>
-                      <div className="d-flex justify-content-between">
-                        <span>Amount Paid:</span>
-                        <span>${payNow || "0"}</span>
-                      </div>
-                      <div className="d-flex justify-content-between fw-bold text-danger">
-                        <span>Remaining Amount:</span>
-                        <span>${feeCalculation.remaining}</span>
-                      </div>
-                      {family?.discount && (
-                        <small className="text-muted">
-                          Family discount applied: {family.discount}%
-                        </small>
-                      )}
-                    </div>
-                  )}
 
                 {/* Fee Year */}
                 <div className="mb-3 row">
