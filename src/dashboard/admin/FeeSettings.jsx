@@ -14,6 +14,7 @@ import { useGetFeesByStatusQuery } from "../../redux/features/fees/feesApi";
 import AdminManualPayModal from "../shared/AdminManualPayModal";
 import Select from "react-select";
 import { Link } from "react-router";
+import AdminFeeUpdateModal from "../shared/AdminFeeUpdateModal";
 
 const PaymentStatusCell = ({ status }) => {
   const statusConfig = {

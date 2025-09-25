@@ -38,6 +38,24 @@ export const familiesApi = apiSlice.injectEndpoints({
       query: (id) => `/families/with-children/enrolled/by-id/${id}`,
       providesTags: ["Family"],
     }),
+    getUnpaidFamily: builder.query({
+      query: ({ month, year }) => `/families/unpaid-families/${month}/${year}`,
+      providesTags: (result, error, { month, year }) =>
+        result
+          ? [
+              // Specific tags for each family
+              ...result.map((family) => ({
+                type: "Family",
+                id: family.familyId,
+              })),
+              // Specific tag for this month/year combination
+              { type: "UnpaidFamily", id: `${month}-${year}` },
+              // General tags as fallback
+              "Family",
+              "Fee",
+            ]
+          : ["Family", "Fee", { type: "UnpaidFamily", id: `${month}-${year}` }],
+    }),
 
     updateFamilyData: builder.mutation({
       query: ({ id, ...patch }) => ({
@@ -72,6 +90,7 @@ export const {
   useGetEnrolledFullFamilyQuery,
   useGetEnrolledFullFamilyByIdQuery,
   useGetEnrolledFullFamilyWithFeesQuery,
+  useGetUnpaidFamilyQuery,
   useGetAllFullFamilyQuery,
   useGetApprovedFullFamilyQuery,
   useGetHoldFullFamilyQuery,

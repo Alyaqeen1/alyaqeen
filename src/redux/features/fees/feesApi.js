@@ -38,6 +38,17 @@ export const feesApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Family", "Fee"], // 🔥 Important — invalidate Family when a student's status changes
     }),
+    deleteFee: builder.mutation({
+      query: (id) => ({
+        url: `/fees/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: (result, error, id) => [
+        "Family",
+        "Fee",
+        { type: "UnpaidFamily", id: "PARTIAL" }, // Invalidate all unpaid family queries
+      ],
+    }),
   }),
 });
 
@@ -49,4 +60,5 @@ export const {
   useGetFeesByIdQuery,
   useUpdateFeeDataMutation,
   useCreateFeeDataMutation,
+  useDeleteFeeMutation,
 } = apiSlice;
