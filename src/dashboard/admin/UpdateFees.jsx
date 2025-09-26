@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   FaEye,
   FaPen,
@@ -14,14 +14,21 @@ import {
 import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
+import FeeUpdateModal from "../shared/FeeUpdateModal";
 
 export default function UpdateFees() {
   const { data: fees, isLoading, refetch } = useGetFeesByDateQuery();
   const [deleteFee] = useDeleteFeeMutation();
+  const [showModal, setShowModal] = useState(false);
+  const [selectedFeeId, setSelectedFeeId] = useState(null);
   if (isLoading) {
     return <LoadingSpinnerDash />;
   }
 
+  const handleShow = (id) => {
+    setSelectedFeeId(id);
+    setShowModal(true);
+  };
   const getStatusColor = (status) => {
     switch (status) {
       case "paid":
@@ -80,7 +87,7 @@ export default function UpdateFees() {
       toast.error(`Failed to delete fee record: ${error?.message}`);
     }
   };
-
+  const handleClose = () => setShowModal(false);
   return (
     <div>
       <h4 className="text-center mb-4">Fee Records</h4>
@@ -227,14 +234,9 @@ export default function UpdateFees() {
                     <td className="text-center">
                       <div className="btn-group btn-group-sm">
                         <button
-                          className="btn btn-outline-primary"
-                          title="View Details"
-                        >
-                          <FaEye />
-                        </button>
-                        <button
                           className="btn btn-outline-warning"
                           title="Edit Fee"
+                          onClick={() => handleShow(fee?._id)}
                         >
                           <FaPen />
                         </button>
@@ -285,6 +287,15 @@ export default function UpdateFees() {
             </div>
           </div>
         </div>
+      )}
+      {selectedFeeId && (
+        <FeeUpdateModal
+          key={`update-${selectedFeeId}`}
+          feeId={selectedFeeId}
+          showModal={showModal}
+          handleClose={handleClose}
+          refetch={refetch}
+        />
       )}
     </div>
   );

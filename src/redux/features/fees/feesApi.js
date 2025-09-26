@@ -46,6 +46,14 @@ export const feesApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Family", "Fee"],
     }),
+    updatePayment: builder.mutation({
+      query: ({ id, ...body }) => ({
+        url: `/fees/update-payment/${id}`,
+        method: "PATCH",
+        body, // send fields directly, not nested in 'data'
+      }),
+      invalidatesTags: ["Fee"],
+    }),
 
     createFeeData: builder.mutation({
       query: (data) => ({
@@ -79,6 +87,7 @@ export const {
   useGetFeesByFeeIdQuery,
   useUpdateFeeDataMutation,
   useUpdateFeeMutation,
+  useUpdatePaymentMutation,
   useCreateFeeDataMutation,
   useDeleteFeeMutation,
 } = apiSlice;
