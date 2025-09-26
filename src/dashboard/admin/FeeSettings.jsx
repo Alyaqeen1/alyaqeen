@@ -183,19 +183,16 @@ export default function FeeSettings() {
     const joiningMonth = joining.getMonth() + 1;
     const joiningYear = joining.getFullYear();
 
-    // Skip if student joined after this month/year
     if (
       selectedYear < joiningYear ||
       (selectedYear === joiningYear && month < joiningMonth)
     ) {
-      return null;
+      return null; // before joining date
     }
 
-    const targetMonth = month.toString();
-    const targetMonthPadded = month.toString().padStart(2, "0");
+    const targetMonth = month.toString().padStart(2, "0");
     const targetYear = selectedYear.toString();
 
-    // Check all fee payments for this student
     for (const payment of feePayments || []) {
       const studentPayment = payment.students?.find(
         (s) => String(s.studentId) === String(student._id)
@@ -203,41 +200,20 @@ export default function FeeSettings() {
 
       if (!studentPayment) continue;
 
-      // Check admission payments (for joining month only)
-      if (
-        payment.paymentType === "admission" &&
-        selectedYear === joiningYear &&
-        month === joiningMonth
-      ) {
-        // Return the actual status (paid, partial, etc.)
-        return payment.status;
-      }
+      const monthPaidEntry = studentPayment.monthsPaid?.find(
+        (m) =>
+          String(m.month).padStart(2, "0") === targetMonth &&
+          String(m.year) === targetYear
+      );
 
-      // Check monthly payments
-      if (payment.paymentType === "monthly" && studentPayment.monthsPaid) {
-        const isPaid = studentPayment.monthsPaid.some(
-          (m) =>
-            (String(m.month) === targetMonth ||
-              String(m.month) === targetMonthPadded) &&
-            String(m.year) === targetYear
-        );
+      if (monthPaidEntry) {
+        const fullFee =
+          monthPaidEntry.discountedFee ?? monthPaidEntry.monthlyFee;
+        const paid = monthPaidEntry.paid ?? 0;
 
-        if (isPaid) return payment.status;
-      }
-
-      // Check for partial payments in monthly fees
-      if (payment.paymentType === "monthly" && payment.status === "partial") {
-        // If there's a partial payment for this month, check if this student is included
-        const hasPartialPayment = studentPayment?.monthsPaid?.some(
-          (m) =>
-            (String(m.month) === targetMonth ||
-              String(m.month) === targetMonthPadded) &&
-            String(m.year) === targetYear
-        );
-
-        if (hasPartialPayment) {
-          return "partial";
-        }
+        if (paid >= fullFee) return "paid";
+        if (paid > 0 && paid < fullFee) return "partial";
+        return "unpaid";
       }
     }
 

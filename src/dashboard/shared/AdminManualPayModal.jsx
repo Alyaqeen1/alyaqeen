@@ -10,6 +10,9 @@ import {
 import { useUpdateStudentStatusMutation } from "../../redux/features/students/studentsApi";
 import toast from "react-hot-toast";
 
+// Helper: always keep two decimals
+const toTwo = (v) => Number(Number(v || 0).toFixed(2));
+
 export default function AdminManualPayModal({
   familyId,
   handleAdminClose,
@@ -32,15 +35,21 @@ export default function AdminManualPayModal({
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
   const [isProcessing, setIsProcessing] = useState(false);
   const [selectedStudents, setSelectedStudents] = useState([]);
+
+  // derived list of enrolled student ids for select-all and comparisons
+  const enrolledStudentIds = useMemo(() => {
+    return (
+      enrolledFamily?.childrenDocs
+        ?.filter((s) => s.status === "enrolled")
+        .map((s) => s._id) || []
+    );
+  }, [enrolledFamily]);
+
   useEffect(() => {
-    if (enrolledFamily?.childrenDocs) {
-      // Set all enrolled students as selected by default
-      const enrolledStudentIds = enrolledFamily.childrenDocs
-        .filter((student) => student.status === "enrolled")
-        .map((student) => student._id);
+    if (enrolledStudentIds.length) {
       setSelectedStudents(enrolledStudentIds);
     }
-  }, [enrolledFamily]);
+  }, [enrolledStudentIds]);
 
   // Handle student selection
   const handleStudentSelection = (studentId) => {
@@ -51,15 +60,12 @@ export default function AdminManualPayModal({
     );
   };
 
-  // Select/deselect all students
+  // Select/deselect all students (only enrolled ones)
   const toggleAllStudents = () => {
-    if (selectedStudents.length === enrolledFamily?.childrenDocs?.length) {
+    if (selectedStudents.length === enrolledStudentIds.length) {
       setSelectedStudents([]);
     } else {
-      const allStudentIds = enrolledFamily.childrenDocs.map(
-        (student) => student._id
-      );
-      setSelectedStudents(allStudentIds);
+      setSelectedStudents(enrolledStudentIds.slice());
     }
   };
 
@@ -72,40 +78,73 @@ export default function AdminManualPayModal({
     );
   }, [enrolledFamily, selectedStudents]);
 
-  // Check if payment already exists in fees collection for this family and selected month/year/type
-  // Check if payment already exists for selected students
+  // Helper to check if a fee doc contains paid month for a student
+  const hasStudentPaidMonth = (feeDoc, studentId, month, year) => {
+    if (!feeDoc?.students) return false;
+    const s = feeDoc.students.find(
+      (st) => String(st.studentId) === String(studentId)
+    );
+    if (!s) return false;
+    const mp = (s.monthsPaid || []).find(
+      (m) =>
+        String(m.month).padStart(2, "0") === String(month).padStart(2, "0") &&
+        String(m.year) === String(year)
+    );
+    if (!mp) return false;
+    const required = mp.discountedFee ?? mp.monthlyFee ?? 0;
+    return (mp.paid ?? 0) >= toTwo(required) - 1e-6;
+  };
+
+  // Helper to check if a fee doc contains admission fully paid for a student
+  const hasStudentPaidAdmission = (feeDoc, studentId) => {
+    if (!feeDoc?.students) return false;
+    const s = feeDoc.students.find(
+      (st) => String(st.studentId) === String(studentId)
+    );
+    if (!s) return false;
+
+    // prefer explicit admission fields if available
+    const admissionFee = s.admissionFee ?? 0;
+    const discounted = s.discountedFee ?? s.monthlyFee ?? 0;
+
+    // If `paidAdmission` exists (we sometimes set it during creation), use that
+    if (s.paidAdmission !== undefined) {
+      return (s.paidAdmission ?? 0) >= admissionFee - 1e-6;
+    }
+
+    // fallback: if subtotal covers admission + discounted monthly portion
+    return (s.subtotal ?? 0) >= toTwo(admissionFee + discounted) - 1e-6;
+  };
+
+  // Check if payment already exists for selected students/month/year/type
   const paymentExists = useMemo(() => {
     if (!feeType || !familyId || selectedStudents.length === 0) return false;
 
     if (feeType === "admission") {
-      // For admission: check if ALL selected students already have admission paid
+      // If any selected student already has an admission payment, return true
       return selectedStudentObjects.every((student) =>
         fees.some(
           (fee) =>
-            fee.familyId === familyId &&
-            fee.paymentType === "admission" &&
-            fee.status === "paid" &&
-            fee.students?.some((s) => s.studentId === student._id)
+            String(fee.familyId) === String(familyId) &&
+            String(fee.paymentType) === "admission" &&
+            // either admission recorded fully OR student's subtotal covers admission
+            (hasStudentPaidAdmission(fee, student._id) ||
+              (fee.status === "paid" &&
+                fee.students?.some(
+                  (s) => String(s.studentId) === String(student._id)
+                )))
         )
       );
     }
+
     if (feeType === "monthly" && feeMonth) {
       return selectedStudentObjects.some((student) =>
         fees.some(
           (fee) =>
-            fee.familyId === familyId &&
-            fee.paymentType === "monthly" &&
-            fee.status === "paid" &&
-            fee.students?.some(
-              (s) =>
-                s.studentId === student._id &&
-                s.monthsPaid?.some(
-                  (mp) =>
-                    String(mp.month).padStart(2, "0") ===
-                      String(feeMonth).padStart(2, "0") &&
-                    String(mp.year) === String(feeYear)
-                )
-            )
+            String(fee.familyId) === String(familyId) &&
+            String(fee.paymentType) === "monthly" &&
+            // consider month paid even if fee.status is partial/paid, inspect monthsPaid for the student
+            hasStudentPaidMonth(fee, student._id, feeMonth, feeYear)
         )
       );
     }
@@ -144,7 +183,6 @@ export default function AdminManualPayModal({
       setIsProcessing(false);
       return;
     }
-    // Validation
     if (!feeType) {
       toast.error("Please select a Payment Type");
       setIsProcessing(false);
@@ -188,7 +226,7 @@ export default function AdminManualPayModal({
       setIsProcessing(false);
       return;
     }
-    // New validation: Check if selected month is before joining month
+
     if (feeType === "monthly" && isBeforeJoiningMonth) {
       toast.error(
         "Cannot record payment for months before student's joining month"
@@ -196,6 +234,7 @@ export default function AdminManualPayModal({
       setIsProcessing(false);
       return;
     }
+
     try {
       if (feeType === "admission") {
         const admissionFeePerStudent = 20;
@@ -215,78 +254,104 @@ export default function AdminManualPayModal({
             0;
 
           const discountedFee = discountPercent
-            ? parseFloat(
-                (baseFee - (baseFee * discountPercent) / 100).toFixed(2)
-              )
-            : baseFee;
+            ? toTwo(baseFee - (baseFee * discountPercent) / 100)
+            : toTwo(baseFee);
 
           return {
             studentId: student._id,
             name: student.name,
             admissionFee: admissionFeePerStudent,
-            monthlyFee: baseFee,
+            monthlyFee: toTwo(baseFee),
             discountedFee,
           };
         });
 
         // Expected total = sum of admission + discounted monthly for all students
-        const expectedTotal = studentsFees.reduce(
+        const expectedTotalRaw = studentsFees.reduce(
           (sum, s) => sum + s.admissionFee + s.discountedFee,
           0
         );
+        const expectedTotal = toTwo(expectedTotalRaw);
 
         // Calculate leftover for monthly portion
         const leftover = Math.max(0, totalPayNow - totalAdmissionNeeded);
 
-        // Allocation logic for monthly portion
+        // Allocation logic for monthly portion (distribute leftover proportionally)
         let allocations = [];
         if (leftover >= 0) {
-          // Partial or full monthly distribution proportionally
-          allocations = studentsFees.map((s) => {
-            const paidMonthly =
-              expectedTotal - totalAdmissionNeeded > 0
-                ? parseFloat(
-                    (
-                      (s.discountedFee /
-                        studentsFees.reduce(
-                          (sum, x) => sum + x.discountedFee,
-                          0
-                        )) *
-                      leftover
-                    ).toFixed(2)
-                  )
-                : 0;
+          // compute raw shares for monthly portion
+          const totalDiscounted = studentsFees.reduce(
+            (s, x) => s + x.discountedFee,
+            0
+          );
 
-            return {
-              ...s,
-              paidAdmission: admissionFeePerStudent,
-              paidMonthly,
-              subtotal: parseFloat(
-                (admissionFeePerStudent + paidMonthly).toFixed(2)
-              ),
-            };
+          allocations = studentsFees.map((s) => {
+            const rawShare =
+              totalDiscounted > 0
+                ? (s.discountedFee / totalDiscounted) * leftover
+                : 0;
+            return { ...s, rawShare };
           });
+
+          // assign cents fairly
+          allocations.forEach(
+            (a) => (a.paidMonthly = Math.floor(a.rawShare * 100) / 100)
+          );
+          let allocatedSum = allocations.reduce(
+            (s, a) => s + (a.paidMonthly || 0),
+            0
+          );
+          let remainderCents = Math.round((leftover - allocatedSum) * 100);
+
+          if (remainderCents > 0) {
+            allocations.sort(
+              (a, b) =>
+                b.rawShare -
+                Math.floor(b.rawShare * 100) / 100 -
+                (a.rawShare - Math.floor(a.rawShare * 100) / 100)
+            );
+            for (let i = 0; i < allocations.length && remainderCents > 0; i++) {
+              allocations[i].paidMonthly = toTwo(
+                (allocations[i].paidMonthly || 0) + 0.01
+              );
+              remainderCents--;
+            }
+          }
+
+          // finalize subtotal and paidAdmission
+          allocations = allocations.map((a) => ({
+            ...a,
+            paidAdmission: toTwo(a.admissionFee),
+            paidMonthly: toTwo(a.paidMonthly || 0),
+            subtotal: toTwo((a.admissionFee || 0) + (a.paidMonthly || 0)),
+          }));
         }
 
         const admissionData = {
           familyId,
           name: family?.name,
           email: family?.email,
-          amount: totalPayNow,
-          expectedTotal: parseFloat(expectedTotal.toFixed(2)), // <-- added
-          remaining: parseFloat(
-            Math.max(0, expectedTotal - totalPayNow).toFixed(2)
-          ), // <-- added
-          status: totalPayNow >= expectedTotal ? "paid" : "partial",
-          date,
-          method: feeMethod,
-          paymentType: feeType,
           students: allocations,
+          expectedTotal: expectedTotal,
+          remaining: toTwo(Math.max(0, expectedTotal - totalPayNow)),
+          paymentType: feeType,
+          status: totalPayNow >= expectedTotal ? "paid" : "partial",
+          payments: [
+            {
+              amount: toTwo(totalPayNow),
+              method: feeMethod,
+              date,
+            },
+          ],
         };
 
         const data = await createFeeData(admissionData).unwrap();
         toast.success(
-          `Admission payment of $${payNow} recorded successfully for ${selectedStudentObjects.length} student(s)`
+          `Admission payment of $${toTwo(
+            totalPayNow
+          )} recorded successfully for ${
+            selectedStudentObjects.length
+          } student(s)`
         );
 
         // Update student statuses if needed
@@ -313,63 +378,57 @@ export default function AdminManualPayModal({
             0;
 
           const discountedFee = discountPercent
-            ? parseFloat(
-                (baseFee - (baseFee * discountPercent) / 100).toFixed(2)
-              )
-            : baseFee;
+            ? toTwo(baseFee - (baseFee * discountPercent) / 100)
+            : toTwo(baseFee);
 
           return {
             studentId: student._id,
             name: student.name,
             fee: discountedFee, // use discounted fee for calculations
-            originalFee: baseFee, // optional: store original too
+            originalFee: toTwo(baseFee), // optional: store original too
           };
         });
 
-        const expectedTotal = studentsFees.reduce((s, st) => s + st.fee, 0);
+        const expectedTotalRaw = studentsFees.reduce((s, st) => s + st.fee, 0);
+        const expectedTotal = toTwo(expectedTotalRaw);
 
         // allocations array will hold { studentId, name, fee, paid }
         let allocations = [];
 
         if (parsedPayNow >= expectedTotal) {
-          // Full payment for everyone (normal case when total matches sum of fees)
-          allocations = studentsFees.map((s) => ({ ...s, paid: s.fee }));
+          // Full payment for everyone
+          allocations = studentsFees.map((s) => ({ ...s, paid: toTwo(s.fee) }));
         } else {
           // Partial payment: distribute proportionally based on each student's fee
-          // 1) compute raw allocated amount
           allocations = studentsFees.map((s) => ({
             ...s,
             rawPaid:
               expectedTotal > 0 ? (s.fee / expectedTotal) * parsedPayNow : 0,
           }));
 
-          // 2) round down to cents first
-          allocations.forEach((a) => {
-            a.paid = Math.floor(a.rawPaid * 100) / 100; // keep cents
-          });
+          // round down to cents
+          allocations.forEach(
+            (a) => (a.paid = Math.floor(a.rawPaid * 100) / 100)
+          );
 
-          // 3) distribute remaining cents fairly (by largest fractional part)
+          // remainder cents
           let allocatedSum = allocations.reduce((sum, a) => sum + a.paid, 0);
-          let remainderCents = Math.round((parsedPayNow - allocatedSum) * 100); // leftover cents
+          let remainderCents = Math.round((parsedPayNow - allocatedSum) * 100);
 
           if (remainderCents > 0) {
-            // sort by fractional part descending
             allocations.sort(
               (a, b) =>
                 b.rawPaid -
                 Math.floor(b.rawPaid * 100) / 100 -
                 (a.rawPaid - Math.floor(a.rawPaid * 100) / 100)
             );
-
             for (let i = 0; i < allocations.length && remainderCents > 0; i++) {
-              allocations[i].paid = Number(
-                (allocations[i].paid + 0.01).toFixed(2)
-              );
+              allocations[i].paid = toTwo((allocations[i].paid || 0) + 0.01);
               remainderCents--;
             }
           }
 
-          // restore original order (optional but keeps predictable ordering)
+          // restore original order
           allocations.sort(
             (a, b) =>
               studentsFees.findIndex((s) => s.studentId === a.studentId) -
@@ -385,34 +444,40 @@ export default function AdminManualPayModal({
             {
               month: feeMonth.padStart(2, "0"),
               year: feeYear,
-              monthlyFee: a.originalFee, // before discount
-              discountedFee: a.fee, // after discount
-              paid: parseFloat((a.paid || 0).toFixed(2)), // actual paid this time
+              monthlyFee: toTwo(a.originalFee),
+              discountedFee: toTwo(a.fee),
+              paid: toTwo(a.paid || 0),
             },
           ],
-          subtotal: parseFloat((a.paid || 0).toFixed(2)),
+          subtotal: toTwo(a.paid || 0),
         }));
 
         const monthlyData = {
           familyId,
           name: family?.name,
           email: family?.email,
-          amount: parsedPayNow,
-          expectedTotal: parseFloat(expectedTotal.toFixed(2)),
-          remaining: parseFloat(
-            Math.max(0, expectedTotal - parsedPayNow).toFixed(2)
-          ),
-          status: parsedPayNow >= expectedTotal ? "paid" : "partial",
-          date,
-          method: feeMethod,
-          paymentType: feeType,
           students: studentsPayload,
+          expectedTotal: expectedTotal,
+          remaining: toTwo(Math.max(0, expectedTotal - parsedPayNow)),
+          status: parsedPayNow >= expectedTotal ? "paid" : "partial",
+          paymentType: feeType,
+          payments: [
+            {
+              amount: toTwo(parsedPayNow),
+              method: feeMethod,
+              date,
+            },
+          ],
         };
 
         const data = await createFeeData(monthlyData).unwrap();
         if (data?.insertedId) {
           toast.success(
-            `Monthly payment of $${payNow} recorded successfully for ${selectedStudentObjects?.length} student(s)`
+            `Monthly payment of $${toTwo(
+              parsedPayNow
+            )} recorded successfully for ${
+              selectedStudentObjects?.length
+            } student(s)`
           );
         }
       }
@@ -422,12 +487,13 @@ export default function AdminManualPayModal({
       handleAdminClose();
     } catch (error) {
       toast.error(error?.data?.message || "Payment recording failed");
-      console.log(error);
+      console.error(error);
     } finally {
       setIsProcessing(false);
       setFeeMethod("");
       setFeeMonth("");
       setFeeType("");
+      setPayNow("");
     }
   };
 
@@ -497,7 +563,7 @@ export default function AdminManualPayModal({
                             id="selectAllStudents"
                             checked={
                               selectedStudents.length ===
-                              enrolledFamily.childrenDocs.length
+                              enrolledStudentIds.length
                             }
                             onChange={toggleAllStudents}
                           />
@@ -550,7 +616,7 @@ export default function AdminManualPayModal({
                     )}
                     <small className="text-muted">
                       Selected: {selectedStudents.length} of{" "}
-                      {enrolledFamily?.childrenDocs?.length} students
+                      {enrolledStudentIds.length} students
                     </small>
                   </div>
                 </div>

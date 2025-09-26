@@ -13,7 +13,18 @@ export default function UnpaidList() {
   const location = useLocation();
   const [deleteFee] = useDeleteFeeMutation();
   const [selectedAdminFamilyId, setSelectedAdminFamilyId] = useState(null);
+  const [selectedFeeData, setSelectedFeeData] = useState({
+    familyId: null,
+    feeId: null,
+  });
+
   const [adminShowModal, setAdminShowModal] = useState(false);
+
+  const handleAdminShow = (familyId, feeId) => {
+    setSelectedFeeData({ familyId, feeId });
+    setAdminShowModal(true);
+  };
+
   const handleAdminClose = () => setAdminShowModal(false);
   // Get current date
   const currentDate = new Date();
@@ -329,9 +340,9 @@ export default function UnpaidList() {
                               <button
                                 className="btn btn-primary btn-sm"
                                 onClick={() =>
-                                  handleEditFee(
-                                    student.feeId,
-                                    student.studentName
+                                  handleAdminShow(
+                                    family?.familyId,
+                                    student.feeId
                                   )
                                 }
                                 title="Edit Fee"
@@ -339,6 +350,7 @@ export default function UnpaidList() {
                               >
                                 <FaPen />
                               </button>
+
                               <button
                                 className="btn btn-danger btn-sm"
                                 onClick={() =>
@@ -430,8 +442,10 @@ export default function UnpaidList() {
         </div>
       )}
       <AdminFeeUpdateModal
-        key={`admin-pay-${selectedAdminFamilyId}`}
-        familyId={selectedAdminFamilyId}
+        key={`admin-pay-${selectedFeeData.familyId}-${selectedFeeData.feeId}`}
+        familyId={selectedFeeData?.familyId}
+        feeId={selectedFeeData?.feeId}
+        month={month}
         adminShowModal={adminShowModal}
         handleAdminClose={handleAdminClose}
         refetch={refetch}

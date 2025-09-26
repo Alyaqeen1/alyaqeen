@@ -21,6 +21,7 @@ import StudentAttendanceAdmin from "./admin/StudentAttendanceAdmin";
 import Subjects from "./admin/Subjects";
 import TeacherDetails from "./admin/TeacherDetails";
 import UnpaidList from "./admin/UnpaidList";
+import UpdateFees from "./admin/UpdateFees";
 import UpdateTeacher from "./admin/UpdateTeacher";
 import ViewStudent from "./admin/ViewStudent";
 import AddStudent from "./admissions/AddStudent";
@@ -392,6 +393,16 @@ const dashboardRoutes = [
           <PrivateRoute>
             <AdminRoute>
               <UnpaidList></UnpaidList>
+            </AdminRoute>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "update-fees",
+        element: (
+          <PrivateRoute>
+            <AdminRoute>
+              <UpdateFees></UpdateFees>
             </AdminRoute>
           </PrivateRoute>
         ),

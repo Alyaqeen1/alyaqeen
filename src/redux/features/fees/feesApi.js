@@ -18,8 +18,16 @@ export const feesApi = apiSlice.injectEndpoints({
       query: (id) => `/fees/by-id/${id}`,
       providesTags: ["Fee"],
     }),
+    getFeesByFeeId: builder.query({
+      query: (id) => `/fees/by-fee-id/${id}`,
+      providesTags: ["Fee"],
+    }),
     getFeesSummary: builder.query({
       query: (id) => `/fees/student-summary/${id}`,
+      providesTags: ["Fee"],
+    }),
+    getFeesByDate: builder.query({
+      query: (id) => `/fees/with-payments`,
       providesTags: ["Fee"],
     }),
     updateFeeData: builder.mutation({
@@ -30,6 +38,15 @@ export const feesApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Family", "Fee"], // 🔥 Important — invalidate Family when a student's status changes
     }),
+    updateFee: builder.mutation({
+      query: ({ id, ...body }) => ({
+        url: `/fees/update/${id}`,
+        method: "PATCH",
+        body, // send fields directly, not nested in 'data'
+      }),
+      invalidatesTags: ["Family", "Fee"],
+    }),
+
     createFeeData: builder.mutation({
       query: (data) => ({
         url: `/fees`,
@@ -57,8 +74,11 @@ export const {
   useGetFeeQuery,
   useGetFeesByStatusQuery,
   useGetFeesSummaryQuery,
+  useGetFeesByDateQuery,
   useGetFeesByIdQuery,
+  useGetFeesByFeeIdQuery,
   useUpdateFeeDataMutation,
+  useUpdateFeeMutation,
   useCreateFeeDataMutation,
   useDeleteFeeMutation,
 } = apiSlice;
