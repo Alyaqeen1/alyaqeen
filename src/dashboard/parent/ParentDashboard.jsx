@@ -265,7 +265,7 @@ export default function ParentDashboard({ family, refetch }) {
       <h3 className="fs-2 fw-bold text-center">
         Students Linked With this account
       </h3>
-      <StudentSummaryChart></StudentSummaryChart>
+      {/* <StudentSummaryChart></StudentSummaryChart> */}
       <div className="table-responsive mb-3">
         <table className="table mb-0" style={{ minWidth: 700 }}>
           <thead>
