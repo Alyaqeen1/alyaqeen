@@ -402,8 +402,12 @@ export default function AdminFeeUpdateModal({
                       >
                         <option value="">Select Method</option>
                         <option value="bank transfer">Bank Transfer</option>
-                        <option value="cash">Cash Payment</option>
-                        <option value="card">Card Payment</option>
+                        <option value="cash or card machine">
+                          Cash Payment at Office
+                        </option>
+                        <option value="office payment">
+                          Card Machine at Office
+                        </option>
                       </select>
                     </div>
                   </div>

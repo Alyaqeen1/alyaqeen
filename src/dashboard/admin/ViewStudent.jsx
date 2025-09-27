@@ -269,12 +269,12 @@ export default function ViewStudent() {
                         >
                           Amount
                         </th>
-                        <th
+                        {/* <th
                           className="font-danger text-white fw-bolder border h6 text-center align-middle"
                           style={{ backgroundColor: "var(--border2)" }}
                         >
                           Actions
-                        </th>
+                        </th> */}
                       </tr>
                     </thead>
                     <tbody>
@@ -299,10 +299,10 @@ export default function ViewStudent() {
                             <td
                               className={`border h6 text-center align-middle text-nowrap`}
                             >
-                              {fee?.month}
+                              {fee?.amount}
                             </td>
 
-                            <td
+                            {/* <td
                               className={`border d-flex gap-2 justify-content-center h6 text-center align-middle text-nowrap`}
                             >
                               <button
@@ -318,7 +318,7 @@ export default function ViewStudent() {
                               >
                                 <FaPen></FaPen>
                               </button>
-                            </td>
+                            </td> */}
                           </tr>
                         ))
                       ) : (
