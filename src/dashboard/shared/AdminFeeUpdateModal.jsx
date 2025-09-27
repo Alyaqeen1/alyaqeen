@@ -7,7 +7,8 @@ import toast from "react-hot-toast";
 
 export default function AdminFeeUpdateModal({
   feeId,
-  month,
+  month, // This should be the target month (e.g., "09")
+  year, // This should be the target year (e.g., 2025)
   handleAdminClose,
   adminShowModal,
 }) {
@@ -18,55 +19,107 @@ export default function AdminFeeUpdateModal({
 
   const [selectedStudents, setSelectedStudents] = useState([]);
   const [payNow, setPayNow] = useState("");
-  const [feeMonth, setFeeMonth] = useState(month || "");
   const [feeMethod, setFeeMethod] = useState("");
   const [paymentDate, setPaymentDate] = useState(
     new Date().toISOString().split("T")[0]
   );
-  const [feeYear, setFeeYear] = useState(new Date().getFullYear());
-  const [feeType, setFeeType] = useState("monthly");
   const [isProcessing, setIsProcessing] = useState(false);
 
   const [updateFee] = useUpdateFeeMutation();
 
-  // Calculate unpaid students and total due amount
-  const { unpaidStudents, totalDueAmount } = useMemo(() => {
-    if (!fee?.students || !feeMonth)
-      return { unpaidStudents: [], totalDueAmount: 0 };
-
-    let totalDue = 0;
-    const unpaid = fee.students
-      .map((student) => {
-        const monthRecord = student.monthsPaid?.find(
-          (m) => m.month === feeMonth && m.year === feeYear
-        );
-        const monthlyFee = monthRecord?.monthlyFee || 50;
-        const discountedFee = monthRecord?.discountedFee || monthlyFee;
-        const paidAmount = monthRecord?.paid || 0;
-        const dueAmount = Math.max(0, discountedFee - paidAmount);
-
-        totalDue += dueAmount;
-
+  // Determine fee type and calculate unpaid amounts accordingly
+  const { unpaidStudents, totalDueAmount, isAdmissionFee, targetMonthYear } =
+    useMemo(() => {
+      if (!fee?.students)
         return {
-          studentId: student.studentId,
-          name: student.name,
-          paidAmount,
-          dueAmount,
-          monthlyFee,
-          discountedFee,
+          unpaidStudents: [],
+          totalDueAmount: 0,
+          isAdmissionFee: false,
+          targetMonthYear: "",
         };
-      })
-      .filter((s) => s.dueAmount > 0);
 
-    return { unpaidStudents: unpaid, totalDueAmount: totalDue };
-  }, [fee, feeMonth, feeYear]);
+      const isAdmission =
+        fee.paymentType === "admission" ||
+        fee.paymentType === "admissionOnHold";
+
+      // Use the provided month and year, or default to current
+      const targetMonth = month || new Date().getMonth() + 1;
+      const targetYear = year || new Date().getFullYear();
+      const targetMonthYear = `${targetYear}-${String(targetMonth).padStart(
+        2,
+        "0"
+      )}`;
+
+      let totalDue = 0;
+      const unpaid = fee.students
+        .map((student) => {
+          if (isAdmission) {
+            // Admission fee logic
+            const admissionFee = student.admissionFee || 20;
+            const monthlyFee =
+              student.discountedFee || student.monthlyFee || 50;
+            const totalExpected = admissionFee + monthlyFee;
+            const paidAmount = student.subtotal || 0;
+            const dueAmount = Math.max(0, totalExpected - paidAmount);
+
+            totalDue += dueAmount;
+
+            return {
+              studentId: student.studentId,
+              name: student.name,
+              paidAmount,
+              dueAmount,
+              admissionFee,
+              monthlyFee,
+              totalExpected,
+              paymentType: "admission",
+            };
+          } else {
+            // Monthly fee logic - FIXED: Use the provided month/year
+            const monthRecord = student.monthsPaid?.find(
+              (m) =>
+                String(m.month) === String(targetMonth).padStart(2, "0") &&
+                m.year === targetYear
+            );
+
+            const monthlyFee = student.monthlyFee || 50;
+            const discountedFee = student.discountedFee || monthlyFee;
+            const paidAmount = monthRecord?.paid || 0;
+            const dueAmount = Math.max(0, discountedFee - paidAmount);
+
+            totalDue += dueAmount;
+
+            return {
+              studentId: student.studentId,
+              name: student.name,
+              paidAmount,
+              dueAmount,
+              monthlyFee,
+              discountedFee,
+              paymentType: "monthly",
+              targetMonth: String(targetMonth).padStart(2, "0"),
+              targetYear,
+            };
+          }
+        })
+        .filter((s) => s.dueAmount > 0);
+
+      return {
+        unpaidStudents: unpaid,
+        totalDueAmount: totalDue,
+        isAdmissionFee: isAdmission,
+        targetMonthYear,
+      };
+    }, [fee, month, year]);
 
   // Auto-select all unpaid students and set default payment amount
   useEffect(() => {
     if (unpaidStudents.length > 0) {
       setSelectedStudents(unpaidStudents.map((s) => s.studentId));
-      // Set to total due amount for all unpaid students
-      setPayNow(totalDueAmount > 0 ? totalDueAmount : "");
+      setPayNow(totalDueAmount > 0 ? totalDueAmount.toFixed(2) : "");
+    } else {
+      setSelectedStudents([]);
+      setPayNow("");
     }
   }, [unpaidStudents, totalDueAmount]);
 
@@ -80,7 +133,7 @@ export default function AdminFeeUpdateModal({
         (sum, student) => sum + student.dueAmount,
         0
       );
-      setPayNow(totalSelectedDue > 0 ? totalSelectedDue : "");
+      setPayNow(totalSelectedDue > 0 ? totalSelectedDue.toFixed(2) : "");
     } else {
       setPayNow("");
     }
@@ -104,13 +157,7 @@ export default function AdminFeeUpdateModal({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (
-      !selectedStudents.length ||
-      !payNow ||
-      !feeMethod ||
-      !feeMonth ||
-      !feeYear
-    ) {
+    if (!selectedStudents.length || !payNow || !feeMethod) {
       toast.error("Please fill all required fields");
       return;
     }
@@ -124,23 +171,28 @@ export default function AdminFeeUpdateModal({
     setIsProcessing(true);
 
     try {
-      // Send ONE payment for ALL selected students
-      // The backend will handle distributing this amount across selected students
-      const result = await updateFee({
+      const updateData = {
         id: feeId,
         partialAmount: paymentAmount,
         partialMethod: feeMethod,
         partialDate: paymentDate,
-        studentIds: selectedStudents, // Send array of selected student IDs
-        month: feeMonth,
-        year: feeYear,
-      }).unwrap();
+        studentIds: selectedStudents,
+      };
 
+      // Add month/year for both admission and monthly fees (needed for backend)
+      if (month && year) {
+        updateData.month = month;
+        updateData.year = year;
+      } else {
+        // Fallback to current month/year if not provided
+        const currentDate = new Date();
+        updateData.month = String(currentDate.getMonth() + 1).padStart(2, "0");
+        updateData.year = currentDate.getFullYear();
+      }
+
+      const result = await updateFee(updateData).unwrap();
       toast.success("Payment recorded successfully");
-
-      // Refetch the fee data to get updated values
       await refetchFee();
-
       handleAdminClose();
     } catch (err) {
       console.error("Payment error:", err);
@@ -150,25 +202,6 @@ export default function AdminFeeUpdateModal({
     }
   };
 
-  const years = Array.from(
-    { length: 5 },
-    (_, i) => new Date().getFullYear() - 2 + i
-  );
-  const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-
   const selectedUnpaidStudents = unpaidStudents.filter((s) =>
     selectedStudents.includes(s.studentId)
   );
@@ -176,6 +209,25 @@ export default function AdminFeeUpdateModal({
     (sum, student) => sum + student.dueAmount,
     0
   );
+
+  // Helper function to get month name
+  const getMonthName = (monthNumber) => {
+    const months = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+    return months[parseInt(monthNumber) - 1] || monthNumber;
+  };
 
   return (
     <>
@@ -190,7 +242,14 @@ export default function AdminFeeUpdateModal({
         <div className="modal-dialog modal-dialog-centered modal-lg">
           <div className="modal-content">
             <div className="modal-header bg-light">
-              <h5 className="modal-title">Record Payment</h5>
+              <h5 className="modal-title">
+                Record {isAdmissionFee ? "Admission" : "Monthly"} Payment
+                {!isAdmissionFee && targetMonthYear && (
+                  <span className="text-muted fs-6 ms-2">
+                    ({getMonthName(month)} {year})
+                  </span>
+                )}
+              </h5>
               <button
                 type="button"
                 className="btn-close"
@@ -203,6 +262,10 @@ export default function AdminFeeUpdateModal({
                 {/* Payment Summary */}
                 <div className="alert alert-info">
                   <div className="row">
+                    <div className="col-md-3">
+                      <strong>Fee Type:</strong>{" "}
+                      {isAdmissionFee ? "Admission" : "Monthly"}
+                    </div>
                     <div className="col-md-3">
                       <strong>Expected Total:</strong> £
                       {fee?.expectedTotal?.toFixed(2) || "0.00"}
@@ -217,21 +280,15 @@ export default function AdminFeeUpdateModal({
                       <strong>Remaining:</strong> £
                       {(fee?.remaining || 0)?.toFixed(2) || "0.00"}
                     </div>
-                    <div className="col-md-3">
-                      <strong>Status:</strong>
-                      <span
-                        className={`badge ms-2 ${
-                          fee?.status === "paid"
-                            ? "bg-success"
-                            : fee?.status === "partial"
-                            ? "bg-warning text-dark"
-                            : "bg-danger"
-                        }`}
-                      >
-                        {fee?.status?.toUpperCase() || "UNPAID"}
-                      </span>
-                    </div>
                   </div>
+                  {!isAdmissionFee && targetMonthYear && (
+                    <div className="row mt-2">
+                      <div className="col-12">
+                        <strong>Target Month:</strong> {getMonthName(month)}{" "}
+                        {year}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Family Info */}
@@ -246,6 +303,11 @@ export default function AdminFeeUpdateModal({
                 <div className="mb-3 row">
                   <label className="col-sm-4 col-form-label fw-semibold">
                     Students to Pay For
+                    {!isAdmissionFee && (
+                      <div className="text-muted fw-normal fs-7">
+                        For {getMonthName(month)} {year}
+                      </div>
+                    )}
                   </label>
                   <div className="col-sm-8">
                     {unpaidStudents.length > 0 ? (
@@ -292,6 +354,12 @@ export default function AdminFeeUpdateModal({
                                 {student.name} - Paid: £
                                 {student.paidAmount.toFixed(2)} | Due: £
                                 {student.dueAmount.toFixed(2)}
+                                {!isAdmissionFee && (
+                                  <span className="text-muted">
+                                    {" "}
+                                    (Monthly: £{student.monthlyFee.toFixed(2)})
+                                  </span>
+                                )}
                               </label>
                             </div>
                           ))}
@@ -309,58 +377,17 @@ export default function AdminFeeUpdateModal({
                       </div>
                     ) : (
                       <div className="alert alert-success p-2">
-                        All students are fully paid for{" "}
-                        {months[parseInt(feeMonth || "1") - 1]} {feeYear}.
+                        {isAdmissionFee
+                          ? "All students are fully paid for admission."
+                          : `All students are fully paid for ${getMonthName(
+                              month
+                            )} ${year}.`}
                       </div>
                     )}
                   </div>
                 </div>
 
-                {/* Payment Details */}
-                <div className="row">
-                  <div className="col-md-6">
-                    <div className="mb-3">
-                      <label className="form-label fw-semibold">
-                        Fee Month
-                      </label>
-                      <select
-                        className="form-select"
-                        value={feeMonth}
-                        onChange={(e) => setFeeMonth(e.target.value)}
-                        required
-                      >
-                        <option value="">Select Month</option>
-                        {months.map((monthName, i) => (
-                          <option
-                            key={monthName}
-                            value={(i + 1).toString().padStart(2, "0")}
-                          >
-                            {monthName}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
-
-                  <div className="col-md-6">
-                    <div className="mb-3">
-                      <label className="form-label fw-semibold">Fee Year</label>
-                      <select
-                        className="form-select"
-                        value={feeYear}
-                        onChange={(e) => setFeeYear(Number(e.target.value))}
-                        required
-                      >
-                        {years.map((y) => (
-                          <option key={y} value={y}>
-                            {y}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
-                </div>
-
+                {/* Rest of the form remains the same */}
                 <div className="row">
                   <div className="col-md-6">
                     <div className="mb-3">
@@ -397,35 +424,40 @@ export default function AdminFeeUpdateModal({
                   </div>
                 </div>
 
-                <div className="row">
-                  <div className="col-md-12">
-                    <div className="mb-3">
-                      <label className="form-label fw-semibold">
-                        Payment Amount £
-                        <span className="text-muted fw-normal">
-                          {" "}
-                          (Total for {selectedStudents.length} selected
-                          students)
-                        </span>
-                      </label>
-                      <input
-                        type="number"
-                        className="form-control"
-                        placeholder="Enter total payment amount"
-                        value={payNow}
-                        onChange={(e) => setPayNow(e.target.value)}
-                        min="0"
-                        max={totalSelectedDue}
-                        step="0.01"
-                        required
-                      />
-                      <small className="text-muted">
-                        Maximum: £{totalSelectedDue.toFixed(2)} (total due for{" "}
-                        {selectedStudents.length} selected students)
-                      </small>
-                    </div>
-                  </div>
+                <div className="mb-3">
+                  <label className="form-label fw-semibold">
+                    Payment Amount £
+                    <span className="text-muted fw-normal">
+                      {" "}
+                      (Total for {selectedStudents.length} selected students)
+                    </span>
+                  </label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    placeholder="Enter total payment amount"
+                    value={payNow}
+                    onChange={(e) => setPayNow(e.target.value)}
+                    min="0"
+                    max={totalSelectedDue}
+                    step="0.01"
+                    required
+                  />
+                  <small className="text-muted">
+                    Maximum: £{totalSelectedDue.toFixed(2)} (total due for{" "}
+                    {selectedStudents.length} selected students)
+                  </small>
                 </div>
+
+                {isAdmissionFee && (
+                  <div className="alert alert-warning">
+                    <small>
+                      <strong>Admission Fee Note:</strong> This payment will be
+                      applied to the admission fee balance. Admission fee
+                      includes £20 admission + first month's fee.
+                    </small>
+                  </div>
+                )}
               </div>
 
               <div className="modal-footer">

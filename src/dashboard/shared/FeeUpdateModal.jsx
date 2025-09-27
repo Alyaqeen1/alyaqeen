@@ -23,18 +23,30 @@ export default function FeeUpdateModal({
 
   const [updatePayment, { isLoading: isUpdating }] = useUpdatePaymentMutation();
 
-  // Simple form state - let backend handle calculations
   const [formData, setFormData] = useState({
     paymentAmount: "",
   });
 
-  // Initialize form data when fee loads
+  // Get current total paid amount
+  const getCurrentPaidAmount = () => {
+    if (!fee) return 0;
+
+    // For both admission and monthly fees, use the root payments array amount
+    if (fee.payments && fee.payments.length > 0) {
+      return fee.payments[0].amount || 0;
+    }
+
+    return 0;
+  };
+
+  // Initialize form data when fee loads - show CURRENT paid amount
   useEffect(() => {
     if (fee) {
-      // Pre-fill with remaining amount as default payment
+      const currentPaidAmount = getCurrentPaidAmount();
       setFormData((prev) => ({
         ...prev,
-        paymentAmount: fee?.payments?.[0]?.amount,
+        paymentAmount:
+          currentPaidAmount > 0 ? currentPaidAmount.toFixed(2) : "",
       }));
     }
   }, [fee]);
@@ -56,38 +68,54 @@ export default function FeeUpdateModal({
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.paymentAmount || formData.paymentAmount <= 0) {
+    if (!formData.paymentAmount || parseFloat(formData.paymentAmount) < 0) {
       toast.error("Please enter a valid payment amount");
       return;
     }
 
-    if (!fee?.students?.[0]?.monthsPaid?.[0]) {
-      toast.error("No student payment period found");
+    if (!fee?.students?.length) {
+      toast.error("No students found in this fee record");
       return;
     }
 
     try {
+      const newPaymentAmount = parseFloat(formData.paymentAmount);
+      const currentPaidAmount = getCurrentPaidAmount();
+
+      // If amount didn't change, no need to update
+      if (newPaymentAmount === currentPaidAmount) {
+        toast.info("No changes made to the payment amount");
+        handleClose();
+        return;
+      }
+
+      // Get payment period from first student
       const firstStudent = fee.students[0];
-      const firstMonth = firstStudent.monthsPaid[0] || {
+      const firstMonth = firstStudent.monthsPaid?.[0] || {
         month: new Date().getMonth() + 1,
         year: new Date().getFullYear(),
       };
 
-      const payload = {
-        payments: [
-          {
-            studentId: firstStudent.studentId,
-            month: firstMonth.month,
-            year: firstMonth.year,
-            amount: parseFloat(formData.paymentAmount),
-            // method and date are optional
-          },
-        ],
-      };
+      // Calculate new amount per student
+      const totalStudents = fee.students.length;
+      const amountPerStudent = newPaymentAmount / totalStudents;
+
+      const payments = fee.students.map((student) => ({
+        studentId: student.studentId,
+        month: firstMonth.month,
+        year: firstMonth.year,
+        amount: amountPerStudent,
+      }));
+
+      const payload = { payments };
 
       await updatePayment({ id: feeId, ...payload }).unwrap();
 
-      toast.success("Payment recorded successfully");
+      toast.success(
+        `Payment updated from £${currentPaidAmount.toFixed(
+          2
+        )} to £${newPaymentAmount.toFixed(2)}`
+      );
       refetch();
       refetchFee();
       handleClose();
@@ -95,7 +123,7 @@ export default function FeeUpdateModal({
       setFormData({ paymentAmount: "" });
     } catch (error) {
       console.error("Update error:", error);
-      toast.error(error?.data?.message || "Failed to record payment");
+      toast.error(error?.data?.message || "Failed to update payment");
     }
   };
 
@@ -121,11 +149,34 @@ export default function FeeUpdateModal({
 
   // Get payment period from first student
   const getPaymentPeriod = () => {
-    if (!fee?.students?.[0]?.monthsPaid?.[0]) return "Unknown Period";
+    if (!fee?.students?.[0]?.monthsPaid?.[0]) {
+      if (
+        fee?.paymentType === "admission" ||
+        fee?.paymentType === "admissionOnHold"
+      ) {
+        return "Admission + First Month";
+      }
+      return "Unknown Period";
+    }
 
     const firstPayment = fee.students[0].monthsPaid[0];
     return `${getMonthName(firstPayment.month)} ${firstPayment.year}`;
   };
+
+  // Calculate current status details
+  // const getCurrentPaidAmount = () => {
+  //   if (!fee) return 0;
+
+  //   if (fee.payments && fee.payments.length > 0) {
+  //     return fee.payments[0].amount || 0;
+  //   }
+
+  //   return 0;
+  // };
+
+  const currentPaidAmount = getCurrentPaidAmount();
+  const expectedTotal = fee?.expectedTotal || 0;
+  const remaining = Math.max(0, expectedTotal - currentPaidAmount);
 
   if (isLoading) {
     return (
@@ -158,7 +209,13 @@ export default function FeeUpdateModal({
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title">Record Additional Payment</h5>
+              <h5 className="modal-title">
+                Edit{" "}
+                {fee?.paymentType?.includes("admission")
+                  ? "Admission"
+                  : "Monthly"}{" "}
+                Payment
+              </h5>
               <button
                 type="button"
                 className="btn-close"
@@ -182,24 +239,35 @@ export default function FeeUpdateModal({
                         <strong>Type:</strong> {fee.paymentType || "Monthly"}
                       </div>
                       <div className="col-6">
-                        <strong>Expected:</strong> £
-                        {fee.expectedTotal?.toFixed(2)}
+                        <strong>Expected Total:</strong> £
+                        {expectedTotal.toFixed(2)}
                       </div>
                       <div className="col-6">
-                        <strong>Remaining:</strong> £{fee.remaining?.toFixed(2)}
+                        <strong>Currently Paid:</strong> £
+                        {currentPaidAmount.toFixed(2)}
+                      </div>
+                      <div className="col-6">
+                        <strong>Remaining:</strong> £{remaining.toFixed(2)}
+                      </div>
+                      <div className="col-6">
+                        <strong>Students:</strong> {fee.students?.length || 0}
                       </div>
                       <div className="col-12 mt-2">
                         <strong>Status:</strong>
                         <span
                           className={`badge ms-2 ${
-                            fee.status === "paid"
+                            remaining <= 0
                               ? "bg-success"
-                              : fee.status === "partial"
+                              : currentPaidAmount > 0
                               ? "bg-warning"
                               : "bg-danger"
                           }`}
                         >
-                          {fee.status?.toUpperCase()}
+                          {remaining <= 0
+                            ? "PAID"
+                            : currentPaidAmount > 0
+                            ? "PARTIAL"
+                            : "UNPAID"}
                         </span>
                       </div>
                     </div>
@@ -207,24 +275,41 @@ export default function FeeUpdateModal({
 
                   {/* Student Summary */}
                   <div className="mb-3">
-                    <label className="form-label fw-semibold">Students</label>
-                    <div className="border rounded p-2 bg-light">
-                      {fee.students?.map((student, index) => {
-                        const monthPaid = student.monthsPaid?.[0];
-                        return (
-                          <div key={student.studentId} className="small mb-1">
-                            <strong>{student.name}</strong> - Paid: £
-                            {monthPaid?.paid?.toFixed(2) || "0.00"}
-                          </div>
-                        );
+                    <label className="form-label fw-semibold">
+                      Students ({fee.students?.length})
+                    </label>
+                    <div
+                      className="border rounded p-2 bg-light"
+                      style={{ maxHeight: "150px", overflowY: "auto" }}
+                    >
+                      {fee.students?.map((student) => {
+                        if (
+                          fee.paymentType === "admission" ||
+                          fee.paymentType === "admissionOnHold"
+                        ) {
+                          return (
+                            <div key={student.studentId} className="small mb-1">
+                              <strong>{student.name}</strong> - Paid: £
+                              {(student.subtotal || 0).toFixed(2)}
+                            </div>
+                          );
+                        } else {
+                          const monthPaid = student.monthsPaid?.[0];
+                          return (
+                            <div key={student.studentId} className="small mb-1">
+                              <strong>{student.name}</strong> - Paid: £
+                              {(monthPaid?.paid || 0).toFixed(2)}
+                            </div>
+                          );
+                        }
                       })}
                     </div>
                   </div>
 
-                  {/* Payment Details */}
+                  {/* Payment Edit Section */}
                   <div className="mb-3">
                     <label htmlFor="paymentAmount" className="form-label">
-                      Payment Amount (£)
+                      Update Payment Amount (£)
                     </label>
                     <input
                       type="number"
@@ -234,12 +319,26 @@ export default function FeeUpdateModal({
                       value={formData.paymentAmount}
                       onChange={handleInputChange}
                       min="0"
+                      max={expectedTotal}
                       step="0.01"
-                      placeholder="Enter payment amount"
+                      placeholder="Enter corrected payment amount"
                       required
                     />
                     <small className="text-muted">
-                      Remaining balance: £{fee.remaining?.toFixed(2)}
+                      Current: £{currentPaidAmount.toFixed(2)} | Maximum: £
+                      {expectedTotal.toFixed(2)} (expected total)
+                      {fee.students?.length > 1 &&
+                        ` - £${(expectedTotal / fee.students.length).toFixed(
+                          2
+                        )} per student`}
+                    </small>
+                  </div>
+
+                  <div className="alert alert-info">
+                    <small>
+                      <strong>Note:</strong> This will update the payment
+                      amount. The system will automatically recalculate the
+                      status and remaining balance.
                     </small>
                   </div>
 
@@ -254,9 +353,14 @@ export default function FeeUpdateModal({
                     <button
                       type="submit"
                       className="btn btn-primary"
-                      disabled={isUpdating}
+                      disabled={
+                        isUpdating ||
+                        !formData.paymentAmount ||
+                        parseFloat(formData.paymentAmount) < 0 ||
+                        parseFloat(formData.paymentAmount) === currentPaidAmount
+                      }
                     >
-                      {isUpdating ? "Processing..." : "Record Payment"}
+                      {isUpdating ? "Updating..." : "Update Payment"}
                     </button>
                   </div>
                 </form>

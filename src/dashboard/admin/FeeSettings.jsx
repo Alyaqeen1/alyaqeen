@@ -200,26 +200,49 @@ export default function FeeSettings() {
 
       if (!studentPayment) continue;
 
-      const monthPaidEntry = studentPayment.monthsPaid?.find(
-        (m) =>
-          String(m.month).padStart(2, "0") === targetMonth &&
-          String(m.year) === targetYear
-      );
+      // Handle ADMISSION payments (payments array in student)
+      if (payment.paymentType === "admission" && studentPayment.payments) {
+        const admissionPayment = studentPayment.payments.find(
+          (p) =>
+            new Date(p.date).getMonth() + 1 === month &&
+            new Date(p.date).getFullYear() === selectedYear
+        );
 
-      if (monthPaidEntry) {
-        const fullFee =
-          monthPaidEntry.discountedFee ?? monthPaidEntry.monthlyFee;
-        const paid = monthPaidEntry.paid ?? 0;
+        if (admissionPayment) {
+          const admissionFee = studentPayment.admissionFee || 0;
+          const monthlyFee =
+            studentPayment.discountedFee || studentPayment.monthlyFee || 0;
+          const totalExpected = admissionFee + monthlyFee;
+          const totalPaid = studentPayment.subtotal || 0;
 
-        if (paid >= fullFee) return "paid";
-        if (paid > 0 && paid < fullFee) return "partial";
-        return "unpaid";
+          if (totalPaid >= totalExpected) return "paid";
+          if (totalPaid > 0 && totalPaid < totalExpected) return "partial";
+          return "unpaid";
+        }
+      }
+
+      // Handle MONTHLY payments (monthsPaid array)
+      if (payment.paymentType === "monthly" && studentPayment.monthsPaid) {
+        const monthPaidEntry = studentPayment.monthsPaid.find(
+          (m) =>
+            String(m.month).padStart(2, "0") === targetMonth &&
+            String(m.year) === targetYear
+        );
+
+        if (monthPaidEntry) {
+          const fullFee =
+            monthPaidEntry.discountedFee ?? monthPaidEntry.monthlyFee;
+          const paid = monthPaidEntry.paid ?? 0;
+
+          if (paid >= fullFee) return "paid";
+          if (paid > 0 && paid < fullFee) return "partial";
+          return "unpaid";
+        }
       }
     }
 
     return "unpaid";
   };
-
   const monthOptions = academicMonths.map((m) => ({
     value: m.num,
     label: m.name,

@@ -11,7 +11,12 @@ import { useUpdateStudentStatusMutation } from "../../redux/features/students/st
 import toast from "react-hot-toast";
 
 // Helper: always keep two decimals
-const toTwo = (v) => Number(Number(v || 0).toFixed(2));
+// Enhanced Helper: always keep two decimals with better error handling
+const toTwo = (v) => {
+  const num = Number(v);
+  if (isNaN(num)) return 0.0;
+  return Number(num.toFixed(2));
+};
 
 export default function AdminManualPayModal({
   familyId,
@@ -121,13 +126,11 @@ export default function AdminManualPayModal({
     if (!feeType || !familyId || selectedStudents.length === 0) return false;
 
     if (feeType === "admission") {
-      // If any selected student already has an admission payment, return true
-      return selectedStudentObjects.every((student) =>
+      return selectedStudentObjects.some((student) =>
         fees.some(
           (fee) =>
             String(fee.familyId) === String(familyId) &&
             String(fee.paymentType) === "admission" &&
-            // either admission recorded fully OR student's subtotal covers admission
             (hasStudentPaidAdmission(fee, student._id) ||
               (fee.status === "paid" &&
                 fee.students?.some(
@@ -198,7 +201,7 @@ export default function AdminManualPayModal({
       setIsProcessing(false);
       return;
     }
-    if (!payNow || isNaN(payNow) || Number(payNow) <= 0) {
+    if (!payNow || isNaN(payNow) || toTwo(Number(payNow)) <= 0) {
       toast.error("Please enter a valid Pay Now amount");
       setIsProcessing(false);
       return;
@@ -238,20 +241,24 @@ export default function AdminManualPayModal({
     try {
       if (feeType === "admission") {
         const admissionFeePerStudent = 20;
-        const totalAdmissionNeeded =
-          admissionFeePerStudent * selectedStudentObjects.length;
-        const totalPayNow = Number(payNow);
+        const totalAdmissionNeeded = toTwo(
+          admissionFeePerStudent * selectedStudentObjects.length
+        );
+        const totalPayNow = toTwo(Number(payNow));
 
         // Apply family discount
-        const discountPercent = family?.discount ? Number(family.discount) : 0;
+        const discountPercent = family?.discount
+          ? toTwo(Number(family.discount))
+          : 0;
 
         // Prepare students with discounted monthly fee
         const studentsFees = selectedStudentObjects.map((student) => {
-          const baseFee =
+          const baseFee = toTwo(
             student.monthly_fee ??
-            student.monthlyFee ??
-            student.monthlyFeeAmount ??
-            0;
+              student.monthlyFee ??
+              student.monthlyFeeAmount ??
+              0
+          );
 
           const discountedFee = discountPercent
             ? toTwo(baseFee - (baseFee * discountPercent) / 100)
@@ -262,7 +269,9 @@ export default function AdminManualPayModal({
             name: student.name,
             admissionFee: admissionFeePerStudent,
             monthlyFee: toTwo(baseFee),
-            discountedFee,
+            discountedFee: toTwo(discountedFee),
+            joiningMonth: new Date().getMonth() + 1,
+            joiningYear: new Date().getFullYear(),
           };
         });
 
@@ -274,7 +283,7 @@ export default function AdminManualPayModal({
         const expectedTotal = toTwo(expectedTotalRaw);
 
         // Calculate leftover for monthly portion
-        const leftover = Math.max(0, totalPayNow - totalAdmissionNeeded);
+        const leftover = toTwo(Math.max(0, totalPayNow - totalAdmissionNeeded));
 
         // Allocation logic for monthly portion (distribute leftover proportionally)
         let allocations = [];
@@ -286,10 +295,11 @@ export default function AdminManualPayModal({
           );
 
           allocations = studentsFees.map((s) => {
-            const rawShare =
+            const rawShare = toTwo(
               totalDiscounted > 0
                 ? (s.discountedFee / totalDiscounted) * leftover
-                : 0;
+                : 0
+            );
             return { ...s, rawShare };
           });
 
@@ -297,9 +307,8 @@ export default function AdminManualPayModal({
           allocations.forEach(
             (a) => (a.paidMonthly = Math.floor(a.rawShare * 100) / 100)
           );
-          let allocatedSum = allocations.reduce(
-            (s, a) => s + (a.paidMonthly || 0),
-            0
+          let allocatedSum = toTwo(
+            allocations.reduce((s, a) => s + (a.paidMonthly || 0), 0)
           );
           let remainderCents = Math.round((leftover - allocatedSum) * 100);
 
@@ -331,8 +340,33 @@ export default function AdminManualPayModal({
           familyId,
           name: family?.name,
           email: family?.email,
-          students: allocations,
-          expectedTotal: expectedTotal,
+          students: allocations.map((student) => ({
+            studentId: student.studentId,
+            name: student.name,
+            admissionFee: student.admissionFee,
+            monthlyFee: toTwo(student.monthlyFee),
+            discountedFee: toTwo(student.discountedFee),
+            joiningMonth: student.joiningMonth.toString().padStart(2, "0"),
+            joiningYear: student.joiningYear,
+            payments: [
+              {
+                amount: student.admissionFee,
+                date: date,
+                method: feeMethod,
+              },
+              ...(student.paidMonthly > 0
+                ? [
+                    {
+                      amount: toTwo(student.paidMonthly),
+                      date: date,
+                      method: feeMethod,
+                    },
+                  ]
+                : []),
+            ],
+            subtotal: toTwo(student.subtotal),
+          })),
+          expectedTotal: toTwo(expectedTotal),
           remaining: toTwo(Math.max(0, expectedTotal - totalPayNow)),
           paymentType: feeType,
           status: totalPayNow >= expectedTotal ? "paid" : "partial",
@@ -340,9 +374,10 @@ export default function AdminManualPayModal({
             {
               amount: toTwo(totalPayNow),
               method: feeMethod,
-              date,
+              date: date,
             },
           ],
+          timestamp: new Date().toISOString(),
         };
 
         const data = await createFeeData(admissionData).unwrap();
@@ -365,17 +400,20 @@ export default function AdminManualPayModal({
         );
       } else {
         // Monthly payment data (smart per-student allocation)
-        const parsedPayNow = Number(payNow);
+        const parsedPayNow = toTwo(Number(payNow));
 
-        // build list of students with their actual monthly fee (supports monthly_fee or monthlyFee)
-        const discountPercent = family?.discount ? Number(family.discount) : 0;
+        // build list of students with their actual monthly fee
+        const discountPercent = family?.discount
+          ? toTwo(Number(family.discount))
+          : 0;
 
         const studentsFees = selectedStudentObjects.map((student) => {
-          const baseFee =
+          const baseFee = toTwo(
             student.monthly_fee ??
-            student.monthlyFee ??
-            student.monthlyFeeAmount ??
-            0;
+              student.monthlyFee ??
+              student.monthlyFeeAmount ??
+              0
+          );
 
           const discountedFee = discountPercent
             ? toTwo(baseFee - (baseFee * discountPercent) / 100)
@@ -384,8 +422,8 @@ export default function AdminManualPayModal({
           return {
             studentId: student._id,
             name: student.name,
-            fee: discountedFee, // use discounted fee for calculations
-            originalFee: toTwo(baseFee), // optional: store original too
+            fee: toTwo(discountedFee),
+            originalFee: toTwo(baseFee),
           };
         });
 
@@ -402,8 +440,9 @@ export default function AdminManualPayModal({
           // Partial payment: distribute proportionally based on each student's fee
           allocations = studentsFees.map((s) => ({
             ...s,
-            rawPaid:
-              expectedTotal > 0 ? (s.fee / expectedTotal) * parsedPayNow : 0,
+            rawPaid: toTwo(
+              expectedTotal > 0 ? (s.fee / expectedTotal) * parsedPayNow : 0
+            ),
           }));
 
           // round down to cents
@@ -412,7 +451,9 @@ export default function AdminManualPayModal({
           );
 
           // remainder cents
-          let allocatedSum = allocations.reduce((sum, a) => sum + a.paid, 0);
+          let allocatedSum = toTwo(
+            allocations.reduce((sum, a) => sum + a.paid, 0)
+          );
           let remainderCents = Math.round((parsedPayNow - allocatedSum) * 100);
 
           if (remainderCents > 0) {
@@ -457,7 +498,7 @@ export default function AdminManualPayModal({
           name: family?.name,
           email: family?.email,
           students: studentsPayload,
-          expectedTotal: expectedTotal,
+          expectedTotal: toTwo(expectedTotal),
           remaining: toTwo(Math.max(0, expectedTotal - parsedPayNow)),
           status: parsedPayNow >= expectedTotal ? "paid" : "partial",
           paymentType: feeType,
