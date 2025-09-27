@@ -42,10 +42,11 @@ export default function AdminManualPayModal({
   const [selectedStudents, setSelectedStudents] = useState([]);
 
   // derived list of enrolled student ids for select-all and comparisons
+  // derived list of enrolled AND approved student ids for select-all and comparisons
   const enrolledStudentIds = useMemo(() => {
     return (
       enrolledFamily?.childrenDocs
-        ?.filter((s) => s.status === "enrolled")
+        ?.filter((s) => s.status === "enrolled" || s.status === "approved")
         .map((s) => s._id) || []
     );
   }, [enrolledFamily]);
@@ -217,18 +218,18 @@ export default function AdminManualPayModal({
     }
 
     // NEW CHECK: Are there any students not enrolled (status "approved")?
-    const notEnrolledStudents = selectedStudentObjects?.filter(
-      (student) => student.status === "approved"
-    );
+    // const notEnrolledStudents = selectedStudentObjects?.filter(
+    //   (student) => student.status === "approved"
+    // );
 
-    if (notEnrolledStudents && notEnrolledStudents.length > 0) {
-      const names = notEnrolledStudents.map((s) => s.name).join(", ");
-      toast.error(
-        `Payment blocked. The following student(s) are not enrolled yet: ${names}`
-      );
-      setIsProcessing(false);
-      return;
-    }
+    // if (notEnrolledStudents && notEnrolledStudents.length > 0) {
+    //   const names = notEnrolledStudents.map((s) => s.name).join(", ");
+    //   toast.error(
+    //     `Payment blocked. The following student(s) are not enrolled yet: ${names}`
+    //   );
+    //   setIsProcessing(false);
+    //   return;
+    // }
 
     if (feeType === "monthly" && isBeforeJoiningMonth) {
       toast.error(
@@ -630,24 +631,32 @@ export default function AdminManualPayModal({
                                 onChange={() =>
                                   handleStudentSelection(student._id)
                                 }
-                                disabled={student.status !== "enrolled"}
+                                disabled={
+                                  student.status !== "enrolled" &&
+                                  student.status !== "approved"
+                                } // Allow both enrolled and approved
                               />
                               <label
                                 className="form-check-label"
                                 htmlFor={`student-${student._id}`}
                                 style={{
                                   color:
-                                    student.status !== "enrolled"
+                                    student.status !== "enrolled" &&
+                                    student.status !== "approved"
                                       ? "#6c757d"
                                       : "inherit",
                                   cursor:
-                                    student.status !== "enrolled"
+                                    student.status !== "enrolled" &&
+                                    student.status !== "approved"
                                       ? "not-allowed"
                                       : "pointer",
                                 }}
                               >
                                 {student.name}
+                                {student.status === "approved" &&
+                                  " (Approved - Not enrolled yet)"}
                                 {student.status !== "enrolled" &&
+                                  student.status !== "approved" &&
                                   " (Not enrolled)"}
                               </label>
                             </div>
