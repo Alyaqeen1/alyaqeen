@@ -44,3 +44,730 @@ button:focus {
   font-size: large;
   text-decoration: none; /* optional: remove underline */
 }
+
+/* child section */
+.child-section-container {
+  min-height: 100vh;
+  padding: 20px;
+  background: linear-gradient(
+    135deg,
+    var(--border2) 0%,
+    color-mix(in srgb, var(--border2) 80%, white) 100%
+  );
+}
+
+/* Header Styles */
+.child-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 30px;
+  padding: 25px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border-left: 6px solid color-mix(in srgb, var(--border2) 30%, transparent);
+}
+
+.student-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(
+    135deg,
+    var(--border2),
+    color-mix(in srgb, var(--border2) 60%, #667eea)
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: bold;
+  color: white;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.student-basic-info h1 {
+  margin: 0 0 12px 0;
+  font-size: 1.8rem;
+  color: #2d3748;
+  font-weight: 600;
+}
+
+.student-badges {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.status-badge {
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.status-badge.enrolled {
+  background: #c6f6d5;
+  color: #22543d;
+}
+
+.status-badge.active {
+  background: #bee3f8;
+  color: #1a365d;
+}
+
+.id-badge {
+  padding: 6px 16px;
+  background: #e2e8f0;
+  color: #4a5568;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+/* Content Layout */
+.child-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 24px;
+}
+
+/* Card Styles */
+.info-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.info-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.card-header {
+  padding: 20px 24px;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--border2) 10%, white),
+    color-mix(in srgb, var(--border2) 5%, white)
+  );
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.card-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #2d3748;
+  font-weight: 600;
+}
+
+.card-content {
+  padding: 24px;
+}
+
+/* Grid Layouts */
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.family-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 20px;
+}
+
+/* Info Item Styles */
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.info-item.full-width {
+  grid-column: 1 / -1;
+}
+
+.info-item label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #718096;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-item p {
+  margin: 0;
+  font-size: 1rem;
+  color: #2d3748;
+  font-weight: 500;
+}
+
+/* Family Info Styles */
+.parent-info {
+  padding: 16px;
+  background: color-mix(in srgb, var(--border2) 5%, white);
+  border-radius: 12px;
+  border-left: 4px solid var(--border2);
+}
+
+.parent-info h4 {
+  margin: 0 0 8px 0;
+  font-size: 0.9rem;
+  color: #718096;
+  font-weight: 600;
+}
+
+.parent-name {
+  font-size: 1.1rem !important;
+  font-weight: 600 !important;
+  color: #2d3748 !important;
+  margin-bottom: 4px !important;
+}
+
+.parent-contact {
+  font-size: 0.95rem !important;
+  color: #4a5568 !important;
+}
+
+.address-info {
+  margin-top: 16px;
+}
+
+.post-code {
+  font-weight: 600 !important;
+  color: var(--border2) !important;
+}
+
+/* Fee Display Styles */
+.fee-display {
+  text-align: center;
+}
+
+.monthly-fee {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 20px 40px;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--border2) 10%, white),
+    color-mix(in srgb, var(--border2) 5%, white)
+  );
+  border-radius: 12px;
+  border: 2px dashed color-mix(in srgb, var(--border2) 30%, transparent);
+}
+
+.fee-label {
+  font-size: 0.9rem;
+  color: #718096;
+  font-weight: 600;
+}
+
+.fee-amount {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--border2);
+}
+
+/* No Student State */
+.no-student-selected {
+  text-align: center;
+  padding: 60px 20px;
+  color: #718096;
+}
+
+.no-student-selected h3 {
+  margin: 0 0 12px 0;
+  font-size: 1.5rem;
+  color: #a0aec0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .child-section-container {
+    padding: 15px;
+  }
+
+  .child-content {
+    grid-template-columns: 1fr;
+  }
+
+  .child-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 15px;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .family-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .student-badges {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .card-content {
+    padding: 16px;
+  }
+
+  .monthly-fee {
+    padding: 16px 24px;
+  }
+
+  .fee-amount {
+    font-size: 1.5rem;
+  }
+}
+/* Profile Stats */
+.profile-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.profile-stat {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: color-mix(in srgb, var(--border2) 5%, white);
+  border-radius: 12px;
+  border-left: 4px solid var(--border2);
+}
+
+.stat-icon {
+  font-size: 1.5rem;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--border2);
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Payment Info */
+.payment-info {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.status-paid {
+  color: #22c55e;
+  font-weight: 600;
+  padding: 4px 8px;
+  background: #dcfce7;
+  border-radius: 6px;
+  display: inline-block;
+}
+
+/* Medical Status */
+.medical-ok {
+  color: #22c55e;
+  font-weight: 500;
+}
+
+.medical-alert {
+  color: #ef4444;
+  font-weight: 500;
+}
+
+.has-emergency {
+  color: #22c55e;
+  font-weight: 500;
+}
+
+.no-emergency {
+  color: #ef4444;
+  font-weight: 500;
+}
+
+.medical-contacts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #f1f5f9;
+}
+
+/* Contact Info */
+.email-value {
+  color: #3b82f6;
+  font-weight: 500;
+}
+
+.system-info {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #f1f5f9;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* Parent Occupation */
+.parent-occupation {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin-top: 4px;
+  font-style: italic;
+}
+
+.additional-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #f1f5f9;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .card-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .card-row {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-stats {
+    gap: 12px;
+  }
+
+  .medical-contacts,
+  .system-info {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Add these styles to your existing CSS */
+
+.child-content {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+/* Regular cards take 1 column */
+.info-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Merit card takes 2 columns */
+.merit-card-double {
+  grid-column: span 2;
+}
+
+/* Card hover effects */
+.info-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.card-header {
+  padding: 20px 24px;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--border2) 10%, white),
+    color-mix(in srgb, var(--border2) 5%, white)
+  );
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.card-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #2d3748;
+  font-weight: 600;
+}
+
+.card-content {
+  padding: 24px;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .child-content {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .merit-card-double {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 768px) {
+  .child-content {
+    grid-template-columns: 1fr;
+  }
+
+  .merit-card-double {
+    grid-column: span 1;
+  }
+}
+
+/* Rest of your existing CSS styles... */
+/* Timeframe Selector */
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.timeframe-selector {
+  display: flex;
+  gap: 8px;
+}
+
+.timeframe-selector button {
+  padding: 6px 12px;
+  border: 1px solid #e5e7eb;
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.timeframe-selector button.active {
+  background: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+}
+
+/* Behavior Insights */
+.behavior-insights {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.insight-card {
+  background: color-mix(in srgb, var(--border2) 8%, white);
+  padding: 12px;
+  border-radius: 8px;
+  text-align: center;
+  border-left: 3px solid var(--border2);
+}
+
+.insight-label {
+  display: block;
+  font-size: 0.75rem;
+  color: #6b7280;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.insight-value {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+.merit-stats-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.merit-stat-row {
+  display: flex;
+  gap: 16px;
+  width: 100%;
+}
+
+.merit-stat-card {
+  flex: 1;
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.merit-stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  border-color: var(--border2);
+}
+
+.stat-content {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  height: 100%;
+}
+
+.stat-icon {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.stat-icon.total {
+  background: linear-gradient(135deg, #ffd700, #ffed4e);
+  color: #b45309;
+}
+
+.stat-icon.recent {
+  background: linear-gradient(135deg, #3b82f6, #60a5fa);
+  color: white;
+}
+
+.stat-icon.average {
+  background: linear-gradient(135deg, #10b981, #34d399);
+  color: white;
+}
+
+.stat-icon.records {
+  background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+  color: white;
+}
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #1f2937;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  color: #6b7280;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .merit-stat-row {
+    flex-direction: column;
+  }
+
+  .stat-content {
+    gap: 12px;
+  }
+
+  .stat-icon {
+    width: 45px;
+    height: 45px;
+    font-size: 1.3rem;
+  }
+
+  .stat-value {
+    font-size: 1.7rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .merit-stats-grid {
+    gap: 12px;
+  }
+
+  .merit-stat-card {
+    padding: 16px;
+  }
+
+  .stat-value {
+    font-size: 1.5rem;
+  }
+
+  .stat-label {
+    font-size: 0.8rem;
+  }
+}
+.merit-card {
+  transition: all 0.3s ease;
+  border-left: 4px solid var(--border2) !important;
+}
+
+.merit-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+}
+
+.merit-category-1 {
+  background: #dbeafe !important;
+  color: #1e40af !important;
+  border: 1px solid #bfdbfe !important;
+}
+
+.merit-category-2 {
+  background: #fef3c7 !important;
+  color: #92400e !important;
+  border: 1px solid #fde68a !important;
+}
+
+.merit-category-3 {
+  background: #dcfce7 !important;
+  color: #166534 !important;
+  border: 1px solid #bbf7d0 !important;
+}
+
+.merit-category-4 {
+  background: linear-gradient(135deg, #fef3c7, #fde68a) !important;
+  color: #92400e !important;
+  border: 1px solid #fcd34d !important;
+}

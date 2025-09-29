@@ -15,6 +15,7 @@ import FeeChoiceModal from "../shared/FeeChoiceModal";
 import MonthlyFeePayment from "./MonthlyFeePayment";
 import sessionMap from "../../utils/sessionMap";
 import StudentSummaryChart from "./StudentSummaryChart";
+import ChildSection from "./ChildSection";
 
 export default function ParentDashboard({ family, refetch }) {
   const [showModal, setShowModal] = useState(false);
@@ -22,6 +23,8 @@ export default function ParentDashboard({ family, refetch }) {
   const { user, loading } = useAuth();
   const [updateStudentStatus] = useUpdateStudentStatusMutation();
   const axiosPublic = useAxiosPublic();
+  const [activeTab, setActiveTab] = useState("payment-summary");
+
   const {
     data: approvedFamily,
     isLoading,
@@ -262,141 +265,202 @@ export default function ParentDashboard({ family, refetch }) {
 
   return (
     <div>
-      <h3 className="fs-2 fw-bold text-center">
-        Students Linked With this account
-      </h3>
-      {/* <StudentSummaryChart></StudentSummaryChart> */}
-      <div className="table-responsive mb-3">
-        <table className="table mb-0" style={{ minWidth: 700 }}>
-          <thead>
-            <tr>
-              {[
-                "#",
-                "Student Name",
-                "Department",
-                "Session",
-                "Class",
-                "Time",
-                "Monthly Fee",
-                "Status",
-              ].map((heading, index) => (
-                <th
-                  key={index}
-                  className="font-danger text-white fw-bolder border h6 text-center align-middle"
-                  style={{ backgroundColor: "var(--border2)" }}
-                >
-                  {heading}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {family?.childrenDocs?.length > 0 ? (
-              family?.childrenDocs?.map((student, idx) => (
-                <tr key={student._id}>
-                  <td className="border h6 text-center align-middle text-nowrap">
-                    {idx + 1}
-                  </td>
-                  <td className="border h6 text-center align-middle text-nowrap">
-                    {student.name}
-                  </td>
-                  <td className="border h6 text-center align-middle text-nowrap">
-                    {student.academic?.department}
-                  </td>
-                  <td className="border h6 text-center align-middle text-nowrap">
-                    {student.academic?.session}
-                  </td>
-                  <td className="border h6 text-center align-middle text-nowrap">
-                    {student.academic?.class || "Not Provided Yet"}
-                  </td>
-                  <td className="border h6 text-center align-middle text-nowrap">
-                    {sessionMap[student.academic?.time]
-                      ? sessionMap[student.academic?.time]
-                      : "not available"}
-                  </td>
-                  <td className="border h6 text-center align-middle text-nowrap">
-                    {student?.monthly_fee
-                      ? student?.monthly_fee
-                      : "Not Assigned"}
-                  </td>
-                  <td className="border h6 text-center align-middle text-nowrap">
-                    {student.status}
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan={7}>
-                  <h5>No students available.</h5>
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-        <AdmissionFeeModal
-          familyId={approvedFamily?._id}
-          showModal={showModal}
-          handleClose={handleClose}
-          paymentDetails={feeDetails}
-          approvedFamily={approvedFamily}
-          admissionFee={admissionFee}
-          refetch={refetch}
-        />
-      </div>
-      {approvedFamily?.childrenDocs?.length > 0 && (
-        <>
-          <h3 className="fs-1 fw-bold text-center pt-5">
-            Action Required For Admission
-          </h3>
-          {approvedFamily?.childrenDocs?.length > 0 ? (
-            <div className="row justify-content-center mt-3">
-              <button
-                onClick={handleShow}
-                className="col-lg-2 text-white py-1 px-2 rounded-2"
-                style={{ backgroundColor: "var(--border2)" }}
-              >
-                Pay Now by Card
-              </button>
-              <p className="col-lg-1 d-flex align-items-center justify-content-center">
-                or
-              </p>
-              <button
-                className="col-lg-2 text-white py-1 px-2 rounded-2"
-                style={{ backgroundColor: "var(--border2)" }}
-                onClick={() => handleOtherPayment("bank transfer")}
-              >
-                Pay by Bank Transfer (Account-to-Account Transfer)
-              </button>
+      {/* Tab Navigation */}
+      <ul
+        className="nav gap-2 my-5 flex justify-content-center align-items-center"
+        role="tablist"
+      >
+        <li className="nav-item">
+          <a
+            className="nav-link text-uppercase box-shadow px-3"
+            style={{
+              backgroundColor:
+                activeTab === "payment-summary" ? "var(--border2)" : undefined,
+              color: activeTab === "payment-summary" ? "white" : "black",
+              borderRadius: "20px", // <-- added here
+            }}
+            onClick={() => setActiveTab("payment-summary")}
+          >
+            Payment Summary
+          </a>
+        </li>
 
-              <p className="col-lg-1 d-flex align-items-center justify-content-center">
-                or
-              </p>
-              <button
-                className="col-lg-2 text-white py-1 px-2 rounded-2"
-                style={{ backgroundColor: "var(--border2)" }}
-                onClick={() => handleOtherPayment("office payment")}
-              >
-                Set up a Standing Order or Direct Debit
-              </button>
-              <p className="col-lg-1 d-flex align-items-center justify-content-center">
-                or
-              </p>
-              <button
-                className="col-lg-2 text-white py-1 px-2 rounded-2"
-                style={{ backgroundColor: "var(--border2)" }}
-                onClick={() => handleOtherPayment("cash or card machine")}
-              >
-                Pay in Office by Card Machine or Cash
-              </button>
+        {family?.childrenDocs?.map((student) => (
+          <li className="nav-item" key={student?._id}>
+            <a
+              className="nav-link text-uppercase box-shadow px-3"
+              style={{
+                backgroundColor:
+                  activeTab === student?._id ? "var(--border2)" : undefined,
+                color: activeTab === student?._id ? "white" : "black",
+                borderRadius: "20px", // <-- added here
+              }}
+              onClick={() => setActiveTab(student?._id)}
+            >
+              {student.name.length > 5
+                ? student.name
+                    .split(" ")
+                    .map((n) => n[0])
+                    .join("") // initials
+                : student.name}
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      {/* Tab content container */}
+      <div className="tab-content mt-4">
+        {activeTab === "payment-summary" && (
+          <div>
+            <h3 className="fs-2 fw-bold text-center">
+              Students Linked With this account
+            </h3>
+            <div className="table-responsive mb-3">
+              <table className="table mb-0" style={{ minWidth: 700 }}>
+                <thead>
+                  <tr>
+                    {[
+                      "#",
+                      "Student Name",
+                      "Department",
+                      "Session",
+                      "Class",
+                      "Time",
+                      "Monthly Fee",
+                      "Status",
+                    ].map((heading, index) => (
+                      <th
+                        key={index}
+                        className="font-danger text-white fw-bolder border h6 text-center align-middle"
+                        style={{ backgroundColor: "var(--border2)" }}
+                      >
+                        {heading}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {family?.childrenDocs?.length > 0 ? (
+                    family?.childrenDocs?.map((student, idx) => (
+                      <tr key={student._id}>
+                        <td className="border h6 text-center align-middle text-nowrap">
+                          {idx + 1}
+                        </td>
+                        <td className="border h6 text-center align-middle text-nowrap">
+                          {student.name}
+                        </td>
+                        <td className="border h6 text-center align-middle text-nowrap">
+                          {student.academic?.department}
+                        </td>
+                        <td className="border h6 text-center align-middle text-nowrap">
+                          {student.academic?.session}
+                        </td>
+                        <td className="border h6 text-center align-middle text-nowrap">
+                          {student.academic?.class || "Not Provided Yet"}
+                        </td>
+                        <td className="border h6 text-center align-middle text-nowrap">
+                          {sessionMap[student.academic?.time]
+                            ? sessionMap[student.academic?.time]
+                            : "not available"}
+                        </td>
+                        <td className="border h6 text-center align-middle text-nowrap">
+                          {student?.monthly_fee
+                            ? student?.monthly_fee
+                            : "Not Assigned"}
+                        </td>
+                        <td className="border h6 text-center align-middle text-nowrap">
+                          {student.status}
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={7}>
+                        <h5>No students available.</h5>
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+              <AdmissionFeeModal
+                familyId={approvedFamily?._id}
+                showModal={showModal}
+                handleClose={handleClose}
+                paymentDetails={feeDetails}
+                approvedFamily={approvedFamily}
+                admissionFee={admissionFee}
+                refetch={refetch}
+              />
             </div>
-          ) : (
-            <h3 className="text-danger">No Child is Approved</h3>
-          )}
-        </>
-      )}
-      {enrolledFamily?.childrenDocs?.length > 0 && (
-        <MonthlyFeePayment enrolledFamily={enrolledFamily}></MonthlyFeePayment>
-      )}
+            {approvedFamily?.childrenDocs?.length > 0 && (
+              <>
+                <h3 className="fs-1 fw-bold text-center pt-5">
+                  Action Required For Admission
+                </h3>
+                {approvedFamily?.childrenDocs?.length > 0 ? (
+                  <div className="row justify-content-center mt-3">
+                    <button
+                      onClick={handleShow}
+                      className="col-lg-2 text-white py-1 px-2 rounded-2"
+                      style={{ backgroundColor: "var(--border2)" }}
+                    >
+                      Pay Now by Card
+                    </button>
+                    <p className="col-lg-1 d-flex align-items-center justify-content-center">
+                      or
+                    </p>
+                    <button
+                      className="col-lg-2 text-white py-1 px-2 rounded-2"
+                      style={{ backgroundColor: "var(--border2)" }}
+                      onClick={() => handleOtherPayment("bank transfer")}
+                    >
+                      Pay by Bank Transfer (Account-to-Account Transfer)
+                    </button>
+
+                    <p className="col-lg-1 d-flex align-items-center justify-content-center">
+                      or
+                    </p>
+                    <button
+                      className="col-lg-2 text-white py-1 px-2 rounded-2"
+                      style={{ backgroundColor: "var(--border2)" }}
+                      onClick={() => handleOtherPayment("office payment")}
+                    >
+                      Set up a Standing Order or Direct Debit
+                    </button>
+                    <p className="col-lg-1 d-flex align-items-center justify-content-center">
+                      or
+                    </p>
+                    <button
+                      className="col-lg-2 text-white py-1 px-2 rounded-2"
+                      style={{ backgroundColor: "var(--border2)" }}
+                      onClick={() => handleOtherPayment("cash or card machine")}
+                    >
+                      Pay in Office by Card Machine or Cash
+                    </button>
+                  </div>
+                ) : (
+                  <h3 className="text-danger">No Child is Approved</h3>
+                )}
+              </>
+            )}
+            {enrolledFamily?.childrenDocs?.length > 0 && (
+              <MonthlyFeePayment
+                enrolledFamily={enrolledFamily}
+              ></MonthlyFeePayment>
+            )}
+          </div>
+        )}
+
+        {family?.childrenDocs?.map(
+          (student) =>
+            activeTab === student?._id && (
+              <ChildSection
+                key={student?._id}
+                studentId={student?._id}
+              ></ChildSection>
+            )
+        )}
+      </div>
 
       {shouldShowModal && <FeeChoiceModal refetch={approvedRefetch} />}
     </div>
