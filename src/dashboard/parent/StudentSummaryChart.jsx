@@ -1,5 +1,7 @@
 import React from "react";
 import Chart from "react-apexcharts";
+import MeritChart from "./MeritChart";
+import AttendanceChart from "./AttendanceChart";
 
 const StudentSummaryChart = () => {
   // Format data for chart
@@ -63,9 +65,17 @@ const StudentSummaryChart = () => {
   };
 
   return (
-    <div className="p-4 bg-white shadow rounded-lg col-lg-4">
+    <div className="p-4 bg-white shadow rounded-lg">
       <h2 className="text-lg font-bold mb-3">Student Fee Summary</h2>
-      <Chart options={options} series={series} type="bar" height={350} />
+      <div className="row">
+        <div className="col-lg-6">
+          <AttendanceChart></AttendanceChart>
+        </div>
+        <div className="col-lg-6">
+          <MeritChart></MeritChart>
+        </div>
+        {/* <Chart options={options} series={series} type="bar" height={350} /> */}
+      </div>
     </div>
   );
 };

@@ -96,9 +96,9 @@ export default function LessonCoveredTable({
   };
 
   const getEducationType = (student) => {
-    if (student.beginning?.type) return student.beginning.type;
-    if (student.ending?.type) return student.ending.type;
-    if (student.type) return student.type; // 👈 will now exist
+    if (student?.beginning?.type) return student?.beginning?.type;
+    if (student?.ending?.type) return student?.ending?.type;
+    if (student?.type) return student?.type; // 👈 will now exist
     return "normal";
   };
 
@@ -183,7 +183,7 @@ export default function LessonCoveredTable({
                 onChange={(e) => setFilterYear(e.target.value)}
               >
                 <option value="">All Years</option>
-                {Array.from({ length: 5 }, (_, i) => currentYear - 2 + i).map(
+                {Array.from({ length: 5 }, (_, i) => currentYear - 2 + i)?.map(
                   (yr) => (
                     <option key={yr} value={yr}>
                       {yr}
@@ -278,11 +278,8 @@ export default function LessonCoveredTable({
               </tr>
             </thead>
             <tbody>
-              {lessonsCovered.map((student, idx) => {
-                const educationType = getEducationType(
-                  student.beginning,
-                  student.ending
-                );
+              {lessonsCovered?.map((student, idx) => {
+                const educationType = getEducationType(student);
 
                 return (
                   <React.Fragment key={idx}>
@@ -293,7 +290,7 @@ export default function LessonCoveredTable({
                     >
                       <td>{expandedRows.has(idx) ? "▼" : "►"}</td>
                       <td>{idx + 1}</td>
-                      <td className="fw-bold">{student.student_name}</td>
+                      <td className="fw-bold">{student?.student_name}</td>
                       <td>
                         <span
                           className={`badge ${
@@ -307,17 +304,17 @@ export default function LessonCoveredTable({
                             : "Normal Education"}
                         </span>
                       </td>
-                      <td>{student.month}</td>
-                      <td>{student.year}</td>
+                      <td>{student?.month}</td>
+                      <td>{student?.year}</td>
                       <td>
-                        {student.beginning ? (
+                        {student?.beginning ? (
                           <span className="badge bg-success">Available</span>
                         ) : (
                           <span className="badge bg-secondary">Not Added</span>
                         )}
                       </td>
                       <td>
-                        {student.ending ? (
+                        {student?.ending ? (
                           <span className="badge bg-success">Available</span>
                         ) : (
                           <span className="badge bg-secondary">Not Added</span>
@@ -331,8 +328,8 @@ export default function LessonCoveredTable({
                               e.stopPropagation();
                               handleDelete(
                                 [
-                                  student.beginning?._id,
-                                  student.ending?._id,
+                                  student?.beginning?._id,
+                                  student?.ending?._id,
                                 ].filter(Boolean)
                               );
                             }}
@@ -352,13 +349,13 @@ export default function LessonCoveredTable({
                       </td>
                     </tr>
 
-                    {expandedRows.has(idx) && (
+                    {expandedRows?.has(idx) && (
                       <tr>
                         <td colSpan="9" className="p-0">
                           <div className="p-3 bg-light">
                             <h6 className="mb-3 text-primary">
-                              Progress Details for {student.student_name} -{" "}
-                              {student.month} {student.year} (
+                              Progress Details for {student?.student_name} -{" "}
+                              {student?.month} {student?.year} (
                               {educationType === "gift_muslim"
                                 ? "Gift For Muslim"
                                 : "Normal Education"}
@@ -373,24 +370,24 @@ export default function LessonCoveredTable({
                                     <h6 className="mb-0">Beginning of Month</h6>
                                   </div>
                                   <div className="card-body">
-                                    {student.beginning ? (
+                                    {student?.beginning ? (
                                       <>
                                         <p>
                                           <strong>Date:</strong>{" "}
                                           {new Date(
-                                            student.beginning.date
+                                            student?.beginning?.date
                                           ).toLocaleDateString()}
                                         </p>
                                         <p>
                                           <strong>Description:</strong>{" "}
-                                          {student.beginning.description ||
+                                          {student?.beginning?.description ||
                                             "No description"}
                                         </p>
 
                                         <div className="mt-3">
                                           <h6>Subjects:</h6>
                                           {renderSubjectsList(
-                                            student.beginning.lessons,
+                                            student?.beginning?.lessons,
                                             educationType
                                           )}
                                         </div>
@@ -411,24 +408,24 @@ export default function LessonCoveredTable({
                                     <h6 className="mb-0">End of Month</h6>
                                   </div>
                                   <div className="card-body">
-                                    {student.ending ? (
+                                    {student?.ending ? (
                                       <>
                                         <p>
                                           <strong>Date:</strong>{" "}
                                           {new Date(
-                                            student.ending.date
+                                            student?.ending?.date
                                           ).toLocaleDateString()}
                                         </p>
                                         <p>
                                           <strong>Description:</strong>{" "}
-                                          {student.ending.description ||
+                                          {student?.ending?.description ||
                                             "No description"}
                                         </p>
 
                                         <div className="mt-3">
                                           <h6>Subjects:</h6>
                                           {renderSubjectsList(
-                                            student.ending.lessons,
+                                            student?.ending?.lessons,
                                             educationType
                                           )}
                                         </div>

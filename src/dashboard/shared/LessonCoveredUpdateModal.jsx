@@ -63,24 +63,24 @@ export default function LessonCoveredUpdateModal({
 
   useEffect(() => {
     if (student) {
-      const beginningType = student.beginning?.type || "normal";
-      const endingType = student.ending?.type || "normal";
+      const beginningType = student?.beginning?.type || "normal";
+      const endingType = student?.ending?.type || "normal";
 
-      if (student.beginning) {
+      if (student?.beginning) {
         setBeginningData({
-          ...student.beginning,
+          ...student?.beginning,
           type: beginningType,
           lessons: {
-            qaidah_quran: student.beginning.lessons?.qaidah_quran || {
+            qaidah_quran: student?.beginning.lessons?.qaidah_quran || {
               selected: "",
               data: { level: "", lesson_name: "", page: "", line: "" },
             },
-            islamic_studies: student.beginning.lessons?.islamic_studies || {
+            islamic_studies: student?.beginning.lessons?.islamic_studies || {
               lesson_name: "",
               page: "",
               book: "",
             },
-            dua_surah: student.beginning.lessons?.dua_surah || {
+            dua_surah: student?.beginning?.lessons?.dua_surah || {
               lesson_name: "",
               book: "",
               level: "",
@@ -88,7 +88,7 @@ export default function LessonCoveredUpdateModal({
               target: "",
               dua_number: "",
             },
-            gift_for_muslim: student.beginning.lessons?.gift_for_muslim || {
+            gift_for_muslim: student?.beginning.lessons?.gift_for_muslim || {
               lesson_name: "",
               level: "",
               page: "",
@@ -103,16 +103,16 @@ export default function LessonCoveredUpdateModal({
           ...student.ending,
           type: endingType,
           lessons: {
-            qaidah_quran: student.ending.lessons?.qaidah_quran || {
+            qaidah_quran: student?.ending.lessons?.qaidah_quran || {
               selected: "",
               data: { level: "", lesson_name: "", page: "", line: "" },
             },
-            islamic_studies: student.ending.lessons?.islamic_studies || {
+            islamic_studies: student?.ending.lessons?.islamic_studies || {
               lesson_name: "",
               page: "",
               book: "",
             },
-            dua_surah: student.ending.lessons?.dua_surah || {
+            dua_surah: student?.ending.lessons?.dua_surah || {
               lesson_name: "",
               book: "",
               level: "",
@@ -120,7 +120,7 @@ export default function LessonCoveredUpdateModal({
               target: "",
               dua_number: "",
             },
-            gift_for_muslim: student.ending.lessons?.gift_for_muslim || {
+            gift_for_muslim: student?.ending.lessons?.gift_for_muslim || {
               lesson_name: "",
               level: "",
               page: "",
@@ -135,12 +135,12 @@ export default function LessonCoveredUpdateModal({
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      if (beginningData._id) {
+      if (beginningData?._id) {
         const data = await updateLessonCovered({
-          id: beginningData._id,
+          id: beginningData?._id,
           data: beginningData,
         }).unwrap();
-        if (data.modifiedCount) {
+        if (data?.modifiedCount) {
           Swal.fire({
             position: "center",
             icon: "success",
@@ -150,12 +150,12 @@ export default function LessonCoveredUpdateModal({
           });
         }
       }
-      if (endingData._id) {
+      if (endingData?._id) {
         const data = await updateLessonCovered({
-          id: endingData._id,
+          id: endingData?._id,
           data: endingData,
         }).unwrap();
-        if (data.modifiedCount) {
+        if (data?.modifiedCount) {
           Swal.fire({
             position: "center",
             icon: "success",
@@ -195,13 +195,13 @@ export default function LessonCoveredUpdateModal({
     setter({
       ...currentData,
       lessons: {
-        ...currentData.lessons,
+        ...currentData?.lessons,
         [subject]: {
-          ...currentData.lessons[subject],
+          ...currentData?.lessons[subject],
           ...(subField
             ? {
                 [field]: {
-                  ...currentData.lessons[subject][field],
+                  ...currentData?.lessons[subject][field],
                   [subField]: value,
                 },
               }
@@ -217,7 +217,7 @@ export default function LessonCoveredUpdateModal({
   };
 
   const renderQuranQaidahFields = (period, data) => {
-    const selectedOption = data.lessons.qaidah_quran.selected;
+    const selectedOption = data?.lessons?.qaidah_quran?.selected;
     const optionLabels = {
       quran: "Quran",
       qaidah: "Qaidah",
@@ -247,14 +247,14 @@ export default function LessonCoveredUpdateModal({
           </div>
 
           {/* Quran/Hifz Fields */}
-          {["quran", "hifz"].includes(selectedOption) && (
+          {["quran", "hifz"]?.includes(selectedOption) && (
             <div className="row g-3">
               <div className="col-md-4">
                 <label className="form-label">Para</label>
                 <input
                   type="text"
                   className="form-control"
-                  value={data.lessons.qaidah_quran.data?.para || ""}
+                  value={data?.lessons?.qaidah_quran?.data?.para || ""}
                   onChange={(e) =>
                     handleLessonChange(
                       period,
@@ -271,7 +271,7 @@ export default function LessonCoveredUpdateModal({
                 <input
                   type="text"
                   className="form-control"
-                  value={data.lessons.qaidah_quran.data?.page || ""}
+                  value={data?.lessons?.qaidah_quran?.data?.page || ""}
                   onChange={(e) =>
                     handleLessonChange(
                       period,
@@ -288,7 +288,7 @@ export default function LessonCoveredUpdateModal({
                 <input
                   type="text"
                   className="form-control"
-                  value={data.lessons.qaidah_quran.data?.line || ""}
+                  value={data?.lessons?.qaidah_quran?.data?.line || ""}
                   onChange={(e) =>
                     handleLessonChange(
                       period,
@@ -310,7 +310,7 @@ export default function LessonCoveredUpdateModal({
                 <label className="form-label">Level</label>
                 <select
                   className="form-control"
-                  value={data.lessons.qaidah_quran.data?.level || ""}
+                  value={data?.lessons?.qaidah_quran?.data?.level || ""}
                   onChange={(e) =>
                     handleLessonChange(
                       period,
@@ -340,7 +340,7 @@ export default function LessonCoveredUpdateModal({
                 <input
                   type="text"
                   className="form-control"
-                  value={data.lessons.qaidah_quran.data?.lesson_name || ""}
+                  value={data?.lessons?.qaidah_quran?.data?.lesson_name || ""}
                   onChange={(e) =>
                     handleLessonChange(
                       period,
@@ -357,7 +357,7 @@ export default function LessonCoveredUpdateModal({
                 <input
                   type="text"
                   className="form-control"
-                  value={data.lessons.qaidah_quran.data?.page || ""}
+                  value={data?.lessons?.qaidah_quran?.data?.page || ""}
                   onChange={(e) =>
                     handleLessonChange(
                       period,
@@ -374,7 +374,7 @@ export default function LessonCoveredUpdateModal({
                 <input
                   type="text"
                   className="form-control"
-                  value={data.lessons.qaidah_quran.data?.line || ""}
+                  value={data?.lessons?.qaidah_quran?.data?.line || ""}
                   onChange={(e) =>
                     handleLessonChange(
                       period,
@@ -405,7 +405,7 @@ export default function LessonCoveredUpdateModal({
               <label className="form-label">Level</label>
               <select
                 className="form-control"
-                value={data.lessons.gift_for_muslim?.level || ""}
+                value={data?.lessons?.gift_for_muslim?.level || ""}
                 onChange={(e) =>
                   handleLessonChange(
                     period,
@@ -428,7 +428,7 @@ export default function LessonCoveredUpdateModal({
               <input
                 type="number"
                 className="form-control"
-                value={data.lessons.gift_for_muslim?.page || ""}
+                value={data?.lessons?.gift_for_muslim?.page || ""}
                 onChange={(e) =>
                   handleLessonChange(
                     period,
@@ -444,7 +444,7 @@ export default function LessonCoveredUpdateModal({
               <input
                 type="number"
                 className="form-control"
-                value={data.lessons.gift_for_muslim?.target || ""}
+                value={data?.lessons?.gift_for_muslim?.target || ""}
                 onChange={(e) =>
                   handleLessonChange(
                     period,
@@ -460,7 +460,7 @@ export default function LessonCoveredUpdateModal({
               <input
                 type="text"
                 className="form-control"
-                value={data.lessons.gift_for_muslim?.lesson_name || ""}
+                value={data?.lessons?.gift_for_muslim?.lesson_name || ""}
                 onChange={(e) =>
                   handleLessonChange(
                     period,
@@ -491,7 +491,7 @@ export default function LessonCoveredUpdateModal({
                 <label className="form-label">Book</label>
                 <select
                   className="form-control"
-                  value={data.lessons.islamic_studies?.book || ""}
+                  value={data?.lessons?.islamic_studies?.book || ""}
                   onChange={(e) =>
                     handleLessonChange(
                       period,
@@ -517,7 +517,7 @@ export default function LessonCoveredUpdateModal({
                 <input
                   type="text"
                   className="form-control"
-                  value={data.lessons.islamic_studies?.page || ""}
+                  value={data?.lessons?.islamic_studies?.page || ""}
                   onChange={(e) =>
                     handleLessonChange(
                       period,
@@ -533,7 +533,7 @@ export default function LessonCoveredUpdateModal({
                 <input
                   type="text"
                   className="form-control"
-                  value={data.lessons.islamic_studies?.lesson_name || ""}
+                  value={data?.lessons?.islamic_studies?.lesson_name || ""}
                   onChange={(e) =>
                     handleLessonChange(
                       period,
@@ -559,7 +559,7 @@ export default function LessonCoveredUpdateModal({
                 <label className="form-label">Book</label>
                 <select
                   className="form-control"
-                  value={data.lessons.dua_surah?.book || ""}
+                  value={data?.lessons?.dua_surah?.book || ""}
                   onChange={(e) =>
                     handleLessonChange(
                       period,
@@ -578,7 +578,7 @@ export default function LessonCoveredUpdateModal({
                 <label className="form-label">Level</label>
                 <select
                   className="form-control"
-                  value={data.lessons.dua_surah?.level || ""}
+                  value={data?.lessons?.dua_surah?.level || ""}
                   onChange={(e) =>
                     handleLessonChange(
                       period,
@@ -601,7 +601,7 @@ export default function LessonCoveredUpdateModal({
                 <input
                   type="number"
                   className="form-control"
-                  value={data.lessons.dua_surah?.target || ""}
+                  value={data?.lessons?.dua_surah?.target || ""}
                   onChange={(e) =>
                     handleLessonChange(
                       period,
@@ -617,7 +617,7 @@ export default function LessonCoveredUpdateModal({
                 <input
                   type="number"
                   className="form-control"
-                  value={data.lessons.dua_surah?.dua_number || ""}
+                  value={data?.lessons?.dua_surah?.dua_number || ""}
                   onChange={(e) =>
                     handleLessonChange(
                       period,
@@ -633,7 +633,7 @@ export default function LessonCoveredUpdateModal({
                 <input
                   type="number"
                   className="form-control"
-                  value={data.lessons.dua_surah?.page || ""}
+                  value={data?.lessons?.dua_surah?.page || ""}
                   onChange={(e) =>
                     handleLessonChange(
                       period,
@@ -649,7 +649,7 @@ export default function LessonCoveredUpdateModal({
                 <input
                   type="text"
                   className="form-control"
-                  value={data.lessons.dua_surah?.lesson_name || ""}
+                  value={data?.lessons?.dua_surah?.lesson_name || ""}
                   onChange={(e) =>
                     handleLessonChange(
                       period,
@@ -702,13 +702,13 @@ export default function LessonCoveredUpdateModal({
                 style={{ maxHeight: "70vh", overflowY: "auto" }}
               >
                 {/* Beginning of Month */}
-                {beginningData._id && (
+                {beginningData?._id && (
                   <>
                     <h5 className="text-primary mb-3">Beginning of Month</h5>
                     <div className="mb-3">
                       <span className="badge bg-info">
                         Type:{" "}
-                        {beginningData.type === "gift_muslim"
+                        {beginningData?.type === "gift_muslim"
                           ? "Gift For Muslim"
                           : "Normal Education"}
                       </span>
@@ -716,21 +716,21 @@ export default function LessonCoveredUpdateModal({
 
                     {renderQuranQaidahFields("beginning", beginningData)}
 
-                    {beginningData.type === "gift_muslim"
+                    {beginningData?.type === "gift_muslim"
                       ? renderGiftForMuslimFields("beginning", beginningData)
                       : renderNormalEducationFields("beginning", beginningData)}
                   </>
                 )}
 
                 {/* Ending of Month */}
-                {endingData._id && (
+                {endingData?._id && (
                   <>
                     <hr className="my-4" />
                     <h5 className="text-primary mb-3">End of Month</h5>
                     <div className="mb-3">
                       <span className="badge bg-info">
                         Type:{" "}
-                        {endingData.type === "gift_muslim"
+                        {endingData?.type === "gift_muslim"
                           ? "Gift For Muslim"
                           : "Normal Education"}
                       </span>
@@ -738,7 +738,7 @@ export default function LessonCoveredUpdateModal({
 
                     {renderQuranQaidahFields("ending", endingData)}
 
-                    {endingData.type === "gift_muslim"
+                    {endingData?.type === "gift_muslim"
                       ? renderGiftForMuslimFields("ending", endingData)
                       : renderNormalEducationFields("ending", endingData)}
 
@@ -748,7 +748,7 @@ export default function LessonCoveredUpdateModal({
                       <textarea
                         className="form-control"
                         rows="2"
-                        value={endingData.description || ""}
+                        value={endingData?.description || ""}
                         onChange={(e) =>
                           handleDescriptionChange("ending", e.target.value)
                         }
