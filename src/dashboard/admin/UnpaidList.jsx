@@ -445,7 +445,8 @@ export default function UnpaidList() {
         key={`admin-pay-${selectedFeeData.familyId}-${selectedFeeData.feeId}`}
         familyId={selectedFeeData?.familyId}
         feeId={selectedFeeData?.feeId}
-        month={month}
+        month={String(month).padStart(2, "0")} // ✅ FIXED: Pad to 2 digits
+        year={parseInt(year)} // ✅ ADD THIS - convert to number
         adminShowModal={adminShowModal}
         handleAdminClose={handleAdminClose}
         refetch={refetch}

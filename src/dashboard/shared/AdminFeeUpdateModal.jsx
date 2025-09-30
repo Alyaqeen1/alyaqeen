@@ -146,7 +146,16 @@ export default function AdminFeeUpdateModal({
         : [...prev, studentId]
     );
   };
-
+  // Add this useEffect to debug the month value
+  useEffect(() => {
+    console.log("🔍 UnpaidList Month Debug:", {
+      rawMonth: month,
+      paddedMonth: String(month).padStart(2, "0"),
+      monthType: typeof month,
+      year: year,
+      yearType: typeof year,
+    });
+  }, [month, year]);
   const toggleAllStudents = () => {
     if (selectedStudents.length === unpaidStudents.length) {
       setSelectedStudents([]);
