@@ -364,6 +364,7 @@ export default function ParentDashboard({ family, refetch }) {
                             : "not available"}
                         </td>
                         <td className="border h6 text-center align-middle text-nowrap">
+                          £
                           {student?.monthly_fee
                             ? student?.monthly_fee
                             : "Not Assigned"}

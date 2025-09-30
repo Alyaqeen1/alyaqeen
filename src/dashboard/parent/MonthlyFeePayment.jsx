@@ -30,6 +30,14 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
     }
   );
 
+  console.log(fees);
+  const totalPaid = fees?.reduce((acc, fee) => {
+    if (fee.payments?.length > 0) {
+      return acc + fee.payments.reduce((sum, p) => sum + (p.amount || 0), 0);
+    }
+    return acc + (fee.amount || 0);
+  }, 0);
+
   const handleShow = (id) => {
     setShowModal(true);
   };
@@ -212,8 +220,15 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
               <tr key={fee._id}>
                 <td>{fee.students?.map((s) => s.name).join(", ")}</td>
                 <td className="text-capitalize">{fee.paymentType}</td>
-                {/* <td>{fee?.month || "_"}</td> */}
-                <td>{fee?.amount}</td>
+                {/* Show total payments for this fee document */}
+                <td>
+                  {fee.payments?.length > 0
+                    ? `£${fee.payments.reduce(
+                        (sum, p) => sum + (p.amount || 0),
+                        0
+                      )}`
+                    : "£0"}
+                </td>
                 <td>
                   <span
                     className={`py-1 px-2 rounded-3 text-white ${
@@ -234,15 +249,22 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
                         month: "short",
                         day: "numeric",
                       })
+                    : fee.payments?.length > 0
+                    ? new Date(
+                        fee.payments[fee.payments.length - 1].date
+                      ).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      })
                     : "N/A"}
                 </td>
                 <td>
                   <button
                     className="py-1 px-2 rounded-2 border border-black"
-                    // style={{ backgroundColor: "var(--border2)" }}
                     onClick={() => handleDataShow(fee?._id)}
                   >
-                    <FaEye></FaEye>
+                    <FaEye />
                   </button>
                 </td>
               </tr>

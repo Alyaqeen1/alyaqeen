@@ -107,10 +107,10 @@ export default function AddTeacher() {
     if (localLoading) return; // Extra guard
     setLocalLoading(true); // ⬅️ Block double click
 
-    if (!photoUrl || !cvUrl || !dbsUrl || !certificateUrl) {
-      setLocalLoading(false); // Reset loading state if files are missing
-      return setError("Please wait until all files are uploaded.");
-    }
+    // if (!photoUrl || !cvUrl || !dbsUrl || !certificateUrl) {
+    //   setLocalLoading(false); // Reset loading state if files are missing
+    //   return setError("Please wait until all files are uploaded.");
+    // }
 
     // Password Validation
     if (password !== confirm_password) {
@@ -364,7 +364,6 @@ export default function AddTeacher() {
             disabled={uploading} // Disable during upload
             onChange={(e) => handleFileChange(e, "photo")}
             className="form-control bg-light"
-            required
           />{" "}
         </div>
         {/* dbs */}
@@ -377,7 +376,6 @@ export default function AddTeacher() {
             onChange={(e) => handleFileChange(e, "dbs")}
             disabled={uploading} // Disable during upload
             className="form-control bg-light"
-            required
           />{" "}
         </div>
         {/* cv */}
@@ -390,7 +388,6 @@ export default function AddTeacher() {
             onChange={(e) => handleFileChange(e, "cv")}
             disabled={uploading} // Disable during upload
             className="form-control bg-light"
-            required
           />{" "}
         </div>
         {/* highest degree certificate */}
@@ -403,7 +400,6 @@ export default function AddTeacher() {
             onChange={(e) => handleFileChange(e, "certificate")}
             disabled={uploading} // Disable during upload
             className="form-control bg-light"
-            required
           />{" "}
         </div>
 
