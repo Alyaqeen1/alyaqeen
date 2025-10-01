@@ -17,9 +17,11 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
   const [selectedFeeId, setSelectedFeeId] = useState(null);
   const [showDataModal, setShowDataModal] = useState(false);
   const [createFeeData] = useCreateFeeDataMutation();
+
   if (!enrolledFamily || enrolledFamily.childrenDocs.length === 0) {
     return <p>No enrolled students found.</p>;
   }
+
   const { user } = useAuth();
   const axiosPublic = useAxiosPublic();
 
@@ -30,19 +32,18 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
     }
   );
 
-  console.log(fees);
-  const totalPaid = fees?.reduce((acc, fee) => {
-    if (fee.payments?.length > 0) {
-      return acc + fee.payments.reduce((sum, p) => sum + (p.amount || 0), 0);
-    }
-    return acc + (fee.amount || 0);
-  }, 0);
+  console.log("📋 Fees data from backend:", fees);
+
+  // ✅ Update total paid calculation for new data structure
+  const totalPaid = fees?.reduce((acc, fee) => acc + (fee.amount || 0), 0);
 
   const handleShow = (id) => {
     setShowModal(true);
   };
-  const handleDataShow = (id) => {
-    setSelectedFeeId(id);
+
+  const handleDataShow = (feeIds) => {
+    // Use the first fee ID for the modal, or all if needed
+    setSelectedFeeId(feeIds[0]);
     setShowDataModal(true);
   };
 
@@ -166,7 +167,6 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
             status: "pending",
             students: feeStudents,
           };
-          // const { data } = await axiosPublic.post("/fees", paymentData);
           const data = await createFeeData(paymentData).unwrap();
 
           if (data.insertedId) {
@@ -186,7 +186,7 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
         "Your Payment was successful. Please wait for admin review.",
         "success"
       );
-      setUnpaidRows([]); // ⬅️ clear unpaid rows
+      setUnpaidRows([]);
       refetch();
     }
   };
@@ -207,8 +207,7 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
           <thead className="table-light">
             <tr>
               <th>Students</th>
-              <th>Type</th>
-              {/* <th>Month</th> */}
+              <th>Month</th>
               <th>Amount(s)</th>
               <th>Status</th>
               <th>Paid Date</th>
@@ -216,25 +215,24 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
             </tr>
           </thead>
           <tbody>
-            {fees?.map((fee) => (
-              <tr key={fee._id}>
-                <td>{fee.students?.map((s) => s.name).join(", ")}</td>
-                <td className="text-capitalize">{fee.paymentType}</td>
-                {/* Show total payments for this fee document */}
-                <td>
-                  {fee.payments?.length > 0
-                    ? `£${fee.payments.reduce(
-                        (sum, p) => sum + (p.amount || 0),
-                        0
-                      )}`
-                    : "£0"}
-                </td>
+            {fees?.map((fee, index) => (
+              <tr key={`${fee.displayMonth}-${index}`}>
+                {/* ✅ Students column - shows all students who paid in this month */}
+                <td>{fee.students}</td>
+
+                {/* ✅ Month column - already formatted from backend */}
+                <td>{fee.displayMonth}</td>
+
+                {/* ✅ Amount column - total for all students in this month */}
+                <td>£{fee.amount}</td>
+
+                {/* ✅ Status column */}
                 <td>
                   <span
                     className={`py-1 px-2 rounded-3 text-white ${
-                      fee?.status === "paid"
+                      fee.status === "paid"
                         ? "bg-success"
-                        : fee?.status === "pending"
+                        : fee.status === "pending"
                         ? "bg-warning"
                         : "bg-danger"
                     }`}
@@ -242,27 +240,24 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
                     {fee.status}
                   </span>
                 </td>
+
+                {/* ✅ Paid Date column */}
                 <td>
-                  {fee.date
-                    ? new Date(fee.date).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      })
-                    : fee.payments?.length > 0
-                    ? new Date(
-                        fee.payments[fee.payments.length - 1].date
-                      ).toLocaleDateString("en-US", {
+                  {fee.paidDate
+                    ? new Date(fee.paidDate).toLocaleDateString("en-US", {
                         year: "numeric",
                         month: "short",
                         day: "numeric",
                       })
                     : "N/A"}
                 </td>
+
+                {/* ✅ Action column - use the first fee ID for the modal */}
                 <td>
                   <button
                     className="py-1 px-2 rounded-2 border border-black"
-                    onClick={() => handleDataShow(fee?._id)}
+                    onClick={() => handleDataShow(fee.originalFeeIds)}
+                    title="View Details"
                   >
                     <FaEye />
                   </button>
@@ -272,7 +267,8 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
           </tbody>
         </table>
       </div>
-      {/* Unpaid Fee Table */}
+
+      {/* Rest of your component remains the same */}
       {unpaidRows.length > 0 && (
         <>
           <h4 className="text-danger mt-5">Pending Monthly Fees</h4>
@@ -286,7 +282,6 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
               <thead className="table-warning">
                 <tr>
                   <th>Student</th>
-
                   <th>Month</th>
                   <th>Discount</th>
                   <th>Amount</th>
@@ -300,7 +295,6 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
                     className="table-warning"
                   >
                     <td>{row?.studentNames}</td>
-
                     <td>{row?.month}</td>
                     <td>
                       {enrolledFamily?.discount ? enrolledFamily?.discount : 0}%
@@ -317,7 +311,6 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
 
       {unpaidRows?.length > 0 && (
         <>
-          {" "}
           <h3 className="fs-1 fw-bold text-center my-4">
             Action Required For Monthly Fee
           </h3>
