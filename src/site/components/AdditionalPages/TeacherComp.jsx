@@ -108,10 +108,10 @@ const TeacherComp = () => {
     if (localLoading) return; // Extra guard
     setLocalLoading(true); // ⬅️ Block double click
 
-    if (!photoUrl || !cvUrl || !dbsUrl || !certificateUrl) {
-      setLocalLoading(false); // Reset loading state if files are missing
-      return setError("Please wait until all files are uploaded.");
-    }
+    // if (!photoUrl || !cvUrl || !dbsUrl || !certificateUrl) {
+    //   setLocalLoading(false); // Reset loading state if files are missing
+    //   return setError("Please wait until all files are uploaded.");
+    // }
 
     // Password Validation
     if (password !== confirm_password) {
@@ -461,7 +461,6 @@ const TeacherComp = () => {
                           disabled={uploading} // Disable during upload
                           onChange={(e) => handleFileChange(e, "photo")}
                           className="form-control"
-                          required
                         />
                       </div>
                     </div>
@@ -481,7 +480,6 @@ const TeacherComp = () => {
                           onChange={(e) => handleFileChange(e, "dbs")}
                           disabled={uploading} // Disable during upload
                           className="form-control"
-                          required
                         />
                       </div>
                     </div>
@@ -501,7 +499,6 @@ const TeacherComp = () => {
                           disabled={uploading} // Disable during upload
                           onChange={(e) => handleFileChange(e, "cv")}
                           className="form-control"
-                          required
                         />
                       </div>
                     </div>
@@ -521,7 +518,6 @@ const TeacherComp = () => {
                           disabled={uploading} // Disable during upload
                           onChange={(e) => handleFileChange(e, "certificate")}
                           className="form-control"
-                          required
                         />
                       </div>
                     </div>

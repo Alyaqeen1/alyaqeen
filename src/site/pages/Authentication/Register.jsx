@@ -12,7 +12,7 @@ export default function Register() {
   return (
     <div className="pricing-wrapper">
       <CmnBanner title="Apply Now"></CmnBanner>
-      {/* <ul
+      <ul
         className="nav gap-2 my-5 flex justify-content-center align-items-center"
         role="tablist"
       >
@@ -48,7 +48,7 @@ export default function Register() {
             Teacher
           </a>
         </li>
-      </ul> */}
+      </ul>
       <div
         id="student"
         className={`c-tab-single ${activeTabIndex === 0 ? "active-tab" : ""}`}
