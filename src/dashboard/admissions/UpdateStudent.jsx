@@ -45,6 +45,7 @@ export default function UpdateStudent() {
     academic,
     medical,
     startingDate,
+    monthly_fee,
   } = student || {};
   const { doctorName, surgeryAddress, surgeryNumber, allergies, condition } =
     medical || {};
@@ -113,11 +114,11 @@ export default function UpdateStudent() {
     const medical_condition = form.medical_condition.value;
     const student_class = form.student_class.value;
     const starting_date = form.starting_date.value;
-
-    const monthly_fee =
-      session === "weekend"
-        ? selectedDepartment?.weekend_fee
-        : selectedDepartment?.weekdays_fee;
+    const monthly_fee = Number(form.monthly_fee.value);
+    // const monthly_fee =
+    //   session === "weekend"
+    //     ? selectedDepartment?.weekend_fee
+    //     : selectedDepartment?.weekdays_fee;
     const today = new Date().setHours(0, 0, 0, 0); // current date at midnight
     const selectedDate = new Date(starting_date).setHours(0, 0, 0, 0); // user date at midnight
 
@@ -820,7 +821,7 @@ export default function UpdateStudent() {
           />
         </div>
         {/* starting date */}
-        <div className="col-md-12">
+        <div className="col-md-6">
           <label className="form-label">Expected Starting Date</label>
           <input
             style={{ borderColor: "var(--border2)" }}
@@ -828,6 +829,16 @@ export default function UpdateStudent() {
             className="form-control bg-light"
             type="date"
             name="starting_date"
+          />
+        </div>
+        <div className="col-md-6">
+          <label className="form-label">Monthly Fee</label>
+          <input
+            style={{ borderColor: "var(--border2)" }}
+            defaultValue={monthly_fee}
+            className="form-control bg-light"
+            type="number"
+            name="monthly_fee"
           />
         </div>
 
