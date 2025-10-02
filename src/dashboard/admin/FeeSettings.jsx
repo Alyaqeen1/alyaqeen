@@ -200,24 +200,24 @@ export default function FeeSettings() {
 
       if (!studentPayment) continue;
 
-      // Handle ADMISSION payments (payments array in student)
-      if (payment.paymentType === "admission" && studentPayment.payments) {
-        const admissionPayment = studentPayment.payments.find(
-          (p) =>
-            new Date(p.date).getMonth() + 1 === month &&
-            new Date(p.date).getFullYear() === selectedYear
-        );
+      // ✅ FIXED: Handle ADMISSION payments - check joining month/year
+      if (payment.paymentType === "admission") {
+        const admissionJoiningMonth = studentPayment.joiningMonth
+          ?.toString()
+          .padStart(2, "0");
+        const admissionJoiningYear = studentPayment.joiningYear?.toString();
 
-        if (admissionPayment) {
-          const admissionFee = studentPayment.admissionFee || 0;
-          const monthlyFee =
-            studentPayment.discountedFee || studentPayment.monthlyFee || 0;
-          const totalExpected = admissionFee + monthlyFee;
-          const totalPaid = studentPayment.subtotal || 0;
-
-          if (totalPaid >= totalExpected) return "paid";
-          if (totalPaid > 0 && totalPaid < totalExpected) return "partial";
-          return "unpaid";
+        // Check if this admission payment is for the target month/year
+        if (
+          admissionJoiningMonth === targetMonth &&
+          admissionJoiningYear === targetYear
+        ) {
+          // ✅ For admission payments, always return "paid" since we set status to "paid" and remaining to 0
+          if (payment.status === "paid") {
+            return "paid";
+          }
+          // If for some reason it's partial, still show as paid (per admin requirement)
+          return "paid";
         }
       }
 

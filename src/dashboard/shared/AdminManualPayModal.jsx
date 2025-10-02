@@ -41,6 +41,19 @@ export default function AdminManualPayModal({
   const [isProcessing, setIsProcessing] = useState(false);
   const [selectedStudents, setSelectedStudents] = useState([]);
 
+  // ✅ Get current month as string (e.g., "09" for September)
+  const currentMonth = useMemo(() => {
+    return (new Date().getMonth() + 1).toString().padStart(2, "0");
+  }, []);
+  useEffect(() => {
+    if (feeType === "monthly") {
+      setFeeMonth(currentMonth);
+      setPayNow(50);
+    } else {
+      setFeeMonth("");
+      setPayNow("");
+    }
+  }, [feeType, currentMonth]);
   // derived list of enrolled student ids for select-all and comparisons
   // derived list of enrolled AND approved student ids for select-all and comparisons
   const enrolledStudentIds = useMemo(() => {
@@ -265,14 +278,19 @@ export default function AdminManualPayModal({
             ? toTwo(baseFee - (baseFee * discountPercent) / 100)
             : toTwo(baseFee);
 
+          // ✅ FIXED: Use student's actual starting date
+          const startingDate = new Date(student.startingDate);
+          const joiningMonth = startingDate.getMonth() + 1;
+          const joiningYear = startingDate.getFullYear();
+
           return {
             studentId: student._id,
             name: student.name,
             admissionFee: admissionFeePerStudent,
             monthlyFee: toTwo(baseFee),
             discountedFee: toTwo(discountedFee),
-            joiningMonth: new Date().getMonth() + 1,
-            joiningYear: new Date().getFullYear(),
+            joiningMonth: joiningMonth, // ✅ Use actual joining month
+            joiningYear: joiningYear, // ✅ Use actual joining year
           };
         });
 
@@ -368,9 +386,9 @@ export default function AdminManualPayModal({
             subtotal: toTwo(student.subtotal),
           })),
           expectedTotal: toTwo(expectedTotal),
-          remaining: toTwo(Math.max(0, expectedTotal - totalPayNow)),
+          remaining: 0,
           paymentType: feeType,
-          status: totalPayNow >= expectedTotal ? "paid" : "partial",
+          status: "paid",
           payments: [
             {
               amount: toTwo(totalPayNow),
