@@ -3,6 +3,7 @@ import { useGetStudentsByIdQuery } from "../../redux/features/students/studentsA
 import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 import AttendanceChart from "./AttendanceChart";
 import MeritChart from "./MeritChart";
+import FeeChart from "./FeeChart";
 
 export default function ChildSection({ studentId }) {
   const { data: student, isLoading } = useGetStudentsByIdQuery(studentId, {
@@ -48,6 +49,34 @@ export default function ChildSection({ studentId }) {
       </div>
 
       <div className="child-content">
+        {/* Attendance Card */}
+        <div className="info-card">
+          <div className="card-header">
+            <h3>📅 Attendance Summary</h3>
+          </div>
+          <div className="card-content">
+            <AttendanceChart studentId={studentId}></AttendanceChart>
+          </div>
+        </div>
+        <div className="info-card merit-card-double">
+          <div className="card-header">
+            <h3>📅 Fee Summary</h3>
+          </div>
+          <div className="card-content">
+            <FeeChart studentId={studentId}></FeeChart>
+          </div>
+        </div>
+
+        {/* Merit Card - Double Width */}
+        <div className="info-card merit-card-triple">
+          <div className="card-header">
+            <h3>⭐ Merit & Performance</h3>
+          </div>
+          <div className="card-content">
+            <MeritChart studentId={studentId}></MeritChart>
+          </div>
+        </div>
+
         {/* Row 1: 3 cards */}
         <div className="info-card">
           <div className="card-header">
@@ -248,26 +277,6 @@ export default function ChildSection({ studentId }) {
                 <p>{student.medical?.surgeryAddress || "Not provided"}</p>
               </div>
             </div>
-          </div>
-        </div>
-
-        {/* Attendance Card */}
-        <div className="info-card">
-          <div className="card-header">
-            <h3>📅 Attendance Summary</h3>
-          </div>
-          <div className="card-content">
-            <AttendanceChart studentId={studentId}></AttendanceChart>
-          </div>
-        </div>
-
-        {/* Merit Card - Double Width */}
-        <div className="info-card merit-card-double">
-          <div className="card-header">
-            <h3>⭐ Merit & Performance</h3>
-          </div>
-          <div className="card-content">
-            <MeritChart studentId={studentId}></MeritChart>
           </div>
         </div>
       </div>

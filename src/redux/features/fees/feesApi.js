@@ -18,6 +18,10 @@ export const feesApi = apiSlice.injectEndpoints({
       query: (id) => `/fees/by-id/${id}`,
       providesTags: ["Fee"],
     }),
+    getFeesByStudentId: builder.query({
+      query: (id) => `/fees/by-student-id/${id}`,
+      providesTags: ["Fee"],
+    }),
     getFeesByFeeId: builder.query({
       query: (id) => `/fees/by-fee-id/${id}`,
       providesTags: ["Fee"],
@@ -84,6 +88,7 @@ export const {
   useGetFeesSummaryQuery,
   useGetFeesByDateQuery,
   useGetFeesByIdQuery,
+  useGetFeesByStudentIdQuery,
   useGetFeesByFeeIdQuery,
   useUpdateFeeDataMutation,
   useUpdateFeeMutation,

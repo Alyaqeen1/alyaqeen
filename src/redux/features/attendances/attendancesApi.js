@@ -20,7 +20,13 @@ export const attendancesApi = apiSlice.injectEndpoints({
       providesTags: ["Attendance"],
     }),
     getAttendanceByStudentSummary: builder.query({
-      query: (studentId) => `/attendances/student/${studentId}/summary`,
+      query: ({ studentId, month, year }) => {
+        const params = new URLSearchParams();
+        if (month) params.append("month", month);
+        if (year) params.append("year", year);
+
+        return `/attendances/student/${studentId}/summary?${params.toString()}`;
+      },
       providesTags: ["Attendance"],
     }),
     addAttendance: builder.mutation({
@@ -44,7 +50,7 @@ export const attendancesApi = apiSlice.injectEndpoints({
     }),
     timeoutAttendance: builder.mutation({
       query: (id) => ({
-        url: `/attendances/${id}/timeout`, // 👈 route matches backend
+        url: `/attendances/${id}/timeout`,
         method: "PATCH",
       }),
       invalidatesTags: ["Attendance"],
@@ -54,7 +60,7 @@ export const attendancesApi = apiSlice.injectEndpoints({
         url: `/attendances/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["Attendance"], // 🔥 Important — invalidate Family when a student's status changes
+      invalidatesTags: ["Attendance"],
     }),
   }),
 });
@@ -69,4 +75,4 @@ export const {
   useUpdateAttendanceMutation,
   useTimeoutAttendanceMutation,
   useDeleteAttendanceMutation,
-} = apiSlice;
+} = attendancesApi;
