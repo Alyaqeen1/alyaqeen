@@ -2,8 +2,8 @@ import Swal from "sweetalert2";
 import {
   useCreateFeeDataMutation,
   useGetFeesByIdQuery,
+  useGetUnpaidFeesQuery,
 } from "../../redux/features/fees/feesApi";
-import { getUnpaidFees } from "../../utils/getUnpaidFees";
 import useAuth from "../../hooks/useAuth";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 import toast from "react-hot-toast";
@@ -11,12 +11,19 @@ import { useEffect, useState } from "react";
 import MonthlyFeeModal from "../shared/MonthlyFeeModal";
 import { FaEye } from "react-icons/fa6";
 import ShowFeeDataModal from "../shared/ShowFeeDataModal";
+import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 
 export default function MonthlyFeePayment({ enrolledFamily }) {
   const [showModal, setShowModal] = useState(false);
   const [selectedFeeId, setSelectedFeeId] = useState(null);
   const [showDataModal, setShowDataModal] = useState(false);
   const [createFeeData] = useCreateFeeDataMutation();
+  const { data: unpaidFees, isLoading } = useGetUnpaidFeesQuery(
+    enrolledFamily?._id,
+    {
+      skip: !enrolledFamily?._id,
+    }
+  );
 
   if (!enrolledFamily || enrolledFamily.childrenDocs.length === 0) {
     return <p>No enrolled students found.</p>;
@@ -25,12 +32,13 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
   const { user } = useAuth();
   const axiosPublic = useAxiosPublic();
 
-  const { data: fees = [], refetch } = useGetFeesByIdQuery(
-    enrolledFamily?._id,
-    {
-      skip: !enrolledFamily?._id,
-    }
-  );
+  const {
+    data: fees = [],
+    refetch,
+    isLoading: isLoadingFee,
+  } = useGetFeesByIdQuery(enrolledFamily?._id, {
+    skip: !enrolledFamily?._id,
+  });
 
   console.log("📋 Fees data from backend:", fees);
 
@@ -51,19 +59,10 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
   const handleClose = () => setShowModal(false);
   const students = enrolledFamily?.childrenDocs;
 
-  const [unpaidRows, setUnpaidRows] = useState([]);
+  // const [unpaidRows, setUnpaidRows] = useState([]);
 
-  useEffect(() => {
-    if (students && fees) {
-      const calculatedUnpaid = getUnpaidFees({
-        students,
-        fees,
-        feeChoice: enrolledFamily?.feeChoice,
-        discount: enrolledFamily?.discount,
-      });
-      setUnpaidRows(calculatedUnpaid);
-    }
-  }, [students, fees, enrolledFamily?.feeChoice, enrolledFamily?.discount]);
+  // Instead of state + getUnpaidFees util, directly use API response
+  const unpaidRows = unpaidFees?.unpaidMonths || [];
 
   const studentMap = {};
 
@@ -186,10 +185,13 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
         "Your Payment was successful. Please wait for admin review.",
         "success"
       );
-      setUnpaidRows([]);
       refetch();
     }
   };
+
+  if (isLoading || isLoadingFee) {
+    return <LoadingSpinnerDash></LoadingSpinnerDash>;
+  }
 
   return (
     <div className="pt-5">
@@ -275,9 +277,7 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
           <div className="table-responsive mb-3">
             <table
               className="table mb-0 table-bordered table-hover"
-              style={{
-                minWidth: 700,
-              }}
+              style={{ minWidth: 700 }}
             >
               <thead className="table-warning">
                 <tr>
@@ -289,20 +289,27 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
                 </tr>
               </thead>
               <tbody>
-                {unpaidRows.map((row, index) => (
-                  <tr
-                    key={`unpaid-${row.studentId}-${row.month}-${index}`}
-                    className="table-warning"
-                  >
-                    <td>{row?.studentNames}</td>
-                    <td>{row?.month}</td>
-                    <td>
-                      {enrolledFamily?.discount ? enrolledFamily?.discount : 0}%
-                    </td>
-                    <td>{row?.totalAmount}</td>
-                    <td className="text-danger">Unpaid</td>
-                  </tr>
-                ))}
+                {unpaidRows.map((row, index) =>
+                  row.students.map((stu, sIndex) =>
+                    stu.monthsUnpaid.map((m, mIndex) => (
+                      <tr
+                        key={`unpaid-${stu.studentId}-${m.month}-${index}-${sIndex}-${mIndex}`}
+                        className="table-warning"
+                      >
+                        <td>{stu.name}</td>
+                        <td>{m.month}</td>
+                        <td>
+                          {enrolledFamily?.discount
+                            ? enrolledFamily.discount
+                            : 0}
+                          %
+                        </td>
+                        <td>£{m.discountedFee}</td>
+                        <td className="text-danger">Unpaid</td>
+                      </tr>
+                    ))
+                  )
+                )}
               </tbody>
             </table>
           </div>

@@ -34,6 +34,10 @@ export const feesApi = apiSlice.injectEndpoints({
       query: (id) => `/fees/with-payments`,
       providesTags: ["Fee"],
     }),
+    getUnpaidFees: builder.query({
+      query: (id) => `/fees/unpaid-months/${id}`,
+      providesTags: ["Fee"],
+    }),
     updateFeeData: builder.mutation({
       query: ({ id, data }) => ({
         url: `/fees/update-status-mode/${id}`,
@@ -88,6 +92,7 @@ export const {
   useGetFeesSummaryQuery,
   useGetFeesByDateQuery,
   useGetFeesByIdQuery,
+  useGetUnpaidFeesQuery,
   useGetFeesByStudentIdQuery,
   useGetFeesByFeeIdQuery,
   useUpdateFeeDataMutation,
