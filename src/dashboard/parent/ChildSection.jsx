@@ -60,7 +60,7 @@ export default function ChildSection({ studentId }) {
         </div>
         <div className="info-card merit-card-double">
           <div className="card-header">
-            <h3>📅 Fee Summary</h3>
+            <h3>💰 Fee Summary</h3>
           </div>
           <div className="card-content">
             <FeeChart studentId={studentId}></FeeChart>
