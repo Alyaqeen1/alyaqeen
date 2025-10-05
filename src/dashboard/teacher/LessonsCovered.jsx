@@ -13,55 +13,6 @@ import LessonCoveredTable from "./LessonCoveredTable";
 import ReportSubmitModal from "./ReportSubmitModal";
 import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 
-// {
-//   student_id: "...",
-//   teacher_id: "...",
-//   class_id: "...",
-//   subject_id: "...",
-//   department_id: "...",
-
-//   month: "September",
-//   year: "2025",
-//   time_of_month: "beginning" | "ending",
-//   type: "normal" | "gift_muslim",
-//   book_name: "qaidah_quran" | "islamic_studies" | "dua_surah",
-//   quran_qaidah_option: "quran" | "qaidah" | "tajweed" | "hifz", // when applicable
-
-//   lessons: [
-//     {
-//       // For Quran/Hifz
-//       para: 1,
-//       page: 5,
-//       line: 7,
-//     },
-//     {
-//       // For Qaidah/Tajweed
-//       level: "level3",
-//       lesson_name: 2,
-//       page: 4,
-//       line: 10
-//     },
-//     {
-//       // For Islamic Studies
-//       lesson: 10,
-//       page: 45
-//     },
-//     {
-//       // For Dua/Surah
-//       lesson: 3,
-//       book: "book1",
-//       level: "level2",
-//       page: 12,
-//       target: 15
-//     }
-//   ],
-
-//   description: "Optional remarks by teacher",
-//   monthly_publish: false,
-//   yearly_publish: false,
-//   date: ISODate()
-// }
-
 export default function LessonsCovered() {
   const { user } = useAuth();
 

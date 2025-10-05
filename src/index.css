@@ -535,16 +535,18 @@ button:focus {
 }
 
 /* Responsive Design */
+/* 0 – 1200px → single column layout */
 @media (max-width: 1200px) {
   .child-content {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr; /* ✅ one column only */
   }
 
   .merit-card-double {
-    grid-column: span 2;
+    grid-column: span 1; /* ✅ make sure no overflow */
   }
+
   .merit-card-triple {
-    grid-column: span 3;
+    grid-column: span 1;
   }
 }
 

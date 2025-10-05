@@ -198,77 +198,82 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
       <h3 className="fs-2 fw-bold text-center">Fee Summary</h3>
 
       {/* Paid History Table */}
-      <h4 className="text-success">Paid Fee History</h4>
-      <div className="table-responsive mb-3">
-        <table
-          className="table mb-0 table-bordered"
-          style={{
-            minWidth: 700,
-          }}
-        >
-          <thead className="table-light">
-            <tr>
-              <th>Students</th>
-              <th>Month</th>
-              <th>Amount(s)</th>
-              <th>Status</th>
-              <th>Paid Date</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {fees?.map((fee, index) => (
-              <tr key={`${fee.displayMonth}-${index}`}>
-                {/* ✅ Students column - shows all students who paid in this month */}
-                <td>{fee.students}</td>
 
-                {/* ✅ Month column - already formatted from backend */}
-                <td>{fee.displayMonth}</td>
+      {fees?.length > 0 && (
+        <>
+          <h4 className="text-success">Paid Fee History</h4>
+          <div className="table-responsive mb-3">
+            <table
+              className="table mb-0 table-bordered"
+              style={{
+                minWidth: 700,
+              }}
+            >
+              <thead className="table-light">
+                <tr>
+                  <th>Students</th>
+                  <th>Month</th>
+                  <th>Amount(s)</th>
+                  <th>Status</th>
+                  <th>Paid Date</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {fees?.map((fee, index) => (
+                  <tr key={`${fee.displayMonth}-${index}`}>
+                    {/* ✅ Students column - shows all students who paid in this month */}
+                    <td>{fee.students}</td>
 
-                {/* ✅ Amount column - total for all students in this month */}
-                <td>£{fee.amount}</td>
+                    {/* ✅ Month column - already formatted from backend */}
+                    <td>{fee.displayMonth}</td>
 
-                {/* ✅ Status column */}
-                <td>
-                  <span
-                    className={`py-1 px-2 rounded-3 text-white ${
-                      fee.status === "paid"
-                        ? "bg-success"
-                        : fee.status === "pending"
-                        ? "bg-warning"
-                        : "bg-danger"
-                    }`}
-                  >
-                    {fee.status}
-                  </span>
-                </td>
+                    {/* ✅ Amount column - total for all students in this month */}
+                    <td>£{fee.amount}</td>
 
-                {/* ✅ Paid Date column */}
-                <td>
-                  {fee.paidDate
-                    ? new Date(fee.paidDate).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      })
-                    : "N/A"}
-                </td>
+                    {/* ✅ Status column */}
+                    <td>
+                      <span
+                        className={`py-1 px-2 rounded-3 text-white ${
+                          fee.status === "paid"
+                            ? "bg-success"
+                            : fee.status === "pending"
+                            ? "bg-warning"
+                            : "bg-danger"
+                        }`}
+                      >
+                        {fee.status}
+                      </span>
+                    </td>
 
-                {/* ✅ Action column - use the first fee ID for the modal */}
-                <td>
-                  <button
-                    className="py-1 px-2 rounded-2 border border-black"
-                    onClick={() => handleDataShow(fee.originalFeeIds)}
-                    title="View Details"
-                  >
-                    <FaEye />
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+                    {/* ✅ Paid Date column */}
+                    <td>
+                      {fee.paidDate
+                        ? new Date(fee.paidDate).toLocaleDateString("en-US", {
+                            year: "numeric",
+                            month: "short",
+                            day: "numeric",
+                          })
+                        : "N/A"}
+                    </td>
+
+                    {/* ✅ Action column - use the first fee ID for the modal */}
+                    <td>
+                      <button
+                        className="py-1 px-2 rounded-2 border border-black"
+                        onClick={() => handleDataShow(fee.originalFeeIds)}
+                        title="View Details"
+                      >
+                        <FaEye />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
+      )}
 
       {/* Rest of your component remains the same */}
       {unpaidRows.length > 0 && (
@@ -281,35 +286,54 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
             >
               <thead className="table-warning">
                 <tr>
-                  <th>Student</th>
+                  <th>Students</th>
                   <th>Month</th>
                   <th>Discount</th>
                   <th>Amount</th>
                   <th>Status</th>
+                  {/* <th>Action</th> */}
                 </tr>
               </thead>
+
               <tbody>
-                {unpaidRows.map((row, index) =>
-                  row.students.map((stu, sIndex) =>
-                    stu.monthsUnpaid.map((m, mIndex) => (
-                      <tr
-                        key={`unpaid-${stu.studentId}-${m.month}-${index}-${sIndex}-${mIndex}`}
-                        className="table-warning"
+                {unpaidRows.map((row, index) => (
+                  <tr
+                    key={`unpaid-${row.month}-${index}`}
+                    className="table-warning"
+                  >
+                    {/* All siblings' names for this month */}
+                    <td>{row.studentNames}</td>
+
+                    {/* Month name */}
+                    <td>
+                      {new Date(row.month + "-01").toLocaleString("default", {
+                        month: "long",
+                        year: "numeric",
+                      })}
+                    </td>
+
+                    {/* Discount if available */}
+                    <td>
+                      {enrolledFamily?.discount ? enrolledFamily.discount : 0}%
+                    </td>
+
+                    {/* Combined total for that month */}
+                    <td>£{row.totalAmount}</td>
+
+                    {/* Status */}
+                    <td className="text-danger">Unpaid</td>
+                    {/* <td>
+                      {" "}
+                      <button
+                        onClick={handleShow}
+                        className="text-white py-1 px-2 rounded-2"
+                        style={{ backgroundColor: "var(--border2)" }}
                       >
-                        <td>{stu.name}</td>
-                        <td>{m.month}</td>
-                        <td>
-                          {enrolledFamily?.discount
-                            ? enrolledFamily.discount
-                            : 0}
-                          %
-                        </td>
-                        <td>£{m.discountedFee}</td>
-                        <td className="text-danger">Unpaid</td>
-                      </tr>
-                    ))
-                  )
-                )}
+                        Pay Now
+                      </button>
+                    </td> */}
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>

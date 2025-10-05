@@ -4,6 +4,7 @@ import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 import AttendanceChart from "./AttendanceChart";
 import MeritChart from "./MeritChart";
 import FeeChart from "./FeeChart";
+import sessionMap from "../../utils/sessionMap";
 
 export default function ChildSection({ studentId }) {
   const { data: student, isLoading } = useGetStudentsByIdQuery(studentId, {
@@ -102,7 +103,7 @@ export default function ChildSection({ studentId }) {
               </div>
               <div className="info-item">
                 <label>Time</label>
-                <p>{student.academic?.time || "Not Provided"}</p>
+                <p> {sessionMap[student.academic?.time] || "Not Provided"}</p>
               </div>
             </div>
           </div>
