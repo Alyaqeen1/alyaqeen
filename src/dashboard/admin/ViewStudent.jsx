@@ -74,10 +74,10 @@ export default function ViewStudent() {
               </div>
               <h5 className="card-title">{name}</h5>
               <p className="mb-1">
-                <strong>School Year:</strong> {school_year || "-"}
+                <strong>Email:</strong> {email || "-"}
               </p>
               <p className="mb-1">
-                <strong>Email:</strong> {email || "-"}
+                <strong>School Year:</strong> {school_year || "-"}
               </p>
               <p className="mb-1">
                 <strong>Language:</strong> {language || "-"}
