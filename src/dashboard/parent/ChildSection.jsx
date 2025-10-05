@@ -216,8 +216,8 @@ export default function ChildSection({ studentId }) {
                 <p>{student.medical?.allergies || "None reported"}</p>
               </div>
               <div className="info-item full-width">
-                <label>Emergency Contact</label>
-                <p>{student.emergency_number || "Not Provided"}</p>
+                <label>Surgery Address</label>
+                <p>{student.medical?.surgeryAddress || "Not provided"}</p>
               </div>
               <div className="info-item">
                 <label>Doctor</label>
@@ -273,8 +273,8 @@ export default function ChildSection({ studentId }) {
                 </p>
               </div>
               <div className="info-item">
-                <label>Surgery Address</label>
-                <p>{student.medical?.surgeryAddress || "Not provided"}</p>
+                <label>Emergency Contact</label>
+                <p>{student.emergency_number || "Not Provided"}</p>
               </div>
             </div>
           </div>
