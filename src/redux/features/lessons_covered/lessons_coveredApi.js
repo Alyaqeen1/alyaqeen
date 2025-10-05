@@ -30,6 +30,26 @@ export const lessons_coveredApi = apiSlice.injectEndpoints({
       },
       providesTags: ["LessonsCovered"],
     }),
+    // In your lessons_coveredApi.js
+    getPreviousLessonsCoveredData: builder.query({
+      query: ({ student_id, month, year, _forceKey }) => {
+        const queryParams = new URLSearchParams();
+        if (month) queryParams.set("month", month);
+        if (year) queryParams.set("year", year);
+        return {
+          url: `/lessons-covered/previous-month-ending/${student_id}?${queryParams.toString()}`,
+        };
+      },
+      providesTags: (result, error, { student_id, month, year, _forceKey }) => [
+        {
+          type: "LessonsCovered",
+          id: `previous-${student_id}-${month}-${year}-${_forceKey}`,
+        },
+      ],
+      refetchOnMountOrArgChange: true,
+      keepUnusedDataFor: 0,
+    }),
+
     getStudentLessonsCoveredMonthlySummary: builder.query({
       query: ({ student_ids = [], month, year }) => {
         const query = new URLSearchParams();
@@ -127,6 +147,7 @@ export const {
   useGetLessonsCoveredMonthlySummaryQuery,
   useGetTeacherLessonsCoveredMonthlySummaryQuery,
   useGetStudentLessonsCoveredMonthlySummaryQuery,
+  useGetPreviousLessonsCoveredDataQuery,
   useGetLessonsCoveredYearlySummaryQuery,
   useGetTeacherLessonsCoveredYearlySummaryQuery,
   useGetStudentLessonsCoveredYearlySummaryQuery,

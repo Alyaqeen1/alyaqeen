@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import useAuth from "../../hooks/useAuth";
-import { useAddLessonCoveredMutation } from "../../redux/features/lessons_covered/lessons_coveredApi";
+import {
+  useAddLessonCoveredMutation,
+  useGetPreviousLessonsCoveredDataQuery,
+} from "../../redux/features/lessons_covered/lessons_coveredApi";
 import { useGetStudentsByIdQuery } from "../../redux/features/students/studentsApi";
 import QuranQaidahForm from "./QuranQaidahForm";
 import DuaSurahForm from "./DuaSurahForm";
@@ -28,6 +31,72 @@ export default function ReportSubmitModal({
   });
   const [addLessonCovered] = useAddLessonCoveredMutation();
 
+  // Track if we have valid previous data for current month/year
+  const [hasValidPreviousData, setHasValidPreviousData] = useState(false);
+
+  // Add the previous data query
+  const {
+    data: previousData,
+    refetch: refetchPreviousData,
+    isFetching: isFetchingPreviousData,
+    error: previousDataError,
+  } = useGetPreviousLessonsCoveredDataQuery(
+    {
+      student_id: studentId,
+      month,
+      year,
+    },
+    {
+      skip: !studentId || time_of_month !== "beginning",
+    }
+  );
+
+  // Check if we have valid previous data for the current context
+  useEffect(() => {
+    if (previousData && time_of_month === "beginning") {
+      setHasValidPreviousData(true);
+
+      // Set the type from previous data
+      if (previousData.type) {
+        setType(previousData.type);
+      }
+
+      // Set Quran/Qaidah option and data
+      if (previousData.lessons?.qaidah_quran) {
+        setQuranOption(previousData.lessons.qaidah_quran.selected);
+        console.log("Previous data available for pre-fill:", previousData);
+        toast.success("Previous month data loaded for pre-fill!");
+      }
+    } else {
+      setHasValidPreviousData(false);
+    }
+  }, [previousData, time_of_month]);
+
+  // Handle error case - when no data found
+  useEffect(() => {
+    if (previousDataError && time_of_month === "beginning") {
+      setHasValidPreviousData(false);
+      // Don't show error toast as it's normal to not have previous data
+    }
+  }, [previousDataError, time_of_month]);
+
+  // Reset form when modal opens/closes
+  useEffect(() => {
+    if (!showModal) {
+      setQuranOption("");
+      setType("");
+      setHasValidPreviousData(false);
+    }
+  }, [showModal]);
+
+  // Refetch previous data when month/year/time_of_month changes
+  useEffect(() => {
+    if (time_of_month === "beginning" && studentId && month && year) {
+      console.log("Refetching previous data for:", month, year);
+      refetchPreviousData();
+    }
+  }, [month, year, time_of_month, studentId, refetchPreviousData]);
+
   const handleClose = () => {
     setShowModal(false);
     setType("");
@@ -35,11 +104,48 @@ export default function ReportSubmitModal({
     setTime_of_month("");
     setMonth(currentMonth);
     setYear(currentYear.toString());
+    setHasValidPreviousData(false);
   };
 
   const handleBackdropClick = (event) => {
     if (event.target.classList.contains("modal")) {
       handleClose();
+    }
+  };
+
+  // Function to manually fetch previous data
+  const handleFetchPreviousData = () => {
+    if (time_of_month === "beginning" && studentId && month && year) {
+      refetchPreviousData();
+    } else {
+      toast.error("Please select beginning of month to fetch previous data");
+    }
+  };
+
+  // Handle month change - REMOVED field resetting
+  const handleMonthChange = (e) => {
+    const newMonth = e.target.value;
+    setMonth(newMonth);
+    // DON'T reset form fields - let child components handle it based on new data
+  };
+
+  // Handle year change - REMOVED field resetting
+  const handleYearChange = (e) => {
+    const newYear = e.target.value;
+    setYear(newYear);
+    // DON'T reset form fields - let child components handle it based on new data
+  };
+
+  // Handle time of month change
+  const handleTimeOfMonthChange = (e) => {
+    const newTimeOfMonth = e.target.value;
+    setTime_of_month(newTimeOfMonth);
+
+    // Reset form when switching to ending
+    if (newTimeOfMonth === "ending") {
+      setQuranOption("");
+      setType("");
+      setHasValidPreviousData(false);
     }
   };
 
@@ -204,6 +310,40 @@ export default function ReportSubmitModal({
                   Submitting report for <strong>{student?.name}</strong>
                 </p>
 
+                {/* Previous Data Info - Only show when we have valid data */}
+                {time_of_month === "beginning" && hasValidPreviousData && (
+                  <div className="alert alert-info py-2">
+                    <small>
+                      <i className="fas fa-info-circle me-2"></i>
+                      Pre-filled with previous month's ending data
+                      {isFetchingPreviousData && " (Loading...)"}
+                    </small>
+                  </div>
+                )}
+
+                {/* Loading State */}
+                {time_of_month === "beginning" && isFetchingPreviousData && (
+                  <div className="alert alert-warning py-2">
+                    <small>
+                      <i className="fas fa-spinner fa-spin me-2"></i>
+                      Loading previous month data...
+                    </small>
+                  </div>
+                )}
+
+                {/* No Data Found State */}
+                {time_of_month === "beginning" &&
+                  previousDataError &&
+                  !isFetchingPreviousData && (
+                    <div className="alert alert-secondary py-2">
+                      <small>
+                        <i className="fas fa-info-circle me-2"></i>
+                        No previous month data found. Please fill in the
+                        starting points manually.
+                      </small>
+                    </div>
+                  )}
+
                 {/* Time of Month */}
                 <div className="row mb-2">
                   <div className="col-lg-3">
@@ -212,7 +352,7 @@ export default function ReportSubmitModal({
                       className="form-control"
                       required
                       value={month}
-                      onChange={(e) => setMonth(e.target.value)}
+                      onChange={handleMonthChange}
                     >
                       <option value="">Select month</option>
                       <option value="January">January</option>
@@ -235,7 +375,7 @@ export default function ReportSubmitModal({
                       className="form-control"
                       required
                       value={year}
-                      onChange={(e) => setYear(e.target.value)}
+                      onChange={handleYearChange}
                     >
                       <option value="">Select year</option>
                       {Array.from(
@@ -255,7 +395,7 @@ export default function ReportSubmitModal({
                       className="form-control"
                       required
                       value={time_of_month}
-                      onChange={(e) => setTime_of_month(e.target.value)}
+                      onChange={handleTimeOfMonthChange}
                     >
                       <option value="">Select time of the month</option>
                       <option value="beginning">Beginning Of The Month</option>
@@ -277,6 +417,23 @@ export default function ReportSubmitModal({
                   </div>
                 </div>
 
+                {/* Manual fetch button */}
+                {time_of_month === "beginning" && (
+                  <div className="mb-3">
+                    <button
+                      type="button"
+                      className="btn btn-outline-primary btn-sm"
+                      onClick={handleFetchPreviousData}
+                      disabled={isFetchingPreviousData}
+                    >
+                      <i className="fas fa-sync-alt me-2"></i>
+                      {isFetchingPreviousData
+                        ? "Loading..."
+                        : "Load Previous Month Data"}
+                    </button>
+                  </div>
+                )}
+
                 <h3 className="fw-bolder mb-2">
                   {time_of_month === "ending" &&
                     `Target Achieved at the end of the month`}
@@ -285,26 +442,41 @@ export default function ReportSubmitModal({
                     `Starting Point at the beginning of the month`}
                 </h3>
 
-                {/* ---------------- Quran / Qaidah Section (Common for both types) ---------------- */}
+                {/* ---------------- Quran / Qaidah Section ---------------- */}
                 <QuranQaidahForm
                   quranOption={quranOption}
                   setQuranOption={setQuranOption}
+                  previousData={
+                    time_of_month === "beginning" ? previousData : null
+                  }
+                  reset={!hasValidPreviousData || !previousData}
                 />
 
                 {/* Type-specific sections */}
+                {/* Type-specific sections */}
                 {type === "normal" ? (
                   <>
-                    {/* ---------------- Islamic Studies Section ---------------- */}
-                    <IslamicStudiesForm />
+                    <IslamicStudiesForm
+                      previousData={
+                        time_of_month === "beginning" ? previousData : null
+                      }
+                      reset={!hasValidPreviousData || !previousData}
+                    />
 
-                    {/* ---------------- Dua & Surah Section ---------------- */}
-                    <DuaSurahForm />
+                    <DuaSurahForm
+                      previousData={
+                        time_of_month === "beginning" ? previousData : null
+                      }
+                      reset={!hasValidPreviousData || !previousData}
+                    />
                   </>
                 ) : type === "gift_muslim" ? (
-                  <>
-                    {/* ---------------- Gift For Muslim Section ---------------- */}
-                    <GiftForMuslimForm />
-                  </>
+                  <GiftForMuslimForm
+                    previousData={
+                      time_of_month === "beginning" ? previousData : null
+                    }
+                    reset={!hasValidPreviousData || !previousData}
+                  />
                 ) : (
                   <h5>Please Choose a type</h5>
                 )}
