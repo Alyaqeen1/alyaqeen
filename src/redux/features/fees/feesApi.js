@@ -31,7 +31,23 @@ export const feesApi = apiSlice.injectEndpoints({
       providesTags: ["Fee"],
     }),
     getFeesByDate: builder.query({
-      query: (id) => `/fees/with-payments`,
+      query: (params = {}) => {
+        const { paymentType, month, year } = params;
+        let url = "/fees/with-payments";
+
+        // Add query parameters if provided
+        const queryParams = new URLSearchParams();
+        if (paymentType) queryParams.append("paymentType", paymentType);
+        if (month) queryParams.append("month", month);
+        if (year) queryParams.append("year", year);
+
+        if (queryParams.toString()) {
+          url += `?${queryParams.toString()}`;
+        }
+
+        console.log("RTK Query URL:", url); // For debugging
+        return url;
+      },
       providesTags: ["Fee"],
     }),
     getUnpaidFees: builder.query({

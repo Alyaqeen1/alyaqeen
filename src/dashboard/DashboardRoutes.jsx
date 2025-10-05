@@ -398,7 +398,7 @@ const dashboardRoutes = [
         ),
       },
       {
-        path: "update-fees",
+        path: "all-fees",
         element: (
           <PrivateRoute>
             <AdminRoute>

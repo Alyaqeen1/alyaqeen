@@ -154,7 +154,7 @@ export default function Sidebar() {
                       submenuItems={[
                         { label: "Fee Settings", to: "fee-settings" },
                         { label: "Unpaid List", to: "unpaid-list" },
-                        { label: "Update Fees", to: "update-fees" },
+                        { label: "All Fees", to: "all-fees" },
                         { label: "Pending Payments", to: "pending-payments" },
                       ]}
                       openSubMenu={openSubMenu}
