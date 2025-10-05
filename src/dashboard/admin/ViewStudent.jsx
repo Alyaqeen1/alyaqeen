@@ -77,6 +77,9 @@ export default function ViewStudent() {
                 <strong>School Year:</strong> {school_year || "-"}
               </p>
               <p className="mb-1">
+                <strong>Email:</strong> {email || "-"}
+              </p>
+              <p className="mb-1">
                 <strong>Language:</strong> {language || "-"}
               </p>
               <p className="mb-1">

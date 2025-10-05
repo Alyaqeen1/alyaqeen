@@ -221,7 +221,8 @@ export default function OffCanvasMenu() {
                         identifier="fees"
                         submenuItems={[
                           { label: "Fee Settings", to: "fee-settings" },
-                          // { label: "Unpaid List", to: "unpaid-list" },
+                          { label: "Unpaid List", to: "unpaid-list" },
+                          { label: "All Fees", to: "all-fees" },
                           { label: "Pending Payments", to: "pending-payments" },
                         ]}
                         openSubMenu={openSubMenu}
