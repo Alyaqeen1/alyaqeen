@@ -1624,7 +1624,7 @@ const ApplyNowComp = () => {
                         <span>|</span>
                         <Link
                           className="text-white d-flex gap-2 align-items-center"
-                          to="mailto:kidsa@gmail.com"
+                          to="mailto:contact@alyaqeen.co.uk"
                         >
                           <FaEnvelope />
                           contact@alyaqeen.co.uk

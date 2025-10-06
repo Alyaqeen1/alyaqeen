@@ -119,7 +119,9 @@ const Footer = () => {
             <div className="content">
               <p>{email}</p>
               <h3>
-                <Link to="mailto:kidsa@gmail.com">contact@alyaqeen.co.uk</Link>
+                <Link to="mailto:contact@alyaqeen.co.uk">
+                  contact@alyaqeen.co.uk
+                </Link>
               </h3>
             </div>
           </div>

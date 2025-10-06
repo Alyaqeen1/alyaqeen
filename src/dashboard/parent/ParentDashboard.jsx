@@ -23,7 +23,7 @@ export default function ParentDashboard({ family, refetch }) {
   const { user, loading } = useAuth();
   const [updateStudentStatus] = useUpdateStudentStatusMutation();
   const axiosPublic = useAxiosPublic();
-  const [activeTab, setActiveTab] = useState("payment-summary");
+  const [activeTab, setActiveTab] = useState(family?.childrenDocs[0]?._id);
 
   const {
     data: approvedFamily,
@@ -270,21 +270,6 @@ export default function ParentDashboard({ family, refetch }) {
         className="nav gap-2 my-5 flex justify-content-center align-items-center"
         role="tablist"
       >
-        <li className="nav-item">
-          <a
-            className="nav-link text-uppercase box-shadow px-3"
-            style={{
-              backgroundColor:
-                activeTab === "payment-summary" ? "var(--border2)" : undefined,
-              color: activeTab === "payment-summary" ? "white" : "black",
-              borderRadius: "20px", // <-- added here
-            }}
-            onClick={() => setActiveTab("payment-summary")}
-          >
-            Payment Summary
-          </a>
-        </li>
-
         {family?.childrenDocs?.map((student) => (
           <li className="nav-item" key={student?._id}>
             <a
@@ -306,6 +291,21 @@ export default function ParentDashboard({ family, refetch }) {
             </a>
           </li>
         ))}
+
+        <li className="nav-item">
+          <a
+            className="nav-link text-uppercase box-shadow px-3"
+            style={{
+              backgroundColor:
+                activeTab === "payment-summary" ? "var(--border2)" : undefined,
+              color: activeTab === "payment-summary" ? "white" : "black",
+              borderRadius: "20px", // <-- added here
+            }}
+            onClick={() => setActiveTab("payment-summary")}
+          >
+            Payment Summary
+          </a>
+        </li>
       </ul>
 
       {/* Tab content container */}

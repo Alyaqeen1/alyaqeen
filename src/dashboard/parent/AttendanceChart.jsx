@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from "react";
 import Chart from "react-apexcharts";
 import { useGetAttendanceByStudentSummaryQuery } from "../../redux/features/attendances/attendancesApi";
+import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 
 const AttendanceChart = ({ studentId }) => {
   const [month, setMonth] = useState("");
@@ -121,6 +122,22 @@ const AttendanceChart = ({ studentId }) => {
               show: true,
               fontSize: "16px",
               fontWeight: "bold",
+              formatter: function (val, opts) {
+                if (
+                  !opts?.w?.globals?.series ||
+                  !opts?.w?.globals?.seriesTotals
+                )
+                  return "";
+                const total = opts.w.globals.seriesTotals.reduce(
+                  (a, b) => a + b,
+                  0
+                );
+                const percent = (
+                  (opts.w.globals.series[opts.seriesIndex] / total) *
+                  100
+                ).toFixed(1);
+                return isNaN(percent) ? "" : `${percent}%`;
+              },
             },
             total: {
               show: true,
@@ -136,9 +153,7 @@ const AttendanceChart = ({ studentId }) => {
     dataLabels: {
       enabled: true,
       formatter: function (val, opts) {
-        return (
-          opts.w.globals.labels[opts.seriesIndex] + ": " + val.toFixed(1) + "%"
-        );
+        return val.toFixed(1) + "%";
       },
       style: {
         fontSize: "11px",
@@ -151,8 +166,11 @@ const AttendanceChart = ({ studentId }) => {
     },
     tooltip: {
       y: {
-        formatter: function (val) {
-          return val + " classes";
+        formatter: function (val, opts) {
+          // Show only percentage in tooltip
+          const total = opts.globals.seriesTotals.reduce((a, b) => a + b, 0);
+          const percent = ((val / total) * 100).toFixed(1);
+          return `${percent}%`;
         },
       },
     },
@@ -165,16 +183,7 @@ const AttendanceChart = ({ studentId }) => {
   };
 
   if (isLoading) {
-    return (
-      <div className="card shadow-sm h-100">
-        <div className="card-body text-center py-5 d-flex flex-column justify-content-center">
-          <div className="spinner-border text-primary" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </div>
-          <p className="mt-2 mb-0">Loading attendance data...</p>
-        </div>
-      </div>
-    );
+    return <LoadingSpinnerDash></LoadingSpinnerDash>;
   }
 
   if (error) {
@@ -191,8 +200,8 @@ const AttendanceChart = ({ studentId }) => {
   }
 
   return (
-    <div className="card shadow-sm min-vh-100">
-      <div className="card-body d-flex flex-column">
+    <div className="card shadow-sm  h-100">
+      <div className="card-body d-flex flex-column h-100">
         {/* Header with filters */}
         <div className="mb-4">
           <div className="d-flex flex-wrap gap-2 align-items-center">
@@ -261,9 +270,9 @@ const AttendanceChart = ({ studentId }) => {
         <div className="flex-grow-1">
           {/* Stats Overview */}
           {attendanceData.total > 0 ? (
-            <div className="h-100 d-flex flex-column">
+            <div className="flex-grow-1 h-100 d-flex flex-column">
               <div className="row text-center mb-4">
-                <div className="col-6 col-md-4 mb-3">
+                <div className="col-6  mb-3">
                   <div className="border rounded p-2 bg-success bg-opacity-10 h-100">
                     <h4 className="text-success mb-1">
                       {attendanceData.attendanceRate}%
@@ -271,7 +280,7 @@ const AttendanceChart = ({ studentId }) => {
                     <small className="text-muted">Attendance Rate</small>
                   </div>
                 </div>
-                <div className="col-6 col-md-4 mb-3">
+                <div className="col-6  mb-3">
                   <div className="border rounded p-2 bg-primary bg-opacity-10 h-100">
                     <h4 className="text-primary mb-1">
                       {attendanceData.total}
@@ -279,16 +288,27 @@ const AttendanceChart = ({ studentId }) => {
                     <small className="text-muted">Total Classes</small>
                   </div>
                 </div>
-                <div className="col-6 col-md-4 mb-3">
+                <div className="col-6  mb-3">
                   <div className="border rounded p-2 bg-warning bg-opacity-10 h-100">
                     <h4 className="text-warning mb-1">{attendanceData.late}</h4>
                     <small className="text-muted">Late Arrivals</small>
                   </div>
                 </div>
+                <div className="col-6  mb-3">
+                  <div className="border rounded p-2 bg-danger bg-opacity-10 h-100">
+                    <h4 className="text-danger mb-1">
+                      {attendanceData.absent}
+                    </h4>
+                    <small className="text-muted">Absent</small>
+                  </div>
+                </div>
               </div>
 
               {/* Chart - takes available space */}
-              <div className="mb-4 flex-grow-1 d-flex align-items-center">
+              <div
+                className="mb-4 flex-grow-1 d-flex align-items-center"
+                style={{ minHeight: "510px" }}
+              >
                 <div className="w-100">
                   <Chart
                     options={chartOptions}
@@ -300,7 +320,7 @@ const AttendanceChart = ({ studentId }) => {
               </div>
 
               {/* Detailed Stats */}
-              <div className="mt-auto">
+              {/* <div className="mt-auto">
                 <div className="row">
                   <div className="col-md-8 mx-auto">
                     <div className="list-group">
@@ -334,7 +354,7 @@ const AttendanceChart = ({ studentId }) => {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           ) : (
             <div className="h-100 d-flex flex-column justify-content-center text-center py-5">

@@ -28,7 +28,7 @@ export default function FeeChart({ studentId }) {
     isError,
   } = useGetFeesByStudentIdQuery(studentId);
   const [chartType, setChartType] = useState("line");
-  const [timeRange, setTimeRange] = useState("all");
+  const [timeRange, setTimeRange] = useState("last6months");
   const [selectedMonth, setSelectedMonth] = useState("");
   const [selectedYear, setSelectedYear] = useState("");
 
@@ -358,10 +358,8 @@ export default function FeeChart({ studentId }) {
       strokeDashArray: 4,
     },
     title: {
-      text: `Monthly Payment Performance - ${
-        feeData?.studentName || "Student"
-      }`,
-      align: "center",
+      text: `Monthly Payment`,
+      align: "left",
       style: {
         fontSize: "16px",
         fontWeight: "bold",
@@ -491,15 +489,15 @@ export default function FeeChart({ studentId }) {
           <div className="col-md-4 mb-4 mb-md-0">
             <div className="card">
               <div className="card-body">
+                <div className="text-center mt-2 text-muted small">
+                  Payment Distribution
+                </div>
                 <Chart
                   options={donutOptions}
                   series={donutSeries}
                   type="donut"
-                  height={250}
+                  height={285} // ⬅ increased height
                 />
-                <div className="text-center mt-2 text-muted small">
-                  Payment Distribution
-                </div>
               </div>
             </div>
           </div>
@@ -605,58 +603,60 @@ export default function FeeChart({ studentId }) {
                 )}
               </div>
             </div>
+            {paymentSummary && paymentSummary.totalMonths > 0 && (
+              <div className="row mt-4">
+                <div className=" col-6 mb-3">
+                  <div className="card border-success h-100">
+                    <div className="card-body text-center">
+                      <h3 className="card-title text-success">
+                        {paymentSummary.paidMonths}
+                      </h3>
+                      <p className="card-text text-muted small">
+                        Fully Paid Months
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-6 mb-3">
+                  <div className="card border-warning h-100">
+                    <div className="card-body text-center">
+                      <h3 className="card-title text-warning">
+                        {paymentSummary.partialPayments}
+                      </h3>
+                      <p className="card-text text-muted small">
+                        Partially Paid Months
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className=" col-6 mb-3">
+                  <div className="card border-danger h-100">
+                    <div className="card-body text-center">
+                      <h3 className="card-title text-danger">
+                        {paymentSummary.unpaidMonths}
+                      </h3>
+                      <p className="card-text text-muted small">
+                        Unpaid Months
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-6 mb-3">
+                  <div className="card border-primary h-100">
+                    <div className="card-body text-center">
+                      <h3 className="card-title text-primary">
+                        {paymentSummary.currentUnpaid}
+                      </h3>
+                      <p className="card-text text-muted small">Current Due</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
         {/* Payment Summary Cards */}
-        {paymentSummary && paymentSummary.totalMonths > 0 && (
-          <div className="row mb-4">
-            <div className="col-md-3 col-6 mb-3">
-              <div className="card border-success">
-                <div className="card-body text-center">
-                  <h3 className="card-title text-success">
-                    {paymentSummary.paidMonths}
-                  </h3>
-                  <p className="card-text text-muted small">
-                    Fully Paid Months
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-3 col-6 mb-3">
-              <div className="card border-warning">
-                <div className="card-body text-center">
-                  <h3 className="card-title text-warning">
-                    {paymentSummary.partialPayments}
-                  </h3>
-                  <p className="card-text text-muted small">
-                    Partially Paid Months
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-3 col-6 mb-3">
-              <div className="card border-danger">
-                <div className="card-body text-center">
-                  <h3 className="card-title text-danger">
-                    {paymentSummary.unpaidMonths}
-                  </h3>
-                  <p className="card-text text-muted small">Unpaid Months</p>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-3 col-6 mb-3">
-              <div className="card border-primary">
-                <div className="card-body text-center">
-                  <h3 className="card-title text-primary">
-                    {paymentSummary.currentUnpaid}
-                  </h3>
-                  <p className="card-text text-muted small">Current Due</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
 
         {/* Bottom Section: Monthly Chart */}
         {chartData?.rawData && chartData.rawData.length > 0 ? (
@@ -685,24 +685,24 @@ export default function FeeChart({ studentId }) {
         {/* Legend - ALWAYS SHOW ALL THREE COLORS */}
         <div className="d-flex flex-wrap justify-content-center gap-3 mt-4">
           <div className="d-flex align-items-center">
-            <div
+            {/* <div
               className="bg-success rounded-circle me-2"
               style={{ width: "12px", height: "12px" }}
-            ></div>
+            ></div> */}
             <span className="text-muted small">Fully Paid (100%)</span>
           </div>
           <div className="d-flex align-items-center">
-            <div
+            {/* <div
               className="bg-warning rounded-circle me-2"
               style={{ width: "12px", height: "12px" }}
-            ></div>
+            ></div> */}
             <span className="text-muted small">Partially Paid (1-99%)</span>
           </div>
           <div className="d-flex align-items-center">
-            <div
+            {/* <div
               className="bg-danger rounded-circle me-2"
               style={{ width: "12px", height: "12px" }}
-            ></div>
+            ></div> */}
             <span className="text-muted small">Unpaid (0%)</span>
           </div>
         </div>

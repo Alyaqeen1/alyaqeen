@@ -374,7 +374,7 @@ const OffCanvasMenu = ({ toggleMenu, handleToggleMenu }) => {
                       <i className="fal fa-envelope"></i>
                     </div>
                     <div className="offcanvas__contact-text">
-                      <Link to="mailto:info@example.com">
+                      <Link to="mailto:contact@alyaqeen.co.uk">
                         <span className="mailto:contact@alyaqeen.co.uk">
                           contact@alyaqeen.co.uk
                         </span>

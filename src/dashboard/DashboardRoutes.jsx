@@ -29,7 +29,11 @@ import Admissions from "./admissions/Admissions";
 import UpdateStudent from "./admissions/UpdateStudent";
 import DashboardLayout from "./layout/DashboardLayout";
 import Home from "./pages/Home/Home";
+import EducationalInfo from "./parent/EducationalInfo";
+import PayByDirectDebit from "./parent/PayByDirectDebit";
+import PayMonthlyFees from "./parent/PayMonthlyFees";
 import ReportsSummaryParent from "./parent/ReportsSummaryParent";
+import StudentDetails from "./parent/StudentDetails";
 import Payments from "./payments/Payments";
 import PaymentSummary from "./payments/PaymentSummary";
 import LessonsCovered from "./teacher/LessonsCovered";
@@ -404,6 +408,46 @@ const dashboardRoutes = [
             <AdminRoute>
               <UpdateFees></UpdateFees>
             </AdminRoute>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "parent/student-details",
+        element: (
+          <PrivateRoute>
+            <ParentRoute>
+              <StudentDetails></StudentDetails>
+            </ParentRoute>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "parent/educational-info",
+        element: (
+          <PrivateRoute>
+            <ParentRoute>
+              <EducationalInfo></EducationalInfo>
+            </ParentRoute>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "parent/pay-monthly-fees",
+        element: (
+          <PrivateRoute>
+            <ParentRoute>
+              <PayMonthlyFees></PayMonthlyFees>
+            </ParentRoute>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "parent/pay-by-direct-debit",
+        element: (
+          <PrivateRoute>
+            <ParentRoute>
+              <PayByDirectDebit></PayByDirectDebit>
+            </ParentRoute>
           </PrivateRoute>
         ),
       },

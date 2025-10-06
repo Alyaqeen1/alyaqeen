@@ -8,6 +8,15 @@ import { GiTeacher } from "react-icons/gi";
 import { IoTimer } from "react-icons/io5";
 import { PiStudentBold } from "react-icons/pi";
 import {
+  FaUserGraduate,
+  FaBookOpen,
+  FaChartLine,
+  FaMoneyBillWave,
+  FaCreditCard,
+  FaWhatsapp,
+  FaEnvelope,
+} from "react-icons/fa";
+import {
   FaCalendar,
   FaCalendarCheck,
   FaEye,
@@ -252,13 +261,33 @@ export default function Sidebar() {
                     />
                   </>
                 )}
-
                 {data?.role === "parent" && (
                   <>
+                    {/* Parent Menu Items - part of the scrollable content */}
                     <MenuItem
-                      icon={<TbFileReport className="mx-2 fs-5" />}
+                      icon={<FaUserGraduate className="mx-2 fs-5" />}
+                      label="Student Details"
+                      to="parent/student-details"
+                    />
+                    <MenuItem
+                      icon={<FaBookOpen className="mx-2 fs-5" />}
+                      label="Educational Info"
+                      to="parent/educational-info"
+                    />
+                    <MenuItem
+                      icon={<FaChartLine className="mx-2 fs-5" />}
                       label="Reports Summary"
                       to="parent/reports-summary"
+                    />
+                    <MenuItem
+                      icon={<FaMoneyBillWave className="mx-2 fs-5" />}
+                      label="Pay Monthly Fees"
+                      to="parent/pay-monthly-fees"
+                    />
+                    <MenuItem
+                      icon={<FaCreditCard className="mx-2 fs-5" />}
+                      label="Pay By Direct Debit"
+                      to="parent/pay-by-direct-debit"
                     />
                   </>
                 )}
@@ -266,6 +295,30 @@ export default function Sidebar() {
             )}
           </ul>
         </nav>
+        {data?.role === "parent" && (
+          <div className="flex-shrink-0 p-3 mt-auto border-top border-secondary">
+            <div className="text-center">
+              <a
+                href="https://wa.me/447869636849"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-success d-flex align-items-center justify-content-center mb-2 w-100"
+                style={{ fontSize: "0.9rem" }}
+              >
+                <FaWhatsapp className="me-2 fs-6" />
+                Contact via WhatsApp
+              </a>
+              <a
+                href="mailto:contact@alyaqeen.co.uk"
+                className="btn btn-primary d-flex align-items-center justify-content-center w-100"
+                style={{ fontSize: "0.9rem" }}
+              >
+                <FaEnvelope className="me-2 fs-6" />
+                Send Email
+              </a>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
