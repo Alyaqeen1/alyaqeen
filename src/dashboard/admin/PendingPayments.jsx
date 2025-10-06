@@ -1,13 +1,9 @@
 import React, { useState } from "react";
 import { FaCheck, FaEye } from "react-icons/fa6";
 import { ImCross } from "react-icons/im";
-import {
-  useGetStudentsByStatusQuery,
-  useUpdateStudentStatusMutation,
-} from "../../redux/features/students/studentsApi";
+import { useUpdateStudentStatusMutation } from "../../redux/features/students/studentsApi";
 import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 import Swal from "sweetalert2";
-import { useGetHoldFullFamilyQuery } from "../../redux/features/families/familiesApi";
 import {
   useGetFeesByStatusQuery,
   useUpdateFeeDataMutation,
