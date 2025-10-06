@@ -788,10 +788,10 @@ export default function AdminManualPayModal({
                     >
                       <option value="">Select Method</option>
                       <option value="bank transfer">Bank Transfer</option>
-                      <option value="cash or card machine">
+                      <option value="cash payment at office">
                         Cash Payment at Office
                       </option>
-                      <option value="office payment">
+                      <option value="card machine at office">
                         Card Machine at Office
                       </option>
                     </select>

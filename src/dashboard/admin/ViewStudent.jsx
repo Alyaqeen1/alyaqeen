@@ -48,6 +48,7 @@ export default function ViewStudent() {
   }
   const unpaidFee =
     Number(summary?.consecutiveUnpaidMonths) * Number(monthly_fee);
+
   return (
     <div className="container my-4">
       <h3 className="mb-4">Student Profile</h3>
@@ -270,6 +271,12 @@ export default function ViewStudent() {
                           className="font-danger text-white fw-bolder border h6 text-center align-middle"
                           style={{ backgroundColor: "var(--border2)" }}
                         >
+                          Fee Method
+                        </th>
+                        <th
+                          className="font-danger text-white fw-bolder border h6 text-center align-middle"
+                          style={{ backgroundColor: "var(--border2)" }}
+                        >
                           Amount
                         </th>
                         {/* <th
@@ -283,7 +290,7 @@ export default function ViewStudent() {
                     <tbody>
                       {paidMonths?.length > 0 ? (
                         paidMonths?.map((fee, idx) => (
-                          <tr key={student?._id}>
+                          <tr key={idx}>
                             <td
                               className={` border h6 text-center align-middle text-nowrap`}
                             >
@@ -299,6 +306,12 @@ export default function ViewStudent() {
                             >
                               {fee?.month}
                             </td>
+                            <td
+                              className={`border h6 text-center align-middle text-nowrap`}
+                            >
+                              {fee?.paymentMethod}
+                            </td>
+
                             <td
                               className={`border h6 text-center align-middle text-nowrap`}
                             >
