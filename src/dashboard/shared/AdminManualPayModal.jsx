@@ -34,7 +34,7 @@ export default function AdminManualPayModal({
   // Form state
   const [feeYear, setFeeYear] = useState(new Date().getFullYear());
   const [feeMonth, setFeeMonth] = useState("");
-  const [feeMethod, setFeeMethod] = useState("cash or card machine");
+  const [feeMethod, setFeeMethod] = useState("cash payment at office");
   const [feeType, setFeeType] = useState("monthly");
   const [payNow, setPayNow] = useState("");
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
