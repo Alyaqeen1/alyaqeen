@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useGetStudentsByIdQuery } from "../../redux/features/students/studentsApi";
 import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
+import { FaEye, FaPen } from "react-icons/fa6";
+import { Link } from "react-router";
 
 export default function StudentsInfo({ studentId }) {
   const [activeTab, setActiveTab] = useState(0);
@@ -37,7 +39,7 @@ export default function StudentsInfo({ studentId }) {
     >
       {/* Header Section */}
       <div className="d-flex justify-content-between child-header">
-        <div className=" d-flex gap-3">
+        <div className="d-flex flex-column justify-content-center flex-lg-row align-items-center gap-3">
           <div className="student-avatar">
             <span>{student.name?.charAt(0) || "S"}</span>
           </div>
@@ -51,7 +53,13 @@ export default function StudentsInfo({ studentId }) {
           </div>
         </div>
         <div>
-          <button>Edit</button>
+          <Link
+            to={`/dashboard/parent/update/${studentId}`}
+            className="text-white py-1 px-2 rounded-2"
+            style={{ backgroundColor: "var(--border2)" }}
+          >
+            <FaPen></FaPen>
+          </Link>
         </div>
       </div>
 

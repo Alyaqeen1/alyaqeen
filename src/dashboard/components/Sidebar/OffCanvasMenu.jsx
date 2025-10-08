@@ -12,6 +12,15 @@ import {
   FaTrophy,
   FaUsers,
 } from "react-icons/fa6";
+import {
+  FaUserGraduate,
+  FaBookOpen,
+  FaChartLine,
+  FaMoneyBillWave,
+  FaCreditCard,
+  FaWhatsapp,
+  FaEnvelope,
+} from "react-icons/fa";
 import { useGetRoleQuery } from "../../../redux/features/role/roleApi";
 import useAuth from "../../../hooks/useAuth";
 import LoadingSpinnerDash from "../LoadingSpinnerDash";
@@ -56,10 +65,10 @@ export default function OffCanvasMenu() {
       <div className="text-end">
         <button
           className="btn"
-          type="button"
-          data-bs-toggle="offcanvas"
-          data-bs-target="#offcanvasScrolling"
-          aria-controls="offcanvasScrolling"
+          // type="button"
+          // data-bs-toggle="offcanvas"
+          // data-bs-target="#offcanvasScrolling"
+          // aria-controls="offcanvasScrolling"
           onClick={handleSidebarToggle} // Toggle the sidebar on button click
         >
           {!showSidebar ? (
@@ -94,7 +103,7 @@ export default function OffCanvasMenu() {
           {/* Sidebar Header */}
           <div className="position-relative py-2">
             {/* ✅ Close Button on the Right */}
-            <button
+            {/* <button
               type="button"
               className="btn btn-sm btn-light position-absolute end-0 top-0 m-2"
               data-bs-dismiss="offcanvas"
@@ -102,7 +111,7 @@ export default function OffCanvasMenu() {
               onClick={() => setShowSidebar(false)}
             >
               <FaRegWindowClose className="fs-5 text-dark" />
-            </button>
+            </button> */}
 
             {/* ✅ Centered Logo */}
             <div className="text-center">
@@ -337,10 +346,29 @@ export default function OffCanvasMenu() {
                   {data?.role === "parent" && (
                     <>
                       <MenuItem
-                        onNavigate={() => setShowSidebar(false)}
-                        icon={<TbFileReport className="mx-2 fs-5" />}
+                        icon={<FaUserGraduate className="mx-2 fs-5" />}
+                        label="Student Details"
+                        to="parent/student-details"
+                      />
+                      <MenuItem
+                        icon={<FaBookOpen className="mx-2 fs-5" />}
+                        label="Educational Info"
+                        to="parent/educational-info"
+                      />
+                      <MenuItem
+                        icon={<FaChartLine className="mx-2 fs-5" />}
                         label="Reports Summary"
                         to="parent/reports-summary"
+                      />
+                      <MenuItem
+                        icon={<FaMoneyBillWave className="mx-2 fs-5" />}
+                        label="Pay Monthly Fees"
+                        to="parent/pay-monthly-fees"
+                      />
+                      <MenuItem
+                        icon={<FaCreditCard className="mx-2 fs-5" />}
+                        label="Pay By Direct Debit"
+                        to="parent/pay-by-direct-debit"
                       />
                     </>
                   )}
@@ -349,6 +377,30 @@ export default function OffCanvasMenu() {
             </ul>
           </nav>
         </div>
+        {data?.role === "parent" && (
+          <div className="flex-shrink-0 p-3 mt-auto border-top border-secondary">
+            <div className="text-center">
+              <a
+                href="https://wa.me/447869636849"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-success d-flex align-items-center justify-content-center mb-2 w-100"
+                style={{ fontSize: "0.9rem" }}
+              >
+                <FaWhatsapp className="me-2 fs-6" />
+                Contact via WhatsApp
+              </a>
+              <a
+                href="mailto:contact@alyaqeen.co.uk"
+                className="btn btn-primary d-flex align-items-center justify-content-center w-100"
+                style={{ fontSize: "0.9rem" }}
+              >
+                <FaEnvelope className="me-2 fs-6" />
+                Send Email
+              </a>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

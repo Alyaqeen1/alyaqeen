@@ -34,6 +34,7 @@ import PayByDirectDebit from "./parent/PayByDirectDebit";
 import PayMonthlyFees from "./parent/PayMonthlyFees";
 import ReportsSummaryParent from "./parent/ReportsSummaryParent";
 import StudentDetails from "./parent/StudentDetails";
+import UpdateChild from "./parent/UpdateChild";
 import Payments from "./payments/Payments";
 import PaymentSummary from "./payments/PaymentSummary";
 import LessonsCovered from "./teacher/LessonsCovered";
@@ -447,6 +448,16 @@ const dashboardRoutes = [
           <PrivateRoute>
             <ParentRoute>
               <PayByDirectDebit></PayByDirectDebit>
+            </ParentRoute>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "parent/update/:id",
+        element: (
+          <PrivateRoute>
+            <ParentRoute>
+              <UpdateChild></UpdateChild>
             </ParentRoute>
           </PrivateRoute>
         ),

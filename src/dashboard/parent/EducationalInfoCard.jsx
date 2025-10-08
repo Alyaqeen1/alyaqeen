@@ -68,7 +68,10 @@ export default function EducationalInfoCard({ studentId }) {
           </div>
 
           <div className="flex-grow-1">
-            <h1 className="mb-1 fw-bold" style={{ fontSize: "1.8rem" }}>
+            <h1
+              className="mb-1 fw-bold text-white"
+              style={{ fontSize: "1.8rem" }}
+            >
               {student?.name}
             </h1>
             <p className="mb-0 opacity-90">
