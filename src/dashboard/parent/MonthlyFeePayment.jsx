@@ -12,12 +12,15 @@ import MonthlyFeeModal from "../shared/MonthlyFeeModal";
 import { FaEye } from "react-icons/fa6";
 import ShowFeeDataModal from "../shared/ShowFeeDataModal";
 import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
+import { useLocation } from "react-router";
 
 export default function MonthlyFeePayment({ enrolledFamily }) {
   const [showModal, setShowModal] = useState(false);
   const [selectedFeeId, setSelectedFeeId] = useState(null);
   const [showDataModal, setShowDataModal] = useState(false);
   const [createFeeData] = useCreateFeeDataMutation();
+  const { pathname } = useLocation();
+  console.log(pathname);
   const { data: unpaidFees, isLoading } = useGetUnpaidFeesQuery(
     enrolledFamily?._id,
     {
@@ -195,11 +198,15 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
 
   return (
     <div className="pt-5">
-      <h3 className="fs-2 fw-bold text-center">Fee Summary</h3>
+      <h3 className="fs-2 fw-bold text-center">
+        {pathname === "/dashboard/parent/pay-monthly-fees"
+          ? "Pay Monthly Fees"
+          : "Fee Summary"}
+      </h3>
 
       {/* Paid History Table */}
 
-      {fees?.length > 0 && (
+      {fees?.length > 0 && pathname === "/dashboard" && (
         <>
           <h4 className="text-success">Paid Fee History</h4>
           <div className="table-responsive mb-3">
