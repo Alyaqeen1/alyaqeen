@@ -98,6 +98,7 @@ export default function AdminManualPayModal({
   }, [enrolledFamily, selectedStudents]);
 
   // Helper to check if a fee doc contains paid month for a student
+  // ✅ FIXED: Check if ANY payment exists for this month, regardless of amount
   const hasStudentPaidMonth = (feeDoc, studentId, month, year) => {
     if (!feeDoc?.students) return false;
     const s = feeDoc.students.find(
@@ -109,9 +110,8 @@ export default function AdminManualPayModal({
         String(m.month).padStart(2, "0") === String(month).padStart(2, "0") &&
         String(m.year) === String(year)
     );
-    if (!mp) return false;
-    const required = mp.discountedFee ?? mp.monthlyFee ?? 0;
-    return (mp.paid ?? 0) >= toTwo(required) - 1e-6;
+    // ✅ FIX: Return true if ANY payment exists for this month (even partial)
+    return !!(mp && (mp.paid ?? 0) > 0);
   };
 
   // Helper to check if a fee doc contains admission fully paid for a student
@@ -136,6 +136,7 @@ export default function AdminManualPayModal({
   };
 
   // Check if payment already exists for selected students/month/year/type
+  // ✅ FIXED: Check if ANY selected student has already paid for this month
   const paymentExists = useMemo(() => {
     if (!feeType || !familyId || selectedStudents.length === 0) return false;
 
@@ -155,20 +156,33 @@ export default function AdminManualPayModal({
     }
 
     if (feeType === "monthly" && feeMonth) {
-      return selectedStudentObjects.some((student) =>
+      // ✅ FIX: Check each selected student individually
+      const hasExistingPayment = selectedStudentObjects.some((student) =>
         fees.some(
           (fee) =>
             String(fee.familyId) === String(familyId) &&
-            String(fee.paymentType) === "monthly" &&
-            // consider month paid even if fee.status is partial/paid, inspect monthsPaid for the student
+            (String(fee.paymentType) === "monthly" ||
+              String(fee.paymentType) === "monthlyOnHold") &&
             hasStudentPaidMonth(fee, student._id, feeMonth, feeYear)
         )
       );
+
+      if (hasExistingPayment) {
+        console.log(
+          "🚫 Payment blocked: Some students already paid for this month"
+        );
+        console.log(
+          "Selected students:",
+          selectedStudentObjects.map((s) => s.name)
+        );
+        console.log("Fee Month/Year:", feeMonth, feeYear);
+      }
+
+      return hasExistingPayment;
     }
 
     return false;
   }, [fees, familyId, feeMonth, feeYear, feeType, selectedStudentObjects]);
-
   const isBeforeJoiningMonth = useMemo(() => {
     if (!feeMonth || !feeYear || selectedStudentObjects.length === 0)
       return false;
@@ -221,28 +235,27 @@ export default function AdminManualPayModal({
       return;
     }
     if (paymentExists) {
+      // ✅ BETTER ERROR: Show which students already paid
+      const alreadyPaidStudents = selectedStudentObjects.filter((student) =>
+        fees.some(
+          (fee) =>
+            String(fee.familyId) === String(familyId) &&
+            (String(fee.paymentType) === "monthly" ||
+              String(fee.paymentType) === "monthlyOnHold") &&
+            hasStudentPaidMonth(fee, student._id, feeMonth, feeYear)
+        )
+      );
+
+      const studentNames = alreadyPaidStudents.map((s) => s.name).join(", ");
+
       toast.error(
-        `Payment already recorded for selected ${
-          feeType === "admission" ? "admission" : `month ${feeMonth}`
-        }`
+        `Payment already recorded for ${studentNames} for ${
+          months[parseInt(feeMonth) - 1]
+        } ${feeYear}`
       );
       setIsProcessing(false);
       return;
     }
-
-    // NEW CHECK: Are there any students not enrolled (status "approved")?
-    // const notEnrolledStudents = selectedStudentObjects?.filter(
-    //   (student) => student.status === "approved"
-    // );
-
-    // if (notEnrolledStudents && notEnrolledStudents.length > 0) {
-    //   const names = notEnrolledStudents.map((s) => s.name).join(", ");
-    //   toast.error(
-    //     `Payment blocked. The following student(s) are not enrolled yet: ${names}`
-    //   );
-    //   setIsProcessing(false);
-    //   return;
-    // }
 
     if (feeType === "monthly" && isBeforeJoiningMonth) {
       toast.error(

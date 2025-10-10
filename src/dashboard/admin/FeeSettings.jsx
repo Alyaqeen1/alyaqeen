@@ -20,7 +20,7 @@ const PaymentStatusCell = ({ status }) => {
   const statusConfig = {
     paid: { bg: "bg-success", text: "Paid" },
     pending: { bg: "bg-warning text-dark", text: "Pending" },
-    partial: { bg: "bg-warning", text: "Partial" }, // New partial status
+    partial: { bg: "bg-info", text: "Partial" },
     unpaid: { bg: "bg-danger", text: "Unpaid" },
   };
 
@@ -212,17 +212,19 @@ export default function FeeSettings() {
           admissionJoiningMonth === targetMonth &&
           admissionJoiningYear === targetYear
         ) {
-          // ✅ For admission payments, always return "paid" since we set status to "paid" and remaining to 0
           if (payment.status === "paid") {
             return "paid";
           }
-          // If for some reason it's partial, still show as paid (per admin requirement)
           return "paid";
         }
       }
 
-      // Handle MONTHLY payments (monthsPaid array)
-      if (payment.paymentType === "monthly" && studentPayment.monthsPaid) {
+      // ✅ FIXED: Handle BOTH monthly AND monthlyOnHold payments
+      if (
+        (payment.paymentType === "monthly" ||
+          payment.paymentType === "monthlyOnHold") &&
+        studentPayment.monthsPaid
+      ) {
         const monthPaidEntry = studentPayment.monthsPaid.find(
           (m) =>
             String(m.month).padStart(2, "0") === targetMonth &&
@@ -230,13 +232,37 @@ export default function FeeSettings() {
         );
 
         if (monthPaidEntry) {
-          const fullFee =
-            monthPaidEntry.discountedFee ?? monthPaidEntry.monthlyFee;
-          const paid = monthPaidEntry.paid ?? 0;
+          // ✅ FIRST: Check payment status for pending payments
+          if (payment.status === "pending") {
+            return "pending";
+          }
 
-          if (paid >= fullFee) return "paid";
-          if (paid > 0 && paid < fullFee) return "partial";
-          return "unpaid";
+          // ✅ SECOND: For paid/rejected payments, check the actual payment amounts
+          if (
+            payment.status === "paid" ||
+            payment.status === "rejected" ||
+            payment.status === "partial"
+          ) {
+            const fullFee =
+              monthPaidEntry.discountedFee ?? monthPaidEntry.monthlyFee;
+            const paid = monthPaidEntry.paid ?? 0;
+
+            // ✅ Check if this is a partial payment (paid < fullFee)
+            if (paid > 0 && paid < fullFee) {
+              return "partial";
+            }
+
+            // ✅ Check if this is a full payment
+            if (paid >= fullFee) {
+              return "paid";
+            }
+
+            // ✅ No payment made
+            return "unpaid";
+          }
+
+          // ✅ Default for other statuses
+          return payment.status === "paid" ? "paid" : "unpaid";
         }
       }
     }

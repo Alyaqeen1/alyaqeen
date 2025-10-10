@@ -5,9 +5,8 @@ import {
   useGetUnpaidFeesQuery,
 } from "../../redux/features/fees/feesApi";
 import useAuth from "../../hooks/useAuth";
-import useAxiosPublic from "../../hooks/useAxiosPublic";
 import toast from "react-hot-toast";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import MonthlyFeeModal from "../shared/MonthlyFeeModal";
 import { FaEye } from "react-icons/fa6";
 import ShowFeeDataModal from "../shared/ShowFeeDataModal";
@@ -20,20 +19,21 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
   const [showDataModal, setShowDataModal] = useState(false);
   const [createFeeData] = useCreateFeeDataMutation();
   const { pathname } = useLocation();
-  console.log(pathname);
+
   const { data: unpaidFees, isLoading } = useGetUnpaidFeesQuery(
     enrolledFamily?._id,
     {
       skip: !enrolledFamily?._id,
     }
   );
-
+  const gradientStyle = {
+    background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+  };
   if (!enrolledFamily || enrolledFamily.childrenDocs.length === 0) {
     return <p>No enrolled students found.</p>;
   }
 
   const { user } = useAuth();
-  const axiosPublic = useAxiosPublic();
 
   const {
     data: fees = [],
@@ -43,26 +43,62 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
     skip: !enrolledFamily?._id,
   });
 
-  console.log("📋 Fees data from backend:", fees);
-
-  // ✅ Update total paid calculation for new data structure
-  const totalPaid = fees?.reduce((acc, fee) => acc + (fee.amount || 0), 0);
-
-  const handleShow = (id) => {
-    setShowModal(true);
+  // FIX 1: Update student names extraction for new structure
+  const getStudentNames = (fee) => {
+    if (fee.students && Array.isArray(fee.students)) {
+      return fee.students.map((student) => student.name).join(", ");
+    }
+    return fee.students || "N/A"; // fallback to old structure
   };
 
-  const handleDataShow = (feeIds) => {
-    // Use the first fee ID for the modal, or all if needed
-    setSelectedFeeId(feeIds[0]);
+  // FIX 2: Update display month extraction for new structure
+  const getDisplayMonth = (fee) => {
+    // For new structure: get month from students[0].monthsPaid[0]
+    if (
+      fee.students &&
+      fee.students.length > 0 &&
+      fee.students[0].monthsPaid &&
+      fee.students[0].monthsPaid.length > 0
+    ) {
+      const firstMonth = fee.students[0].monthsPaid[0];
+      return `${firstMonth.month}/${firstMonth.year}`;
+    }
+    // For old structure
+    return fee.displayMonth || "N/A";
+  };
+
+  // FIX 3: Update paid date extraction
+  const getPaidDate = (fee) => {
+    // For new structure: use timestamp.$date
+    if (fee.timestamp?.$date) {
+      return new Date(fee.timestamp.$date).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      });
+    }
+    // For old structure
+    return fee.paidDate
+      ? new Date(fee.paidDate).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        })
+      : "N/A";
+  };
+
+  // FIX 4: Update fee ID handling for modal
+  const handleDataShow = (feeId) => {
+    setSelectedFeeId(feeId);
     setShowDataModal(true);
+  };
+
+  const handleShow = () => {
+    setShowModal(true);
   };
 
   const handleDataClose = () => setShowDataModal(false);
   const handleClose = () => setShowModal(false);
-  const students = enrolledFamily?.childrenDocs;
-
-  // const [unpaidRows, setUnpaidRows] = useState([]);
 
   // Instead of state + getUnpaidFees util, directly use API response
   const unpaidRows = unpaidFees?.unpaidMonths || [];
@@ -92,6 +128,7 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
           year,
           monthlyFee,
           discountedFee,
+          paid: discountedFee,
         });
       });
 
@@ -106,6 +143,7 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
 
   const grandTotal = unpaidRows.reduce((acc, row) => acc + row.totalAmount, 0);
 
+  // FIX 5: Update payment data structure for new schema
   const handleOtherPayment = async (method) => {
     const tableHTML = `
     <div class="table-responsive">
@@ -125,8 +163,7 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
             <tr>
               <td style="padding: 6px; border: 1px solid #ccc;">${
                 row?.studentNames
-              }
-              </td>
+              }</td>
               <td style="padding: 6px; border: 1px solid #ccc;">${
                 row?.month
               }</td>
@@ -158,21 +195,29 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
       focusConfirm: false,
       preConfirm: async () => {
         try {
+          // FIX 6: Update payment data to match new structure
           const paymentData = {
             familyId: enrolledFamily?._id,
             name: user?.displayName,
             email: user?.email,
-            amount: grandTotal,
-            method,
-            date: new Date().toISOString(),
             paymentType: "monthlyOnHold",
             status: "pending",
             students: feeStudents,
+            expectedTotal: grandTotal,
+            remaining: 0,
+            payments: [
+              {
+                amount: grandTotal,
+                method: method,
+                date: new Date().toISOString().split("T")[0], // YYYY-MM-DD format
+              },
+            ],
           };
+
           const data = await createFeeData(paymentData).unwrap();
 
           if (data.insertedId) {
-            toast.success("Payment successful!");
+            toast.success("Payment request submitted successfully!");
             refetch();
           }
         } catch (err) {
@@ -205,7 +250,6 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
       </h3>
 
       {/* Paid History Table */}
-
       {fees?.length > 0 && pathname === "/dashboard" && (
         <>
           <h4 className="text-success">Paid Fee History</h4>
@@ -228,17 +272,16 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
               </thead>
               <tbody>
                 {fees?.map((fee, index) => (
-                  <tr key={`${fee.displayMonth}-${index}`}>
-                    {/* ✅ Students column - shows all students who paid in this month */}
-                    <td>{fee.students}</td>
+                  <tr key={fee._id || `${fee.displayMonth}-${index}`}>
+                    {/* FIX 7: Use helper function for student names */}
+                    <td>{getStudentNames(fee)}</td>
 
-                    {/* ✅ Month column - already formatted from backend */}
-                    <td>{fee.displayMonth}</td>
+                    {/* FIX 8: Use helper function for display month */}
+                    <td>{getDisplayMonth(fee)}</td>
 
-                    {/* ✅ Amount column - total for all students in this month */}
-                    <td>£{fee.amount}</td>
+                    {/* FIX 9: Use amount or expectedTotal */}
+                    <td>£{fee.amount || fee.expectedTotal}</td>
 
-                    {/* ✅ Status column */}
                     <td>
                       <span
                         className={`py-1 px-2 rounded-3 text-white ${
@@ -246,29 +289,21 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
                             ? "bg-success"
                             : fee.status === "pending"
                             ? "bg-warning"
-                            : "bg-danger"
+                            : "bg-info"
                         }`}
                       >
                         {fee.status}
                       </span>
                     </td>
 
-                    {/* ✅ Paid Date column */}
-                    <td>
-                      {fee.paidDate
-                        ? new Date(fee.paidDate).toLocaleDateString("en-US", {
-                            year: "numeric",
-                            month: "short",
-                            day: "numeric",
-                          })
-                        : "N/A"}
-                    </td>
+                    {/* FIX 10: Use helper function for paid date */}
+                    <td>{getPaidDate(fee)}</td>
 
-                    {/* ✅ Action column - use the first fee ID for the modal */}
+                    {/* FIX 11: Use _id instead of originalFeeIds */}
                     <td>
                       <button
                         className="py-1 px-2 rounded-2 border border-black"
-                        onClick={() => handleDataShow(fee.originalFeeIds)}
+                        onClick={() => handleDataShow(fee._id)}
                         title="View Details"
                       >
                         <FaEye />
@@ -298,7 +333,6 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
                   <th>Discount</th>
                   <th>Amount</th>
                   <th>Status</th>
-                  {/* <th>Action</th> */}
                 </tr>
               </thead>
 
@@ -308,37 +342,18 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
                     key={`unpaid-${row.month}-${index}`}
                     className="table-warning"
                   >
-                    {/* All siblings' names for this month */}
                     <td>{row.studentNames}</td>
-
-                    {/* Month name */}
                     <td>
                       {new Date(row.month + "-01").toLocaleString("default", {
                         month: "long",
                         year: "numeric",
                       })}
                     </td>
-
-                    {/* Discount if available */}
                     <td>
                       {enrolledFamily?.discount ? enrolledFamily.discount : 0}%
                     </td>
-
-                    {/* Combined total for that month */}
                     <td>£{row.totalAmount}</td>
-
-                    {/* Status */}
                     <td className="text-danger">Unpaid</td>
-                    {/* <td>
-                      {" "}
-                      <button
-                        onClick={handleShow}
-                        className="text-white py-1 px-2 rounded-2"
-                        style={{ backgroundColor: "var(--border2)" }}
-                      >
-                        Pay Now
-                      </button>
-                    </td> */}
                   </tr>
                 ))}
               </tbody>
@@ -346,6 +361,17 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
           </div>
         </>
       )}
+
+      {!unpaidRows.length &&
+        pathname === "/dashboard/parent/pay-monthly-fees" && (
+          <>
+            <div style={gradientStyle} className="text-white p-4 rounded-5">
+              <div className="d-flex align-items-center flex-wrap gap-4">
+                No Unpaid Months Available Now, Come Back Later
+              </div>
+            </div>
+          </>
+        )}
 
       {unpaidRows?.length > 0 && (
         <>
@@ -368,7 +394,7 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
               style={{ backgroundColor: "var(--border2)" }}
               onClick={() => handleOtherPayment("bank transfer")}
             >
-              Pay by Bank Transfer (Account-to-Account Transfer)
+              Bank Transfer
             </button>
 
             <p className="col-lg-1 d-flex align-items-center justify-content-center">
@@ -377,9 +403,10 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
             <button
               className="col-lg-2 text-white py-1 px-2 rounded-2"
               style={{ backgroundColor: "var(--border2)" }}
-              onClick={() => handleOtherPayment("office payment")}
+              onClick={() => handleOtherPayment("cash payment at office")}
             >
-              Set up a Standing Order or Direct Debit
+              {" "}
+              Cash Payment at Office
             </button>
             <p className="col-lg-1 d-flex align-items-center justify-content-center">
               or
@@ -387,9 +414,9 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
             <button
               className="col-lg-2 text-white py-1 px-2 rounded-2"
               style={{ backgroundColor: "var(--border2)" }}
-              onClick={() => handleOtherPayment("cash or card machine")}
+              onClick={() => handleOtherPayment("card machine at office")}
             >
-              Pay in Office by Card Machine or Cash
+              Card Machine at Office
             </button>
           </div>
         </>

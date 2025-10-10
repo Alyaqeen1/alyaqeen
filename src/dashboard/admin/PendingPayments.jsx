@@ -40,86 +40,6 @@ export default function PendingPayments() {
 
   const handleStatus = async (students, newStatus, feeId, paymentType) => {
     try {
-      // if (paymentType === "admissionOnHold") {
-      //   const updatePromises = students.map((student) =>
-      //     updateStudentStatus({ id: student.studentId, status: newStatus })
-      //       .unwrap()
-      //       .catch((err) => {
-      //         console.error(`Failed to update ${student.name}`, err);
-      //         return null;
-      //       })
-      //   );
-      //   await Promise.allSettled(updatePromises);
-
-      //   if (newStatus === "enrolled") {
-      //     // await axiosPublic.patch(`/fees/update-status-mode/${feeId}`, {
-      //     //   status: "paid",
-      //     //   paymentType: "admission",
-      //     // });
-      //     const data = await updateFeeData({
-      //       id: feeId,
-      //       data: {
-      //         status: "paid",
-      //         paymentType: "admission",
-      //       },
-      //     });
-      //     if (data?.modifiedCount) {
-      //       Swal.fire({
-      //         icon: "success",
-      //         title: "Students Enrolled and Payment Approved",
-      //         timer: 1500,
-      //         showConfirmButton: false,
-      //       });
-      //     }
-      //   } else if (newStatus === "approved") {
-      //     Swal.fire({
-      //       title: "Are you sure?",
-      //       text: "You won't be able to revert this! Student Status will again be approved and the student would need to pay again through dashboard",
-      //       icon: "warning",
-      //       showCancelButton: true,
-      //       confirmButtonColor: "#3085d6",
-      //       cancelButtonColor: "#d33",
-      //       confirmButtonText: "Yes, delete it!",
-      //     }).then((result) => {
-      //       if (result.isConfirmed) {
-      //         updateFeeData({
-      //           id: feeId,
-      //           data: {
-      //             status: "rejected",
-      //             paymentType: "admission",
-      //           },
-      //         })
-      //           .then((res) => {
-      //             if (res?.modifiedCount) {
-      //               Swal.fire({
-      //                 title: "Deleted!",
-      //                 text: "Admission Declined & Fee Entry Rejected",
-      //                 icon: "success",
-      //               });
-      //               refetch();
-      //             } else {
-      //               Swal.fire({
-      //                 title: "Error",
-      //                 text: "Something went wrong.",
-      //                 icon: "error",
-      //               });
-      //             }
-      //           })
-      //           .catch((error) => {
-      //             Swal.fire({
-      //               title: "Error",
-      //               text:
-      //                 error.response?.data?.message ||
-      //                 "Failed to delete student.",
-      //               icon: "error",
-      //             });
-      //           });
-      //       }
-      //     });
-      //   }
-      //   refetch();
-      // }
-
       if (paymentType === "admissionOnHold") {
         const updatePromises = students.map((student) =>
           updateStudentStatus({ id: student.studentId, status: newStatus })
@@ -196,7 +116,8 @@ export default function PendingPayments() {
       // ✅ For monthlyOnHold payments
       else if (paymentType === "monthlyOnHold") {
         if (newStatus === "enrolled") {
-          const data = await updateFeeData({
+          // ✅ Use the correct endpoint and data structure
+          const result = await updateFeeData({
             id: feeId,
             data: {
               status: "paid",
@@ -204,13 +125,15 @@ export default function PendingPayments() {
             },
           }).unwrap();
 
-          if (data?.modifiedCount) {
-            Swal.fire({
+          if (result.modifiedCount > 0) {
+            await Swal.fire({
               icon: "success",
               title: "Monthly Payment Approved",
-              timer: 1500,
+              text: "Payment has been approved and confirmation email sent!",
+              timer: 2000,
               showConfirmButton: false,
             });
+            refetch();
           }
         } else if (newStatus === "approved") {
           Swal.fire({
@@ -387,7 +310,7 @@ export default function PendingPayments() {
                   <td
                     className={`border h6 text-center align-middle text-nowrap`}
                   >
-                    {fee?.method}
+                    {fee?.payments?.[0]?.method}
                   </td>
                   <td
                     className={`border h6 text-center align-middle text-nowrap`}
@@ -395,19 +318,22 @@ export default function PendingPayments() {
                     {fee?.paymentType}
                   </td>
                   <td className="border h6 text-center align-middle text-nowrap">
-                    {fee?.date
-                      ? new Date(fee.date).toLocaleDateString("en-US", {
-                          year: "numeric",
-                          month: "short", // or "long"
-                          day: "numeric",
-                        })
+                    {fee?.payments?.[0]?.date
+                      ? new Date(fee?.payments?.[0]?.date).toLocaleDateString(
+                          "en-US",
+                          {
+                            year: "numeric",
+                            month: "short", // or "long"
+                            day: "numeric",
+                          }
+                        )
                       : "N/A"}
                   </td>
 
                   <td
                     className={`border h6 text-center align-middle text-nowrap`}
                   >
-                    {fee?.amount}
+                    {fee?.payments?.[0]?.amount}
                   </td>
                   <td
                     className={`border h6 text-center align-middle text-nowrap`}
