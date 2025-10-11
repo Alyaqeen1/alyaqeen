@@ -1,7 +1,6 @@
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
-import useAxiosSecure from "../../hooks/useAxiosSecure";
 import useAuth from "../../hooks/useAuth";
 import "./CheckoutForm.css";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
@@ -19,34 +18,13 @@ const CheckoutForm = ({
   const { user } = useAuth();
   const [createFeeData] = useCreateFeeDataMutation();
   const [updateStudentStatus] = useUpdateStudentStatusMutation();
-  // const axiosSecure = useAxiosSecure();
   const axiosPublic = useAxiosPublic();
   const stripe = useStripe();
   const elements = useElements();
 
-  const [clientSecret, setClientSecret] = useState("");
   const [processing, setProcessing] = useState(false);
 
-  // Step 1: Create Payment Intent when amount is set
-  useEffect(() => {
-    if (amount > 0) {
-      createPaymentIntent();
-    }
-  }, [amount]);
-
-  const createPaymentIntent = async () => {
-    try {
-      const response = await axiosPublic.post("/create-payment-intent", {
-        price: amount,
-      });
-      setClientSecret(response.data.clientSecret);
-    } catch (error) {
-      console.error("Error creating payment intent:", error);
-      toast.error("Failed to initiate payment.");
-    }
-  };
-
-  // Step 2: Handle form submission
+  // ✅ Create payment intent ONLY when form is submitted
   const handleSubmit = async (event) => {
     event.preventDefault();
     setProcessing(true);
@@ -63,113 +41,130 @@ const CheckoutForm = ({
       return;
     }
 
-    const { error: methodError, paymentMethod } =
-      await stripe.createPaymentMethod({
-        type: "card",
-        card,
+    try {
+      // ✅ STEP 1: Create payment intent ONLY when user clicks pay
+      const { data } = await axiosPublic.post("/create-payment-intent", {
+        price: amount,
       });
 
-    if (methodError) {
-      toast.error(methodError.message);
-      setProcessing(false);
-      return;
-    }
+      const clientSecret = data.clientSecret;
 
-    const { error: confirmError, paymentIntent } =
-      await stripe.confirmCardPayment(clientSecret, {
-        payment_method: {
-          card,
-          billing_details: {
-            name: user?.displayName || "Anonymous",
-            email: user?.email || "unknown@example.com",
+      // ✅ STEP 2: Confirm payment with the created intent
+      const { error: confirmError, paymentIntent } =
+        await stripe.confirmCardPayment(clientSecret, {
+          payment_method: {
+            card,
+            billing_details: {
+              name: user?.displayName || "Anonymous",
+              email: user?.email || "unknown@example.com",
+            },
           },
-        },
-      });
+        });
 
-    if (confirmError) {
-      toast.error(confirmError.message);
-      setProcessing(false);
-      return;
-    }
-
-    if (paymentIntent.status === "succeeded") {
-      try {
-        const basePaymentData = {
-          familyId,
-          name: user?.displayName,
-          email: user?.email,
-          amount,
-          status: "paid",
-          date: new Date().toISOString(),
-          method: "instant", // You can pass this as a prop too if you want to support "bank transfer"
-          transactionId: paymentIntent.id,
-          paymentType,
-        };
-
-        // Merge dynamic values based on type
-        let paymentData = { ...basePaymentData };
-
-        if (paymentType === "admission") {
-          paymentData = {
-            ...paymentData,
-            status: "paid",
-            students: paymentDetails?.map((student) => ({
-              studentId: student.studentId,
-              name: student.name,
-              admissionFee: student.admissionFee,
-              monthlyFee: student.monthlyFee,
-              joiningMonth: student.joiningMonth,
-              joiningYear: student.joiningYear,
-            })),
-          };
-        } else if (paymentType === "monthly") {
-          paymentData = {
-            ...paymentData,
-            students: paymentDetails, // [{ uid, monthsPaid: [{month, year}] }]
-          };
-        }
-
-        // const { data } = await axiosPublic.post("/fees", paymentData);
-        const data = await createFeeData(paymentData).unwrap();
-
-        // ✅ 1. Save payment and show toast
-        if (data.insertedId) {
-          toast.success("Payment successful!");
-          refetch();
-        }
-
-        // ✅ 2. Extra logic for admission payments
-        if (paymentType === "admission") {
-          const updatePromises = paymentDetails.map((student) =>
-            updateStudentStatus({ id: student.studentId, status: "enrolled" })
-              .unwrap()
-              .catch((err) => {
-                console.error(`Update failed for ${student.name}`, err);
-                return null;
-              })
-          );
-          const results = await Promise.allSettled(updatePromises);
-          // You can optionally handle or log the results here
-
-          const notification = {
-            type: "admission",
-            message: `${user?.displayName} Paid Admission Fee.`,
-            isRead: false,
-            createdAt: new Date(),
-            link: "/dashboard/online-admissions",
-          };
-
-          // Optionally call backend to send email/WhatsApp
-          await axiosPublic.post("/notifications", notification);
-        }
-      } catch (error) {
-        toast.error("Payment succeeded, but further processing failed.");
-      } finally {
+      if (confirmError) {
+        toast.error(confirmError.message);
         setProcessing(false);
-        handleClose?.();
+        return;
       }
-    } else {
-      toast.error("Payment failed.");
+
+      if (paymentIntent.status === "succeeded") {
+        try {
+          // FIXED: Base payment data matches your target structure
+          const basePaymentData = {
+            familyId,
+            name: user?.displayName,
+            email: user?.email,
+            expectedTotal: amount, // FIX: Use expectedTotal instead of amount
+            remaining: 0, // FIX: Add remaining field
+            status: "paid",
+            paymentType,
+            timestamp: new Date().toISOString(), // FIX: Use timestamp instead of date
+            transactionId: paymentIntent.id,
+          };
+
+          let paymentData = { ...basePaymentData };
+
+          if (paymentType === "admission") {
+            paymentData = {
+              ...paymentData,
+              students: paymentDetails?.map((student) => ({
+                studentId: student.studentId,
+                name: student.name,
+                admissionFee: student.admissionFee,
+                monthlyFee: student.monthlyFee,
+                joiningMonth: student.joiningMonth,
+                joiningYear: student.joiningYear,
+              })),
+              payments: [
+                // FIX: Add payments array for admission too
+                {
+                  amount: amount,
+                  method: "instant",
+                  date: new Date().toISOString().split("T")[0],
+                  transactionId: paymentIntent.id,
+                },
+              ],
+            };
+          } else if (paymentType === "monthly") {
+            // FIXED: This is now correct - paymentDetails already has monthsPaid
+            paymentData = {
+              ...paymentData,
+              students: paymentDetails, // ✅ This already has the correct structure with monthsPaid
+              payments: [
+                {
+                  amount: amount,
+                  method: "instant",
+                  date: new Date().toISOString().split("T")[0],
+                  transactionId: paymentIntent.id,
+                },
+              ],
+            };
+          }
+
+          const data = await createFeeData(paymentData).unwrap();
+
+          // ✅ 1. Save payment and show toast
+          if (data.insertedId) {
+            toast.success("Payment successful!");
+            refetch();
+          }
+
+          // ✅ 2. Extra logic for admission payments
+          if (paymentType === "admission") {
+            const updatePromises = paymentDetails.map((student) =>
+              updateStudentStatus({ id: student.studentId, status: "enrolled" })
+                .unwrap()
+                .catch((err) => {
+                  console.error(`Update failed for ${student.name}`, err);
+                  return null;
+                })
+            );
+            const results = await Promise.allSettled(updatePromises);
+
+            const notification = {
+              type: "admission",
+              message: `${user?.displayName} Paid Admission Fee.`,
+              isRead: false,
+              createdAt: new Date(),
+              link: "/dashboard/online-admissions",
+            };
+
+            await axiosPublic.post("/notifications", notification);
+          }
+        } catch (error) {
+          console.error("Payment processing error:", error);
+          toast.error("Payment succeeded, but further processing failed.");
+        } finally {
+          setProcessing(false);
+          handleClose?.();
+        }
+      } else {
+        toast.error("Payment failed.");
+        setProcessing(false);
+      }
+    } catch (error) {
+      console.error("Payment initialization error:", error);
+      toast.error("Payment failed to initialize.");
       setProcessing(false);
     }
   };
@@ -197,7 +192,7 @@ const CheckoutForm = ({
         <button
           className="btn btn-primary"
           type="submit"
-          disabled={!stripe || !clientSecret || processing}
+          disabled={!stripe || processing} // ✅ Remove clientSecret dependency
         >
           {processing ? "Processing..." : `Pay $${amount}`}
         </button>

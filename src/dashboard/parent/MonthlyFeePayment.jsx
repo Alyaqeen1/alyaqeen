@@ -141,6 +141,7 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
     subtotal: parseFloat(stu.subtotal.toFixed(2)),
   }));
 
+  console.log(feeStudents);
   const grandTotal = unpaidRows.reduce((acc, row) => acc + row.totalAmount, 0);
 
   // FIX 5: Update payment data structure for new schema

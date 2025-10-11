@@ -10,9 +10,16 @@ export default function MonthlyFeeModal({
   enrolledFamily,
   refetch,
 }) {
+  // In your MonthlyFeeModal.jsx
   const handleBackdropClick = (event) => {
     if (event.target.classList.contains("modal")) {
-      handleClose();
+      // Blur any active elements before closing
+      if (document.activeElement) {
+        document.activeElement.blur();
+      }
+      setTimeout(() => {
+        handleClose();
+      }, 100);
     }
   };
   const grandTotal = unpaidRows.reduce((acc, row) => acc + row.totalAmount, 0);
@@ -116,15 +123,16 @@ export default function MonthlyFeeModal({
               </div>
 
               {/* Future Payment Integration */}
-
-              <Payments
-                familyId={familyId}
-                amount={Math.round(grandTotal)}
-                paymentDetails={paymentDetails}
-                handleClose={handleClose}
-                paymentType="monthly"
-                refetch={refetch}
-              />
+              {showModal && (
+                <Payments
+                  familyId={familyId}
+                  amount={Math.round(grandTotal)}
+                  paymentDetails={paymentDetails}
+                  handleClose={handleClose}
+                  paymentType="monthly"
+                  refetch={refetch}
+                />
+              )}
             </div>
           </div>
         </div>
