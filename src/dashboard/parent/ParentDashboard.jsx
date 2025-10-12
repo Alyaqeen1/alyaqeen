@@ -46,14 +46,28 @@ export default function ParentDashboard({ family, refetch }) {
   const approvedChildAfter10th = approvedFamily?.childrenDocs?.some((child) => {
     if (child.status !== "approved" || !child.startingDate) return false;
     const startDate = new Date(child.startingDate);
-    return startDate.getDate() > 10;
+    // Check if joined after September 10th, 2025
+    return startDate > new Date("2025-09-10");
   });
+
+  // ✅ ADD DEBUG LOGS
+  console.log("=== FEE CHOICE MODAL DEBUG ===");
+  console.log("roleData?.role:", roleData?.role);
+  console.log("approvedChildAfter10th:", approvedChildAfter10th);
+  console.log("approvedFamily?.feeChoice:", approvedFamily?.feeChoice);
+  console.log("family?.feeChoice:", family?.feeChoice);
+  console.log(
+    "shouldShowModal:",
+    roleData?.role === "parent" &&
+      approvedChildAfter10th &&
+      approvedFamily?.feeChoice === null
+  );
 
   const shouldShowModal =
     roleData?.role === "parent" &&
     approvedChildAfter10th &&
-    family?.feeChoice === null;
-
+    (approvedFamily?.feeChoice === null ||
+      approvedFamily?.feeChoice === undefined);
   const handleShow = (id) => {
     const blockedStudent = approvedFamily?.childrenDocs?.find((child) => {
       const startDate = new Date(child.startingDate);

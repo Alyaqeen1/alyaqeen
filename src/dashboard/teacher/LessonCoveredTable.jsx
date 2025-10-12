@@ -83,7 +83,11 @@ export default function LessonCoveredTable({
       case "dua_surah":
         return `Book: ${data.book || "N/A"}, Level: ${
           data.level || "N/A"
-        }, Page: ${data.page || "N/A"}, Target: ${data.target || "N/A"}`;
+        }, Page: ${data.page || "N/A"}, Target: ${
+          data.target || "N/A"
+        }, Dua Number: ${data.dua_number || "N/A"}, Lesson Name: ${
+          data.lesson_name || "N/A"
+        }`;
 
       case "gift_for_muslim":
         return `Level: ${data.level || "N/A"}, Lesson: ${

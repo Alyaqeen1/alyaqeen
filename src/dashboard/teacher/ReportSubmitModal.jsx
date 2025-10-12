@@ -164,8 +164,124 @@ export default function ReportSubmitModal({
     const quran_hifz_line = form.quran_hifz_line?.value?.trim() || "";
     const description = form.description?.value?.trim() || "";
 
-    let quranData = null;
+    // Type-specific fields
+    const islamic_studies_lesson_name =
+      form.islamic_studies_lesson_name?.value?.trim() || "";
+    const islamic_studies_book =
+      form?.islamic_studies_book?.value?.trim() || "";
+    const islamic_studies_page = form.islamic_studies_page?.value?.trim() || "";
+    const dua_surah_lesson_name =
+      form.dua_surah_lesson_name?.value?.trim() || "";
+    const dua_surah_book = form.dua_surah_book?.value?.trim() || "";
+    const dua_surah_level = form.dua_surah_level?.value?.trim() || "";
+    const dua_surah_page = form.dua_surah_page?.value?.trim() || "";
+    const dua_surah_target = form.dua_surah_target?.value?.trim() || "";
+    const dua_surah_dua_number = form.dua_surah_dua_number?.value?.trim() || "";
+    const gift_for_muslim_lesson_name =
+      form.gift_for_muslim_lesson_name?.value?.trim() || "";
+    const gift_for_muslim_level =
+      form.gift_for_muslim_level?.value?.trim() || "";
+    const gift_for_muslim_page = form.gift_for_muslim_page?.value?.trim() || "";
+    const gift_for_muslim_target =
+      form.gift_for_muslim_target?.value?.trim() || "";
 
+    // ========== VALIDATION START ==========
+
+    // 1. Validate basic required fields
+    if (!time_of_month) {
+      return toast.error("Please select time of month");
+    }
+    if (!type) {
+      return toast.error("Please select type of education");
+    }
+    if (!month) {
+      return toast.error("Please select month");
+    }
+    if (!year) {
+      return toast.error("Please select year");
+    }
+
+    // 2. Validate Quran/Qaidah section
+    if (!quranOption) {
+      return toast.error(
+        "Please select an option for Qaidah/Quran/Tajweed/Hifz"
+      );
+    }
+
+    if (quranOption === "qaidah" || quranOption === "tajweed") {
+      if (!qaidah_tajweed_level) {
+        return toast.error("Please enter Qaidah/Tajweed level");
+      }
+      if (!qaidah_tajweed_lesson_name) {
+        return toast.error("Please enter Qaidah/Tajweed lesson name");
+      }
+      if (!qaidah_tajweed_page) {
+        return toast.error("Please enter Qaidah/Tajweed page");
+      }
+      if (!qaidah_tajweed_line) {
+        return toast.error("Please enter Qaidah/Tajweed line");
+      }
+    } else if (quranOption === "quran" || quranOption === "hifz") {
+      if (!quran_hifz_para) {
+        return toast.error("Please enter Quran/Hifz para");
+      }
+      if (!quran_hifz_page) {
+        return toast.error("Please enter Quran/Hifz page");
+      }
+    }
+
+    // 3. Validate type-specific sections
+    if (type === "normal") {
+      // Islamic Studies validation
+      if (!islamic_studies_lesson_name) {
+        return toast.error("Please enter Islamic Studies lesson name");
+      }
+      if (!islamic_studies_book) {
+        return toast.error("Please enter Islamic Studies book");
+      }
+      if (!islamic_studies_page) {
+        return toast.error("Please enter Islamic Studies page");
+      }
+
+      // Dua/Surah validation
+      if (!dua_surah_lesson_name) {
+        return toast.error("Please enter Dua/Surah lesson name");
+      }
+      if (!dua_surah_book) {
+        return toast.error("Please enter Dua/Surah book");
+      }
+      if (!dua_surah_level) {
+        return toast.error("Please enter Dua/Surah level");
+      }
+      if (!dua_surah_page) {
+        return toast.error("Please enter Dua/Surah page");
+      }
+      if (!dua_surah_target) {
+        return toast.error("Please enter Dua/Surah target");
+      }
+      if (!dua_surah_dua_number) {
+        return toast.error("Please enter Dua/Surah dua number");
+      }
+    } else if (type === "gift_muslim") {
+      // Gift for Muslim validation
+      if (!gift_for_muslim_lesson_name) {
+        return toast.error("Please enter Gift for Muslim lesson name");
+      }
+      if (!gift_for_muslim_level) {
+        return toast.error("Please enter Gift for Muslim level");
+      }
+      if (!gift_for_muslim_page) {
+        return toast.error("Please enter Gift for Muslim page");
+      }
+      if (!gift_for_muslim_target) {
+        return toast.error("Please enter Gift for Muslim target");
+      }
+    }
+
+    // ========== VALIDATION END ==========
+
+    // Prepare Quran data
+    let quranData = null;
     if (quranOption === "qaidah" || quranOption === "tajweed") {
       quranData = {
         selected: quranOption,
@@ -208,21 +324,6 @@ export default function ReportSubmitModal({
 
     // Add type-specific fields
     if (type === "normal") {
-      const islamic_studies_lesson_name =
-        form.islamic_studies_lesson_name?.value?.trim() || "";
-      const islamic_studies_book =
-        form?.islamic_studies_book?.value?.trim() || "";
-      const islamic_studies_page =
-        form.islamic_studies_page?.value?.trim() || "";
-      const dua_surah_lesson_name =
-        form.dua_surah_lesson_name?.value?.trim() || "";
-      const dua_surah_book = form.dua_surah_book?.value?.trim() || "";
-      const dua_surah_level = form.dua_surah_level?.value?.trim() || "";
-      const dua_surah_page = form.dua_surah_page?.value?.trim() || "";
-      const dua_surah_target = form.dua_surah_target?.value?.trim() || "";
-      const dua_surah_dua_number =
-        form.dua_surah_dua_number?.value?.trim() || "";
-
       reportData.lessons.islamic_studies = {
         lesson_name: islamic_studies_lesson_name,
         page: islamic_studies_page,
@@ -238,15 +339,6 @@ export default function ReportSubmitModal({
         dua_number: dua_surah_dua_number,
       };
     } else if (type === "gift_muslim") {
-      const gift_for_muslim_lesson_name =
-        form.gift_for_muslim_lesson_name?.value?.trim() || "";
-      const gift_for_muslim_level =
-        form.gift_for_muslim_level?.value?.trim() || "";
-      const gift_for_muslim_page =
-        form.gift_for_muslim_page?.value?.trim() || "";
-      const gift_for_muslim_target =
-        form.gift_for_muslim_target?.value?.trim() || "";
-
       reportData.lessons.gift_for_muslim = {
         lesson_name: gift_for_muslim_lesson_name,
         level: gift_for_muslim_level,
@@ -270,7 +362,6 @@ export default function ReportSubmitModal({
     }
     console.log("Final Structured Report:", reportData);
   };
-
   return (
     <>
       {/* Backdrop */}

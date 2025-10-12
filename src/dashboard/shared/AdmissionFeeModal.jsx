@@ -105,9 +105,9 @@ export default function AdmissionFeeModal({
                 <thead>
                   <tr>
                     <th>Child Name</th>
-                    <th>Admission Fee ($)</th>
-                    <th>Monthly Fee ($)</th>
-                    <th>Subtotal ($)</th>
+                    <th>Admission Fee (£)</th>
+                    <th>Monthly Fee (£)</th>
+                    <th>Subtotal (£)</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -123,7 +123,7 @@ export default function AdmissionFeeModal({
               </table>
 
               <div className="text-end mt-2">
-                <strong>Grand Total: ${grandTotal.toFixed(2)}</strong>
+                <strong>Grand Total: £{grandTotal.toFixed(2)}</strong>
               </div>
 
               <div className="row mt-3">
