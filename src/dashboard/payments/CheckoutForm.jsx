@@ -12,7 +12,7 @@ const CheckoutForm = ({
   amount = 0,
   handleClose,
   paymentType,
-  paymentDetails = [], // extra dynamic data per payment type
+  paymentDetails = [],
   refetch,
 }) => {
   const { user } = useAuth();
@@ -24,7 +24,6 @@ const CheckoutForm = ({
 
   const [processing, setProcessing] = useState(false);
 
-  // ✅ Create payment intent ONLY when form is submitted
   const handleSubmit = async (event) => {
     event.preventDefault();
     setProcessing(true);
@@ -42,14 +41,12 @@ const CheckoutForm = ({
     }
 
     try {
-      // ✅ STEP 1: Create payment intent ONLY when user clicks pay
       const { data } = await axiosPublic.post("/create-payment-intent", {
         price: amount,
       });
 
       const clientSecret = data.clientSecret;
 
-      // ✅ STEP 2: Confirm payment with the created intent
       const { error: confirmError, paymentIntent } =
         await stripe.confirmCardPayment(clientSecret, {
           payment_method: {
@@ -69,17 +66,15 @@ const CheckoutForm = ({
 
       if (paymentIntent.status === "succeeded") {
         try {
-          // FIXED: Base payment data matches your target structure
           const basePaymentData = {
             familyId,
             name: user?.displayName,
             email: user?.email,
-            expectedTotal: amount, // FIX: Use expectedTotal instead of amount
-            remaining: 0, // FIX: Add remaining field
+            expectedTotal: amount,
+            remaining: 0,
             status: "paid",
             paymentType,
-            timestamp: new Date().toISOString(), // FIX: Use timestamp instead of date
-            transactionId: paymentIntent.id,
+            timestamp: new Date().toISOString(),
           };
 
           let paymentData = { ...basePaymentData };
@@ -92,24 +87,27 @@ const CheckoutForm = ({
                 name: student.name,
                 admissionFee: student.admissionFee,
                 monthlyFee: student.monthlyFee,
-                joiningMonth: student.joiningMonth,
+                discountedFee: student.monthlyFee, // ✅ Add discountedFee
+                joiningMonth: student.joiningMonth.toString().padStart(2, "0"), // ✅ Format as "09"
                 joiningYear: student.joiningYear,
+
+                subtotal: student.admissionFee, // ✅ Only admission fee for subtotal
               })),
               payments: [
-                // FIX: Add payments array for admission too
+                // ✅ Root payments with transactionId
                 {
                   amount: amount,
                   method: "instant",
                   date: new Date().toISOString().split("T")[0],
-                  transactionId: paymentIntent.id,
+                  transactionId: paymentIntent.id, // ✅ Only here
                 },
               ],
             };
           } else if (paymentType === "monthly") {
-            // FIXED: This is now correct - paymentDetails already has monthsPaid
+            // Monthly section unchanged - working fine
             paymentData = {
               ...paymentData,
-              students: paymentDetails, // ✅ This already has the correct structure with monthsPaid
+              students: paymentDetails,
               payments: [
                 {
                   amount: amount,
@@ -123,13 +121,11 @@ const CheckoutForm = ({
 
           const data = await createFeeData(paymentData).unwrap();
 
-          // ✅ 1. Save payment and show toast
           if (data.insertedId) {
             toast.success("Payment successful!");
             refetch();
           }
 
-          // ✅ 2. Extra logic for admission payments
           if (paymentType === "admission") {
             const updatePromises = paymentDetails.map((student) =>
               updateStudentStatus({ id: student.studentId, status: "enrolled" })
@@ -192,7 +188,7 @@ const CheckoutForm = ({
         <button
           className="btn btn-primary"
           type="submit"
-          disabled={!stripe || processing} // ✅ Remove clientSecret dependency
+          disabled={!stripe || processing}
         >
           {processing ? "Processing..." : `Pay $${amount}`}
         </button>

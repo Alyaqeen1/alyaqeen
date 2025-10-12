@@ -30,7 +30,13 @@ export default function AdmissionFeeModal({
   //   return Swal.fire("No approved students to process", "", "info");
   // }
 
+  // In AdmissionFeeModal.jsx - update the feeDetails calculation
   const feeDetails = approvedStudents.map((student, index) => {
+    const startDate = new Date(student.startingDate);
+    const joinDate = startDate.getDate();
+    const joiningMonth = startDate.getMonth() + 1;
+    const joiningYear = startDate.getFullYear();
+
     const baseAdmissionFee = 20;
     const isThirdOrLaterStudent = index >= 2;
     const studentAdmissionFee = isThirdOrLaterStudent
@@ -38,10 +44,6 @@ export default function AdmissionFeeModal({
       : baseAdmissionFee;
 
     const monthlyFee = student.monthly_fee || 0;
-
-    // Calculate pro-rated monthly fee if applicable
-    const startDate = new Date(student.startingDate);
-    const joinDate = startDate.getDate();
     let adjustedMonthlyFee = monthlyFee;
 
     if (approvedFamily.feeChoice === "proRated" && joinDate > 10) {
@@ -55,10 +57,14 @@ export default function AdmissionFeeModal({
     const subtotal = studentAdmissionFee + adjustedMonthlyFee;
 
     return {
+      studentId: student._id, // ✅ Add studentId
       name: student.name,
       admissionFee: studentAdmissionFee,
       monthlyFee: adjustedMonthlyFee,
+      discountedFee: adjustedMonthlyFee, // ✅ Add discountedFee
       subtotal,
+      joiningMonth, // ✅ Add joiningMonth
+      joiningYear, // ✅ Add joiningYear
     };
   });
   admissionFeeTotal = feeDetails.reduce(

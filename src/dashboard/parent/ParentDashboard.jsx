@@ -198,21 +198,19 @@ export default function ParentDashboard({ family, refetch }) {
     const result = await Swal.fire({
       title: `Confirm Payment via ${method}`,
       html: tableHTML,
-      width: "90%", // More responsive width
-      maxWidth: "800px", // But don't get too wide on desktop
+      width: "auto",
+      maxWidth: "800px",
       showCancelButton: true,
       confirmButtonText: "Confirm",
       cancelButtonText: "Cancel",
       focusConfirm: false,
       preConfirm: async () => {
         try {
+          // ✅ CORRECTED: Use the same structure as manual modal
           const paymentData = {
             familyId: approvedFamily?._id,
             name: user?.displayName,
             email: user?.email,
-            amount: grandTotal,
-            method,
-            date: new Date().toISOString(),
             paymentType: "admissionOnHold",
             status: "pending",
             students: feeDetails?.map((student) => ({
@@ -220,10 +218,30 @@ export default function ParentDashboard({ family, refetch }) {
               name: student.name,
               admissionFee: student.admissionFee,
               monthlyFee: student.monthlyFee,
-              joiningMonth: student.joiningMonth,
+              discountedFee: student.monthlyFee, // Same as monthlyFee for now
+              joiningMonth: student.joiningMonth.toString().padStart(2, "0"),
               joiningYear: student.joiningYear,
+              payments: [
+                {
+                  amount: student.admissionFee,
+                  method: method,
+                  date: new Date().toISOString().split("T")[0],
+                },
+              ],
+              subtotal: student.subtotal,
             })),
+            expectedTotal: grandTotal,
+            remaining: 0,
+            payments: [
+              {
+                amount: grandTotal,
+                method: method,
+                date: new Date().toISOString().split("T")[0],
+              },
+            ],
+            timestamp: new Date().toISOString(),
           };
+
           const { data } = await axiosPublic.post("/fees", paymentData);
 
           if (data.insertedId) {
@@ -231,6 +249,7 @@ export default function ParentDashboard({ family, refetch }) {
             refetch();
           }
 
+          // Update student statuses to "enrolled"
           const updatePromises = approvedStudents.map((student) =>
             updateStudentStatus({ id: student._id, status: "hold" })
               .unwrap()
@@ -258,7 +277,7 @@ export default function ParentDashboard({ family, refetch }) {
     });
 
     if (result.isConfirmed) {
-      Swal.fire("Success!", "All students are marked as 'on hold'.", "success");
+      Swal.fire("Success!", "All students are now enrolled.", "success");
       refetch();
     }
   };
@@ -415,7 +434,7 @@ export default function ParentDashboard({ family, refetch }) {
                       style={{ backgroundColor: "var(--border2)" }}
                       onClick={() => handleOtherPayment("bank transfer")}
                     >
-                      Pay by Bank Transfer (Account-to-Account Transfer)
+                      Bank Transfer
                     </button>
 
                     <p className="col-lg-1 d-flex align-items-center justify-content-center">
@@ -424,9 +443,11 @@ export default function ParentDashboard({ family, refetch }) {
                     <button
                       className="col-lg-2 text-white py-1 px-2 rounded-2"
                       style={{ backgroundColor: "var(--border2)" }}
-                      onClick={() => handleOtherPayment("office payment")}
+                      onClick={() =>
+                        handleOtherPayment("cash payment at office")
+                      }
                     >
-                      Set up a Standing Order or Direct Debit
+                      Cash Payment at Office
                     </button>
                     <p className="col-lg-1 d-flex align-items-center justify-content-center">
                       or
@@ -434,9 +455,11 @@ export default function ParentDashboard({ family, refetch }) {
                     <button
                       className="col-lg-2 text-white py-1 px-2 rounded-2"
                       style={{ backgroundColor: "var(--border2)" }}
-                      onClick={() => handleOtherPayment("cash or card machine")}
+                      onClick={() =>
+                        handleOtherPayment("card machine at office")
+                      }
                     >
-                      Pay in Office by Card Machine or Cash
+                      Card Machine at Office
                     </button>
                   </div>
                 ) : (

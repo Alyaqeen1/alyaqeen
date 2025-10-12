@@ -147,14 +147,14 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
   // FIX 5: Update payment data structure for new schema
   const handleOtherPayment = async (method) => {
     const tableHTML = `
-    <div class="table-responsive">
-      <table class="table table-bordered" style="width: 100%; border-collapse: collapse;">
+    <div class="table-responsive" style="overflow-x: auto;">
+      <table class="table table-bordered" style="width: 100%; border-collapse: collapse; min-width: 300px;">
         <thead>
-          <tr style="background-color: #444; color: #fff;">
-            <th style="padding: 6px; border: 1px solid #ccc;">Student Name</th>
-            <th style="padding: 6px; border: 1px solid #ccc;">Month</th>
-            <th style="padding: 6px; border: 1px solid #ccc;">Discount</th>
-            <th style="padding: 6px; border: 1px solid #ccc;">Total Amount (£)</th>
+          <tr style="padding: 8px 4px; border: 1px solid #ccc; white-space: nowrap;">
+            <th style="padding: 8px 4px; border: 1px solid #ccc; white-space: nowrap;">Student Name</th>
+            <th style="padding: 8px 4px; border: 1px solid #ccc; white-space: nowrap;">Month</th>
+            <th style="padding: 8px 4px; border: 1px solid #ccc; white-space: nowrap;">Discount</th>
+            <th style="padding: 8px 4px; border: 1px solid #ccc; white-space: nowrap;">Total Amount (£)</th>
           </tr>
         </thead>
         <tbody>
@@ -162,16 +162,16 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
             .map(
               (row) => `
             <tr>
-              <td style="padding: 6px; border: 1px solid #ccc;">${
+              <td style="padding: 8px 4px; border: 1px solid #ccc; white-space: nowrap;">${
                 row?.studentNames
               }</td>
-              <td style="padding: 6px; border: 1px solid #ccc;">${
+              <td style="padding: 8px 4px; border: 1px solid #ccc; white-space: nowrap;">${
                 row?.month
               }</td>
-              <td style="padding: 6px; border: 1px solid #ccc;">${
+              <td style="padding: 8px 4px; border: 1px solid #ccc; white-space: nowrap;">${
                 enrolledFamily?.discount ? enrolledFamily?.discount : 0
               }%</td>
-              <td style="padding: 6px; border: 1px solid #ccc;">${
+              <td style="padding: 8px 4px; border: 1px solid #ccc; white-space: nowrap;">${
                 row?.totalAmount
               }</td>
             </tr>
@@ -189,7 +189,7 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
     const result = await Swal.fire({
       title: `Confirm Payment via ${method}`,
       html: tableHTML,
-      width: "60%",
+      width: "auto",
       showCancelButton: true,
       confirmButtonText: "Confirm",
       cancelButtonText: "Cancel",
