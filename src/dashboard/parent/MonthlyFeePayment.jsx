@@ -6,12 +6,17 @@ import {
 } from "../../redux/features/fees/feesApi";
 import useAuth from "../../hooks/useAuth";
 import toast from "react-hot-toast";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MonthlyFeeModal from "../shared/MonthlyFeeModal";
 import { FaEye } from "react-icons/fa6";
 import ShowFeeDataModal from "../shared/ShowFeeDataModal";
 import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
-import { useLocation } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
+import {
+  useCancelFamilyDebitMutation,
+  useGetFamilyDebitQuery,
+} from "../../redux/features/families/familiesApi";
 
 export default function MonthlyFeePayment({ enrolledFamily }) {
   const [showModal, setShowModal] = useState(false);
@@ -19,41 +24,120 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
   const [showDataModal, setShowDataModal] = useState(false);
   const [createFeeData] = useCreateFeeDataMutation();
   const { pathname } = useLocation();
+  const navigate = useNavigate();
+  const axiosPublic = useAxiosPublic();
 
-  const { data: unpaidFees, isLoading } = useGetUnpaidFeesQuery(
+  // ✅ RTK Queries - Use data directly from RTK
+  const {
+    data: directDebitData,
+    isLoading: directDebitLoading,
+    refetch: refetchDirectDebit,
+  } = useGetFamilyDebitQuery(enrolledFamily?._id, {
+    skip: !enrolledFamily?._id,
+  });
+
+  const [cancelFamilyDebit, { isLoading: isCancelling }] =
+    useCancelFamilyDebitMutation();
+
+  const { data: unpaidFees, isLoading: unpaidLoading } = useGetUnpaidFeesQuery(
     enrolledFamily?._id,
     {
       skip: !enrolledFamily?._id,
     }
   );
+
+  const {
+    data: fees = [],
+    refetch: refetchFees,
+    isLoading: feesLoading,
+  } = useGetFeesByIdQuery(enrolledFamily?._id, {
+    skip: !enrolledFamily?._id,
+  });
+
+  // ✅ Use data directly from RTK queries
+  const hasDirectDebit = directDebitData?.hasDirectDebit || false;
+  const hasDirectDebitStatus = directDebitData?.directDebit?.status || null;
+  const paymentMethod = directDebitData?.directDebit || null;
+
+  // ✅ Proper pending authorization check
+  const isPendingAuthorization =
+    directDebitData?.directDebit?.mandateStatus === "pending" &&
+    directDebitData?.directDebit?.status !== "cancelled";
+
   const gradientStyle = {
     background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
   };
+
   if (!enrolledFamily || enrolledFamily.childrenDocs.length === 0) {
     return <p>No enrolled students found.</p>;
   }
 
   const { user } = useAuth();
 
-  const {
-    data: fees = [],
-    refetch,
-    isLoading: isLoadingFee,
-  } = useGetFeesByIdQuery(enrolledFamily?._id, {
-    skip: !enrolledFamily?._id,
-  });
+  // ✅ CANCEL DIRECT DEBIT FUNCTION
+  const handleCancelDirectDebit = async () => {
+    const result = await Swal.fire({
+      title: "Cancel Direct Debit?",
+      text: "Are you sure you want to cancel your Direct Debit setup?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, cancel it!",
+      cancelButtonText: "No, keep it",
+    });
 
-  // FIX 1: Update student names extraction for new structure
+    if (result.isConfirmed) {
+      try {
+        const result = await cancelFamilyDebit(enrolledFamily._id).unwrap();
+
+        // ✅ RTK will automatically refetch getFamilyDebit due to invalidatesTags
+        if (result?.success) {
+          Swal.fire(
+            "Cancelled!",
+            "Your Direct Debit has been cancelled.",
+            "success"
+          );
+          // Optional: Refetch to update UI immediately
+          refetchDirectDebit();
+        }
+      } catch (error) {
+        console.error("Cancellation failed:", error);
+        Swal.fire("Error!", "Failed to cancel Direct Debit.", "error");
+      }
+    }
+  };
+
+  // ✅ MANAGE DIRECT DEBIT FUNCTION
+  const handleManageDirectDebit = () => {
+    navigate("/dashboard/parent/pay-by-direct-debit", {
+      state: {
+        manage: true,
+        familyId: enrolledFamily?._id,
+        fromFeesPage: true,
+      },
+    });
+  };
+
+  // ✅ CHECK STATUS FUNCTION - Redirects to Direct Debit page
+  const handleCheckStatus = () => {
+    navigate("/dashboard/parent/pay-by-direct-debit", {
+      state: {
+        familyId: enrolledFamily?._id,
+        fromFeesPage: true,
+      },
+    });
+  };
+
+  // Rest of your existing functions remain the same...
   const getStudentNames = (fee) => {
     if (fee.students && Array.isArray(fee.students)) {
       return fee.students.map((student) => student.name).join(", ");
     }
-    return fee.students || "N/A"; // fallback to old structure
+    return fee.students || "N/A";
   };
 
-  // FIX 2: Update display month extraction for new structure
   const getDisplayMonth = (fee) => {
-    // For new structure: get month from students[0].monthsPaid[0]
     if (
       fee.students &&
       fee.students.length > 0 &&
@@ -63,13 +147,10 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
       const firstMonth = fee.students[0].monthsPaid[0];
       return `${firstMonth.month}/${firstMonth.year}`;
     }
-    // For old structure
     return fee.displayMonth || "N/A";
   };
 
-  // FIX 3: Update paid date extraction
   const getPaidDate = (fee) => {
-    // For new structure: use timestamp.$date
     if (fee.timestamp?.$date) {
       return new Date(fee.timestamp.$date).toLocaleDateString("en-US", {
         year: "numeric",
@@ -77,7 +158,6 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
         day: "numeric",
       });
     }
-    // For old structure
     return fee.paidDate
       ? new Date(fee.paidDate).toLocaleDateString("en-US", {
           year: "numeric",
@@ -87,7 +167,6 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
       : "N/A";
   };
 
-  // FIX 4: Update fee ID handling for modal
   const handleDataShow = (feeId) => {
     setSelectedFeeId(feeId);
     setShowDataModal(true);
@@ -100,7 +179,6 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
   const handleDataClose = () => setShowDataModal(false);
   const handleClose = () => setShowModal(false);
 
-  // Instead of state + getUnpaidFees util, directly use API response
   const unpaidRows = unpaidFees?.unpaidMonths || [];
 
   const studentMap = {};
@@ -144,7 +222,6 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
   console.log(feeStudents);
   const grandTotal = unpaidRows.reduce((acc, row) => acc + row.totalAmount, 0);
 
-  // FIX 5: Update payment data structure for new schema
   const handleOtherPayment = async (method) => {
     const tableHTML = `
     <div class="table-responsive" style="overflow-x: auto;">
@@ -196,7 +273,6 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
       focusConfirm: false,
       preConfirm: async () => {
         try {
-          // FIX 6: Update payment data to match new structure
           const paymentData = {
             familyId: enrolledFamily?._id,
             name: user?.displayName,
@@ -210,7 +286,7 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
               {
                 amount: grandTotal,
                 method: method,
-                date: new Date().toISOString().split("T")[0], // YYYY-MM-DD format
+                date: new Date().toISOString().split("T")[0],
               },
             ],
           };
@@ -219,7 +295,7 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
 
           if (data.insertedId) {
             toast.success("Payment request submitted successfully!");
-            refetch();
+            refetchFees();
           }
         } catch (err) {
           Swal.showValidationMessage(`Request failed: ${err.message}`);
@@ -234,12 +310,12 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
         "Your Payment was successful. Please wait for admin review.",
         "success"
       );
-      refetch();
+      refetchFees();
     }
   };
 
-  if (isLoading || isLoadingFee) {
-    return <LoadingSpinnerDash></LoadingSpinnerDash>;
+  if (unpaidLoading || feesLoading || directDebitLoading) {
+    return <LoadingSpinnerDash />;
   }
 
   return (
@@ -274,15 +350,9 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
               <tbody>
                 {fees?.map((fee, index) => (
                   <tr key={fee._id || `${fee.displayMonth}-${index}`}>
-                    {/* FIX 7: Use helper function for student names */}
                     <td>{getStudentNames(fee)}</td>
-
-                    {/* FIX 8: Use helper function for display month */}
                     <td>{getDisplayMonth(fee)}</td>
-
-                    {/* FIX 9: Use amount or expectedTotal */}
                     <td>£{fee.amount || fee.expectedTotal}</td>
-
                     <td>
                       <span
                         className={`py-1 px-2 rounded-3 text-white ${
@@ -296,11 +366,7 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
                         {fee.status}
                       </span>
                     </td>
-
-                    {/* FIX 10: Use helper function for paid date */}
                     <td>{getPaidDate(fee)}</td>
-
-                    {/* FIX 11: Use _id instead of originalFeeIds */}
                     <td>
                       <button
                         className="py-1 px-2 rounded-2 border border-black"
@@ -379,49 +445,120 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
           <h3 className="fs-1 fw-bold text-center my-4">
             Action Required For Monthly Fee
           </h3>
-          <div className="row justify-content-center mt-3">
-            <button
-              onClick={handleShow}
-              className="col-lg-2 text-white py-1 px-2 rounded-2"
-              style={{ backgroundColor: "var(--border2)" }}
-            >
-              Pay Now by Card
-            </button>
-            <p className="col-lg-1 d-flex align-items-center justify-content-center">
-              or
-            </p>
-            <button
-              className="col-lg-2 text-white py-1 px-2 rounded-2"
-              style={{ backgroundColor: "var(--border2)" }}
-              onClick={() => handleOtherPayment("bank transfer")}
-            >
-              Bank Transfer
-            </button>
 
-            <p className="col-lg-1 d-flex align-items-center justify-content-center">
-              or
-            </p>
-            <button
-              className="col-lg-2 text-white py-1 px-2 rounded-2"
-              style={{ backgroundColor: "var(--border2)" }}
-              onClick={() => handleOtherPayment("cash payment at office")}
-            >
-              {" "}
-              Cash Payment at Office
-            </button>
-            <p className="col-lg-1 d-flex align-items-center justify-content-center">
-              or
-            </p>
-            <button
-              className="col-lg-2 text-white py-1 px-2 rounded-2"
-              style={{ backgroundColor: "var(--border2)" }}
-              onClick={() => handleOtherPayment("card machine at office")}
-            >
-              Card Machine at Office
-            </button>
-          </div>
+          {/* ✅ CONDITIONAL RENDERING: Show appropriate UI based on Direct Debit status */}
+          {hasDirectDebitStatus === "active" ? (
+            // ✅ DIRECT DEBIT ACTIVE - Show only management options
+            <div className="row justify-content-center mt-3">
+              <div className="col-lg-8 text-center">
+                <div className="text-success py-3 px-4 rounded-3 border border-success bg-light mb-3">
+                  <i className="fas fa-check-circle me-2 fs-4"></i>
+                  <h5 className="d-inline">Direct Debit Active</h5>
+                  <br />
+                  <small className="text-muted">
+                    Your fees will be automatically collected each month
+                  </small>
+                </div>
+
+                <div className="d-flex justify-content-center gap-3">
+                  <button
+                    className="btn btn-outline-primary"
+                    onClick={handleManageDirectDebit}
+                  >
+                    Manage Direct Debit
+                  </button>
+                  <button
+                    className="btn btn-outline-danger"
+                    onClick={handleCancelDirectDebit}
+                    disabled={isCancelling}
+                  >
+                    {isCancelling ? "Cancelling..." : "Cancel Direct Debit"}
+                  </button>
+                </div>
+              </div>
+            </div>
+          ) : isPendingAuthorization ? (
+            // ✅ PENDING AUTHORIZATION - Show pending status with redirect button
+            <div className="row justify-content-center mt-3">
+              <div className="col-lg-8 text-center">
+                <div className="text-warning py-3 px-4 rounded-3 border border-warning bg-light mb-3">
+                  <i className="fas fa-clock me-2 fs-4"></i>
+                  <h5 className="d-inline">
+                    Direct Debit Pending Authorization
+                  </h5>
+                  <br />
+                  <small className="text-muted">
+                    Your bank is verifying the Direct Debit mandate. This
+                    usually takes 2-3 business days.
+                    <br />
+                    Your payments will be automatic once authorized.
+                  </small>
+                </div>
+
+                <div className="d-flex justify-content-center gap-3">
+                  <button
+                    className="btn btn-warning text-white"
+                    onClick={handleCheckStatus}
+                  >
+                    <i className="fas fa-external-link-alt me-2"></i>
+                    Check Status & Details
+                  </button>
+                  <button
+                    className="btn btn-outline-danger"
+                    onClick={handleCancelDirectDebit}
+                    disabled={isCancelling}
+                  >
+                    {isCancelling ? "Cancelling..." : "Cancel Setup"}
+                  </button>
+                </div>
+              </div>
+            </div>
+          ) : (
+            // ✅ DIRECT DEBIT NOT ACTIVE - Show all payment options
+            <div className="row justify-content-center mt-3">
+              <button
+                onClick={handleShow}
+                className="col-lg-2 text-white py-2 px-3 rounded-2"
+                style={{ backgroundColor: "var(--border2)" }}
+              >
+                Pay Now by Card
+              </button>
+              <p className="col-lg-1 d-flex align-items-center justify-content-center">
+                or
+              </p>
+              <button
+                className="col-lg-2 text-white py-2 px-3 rounded-2"
+                style={{ backgroundColor: "var(--border2)" }}
+                onClick={() => handleOtherPayment("bank transfer")}
+              >
+                Bank Transfer
+              </button>
+
+              <p className="col-lg-1 d-flex align-items-center justify-content-center">
+                or
+              </p>
+              <button
+                className="col-lg-2 text-white py-2 px-3 rounded-2"
+                style={{ backgroundColor: "var(--border2)" }}
+                onClick={() => handleOtherPayment("cash payment at office")}
+              >
+                Cash Payment at Office
+              </button>
+              <p className="col-lg-1 d-flex align-items-center justify-content-center">
+                or
+              </p>
+              <button
+                className="col-lg-2 text-white py-2 px-3 rounded-2"
+                style={{ backgroundColor: "var(--border2)" }}
+                onClick={() => handleOtherPayment("card machine at office")}
+              >
+                Card Machine at Office
+              </button>
+            </div>
+          )}
         </>
       )}
+
       <ShowFeeDataModal
         feeId={selectedFeeId}
         showModal={showDataModal}
@@ -434,7 +571,7 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
         paymentDetails={feeStudents}
         unpaidRows={unpaidRows}
         enrolledFamily={enrolledFamily}
-        refetch={refetch}
+        refetch={refetchFees}
       />
     </div>
   );

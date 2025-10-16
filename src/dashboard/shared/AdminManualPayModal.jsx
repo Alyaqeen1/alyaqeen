@@ -48,12 +48,34 @@ export default function AdminManualPayModal({
   useEffect(() => {
     if (feeType === "monthly") {
       setFeeMonth(currentMonth);
-      setPayNow(50);
+
+      if (
+        enrolledFamily?.childrenDocs?.length > 0 &&
+        selectedStudents.length > 0
+      ) {
+        const totalWithoutDiscount = enrolledFamily.childrenDocs
+          .filter((s) => selectedStudents.includes(s._id))
+          .reduce((sum, s) => {
+            const fee =
+              s.monthly_fee ?? s.monthlyFee ?? s.monthlyFeeAmount ?? 0;
+            return sum + Number(fee);
+          }, 0);
+
+        // apply family discount if exists
+        const discountPercent = enrolledFamily?.discount || 0;
+        const discountAmount = (totalWithoutDiscount * discountPercent) / 100;
+        const finalTotal = totalWithoutDiscount - discountAmount;
+
+        setPayNow(finalTotal);
+      } else {
+        setPayNow("");
+      }
     } else {
       setFeeMonth("");
       setPayNow("");
     }
-  }, [feeType, currentMonth]);
+  }, [feeType, currentMonth, selectedStudents, enrolledFamily]);
+
   // derived list of enrolled student ids for select-all and comparisons
   // derived list of enrolled AND approved student ids for select-all and comparisons
   const enrolledStudentIds = useMemo(() => {

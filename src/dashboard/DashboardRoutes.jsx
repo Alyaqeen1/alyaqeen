@@ -31,6 +31,8 @@ import DashboardLayout from "./layout/DashboardLayout";
 import Home from "./pages/Home/Home";
 import EducationalInfo from "./parent/EducationalInfo";
 import PayByDirectDebit from "./parent/PayByDirectDebit";
+import PaymentCancel from "./parent/PaymentCancel";
+import PaymentSuccess from "./parent/PaymentSuccess";
 import PayMonthlyFees from "./parent/PayMonthlyFees";
 import ReportsSummaryParent from "./parent/ReportsSummaryParent";
 import StudentDetails from "./parent/StudentDetails";
@@ -458,6 +460,26 @@ const dashboardRoutes = [
           <PrivateRoute>
             <ParentRoute>
               <UpdateChild></UpdateChild>
+            </ParentRoute>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "parent/payment-success",
+        element: (
+          <PrivateRoute>
+            <ParentRoute>
+              <PaymentSuccess></PaymentSuccess>
+            </ParentRoute>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "parent/payment-cancel",
+        element: (
+          <PrivateRoute>
+            <ParentRoute>
+              <PaymentCancel></PaymentCancel>
             </ParentRoute>
           </PrivateRoute>
         ),
