@@ -449,7 +449,7 @@ const MeritChart = ({ studentId }) => {
 
             {/* Charts Grid - Side by Side */}
             <div className="row g-3 mb-4">
-              <div className="col-md-6">
+              <div className="col-lg-6">
                 <div className="card border-0 shadow-sm h-100">
                   <div className="card-body p-3">
                     <h6 className="card-title fw-bold mb-2">
@@ -464,7 +464,7 @@ const MeritChart = ({ studentId }) => {
                   </div>
                 </div>
               </div>
-              <div className="col-md-6">
+              <div className="col-lg-6">
                 <div className="card border-0 shadow-sm h-100">
                   <div className="card-body p-3">
                     <div className="d-flex justify-content-between align-items-center mb-2">

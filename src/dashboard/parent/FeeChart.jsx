@@ -486,7 +486,7 @@ export default function FeeChart({ studentId }) {
         {/* Top Section: Donut & Filters */}
         <div className="row mb-4">
           {/* Donut Chart */}
-          <div className="col-md-4 mb-4 mb-md-0">
+          <div className="col-xl-4 mb-4 mb-md-0">
             <div className="card">
               <div className="card-body">
                 <div className="text-center mt-2 text-muted small">
@@ -503,7 +503,7 @@ export default function FeeChart({ studentId }) {
           </div>
 
           {/* Filters Container */}
-          <div className="col-md-8">
+          <div className="col-xl-8">
             <div className="card">
               <div className="card-body">
                 <div className="row g-3">

@@ -299,47 +299,95 @@ export default function ParentDashboard({ family, refetch }) {
   return (
     <div>
       {/* Tab Navigation */}
-      <ul
-        className="nav gap-2 my-5 flex justify-content-center align-items-center"
-        role="tablist"
-      >
-        {family?.childrenDocs?.map((student) => (
-          <li className="nav-item" key={student?._id}>
-            <a
-              className="nav-link text-uppercase box-shadow px-3"
+      <div className="d-flex justify-content-center my-5">
+        <div className="d-flex flex-wrap gap-3 justify-content-center">
+          {family?.childrenDocs?.map((student) => (
+            <button
+              key={student?._id}
+              className="btn fw-semibold px-4 py-2 rounded-pill border-0 shadow-sm transition-all"
               style={{
-                backgroundColor:
-                  activeTab === student?._id ? "var(--border2)" : undefined,
-                color: activeTab === student?._id ? "white" : "black",
-                borderRadius: "20px", // <-- added here
+                background:
+                  activeTab === student?._id
+                    ? "linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
+                    : "linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)",
+                color: activeTab === student?._id ? "white" : "#6c757d",
+                border:
+                  activeTab === student?._id ? "none" : "1px solid #dee2e6",
+                minWidth: "120px",
+                transition: "all 0.3s ease",
+                transform:
+                  activeTab === student?._id ? "scale(1.05)" : "scale(1)",
+                boxShadow:
+                  activeTab === student?._id
+                    ? "0 4px 15px rgba(102, 126, 234, 0.4)"
+                    : "0 2px 8px rgba(0, 0, 0, 0.1)",
               }}
               onClick={() => setActiveTab(student?._id)}
             >
-              {student.name.length > 5
-                ? student.name
-                    .split(" ")
-                    .map((n) => n[0])
-                    .join("") // initials
-                : student.name}
-            </a>
-          </li>
-        ))}
+              <div className="d-flex flex-column align-items-center">
+                <span className="fw-bold" style={{ fontSize: "0.9rem" }}>
+                  {student.name.length > 5
+                    ? student.name
+                        .split(" ")
+                        .map((n) => n[0])
+                        .join("")
+                    : student.name}
+                </span>
+                {activeTab === student?._id && (
+                  <div
+                    style={{
+                      width: "6px",
+                      height: "6px",
+                      backgroundColor: "white",
+                      borderRadius: "50%",
+                      marginTop: "4px",
+                    }}
+                  />
+                )}
+              </div>
+            </button>
+          ))}
 
-        <li className="nav-item">
-          <a
-            className="nav-link text-uppercase box-shadow px-3"
+          <button
+            className="btn fw-semibold px-4 py-2 rounded-pill border-0 shadow-sm transition-all"
             style={{
-              backgroundColor:
-                activeTab === "payment-summary" ? "var(--border2)" : undefined,
-              color: activeTab === "payment-summary" ? "white" : "black",
-              borderRadius: "20px", // <-- added here
+              background:
+                activeTab === "payment-summary"
+                  ? "linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
+                  : "linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)",
+              color: activeTab === "payment-summary" ? "white" : "#6c757d",
+              border:
+                activeTab === "payment-summary" ? "none" : "1px solid #dee2e6",
+              minWidth: "160px",
+              transition: "all 0.3s ease",
+              transform:
+                activeTab === "payment-summary" ? "scale(1.05)" : "scale(1)",
+              boxShadow:
+                activeTab === "payment-summary"
+                  ? "0 4px 15px rgba(102, 126, 234, 0.4)"
+                  : "0 2px 8px rgba(0, 0, 0, 0.1)",
             }}
             onClick={() => setActiveTab("payment-summary")}
           >
-            Payment Summary
-          </a>
-        </li>
-      </ul>
+            <div className="d-flex flex-column align-items-center">
+              <span className="fw-bold" style={{ fontSize: "0.9rem" }}>
+                💰 Payment Summary
+              </span>
+              {activeTab === "payment-summary" && (
+                <div
+                  style={{
+                    width: "6px",
+                    height: "6px",
+                    backgroundColor: "white",
+                    borderRadius: "50%",
+                    marginTop: "4px",
+                  }}
+                />
+              )}
+            </div>
+          </button>
+        </div>
+      </div>
 
       {/* Tab content container */}
       <div className="tab-content mt-4">
