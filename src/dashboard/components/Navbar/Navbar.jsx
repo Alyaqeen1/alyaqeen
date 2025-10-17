@@ -116,7 +116,7 @@ export default function Navbar() {
               whileHover={{ backgroundColor: "#F1F1F6" }}
               transition={{ duration: 0 }}
               style={btnStyle}
-              className="d-none d-lg-block"
+              // className="d-none d-lg-block"
               title="Notifications"
               onClick={toggleDropdown}
             >

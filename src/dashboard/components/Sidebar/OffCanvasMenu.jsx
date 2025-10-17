@@ -230,6 +230,7 @@ export default function OffCanvasMenu() {
                         identifier="fees"
                         submenuItems={[
                           { label: "Fee Settings", to: "fee-settings" },
+                          { label: "Direct Debit", to: "direct-debit" },
                           { label: "Unpaid List", to: "unpaid-list" },
                           { label: "All Fees", to: "all-fees" },
                           { label: "Pending Payments", to: "pending-payments" },
@@ -349,26 +350,31 @@ export default function OffCanvasMenu() {
                         icon={<FaUserGraduate className="mx-2 fs-5" />}
                         label="Student Details"
                         to="parent/student-details"
+                        onNavigate={() => setShowSidebar(false)}
                       />
                       <MenuItem
                         icon={<FaBookOpen className="mx-2 fs-5" />}
                         label="Educational Info"
                         to="parent/educational-info"
+                        onNavigate={() => setShowSidebar(false)}
                       />
                       <MenuItem
                         icon={<FaChartLine className="mx-2 fs-5" />}
                         label="Reports Summary"
                         to="parent/reports-summary"
+                        onNavigate={() => setShowSidebar(false)}
                       />
                       <MenuItem
                         icon={<FaMoneyBillWave className="mx-2 fs-5" />}
                         label="Pay Monthly Fees"
                         to="parent/pay-monthly-fees"
+                        onNavigate={() => setShowSidebar(false)}
                       />
                       <MenuItem
                         icon={<FaCreditCard className="mx-2 fs-5" />}
                         label="Pay By Direct Debit"
                         to="parent/pay-by-direct-debit"
+                        onNavigate={() => setShowSidebar(false)}
                       />
                     </>
                   )}

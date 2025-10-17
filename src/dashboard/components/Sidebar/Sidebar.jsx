@@ -162,6 +162,7 @@ export default function Sidebar() {
                       identifier="fees"
                       submenuItems={[
                         { label: "Fee Settings", to: "fee-settings" },
+                        { label: "Direct Debit", to: "direct-debit" },
                         { label: "Unpaid List", to: "unpaid-list" },
                         { label: "All Fees", to: "all-fees" },
                         { label: "Pending Payments", to: "pending-payments" },

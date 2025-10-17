@@ -5,6 +5,7 @@ import TeacherRoute from "../routes/TeacherRoute";
 import ActiveStudents from "./admin/ActiveStudents";
 import ActiveTeachers from "./admin/ActiveTeachers";
 import AddTeacher from "./admin/AddTeacher";
+import AdminDirectDebit from "./admin/AdminDirectDebit";
 import Classes from "./admin/Classes";
 import Departments from "./admin/Departments";
 import FeeSettings from "./admin/FeeSettings";
@@ -400,6 +401,16 @@ const dashboardRoutes = [
           <PrivateRoute>
             <AdminRoute>
               <UnpaidList></UnpaidList>
+            </AdminRoute>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "direct-debit",
+        element: (
+          <PrivateRoute>
+            <AdminRoute>
+              <AdminDirectDebit></AdminDirectDebit>
             </AdminRoute>
           </PrivateRoute>
         ),

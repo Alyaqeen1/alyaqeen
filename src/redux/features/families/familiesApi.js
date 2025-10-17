@@ -38,6 +38,17 @@ export const familiesApi = apiSlice.injectEndpoints({
       query: (id) => `/families/with-children/enrolled/by-id/${id}`,
       providesTags: ["Family"],
     }),
+    // ✅ ADMIN: Get all Direct Debit families
+    getAdminDirectDebitFamilies: builder.query({
+      query: () => "/families/admin/direct-debit-families-with-fees",
+      providesTags: ["Family"],
+    }),
+
+    // ✅ ADMIN: Get specific Direct Debit family details
+    getAdminDirectDebitFamily: builder.query({
+      query: (id) => `/families/admin/direct-debit-family/${id}`,
+      providesTags: (result, error, id) => [{ type: "Family", id }, "Family"],
+    }),
     // In familiesApi.js - fix the getFamilyDebit query
     getFamilyDebit: builder.query({
       query: (familyId) =>
@@ -102,6 +113,19 @@ export const familiesApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Family"], // 🔥 Important — invalidate Family when a student's status changes
     }),
+    // ✅ ADMIN: Manual payment collection
+    collectAdminPayment: builder.mutation({
+      query: ({ familyId, amount, description }) => ({
+        url: "/families/admin/collect-payment",
+        method: "POST",
+        body: { familyId, amount, description },
+      }),
+      invalidatesTags: (result, error, { familyId }) => [
+        { type: "Family", id: familyId },
+        "Fee", // Invalidate fees since we're collecting payment
+        "Family",
+      ],
+    }),
     cancelFamilyDebit: builder.mutation({
       query: (familyId) => ({
         url: `/families/cancel-direct-debit`,
@@ -132,4 +156,7 @@ export const {
   useUpdateFamilyFeeChoiceMutation,
   useCancelFamilyDebitMutation,
   useDeleteFamilyDataMutation,
+  useGetAdminDirectDebitFamiliesQuery,
+  useGetAdminDirectDebitFamilyQuery,
+  useCollectAdminPaymentMutation,
 } = apiSlice;

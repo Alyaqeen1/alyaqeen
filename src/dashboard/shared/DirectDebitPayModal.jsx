@@ -7,34 +7,33 @@ import {
   useCreateFeeDataMutation,
   useGetFeesQuery,
 } from "../../redux/features/fees/feesApi";
+import { useCollectAdminPaymentMutation } from "../../redux/features/families/familiesApi";
 import { useUpdateStudentStatusMutation } from "../../redux/features/students/studentsApi";
 import toast from "react-hot-toast";
 
 // Helper: always keep two decimals
-// Enhanced Helper: always keep two decimals with better error handling
 const toTwo = (v) => {
   const num = Number(v);
   if (isNaN(num)) return 0.0;
   return Number(num.toFixed(2));
 };
 
-export default function AdminManualPayModal({
+export default function DirectDebitPayModal({
   familyId,
   handleAdminClose,
   adminShowModal,
   refetch: familiesRefetch,
-  refetchFee,
 }) {
   const { data: enrolledFamily } = useGetEnrolledFullFamilyByIdQuery(familyId);
   const { data: family } = useGetFamilyQuery(familyId);
   const [createFeeData] = useCreateFeeDataMutation();
+  const [collectPayment] = useCollectAdminPaymentMutation();
   const [updateStudentStatus] = useUpdateStudentStatusMutation();
   const { data: fees = [] } = useGetFeesQuery();
 
   // Form state
   const [feeYear, setFeeYear] = useState(new Date().getFullYear());
   const [feeMonth, setFeeMonth] = useState("");
-  const [feeMethod, setFeeMethod] = useState("cash payment at office");
   const [feeType, setFeeType] = useState("monthly");
   const [payNow, setPayNow] = useState("");
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
@@ -45,6 +44,8 @@ export default function AdminManualPayModal({
   const currentMonth = useMemo(() => {
     return (new Date().getMonth() + 1).toString().padStart(2, "0");
   }, []);
+
+  // Auto-fill month and calculate expected total based on fee type
   useEffect(() => {
     if (feeType === "monthly") {
       setFeeMonth(currentMonth);
@@ -71,13 +72,32 @@ export default function AdminManualPayModal({
         setPayNow("");
       }
     } else {
+      // Admission type - calculate admission fee + first month
       setFeeMonth("");
-      setPayNow("");
+      if (selectedStudents.length > 0) {
+        const admissionFeePerStudent = 20;
+        const totalAdmissionFee =
+          admissionFeePerStudent * selectedStudents.length;
+
+        const totalMonthlyFee =
+          enrolledFamily?.childrenDocs
+            ?.filter((s) => selectedStudents.includes(s._id))
+            .reduce((sum, s) => {
+              const baseFee =
+                s.monthly_fee ?? s.monthlyFee ?? s.monthlyFeeAmount ?? 0;
+              const discountPercent = enrolledFamily?.discount || 0;
+              const discountedFee = baseFee - (baseFee * discountPercent) / 100;
+              return sum + Number(discountedFee);
+            }, 0) || 0;
+
+        setPayNow(totalAdmissionFee + totalMonthlyFee);
+      } else {
+        setPayNow("");
+      }
     }
   }, [feeType, currentMonth, selectedStudents, enrolledFamily]);
 
   // derived list of enrolled student ids for select-all and comparisons
-  // derived list of enrolled AND approved student ids for select-all and comparisons
   const enrolledStudentIds = useMemo(() => {
     return (
       enrolledFamily?.childrenDocs
@@ -170,7 +190,6 @@ export default function AdminManualPayModal({
   }, [payNow, expectedTotal]);
 
   // Helper to check if a fee doc contains paid month for a student
-  // ✅ FIXED: Check if ANY payment exists for this month, regardless of amount
   const hasStudentPaidMonth = (feeDoc, studentId, month, year) => {
     if (!feeDoc?.students) return false;
     const s = feeDoc.students.find(
@@ -182,35 +201,21 @@ export default function AdminManualPayModal({
         String(m.month).padStart(2, "0") === String(month).padStart(2, "0") &&
         String(m.year) === String(year)
     );
-    // ✅ FIX: Return true if ANY payment exists for this month (even partial)
     return !!(mp && (mp.paid ?? 0) > 0);
   };
 
-  // Helper to check if a fee doc contains admission fully paid for a student
+  // Helper to check if admission already paid for student
   const hasStudentPaidAdmission = (feeDoc, studentId) => {
     if (!feeDoc?.students) return false;
     const s = feeDoc.students.find(
       (st) => String(st.studentId) === String(studentId)
     );
-    if (!s) return false;
-
-    // prefer explicit admission fields if available
-    const admissionFee = s.admissionFee ?? 0;
-    const discounted = s.discountedFee ?? s.monthlyFee ?? 0;
-
-    // If `paidAdmission` exists (we sometimes set it during creation), use that
-    if (s.paidAdmission !== undefined) {
-      return (s.paidAdmission ?? 0) >= admissionFee - 1e-6;
-    }
-
-    // fallback: if subtotal covers admission + discounted monthly portion
-    return (s.subtotal ?? 0) >= toTwo(admissionFee + discounted) - 1e-6;
+    return s?.admissionFee !== undefined;
   };
 
-  // Check if payment already exists for selected students/month/year/type
-  // ✅ FIXED: Check if ANY selected student has already paid for this month
+  // Check if payment already exists for selected students
   const paymentExists = useMemo(() => {
-    if (!feeType || !familyId || selectedStudents.length === 0) return false;
+    if (!familyId || selectedStudents.length === 0) return false;
 
     if (feeType === "admission") {
       return selectedStudentObjects.some((student) =>
@@ -218,45 +223,32 @@ export default function AdminManualPayModal({
           (fee) =>
             String(fee.familyId) === String(familyId) &&
             String(fee.paymentType) === "admission" &&
-            (hasStudentPaidAdmission(fee, student._id) ||
-              (fee.status === "paid" &&
-                fee.students?.some(
-                  (s) => String(s.studentId) === String(student._id)
-                )))
+            hasStudentPaidAdmission(fee, student._id)
         )
       );
-    }
-
-    if (feeType === "monthly" && feeMonth) {
-      // ✅ FIX: Check each selected student individually
-      const hasExistingPayment = selectedStudentObjects.some((student) =>
+    } else if (feeType === "monthly" && feeMonth) {
+      return selectedStudentObjects.some((student) =>
         fees.some(
           (fee) =>
             String(fee.familyId) === String(familyId) &&
             (String(fee.paymentType) === "monthly" ||
-              String(fee.paymentType) === "monthlyOnHold") &&
+              String(fee.paymentType) === "monthlyOnHold" ||
+              String(fee.paymentType) === "direct_debit") &&
             hasStudentPaidMonth(fee, student._id, feeMonth, feeYear)
         )
       );
-
-      if (hasExistingPayment) {
-        console.log(
-          "🚫 Payment blocked: Some students already paid for this month"
-        );
-        console.log(
-          "Selected students:",
-          selectedStudentObjects.map((s) => s.name)
-        );
-        console.log("Fee Month/Year:", feeMonth, feeYear);
-      }
-
-      return hasExistingPayment;
     }
 
     return false;
   }, [fees, familyId, feeMonth, feeYear, feeType, selectedStudentObjects]);
+
   const isBeforeJoiningMonth = useMemo(() => {
-    if (!feeMonth || !feeYear || selectedStudentObjects.length === 0)
+    if (
+      feeType !== "monthly" ||
+      !feeMonth ||
+      !feeYear ||
+      selectedStudentObjects.length === 0
+    )
       return false;
 
     const selectedMonth = parseInt(feeMonth);
@@ -266,7 +258,7 @@ export default function AdminManualPayModal({
       if (!student.startingDate) return false;
 
       const joiningDate = new Date(student.startingDate);
-      const joiningMonth = joiningDate.getMonth() + 1; // getMonth is 0-indexed
+      const joiningMonth = joiningDate.getMonth() + 1;
       const joiningYear = joiningDate.getFullYear();
 
       return (
@@ -274,12 +266,12 @@ export default function AdminManualPayModal({
         (selectedYear === joiningYear && selectedMonth < joiningMonth)
       );
     });
-  }, [feeMonth, feeYear, selectedStudentObjects]);
+  }, [feeMonth, feeYear, selectedStudentObjects, feeType]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     setIsProcessing(true);
+
     // Validation
     if (selectedStudents?.length === 0) {
       toast.error("Please select at least one student");
@@ -296,35 +288,33 @@ export default function AdminManualPayModal({
       setIsProcessing(false);
       return;
     }
-    if (!feeMethod) {
-      toast.error("Please select a Payment Method");
-      setIsProcessing(false);
-      return;
-    }
     if (!payNow || isNaN(payNow) || toTwo(Number(payNow)) <= 0) {
-      toast.error("Please enter a valid Pay Now amount");
+      toast.error("Please enter a valid amount");
       setIsProcessing(false);
       return;
     }
     if (paymentExists) {
-      // ✅ BETTER ERROR: Show which students already paid
-      const alreadyPaidStudents = selectedStudentObjects.filter((student) =>
-        fees.some(
-          (fee) =>
-            String(fee.familyId) === String(familyId) &&
-            (String(fee.paymentType) === "monthly" ||
-              String(fee.paymentType) === "monthlyOnHold") &&
-            hasStudentPaidMonth(fee, student._id, feeMonth, feeYear)
-        )
-      );
+      if (feeType === "admission") {
+        toast.error("Admission fee already paid for some selected students");
+      } else {
+        const alreadyPaidStudents = selectedStudentObjects.filter((student) =>
+          fees.some(
+            (fee) =>
+              String(fee.familyId) === String(familyId) &&
+              (String(fee.paymentType) === "monthly" ||
+                String(fee.paymentType) === "monthlyOnHold" ||
+                String(fee.paymentType) === "direct_debit") &&
+              hasStudentPaidMonth(fee, student._id, feeMonth, feeYear)
+          )
+        );
 
-      const studentNames = alreadyPaidStudents.map((s) => s.name).join(", ");
-
-      toast.error(
-        `Payment already recorded for ${studentNames} for ${
-          months[parseInt(feeMonth) - 1]
-        } ${feeYear}`
-      );
+        const studentNames = alreadyPaidStudents.map((s) => s.name).join(", ");
+        toast.error(
+          `Payment already recorded for ${studentNames} for ${
+            months[parseInt(feeMonth) - 1]
+          } ${feeYear}`
+        );
+      }
       setIsProcessing(false);
       return;
     }
@@ -338,20 +328,33 @@ export default function AdminManualPayModal({
     }
 
     try {
+      const parsedPayNow = toTwo(Number(payNow));
+
+      // Process Stripe Direct Debit payment first
+      const stripeResult = await collectPayment({
+        familyId: familyId,
+        amount: parsedPayNow,
+        description: `${
+          feeType === "admission" ? "Admission and first month" : "Monthly"
+        } payment via Direct Debit`,
+        month: feeMonth,
+        year: feeYear,
+      }).unwrap();
+
+      console.log("Stripe payment result:", stripeResult);
+
+      // Apply family discount
+      const discountPercent = family?.discount
+        ? toTwo(Number(family.discount))
+        : 0;
+
+      let feeData;
+
       if (feeType === "admission") {
+        // Admission payment logic
         const admissionFeePerStudent = 20;
-        const totalAdmissionNeeded = toTwo(
-          admissionFeePerStudent * selectedStudentObjects.length
-        );
-        const totalPayNow = toTwo(Number(payNow));
 
-        // Apply family discount
-        const discountPercent = family?.discount
-          ? toTwo(Number(family.discount))
-          : 0;
-
-        // Prepare students with discounted monthly fee
-        const studentsFees = selectedStudentObjects.map((student) => {
+        const studentsPayload = selectedStudentObjects.map((student) => {
           const baseFee = toTwo(
             student.monthly_fee ??
               student.monthlyFee ??
@@ -363,7 +366,6 @@ export default function AdminManualPayModal({
             ? toTwo(baseFee - (baseFee * discountPercent) / 100)
             : toTwo(baseFee);
 
-          // ✅ FIXED: Use student's actual starting date
           const startingDate = new Date(student.startingDate);
           const joiningMonth = startingDate.getMonth() + 1;
           const joiningYear = startingDate.getFullYear();
@@ -374,126 +376,32 @@ export default function AdminManualPayModal({
             admissionFee: admissionFeePerStudent,
             monthlyFee: toTwo(baseFee),
             discountedFee: toTwo(discountedFee),
-            joiningMonth: joiningMonth, // ✅ Use actual joining month
-            joiningYear: joiningYear, // ✅ Use actual joining year
+            joiningMonth: joiningMonth.toString().padStart(2, "0"),
+            joiningYear: joiningYear,
+            subtotal: toTwo(admissionFeePerStudent + discountedFee),
           };
         });
 
-        // Expected total = sum of admission + discounted monthly for all students
-        const expectedTotalRaw = studentsFees.reduce(
-          (sum, s) => sum + s.admissionFee + s.discountedFee,
-          0
-        );
-        const expectedTotal = toTwo(expectedTotalRaw);
-
-        // Calculate leftover for monthly portion
-        const leftover = toTwo(Math.max(0, totalPayNow - totalAdmissionNeeded));
-
-        // Allocation logic for monthly portion (distribute leftover proportionally)
-        let allocations = [];
-        if (leftover >= 0) {
-          // compute raw shares for monthly portion
-          const totalDiscounted = studentsFees.reduce(
-            (s, x) => s + x.discountedFee,
-            0
-          );
-
-          allocations = studentsFees.map((s) => {
-            const rawShare = toTwo(
-              totalDiscounted > 0
-                ? (s.discountedFee / totalDiscounted) * leftover
-                : 0
-            );
-            return { ...s, rawShare };
-          });
-
-          // assign cents fairly
-          allocations.forEach(
-            (a) => (a.paidMonthly = Math.floor(a.rawShare * 100) / 100)
-          );
-          let allocatedSum = toTwo(
-            allocations.reduce((s, a) => s + (a.paidMonthly || 0), 0)
-          );
-          let remainderCents = Math.round((leftover - allocatedSum) * 100);
-
-          if (remainderCents > 0) {
-            allocations.sort(
-              (a, b) =>
-                b.rawShare -
-                Math.floor(b.rawShare * 100) / 100 -
-                (a.rawShare - Math.floor(a.rawShare * 100) / 100)
-            );
-            for (let i = 0; i < allocations.length && remainderCents > 0; i++) {
-              allocations[i].paidMonthly = toTwo(
-                (allocations[i].paidMonthly || 0) + 0.01
-              );
-              remainderCents--;
-            }
-          }
-
-          // finalize subtotal and paidAdmission
-          allocations = allocations.map((a) => ({
-            ...a,
-            paidAdmission: toTwo(a.admissionFee),
-            paidMonthly: toTwo(a.paidMonthly || 0),
-            subtotal: toTwo((a.admissionFee || 0) + (a.paidMonthly || 0)),
-          }));
-        }
-
-        const admissionData = {
+        feeData = {
           familyId,
           name: family?.name,
           email: family?.email,
-          students: allocations.map((student) => ({
-            studentId: student.studentId,
-            name: student.name,
-            admissionFee: student.admissionFee,
-            monthlyFee: toTwo(student.monthlyFee),
-            discountedFee: toTwo(student.discountedFee),
-            joiningMonth: student.joiningMonth.toString().padStart(2, "0"),
-            joiningYear: student.joiningYear,
-            payments: [
-              {
-                amount: student.admissionFee,
-                date: date,
-                method: feeMethod,
-              },
-              ...(student.paidMonthly > 0
-                ? [
-                    {
-                      amount: toTwo(student.paidMonthly),
-                      date: date,
-                      method: feeMethod,
-                    },
-                  ]
-                : []),
-            ],
-            subtotal: toTwo(student.subtotal),
-          })),
+          students: studentsPayload,
           expectedTotal: toTwo(expectedTotal),
           remaining: 0,
-          paymentType: feeType,
           status: "paid",
+          paymentType: "admission",
           payments: [
             {
-              amount: toTwo(totalPayNow),
-              method: feeMethod,
+              amount: toTwo(parsedPayNow),
+              method: "direct_debit",
               date: date,
+              stripePaymentIntentId: stripeResult.paymentIntentId,
             },
           ],
-          timestamp: new Date().toISOString(),
         };
 
-        const data = await createFeeData(admissionData).unwrap();
-        toast.success(
-          `Admission payment of $${toTwo(
-            totalPayNow
-          )} recorded successfully for ${
-            selectedStudentObjects.length
-          } student(s)`
-        );
-
-        // Update student statuses if needed
+        // Update student statuses to enrolled
         await Promise.all(
           selectedStudentObjects.map((student) =>
             updateStudentStatus({
@@ -503,14 +411,7 @@ export default function AdminManualPayModal({
           )
         );
       } else {
-        // Monthly payment data (smart per-student allocation)
-        const parsedPayNow = toTwo(Number(payNow));
-
-        // build list of students with their actual monthly fee
-        const discountPercent = family?.discount
-          ? toTwo(Number(family.discount))
-          : 0;
-
+        // Monthly payment logic
         const studentsFees = selectedStudentObjects.map((student) => {
           const baseFee = toTwo(
             student.monthly_fee ??
@@ -531,17 +432,12 @@ export default function AdminManualPayModal({
           };
         });
 
-        const expectedTotalRaw = studentsFees.reduce((s, st) => s + st.fee, 0);
-        const expectedTotal = toTwo(expectedTotalRaw);
-
-        // allocations array will hold { studentId, name, fee, paid }
+        // Allocate payment proportionally among students
         let allocations = [];
 
         if (parsedPayNow >= expectedTotal) {
-          // Full payment for everyone
           allocations = studentsFees.map((s) => ({ ...s, paid: toTwo(s.fee) }));
         } else {
-          // Partial payment: distribute proportionally based on each student's fee
           allocations = studentsFees.map((s) => ({
             ...s,
             rawPaid: toTwo(
@@ -549,12 +445,10 @@ export default function AdminManualPayModal({
             ),
           }));
 
-          // round down to cents
           allocations.forEach(
             (a) => (a.paid = Math.floor(a.rawPaid * 100) / 100)
           );
 
-          // remainder cents
           let allocatedSum = toTwo(
             allocations.reduce((sum, a) => sum + a.paid, 0)
           );
@@ -573,7 +467,6 @@ export default function AdminManualPayModal({
             }
           }
 
-          // restore original order
           allocations.sort(
             (a, b) =>
               studentsFees.findIndex((s) => s.studentId === a.studentId) -
@@ -581,7 +474,6 @@ export default function AdminManualPayModal({
           );
         }
 
-        // Build students payload for DB
         const studentsPayload = allocations.map((a) => ({
           studentId: a.studentId,
           name: a.name,
@@ -597,48 +489,49 @@ export default function AdminManualPayModal({
           subtotal: toTwo(a.paid || 0),
         }));
 
-        const monthlyData = {
+        feeData = {
           familyId,
           name: family?.name,
           email: family?.email,
           students: studentsPayload,
           expectedTotal: toTwo(expectedTotal),
           remaining: toTwo(Math.max(0, expectedTotal - parsedPayNow)),
-          status: parsedPayNow >= expectedTotal ? "paid" : "partial",
-          paymentType: feeType,
+          status: paymentStatus,
+          paymentType: "monthly",
           payments: [
             {
               amount: toTwo(parsedPayNow),
-              method: feeMethod,
-              date,
+              method: "direct_debit",
+              date: date,
+              stripePaymentIntentId: stripeResult.paymentIntentId,
             },
           ],
         };
-
-        const data = await createFeeData(monthlyData).unwrap();
-        if (data?.insertedId) {
-          toast.success(
-            `Monthly payment of $${toTwo(
-              parsedPayNow
-            )} recorded successfully for ${
-              selectedStudentObjects?.length
-            } student(s)`
-          );
-        }
       }
 
-      refetchFee();
+      const data = await createFeeData(feeData).unwrap();
+
+      if (data?.insertedId) {
+        toast.success(
+          `Direct Debit payment of £${toTwo(parsedPayNow)} (${
+            paymentStatus === "paid" ? "Full" : "Partial"
+          }) recorded successfully for ${
+            selectedStudentObjects?.length
+          } student(s)`
+        );
+      }
+
       familiesRefetch();
       handleAdminClose();
     } catch (error) {
-      toast.error(error?.data?.message || "Payment recording failed");
-      console.error(error);
+      toast.error(
+        error?.data?.error ||
+          error?.data?.message ||
+          "Direct Debit payment failed"
+      );
+      console.error("Payment error:", error);
     } finally {
       setIsProcessing(false);
-      setFeeMethod("");
-      setFeeMonth("");
-      setFeeType("");
-      setPayNow("");
     }
   };
 
@@ -675,7 +568,7 @@ export default function AdminManualPayModal({
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             <div className="modal-header bg-light">
-              <h5 className="modal-title">Pay Group Fee</h5>
+              <h5 className="modal-title">Collect Direct Debit Payment</h5>
               <button
                 type="button"
                 className="btn-close"
@@ -690,7 +583,14 @@ export default function AdminManualPayModal({
                   <label className="col-sm-4 col-form-label fw-semibold">
                     Family Name
                   </label>
-                  <div className="col-sm-8 pt-2">{family?.name || "-"}</div>
+                  <div className="col-sm-8 pt-2">
+                    <strong>{family?.name || "-"}</strong>
+                    <br />
+                    <small className="text-muted">
+                      {enrolledFamily?.directDebit?.bankName} ****
+                      {enrolledFamily?.directDebit?.last4}
+                    </small>
+                  </div>
                 </div>
 
                 {/* Students Selection */}
@@ -737,7 +637,7 @@ export default function AdminManualPayModal({
                                 disabled={
                                   student.status !== "enrolled" &&
                                   student.status !== "approved"
-                                } // Allow both enrolled and approved
+                                }
                               />
                               <label
                                 className="form-check-label"
@@ -755,9 +655,8 @@ export default function AdminManualPayModal({
                                       : "pointer",
                                 }}
                               >
-                                {student.name}
-                                {student.status === "approved" &&
-                                  " (Approved - Not enrolled yet)"}
+                                {student.name} - £{student.monthly_fee || 0}
+                                {student.status === "approved" && " (Approved)"}
                                 {student.status !== "enrolled" &&
                                   student.status !== "approved" &&
                                   " (Not enrolled)"}
@@ -771,6 +670,30 @@ export default function AdminManualPayModal({
                       Selected: {selectedStudents.length} of{" "}
                       {enrolledStudentIds.length} students
                     </small>
+                  </div>
+                </div>
+
+                {/* Payment Type */}
+                <div className="mb-3 row">
+                  <label
+                    htmlFor="feeType"
+                    className="col-sm-4 col-form-label fw-semibold"
+                  >
+                    Payment Type
+                  </label>
+                  <div className="col-sm-8">
+                    <select
+                      id="feeType"
+                      className="form-select"
+                      value={feeType}
+                      onChange={(e) => setFeeType(e.target.value)}
+                      required
+                    >
+                      <option value="monthly">Monthly</option>
+                      <option value="admission">
+                        Admission and First Month
+                      </option>
+                    </select>
                   </div>
                 </div>
 
@@ -799,32 +722,7 @@ export default function AdminManualPayModal({
                   </div>
                 </div>
 
-                {/* Payment Type */}
-                <div className="mb-3 row">
-                  <label
-                    htmlFor="feeType"
-                    className="col-sm-4 col-form-label fw-semibold"
-                  >
-                    Payment Type
-                  </label>
-                  <div className="col-sm-8">
-                    <select
-                      id="feeType"
-                      className="form-select"
-                      value={feeType}
-                      onChange={(e) => setFeeType(e.target.value)}
-                      required
-                    >
-                      <option value="">Select Type</option>
-                      <option value="admission">
-                        Admission and First Month
-                      </option>
-                      <option value="monthly">Monthly</option>
-                    </select>
-                  </div>
-                </div>
-
-                {/* Fee Month (only required if monthly) */}
+                {/* Fee Month (only for monthly payments) */}
                 {feeType === "monthly" && (
                   <div className="mb-3 row">
                     <label
@@ -855,7 +753,7 @@ export default function AdminManualPayModal({
                   </div>
                 )}
 
-                {/* ✅ ADDED: Expected Total */}
+                {/* Expected Total */}
                 <div className="mb-3 row">
                   <label className="col-sm-4 col-form-label fw-semibold">
                     Expected Total
@@ -880,41 +778,13 @@ export default function AdminManualPayModal({
                   </div>
                 </div>
 
-                {/* Payment Method */}
-                <div className="mb-3 row">
-                  <label
-                    htmlFor="feeMethod"
-                    className="col-sm-4 col-form-label fw-semibold"
-                  >
-                    Payment Method
-                  </label>
-                  <div className="col-sm-8">
-                    <select
-                      id="feeMethod"
-                      className="form-select"
-                      value={feeMethod}
-                      onChange={(e) => setFeeMethod(e.target.value)}
-                      required
-                    >
-                      <option value="">Select Method</option>
-                      <option value="bank transfer">Bank Transfer</option>
-                      <option value="cash payment at office">
-                        Cash Payment at Office
-                      </option>
-                      <option value="card machine at office">
-                        Card Machine at Office
-                      </option>
-                    </select>
-                  </div>
-                </div>
-
-                {/* Pay Now */}
+                {/* Amount to Collect */}
                 <div className="mb-3 row">
                   <label
                     htmlFor="payNow"
                     className="col-sm-4 col-form-label fw-semibold"
                   >
-                    Pay Now
+                    Amount to Collect
                   </label>
                   <div className="col-sm-8">
                     <input
@@ -928,7 +798,6 @@ export default function AdminManualPayModal({
                       step="0.01"
                       required
                     />
-                    {/* ✅ ADDED: Payment Status Display */}
                     <small className="text-muted">
                       Status:{" "}
                       <span
@@ -956,7 +825,7 @@ export default function AdminManualPayModal({
                     htmlFor="paymentDate"
                     className="col-sm-4 col-form-label fw-semibold"
                   >
-                    Date
+                    Payment Date
                   </label>
                   <div className="col-sm-8">
                     <input
@@ -967,6 +836,16 @@ export default function AdminManualPayModal({
                       onChange={(e) => setDate(e.target.value)}
                       required
                     />
+                  </div>
+                </div>
+
+                {/* Payment Method (Fixed) */}
+                <div className="mb-3 row">
+                  <label className="col-sm-4 col-form-label fw-semibold">
+                    Payment Method
+                  </label>
+                  <div className="col-sm-8 pt-2 text-success">
+                    <strong>Direct Debit</strong>
                   </div>
                 </div>
               </div>
@@ -982,34 +861,21 @@ export default function AdminManualPayModal({
                 </button>
                 <button
                   type="submit"
-                  className="text-white py-1 px-2 rounded-2"
+                  className="btn btn-success"
                   disabled={
                     !payNow ||
-                    !feeMethod ||
-                    !feeType ||
                     (feeType === "monthly" && !feeMonth) ||
                     isProcessing
                   }
-                  style={{
-                    backgroundColor:
-                      !payNow ||
-                      !feeMethod ||
-                      !feeType ||
-                      (feeType === "monthly" && !feeMonth) ||
-                      isProcessing
-                        ? "var(--border2)"
-                        : "#28a745",
-                    cursor:
-                      !payNow ||
-                      !feeMethod ||
-                      !feeType ||
-                      (feeType === "monthly" && !feeMonth) ||
-                      isProcessing
-                        ? "not-allowed"
-                        : "pointer",
-                  }}
                 >
-                  {isProcessing ? "Processing..." : "Pay Group Fee"}
+                  {isProcessing ? (
+                    <>
+                      <span className="spinner-border spinner-border-sm me-2"></span>
+                      Processing...
+                    </>
+                  ) : (
+                    `Collect £${toTwo(Number(payNow)).toFixed(2)}`
+                  )}
                 </button>
               </div>
             </form>

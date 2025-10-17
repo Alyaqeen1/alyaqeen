@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Outlet } from "react-router";
+import { Outlet, ScrollRestoration } from "react-router";
 import Sidebar from "../components/Sidebar/Sidebar";
 import Navbar from "../components/Navbar/Navbar";
 import Footer from "../components/Footer/Footer";
@@ -23,6 +23,7 @@ export default function DashboardLayout() {
 
   return (
     <div className="row" style={{ minHeight: "100vh" }}>
+      <ScrollRestoration />
       {/* Sidebar */}
       <Sidebar></Sidebar>
 
