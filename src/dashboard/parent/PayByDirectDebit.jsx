@@ -569,8 +569,8 @@ export default function PayByDirectDebit() {
                 )}
 
                 <div className="d-grid gap-3 d-md-flex justify-content-center">
-                  <button
-                    onClick={handleBacsPayment}
+                  {/* <button
+                    onClick={handleUpdateBacsPayment}
                     className="btn btn-outline-primary px-4 py-3"
                     style={{
                       borderColor: "#667eea",
@@ -580,7 +580,7 @@ export default function PayByDirectDebit() {
                     disabled={isCancelling}
                   >
                     Update Payment Method
-                  </button>
+                  </button> */}
 
                   <button
                     className="btn btn-outline-danger px-4 py-3"

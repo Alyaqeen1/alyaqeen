@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import AdmissionFeeModal from "../shared/AdmissionFeeModal";
 import {
+  useCancelFamilyDebitMutation,
   useGetApprovedFullFamilyQuery,
   useGetEnrolledFullFamilyQuery,
+  useGetFamilyDebitQuery,
 } from "../../redux/features/families/familiesApi";
 import useAuth from "../../hooks/useAuth";
 import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
@@ -16,6 +18,7 @@ import MonthlyFeePayment from "./MonthlyFeePayment";
 import sessionMap from "../../utils/sessionMap";
 import StudentSummaryChart from "./StudentSummaryChart";
 import ChildSection from "./ChildSection";
+import { Link, useNavigate } from "react-router";
 
 export default function ParentDashboard({ family, refetch }) {
   const [showModal, setShowModal] = useState(false);
@@ -24,7 +27,7 @@ export default function ParentDashboard({ family, refetch }) {
   const [updateStudentStatus] = useUpdateStudentStatusMutation();
   const axiosPublic = useAxiosPublic();
   const [activeTab, setActiveTab] = useState(family?.childrenDocs[0]?._id);
-
+  const navigate = useNavigate();
   const {
     data: approvedFamily,
     isLoading,
@@ -43,25 +46,26 @@ export default function ParentDashboard({ family, refetch }) {
     }
   );
 
+  const {
+    data: directDebitData,
+    isLoading: directDebitLoading,
+    refetch: refetchDirectDebit,
+  } = useGetFamilyDebitQuery(enrolledFamily?._id, {
+    skip: !enrolledFamily?._id,
+  });
+  const [cancelFamilyDebit, { isLoading: isCancelling }] =
+    useCancelFamilyDebitMutation();
+
   const approvedChildAfter10th = approvedFamily?.childrenDocs?.some((child) => {
     if (child.status !== "approved" || !child.startingDate) return false;
     const startDate = new Date(child.startingDate);
     // Check if joined after September 10th, 2025
     return startDate > new Date("2025-09-10");
   });
-
-  // ✅ ADD DEBUG LOGS
-  console.log("=== FEE CHOICE MODAL DEBUG ===");
-  console.log("roleData?.role:", roleData?.role);
-  console.log("approvedChildAfter10th:", approvedChildAfter10th);
-  console.log("approvedFamily?.feeChoice:", approvedFamily?.feeChoice);
-  console.log("family?.feeChoice:", family?.feeChoice);
-  console.log(
-    "shouldShowModal:",
-    roleData?.role === "parent" &&
-      approvedChildAfter10th &&
-      approvedFamily?.feeChoice === null
-  );
+  const hasDirectDebitStatus = directDebitData?.directDebit?.status || null;
+  const isPendingAuthorization =
+    directDebitData?.directDebit?.mandateStatus === "pending" &&
+    directDebitData?.directDebit?.status !== "cancelled";
 
   const shouldShowModal =
     roleData?.role === "parent" &&
@@ -211,7 +215,36 @@ export default function ParentDashboard({ family, refetch }) {
 
     const result = await Swal.fire({
       title: `Confirm Payment via ${method}`,
-      html: tableHTML,
+      html: `
+      ${tableHTML}
+      <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+        <label for="paymentDate" style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">
+          📅 Payment Date
+        </label>
+        <input 
+          type="date" 
+          id="paymentDate" 
+          class="swal2-input" 
+          value="${new Date().toISOString().split("T")[0]}"
+          style="
+          width: 80%;
+            padding: 10px 12px; 
+            border: 2px solid #ddd; 
+            
+            color: black;
+            border-radius: 6px; 
+            font-size: 14px;
+            transition: border-color 0.3s;
+          "
+          onfocus="this.style.borderColor='#007bff'"
+          onblur="this.style.borderColor='#ddd'"
+          required
+        />
+        <small style="display: block; margin-top: 5px; color: #666; font-size: 12px;">
+          Select the date when you made the payment
+        </small>
+      </div>
+    `,
       width: "auto",
       maxWidth: "800px",
       showCancelButton: true,
@@ -220,7 +253,15 @@ export default function ParentDashboard({ family, refetch }) {
       focusConfirm: false,
       preConfirm: async () => {
         try {
-          // ✅ CORRECTED: Use the same structure as manual modal
+          const paymentDateInput = document.getElementById("paymentDate");
+          const selectedDate = paymentDateInput.value;
+
+          if (!selectedDate) {
+            Swal.showValidationMessage("Please select a payment date");
+            return false;
+          }
+
+          // ✅ CORRECTED: Include both admission fee and monthly fee in payments array
           const paymentData = {
             familyId: approvedFamily?._id,
             name: user?.displayName,
@@ -239,7 +280,12 @@ export default function ParentDashboard({ family, refetch }) {
                 {
                   amount: student.admissionFee,
                   method: method,
-                  date: new Date().toISOString().split("T")[0],
+                  date: selectedDate,
+                },
+                {
+                  amount: student.monthlyFee, // ✅ ADDED: Monthly fee payment
+                  method: method,
+                  date: selectedDate,
                 },
               ],
               subtotal: student.subtotal,
@@ -250,7 +296,7 @@ export default function ParentDashboard({ family, refetch }) {
               {
                 amount: grandTotal,
                 method: method,
-                date: new Date().toISOString().split("T")[0],
+                date: selectedDate,
               },
             ],
             timestamp: new Date().toISOString(),
@@ -293,6 +339,47 @@ export default function ParentDashboard({ family, refetch }) {
     if (result.isConfirmed) {
       Swal.fire("Success!", "All students are now enrolled.", "success");
       refetch();
+    }
+  };
+  const handleManageDirectDebit = () => {
+    navigate("/dashboard/parent/pay-by-direct-debit", {
+      state: {
+        manage: true,
+        familyId: enrolledFamily?._id,
+        fromFeesPage: true,
+      },
+    });
+  };
+  const handleCancelDirectDebit = async () => {
+    const result = await Swal.fire({
+      title: "Cancel Direct Debit?",
+      text: "Are you sure you want to cancel your Direct Debit setup?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, cancel it!",
+      cancelButtonText: "No, keep it",
+    });
+
+    if (result.isConfirmed) {
+      try {
+        const result = await cancelFamilyDebit(enrolledFamily._id).unwrap();
+
+        // ✅ RTK will automatically refetch getFamilyDebit due to invalidatesTags
+        if (result?.success) {
+          Swal.fire(
+            "Cancelled!",
+            "Your Direct Debit has been cancelled.",
+            "success"
+          );
+          // Optional: Refetch to update UI immediately
+          refetchDirectDebit();
+        }
+      } catch (error) {
+        console.error("Cancellation failed:", error);
+        Swal.fire("Error!", "Failed to cancel Direct Debit.", "error");
+      }
     }
   };
 
@@ -479,53 +566,127 @@ export default function ParentDashboard({ family, refetch }) {
                 <h3 className="fs-1 fw-bold text-center pt-5">
                   Action Required For Admission
                 </h3>
-                {approvedFamily?.childrenDocs?.length > 0 ? (
+                {hasDirectDebitStatus === "active" ? (
+                  // ✅ DIRECT DEBIT ACTIVE - Show only management options
                   <div className="row justify-content-center mt-3">
-                    <button
-                      onClick={handleShow}
-                      className="col-lg-2 text-white py-1 px-2 rounded-2"
-                      style={{ backgroundColor: "var(--border2)" }}
-                    >
-                      Pay Now by Card
-                    </button>
-                    <p className="col-lg-1 d-flex align-items-center justify-content-center">
-                      or
-                    </p>
-                    <button
-                      className="col-lg-2 text-white py-1 px-2 rounded-2"
-                      style={{ backgroundColor: "var(--border2)" }}
-                      onClick={() => handleOtherPayment("bank transfer")}
-                    >
-                      Bank Transfer
-                    </button>
+                    <div className="col-lg-8 text-center">
+                      <div className="text-success py-3 px-4 rounded-3 border border-success bg-light mb-3">
+                        <i className="fas fa-check-circle me-2 fs-4"></i>
+                        <h5 className="d-inline">Direct Debit Active</h5>
+                        <br />
+                        <small className="text-muted">
+                          Your Admission Fee and First Month Fee will be
+                          automatically collected each month
+                        </small>
+                      </div>
 
-                    <p className="col-lg-1 d-flex align-items-center justify-content-center">
-                      or
-                    </p>
-                    <button
-                      className="col-lg-2 text-white py-1 px-2 rounded-2"
-                      style={{ backgroundColor: "var(--border2)" }}
-                      onClick={() =>
-                        handleOtherPayment("cash payment at office")
-                      }
-                    >
-                      Cash Payment at Office
-                    </button>
-                    <p className="col-lg-1 d-flex align-items-center justify-content-center">
-                      or
-                    </p>
-                    <button
-                      className="col-lg-2 text-white py-1 px-2 rounded-2"
-                      style={{ backgroundColor: "var(--border2)" }}
-                      onClick={() =>
-                        handleOtherPayment("card machine at office")
-                      }
-                    >
-                      Card Machine at Office
-                    </button>
+                      <div className="d-flex justify-content-center gap-3">
+                        <button
+                          className="btn btn-outline-primary"
+                          onClick={handleManageDirectDebit}
+                        >
+                          Manage Direct Debit
+                        </button>
+                        <button
+                          className="btn btn-outline-danger"
+                          onClick={handleCancelDirectDebit}
+                          disabled={isCancelling}
+                        >
+                          {isCancelling
+                            ? "Cancelling..."
+                            : "Cancel Direct Debit"}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ) : isPendingAuthorization ? (
+                  // ✅ PENDING AUTHORIZATION - Show pending status with redirect button
+                  <div className="row justify-content-center mt-3">
+                    <div className="col-lg-8 text-center">
+                      <div className="text-warning py-3 px-4 rounded-3 border border-warning bg-light mb-3">
+                        <i className="fas fa-clock me-2 fs-4"></i>
+                        <h5 className="d-inline">
+                          Direct Debit Pending Authorization
+                        </h5>
+                        <br />
+                        <small className="text-muted">
+                          Your bank is verifying the Direct Debit mandate. This
+                          usually takes 2-3 business days.
+                          <br />
+                          Your payments will be automatic once authorized.
+                        </small>
+                      </div>
+
+                      <div className="d-flex justify-content-center gap-3">
+                        <button
+                          className="btn btn-warning text-white"
+                          onClick={handleCheckStatus}
+                        >
+                          <i className="fas fa-external-link-alt me-2"></i>
+                          Check Status & Details
+                        </button>
+                        <button
+                          className="btn btn-outline-danger"
+                          onClick={handleCancelDirectDebit}
+                          disabled={isCancelling}
+                        >
+                          {isCancelling ? "Cancelling..." : "Cancel Setup"}
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 ) : (
-                  <h3 className="text-danger">No Child is Approved</h3>
+                  <>
+                    {approvedFamily?.childrenDocs?.length > 0 ? (
+                      <div className="row justify-content-center mt-3">
+                        <button
+                          onClick={handleShow}
+                          className="col-lg-2 text-white py-1 px-2 rounded-2"
+                          style={{ backgroundColor: "var(--border2)" }}
+                        >
+                          Pay Now by Card
+                        </button>
+
+                        <p className="col-lg-1 d-flex align-items-center justify-content-center">
+                          or
+                        </p>
+                        <button
+                          className="col-lg-2 text-white py-1 px-2 rounded-2"
+                          style={{ backgroundColor: "var(--border2)" }}
+                          onClick={() =>
+                            handleOtherPayment("cash payment at office")
+                          }
+                        >
+                          Cash Payment at Office
+                        </button>
+                        <p className="col-lg-1 d-flex align-items-center justify-content-center">
+                          or
+                        </p>
+                        <button
+                          className="col-lg-2 text-white py-1 px-2 rounded-2"
+                          style={{ backgroundColor: "var(--border2)" }}
+                          onClick={() =>
+                            handleOtherPayment("card machine at office")
+                          }
+                        >
+                          Card Machine at Office
+                        </button>
+
+                        <p className="col-lg-1 d-flex align-items-center justify-content-center">
+                          or
+                        </p>
+                        <Link
+                          className="col-lg-2 text-white py-2 px-3 rounded-2 text-center"
+                          style={{ backgroundColor: "var(--border2)" }}
+                          to={"/dashboard/parent/pay-by-direct-debit"}
+                        >
+                          Pay by Direct Debit
+                        </Link>
+                      </div>
+                    ) : (
+                      <h3 className="text-danger">No Child is Approved</h3>
+                    )}
+                  </>
                 )}
               </>
             )}

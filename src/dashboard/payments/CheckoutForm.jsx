@@ -87,19 +87,30 @@ const CheckoutForm = ({
                 name: student.name,
                 admissionFee: student.admissionFee,
                 monthlyFee: student.monthlyFee,
-                discountedFee: student.monthlyFee, // ✅ Add discountedFee
-                joiningMonth: student.joiningMonth.toString().padStart(2, "0"), // ✅ Format as "09"
+                discountedFee: student.monthlyFee,
+                joiningMonth: student.joiningMonth.toString().padStart(2, "0"),
                 joiningYear: student.joiningYear,
-
-                subtotal: student.admissionFee, // ✅ Only admission fee for subtotal
+                payments: [
+                  // ✅ ADDED: Student-level payments array
+                  {
+                    amount: student.admissionFee,
+                    date: new Date().toISOString().split("T")[0],
+                    method: "instant",
+                  },
+                  {
+                    amount: student.monthlyFee, // ✅ ADDED: Monthly fee payment
+                    date: new Date().toISOString().split("T")[0],
+                    method: "instant",
+                  },
+                ],
+                subtotal: student.admissionFee + student.monthlyFee, // ✅ CORRECTED: Include both fees
               })),
               payments: [
-                // ✅ Root payments with transactionId
                 {
                   amount: amount,
                   method: "instant",
                   date: new Date().toISOString().split("T")[0],
-                  transactionId: paymentIntent.id, // ✅ Only here
+                  transactionId: paymentIntent.id,
                 },
               ],
             };

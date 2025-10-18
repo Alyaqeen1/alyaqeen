@@ -306,6 +306,21 @@ export default function AdminManualPayModal({
       setIsProcessing(false);
       return;
     }
+    // ✅ NEW VALIDATION: Check if amount is less than total admission fee
+    if (feeType === "admission") {
+      const admissionFeePerStudent = 20;
+      const totalAdmissionFee =
+        admissionFeePerStudent * selectedStudents.length;
+      const enteredAmount = toTwo(Number(payNow));
+
+      if (enteredAmount < totalAdmissionFee) {
+        toast.error(
+          `Amount cannot be less than total admission fee (£${totalAdmissionFee}) for ${selectedStudents.length} student(s)`
+        );
+        setIsProcessing(false);
+        return;
+      }
+    }
     if (paymentExists) {
       // ✅ BETTER ERROR: Show which students already paid
       const alreadyPaidStudents = selectedStudentObjects.filter((student) =>
@@ -365,7 +380,9 @@ export default function AdminManualPayModal({
 
           // ✅ FIXED: Use student's actual starting date
           const startingDate = new Date(student.startingDate);
-          const joiningMonth = startingDate.getMonth() + 1;
+          const joiningMonth = (startingDate.getMonth() + 1)
+            .toString()
+            .padStart(2, "0");
           const joiningYear = startingDate.getFullYear();
 
           return {
@@ -374,8 +391,8 @@ export default function AdminManualPayModal({
             admissionFee: admissionFeePerStudent,
             monthlyFee: toTwo(baseFee),
             discountedFee: toTwo(discountedFee),
-            joiningMonth: joiningMonth, // ✅ Use actual joining month
-            joiningYear: joiningYear, // ✅ Use actual joining year
+            joiningMonth: joiningMonth,
+            joiningYear: joiningYear,
           };
         });
 
@@ -386,94 +403,119 @@ export default function AdminManualPayModal({
         );
         const expectedTotal = toTwo(expectedTotalRaw);
 
-        // Calculate leftover for monthly portion
-        const leftover = toTwo(Math.max(0, totalPayNow - totalAdmissionNeeded));
-
-        // Allocation logic for monthly portion (distribute leftover proportionally)
+        // ✅ FIXED: Smart allocation of the paid amount
         let allocations = [];
-        if (leftover >= 0) {
-          // compute raw shares for monthly portion
-          const totalDiscounted = studentsFees.reduce(
-            (s, x) => s + x.discountedFee,
+
+        if (totalPayNow >= expectedTotal) {
+          // Full payment - everyone gets full admission + monthly
+          allocations = studentsFees.map((student) => ({
+            ...student,
+            paidAdmission: student.admissionFee,
+            paidMonthly: student.discountedFee,
+          }));
+        } else {
+          // Partial payment - need to allocate smartly
+
+          // First priority: Admission fees (fixed £20 per student)
+          const totalAdmissionAllocated = Math.min(
+            totalPayNow,
+            totalAdmissionNeeded
+          );
+          const remainingAfterAdmission = toTwo(
+            totalPayNow - totalAdmissionAllocated
+          );
+
+          // Allocate admission fees equally (each student gets their £20 if possible)
+          const admissionPerStudent =
+            totalAdmissionAllocated >= totalAdmissionNeeded
+              ? admissionFeePerStudent
+              : toTwo(totalAdmissionAllocated / selectedStudentObjects.length);
+
+          // Allocate remaining amount to monthly fees proportionally
+          const totalMonthlyNeeded = studentsFees.reduce(
+            (sum, s) => sum + s.discountedFee,
             0
           );
 
-          allocations = studentsFees.map((s) => {
-            const rawShare = toTwo(
-              totalDiscounted > 0
-                ? (s.discountedFee / totalDiscounted) * leftover
-                : 0
-            );
-            return { ...s, rawShare };
+          allocations = studentsFees.map((student) => {
+            const monthlyShare =
+              totalMonthlyNeeded > 0
+                ? toTwo(
+                    (student.discountedFee / totalMonthlyNeeded) *
+                      remainingAfterAdmission
+                  )
+                : 0;
+
+            return {
+              ...student,
+              paidAdmission: admissionPerStudent,
+              paidMonthly: monthlyShare,
+            };
           });
 
-          // assign cents fairly
-          allocations.forEach(
-            (a) => (a.paidMonthly = Math.floor(a.rawShare * 100) / 100)
+          // Adjust for rounding errors
+          let allocatedMonthlySum = toTwo(
+            allocations.reduce((sum, a) => sum + a.paidMonthly, 0)
           );
-          let allocatedSum = toTwo(
-            allocations.reduce((s, a) => s + (a.paidMonthly || 0), 0)
+          let monthlyRemainder = toTwo(
+            remainingAfterAdmission - allocatedMonthlySum
           );
-          let remainderCents = Math.round((leftover - allocatedSum) * 100);
 
-          if (remainderCents > 0) {
-            allocations.sort(
-              (a, b) =>
-                b.rawShare -
-                Math.floor(b.rawShare * 100) / 100 -
-                (a.rawShare - Math.floor(a.rawShare * 100) / 100)
-            );
-            for (let i = 0; i < allocations.length && remainderCents > 0; i++) {
-              allocations[i].paidMonthly = toTwo(
-                (allocations[i].paidMonthly || 0) + 0.01
+          if (monthlyRemainder > 0) {
+            // Distribute remainder to students with highest monthly fees first
+            allocations.sort((a, b) => b.discountedFee - a.discountedFee);
+            for (
+              let i = 0;
+              i < allocations.length && monthlyRemainder > 0;
+              i++
+            ) {
+              const maxCanAdd = toTwo(
+                allocations[i].discountedFee - allocations[i].paidMonthly
               );
-              remainderCents--;
+              const toAdd = Math.min(monthlyRemainder, maxCanAdd, 0.01); // Add at most 1p at a time
+              allocations[i].paidMonthly = toTwo(
+                allocations[i].paidMonthly + toAdd
+              );
+              monthlyRemainder = toTwo(monthlyRemainder - toAdd);
             }
           }
-
-          // finalize subtotal and paidAdmission
-          allocations = allocations.map((a) => ({
-            ...a,
-            paidAdmission: toTwo(a.admissionFee),
-            paidMonthly: toTwo(a.paidMonthly || 0),
-            subtotal: toTwo((a.admissionFee || 0) + (a.paidMonthly || 0)),
-          }));
         }
 
+        // ✅ FIXED: Create proper admission data structure with allocated amounts
         const admissionData = {
           familyId,
           name: family?.name,
           email: family?.email,
+          paymentType: "admission",
+          status: "paid",
           students: allocations.map((student) => ({
             studentId: student.studentId,
             name: student.name,
             admissionFee: student.admissionFee,
-            monthlyFee: toTwo(student.monthlyFee),
-            discountedFee: toTwo(student.discountedFee),
-            joiningMonth: student.joiningMonth.toString().padStart(2, "0"),
+            monthlyFee: student.monthlyFee,
+            discountedFee: student.discountedFee,
+            joiningMonth: student.joiningMonth,
             joiningYear: student.joiningYear,
             payments: [
               {
-                amount: student.admissionFee,
+                amount: student.paidAdmission,
                 date: date,
                 method: feeMethod,
               },
               ...(student.paidMonthly > 0
                 ? [
                     {
-                      amount: toTwo(student.paidMonthly),
+                      amount: student.paidMonthly,
                       date: date,
                       method: feeMethod,
                     },
                   ]
                 : []),
             ],
-            subtotal: toTwo(student.subtotal),
+            subtotal: toTwo(student.paidAdmission + student.paidMonthly),
           })),
           expectedTotal: toTwo(expectedTotal),
-          remaining: 0,
-          paymentType: feeType,
-          status: "paid",
+          remaining: toTwo(Math.max(0, expectedTotal - totalPayNow)),
           payments: [
             {
               amount: toTwo(totalPayNow),
@@ -485,23 +527,30 @@ export default function AdminManualPayModal({
         };
 
         const data = await createFeeData(admissionData).unwrap();
+
+        // Show allocation summary
+        const allocationSummary = allocations
+          .map(
+            (s) =>
+              `${s.name}: £${s.paidAdmission} (admission) + £${s.paidMonthly} (monthly)`
+          )
+          .join("; ");
+
         toast.success(
-          `Admission payment of $${toTwo(
-            totalPayNow
-          )} recorded successfully for ${
-            selectedStudentObjects.length
-          } student(s)`
+          `Admission payment of £${totalPayNow} recorded successfully! Allocation: ${allocationSummary}`
         );
 
-        // Update student statuses if needed
-        await Promise.all(
-          selectedStudentObjects.map((student) =>
-            updateStudentStatus({
-              id: student._id,
-              status: "enrolled",
-            }).unwrap()
-          )
-        );
+        // Update student statuses to enrolled only if full admission is paid
+        if (totalPayNow >= totalAdmissionNeeded) {
+          await Promise.all(
+            selectedStudentObjects.map((student) =>
+              updateStudentStatus({
+                id: student._id,
+                status: "enrolled",
+              }).unwrap()
+            )
+          );
+        }
       } else {
         // Monthly payment data (smart per-student allocation)
         const parsedPayNow = toTwo(Number(payNow));

@@ -207,6 +207,8 @@ export default function PendingPayments() {
 
   return (
     <div>
+      <h3 className={`fs-1 fw-bold text-center`}>Pending Payments</h3>
+
       <div className="table-responsive mb-3">
         <table
           className="table mb-0"

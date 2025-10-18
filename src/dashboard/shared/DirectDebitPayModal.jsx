@@ -293,6 +293,21 @@ export default function DirectDebitPayModal({
       setIsProcessing(false);
       return;
     }
+    // ✅ NEW VALIDATION: Check if amount is less than total admission fee
+    if (feeType === "admission") {
+      const admissionFeePerStudent = 20;
+      const totalAdmissionFee =
+        admissionFeePerStudent * selectedStudents.length;
+      const enteredAmount = toTwo(Number(payNow));
+
+      if (enteredAmount < totalAdmissionFee) {
+        toast.error(
+          `Amount cannot be less than total admission fee (£${totalAdmissionFee}) for ${selectedStudents.length} student(s)`
+        );
+        setIsProcessing(false);
+        return;
+      }
+    }
     if (paymentExists) {
       if (feeType === "admission") {
         toast.error("Admission fee already paid for some selected students");
@@ -351,10 +366,19 @@ export default function DirectDebitPayModal({
       let feeData;
 
       if (feeType === "admission") {
-        // Admission payment logic
         const admissionFeePerStudent = 20;
+        const totalAdmissionNeeded = toTwo(
+          admissionFeePerStudent * selectedStudentObjects.length
+        );
+        const totalPayNow = toTwo(Number(payNow));
 
-        const studentsPayload = selectedStudentObjects.map((student) => {
+        // Apply family discount
+        const discountPercent = family?.discount
+          ? toTwo(Number(family.discount))
+          : 0;
+
+        // Prepare students with discounted monthly fee
+        const studentsFees = selectedStudentObjects.map((student) => {
           const baseFee = toTwo(
             student.monthly_fee ??
               student.monthlyFee ??
@@ -367,7 +391,9 @@ export default function DirectDebitPayModal({
             : toTwo(baseFee);
 
           const startingDate = new Date(student.startingDate);
-          const joiningMonth = startingDate.getMonth() + 1;
+          const joiningMonth = (startingDate.getMonth() + 1)
+            .toString()
+            .padStart(2, "0");
           const joiningYear = startingDate.getFullYear();
 
           return {
@@ -376,11 +402,123 @@ export default function DirectDebitPayModal({
             admissionFee: admissionFeePerStudent,
             monthlyFee: toTwo(baseFee),
             discountedFee: toTwo(discountedFee),
-            joiningMonth: joiningMonth.toString().padStart(2, "0"),
+            joiningMonth: joiningMonth,
             joiningYear: joiningYear,
-            subtotal: toTwo(admissionFeePerStudent + discountedFee),
           };
         });
+
+        // Expected total = sum of admission + discounted monthly for all students
+        const expectedTotalRaw = studentsFees.reduce(
+          (sum, s) => sum + s.admissionFee + s.discountedFee,
+          0
+        );
+        const expectedTotal = toTwo(expectedTotalRaw);
+
+        // ✅ FIXED: Smart allocation of the paid amount
+        let allocations = [];
+
+        if (totalPayNow >= expectedTotal) {
+          // Full payment - everyone gets full admission + monthly
+          allocations = studentsFees.map((student) => ({
+            ...student,
+            paidAdmission: student.admissionFee,
+            paidMonthly: student.discountedFee,
+          }));
+        } else {
+          // Partial payment - need to allocate smartly
+
+          // First priority: Admission fees (fixed £20 per student)
+          const totalAdmissionAllocated = Math.min(
+            totalPayNow,
+            totalAdmissionNeeded
+          );
+          const remainingAfterAdmission = toTwo(
+            totalPayNow - totalAdmissionAllocated
+          );
+
+          // Allocate admission fees equally (each student gets their £20 if possible)
+          const admissionPerStudent =
+            totalAdmissionAllocated >= totalAdmissionNeeded
+              ? admissionFeePerStudent
+              : toTwo(totalAdmissionAllocated / selectedStudentObjects.length);
+
+          // Allocate remaining amount to monthly fees proportionally
+          const totalMonthlyNeeded = studentsFees.reduce(
+            (sum, s) => sum + s.discountedFee,
+            0
+          );
+
+          allocations = studentsFees.map((student) => {
+            const monthlyShare =
+              totalMonthlyNeeded > 0
+                ? toTwo(
+                    (student.discountedFee / totalMonthlyNeeded) *
+                      remainingAfterAdmission
+                  )
+                : 0;
+
+            return {
+              ...student,
+              paidAdmission: admissionPerStudent,
+              paidMonthly: monthlyShare,
+            };
+          });
+
+          // Adjust for rounding errors
+          let allocatedMonthlySum = toTwo(
+            allocations.reduce((sum, a) => sum + a.paidMonthly, 0)
+          );
+          let monthlyRemainder = toTwo(
+            remainingAfterAdmission - allocatedMonthlySum
+          );
+
+          if (monthlyRemainder > 0) {
+            // Distribute remainder to students with highest monthly fees first
+            allocations.sort((a, b) => b.discountedFee - a.discountedFee);
+            for (
+              let i = 0;
+              i < allocations.length && monthlyRemainder > 0;
+              i++
+            ) {
+              const maxCanAdd = toTwo(
+                allocations[i].discountedFee - allocations[i].paidMonthly
+              );
+              const toAdd = Math.min(monthlyRemainder, maxCanAdd, 0.01);
+              allocations[i].paidMonthly = toTwo(
+                allocations[i].paidMonthly + toAdd
+              );
+              monthlyRemainder = toTwo(monthlyRemainder - toAdd);
+            }
+          }
+        }
+
+        // ✅ FIXED: Create proper admission data structure with allocated amounts
+        const studentsPayload = allocations.map((student) => ({
+          studentId: student.studentId,
+          name: student.name,
+          admissionFee: student.admissionFee,
+          monthlyFee: student.monthlyFee,
+          discountedFee: student.discountedFee,
+          joiningMonth: student.joiningMonth,
+          joiningYear: student.joiningYear,
+          payments: [
+            {
+              amount: student.paidAdmission,
+              date: date,
+              method: "direct_debit",
+            },
+            ...(student.paidMonthly > 0
+              ? [
+                  {
+                    amount: student.paidMonthly,
+                    date: date,
+                    method: "direct_debit",
+                  },
+                ]
+              : []),
+          ],
+          subtotal: toTwo(student.paidAdmission + student.paidMonthly),
+        }));
 
         feeData = {
           familyId,
@@ -388,12 +526,12 @@ export default function DirectDebitPayModal({
           email: family?.email,
           students: studentsPayload,
           expectedTotal: toTwo(expectedTotal),
-          remaining: 0,
+          remaining: toTwo(Math.max(0, expectedTotal - totalPayNow)),
           status: "paid",
           paymentType: "admission",
           payments: [
             {
-              amount: toTwo(parsedPayNow),
+              amount: toTwo(totalPayNow),
               method: "direct_debit",
               date: date,
               stripePaymentIntentId: stripeResult.paymentIntentId,
@@ -401,15 +539,27 @@ export default function DirectDebitPayModal({
           ],
         };
 
-        // Update student statuses to enrolled
-        await Promise.all(
-          selectedStudentObjects.map((student) =>
-            updateStudentStatus({
-              id: student._id,
-              status: "enrolled",
-            }).unwrap()
+        // Show allocation summary
+        const allocationSummary = allocations
+          .map(
+            (s) =>
+              `${s.name}: £${s.paidAdmission} (admission) + £${s.paidMonthly} (monthly)`
           )
-        );
+          .join("; ");
+
+        console.log("Direct Debit Admission Allocation:", allocationSummary);
+
+        // Update student statuses to enrolled only if full admission is paid
+        if (totalPayNow >= totalAdmissionNeeded) {
+          await Promise.all(
+            selectedStudentObjects.map((student) =>
+              updateStudentStatus({
+                id: student._id,
+                status: "enrolled",
+              }).unwrap()
+            )
+          );
+        }
       } else {
         // Monthly payment logic
         const studentsFees = selectedStudentObjects.map((student) => {
