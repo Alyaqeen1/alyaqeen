@@ -65,7 +65,7 @@ export default function MonthlyFeeModal({
                         Discount
                       </th>
                       <th style={{ padding: "6px", border: "1px solid #ccc" }}>
-                        Total Amount ($)
+                        Total Amount (£)
                       </th>
                     </tr>
                   </thead>
@@ -90,7 +90,7 @@ export default function MonthlyFeeModal({
                         <td
                           style={{ padding: "6px", border: "1px solid #ccc" }}
                         >
-                          {row?.totalAmount}
+                          £{row?.totalAmount}
                         </td>
                       </tr>
                     ))}
@@ -107,7 +107,7 @@ export default function MonthlyFeeModal({
                   fontWeight: "bold",
                 }}
               >
-                Grand Total: ${grandTotal.toFixed(2)}
+                Grand Total: £{grandTotal.toFixed(2)}
               </div>
 
               <div className="row mt-3">

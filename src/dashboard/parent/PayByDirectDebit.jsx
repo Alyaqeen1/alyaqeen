@@ -9,6 +9,7 @@ import {
 } from "../../redux/features/families/familiesApi";
 import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 import Swal from "sweetalert2";
+import toast from "react-hot-toast";
 
 export default function PayByDirectDebit() {
   const axiosPublic = useAxiosPublic();
@@ -39,7 +40,9 @@ export default function PayByDirectDebit() {
     useCancelFamilyDebitMutation();
 
   const [isManaging, setIsManaging] = useState(false);
+  const [preferredDate, setPreferredDate] = useState(""); // Default to 1st
 
+  console.log(preferredDate);
   // ✅ Use data from RTK Query instead of local state
   const hasExistingSetup = directDebitData?.hasDirectDebit || false;
   const paymentMethod = directDebitData?.directDebit || null;
@@ -66,13 +69,18 @@ export default function PayByDirectDebit() {
 
   const handleBacsPayment = async () => {
     try {
-      // Store familyId for the success page
-      localStorage.setItem("currentFamilyId", familyId);
+      // Validate preferred date is selected
+      if (!preferredDate) {
+        toast.error("Please select your preferred payment date first");
+        return;
+      }
 
+      // Store familyId for the success page
       const { data } = await axiosPublic.post("/create-bacs-checkout-session", {
         email: user?.email,
         name: family?.name,
         familyId: familyId,
+        preferredPaymentDate: preferredDate, // Send preferred date to backend
       });
       window.location.href = data.url;
     } catch (error) {
@@ -132,6 +140,7 @@ export default function PayByDirectDebit() {
       navigate("/dashboard/parent/pay-monthly-fees");
     }
   };
+
   // Gradient styles
   const gradientStyle = {
     background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
@@ -148,7 +157,7 @@ export default function PayByDirectDebit() {
   if (familyLoading || debitLoading) {
     return <LoadingSpinnerDash />;
   }
-  // Show different UI based on status
+
   // Show different UI based on status
   if (isPendingAuthorization) {
     return (
@@ -156,7 +165,6 @@ export default function PayByDirectDebit() {
         className="rounded-4 border-0 shadow overflow-hidden mx-auto"
         style={{
           background: "white",
-          maxWidth: "1200px",
           margin: "2rem auto",
         }}
       >
@@ -420,12 +428,12 @@ export default function PayByDirectDebit() {
       </div>
     );
   }
+
   return (
     <div
       className="rounded-4 border-0 shadow overflow-hidden mx-auto"
       style={{
         background: "white",
-        maxWidth: "1200px",
         margin: "2rem auto",
       }}
     >
@@ -810,6 +818,73 @@ export default function PayByDirectDebit() {
                       <p className="text-muted small">
                         Fees are paid automatically each month
                       </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Preferred Payment Date Section - ADDED THIS */}
+            <div className="col-12">
+              <div className="card shadow border-0 mb-4">
+                <div className="card-body p-4">
+                  <h5 className="fw-bold mb-3 text-dark">
+                    Select Preferred Payment Date
+                  </h5>
+                  <p className="text-muted mb-3">
+                    Choose which day of the month you'd like your payments to be
+                    collected (1st-7th)
+                  </p>
+
+                  <div className="row align-items-center">
+                    <div className="col-md-6">
+                      <select
+                        value={preferredDate}
+                        onChange={(e) =>
+                          setPreferredDate(parseInt(e.target.value))
+                        }
+                        className="form-select form-select-lg"
+                        style={{
+                          border: "2px solid #667eea",
+                          borderRadius: "8px",
+                          padding: "12px",
+                          fontSize: "1rem",
+                        }}
+                      >
+                        <option value="">
+                          Select Your Preferred Date for Payment Collection
+                        </option>
+                        {[1, 2, 3, 4, 5, 6, 7].map((day) => (
+                          <option key={day} value={day}>
+                            {day}
+                            {day === 1
+                              ? "st"
+                              : day === 2
+                              ? "nd"
+                              : day === 3
+                              ? "rd"
+                              : "th"}{" "}
+                            of each month
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="col-md-6">
+                      <div className="alert alert-info border-0 mb-0">
+                        <small>
+                          <i className="fas fa-info-circle me-2"></i>
+                          Your payment will be automatically collected on the{" "}
+                          {preferredDate}
+                          {preferredDate === 1
+                            ? "st"
+                            : preferredDate === 2
+                            ? "nd"
+                            : preferredDate === 3
+                            ? "rd"
+                            : "th"}{" "}
+                          of each month
+                        </small>
+                      </div>
                     </div>
                   </div>
                 </div>

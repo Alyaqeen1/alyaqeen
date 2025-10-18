@@ -245,10 +245,10 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
               <td style="padding: 8px 4px; border: 1px solid #ccc; white-space: nowrap;">${
                 row?.month
               }</td>
-              <td style="padding: 8px 4px; border: 1px solid #ccc; white-space: nowrap;">${
+              <td style="padding: 8px 4px; border: 1px solid #ccc; white-space: nowrap;">£${
                 enrolledFamily?.discount ? enrolledFamily?.discount : 0
               }%</td>
-              <td style="padding: 8px 4px; border: 1px solid #ccc; white-space: nowrap;">${
+              <td style="padding: 8px 4px; border: 1px solid #ccc; white-space: nowrap;">£${
                 row?.totalAmount
               }</td>
             </tr>
@@ -265,14 +265,54 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
 
     const result = await Swal.fire({
       title: `Confirm Payment via ${method}`,
-      html: tableHTML,
+      html: `
+        ${tableHTML}
+        <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+          <label for="paymentDate" style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">
+            📅 Payment Date
+          </label>
+          <input 
+            type="date" 
+            id="paymentDate" 
+            class="swal2-input" 
+            value="${new Date().toISOString().split("T")[0]}"
+            style="
+            width: 80%;
+              padding: 10px 12px; 
+              border: 2px solid #ddd; 
+              
+              color: black;
+              border-radius: 6px; 
+              font-size: 14px;
+              transition: border-color 0.3s;
+            "
+            onfocus="this.style.borderColor='#007bff'"
+            onblur="this.style.borderColor='#ddd'"
+            required
+          />
+          <small style="display: block; margin-top: 5px; color: #666; font-size: 12px;">
+            Select the date when you made the payment
+          </small>
+        </div>
+      `,
       width: "auto",
       showCancelButton: true,
-      confirmButtonText: "Confirm",
+      confirmButtonText: "Confirm Payment",
       cancelButtonText: "Cancel",
       focusConfirm: false,
       preConfirm: async () => {
         try {
+          const paymentDateInput = document.getElementById("paymentDate");
+          const selectedDate = paymentDateInput.value;
+
+          if (!selectedDate) {
+            Swal.showValidationMessage("Please select a payment date");
+            return false;
+          }
+
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+
           const paymentData = {
             familyId: enrolledFamily?._id,
             name: user?.displayName,
@@ -286,7 +326,7 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
               {
                 amount: grandTotal,
                 method: method,
-                date: new Date().toISOString().split("T")[0],
+                date: selectedDate,
               },
             ],
           };
@@ -307,13 +347,12 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
     if (result.isConfirmed) {
       Swal.fire(
         "Success!",
-        "Your Payment was successful. Please wait for admin review.",
+        "Your payment request has been submitted successfully. Please wait for admin review.",
         "success"
       );
       refetchFees();
     }
   };
-
   if (unpaidLoading || feesLoading || directDebitLoading) {
     return <LoadingSpinnerDash />;
   }
@@ -523,16 +562,6 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
               >
                 Pay Now by Card
               </button>
-              <p className="col-lg-1 d-flex align-items-center justify-content-center">
-                or
-              </p>
-              <button
-                className="col-lg-2 text-white py-2 px-3 rounded-2"
-                style={{ backgroundColor: "var(--border2)" }}
-                onClick={() => handleOtherPayment("bank transfer")}
-              >
-                Bank Transfer
-              </button>
 
               <p className="col-lg-1 d-flex align-items-center justify-content-center">
                 or
@@ -554,6 +583,16 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
               >
                 Card Machine at Office
               </button>
+              <p className="col-lg-1 d-flex align-items-center justify-content-center">
+                or
+              </p>
+              <Link
+                className="col-lg-2 text-white py-2 px-3 rounded-2 text-center"
+                style={{ backgroundColor: "var(--border2)" }}
+                to={"/dashboard/parent/pay-by-direct-debit"}
+              >
+                Pay by Direct Debit
+              </Link>
             </div>
           )}
         </>

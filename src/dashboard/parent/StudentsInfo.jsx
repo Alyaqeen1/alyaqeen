@@ -304,7 +304,7 @@ export default function StudentsInfo({ studentId }) {
                       className="opacity-90 mb-1"
                       style={{ fontSize: "0.85rem" }}
                     >
-                      FAXED NAME
+                      FAMILY NAME
                     </span>
                     <span className="fw-semibold">
                       {student.family_name || "Not provided"}
