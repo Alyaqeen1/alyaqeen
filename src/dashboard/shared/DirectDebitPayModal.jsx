@@ -18,6 +18,25 @@ const toTwo = (v) => {
   return Number(num.toFixed(2));
 };
 
+const years = Array.from(
+  { length: 5 },
+  (_, i) => new Date().getFullYear() - 2 + i
+);
+const months = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
 export default function DirectDebitPayModal({
   familyId,
   handleAdminClose,
@@ -205,42 +224,111 @@ export default function DirectDebitPayModal({
   };
 
   // Helper to check if admission already paid for student
+  // ✅ FIXED: Check if admission was actually paid
+  // ✅ FIXED: Helper to check if admission already paid for student
   const hasStudentPaidAdmission = (feeDoc, studentId) => {
     if (!feeDoc?.students) return false;
-    const s = feeDoc.students.find(
+
+    const studentFee = feeDoc.students.find(
       (st) => String(st.studentId) === String(studentId)
     );
-    return s?.admissionFee !== undefined;
+    if (!studentFee) return false;
+
+    // Check if this is an admission fee document and has payments
+    if (feeDoc.paymentType === "admission" && studentFee.payments) {
+      const totalPaid = studentFee.payments.reduce(
+        (sum, payment) => sum + (payment.amount || 0),
+        0
+      );
+
+      // Consider admission paid if at least the admission fee amount is covered
+      const admissionFeeAmount = studentFee.admissionFee || 20;
+      return totalPaid >= admissionFeeAmount;
+    }
+
+    return false;
   };
 
-  // Check if payment already exists for selected students
+  // ✅ FIXED: Check if payment already exists for selected students
   const paymentExists = useMemo(() => {
     if (!familyId || selectedStudents.length === 0) return false;
 
     if (feeType === "admission") {
-      return selectedStudentObjects.some((student) =>
-        fees.some(
-          (fee) =>
-            String(fee.familyId) === String(familyId) &&
-            String(fee.paymentType) === "admission" &&
-            hasStudentPaidAdmission(fee, student._id)
-        )
+      // Check if any selected student already has a paid admission fee
+      const studentsWithExistingAdmission = selectedStudentObjects.filter(
+        (student) =>
+          fees.some(
+            (fee) =>
+              String(fee.familyId) === String(familyId) &&
+              fee.paymentType === "admission" &&
+              hasStudentPaidAdmission(fee, student._id)
+          )
       );
+
+      if (studentsWithExistingAdmission.length > 0) {
+        console.log(
+          "Students with existing admission:",
+          studentsWithExistingAdmission.map((s) => s.name)
+        );
+        return true;
+      }
+
+      return false;
     } else if (feeType === "monthly" && feeMonth) {
       return selectedStudentObjects.some((student) =>
         fees.some(
           (fee) =>
             String(fee.familyId) === String(familyId) &&
-            (String(fee.paymentType) === "monthly" ||
-              String(fee.paymentType) === "monthlyOnHold" ||
-              String(fee.paymentType) === "direct_debit") &&
+            (fee.paymentType === "monthly" ||
+              fee.paymentType === "direct_debit") &&
             hasStudentPaidMonth(fee, student._id, feeMonth, feeYear)
         )
       );
     }
 
     return false;
-  }, [fees, familyId, feeMonth, feeYear, feeType, selectedStudentObjects]);
+  }, [
+    fees,
+    familyId,
+    feeMonth,
+    feeYear,
+    feeType,
+    selectedStudentObjects,
+    selectedStudents,
+  ]);
+
+  // ✅ NEW: Additional validation to prevent duplicate admission payments
+  const canProceedWithAdmission = useMemo(() => {
+    if (feeType !== "admission") return true;
+
+    // Check if we would be creating duplicate admission records
+    const existingAdmissionFees = fees.filter(
+      (fee) =>
+        String(fee.familyId) === String(familyId) &&
+        fee.paymentType === "admission"
+    );
+
+    if (existingAdmissionFees.length === 0) return true;
+
+    // For each existing admission fee, check if any selected student is already included
+    for (const existingFee of existingAdmissionFees) {
+      const hasOverlap = selectedStudentObjects.some((student) =>
+        existingFee.students?.some(
+          (s) => String(s.studentId) === String(student._id)
+        )
+      );
+
+      if (hasOverlap) {
+        console.log(
+          "Duplicate admission detected for students in existing fee:",
+          existingFee._id
+        );
+        return false;
+      }
+    }
+
+    return true;
+  }, [fees, familyId, feeType, selectedStudentObjects]);
 
   const isBeforeJoiningMonth = useMemo(() => {
     if (
@@ -293,7 +381,14 @@ export default function DirectDebitPayModal({
       setIsProcessing(false);
       return;
     }
-    // ✅ NEW VALIDATION: Check if amount is less than total admission fee
+    // BACS maximum limit protection
+    if (payNow > 10000) {
+      toast.error("Cannot exceed £10,000 per transaction (BACS limit)");
+      setIsProcessing(false);
+      return;
+    }
+
+    // ✅ ADD THIS VALIDATION: Check if amount is less than total admission fee
     if (feeType === "admission") {
       const admissionFeePerStudent = 20;
       const totalAdmissionFee =
@@ -308,9 +403,38 @@ export default function DirectDebitPayModal({
         return;
       }
     }
+    // ✅ NEW VALIDATION: Check if amount is less than total admission fee
+    if (feeType === "admission" && !canProceedWithAdmission) {
+      const duplicateStudents = selectedStudentObjects.filter((student) =>
+        fees.some(
+          (fee) =>
+            String(fee.familyId) === String(familyId) &&
+            fee.paymentType === "admission" &&
+            fee.students?.some(
+              (s) => String(s.studentId) === String(student._id)
+            )
+        )
+      );
+
+      const studentNames = duplicateStudents.map((s) => s.name).join(", ");
+      toast.error(`Admission already processed for: ${studentNames}`);
+      setIsProcessing(false);
+      return;
+    }
+
     if (paymentExists) {
       if (feeType === "admission") {
-        toast.error("Admission fee already paid for some selected students");
+        const alreadyPaidStudents = selectedStudentObjects.filter((student) =>
+          fees.some(
+            (fee) =>
+              String(fee.familyId) === String(familyId) &&
+              fee.paymentType === "admission" &&
+              hasStudentPaidAdmission(fee, student._id)
+          )
+        );
+
+        const studentNames = alreadyPaidStudents.map((s) => s.name).join(", ");
+        toast.error(`Admission fee already paid for: ${studentNames}`);
       } else {
         const alreadyPaidStudents = selectedStudentObjects.filter((student) =>
           fees.some(
@@ -318,6 +442,7 @@ export default function DirectDebitPayModal({
               String(fee.familyId) === String(familyId) &&
               (String(fee.paymentType) === "monthly" ||
                 String(fee.paymentType) === "monthlyOnHold" ||
+                String(fee.status) !== "failed" ||
                 String(fee.paymentType) === "direct_debit") &&
               hasStudentPaidMonth(fee, student._id, feeMonth, feeYear)
           )
@@ -346,6 +471,8 @@ export default function DirectDebitPayModal({
       const parsedPayNow = toTwo(Number(payNow));
 
       // Process Stripe Direct Debit payment first
+      // In handleSubmit function, update the collectPayment call:
+      // In handleSubmit function, update the collectPayment call:
       const stripeResult = await collectPayment({
         familyId: familyId,
         amount: parsedPayNow,
@@ -354,10 +481,21 @@ export default function DirectDebitPayModal({
         } payment via Direct Debit`,
         month: feeMonth,
         year: feeYear,
+        feeType: feeType,
       }).unwrap();
 
-      console.log("Stripe payment result:", stripeResult);
+      console.log("💰 Stripe payment result:", stripeResult);
+      console.log("🆔 Payment Intent ID:", stripeResult.paymentIntentId);
 
+      // Then when creating feeData:
+      const paymentData = {
+        amount: toTwo(parsedPayNow),
+        method: "direct_debit",
+        date: date,
+        stripePaymentIntentId: stripeResult.paymentIntentId,
+      };
+
+      console.log("💳 Payment data being saved:", paymentData);
       // Apply family discount
       const discountPercent = family?.discount
         ? toTwo(Number(family.discount))
@@ -527,16 +665,11 @@ export default function DirectDebitPayModal({
           students: studentsPayload,
           expectedTotal: toTwo(expectedTotal),
           remaining: toTwo(Math.max(0, expectedTotal - totalPayNow)),
-          status: "paid",
+          status: "pending", // ✅ Change from "paid" to "pending"
           paymentType: "admission",
-          payments: [
-            {
-              amount: toTwo(totalPayNow),
-              method: "direct_debit",
-              date: date,
-              stripePaymentIntentId: stripeResult.paymentIntentId,
-            },
-          ],
+          payments: [paymentData],
+          createdAt: new Date(),
+          updatedAt: new Date(),
         };
 
         // Show allocation summary
@@ -638,7 +771,6 @@ export default function DirectDebitPayModal({
           ],
           subtotal: toTwo(a.paid || 0),
         }));
-
         feeData = {
           familyId,
           name: family?.name,
@@ -646,28 +778,20 @@ export default function DirectDebitPayModal({
           students: studentsPayload,
           expectedTotal: toTwo(expectedTotal),
           remaining: toTwo(Math.max(0, expectedTotal - parsedPayNow)),
-          status: paymentStatus,
+          status: "pending", // ✅ Change from paymentStatus to "pending"
           paymentType: "monthly",
-          payments: [
-            {
-              amount: toTwo(parsedPayNow),
-              method: "direct_debit",
-              date: date,
-              stripePaymentIntentId: stripeResult.paymentIntentId,
-            },
-          ],
+          payments: [paymentData],
+          createdAt: new Date(),
+          updatedAt: new Date(),
         };
       }
 
       const data = await createFeeData(feeData).unwrap();
-
       if (data?.insertedId) {
         toast.success(
-          `Direct Debit payment of £${toTwo(parsedPayNow)} (${
-            paymentStatus === "paid" ? "Full" : "Partial"
-          }) recorded successfully for ${
-            selectedStudentObjects?.length
-          } student(s)`
+          `Direct Debit payment of £${toTwo(
+            parsedPayNow
+          )} initiated successfully. Status: Pending`
         );
       }
 
@@ -684,25 +808,6 @@ export default function DirectDebitPayModal({
       setIsProcessing(false);
     }
   };
-
-  const years = Array.from(
-    { length: 5 },
-    (_, i) => new Date().getFullYear() - 2 + i
-  );
-  const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
 
   return (
     <>

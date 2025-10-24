@@ -52,7 +52,14 @@ export default function AdminDirectDebit() {
   };
   const handleAdminManualClose = () => setAdminManualShowModal(false);
 
-  const { data, isLoading, refetch } = useGetAdminDirectDebitFamiliesQuery();
+  const { data, isLoading, refetch } = useGetAdminDirectDebitFamiliesQuery(
+    undefined,
+    {
+      pollingInterval: 30000, // This WILL work for status updates
+      refetchOnFocus: true, // Refetch when window regains focus
+      refetchOnReconnect: true, // Refetch when internet reconnects
+    }
+  );
   const [collectPayment, { isLoading: isCollecting }] =
     useCollectAdminPaymentMutation();
 

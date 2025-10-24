@@ -187,44 +187,88 @@ export default function AdminManualPayModal({
   };
 
   // Helper to check if a fee doc contains admission fully paid for a student
+  // ✅ ADD THIS: Helper to check if admission already paid for student (same as DirectDebit)
   const hasStudentPaidAdmission = (feeDoc, studentId) => {
     if (!feeDoc?.students) return false;
-    const s = feeDoc.students.find(
+
+    const studentFee = feeDoc.students.find(
       (st) => String(st.studentId) === String(studentId)
     );
-    if (!s) return false;
+    if (!studentFee) return false;
 
-    // prefer explicit admission fields if available
-    const admissionFee = s.admissionFee ?? 0;
-    const discounted = s.discountedFee ?? s.monthlyFee ?? 0;
+    // Check if this is an admission fee document and has payments
+    if (feeDoc.paymentType === "admission" && studentFee.payments) {
+      const totalPaid = studentFee.payments.reduce(
+        (sum, payment) => sum + (payment.amount || 0),
+        0
+      );
 
-    // If `paidAdmission` exists (we sometimes set it during creation), use that
-    if (s.paidAdmission !== undefined) {
-      return (s.paidAdmission ?? 0) >= admissionFee - 1e-6;
+      // Consider admission paid if at least the admission fee amount is covered
+      const admissionFeeAmount = studentFee.admissionFee || 20;
+      return totalPaid >= admissionFeeAmount;
     }
 
-    // fallback: if subtotal covers admission + discounted monthly portion
-    return (s.subtotal ?? 0) >= toTwo(admissionFee + discounted) - 1e-6;
+    return false;
   };
 
+  // ✅ ADD THIS: Additional validation to prevent duplicate admission payments
+  const canProceedWithAdmission = useMemo(() => {
+    if (feeType !== "admission") return true;
+
+    // Check if we would be creating duplicate admission records
+    const existingAdmissionFees = fees.filter(
+      (fee) =>
+        String(fee.familyId) === String(familyId) &&
+        fee.paymentType === "admission"
+    );
+
+    if (existingAdmissionFees.length === 0) return true;
+
+    // For each existing admission fee, check if any selected student is already included
+    for (const existingFee of existingAdmissionFees) {
+      const hasOverlap = selectedStudentObjects.some((student) =>
+        existingFee.students?.some(
+          (s) => String(s.studentId) === String(student._id)
+        )
+      );
+
+      if (hasOverlap) {
+        console.log(
+          "Duplicate admission detected for students in existing fee:",
+          existingFee._id
+        );
+        return false;
+      }
+    }
+
+    return true;
+  }, [fees, familyId, feeType, selectedStudentObjects]);
   // Check if payment already exists for selected students/month/year/type
   // ✅ FIXED: Check if ANY selected student has already paid for this month
   const paymentExists = useMemo(() => {
     if (!feeType || !familyId || selectedStudents.length === 0) return false;
 
     if (feeType === "admission") {
-      return selectedStudentObjects.some((student) =>
-        fees.some(
-          (fee) =>
-            String(fee.familyId) === String(familyId) &&
-            String(fee.paymentType) === "admission" &&
-            (hasStudentPaidAdmission(fee, student._id) ||
-              (fee.status === "paid" &&
-                fee.students?.some(
-                  (s) => String(s.studentId) === String(student._id)
-                )))
-        )
+      // Check if any selected student already has a paid admission fee
+      const studentsWithExistingAdmission = selectedStudentObjects.filter(
+        (student) =>
+          fees.some(
+            (fee) =>
+              String(fee.familyId) === String(familyId) &&
+              fee.paymentType === "admission" &&
+              hasStudentPaidAdmission(fee, student._id)
+          )
       );
+
+      if (studentsWithExistingAdmission.length > 0) {
+        console.log(
+          "Students with existing admission:",
+          studentsWithExistingAdmission.map((s) => s.name)
+        );
+        return true;
+      }
+
+      return false;
     }
 
     if (feeType === "monthly" && feeMonth) {
@@ -306,6 +350,7 @@ export default function AdminManualPayModal({
       setIsProcessing(false);
       return;
     }
+
     // ✅ NEW VALIDATION: Check if amount is less than total admission fee
     if (feeType === "admission") {
       const admissionFeePerStudent = 20;
@@ -321,24 +366,65 @@ export default function AdminManualPayModal({
         return;
       }
     }
-    if (paymentExists) {
-      // ✅ BETTER ERROR: Show which students already paid
-      const alreadyPaidStudents = selectedStudentObjects.filter((student) =>
+
+    // ✅ ADD THIS: Check for duplicate admission payments
+    if (feeType === "admission" && !canProceedWithAdmission) {
+      const duplicateStudents = selectedStudentObjects.filter((student) =>
         fees.some(
           (fee) =>
             String(fee.familyId) === String(familyId) &&
-            (String(fee.paymentType) === "monthly" ||
-              String(fee.paymentType) === "monthlyOnHold") &&
-            hasStudentPaidMonth(fee, student._id, feeMonth, feeYear)
+            fee.paymentType === "admission" &&
+            fee.students?.some(
+              (s) => String(s.studentId) === String(student._id)
+            )
         )
       );
 
-      const studentNames = alreadyPaidStudents.map((s) => s.name).join(", ");
+      const studentNames = duplicateStudents.map((s) => s.name).join(", ");
+      toast.error(`Admission already processed for: ${studentNames}`);
+      setIsProcessing(false);
+      return;
+    }
 
+    if (paymentExists) {
+      if (feeType === "admission") {
+        const alreadyPaidStudents = selectedStudentObjects.filter((student) =>
+          fees.some(
+            (fee) =>
+              String(fee.familyId) === String(familyId) &&
+              fee.paymentType === "admission" &&
+              hasStudentPaidAdmission(fee, student._id)
+          )
+        );
+
+        const studentNames = alreadyPaidStudents.map((s) => s.name).join(", ");
+        toast.error(`Admission fee already paid for: ${studentNames}`);
+      } else {
+        // ✅ FIXED: Monthly payment error - define studentNames here
+        const alreadyPaidStudents = selectedStudentObjects.filter((student) =>
+          fees.some(
+            (fee) =>
+              String(fee.familyId) === String(familyId) &&
+              (String(fee.paymentType) === "monthly" ||
+                String(fee.paymentType) === "monthlyOnHold") &&
+              hasStudentPaidMonth(fee, student._id, feeMonth, feeYear)
+          )
+        );
+
+        const studentNames = alreadyPaidStudents.map((s) => s.name).join(", ");
+        toast.error(
+          `Payment already recorded for ${studentNames} for ${
+            months[parseInt(feeMonth) - 1]
+          } ${feeYear}`
+        );
+      }
+      setIsProcessing(false);
+      return;
+    }
+
+    if (feeType === "monthly" && isBeforeJoiningMonth) {
       toast.error(
-        `Payment already recorded for ${studentNames} for ${
-          months[parseInt(feeMonth) - 1]
-        } ${feeYear}`
+        "Cannot record payment for months before student's joining month"
       );
       setIsProcessing(false);
       return;

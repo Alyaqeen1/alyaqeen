@@ -12,7 +12,7 @@ import seven from "../../assets/img/hero/right.png";
 import eight from "../../assets/img/hero/star.png";
 import nine from "../../assets/img/home/image8.png";
 import ten from "../../assets/img/hero/hero-shape.png";
-import eleven from "../../assets/img/home/testimonial.png";
+import eleven from "../../assets/img/home/bannerImg3.png";
 
 const Banner = () => {
   const [isOpen, setOpen] = useState(false);
