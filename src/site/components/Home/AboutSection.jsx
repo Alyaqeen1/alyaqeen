@@ -8,7 +8,7 @@ import one from "../../assets/img/about/bus.png";
 import two from "../../assets/img/home/quran-quran-svgrepo-com.svg";
 import three from "../../assets/img/about/dot.png";
 import four from "../../assets/img/home/review01.png";
-import five from "../../assets/img/home/review02.png";
+import five from "../../assets/img/home/review3.png";
 
 const AboutSection = () => {
   const { t } = useTranslation(["home"]);

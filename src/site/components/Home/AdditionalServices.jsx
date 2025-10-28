@@ -6,7 +6,7 @@ import five from "../../assets/img/program/mask-2.png";
 import six from "../../assets/img/program/compass.png";
 import seven from "../../assets/img/home/online-learing.png";
 import eight from "../../assets/img/home/nikaah_bg.jpg";
-import nine from "../../assets/img/home/sports-club.jpg";
+import nine from "../../assets/img/home/soccer.jpg";
 import { Link } from "react-router";
 
 export default function AdditionalServices() {
@@ -71,6 +71,7 @@ export default function AdditionalServices() {
                     width: "300px",
                     height: "300px",
                     borderRadius: "150px",
+                    objectFit: "cover",
                   }}
                   src={seven}
                   alt="img"
@@ -103,6 +104,7 @@ export default function AdditionalServices() {
                     width: "300px",
                     height: "300px",
                     borderRadius: "150px",
+                    objectFit: "cover",
                   }}
                   src={eight}
                   alt="img"
@@ -138,6 +140,7 @@ export default function AdditionalServices() {
                     width: "300px",
                     height: "300px",
                     borderRadius: "150px",
+                    objectFit: "cover",
                   }}
                   src={nine}
                   alt="img"
