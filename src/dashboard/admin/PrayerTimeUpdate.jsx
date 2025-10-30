@@ -227,7 +227,7 @@ export default function PrayerTimeUpdate() {
             className="form-control bg-light"
             placeholder="e.g. 1:00 PM"
             value={zuhrJamat}
-            onChange={(e) => setFajrJamat(e.target.value)}
+            onChange={(e) => setZuhrJamat(e.target.value)}
             required
           />
         </div>
