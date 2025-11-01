@@ -48,7 +48,7 @@ const LoginComp = () => {
       </div>
       <div className="container">
         <div className="contact-wrapper py-5">
-          <div className="row align-items-center">
+          <div className="row gap-5 gap-lg-0 align-items-center">
             <div className="col-lg-6">
               <div className="contact-content">
                 <div className="section-title">
@@ -138,7 +138,7 @@ const LoginComp = () => {
                 </form>
               </div>
             </div>
-            <div className="col-lg-6">
+            <div className="col-lg-6 mt-5 mt-lg-0">
               <div
                 className="contact-image d-flex justify-content-center align-items-center"
                 data-aos-duration="800"
