@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   useGetTeacherLessonsCoveredMonthlySummaryQuery,
   useGetTeacherLessonsCoveredYearlySummaryQuery,
@@ -15,9 +15,33 @@ export default function ReportsSummary() {
   const currentYear = new Date().getFullYear();
   const [year, setYear] = useState(currentYear);
   const [showOverallSummary, setShowOverallSummary] = useState(false);
-  const [expandedStudent, setExpandedStudent] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
   const { user } = useAuth();
   const [publishMultipleLessons] = usePublishMultipleLessonsMutation();
+
+  // Get current month name for initial load
+  const getCurrentMonthName = () => {
+    const months = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+    return months[new Date().getMonth()];
+  };
+
+  // Set initial month only once on component mount
+  useEffect(() => {
+    setMonth(getCurrentMonthName());
+  }, []);
 
   // Fetch teacher data
   const { data: teacher, isLoading: isLoadingTeacher } =
@@ -29,8 +53,10 @@ export default function ReportsSummary() {
   const {
     data: lessonsCovered = [],
     isLoading: isLoadingMonthly,
+    isFetching: isFetchingMonthly,
     isError: isMonthlyError,
     error: monthlyError,
+    refetch: refetchMonthly,
   } = useGetTeacherLessonsCoveredMonthlySummaryQuery(
     {
       id: teacher?._id,
@@ -38,7 +64,8 @@ export default function ReportsSummary() {
       year: year.toString(),
     },
     {
-      skip: !teacher?._id || showOverallSummary,
+      skip: !teacher?._id || showOverallSummary || !month,
+      refetchOnMountOrArgChange: true,
     }
   );
 
@@ -46,7 +73,9 @@ export default function ReportsSummary() {
   const {
     data: overallSummary = [],
     isLoading: isLoadingYearly,
+    isFetching: isFetchingYearly,
     isError: isYearlyError,
+    refetch: refetchYearly,
   } = useGetTeacherLessonsCoveredYearlySummaryQuery(
     {
       id: teacher?._id,
@@ -54,29 +83,64 @@ export default function ReportsSummary() {
     },
     {
       skip: !teacher?._id || !showOverallSummary,
+      refetchOnMountOrArgChange: true,
     }
   );
 
-  const isLoading =
-    isLoadingTeacher ||
-    (showOverallSummary ? isLoadingYearly : isLoadingMonthly);
+  // Enhanced loading detection
+  const isFetching = showOverallSummary ? isFetchingYearly : isFetchingMonthly;
+  const isLoadingInitial = showOverallSummary
+    ? isLoadingYearly
+    : isLoadingMonthly;
+  const isLoading = isLoadingTeacher || isLoadingInitial || isFetching;
+
   const isError = showOverallSummary ? isYearlyError : isMonthlyError;
   const isNoDataError = monthlyError?.data?.message?.includes("No data found");
 
+  // Refetch data when filters change
+  useEffect(() => {
+    if (!showOverallSummary && month && teacher?._id) {
+      refetchMonthly();
+    }
+  }, [month, year, showOverallSummary, refetchMonthly, teacher?._id]);
+
+  useEffect(() => {
+    if (showOverallSummary && teacher?._id) {
+      refetchYearly();
+    }
+  }, [year, showOverallSummary, refetchYearly, teacher?._id]);
+
   const handleOverallSummaryClick = () => {
     setShowOverallSummary(!showOverallSummary);
-    setMonth("");
-    setExpandedStudent(null);
+    if (!showOverallSummary) {
+      setMonth(""); // Clear month when switching to overall summary
+    } else {
+      setMonth(getCurrentMonthName()); // Set current month when switching back
+    }
+    setSearchTerm(""); // Clear search when switching views
   };
 
-  const toggleStudentDetails = (studentId) => {
-    setExpandedStudent(expandedStudent === studentId ? null : studentId);
+  // Handle month change
+  const handleMonthChange = (e) => {
+    const newMonth = e.target.value;
+    setMonth(newMonth);
   };
 
-  if (isLoading) return <LoadingSpinnerDash />;
+  // Handle year change
+  const handleYearChange = (e) => {
+    const newYear = Number(e.target.value);
+    setYear(newYear);
+  };
 
-  const displayData = showOverallSummary ? overallSummary : lessonsCovered;
-  const isEmpty = displayData.length === 0;
+  // Handle search term change
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  // Clear search
+  const handleClearSearch = () => {
+    setSearchTerm("");
+  };
 
   const handlePublish = async (ids) => {
     if (!ids || ids.length === 0) {
@@ -86,7 +150,7 @@ export default function ReportsSummary() {
 
     Swal.fire({
       title: "Are you sure?",
-      text: "You won't be able to revert this!",
+      text: "Publish selected report(s)?",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
@@ -100,85 +164,76 @@ export default function ReportsSummary() {
             monthly_publish: !showOverallSummary,
             yearly_publish: showOverallSummary,
           }).unwrap();
+
           if (res?.modifiedCount > 0) {
-            Swal.fire({
-              title: "Published!",
-              text: "Your file has been Published.",
-              icon: "success",
-            });
+            Swal.fire("Published!", "Reports have been published.", "success");
+            // Refetch data after publishing
+            if (showOverallSummary) {
+              refetchYearly();
+            } else {
+              refetchMonthly();
+            }
           }
         } catch (error) {
-          toast.error(
-            error?.data?.message || "Failed to publish lessons. Try again."
-          );
+          toast.error(error?.data?.message || "Failed to publish lessons.");
         }
       }
     });
   };
 
-  const renderStudentReport = (student, isYearly, isExpanded) => {
-    const progressData = isYearly ? student.progress : student;
+  // Filter data based on search term
+  const filterDataBySearch = (data) => {
+    if (!searchTerm.trim()) return data;
 
-    return (
-      <div className="card mb-3" key={student.student_id}>
-        <div className="card-header d-flex justify-content-between align-items-center">
-          <div>
-            <h5 className="mb-0">{student.student_name}</h5>
-            <small className="text-muted">{student.class_name}</small>
-          </div>
-          <div>
-            <span className="badge bg-secondary me-2">
-              {isYearly
-                ? `Year: ${student.year}`
-                : `${student.month} ${student.year}`}
-            </span>
-            <span className="badge bg-info me-2">
-              {student.type === "gift_muslim" ? "Gift for Muslim" : "Normal"}
-            </span>
-            <button
-              className="btn btn-sm btn-outline-primary me-2"
-              onClick={() => toggleStudentDetails(student.student_id)}
-            >
-              {isExpanded ? "Hide Details" : "Show Details"}
-            </button>
-            <button
-              className="btn btn-sm btn-warning text-white"
-              onClick={() => handlePublish(student.processedDocumentIds)}
-            >
-              Publish
-            </button>
-          </div>
-        </div>
-
-        {/* summary + expanded views here */}
-      </div>
+    const searchLower = searchTerm.toLowerCase().trim();
+    return data.filter(
+      (item) =>
+        item.student_name?.toLowerCase().includes(searchLower) ||
+        item.class_name?.toLowerCase().includes(searchLower)
     );
   };
 
-  // Progress fields filtering
-  const getFilteredDetailItems = (progress) => {
+  const displayData = filterDataBySearch(
+    showOverallSummary ? overallSummary : lessonsCovered
+  );
+  const isEmpty = displayData.length === 0;
+  const originalDataCount = showOverallSummary
+    ? overallSummary.length
+    : lessonsCovered.length;
+  const filteredCount = displayData.length;
+
+  // Get all progress fields that have values
+  const getProgressInfo = (progress) => {
     if (!progress) return [];
+
     return [
-      progress.page_progress && {
-        label: "Pages",
-        value: progress.page_progress,
-      },
-      progress.line_progress && {
-        label: "Lines",
-        value: progress.line_progress,
-      },
-      progress.para_progress && {
-        label: "Paras",
-        value: progress.para_progress,
-      },
-      progress.target_progress && {
-        label: "Targets",
-        value: progress.target_progress,
-      },
-      progress.dua_number_progress && {
-        label: "Duas",
-        value: progress.dua_number_progress,
-      },
+      progress.selected && { label: "Type", value: progress.selected },
+      progress.page_progress !== undefined &&
+        progress.page_progress !== null && {
+          label: "Pages Done",
+          value: progress.page_progress,
+        },
+      progress.line_progress !== undefined &&
+        progress.line_progress !== null && {
+          label: "Lines",
+          value: progress.line_progress,
+        },
+      progress.para_progress !== undefined &&
+        progress.para_progress !== null && {
+          label: "Paras Done",
+          value: progress.para_progress,
+        },
+      progress.target_display !== undefined &&
+        progress.target_display !== null &&
+        progress.target_display !== "N/A" && {
+          label: "Targets",
+          value: progress.target_display,
+        },
+      progress.dua_number_progress !== undefined &&
+        progress.dua_number_progress !== null && {
+          label: "Duas Done",
+          value: progress.dua_number_progress,
+        },
       progress.level_display &&
         progress.level_display !== "N/A" && {
           label: "Level",
@@ -194,47 +249,70 @@ export default function ReportsSummary() {
           label: "Lesson",
           value: progress.lesson_name_display,
         },
-      progress.selected && { label: "Type", value: progress.selected },
     ].filter(Boolean);
   };
 
-  const renderProgressDetails = (progress) => {
-    const detailItems = getFilteredDetailItems(progress);
-    return (
-      <div className="progress-details">
-        {detailItems.map((item, idx) => (
-          <div key={idx} className="detail-item">
-            <span className="detail-label">{item.label}:</span>
-            <span className="detail-value">{item.value}</span>
-          </div>
-        ))}
-      </div>
-    );
-  };
+  // Get all available progress sections
+  const getProgressSections = (progressData, type) => {
+    const sections = [
+      {
+        key: "qaidah_quran_progress",
+        title: "Qaidah / Quran",
+        color: "#e3f2fd",
+        icon: "📖",
+      },
+      {
+        key: "islamic_studies_progress",
+        title: "Islamic Studies",
+        color: "#e8f5e9",
+        icon: "📚",
+      },
+      {
+        key: "dua_surah_progress",
+        title: "Dua / Surah",
+        color: "#fff8e1",
+        icon: "🕌",
+      },
+      {
+        key: "gift_for_muslim_progress",
+        title: "Gift for Muslim",
+        color: "#fff3e0",
+        icon: "🎁",
+      },
+    ];
 
-  // Config for progress sections
-  const progressConfig = {
-    qaidah_quran_progress: { title: "Qaidah/Quran", color: "primary" },
-    islamic_studies_progress: { title: "Islamic Studies", color: "success" },
-    dua_surah_progress: { title: "Dua/Surah", color: "info" },
-    gift_for_muslim_progress: { title: "Gift for Muslim", color: "warning" },
+    // Filter based on student type and whether progress data exists
+    return sections.filter((section) => {
+      const progress = progressData[section.key];
+      if (!progress) return false;
+
+      // For gift_muslim type, only show qaidah_quran and gift_for_muslim
+      if (type === "gift_muslim") {
+        return (
+          section.key === "qaidah_quran_progress" ||
+          section.key === "gift_for_muslim_progress"
+        );
+      }
+
+      // For normal type, show all except gift_for_muslim if it's null
+      return section.key !== "gift_for_muslim_progress";
+    });
   };
 
   return (
     <div className="container-fluid p-3">
-      <h3 className="mb-4">Reports Summary</h3>
+      <h3 className="mb-4 fw-semibold">Reports Summary</h3>
 
       {/* Filters */}
       <div className="row align-items-end mb-4 g-3">
         <div className="col-md-8 d-flex flex-wrap gap-3">
           {!showOverallSummary && (
-            <div className="flex-grow-1" style={{ minWidth: "200px" }}>
-              <label className="form-label">Month</label>
+            <div style={{ minWidth: "200px" }}>
+              <label className="form-label fw-semibold">Month</label>
               <select
-                className="form-select bg-light"
-                style={{ borderColor: "var(--border2)" }}
+                className="form-select"
                 value={month}
-                onChange={(e) => setMonth(e.target.value)}
+                onChange={handleMonthChange}
               >
                 <option value="">Select month</option>
                 {[
@@ -259,15 +337,13 @@ export default function ReportsSummary() {
             </div>
           )}
 
-          <div className="flex-grow-1" style={{ minWidth: "200px" }}>
-            <label className="form-label">Year</label>
+          <div style={{ minWidth: "200px" }}>
+            <label className="form-label fw-semibold">Year</label>
             <select
-              className="form-select bg-light"
-              style={{ borderColor: "var(--border2)" }}
+              className="form-select"
               value={year}
-              onChange={(e) => setYear(Number(e.target.value))}
+              onChange={handleYearChange}
             >
-              <option value="">Select year</option>
               {Array.from({ length: 5 }, (_, i) => currentYear - 2 + i).map(
                 (yr) => (
                   <option key={yr} value={yr}>
@@ -277,161 +353,218 @@ export default function ReportsSummary() {
               )}
             </select>
           </div>
+
+          {/* Search Field */}
+          <div style={{ minWidth: "250px" }}>
+            <label className="form-label fw-semibold">
+              Search Student or Class
+            </label>
+            <div className="input-group">
+              <span className="input-group-text">
+                <i className="fas fa-search"></i>
+              </span>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Search by student name or class..."
+                value={searchTerm}
+                onChange={handleSearchChange}
+              />
+              {searchTerm && (
+                <button
+                  className="btn btn-outline-secondary"
+                  type="button"
+                  onClick={handleClearSearch}
+                  title="Clear search"
+                >
+                  <i className="fas fa-times"></i>
+                </button>
+              )}
+            </div>
+          </div>
         </div>
 
         <div className="col-md-4 text-md-end">
-          <button
-            className="btn text-white"
-            style={{ backgroundColor: "var(--border2)" }}
-            onClick={handleOverallSummaryClick}
-          >
+          <button className="btn btn-dark" onClick={handleOverallSummaryClick}>
             {showOverallSummary ? "Show Monthly View" : "Overall Summary"}
           </button>
         </div>
       </div>
 
-      {/* Results */}
-      {isError && !isNoDataError ? (
+      {/* Results Count */}
+      {!isLoading && !isError && originalDataCount > 0 && (
+        <div className="mb-3">
+          <small className="text-muted">
+            Showing {filteredCount} of {originalDataCount} student
+            {originalDataCount !== 1 ? "s" : ""}
+            {searchTerm && (
+              <span>
+                {" "}
+                for "<strong>{searchTerm}</strong>"
+              </span>
+            )}
+          </small>
+        </div>
+      )}
+
+      {/* Content */}
+      {isLoading ? (
+        <LoadingSpinnerDash />
+      ) : isError && !isNoDataError ? (
         <div className="alert alert-danger">Error loading data</div>
       ) : isEmpty ? (
         <div className="alert alert-info text-center">
-          {showOverallSummary
-            ? `No yearly data found for ${year}`
-            : month || year !== currentYear
-            ? "No lessons data found for selected filters"
-            : "Please select filters to view data"}
+          {searchTerm ? (
+            <>
+              No students found matching "<strong>{searchTerm}</strong>"
+              {originalDataCount > 0 && (
+                <div className="mt-2">
+                  <button
+                    className="btn btn-sm btn-outline-primary"
+                    onClick={handleClearSearch}
+                  >
+                    Clear search to show all {originalDataCount} students
+                  </button>
+                </div>
+              )}
+            </>
+          ) : showOverallSummary ? (
+            `No yearly data found for ${year}`
+          ) : month ? (
+            `No lessons found for ${month} ${year}`
+          ) : (
+            "Please select filters to view data"
+          )}
         </div>
       ) : (
-        <div className="reports-container">
+        <div className="row g-3">
           {displayData.map((item, idx) => {
             const progressData = showOverallSummary ? item.progress : item;
-            const isExpanded = expandedStudent === item.student_id;
+            const sections = getProgressSections(progressData, item.type);
+            const isGiftMuslim = item.type === "gift_muslim";
 
             return (
-              <div key={item.student_id || idx} className="card mb-3">
-                <div className="card-header d-flex justify-content-between align-items-center">
-                  <div>
-                    <h5 className="mb-0">{item.student_name}</h5>
-                    <small className="text-muted">{item.class_name}</small>
-                  </div>
-                  <div>
-                    <span className="badge bg-secondary me-2">
-                      {showOverallSummary
-                        ? `Year: ${item.year}`
-                        : `${item.month} ${item.year}`}
-                    </span>
-                    <span className="badge bg-info me-2">
-                      {item.type === "gift_muslim"
-                        ? "Gift for Muslim"
-                        : "Normal"}
-                    </span>
-                    <button
-                      className="btn btn-sm btn-outline-primary me-2"
-                      onClick={() => toggleStudentDetails(item.student_id)}
-                    >
-                      {isExpanded ? "Hide Details" : "Show Details"}
-                    </button>
-                    <button
-                      className="btn btn-sm btn-warning text-white"
-                      onClick={() => handlePublish(item.processedDocumentIds)}
-                    >
-                      Publish
-                    </button>
-                  </div>
-                </div>
-
-                <div className="card-body">
-                  {/* Summary View */}
-                  <div className="row text-center">
-                    {Object.entries(progressConfig).map(([key, cfg]) => {
-                      const progress = progressData[key];
-                      if (!progress) return null;
-
-                      // Determine column size based on student type
-                      const colSize =
-                        item.type === "gift_muslim" ? "col-md-6" : "col-md-4";
-
-                      return (
-                        <div key={key} className={`${colSize} mb-2`}>
-                          <div className="card bg-light h-100">
-                            <div className="card-body py-2">
-                              <h6 className="card-title">{cfg.title}</h6>
-                              {getFilteredDetailItems(progress).map(
-                                (item, idx) => (
-                                  <p key={idx} className="card-text mb-0">
-                                    {item.label}: <strong>{item.value}</strong>
-                                  </p>
-                                )
-                              )}
-                            </div>
-                          </div>
+              <div key={item.student_id || idx} className="col-lg-6 col-xl-4">
+                <div className="card shadow-sm border-0 h-100">
+                  <div className="card-body d-flex flex-column">
+                    {/* Header */}
+                    <div className="mb-3">
+                      <div className="d-flex justify-content-between align-items-start mb-2">
+                        <div className="flex-grow-1">
+                          <h5 className="mb-1 fw-bold text-dark">
+                            {item.student_name}
+                          </h5>
+                          <p className="mb-1 text-muted small">
+                            <i className="fas fa-user-graduate me-1"></i>
+                            {item.class_name}
+                          </p>
                         </div>
-                      );
-                    })}
-                  </div>
-
-                  {/* Expanded View */}
-                  {isExpanded && (
-                    <div className="mt-3">
-                      <h6>Detailed Progress</h6>
-                      <div className="row">
-                        {Object.entries(progressConfig).map(([key, cfg]) => {
-                          const progress = progressData[key];
-                          if (!progress) return null;
-
-                          // Determine column size based on student type
-                          const colSize =
-                            item.type === "gift_muslim"
-                              ? "col-md-6"
-                              : "col-md-4";
-
-                          return (
-                            <div key={key} className={`${colSize} mb-2`}>
-                              <div className={`card border-${cfg.color}`}>
-                                <div
-                                  className={`card-header bg-${cfg.color} text-white`}
-                                >
-                                  <h6 className="mb-0">{cfg.title} Progress</h6>
-                                </div>
-                                <div className="card-body">
-                                  {renderProgressDetails(progress)}
-                                </div>
-                              </div>
-                            </div>
-                          );
-                        })}
+                        <div className="text-end">
+                          <span className="badge bg-secondary mb-1">
+                            {showOverallSummary
+                              ? `Year ${item.year}`
+                              : `${item.month} ${item.year}`}
+                          </span>
+                          <br />
+                          <span
+                            className={`badge ${
+                              isGiftMuslim ? "bg-info" : "bg-success"
+                            }`}
+                          >
+                            {isGiftMuslim ? "Gift for Muslim" : "Normal"}
+                          </span>
+                        </div>
                       </div>
                     </div>
-                  )}
+
+                    {/* Progress Sections */}
+                    <div className="flex-grow-1 d-flex flex-column">
+                      {sections.length > 0 ? (
+                        <div
+                          className={`flex-grow-1 d-flex flex-column ${
+                            isGiftMuslim ? "gap-0" : "gap-3"
+                          }`}
+                          style={{ minHeight: isGiftMuslim ? "200px" : "auto" }}
+                        >
+                          {sections.map((section, index) => {
+                            const progress = progressData[section.key];
+                            const progressInfo = getProgressInfo(progress);
+
+                            return (
+                              <div
+                                key={section.key}
+                                className={`p-3 rounded border ${
+                                  isGiftMuslim ? "flex-grow-1" : ""
+                                } ${isGiftMuslim && index === 0 ? "mb-2" : ""}`}
+                                style={{
+                                  backgroundColor: section.color,
+                                  minHeight: isGiftMuslim ? "48%" : "auto",
+                                }}
+                              >
+                                <h6 className="fw-semibold mb-2 d-flex align-items-center">
+                                  <span className="me-2">{section.icon}</span>
+                                  {section.title}
+                                </h6>
+
+                                {progressInfo.length > 0 ? (
+                                  <div className="row g-1">
+                                    {progressInfo.map((info, i) => (
+                                      <div key={i} className="col-6">
+                                        <div className="d-flex justify-content-between">
+                                          <small className="text-muted">
+                                            {info.label}:
+                                          </small>
+                                          <small className="fw-bold text-dark">
+                                            {info.value}
+                                          </small>
+                                        </div>
+                                      </div>
+                                    ))}
+                                  </div>
+                                ) : (
+                                  <small className="text-muted">
+                                    No progress data
+                                  </small>
+                                )}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      ) : (
+                        <div className="text-center py-4 text-muted flex-grow-1 d-flex align-items-center justify-content-center">
+                          <div>
+                            <i className="fas fa-clipboard-list fa-2x mb-2"></i>
+                            <p className="mb-0">No progress data available</p>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Footer */}
+                    <div className="mt-3 pt-3 border-top">
+                      <div className="d-flex justify-content-between align-items-center">
+                        <small className="text-muted">
+                          {sections.length} subject
+                          {sections.length !== 1 ? "s" : ""}
+                        </small>
+                        <button
+                          className="btn btn-sm btn-warning text-white fw-semibold"
+                          onClick={() =>
+                            handlePublish(item.processedDocumentIds)
+                          }
+                        >
+                          <i className="fas fa-upload me-1"></i>
+                          Publish
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             );
           })}
         </div>
       )}
-      <style jsx>{`
-        .progress-details {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 0.5rem;
-        }
-        .detail-item {
-          display: flex;
-          justify-content: space-between;
-          padding: 0.25rem 0;
-          border-bottom: 1px solid #eee;
-        }
-        .detail-label {
-          font-weight: 500;
-          color: #6c757d;
-        }
-        .detail-value {
-          font-weight: 600;
-        }
-        .card-body {
-          min-height: 150px;
-        }
-      `}</style>
     </div>
   );
 }

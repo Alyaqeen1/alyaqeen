@@ -40,6 +40,7 @@ import StudentDetails from "./parent/StudentDetails";
 import UpdateChild from "./parent/UpdateChild";
 import Payments from "./payments/Payments";
 import PaymentSummary from "./payments/PaymentSummary";
+import LessonCoveredTable from "./teacher/LessonCoveredTable";
 import LessonsCovered from "./teacher/LessonsCovered";
 import Merits from "./teacher/Merits";
 import ReportsSummary from "./teacher/ReportsSummary";
@@ -381,6 +382,16 @@ const dashboardRoutes = [
           <PrivateRoute>
             <TeacherRoute>
               <TeacherSelfUpdate></TeacherSelfUpdate>
+            </TeacherRoute>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "teacher/view-reports",
+        element: (
+          <PrivateRoute>
+            <TeacherRoute>
+              <LessonCoveredTable></LessonCoveredTable>
             </TeacherRoute>
           </PrivateRoute>
         ),

@@ -331,6 +331,10 @@ export default function OffCanvasMenu() {
                             to: "teacher/lessons-covered",
                           },
                           {
+                            label: "View Reports",
+                            to: "teacher/view-reports",
+                          },
+                          {
                             label: "Reports Summary",
                             to: "teacher/reports-summary",
                           },

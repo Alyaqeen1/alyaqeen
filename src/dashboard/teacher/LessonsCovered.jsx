@@ -9,7 +9,6 @@ import {
 } from "../../redux/features/teachers/teachersApi";
 import { useGetTeacherStudentsProgressQuery } from "../../redux/features/lessons_covered/lessons_coveredApi";
 
-import LessonCoveredTable from "./LessonCoveredTable";
 import ReportSubmitModal from "./ReportSubmitModal";
 import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 
@@ -21,15 +20,12 @@ export default function LessonsCovered() {
   const [session, setSession] = useState("");
   const [time, setTime] = useState("");
   const [classId, setClassId] = useState("");
-  const [isEditMode, setIsEditMode] = useState(false);
   const currentYear = new Date().getFullYear();
   const [filterMonth, setFilterMonth] = useState("");
   const [filterName, setFilterName] = useState("");
   const [filterYear, setFilterYear] = useState(currentYear.toString());
   const [showModal, setShowModal] = useState(false);
   const [selectedStudentId, setSelectedStudentId] = useState(null);
-  // Get all lessons covered by this teacher by default
-  // Toggle modal visibility
 
   // ── APPLIED FILTER STATES ──
   const [appliedFilters, setAppliedFilters] = useState({
@@ -42,7 +38,6 @@ export default function LessonsCovered() {
   // ── APPLY FILTER HANDLER ──
   const handleApplyFilters = () => {
     setAppliedFilters({ department, session, time, classId });
-    setIsEditMode(!isEditMode); // enable form display
   };
 
   // ── QUERIES ──
@@ -93,6 +88,7 @@ export default function LessonsCovered() {
   } = useGetStudentsByGroupQuery(groupId, {
     skip: !groupId,
   });
+
   const handleShow = (id) => {
     setSelectedStudentId(id);
     setShowModal(true);
@@ -103,110 +99,11 @@ export default function LessonsCovered() {
       refetch();
     }
   }, [groupId]);
-  // const handleSubmit = async (e, id) => {
-  //   e.preventDefault();
-
-  //   if (!time_of_month || !book_name) {
-  //     toast.error("Please fill time of the month and book name first.");
-  //     return;
-  //   }
-  //   if (!classId || !department || !session || !time) {
-  //     toast.error("Please fill subject, class and dept first.");
-  //     return;
-  //   }
-
-  //   const form = e.target;
-  //   const level = form?.level?.value;
-  //   const lesson_name = form?.lesson_name?.value;
-  //   const page = form?.page?.value;
-  //   const line = form?.line?.value;
-  //   const para = form?.para?.value;
-  //   const book = form?.book?.value;
-  //   const target = form?.target?.value;
-  //   const description = form?.description?.value;
-
-  //   const numOrNull = (val) => (val ? parseInt(val, 10) : null);
-
-  //   let lessons = [];
-
-  //   if (book_name === "qaidah_quran") {
-  //     if (quran_qaidah_options === "quran" || quran_qaidah_options === "hifz") {
-  //       lessons.push({
-  //         para: numOrNull(para),
-  //         page: numOrNull(page),
-  //         line: numOrNull(line),
-  //       });
-  //     } else if (
-  //       quran_qaidah_options === "qaidah" ||
-  //       quran_qaidah_options === "tajweed"
-  //     ) {
-  //       lessons.push({
-  //         level,
-  //         lesson_name: numOrNull(lesson_name),
-  //         page: numOrNull(page),
-  //         line: numOrNull(line),
-  //       });
-  //     }
-  //   }
-
-  //   if (book_name === "islamic_studies") {
-  //     lessons.push({
-  //       lesson_name, // text field, keep as string
-  //       page: numOrNull(page),
-  //     });
-  //   }
-
-  //   if (book_name === "dua_surah") {
-  //     lessons.push({
-  //       lesson_name, // text field, keep as string
-  //       book,
-  //       level,
-  //       page: numOrNull(page),
-  //       target: numOrNull(target),
-  //     });
-  //   }
-
-  //   let lessonsData = {
-  //     student_id: id,
-  //     teacher_id: teacher?._id,
-  //     class_id: classId,
-  //     subject_id: subjectId,
-  //     department_id: department,
-  //     month,
-  //     year,
-  //     time_of_month,
-  //     type,
-  //     book_name,
-  //     quran_qaidah_option: quran_qaidah_options || null,
-  //     lessons,
-  //     monthly_publish: false,
-  //     yearly_publish: false,
-  //     date: new Date().toISOString(),
-  //   };
-
-  //   if (description) lessonsData.description = description;
-
-  //   console.log(lessonsData);
-
-  //   // try {
-  //   //   const data = await addLessonCovered(lessonsData).unwrap();
-  //   //   if (data?.insertedId || data?.updatedId) {
-  //   //     toast.success("Lessons covered saved successfully.");
-
-  //   //     form.reset();
-  //   //     setTime_of_month("");
-  //   //     setBook_name("");
-  //   //     setQuran_qaidah_options("");
-  //   //   }
-  //   // } catch (error) {
-  //   //   toast.error(error?.data?.message || "Failed to save lessons covered.");
-  //   // }
-  // };
-  // const handleClose = () => setShowModal(false);
 
   if (isLoading || LessonCoveredLoading) {
     return <LoadingSpinnerDash></LoadingSpinnerDash>;
   }
+
   return (
     <div>
       <h3 className="mb-2">Lessons Covered</h3>
@@ -314,54 +211,43 @@ export default function LessonsCovered() {
               className="btn text-white w-100"
               onClick={handleApplyFilters}
             >
-              {isEditMode ? "Cancel" : "Apply Filters"}
+              Apply Filters
             </button>
           </div>
         </div>
       </div>
 
-      {/* Content Area */}
-      <div className="border border-black mt-4 p-3">
-        {isEditMode ? (
-          // SHOW INPUT FORM FOR EACH STUDENT WHEN IN EDIT MODE
-          <div className="mt-2">
-            {students.map((student, index) => (
-              <div
-                key={student._id}
-                className="border p-4 mb-3 bg-light rounded shadow-sm"
-              >
-                <div className="d-flex justify-content-between align-items-center">
-                  <h5 className="mb-3">
-                    {index + 1}. {student.name}{" "}
-                  </h5>
-                  <button
-                    style={{
-                      backgroundColor: "var(--border2)",
-                      color: "white",
-                    }}
-                    className="px-4 py-2"
-                    onClick={() => handleShow(student?._id)}
-                  >
-                    Open
-                  </button>
-                </div>
+      {/* Content Area - Always show students list */}
+      <div
+        className={`${
+          students?.length > 0 ? "border border-black" : ""
+        } mt-4 p-3`}
+      >
+        <div className="mt-2">
+          {students.map((student, index) => (
+            <div
+              key={student._id}
+              className="border p-4 mb-3 bg-light rounded shadow-sm"
+            >
+              <div className="d-flex justify-content-between align-items-center">
+                <h5 className="mb-3">
+                  {index + 1}. {student.name}{" "}
+                </h5>
+                <button
+                  style={{
+                    backgroundColor: "var(--border2)",
+                    color: "white",
+                  }}
+                  className="px-4 py-2"
+                  onClick={() => handleShow(student?._id)}
+                >
+                  Open
+                </button>
               </div>
-            ))}
-          </div>
-        ) : (
-          // SHOW EXISTING LESSONS COVERED DATA BY DEFAULT
-          <div className="mt-2">
-            <LessonCoveredTable
-              lessonsCovered={lessonsCovered}
-              filterMonth={filterMonth}
-              setFilterMonth={setFilterMonth}
-              filterName={filterName}
-              setFilterName={setFilterName}
-              filterYear={filterYear}
-              setFilterYear={setFilterYear}
-            ></LessonCoveredTable>
-          </div>
-        )}
+            </div>
+          ))}
+        </div>
+
         <ReportSubmitModal
           studentId={selectedStudentId}
           teacherId={teacher?._id}

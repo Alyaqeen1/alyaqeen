@@ -206,10 +206,12 @@ export default function ReportsSummaryAdmin() {
           label: "Paras Done",
           value: progress.para_progress,
         },
-      progress.target_progress !== undefined &&
-        progress.target_progress !== null && {
+      // CHANGED: Use target_display instead of target_progress
+      progress.target_display !== undefined &&
+        progress.target_display !== null &&
+        progress.target_display !== "N/A" && {
           label: "Targets",
-          value: progress.target_progress,
+          value: progress.target_display, // This will show "Beginning → Ending"
         },
       progress.dua_number_progress !== undefined &&
         progress.dua_number_progress !== null && {

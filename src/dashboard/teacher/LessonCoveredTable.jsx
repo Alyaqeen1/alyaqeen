@@ -1,23 +1,50 @@
 import React, { useState } from "react";
 import { FaTrashAlt, FaPen } from "react-icons/fa";
 import Swal from "sweetalert2";
-import { useDeleteManyLessonCoveredMutation } from "../../redux/features/lessons_covered/lessons_coveredApi";
+import {
+  useDeleteManyLessonCoveredMutation,
+  useGetTeacherStudentsProgressQuery,
+} from "../../redux/features/lessons_covered/lessons_coveredApi";
 import LessonCoveredUpdateModal from "../shared/LessonCoveredUpdateModal";
+import { useGetTeacherByEmailQuery } from "../../redux/features/teachers/teachersApi";
+import useAuth from "../../hooks/useAuth";
 
-export default function LessonCoveredTable({
-  lessonsCovered,
-  filterMonth,
-  setFilterMonth,
-  filterName,
-  setFilterName,
-  filterYear,
-  setFilterYear,
-}) {
+export default function LessonCoveredTable(
+  {
+    // lessonsCovered,
+    // filterMonth,
+    // setFilterMonth,
+    // filterName,
+    // setFilterName,
+    // filterYear,
+    // setFilterYear,
+  }
+) {
+  const currentYear = new Date().getFullYear();
+  const [filterMonth, setFilterMonth] = useState("");
+  const [filterName, setFilterName] = useState("");
+  const [filterYear, setFilterYear] = useState(currentYear.toString());
+  const { user } = useAuth();
+  const { data: teacher } = useGetTeacherByEmailQuery(user?.email, {
+    skip: !user?.email,
+  });
+  const { data: lessonsCovered = [], isLoading: LessonCoveredLoading } =
+    useGetTeacherStudentsProgressQuery(
+      {
+        teacher_id: teacher?._id,
+        student_name: filterName,
+        month: filterMonth,
+        year: filterYear,
+      },
+      {
+        skip: !teacher?._id,
+      }
+    );
+
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [expandedRows, setExpandedRows] = useState(new Set());
 
-  const currentYear = new Date().getFullYear();
   const [deleteManyLessonCovered] = useDeleteManyLessonCoveredMutation();
 
   const toggleRowExpansion = (index) => {
