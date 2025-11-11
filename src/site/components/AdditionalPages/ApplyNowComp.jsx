@@ -531,10 +531,10 @@ const ApplyNowComp = () => {
       </div>
 
       <div className="container">
-        <div className="d-flex text-right mb-3">
+        <div className="d-flex justify-content-center align-content-center text-right mb-0">
           <a
             href="/file/Arabic Quran Application Form.docx"
-            className="theme-btn me-md-3 text-wrap"
+            className="theme-btn px-2 d-flex text-nowrap justify-content-center align-items-center me-md-3 me-1 text-center text-wrap"
             // style={{
             //   marginRight: "10px",
             // }}
@@ -544,7 +544,7 @@ const ApplyNowComp = () => {
           <a
             href="/file/Tuition Admission Form Updated.pdf"
             download
-            className="theme-btn text-wrap"
+            className="theme-btn px-2 text-nowrap d-flex justify-content-center align-items-center me-md-3 me-1 text-center text-wrap"
           >
             Download Form In PDF File
           </a>
@@ -552,7 +552,7 @@ const ApplyNowComp = () => {
         <div>
           {/* Student Search Section */}
           <ul
-            className="nav gap-2 my-md-5 d-flex justify-content-center align-items-center"
+            className="nav gap-2 my-md-5 my-2 d-flex justify-content-center align-items-center"
             role="tablist"
           >
             <li
@@ -563,13 +563,13 @@ const ApplyNowComp = () => {
               role="presentation"
             >
               <a
-                className={`nav-link text-uppercase box-shadow px-2 px-md-3 py-2 py-md-3 ${
+                className={`nav-link text-uppercase box-shadow px-2 px-md-3 py-1 py-md-3 ${
                   activeTabIndex === 0 ? " active" : ""
                 }`}
                 onClick={() => handleTabClick(0)}
               >
                 <p className="fs-6 fs-md-4">Add a New Student</p>
-                <p className="text-wrap" style={{ fontSize: "10px" }}>
+                <p className="text-wrap lh-1" style={{ fontSize: "10px" }}>
                   If this is your first child or not a sibling, start a fresh
                   form.
                 </p>
@@ -583,13 +583,13 @@ const ApplyNowComp = () => {
               role="presentation"
             >
               <a
-                className={`nav-link text-uppercase box-shadow px-2 px-md-3 py-2 py-md-3 ${
+                className={`nav-link text-uppercase box-shadow px-2 px-md-3 py-1 py-md-3 ${
                   activeTabIndex === 1 ? " active" : ""
                 }`}
                 onClick={() => handleTabClick(1)}
               >
                 <p className="fs-6 fs-md-4">Add a Sibling</p>
-                <p style={{ fontSize: "10px" }}>
+                <p className="text-wrap lh-1" style={{ fontSize: "10px" }}>
                   Adding another child? Select an existing student to auto-fill
                   details.
                 </p>
@@ -682,7 +682,7 @@ const ApplyNowComp = () => {
           </div>
         </div>
         <div
-          className="contact-wrapper"
+          className="contact-wrapper mt-0 pt-0"
           style={{ position: "relative", zIndex: 0 }}
         >
           <div className="row">
