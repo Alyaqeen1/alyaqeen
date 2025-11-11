@@ -6,7 +6,14 @@ import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 import { useGetFeesSummaryQuery } from "../../redux/features/fees/feesApi";
 import { FaPen } from "react-icons/fa6";
 import { FaTrashAlt } from "react-icons/fa";
-
+const formatDate = (dateString) => {
+  if (dateString === "N/A") return "N/A";
+  const date = new Date(dateString);
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const year = date.getFullYear();
+  return `${day}-${month}-${year}`;
+};
 export default function ViewStudent() {
   const { id } = useParams();
   const { data: student, isLoading } = useGetStudentsByIdQuery(id, {
@@ -299,7 +306,7 @@ export default function ViewStudent() {
                             <td
                               className={` border h6 text-center align-middle text-nowrap`}
                             >
-                              {fee?.paymentDate}
+                              {formatDate(fee?.paymentDate)}
                             </td>
                             <td
                               className={`fw-medium border text-center align-middle text-nowrap`}

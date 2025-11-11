@@ -13,7 +13,7 @@ export default function Register() {
     <div className="pricing-wrapper">
       <CmnBanner title="Apply Now"></CmnBanner>
       <ul
-        className="nav gap-2 my-5 flex justify-content-center align-items-center"
+        className="nav gap-2 my-md-5 my-0 flex justify-content-center align-items-center"
         role="tablist"
       >
         <li

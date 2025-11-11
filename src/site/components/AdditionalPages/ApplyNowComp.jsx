@@ -531,20 +531,20 @@ const ApplyNowComp = () => {
       </div>
 
       <div className="container">
-        <div className="text-right mb-3">
+        <div className="d-flex text-right mb-3">
           <a
             href="/file/Arabic Quran Application Form.docx"
-            className="theme-btn"
-            style={{
-              marginRight: "10px",
-            }}
+            className="theme-btn me-md-3 text-wrap"
+            // style={{
+            //   marginRight: "10px",
+            // }}
           >
             Download Form In Word File
           </a>
           <a
             href="/file/Tuition Admission Form Updated.pdf"
             download
-            className="theme-btn"
+            className="theme-btn text-wrap"
           >
             Download Form In PDF File
           </a>
@@ -552,43 +552,43 @@ const ApplyNowComp = () => {
         <div>
           {/* Student Search Section */}
           <ul
-            className="nav gap-2 my-5 flex justify-content-center align-items-center"
+            className="nav gap-2 my-md-5 d-flex justify-content-center align-items-center"
             role="tablist"
           >
             <li
-              className="nav-item "
+              className="nav-item"
               data-aos-duration="800"
               data-aos="fade-up"
               data-aos-delay="300"
               role="presentation"
             >
               <a
-                className={`nav-link text-uppercase box-shadow px-3 ${
+                className={`nav-link text-uppercase box-shadow px-2 px-md-3 py-2 py-md-3 ${
                   activeTabIndex === 0 ? " active" : ""
                 }`}
                 onClick={() => handleTabClick(0)}
               >
-                <p className="fs-4">Add a New Student</p>
-                <p style={{ fontSize: "10px" }}>
+                <p className="fs-6 fs-md-4">Add a New Student</p>
+                <p className="text-wrap" style={{ fontSize: "10px" }}>
                   If this is your first child or not a sibling, start a fresh
                   form.
                 </p>
               </a>
             </li>
             <li
-              className="nav-item "
+              className="nav-item"
               data-aos-duration="800"
               data-aos="fade-up"
               data-aos-delay="500"
               role="presentation"
             >
               <a
-                className={`nav-link text-uppercase box-shadow px-3 ${
+                className={`nav-link text-uppercase box-shadow px-2 px-md-3 py-2 py-md-3 ${
                   activeTabIndex === 1 ? " active" : ""
                 }`}
                 onClick={() => handleTabClick(1)}
               >
-                <p className="fs-4">Add a Sibling</p>
+                <p className="fs-6 fs-md-4">Add a Sibling</p>
                 <p style={{ fontSize: "10px" }}>
                   Adding another child? Select an existing student to auto-fill
                   details.
@@ -689,7 +689,7 @@ const ApplyNowComp = () => {
             <div className="col-lg-12">
               <div className="contact-content">
                 <div className="section-title">
-                  <p
+                  {/* <p
                     className="text-white text-center fs-4 mb-1"
                     data-aos-duration="800"
                     data-aos="fade-up"
@@ -699,7 +699,7 @@ const ApplyNowComp = () => {
                   <p className="text-white text-center">
                     116 - 118 Church Road, Yardley Birmingham, B25 8UX :
                     +07869636849
-                  </p>
+                  </p> */}
                   <p className="text-white text-center">Registration Form</p>
                   <h2
                     className="text-white "
@@ -737,9 +737,9 @@ const ApplyNowComp = () => {
                     {/* full name */}
                     <div
                       className="col-lg-4 "
-                      data-aos-duration="800"
-                      data-aos="fade-up"
-                      data-aos-delay="300"
+                      // data-aos-duration="800"
+                      // data-aos="fade-up"
+                      // data-aos-delay="300"
                     >
                       <div className="form-clt">
                         <span>Full Name*</span>
