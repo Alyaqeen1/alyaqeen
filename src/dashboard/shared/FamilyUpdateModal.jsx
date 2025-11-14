@@ -24,19 +24,29 @@ export default function FamilyUpdateModal({
     refetch,
   } = useGetFamilyQuery(familyId, { skip: !familyId });
 
-  // Fetch active students
-  const { data: students = [], isLoading: studentLoading } =
+  // Fetch active students for dropdown options
+  const { data: activeStudents = [], isLoading: studentLoading } =
     useGetStudentByActivityQuery({
       activity: "active",
     });
 
-  // Prepare student options
+  // Fetch inactive students for pre-filled values
+  const { data: inactiveStudents = [] } = useGetStudentByActivityQuery({
+    activity: "inactive",
+  });
+
+  // Combine all students for finding pre-filled values
+  const allStudents = useMemo(() => {
+    return [...activeStudents, ...inactiveStudents];
+  }, [activeStudents, inactiveStudents]);
+
+  // Prepare student options (only active students for dropdown)
   const studentOptions = useMemo(() => {
-    return students?.map((student) => ({
+    return activeStudents?.map((student) => ({
       label: student.name,
       value: student.uid,
     }));
-  }, [students]);
+  }, [activeStudents]);
 
   // Track selected student UIDs
   const [selectedStudentUids, setSelectedStudentUids] = useState([]);
@@ -49,6 +59,43 @@ export default function FamilyUpdateModal({
       setSelectedStudentUids([]); // Reset when modal closes
     }
   }, [showModal, family]);
+
+  // Create custom formatOptionLabel to show inactive status
+  const formatOptionLabel = ({ value, label }) => {
+    const student = allStudents.find((s) => s.uid === value);
+    const isInactive = student?.activity === "inactive";
+
+    return (
+      <div>
+        {label}
+        {isInactive && (
+          <span
+            style={{ color: "#6c757d", fontSize: "0.8em", marginLeft: "8px" }}
+          >
+            (Inactive)
+          </span>
+        )}
+      </div>
+    );
+  };
+
+  // Get current selected values for the Select component
+  const selectedValues = useMemo(() => {
+    return selectedStudentUids
+      ?.map((uid) => {
+        const student = allStudents.find((s) => s.uid === uid);
+        if (!student) {
+          console.warn(`Student with uid "${uid}" not found`);
+          return null;
+        }
+        return {
+          label: student.name,
+          value: uid,
+          isInactive: student.activity === "inactive",
+        };
+      })
+      ?.filter(Boolean);
+  }, [selectedStudentUids, allStudents]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -148,27 +195,35 @@ export default function FamilyUpdateModal({
                     <Select
                       isMulti
                       options={studentOptions}
-                      value={selectedStudentUids
-                        ?.map((uid) => {
-                          const student = students?.find((s) => s.uid === uid);
-                          if (!student) {
-                            console.warn(
-                              `Student with uid "${uid}" not found in students list`
-                            );
-                            return null;
-                          }
-                          return { label: student.name, value: uid };
-                        })
-                        ?.filter(Boolean)}
+                      value={selectedValues}
                       onChange={(selectedOptions) =>
                         setSelectedStudentUids(
                           selectedOptions.map((opt) => opt.value)
                         )
                       }
+                      formatOptionLabel={formatOptionLabel}
                       placeholder="Select students..."
                       isSearchable
                       classNamePrefix="react-select"
+                      // Optional: Add styles to differentiate inactive students
+                      styles={{
+                        multiValueLabel: (base, state) => {
+                          const isInactive = state.data.isInactive;
+                          return {
+                            ...base,
+                            backgroundColor: isInactive
+                              ? "#f8f9fa"
+                              : base.backgroundColor,
+                            color: isInactive ? "#6c757d" : base.color,
+                            fontStyle: isInactive ? "italic" : "normal",
+                          };
+                        },
+                      }}
                     />
+                    <div className="form-text">
+                      Inactive students are shown but cannot be selected from
+                      dropdown
+                    </div>
                   </div>
 
                   <div className="mb-3">
