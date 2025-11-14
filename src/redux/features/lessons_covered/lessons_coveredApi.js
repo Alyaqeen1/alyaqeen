@@ -52,20 +52,18 @@ export const lessons_coveredApi = apiSlice.injectEndpoints({
 
     getStudentLessonsCoveredMonthlySummary: builder.query({
       query: ({ student_ids = [], month, year }) => {
-        const query = new URLSearchParams();
+        const params = new URLSearchParams();
 
-        if (student_ids.length > 0) {
-          query.set("student_ids", student_ids.join(","));
-        }
-        if (month) query.set("month", month);
-        if (year) query.set("year", year);
+        if (student_ids.length > 0)
+          params.set("student_ids", student_ids.join(","));
+        if (month) params.set("month", month);
+        if (year) params.set("year", year);
 
         return {
-          url: `/lessons-covered/student-monthly-summary`,
-          params: query,
+          url: "/lessons-covered/student-monthly-summary",
+          params, // <-- RTK handles encoding
         };
       },
-      providesTags: ["LessonsCovered"],
     }),
 
     getLessonsCoveredYearlySummary: builder.query({
