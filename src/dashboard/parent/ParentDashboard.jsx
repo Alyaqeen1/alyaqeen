@@ -19,6 +19,8 @@ import sessionMap from "../../utils/sessionMap";
 import StudentSummaryChart from "./StudentSummaryChart";
 import ChildSection from "./ChildSection";
 import { Link, useNavigate } from "react-router";
+import { useGetDepartmentsQuery } from "../../redux/features/departments/departmentsApi";
+import { useGetClassesQuery } from "../../redux/features/classes/classesApi";
 
 export default function ParentDashboard({ family, refetch }) {
   const [showModal, setShowModal] = useState(false);
@@ -28,6 +30,10 @@ export default function ParentDashboard({ family, refetch }) {
   const axiosPublic = useAxiosPublic();
   const [activeTab, setActiveTab] = useState(family?.childrenDocs[0]?._id);
   const navigate = useNavigate();
+
+  const { data: departments } = useGetDepartmentsQuery();
+  const { data: classes } = useGetClassesQuery();
+
   const {
     data: approvedFamily,
     isLoading,
@@ -55,6 +61,60 @@ export default function ParentDashboard({ family, refetch }) {
   });
   const [cancelFamilyDebit, { isLoading: isCancelling }] =
     useCancelFamilyDebitMutation();
+
+  // Helper function to get academic information for display
+  const getAcademicDisplay = (academic) => {
+    if (!academic) return { departments: [], classes: [], sessions: [] };
+
+    // Handle new multi-department structure
+    if (academic.enrollments && Array.isArray(academic.enrollments)) {
+      const deptNames = academic.enrollments.map((enrollment) => {
+        const dept = departments?.find((d) => d._id === enrollment.dept_id);
+        return dept ? dept.dept_name : "Unknown Department";
+      });
+
+      const classNames = academic.enrollments.map((enrollment) => {
+        const cls = classes?.find((c) => c._id === enrollment.class_id);
+        return cls ? cls.class_name : "Unknown Class";
+      });
+
+      const sessionTimes = academic.enrollments.map(
+        (enrollment) =>
+          sessionMap[enrollment.session_time] ||
+          enrollment.session_time ||
+          "Not Set"
+      );
+
+      return {
+        departments: [...new Set(deptNames)],
+        classes: [...new Set(classNames)],
+        sessions: [...new Set(sessionTimes)],
+        count: academic.enrollments.length,
+      };
+    }
+
+    // Handle old single department structure
+    if (academic.dept_id) {
+      const dept = departments?.find((d) => d._id === academic.dept_id);
+      const cls = classes?.find((c) => c._id === academic.class_id);
+
+      return {
+        departments: [
+          dept?.dept_name || academic.department || "Unknown Department",
+        ],
+        classes: [cls?.class_name || academic.class || "Unknown Class"],
+        sessions: [sessionMap[academic.time] || academic.time || "Not Set"],
+        count: 1,
+      };
+    }
+
+    return {
+      departments: [academic.department || "Not assigned"],
+      classes: [academic.class || "Not assigned"],
+      sessions: [sessionMap[academic.time] || academic.time || "Not Set"],
+      count: 1,
+    };
+  };
 
   const approvedChildAfter10th = approvedFamily?.childrenDocs?.some((child) => {
     if (child.status !== "approved" || !child.startingDate) return false;
@@ -490,10 +550,9 @@ export default function ParentDashboard({ family, refetch }) {
                     {[
                       "#",
                       "Student Name",
-                      "Department",
-                      "Session",
-                      "Class",
-                      "Time",
+                      "Departments",
+                      "Classes",
+                      "Session Times",
                       "Monthly Fee",
                       "Status",
                     ].map((heading, index) => (
@@ -509,39 +568,77 @@ export default function ParentDashboard({ family, refetch }) {
                 </thead>
                 <tbody>
                   {family?.childrenDocs?.length > 0 ? (
-                    family?.childrenDocs?.map((student, idx) => (
-                      <tr key={student._id}>
-                        <td className="border h6 text-center align-middle text-nowrap">
-                          {idx + 1}
-                        </td>
-                        <td className="border h6 text-center align-middle text-nowrap">
-                          {student.name}
-                        </td>
-                        <td className="border h6 text-center align-middle text-nowrap">
-                          {student.academic?.department}
-                        </td>
-                        <td className="border h6 text-center align-middle text-nowrap">
-                          {student.academic?.session}
-                        </td>
-                        <td className="border h6 text-center align-middle text-nowrap">
-                          {student.academic?.class || "Not Provided Yet"}
-                        </td>
-                        <td className="border h6 text-center align-middle text-nowrap">
-                          {sessionMap[student.academic?.time]
-                            ? sessionMap[student.academic?.time]
-                            : "not available"}
-                        </td>
-                        <td className="border h6 text-center align-middle text-nowrap">
-                          £
-                          {student?.monthly_fee
-                            ? student?.monthly_fee
-                            : "Not Assigned"}
-                        </td>
-                        <td className="border h6 text-center align-middle text-nowrap">
-                          {student.status}
-                        </td>
-                      </tr>
-                    ))
+                    family?.childrenDocs?.map((student, idx) => {
+                      const academicInfo = getAcademicDisplay(student.academic);
+
+                      return (
+                        <tr key={student._id}>
+                          <td className="border h6 text-center align-middle text-nowrap">
+                            {idx + 1}
+                          </td>
+                          <td className="border h6 text-center align-middle text-nowrap">
+                            {student.name}
+                          </td>
+                          <td className="border text-center align-middle">
+                            <div className="d-flex flex-column gap-1">
+                              {academicInfo.departments
+                                .slice(0, 2)
+                                .map((dept, deptIdx) => (
+                                  <div key={deptIdx} className="small">
+                                    {dept}
+                                  </div>
+                                ))}
+                              {academicInfo.departments.length > 2 && (
+                                <div className="small text-muted">
+                                  +{academicInfo.departments.length - 2} more
+                                </div>
+                              )}
+                            </div>
+                          </td>
+                          <td className="border text-center align-middle">
+                            <div className="d-flex flex-column gap-1">
+                              {academicInfo.classes
+                                .slice(0, 2)
+                                .map((cls, clsIdx) => (
+                                  <div key={clsIdx} className="small">
+                                    {cls}
+                                  </div>
+                                ))}
+                              {academicInfo.classes.length > 2 && (
+                                <div className="small text-muted">
+                                  +{academicInfo.classes.length - 2} more
+                                </div>
+                              )}
+                            </div>
+                          </td>
+                          <td className="border text-center align-middle">
+                            <div className="d-flex flex-column gap-1">
+                              {academicInfo.sessions
+                                .slice(0, 2)
+                                .map((session, sessionIdx) => (
+                                  <div key={sessionIdx} className="small">
+                                    {session}
+                                  </div>
+                                ))}
+                              {academicInfo.sessions.length > 2 && (
+                                <div className="small text-muted">
+                                  +{academicInfo.sessions.length - 2} more
+                                </div>
+                              )}
+                            </div>
+                          </td>
+                          <td className="border h6 text-center align-middle text-nowrap">
+                            £
+                            {student?.monthly_fee
+                              ? student?.monthly_fee
+                              : "Not Assigned"}
+                          </td>
+                          <td className="border h6 text-center align-middle text-nowrap">
+                            {student.status}
+                          </td>
+                        </tr>
+                      );
+                    })
                   ) : (
                     <tr>
                       <td colSpan={7}>
@@ -620,7 +717,9 @@ export default function ParentDashboard({ family, refetch }) {
                       <div className="d-flex justify-content-center gap-3">
                         <button
                           className="btn btn-warning text-white"
-                          onClick={handleCheckStatus}
+                          onClick={() =>
+                            navigate("/dashboard/parent/pay-by-direct-debit")
+                          }
                         >
                           <i className="fas fa-external-link-alt me-2"></i>
                           Check Status & Details

@@ -414,6 +414,7 @@ const ApplyNowComp = () => {
 
       if (monthly_fee) {
         // ✅ 2. Prepare student data
+        // ✅ 2. Prepare student data
         const studentData = {
           uid: studentUid,
           name: student_name,
@@ -440,10 +441,14 @@ const ApplyNowComp = () => {
             number: father_number,
           },
           academic: {
-            dept_id: std_department,
-            time: std_time,
-            session: std_session,
-            class_id: student_class,
+            enrollments: [
+              {
+                dept_id: std_department,
+                class_id: student_class,
+                session: std_session,
+                session_time: std_time,
+              },
+            ],
           },
           medical: {
             doctorName: doctor_name,

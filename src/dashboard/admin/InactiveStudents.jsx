@@ -11,6 +11,24 @@ import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 import { Link } from "react-router";
 import toast from "react-hot-toast";
 import StudentModal from "../shared/StudentModal";
+import { useGetDepartmentsQuery } from "../../redux/features/departments/departmentsApi";
+import { useGetClassesQuery } from "../../redux/features/classes/classesApi";
+
+// Helper function to format session time
+const formatSessionTime = (time) => {
+  switch (time) {
+    case "S1":
+      return "Weekdays Early";
+    case "S2":
+      return "Weekdays Late";
+    case "WM":
+      return "Weekend Morning";
+    case "WA":
+      return "Weekend Afternoon";
+    default:
+      return time || "Not assigned";
+  }
+};
 
 export default function InactiveStudents() {
   const [activeRow, setActiveRow] = useState(null);
@@ -18,6 +36,10 @@ export default function InactiveStudents() {
   const [selectedStudentId, setSelectedStudentId] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
+
+  const { data: departments } = useGetDepartmentsQuery();
+  const { data: classes } = useGetClassesQuery();
+
   useEffect(() => {
     const timerId = setTimeout(() => {
       setDebouncedSearchTerm(searchTerm);
@@ -27,6 +49,7 @@ export default function InactiveStudents() {
       clearTimeout(timerId);
     };
   }, [searchTerm]);
+
   const {
     data: students = [],
     isLoading,
@@ -69,6 +92,124 @@ export default function InactiveStudents() {
     useDeleteStudentDataMutation();
   const [updateStudentActivity, { isLoading: updateLoading }] =
     useUpdateStudentActivityMutation();
+
+  // Helper function to get department display
+  const getDepartmentDisplay = (academic) => {
+    if (!academic) return "Not assigned";
+
+    // Handle new multi-department structure
+    if (academic.enrollments && Array.isArray(academic.enrollments)) {
+      if (academic.enrollments.length === 0) return "Not assigned";
+
+      // Get unique department names
+      const deptNames = academic.enrollments.map((enrollment) => {
+        const dept = departments?.find((d) => d._id === enrollment.dept_id);
+        return dept ? dept.dept_name : "Unknown Dept";
+      });
+
+      // Remove duplicates and limit to 2 for display
+      const uniqueDepts = [...new Set(deptNames)].slice(0, 2);
+
+      if (uniqueDepts.length === 1) {
+        return (
+          <div className="text-center">
+            <div className="small">{uniqueDepts[0]}</div>
+          </div>
+        );
+      }
+
+      return (
+        <div className="text-center">
+          <div className="small">{uniqueDepts[0]}</div>
+          <div className="small">{uniqueDepts[1]}</div>
+          {academic.enrollments.length > 2 && (
+            <div className="small text-muted">
+              +{academic.enrollments.length - 2} more
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // Handle old single department structure
+    if (academic.dept_id) {
+      const dept = departments?.find((d) => d._id === academic.dept_id);
+      return (
+        <div className="text-center">
+          <div className="small">{dept ? dept.dept_name : "Unknown Dept"}</div>
+        </div>
+      );
+    }
+
+    if (academic.department) {
+      return (
+        <div className="text-center">
+          <div className="small">{academic.department}</div>
+        </div>
+      );
+    }
+
+    return "Not assigned";
+  };
+
+  // Helper function to get class display
+  const getClassDisplay = (academic) => {
+    if (!academic) return "Not assigned";
+
+    // Handle new multi-department structure
+    if (academic.enrollments && Array.isArray(academic.enrollments)) {
+      if (academic.enrollments.length === 0) return "Not assigned";
+
+      // Get class names
+      const classNames = academic.enrollments.map((enrollment) => {
+        const cls = classes?.find((c) => c._id === enrollment.class_id);
+        return cls ? cls.class_name : "Unknown Class";
+      });
+
+      // Remove duplicates and limit to 2 for display
+      const uniqueClasses = [...new Set(classNames)].slice(0, 2);
+
+      if (uniqueClasses.length === 1) {
+        return (
+          <div className="text-center">
+            <div className="small">{uniqueClasses[0]}</div>
+          </div>
+        );
+      }
+
+      return (
+        <div className="text-center">
+          <div className="small">{uniqueClasses[0]}</div>
+          <div className="small">{uniqueClasses[1]}</div>
+          {classNames.length > 2 && (
+            <div className="small text-muted">
+              +{classNames.length - 2} more
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // Handle old single department structure
+    if (academic.class_id) {
+      const cls = classes?.find((c) => c._id === academic.class_id);
+      return (
+        <div className="text-center">
+          <div className="small">{cls ? cls.class_name : "Unknown Class"}</div>
+        </div>
+      );
+    }
+
+    if (academic.class) {
+      return (
+        <div className="text-center">
+          <div className="small">{academic.class}</div>
+        </div>
+      );
+    }
+
+    return "Not assigned";
+  };
 
   // Toggle modal visibility
   const handleShow = (id) => {
@@ -230,12 +371,17 @@ export default function InactiveStudents() {
                     <td className="border text-center align-middle">
                       {student?.student_id}
                     </td>
+
+                    {/* Updated Department Column */}
                     <td className="border text-center align-middle">
-                      {student?.academic?.department}
+                      {getDepartmentDisplay(student?.academic)}
                     </td>
+
+                    {/* Updated Class Column */}
                     <td className="border text-center align-middle">
-                      {student?.academic?.class}
+                      {getClassDisplay(student?.academic)}
                     </td>
+
                     <td className="border text-center align-middle">
                       {student?.activity}
                     </td>
@@ -257,7 +403,7 @@ export default function InactiveStudents() {
               ))
             ) : (
               <tr>
-                <td colSpan={7}>
+                <td colSpan={8}>
                   <h5 className="text-center my-2">No students available.</h5>
                 </td>
               </tr>

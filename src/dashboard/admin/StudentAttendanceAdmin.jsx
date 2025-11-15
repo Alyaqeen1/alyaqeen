@@ -334,8 +334,8 @@ export default function StudentAttendanceAdmin() {
             </thead>
 
             <tbody>
-              {students.length ? (
-                students.map((stu, idx) => (
+              {students?.length ? (
+                students?.map((stu, idx) => (
                   <tr key={stu._id}>
                     <td className="text-center border align-middle">
                       {idx + 1}

@@ -599,6 +599,126 @@ export default function PayByDirectDebit() {
         ) : (
           // NEW SETUP VIEW
           <div className="row g-4">
+            {/* Preferred Payment Date Section - ADDED THIS */}
+            <div className="col-12">
+              <div className="card shadow border-0 mb-4">
+                <div className="card-body p-4">
+                  <h5 className="fw-bold mb-3 text-dark">
+                    Select Preferred Payment Date
+                  </h5>
+                  <p className="text-muted mb-3">
+                    Choose which day of the month you'd like your payments to be
+                    collected (1st-7th)
+                  </p>
+
+                  <div className="row align-items-center">
+                    <div className="col-md-6">
+                      <select
+                        value={preferredDate}
+                        onChange={(e) =>
+                          setPreferredDate(parseInt(e.target.value))
+                        }
+                        className="form-select form-select-lg"
+                        style={{
+                          border: "2px solid #667eea",
+                          borderRadius: "8px",
+                          padding: "12px",
+                          fontSize: "1rem",
+                        }}
+                      >
+                        <option value="">
+                          Select Your Preferred Date for Payment Collection
+                        </option>
+                        {[1, 2, 3, 4, 5, 6, 7].map((day) => (
+                          <option key={day} value={day}>
+                            {day}
+                            {day === 1
+                              ? "st"
+                              : day === 2
+                              ? "nd"
+                              : day === 3
+                              ? "rd"
+                              : "th"}{" "}
+                            of each month
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="col-md-6">
+                      <div className="alert alert-info border-0 mb-0">
+                        <small>
+                          <i className="fas fa-info-circle me-2"></i>
+                          Your payment will be automatically collected on the{" "}
+                          {preferredDate}
+                          {preferredDate === 1
+                            ? "st"
+                            : preferredDate === 2
+                            ? "nd"
+                            : preferredDate === 3
+                            ? "rd"
+                            : "th"}{" "}
+                          of each month
+                        </small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Setup Button Section */}
+            <div className="col-12">
+              <div className="text-center">
+                <div className="card shadow border-0">
+                  <div className="card-body p-5">
+                    <h4 className="mb-4 text-dark">
+                      Ready to Set Up Direct Debit?
+                    </h4>
+                    <p className="text-muted mb-4">
+                      You'll be redirected to Stripe to securely set up your
+                      Direct Debit mandate. This takes just 2-3 minutes.
+                    </p>
+
+                    <div className="d-grid gap-3 d-md-flex justify-content-md-center align-items-center">
+                      <button
+                        onClick={handleBacsPayment}
+                        className="btn text-white fw-semibold px-5 py-3 rounded-3 border-0"
+                        style={{
+                          background:
+                            "linear-gradient(135deg, #667eea, #764ba2)",
+                          textShadow: "0 1px 1px rgba(0,0,0,0.2)",
+                          fontSize: "1.1rem",
+                          minWidth: "250px",
+                        }}
+                      >
+                        Set Up Direct Debit
+                      </button>
+
+                      <button
+                        className="btn btn-outline-secondary px-4 py-3"
+                        onClick={handleBack}
+                        style={{
+                          borderColor: "#667eea",
+                          color: "#667eea",
+                          minWidth: "150px",
+                        }}
+                      >
+                        Back to Options
+                      </button>
+                    </div>
+
+                    <div className="mt-4">
+                      <p className="small text-muted">
+                        <i className="fas fa-lock me-1"></i>
+                        Your bank details are processed securely by Stripe and
+                        are never stored on our servers.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* Benefits Section - FILLED CONTENT */}
             <div className="col-12">
               <div
@@ -817,126 +937,6 @@ export default function PayByDirectDebit() {
                       <h6 className="fw-bold text-dark">Relax</h6>
                       <p className="text-muted small">
                         Fees are paid automatically each month
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Preferred Payment Date Section - ADDED THIS */}
-            <div className="col-12">
-              <div className="card shadow border-0 mb-4">
-                <div className="card-body p-4">
-                  <h5 className="fw-bold mb-3 text-dark">
-                    Select Preferred Payment Date
-                  </h5>
-                  <p className="text-muted mb-3">
-                    Choose which day of the month you'd like your payments to be
-                    collected (1st-7th)
-                  </p>
-
-                  <div className="row align-items-center">
-                    <div className="col-md-6">
-                      <select
-                        value={preferredDate}
-                        onChange={(e) =>
-                          setPreferredDate(parseInt(e.target.value))
-                        }
-                        className="form-select form-select-lg"
-                        style={{
-                          border: "2px solid #667eea",
-                          borderRadius: "8px",
-                          padding: "12px",
-                          fontSize: "1rem",
-                        }}
-                      >
-                        <option value="">
-                          Select Your Preferred Date for Payment Collection
-                        </option>
-                        {[1, 2, 3, 4, 5, 6, 7].map((day) => (
-                          <option key={day} value={day}>
-                            {day}
-                            {day === 1
-                              ? "st"
-                              : day === 2
-                              ? "nd"
-                              : day === 3
-                              ? "rd"
-                              : "th"}{" "}
-                            of each month
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    <div className="col-md-6">
-                      <div className="alert alert-info border-0 mb-0">
-                        <small>
-                          <i className="fas fa-info-circle me-2"></i>
-                          Your payment will be automatically collected on the{" "}
-                          {preferredDate}
-                          {preferredDate === 1
-                            ? "st"
-                            : preferredDate === 2
-                            ? "nd"
-                            : preferredDate === 3
-                            ? "rd"
-                            : "th"}{" "}
-                          of each month
-                        </small>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Setup Button Section */}
-            <div className="col-12">
-              <div className="text-center">
-                <div className="card shadow border-0">
-                  <div className="card-body p-5">
-                    <h4 className="mb-4 text-dark">
-                      Ready to Set Up Direct Debit?
-                    </h4>
-                    <p className="text-muted mb-4">
-                      You'll be redirected to Stripe to securely set up your
-                      Direct Debit mandate. This takes just 2-3 minutes.
-                    </p>
-
-                    <div className="d-grid gap-3 d-md-flex justify-content-md-center align-items-center">
-                      <button
-                        onClick={handleBacsPayment}
-                        className="btn text-white fw-semibold px-5 py-3 rounded-3 border-0"
-                        style={{
-                          background:
-                            "linear-gradient(135deg, #667eea, #764ba2)",
-                          textShadow: "0 1px 1px rgba(0,0,0,0.2)",
-                          fontSize: "1.1rem",
-                          minWidth: "250px",
-                        }}
-                      >
-                        Set Up Direct Debit
-                      </button>
-
-                      <button
-                        className="btn btn-outline-secondary px-4 py-3"
-                        onClick={handleBack}
-                        style={{
-                          borderColor: "#667eea",
-                          color: "#667eea",
-                          minWidth: "150px",
-                        }}
-                      >
-                        Back to Options
-                      </button>
-                    </div>
-
-                    <div className="mt-4">
-                      <p className="small text-muted">
-                        <i className="fas fa-lock me-1"></i>
-                        Your bank details are processed securely by Stripe and
-                        are never stored on our servers.
                       </p>
                     </div>
                   </div>

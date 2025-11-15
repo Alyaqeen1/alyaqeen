@@ -8,10 +8,416 @@ import { useParams } from "react-router";
 import useAuth from "../../hooks/useAuth";
 import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 import Swal from "sweetalert2";
-
 import toast from "react-hot-toast";
 import { useGetDepartmentsQuery } from "../../redux/features/departments/departmentsApi";
 import { useGetClassesQuery } from "../../redux/features/classes/classesApi";
+import { FaTrashAlt, FaPlus, FaEdit } from "react-icons/fa";
+
+// Multi Department Modal Component
+const AddDepartmentModal = ({
+  isOpen,
+  onClose,
+  onAdd,
+  departments,
+  classes,
+  existingEnrollments = [],
+}) => {
+  const [deptId, setDeptId] = useState("");
+  const [session, setSession] = useState("");
+  const [sessionTime, setSessionTime] = useState("");
+  const [classId, setClassId] = useState("");
+
+  const selectedDepartment = departments?.find((dept) => dept._id === deptId);
+
+  const availableClasses = classes?.filter(
+    (cls) =>
+      cls.dept_id === deptId &&
+      cls.session === session &&
+      cls.session_time === sessionTime
+  );
+
+  const resetForm = () => {
+    setDeptId("");
+    setSession("");
+    setSessionTime("");
+    setClassId("");
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (!deptId || !session || !sessionTime || !classId) {
+      return toast.error("Please fill all fields");
+    }
+
+    // Check for duplicate enrollment
+    const isDuplicate = existingEnrollments.some(
+      (enrollment) =>
+        enrollment.dept_id === deptId && enrollment.class_id === classId
+    );
+
+    if (isDuplicate) {
+      return toast.error(
+        "This department and class combination already exists"
+      );
+    }
+
+    const newEnrollment = {
+      dept_id: deptId,
+      class_id: classId,
+      session: session,
+      session_time: sessionTime,
+    };
+
+    onAdd(newEnrollment);
+    resetForm();
+    onClose();
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div
+      className="modal show d-block"
+      style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+    >
+      <div className="modal-dialog modal-dialog-centered">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h5 className="modal-title">Add Department/Class</h5>
+            <button
+              type="button"
+              className="btn-close"
+              onClick={onClose}
+            ></button>
+          </div>
+          <form onSubmit={handleSubmit}>
+            <div className="modal-body">
+              <div className="row g-3">
+                {/* Department */}
+                <div className="col-12">
+                  <label className="form-label">Department</label>
+                  <select
+                    className="form-control"
+                    value={deptId}
+                    onChange={(e) => {
+                      setDeptId(e.target.value);
+                      setSession("");
+                      setSessionTime("");
+                      setClassId("");
+                    }}
+                    required
+                  >
+                    <option value="">Select Department</option>
+                    {departments?.map((dept) => (
+                      <option key={dept._id} value={dept._id}>
+                        {dept.dept_name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Session */}
+                <div className="col-12">
+                  <label className="form-label">Session</label>
+                  <select
+                    className="form-control"
+                    value={session}
+                    onChange={(e) => {
+                      setSession(e.target.value);
+                      setSessionTime("");
+                      setClassId("");
+                    }}
+                    required
+                    disabled={!deptId}
+                  >
+                    <option value="">Select Session</option>
+                    <option value="weekdays">Weekdays</option>
+                    <option value="weekend">Weekend</option>
+                  </select>
+                </div>
+
+                {/* Session Time */}
+                <div className="col-12">
+                  <label className="form-label">Session Time</label>
+                  <select
+                    className="form-control"
+                    value={sessionTime}
+                    onChange={(e) => {
+                      setSessionTime(e.target.value);
+                      setClassId("");
+                    }}
+                    required
+                    disabled={!session}
+                  >
+                    <option value="">Select Time</option>
+                    {session === "weekdays" && (
+                      <>
+                        <option value="S1">
+                          Early - 4:30 PM – 6:00 PM (1½ hrs)
+                        </option>
+                        <option value="S2">
+                          Late - 5:45 PM – 7:15 PM (1½ hrs)
+                        </option>
+                      </>
+                    )}
+                    {session === "weekend" && (
+                      <>
+                        <option value="WM">
+                          Morning - 10:00 AM – 12:30 PM (2½ hrs)
+                        </option>
+                        <option value="WA">
+                          Afternoon - 12:30 PM – 2:30 PM (2 hrs)
+                        </option>
+                      </>
+                    )}
+                  </select>
+                </div>
+
+                {/* Class */}
+                <div className="col-12">
+                  <label className="form-label">Class</label>
+                  <select
+                    className="form-control"
+                    value={classId}
+                    onChange={(e) => setClassId(e.target.value)}
+                    required
+                    disabled={!sessionTime}
+                  >
+                    <option value="">Select Class</option>
+                    {availableClasses?.map((cls) => (
+                      <option key={cls._id} value={cls._id}>
+                        {cls.class_name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={onClose}
+              >
+                Cancel
+              </button>
+              <button type="submit" className="btn btn-primary">
+                Add Department
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Edit Department Modal Component
+const EditDepartmentModal = ({
+  isOpen,
+  onClose,
+  onUpdate,
+  departments,
+  classes,
+  existingEnrollments = [],
+  enrollmentToEdit,
+  enrollmentIndex,
+}) => {
+  const [deptId, setDeptId] = useState("");
+  const [session, setSession] = useState("");
+  const [sessionTime, setSessionTime] = useState("");
+  const [classId, setClassId] = useState("");
+
+  // Initialize form with enrollment data when modal opens
+  useEffect(() => {
+    if (enrollmentToEdit) {
+      setDeptId(enrollmentToEdit.dept_id || "");
+      setSession(enrollmentToEdit.session || "");
+      setSessionTime(enrollmentToEdit.session_time || "");
+      setClassId(enrollmentToEdit.class_id || "");
+    }
+  }, [enrollmentToEdit]);
+
+  const selectedDepartment = departments?.find((dept) => dept._id === deptId);
+
+  const availableClasses = classes?.filter(
+    (cls) =>
+      cls.dept_id === deptId &&
+      cls.session === session &&
+      cls.session_time === sessionTime
+  );
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (!deptId || !session || !sessionTime || !classId) {
+      return toast.error("Please fill all fields");
+    }
+
+    // Check for duplicate enrollment (excluding current one being edited)
+    const isDuplicate = existingEnrollments.some(
+      (enrollment, index) =>
+        index !== enrollmentIndex &&
+        enrollment.dept_id === deptId &&
+        enrollment.class_id === classId
+    );
+
+    if (isDuplicate) {
+      return toast.error(
+        "This department and class combination already exists"
+      );
+    }
+
+    const updatedEnrollment = {
+      dept_id: deptId,
+      class_id: classId,
+      session: session,
+      session_time: sessionTime,
+    };
+
+    onUpdate(updatedEnrollment, enrollmentIndex);
+    onClose();
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div
+      className="modal show d-block"
+      style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+    >
+      <div className="modal-dialog modal-dialog-centered">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h5 className="modal-title">Edit Department/Class</h5>
+            <button
+              type="button"
+              className="btn-close"
+              onClick={onClose}
+            ></button>
+          </div>
+          <form onSubmit={handleSubmit}>
+            <div className="modal-body">
+              <div className="row g-3">
+                {/* Department */}
+                <div className="col-12">
+                  <label className="form-label">Department</label>
+                  <select
+                    className="form-control"
+                    value={deptId}
+                    onChange={(e) => {
+                      setDeptId(e.target.value);
+                      setSession("");
+                      setSessionTime("");
+                      setClassId("");
+                    }}
+                    required
+                  >
+                    <option value="">Select Department</option>
+                    {departments?.map((dept) => (
+                      <option key={dept._id} value={dept._id}>
+                        {dept.dept_name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Session */}
+                <div className="col-12">
+                  <label className="form-label">Session</label>
+                  <select
+                    className="form-control"
+                    value={session}
+                    onChange={(e) => {
+                      setSession(e.target.value);
+                      setSessionTime("");
+                      setClassId("");
+                    }}
+                    required
+                    disabled={!deptId}
+                  >
+                    <option value="">Select Session</option>
+                    <option value="weekdays">Weekdays</option>
+                    <option value="weekend">Weekend</option>
+                  </select>
+                </div>
+
+                {/* Session Time */}
+                <div className="col-12">
+                  <label className="form-label">Session Time</label>
+                  <select
+                    className="form-control"
+                    value={sessionTime}
+                    onChange={(e) => {
+                      setSessionTime(e.target.value);
+                      setClassId("");
+                    }}
+                    required
+                    disabled={!session}
+                  >
+                    <option value="">Select Time</option>
+                    {session === "weekdays" && (
+                      <>
+                        <option value="S1">
+                          Early - 4:30 PM – 6:00 PM (1½ hrs)
+                        </option>
+                        <option value="S2">
+                          Late - 5:45 PM – 7:15 PM (1½ hrs)
+                        </option>
+                      </>
+                    )}
+                    {session === "weekend" && (
+                      <>
+                        <option value="WM">
+                          Morning - 10:00 AM – 12:30 PM (2½ hrs)
+                        </option>
+                        <option value="WA">
+                          Afternoon - 12:30 PM – 2:30 PM (2 hrs)
+                        </option>
+                      </>
+                    )}
+                  </select>
+                </div>
+
+                {/* Class */}
+                <div className="col-12">
+                  <label className="form-label">Class</label>
+                  <select
+                    className="form-control"
+                    value={classId}
+                    onChange={(e) => setClassId(e.target.value)}
+                    required
+                    disabled={!sessionTime}
+                  >
+                    <option value="">Select Class</option>
+                    {availableClasses?.map((cls) => (
+                      <option key={cls._id} value={cls._id}>
+                        {cls.class_name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={onClose}
+              >
+                Cancel
+              </button>
+              <button type="submit" className="btn btn-primary">
+                Update Department
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default function UpdateStudent() {
   const { id } = useParams();
@@ -27,6 +433,19 @@ export default function UpdateStudent() {
     skip: !id, // avoid fetching if no ID)
   });
   const { user, updateUser, loading, setLoading } = useAuth();
+
+  // Modal states
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [enrollmentToEdit, setEnrollmentToEdit] = useState(null);
+  const [enrollmentEditIndex, setEnrollmentEditIndex] = useState(null);
+
+  // Academic state - always use enrollments array
+  const [enrollments, setEnrollments] = useState([]);
+  // Monthly fee state - separate from calculated fee
+  const [monthlyFee, setMonthlyFee] = useState(0);
+  const [isFeeOverridden, setIsFeeOverridden] = useState(false);
+
   const {
     name,
     email,
@@ -57,34 +476,121 @@ export default function UpdateStudent() {
 
   const { name: motherName, occupation, number: motherNumber } = mother || {};
 
-  const {
-    session,
-    department,
-    time,
-    class: studentClass,
-    dept_id,
-    class_id,
-  } = academic || {};
-
-  const [dept_state, setDept_state] = useState("");
-  const [session_state, setSession_state] = useState("");
-  const [time_state, setTime_state] = useState("");
-  const [class_state, setClass_state] = useState("");
-
   useEffect(() => {
-    setDept_state(dept_id);
-    setSession_state(session);
-    setTime_state(time);
-    setClass_state(class_id);
-  }, [dept_id, session, time, class_id]);
+    if (student?.academic) {
+      // Handle both old single department and new multi-department structures
+      if (
+        student.academic.enrollments &&
+        Array.isArray(student.academic.enrollments)
+      ) {
+        setEnrollments(student.academic.enrollments);
+      } else if (student.academic.dept_id) {
+        // Convert old structure to new array format
+        setEnrollments([
+          {
+            dept_id: student.academic.dept_id,
+            class_id: student.academic.class_id,
+            session: student.academic.session,
+            session_time: student.academic.time,
+          },
+        ]);
+      } else {
+        setEnrollments([]);
+      }
+    }
 
-  const selectedDepartment = departments?.find(
-    (dept) => dept?._id === dept_state
-  );
+    // Set initial monthly fee from student data
+    if (student?.monthly_fee) {
+      setMonthlyFee(student.monthly_fee);
+      // Check if fee is overridden (different from calculated)
+      const calculatedFee = calculateMonthlyFee(
+        student.academic?.enrollments ||
+          (student.academic?.dept_id
+            ? [
+                {
+                  dept_id: student.academic.dept_id,
+                  class_id: student.academic.class_id,
+                  session: student.academic.session,
+                  session_time: student.academic.time,
+                },
+              ]
+            : [])
+      );
+      setIsFeeOverridden(student.monthly_fee !== calculatedFee);
+    }
+  }, [student]);
+
+  // Calculate monthly fee based on enrollments
+  const calculateMonthlyFee = (enrollments) => {
+    return enrollments.reduce((total, enrollment) => {
+      const dept = departments?.find((d) => d._id === enrollment.dept_id);
+      if (!dept) return total;
+
+      const fee =
+        enrollment.session === "weekend" ? dept.weekend_fee : dept.weekdays_fee;
+      return total + (fee || 0);
+    }, 0);
+  };
+
+  const calculatedFee = calculateMonthlyFee(enrollments);
+
+  const handleAddEnrollment = (newEnrollment) => {
+    const updatedEnrollments = [...enrollments, newEnrollment];
+    setEnrollments(updatedEnrollments);
+
+    // Auto-update fee if not overridden
+    if (!isFeeOverridden) {
+      setMonthlyFee(calculateMonthlyFee(updatedEnrollments));
+    }
+  };
+
+  const handleEditEnrollment = (enrollment, index) => {
+    setEnrollmentToEdit(enrollment);
+    setEnrollmentEditIndex(index);
+    setIsEditModalOpen(true);
+  };
+
+  const handleUpdateEnrollment = (updatedEnrollment, index) => {
+    const updatedEnrollments = [...enrollments];
+    updatedEnrollments[index] = updatedEnrollment;
+    setEnrollments(updatedEnrollments);
+
+    // Auto-update fee if not overridden
+    if (!isFeeOverridden) {
+      setMonthlyFee(calculateMonthlyFee(updatedEnrollments));
+    }
+  };
+
+  const handleRemoveEnrollment = (index) => {
+    const updatedEnrollments = enrollments.filter((_, i) => i !== index);
+    setEnrollments(updatedEnrollments);
+
+    // Auto-update fee if not overridden
+    if (!isFeeOverridden) {
+      setMonthlyFee(calculateMonthlyFee(updatedEnrollments));
+    }
+  };
+
+  const handleFeeChange = (e) => {
+    const newFee = Number(e.target.value);
+    setMonthlyFee(newFee);
+
+    // Check if the fee is being overridden
+    const calculated = calculateMonthlyFee(enrollments);
+    setIsFeeOverridden(newFee !== calculated);
+  };
+
+  const handleUseCalculatedFee = () => {
+    setMonthlyFee(calculatedFee);
+    setIsFeeOverridden(false);
+    toast.success("Using calculated fee");
+  };
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const form = e.target;
+
     // basic info
     const student_name = form.student_name.value;
     const student_dob = form.std_dob.value;
@@ -95,6 +601,7 @@ export default function UpdateStudent() {
     const emergency_number = form.emergency_number.value;
     const address = form.address.value.trim();
     const post_code = form.post_code.value.trim();
+
     // parent details
     const mother_name = form.mother_name.value;
     const mother_occupation = form.mother_occupation.value;
@@ -102,30 +609,20 @@ export default function UpdateStudent() {
     const father_name = form.father_name.value;
     const father_occupation = form.father_occupation.value;
     const father_number = form.father_number.value;
-    // academic details
-    const std_department = form.std_department.value;
-    const std_time = form.std_time.value;
-    const std_session = form.std_session.value;
+
     // health details
     const doctor_name = form.doctor_name.value;
     const surgery_address = form.surgery_address.value;
     const surgery_number = form.surgery_number.value;
     const allergies = form.allergies.value;
     const medical_condition = form.medical_condition.value;
-    const student_class = form.student_class.value;
     const starting_date = form.starting_date.value;
-    const monthly_fee = Number(form.monthly_fee.value);
-    // const monthly_fee =
-    //   session === "weekend"
-    //     ? selectedDepartment?.weekend_fee
-    //     : selectedDepartment?.weekdays_fee;
-    const today = new Date().setHours(0, 0, 0, 0); // current date at midnight
-    const selectedDate = new Date(starting_date).setHours(0, 0, 0, 0); // user date at midnight
 
-    // if (selectedDate < today) {
-    //   setLoading(false); // ✅ Block double click
-    //   return toast.error("Starting date cannot be in the past");
-    // }
+    // Prepare academic structure with enrollments array
+    const academicStructure = {
+      enrollments: enrollments,
+    };
+
     const studentData = {
       name: student_name,
       dob: student_dob,
@@ -147,12 +644,7 @@ export default function UpdateStudent() {
         occupation: father_occupation,
         number: father_number,
       },
-      academic: {
-        dept_id: std_department,
-        time: std_time,
-        session: std_session,
-        class_id: student_class,
-      },
+      academic: academicStructure,
       medical: {
         doctorName: doctor_name,
         surgeryAddress: surgery_address,
@@ -161,38 +653,52 @@ export default function UpdateStudent() {
         condition: medical_condition,
       },
       startingDate: starting_date,
-      monthly_fee,
+      monthly_fee: monthlyFee, // Use the state value (could be calculated or overridden)
     };
 
-    // if (monthly_fee) {
-    // const { data } = await axiosPublic.put(`/students/${id}`, studentData);
-    const data = await updateAllStudentData({ id, studentData }).unwrap();
-    if (data.modifiedCount) {
-      Swal.fire({
-        position: "center",
-        icon: "success",
-        title: "Student updated successfully",
-        showConfirmButton: false,
-        timer: 1500,
-      });
-      refetch();
+    try {
+      const data = await updateAllStudentData({ id, studentData }).unwrap();
+      console.log(data);
+      if (data?.modifiedCount) {
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Student updated successfully",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+    } catch (error) {
+      console.error("Update failed:", error);
+      toast.error("Failed to update student");
+    } finally {
+      setLoading(false);
     }
   };
-  // };
+
   const handleStatus = async (newStatus) => {
-    if (newStatus === "approved" && !class_id) {
-      Swal.fire({
-        icon: "warning",
-        title: "Assign a class first!",
-        text: "You must assign a class before approving the student.",
-      });
-      return;
+    if (newStatus === "approved") {
+      // Get the current enrollments from the database (student data)
+      const dbEnrollments = student?.academic?.enrollments || [];
+
+      // Check if there are any enrollments with valid class_id in the database
+      const hasValidEnrollmentsInDB = dbEnrollments.some(
+        (enrollment) =>
+          enrollment.class_id !== null && enrollment.class_id !== ""
+      );
+
+      if (!hasValidEnrollmentsInDB) {
+        Swal.fire({
+          icon: "warning",
+          title: "Assign valid classes first!",
+          text: "You must assign proper classes (not just departments) and save the changes before approving the student.",
+          confirmButtonText: "OK",
+        });
+        return;
+      }
     }
 
     try {
-      // const { data } = await axiosPublic.patch(`/students/${studentId}`, {
-      //   status: newStatus,
-      // });
       const data = await updateStudentStatus({
         id: id,
         status: newStatus,
@@ -209,14 +715,14 @@ export default function UpdateStudent() {
         refetch();
       }
     } catch (err) {
-      // }
       console.error("Failed to update status:", err);
+      toast.error("Failed to update student status");
     }
   };
-
   if (isLoading || loading) {
     return <LoadingSpinnerDash></LoadingSpinnerDash>;
   }
+
   const formatDate = (dateString) => {
     if (!dateString) return "";
 
@@ -242,6 +748,33 @@ export default function UpdateStudent() {
   return (
     <div>
       <h3 className={`fs-1 fw-bold text-center`}>Update Student</h3>
+
+      {/* Add Department Modal */}
+      <AddDepartmentModal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        onAdd={handleAddEnrollment}
+        departments={departments}
+        classes={classes}
+        existingEnrollments={enrollments}
+      />
+
+      {/* Edit Department Modal */}
+      <EditDepartmentModal
+        isOpen={isEditModalOpen}
+        onClose={() => {
+          setIsEditModalOpen(false);
+          setEnrollmentToEdit(null);
+          setEnrollmentEditIndex(null);
+        }}
+        onUpdate={handleUpdateEnrollment}
+        departments={departments}
+        classes={classes}
+        existingEnrollments={enrollments}
+        enrollmentToEdit={enrollmentToEdit}
+        enrollmentIndex={enrollmentEditIndex}
+      />
+
       <form onSubmit={handleFormSubmit} className="row g-3">
         {/* basic details */}
         <div
@@ -433,7 +966,6 @@ export default function UpdateStudent() {
           <input
             type="text"
             style={{ borderColor: "var(--border2)" }}
-            // disabled
             className="form-control bg-light"
             defaultValue={address}
             name="address"
@@ -531,221 +1063,101 @@ export default function UpdateStudent() {
           />
         </div>
 
-        {/* Academic Details */}
+        {/* Academic Details - UPDATED WITH MODAL SYSTEM */}
         <div
           style={{ backgroundColor: "var(--border2)" }}
           className="text-white rounded-3 p-2 fs-5"
         >
           Academic Details
-        </div>
-        {dept_state ? (
-          <div className="col-md-6">
-            <label className="form-label">Departments</label>
-            <select
-              name="std_department"
-              style={{ borderColor: "var(--border2)" }}
-              className="form-control bg-light"
-              value={dept_state}
-              onChange={(e) => setDept_state(e.target.value)}
-              // defaultValue={dept_id}
-            >
-              <option value="">Select department</option>
-              {departments?.map((dept) => (
-                <option key={dept?._id} value={dept?._id}>
-                  {dept?.dept_name}
-                </option>
-              ))}
-
-              {/* <option value="Qaidah, Quran & Islamic Studies">
-                Qaidah, Quran & Islamic Studies
-              </option>
-              <option value="Primary Maths & English Tuition">
-                Primary Maths & English Tuition
-              </option>
-              <option value="GCSE Maths English & Science Tuition">
-                GCSE Maths English & Science Tuition
-              </option>
-              <option value="Hifz Memorisation">Hifz Memorisation</option>
-              <option value="Arabic Language">Arabic Language</option> */}
-            </select>
-          </div>
-        ) : (
-          <div className="col-md-6">
-            <label className="form-label">Departments</label>
-            <select
-              name="std_department"
-              style={{ borderColor: "var(--border2)" }}
-              className="form-control bg-light"
-              value={dept_state}
-              onChange={(e) => setDept_state(e.target.value)}
-              // defaultValue={dept_id}
-            >
-              <option value="">Select department</option>
-              {departments?.map((dept) => (
-                <option key={dept?._id} value={dept?._id}>
-                  {dept?.dept_name}
-                </option>
-              ))}
-
-              {/* <option value="Qaidah, Quran & Islamic Studies">
-                Qaidah, Quran & Islamic Studies
-              </option>
-              <option value="Primary Maths & English Tuition">
-                Primary Maths & English Tuition
-              </option>
-              <option value="GCSE Maths English & Science Tuition">
-                GCSE Maths English & Science Tuition
-              </option>
-              <option value="Hifz Memorisation">Hifz Memorisation</option>
-              <option value="Arabic Language">Arabic Language</option> */}
-            </select>
-          </div>
-        )}
-
-        {/* session */}
-        {session_state ? (
-          <div className="col-md-6">
-            <label className="form-label">Session</label>
-            <select
-              name="std_session"
-              style={{ borderColor: "var(--border2)" }}
-              className="form-control bg-light"
-              value={session_state}
-              onChange={(e) => setSession_state(e.target.value)}
-              // defaultValue={session}
-            >
-              <option value="">Select Session</option>
-              <option value="weekdays">Weekdays</option>
-              <option value="weekend">Weekend</option>
-            </select>
-          </div>
-        ) : (
-          <div className="col-md-6">
-            <label className="form-label">Session</label>
-            <select
-              name="std_session"
-              style={{ borderColor: "var(--border2)" }}
-              className="form-control bg-light"
-              value={session_state}
-              onChange={(e) => setSession_state(e.target.value)}
-              // defaultValue={session}
-            >
-              <option value="">Select Session</option>
-              <option value="weekdays">Weekdays</option>
-              <option value="weekend">Weekend</option>
-            </select>
-          </div>
-        )}
-
-        {/* time */}
-        {time_state ? (
-          <div className="col-md-6">
-            <label className="form-label">Session Time</label>
-            <select
-              name="std_time"
-              style={{ borderColor: "var(--border2)" }}
-              className="form-control bg-light"
-              value={time_state}
-              onChange={(e) => setTime_state(e.target.value)}
-              // defaultValue={time}
-            >
-              <option value="">Select Session Time</option>
-              {dept_state && session_state === "weekdays" ? (
-                <>
-                  <option value="S1">Early - 4:30 PM – 6:00 PM (1½ hrs)</option>
-                  <option value="S2">Late - 5:45 PM – 7:15 PM (1½ hrs)</option>
-                </>
-              ) : dept_state && session_state === "weekend" ? (
-                <>
-                  <option value="WM">
-                    Morning - 10:00 AM – 12:30 PM (2½ hrs)
-                  </option>
-                  <option value="WA">
-                    Afternoon - 12:30 PM – 2:30 PM (2 hrs)
-                  </option>
-                </>
-              ) : null}
-            </select>
-          </div>
-        ) : (
-          <div className="col-md-6">
-            <label className="form-label">Session Time</label>
-            <select
-              name="std_time"
-              style={{ borderColor: "var(--border2)" }}
-              className="form-control bg-light"
-              onChange={(e) => setTime_state(e.target.value)}
-              // defaultValue={time}
-            >
-              <option value="">Select Session Time</option>
-              {dept_state && session_state === "weekdays" ? (
-                <>
-                  <option value="S1">Early - 4:30 PM – 6:00 PM (1½ hrs)</option>
-                  <option value="S2">Late - 5:45 PM – 7:15 PM (1½ hrs)</option>
-                </>
-              ) : dept_state && session_state === "weekend" ? (
-                <>
-                  <option value="WM">
-                    Morning - 10:00 AM – 12:30 PM (1½ hrs)
-                  </option>
-                  <option value="WA">
-                    Afternoon - 12:30 PM – 2:30 PM (1½ hrs)
-                  </option>
-                </>
-              ) : null}
-            </select>
-          </div>
-        )}
-
-        {/* class */}
-        {/* <div className="col-md-6">
-          <label className="form-label">Class</label>
-          <input
-            style={{ borderColor: "var(--border2)" }}
-            className="form-control bg-light"
-            type="text"
-            defaultValue={studentClass === null ? "Not Provided" : studentClass}
-            name="student_class"
-            placeholder=""
-            
-          />
-        </div> */}
-
-        <div className="col-md-6">
-          <label className="form-label">Class</label>
-          {/* {studentClass && ( */}
-          <select
-            // disabled
-            className="form-control bg-light"
-            style={{
-              borderColor: "var(--border2)",
-            }}
-            name="student_class"
-            value={class_state}
-            onChange={(e) => setClass_state(e.target.value)}
-            // defaultValue={class_id}
+          <button
+            type="button"
+            className="btn btn-sm btn-light ms-3"
+            onClick={() => setIsAddModalOpen(true)}
           >
-            <option value="">Select Class</option>
-            {(() => {
-              const selectedDept = departments?.find(
-                (dept) => dept._id === dept_state
-              );
+            <FaPlus className="me-1" /> Add Department
+          </button>
+        </div>
 
-              return classes
-                ?.filter(
-                  (cls) =>
-                    cls.dept_id === selectedDept?._id &&
-                    cls?.session === session_state &&
-                    cls?.session_time === time_state
-                )
-                .map((cls) => (
-                  <option key={cls._id} value={cls._id}>
-                    {cls.class_name}
-                  </option>
-                ));
-            })()}
-          </select>
-          {/* )} */}
+        {/* Current Enrollments Table */}
+        <div className="col-12">
+          {enrollments.length === 0 ? (
+            <div className="alert alert-info">
+              No departments/classes assigned yet. Click "Add Department" to
+              assign classes.
+            </div>
+          ) : (
+            <div className="table-responsive">
+              <table className="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Department</th>
+                    <th>Session</th>
+                    <th>Time</th>
+                    <th>Class</th>
+                    <th>Fee</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {enrollments.map((enrollment, index) => {
+                    const dept = departments?.find(
+                      (d) => d._id === enrollment.dept_id
+                    );
+                    const cls = classes?.find(
+                      (c) => c._id === enrollment.class_id
+                    );
+                    const fee =
+                      enrollment.session === "weekend"
+                        ? dept?.weekend_fee
+                        : dept?.weekdays_fee;
+
+                    return (
+                      <tr key={index}>
+                        <td>{index + 1}</td>
+                        <td>{dept?.dept_name || "N/A"}</td>
+                        <td>{enrollment.session}</td>
+                        <td>{enrollment.session_time}</td>
+                        <td>{cls?.class_name || "N/A"}</td>
+                        <td>£{fee || 0}</td>
+                        <td>
+                          <div className="btn-group" role="group">
+                            <button
+                              type="button"
+                              className="btn btn-sm btn-warning me-1"
+                              onClick={() =>
+                                handleEditEnrollment(enrollment, index)
+                              }
+                              title="Edit"
+                            >
+                              <FaEdit />
+                            </button>
+                            <button
+                              type="button"
+                              className="btn btn-sm btn-danger"
+                              onClick={() => handleRemoveEnrollment(index)}
+                              title="Delete"
+                            >
+                              <FaTrashAlt />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colSpan="5" className="text-end fw-bold">
+                      Calculated Monthly Fee:
+                    </td>
+                    <td className="fw-bold">£{calculatedFee}</td>
+                    <td></td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          )}
         </div>
 
         {/* Health Information */}
@@ -831,15 +1243,38 @@ export default function UpdateStudent() {
             name="starting_date"
           />
         </div>
+
+        {/* Monthly Fee Section - UPDATED */}
         <div className="col-md-6">
-          <label className="form-label">Monthly Fee</label>
+          <div className="d-flex justify-content-between align-items-center mb-2">
+            <label className="form-label mb-0">Monthly Fee</label>
+            {isFeeOverridden && (
+              <button
+                type="button"
+                className="btn btn-sm btn-outline-secondary"
+                onClick={handleUseCalculatedFee}
+              >
+                Use Calculated Fee
+              </button>
+            )}
+          </div>
           <input
             style={{ borderColor: "var(--border2)" }}
-            defaultValue={monthly_fee}
-            className="form-control bg-light"
+            className="form-control"
             type="number"
+            value={monthlyFee}
+            onChange={handleFeeChange}
             name="monthly_fee"
           />
+          <small className="text-muted">
+            {isFeeOverridden ? (
+              <span className="text-warning">
+                ⚠️ Manual override - Calculated fee: £{calculatedFee}
+              </span>
+            ) : (
+              "Auto-calculated from departments"
+            )}
+          </small>
         </div>
 
         {/* Submit Button */}

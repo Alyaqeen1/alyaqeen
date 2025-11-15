@@ -264,13 +264,13 @@ export default function AddStudent() {
           email: student_email,
           dob: student_dob,
           parentUid,
+          address,
+          post_code,
           gender: student_gender,
           school_year,
           status: "under review",
           activity: "active",
           language,
-          address,
-          post_code,
           emergency_number,
           family_name,
           mother: {
@@ -284,10 +284,14 @@ export default function AddStudent() {
             number: father_number,
           },
           academic: {
-            dept_id: std_department,
-            time: std_time,
-            session: std_session,
-            class_id: student_class,
+            enrollments: [
+              {
+                dept_id: std_department,
+                class_id: student_class,
+                session: std_session,
+                session_time: std_time,
+              },
+            ],
           },
           medical: {
             doctorName: doctor_name,

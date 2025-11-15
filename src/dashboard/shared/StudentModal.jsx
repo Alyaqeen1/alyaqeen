@@ -3,6 +3,8 @@ import {
   useGetStudentQuery,
   useUpdateStudentStatusMutation,
 } from "../../redux/features/students/studentsApi";
+import { useGetDepartmentsQuery } from "../../redux/features/departments/departmentsApi";
+import { useGetClassesQuery } from "../../redux/features/classes/classesApi";
 import { FaCheck, FaCross, FaPen } from "react-icons/fa6";
 import { FaTrashAlt } from "react-icons/fa";
 import { ImCross } from "react-icons/im";
@@ -10,8 +12,99 @@ import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 import sessionMap from "../../utils/sessionMap";
 import Swal from "sweetalert2";
+
+// Helper function to get department information with vertical layout
+const getDepartmentInfo = (academic, departments = []) => {
+  if (!academic) return "Not assigned";
+
+  // Handle new multi-department structure with enrollments array
+  if (academic.enrollments && Array.isArray(academic.enrollments)) {
+    if (academic.enrollments.length === 0) return "Not assigned";
+
+    // Return array of department info for vertical display
+    const departmentList = academic.enrollments.map((enrollment, index) => {
+      // Find the actual department name
+      const dept = departments.find((d) => d._id === enrollment.dept_id);
+      const deptName = dept ? dept.dept_name : "Unknown Department";
+
+      const sessionInfo = enrollment.session
+        ? `${enrollment.session} (${enrollment.session_time})`
+        : "";
+      return {
+        name: deptName,
+        session: sessionInfo,
+        index: index + 1,
+      };
+    });
+
+    return departmentList;
+  }
+
+  // Handle old single department structure
+  if (academic.dept_id) {
+    const dept = departments.find((d) => d._id === academic.dept_id);
+    const deptName = dept ? dept.dept_name : "Unknown Department";
+
+    const sessionInfo = academic.session
+      ? `${academic.session} (${academic.time})`
+      : "";
+    return [
+      {
+        name: deptName,
+        session: sessionInfo,
+        index: 1,
+      },
+    ];
+  }
+
+  return [];
+};
+
+// Helper function to get class information with vertical layout
+const getClassInfo = (academic, classes = []) => {
+  if (!academic) return "Not assigned";
+
+  // Handle new multi-department structure with enrollments array
+  if (academic.enrollments && Array.isArray(academic.enrollments)) {
+    if (academic.enrollments.length === 0) return "Not assigned";
+
+    // Return array of class info for vertical display
+    const classList = academic.enrollments.map((enrollment, index) => {
+      const cls = classes.find((c) => c._id === enrollment.class_id);
+      const className = cls ? cls.class_name : "Unknown Class";
+
+      return {
+        name: className,
+        index: index + 1,
+      };
+    });
+
+    return classList;
+  }
+
+  // Handle old single department structure
+  if (academic.class_id) {
+    const cls = classes.find((c) => c._id === academic.class_id);
+    const className = cls ? cls.class_name : "Unknown Class";
+
+    return [
+      {
+        name: className,
+        index: 1,
+      },
+    ];
+  }
+
+  return [];
+};
+
 export default function StudentModal({ studentId, handleClose, showModal }) {
   const [updateStudentStatus] = useUpdateStudentStatusMutation();
+
+  // Use your existing queries
+  const { data: departments } = useGetDepartmentsQuery();
+  const { data: classes } = useGetClassesQuery();
+
   const {
     data: student,
     isLoading,
@@ -56,30 +149,35 @@ export default function StudentModal({ studentId, handleClose, showModal }) {
 
   const { session, department, time, class: student_class } = academic || {};
 
+  // Get department information using our helper function with actual department names
+  const departmentInfo = getDepartmentInfo(academic, departments || []);
+
+  // Get class information using our helper function with actual class names
+  const classInfo = getClassInfo(academic, classes || []);
+
   const handleBackdropClick = (event) => {
     // Close modal only if clicked on the backdrop (not modal content)
     if (event.target.classList.contains("modal")) {
       handleClose();
     }
   };
-  console.log(student_class);
+
   const handleStatus = async (newStatus) => {
-    if (
-      newStatus === "approved" &&
-      (student_class === "Unknown Class" || !student_class)
-    ) {
+    // Updated approval check for multi-department structure
+    const hasClassAssigned =
+      academic?.enrollments?.some((enrollment) => enrollment.class_id) ||
+      academic?.class_id;
+
+    if (newStatus === "approved" && !hasClassAssigned) {
       Swal.fire({
         icon: "warning",
-        title: "Assign a class first!",
-        text: "You must assign a class before approving the student.",
+        title: "Assign classes first!",
+        text: "You must assign classes to all departments before approving the student.",
       });
       return;
     }
 
     try {
-      // const { data } = await axiosPublic.patch(`/students/${studentId}`, {
-      //   status: newStatus,
-      // });
       const data = await updateStudentStatus({
         id: studentId,
         status: newStatus,
@@ -96,7 +194,6 @@ export default function StudentModal({ studentId, handleClose, showModal }) {
         refetch();
       }
     } catch (err) {
-      // }
       console.error("Failed to update status:", err);
     }
   };
@@ -104,6 +201,7 @@ export default function StudentModal({ studentId, handleClose, showModal }) {
   if (!showModal) return null;
   if (isLoading) return <LoadingSpinnerDash></LoadingSpinnerDash>;
   if (isError || !student) return <div>Failed to load student data</div>;
+
   return (
     <div>
       {/* Dark Background (Backdrop) */}
@@ -119,7 +217,7 @@ export default function StudentModal({ studentId, handleClose, showModal }) {
           display: showModal ? "block" : "none",
           zIndex: 1050,
         }}
-        onMouseDown={handleBackdropClick} // Detect click outside
+        onMouseDown={handleBackdropClick}
       >
         <div className="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg">
           <div className="modal-content">
@@ -170,29 +268,46 @@ export default function StudentModal({ studentId, handleClose, showModal }) {
                     <strong>Language:</strong> {language}
                   </p>
 
-                  <p>
-                    <strong>department:</strong> {department}
-                  </p>
-                  <p>
-                    <strong>Session:</strong> {session}
-                  </p>
-                  <p>
-                    <strong>Session Time:</strong>{" "}
-                    {time ? sessionMap[time] : "not available"}
-                  </p>
+                  {/* Updated Department Information with vertical layout */}
+                  <div>
+                    <strong>Departments:</strong>
+                    {Array.isArray(departmentInfo) &&
+                    departmentInfo.length > 0 ? (
+                      <div className="mt-1">
+                        {departmentInfo.map((dept, idx) => (
+                          <div key={idx} className="ms-3 text-sm">
+                            • {dept.name} - {dept.session}
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <span className="ms-2">Not assigned</span>
+                    )}
+                  </div>
+
+                  {/* Updated Class Information with vertical layout */}
+                  <div className="mt-2">
+                    <strong>Classes:</strong>
+                    {Array.isArray(classInfo) && classInfo.length > 0 ? (
+                      <div className="mt-1">
+                        {classInfo.map((cls, idx) => (
+                          <div key={idx} className="ms-3 text-sm">
+                            • {cls.name}
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <span className="ms-2">Not assigned</span>
+                    )}
+                  </div>
 
                   <p>
                     <strong>Emergency Number:</strong> {emergency_number}
                   </p>
-                  <p>
-                    <strong>
-                      Class:{" "}
-                      {student_class === null ? "Not Provided" : student_class}
-                    </strong>
-                  </p>
+
                   <p>
                     <strong>Monthly Fee:</strong>{" "}
-                    {monthly_fee ? monthly_fee : "Not Assigned"}
+                    {monthly_fee ? `£${monthly_fee}` : "Not Assigned"}
                   </p>
                 </div>
                 <div className="border-start border-2 ps-2 flex-grow-1">
@@ -235,7 +350,13 @@ export default function StudentModal({ studentId, handleClose, showModal }) {
                   </p>
                   <p>
                     <strong>
-                      <a href={signature}>Parent's Signature</a>
+                      <a
+                        href={signature}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Parent's Signature
+                      </a>
                     </strong>
                   </p>
                 </div>

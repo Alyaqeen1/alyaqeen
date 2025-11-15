@@ -211,7 +211,7 @@ export default function ActiveTeachers() {
                         <img
                           style={{ width: "50px" }}
                           className="rounded-5"
-                          src={teacher_photo}
+                          src={teacher?.teacher_photo}
                           alt=""
                         />
                       ) : (

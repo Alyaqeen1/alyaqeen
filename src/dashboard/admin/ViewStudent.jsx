@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import { useParams } from "react-router";
 import { useGetStudentsByIdQuery } from "../../redux/features/students/studentsApi";
+import { useGetDepartmentsQuery } from "../../redux/features/departments/departmentsApi";
+import { useGetClassesQuery } from "../../redux/features/classes/classesApi";
 import sessionMap from "../../utils/sessionMap";
 import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 import { useGetFeesSummaryQuery } from "../../redux/features/fees/feesApi";
 import { FaPen } from "react-icons/fa6";
 import { FaTrashAlt } from "react-icons/fa";
+
 const formatDate = (dateString) => {
   if (dateString === "N/A") return "N/A";
   const date = new Date(dateString);
@@ -14,18 +17,21 @@ const formatDate = (dateString) => {
   const year = date.getFullYear();
   return `${day}-${month}-${year}`;
 };
+
 export default function ViewStudent() {
   const { id } = useParams();
   const { data: student, isLoading } = useGetStudentsByIdQuery(id, {
     skip: !id,
   });
+  const { data: departments } = useGetDepartmentsQuery();
+  const { data: classes } = useGetClassesQuery();
   const { data: feeSummary, isLoading: isFeeLoading } = useGetFeesSummaryQuery(
     id,
     {
       skip: !id,
     }
   );
-  console.log(feeSummary);
+
   const [activeTab, setActiveTab] = useState("profile");
 
   const {
@@ -49,10 +55,53 @@ export default function ViewStudent() {
   } = student || {};
 
   const { summary, paidMonths } = feeSummary || {};
-  console.log(paidMonths);
+
+  // Helper function to get academic information for display
+  const getAcademicDisplay = (academic) => {
+    if (!academic) return [];
+
+    // Handle new multi-department structure
+    if (academic.enrollments && Array.isArray(academic.enrollments)) {
+      return academic.enrollments.map((enrollment, index) => {
+        const dept = departments?.find((d) => d._id === enrollment.dept_id);
+        const cls = classes?.find((c) => c._id === enrollment.class_id);
+
+        return {
+          department: dept?.dept_name || "Unknown Department",
+          class: cls?.class_name || "Unknown Class",
+          session: enrollment.session,
+          time: enrollment.session_time,
+          index: index + 1,
+        };
+      });
+    }
+
+    // Handle old single department structure
+    if (academic.dept_id) {
+      const dept = departments?.find((d) => d._id === academic.dept_id);
+      const cls = classes?.find((c) => c._id === academic.class_id);
+
+      return [
+        {
+          department:
+            dept?.dept_name || academic.department || "Unknown Department",
+          class: cls?.class_name || academic.class || "Unknown Class",
+          session: academic.session,
+          time: academic.time,
+          index: 1,
+        },
+      ];
+    }
+
+    return [];
+  };
+
+  const academicInfo = getAcademicDisplay(academic);
+
   if (isLoading || isFeeLoading) {
     return <LoadingSpinnerDash></LoadingSpinnerDash>;
   }
+
   const unpaidFee =
     Number(summary?.consecutiveUnpaidMonths) * Number(monthly_fee);
 
@@ -178,23 +227,43 @@ export default function ViewStudent() {
                   </div>
                 ))}
 
-                {/* Academic Details */}
+                {/* Academic Details - UPDATED FOR MULTI-DEPARTMENT */}
                 <h6 className="fw-bold border-bottom pb-1 mt-3 mb-2">
                   Academic Information
                 </h6>
-                {[
-                  ["Department", academic?.department],
-                  ["Class", academic?.class],
-                  ["Session", academic?.session],
-                  ["Time", academic?.time ? sessionMap[academic.time] : "-"], // use map here
-                ].map(([label, value]) => (
-                  <div className="row mb-2" key={label}>
-                    <div className="col-md-6">
-                      <strong>{label}</strong>
+                {academicInfo.length > 0 ? (
+                  academicInfo.map((academicItem, index) => (
+                    <div key={index} className="mb-3 p-2 border rounded">
+                      {academicInfo.length > 1 && (
+                        <div className="fw-bold text-primary mb-2">
+                          Department {academicItem.index}
+                        </div>
+                      )}
+                      {[
+                        ["Department", academicItem.department],
+                        ["Class", academicItem.class],
+                        ["Session", academicItem.session],
+                        [
+                          "Time",
+                          academicItem.time
+                            ? sessionMap[academicItem.time]
+                            : "-",
+                        ],
+                      ].map(([label, value]) => (
+                        <div className="row mb-1" key={label}>
+                          <div className="col-md-6">
+                            <strong>{label}</strong>
+                          </div>
+                          <div className="col-md-6">{value || "-"}</div>
+                        </div>
+                      ))}
                     </div>
-                    <div className="col-md-6">{value || "-"}</div>
+                  ))
+                ) : (
+                  <div className="text-muted">
+                    No academic information available
                   </div>
-                ))}
+                )}
 
                 {/* Medical Information */}
                 <h6 className="fw-bold border-bottom pb-1 mt-3 mb-2">
@@ -215,7 +284,7 @@ export default function ViewStudent() {
                   </div>
                 ))}
 
-                {/* fee */}
+                {/* Fee Information */}
                 <h6 className="fw-bold border-bottom pb-1 mb-2 mt-3">
                   Fee Information
                 </h6>
@@ -286,72 +355,36 @@ export default function ViewStudent() {
                         >
                           Amount
                         </th>
-                        {/* <th
-                          className="font-danger text-white fw-bolder border h6 text-center align-middle"
-                          style={{ backgroundColor: "var(--border2)" }}
-                        >
-                          Actions
-                        </th> */}
                       </tr>
                     </thead>
                     <tbody>
                       {paidMonths?.length > 0 ? (
                         paidMonths?.map((fee, idx) => (
                           <tr key={idx}>
-                            <td
-                              className={` border h6 text-center align-middle text-nowrap`}
-                            >
+                            <td className="border h6 text-center align-middle text-nowrap">
                               {idx + 1}
                             </td>
-                            <td
-                              className={` border h6 text-center align-middle text-nowrap`}
-                            >
+                            <td className="border h6 text-center align-middle text-nowrap">
                               {formatDate(fee?.paymentDate)}
                             </td>
-                            <td
-                              className={`fw-medium border text-center align-middle text-nowrap`}
-                            >
+                            <td className="fw-medium border text-center align-middle text-nowrap">
                               {fee?.month}
                             </td>
-                            <td
-                              className={`border h6 text-center align-middle text-nowrap`}
-                            >
+                            <td className="border h6 text-center align-middle text-nowrap">
                               {fee?.paymentMethod}
                             </td>
-
-                            <td
-                              className={`border h6 text-center align-middle text-nowrap`}
-                            >
+                            <td className="border h6 text-center align-middle text-nowrap">
                               {fee?.amount}
                             </td>
-
-                            {/* <td
-                              className={`border d-flex gap-2 justify-content-center h6 text-center align-middle text-nowrap`}
-                            >
-                              <button
-                                className="text-white py-1 px-2 rounded-2"
-                                style={{ backgroundColor: "var(--border2)" }}
-                                onClick={() => handleDelete(student?._id)}
-                              >
-                                <FaTrashAlt></FaTrashAlt>
-                              </button>
-                              <button
-                                className="text-white py-1 px-2 rounded-2"
-                                style={{ backgroundColor: "var(--border2)" }}
-                              >
-                                <FaPen></FaPen>
-                              </button>
-                            </td> */}
                           </tr>
                         ))
                       ) : (
                         <tr>
-                          <td colSpan={12}>
+                          <td colSpan={5}>
                             <h5>No Fee Records available.</h5>
                           </td>
                         </tr>
                       )}
-                      {}
                     </tbody>
                   </table>
                 </div>

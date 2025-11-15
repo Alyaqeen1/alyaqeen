@@ -948,20 +948,20 @@
 
   .page-heading {
     position: relative;
-    padding: 140px 0 197px;
+    padding: 60px 0 197px;
     text-align: center;
     z-index: 9;
 
     @include breakpoint(max-xl) {
-      padding: 140px 0;
+      padding: 60px 0;
     }
 
     @include breakpoint(max-lg) {
-      padding: 110px 0;
+      padding: 60px 0;
     }
 
     @include breakpoint(max-md) {
-      padding: 70px 0;
+      padding: 50px 0;
     }
 
     @include breakpoint(max-sm) {

@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useGetStudentsByIdQuery } from "../../redux/features/students/studentsApi";
+import { useGetDepartmentsQuery } from "../../redux/features/departments/departmentsApi";
+import { useGetClassesQuery } from "../../redux/features/classes/classesApi";
 import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 import { Link } from "react-router";
 import sessionMap from "../../utils/sessionMap";
@@ -8,6 +10,8 @@ export default function EducationalInfoCard({ studentId }) {
   const { data: student, isLoading } = useGetStudentsByIdQuery(studentId, {
     skip: !studentId,
   });
+  const { data: departments } = useGetDepartmentsQuery();
+  const { data: classes } = useGetClassesQuery();
 
   // Gradient styles
   const gradientStyle = {
@@ -19,7 +23,50 @@ export default function EducationalInfoCard({ studentId }) {
     secondary: { background: "linear-gradient(135deg, #f093fb, #f5576c)" },
     info: { background: "linear-gradient(135deg, #4facfe, #00f2fe)" },
     success: { background: "linear-gradient(135deg, #43e97b, #38f9d7)" },
+    warning: { background: "linear-gradient(135deg, #ffd89b, #19547b)" },
   };
+
+  // Helper function to get academic information
+  const getAcademicInfo = (academic) => {
+    if (!academic) return [];
+
+    // Handle new multi-department structure
+    if (academic.enrollments && Array.isArray(academic.enrollments)) {
+      return academic.enrollments.map((enrollment, index) => {
+        const dept = departments?.find((d) => d._id === enrollment.dept_id);
+        const cls = classes?.find((c) => c._id === enrollment.class_id);
+
+        return {
+          department: dept?.dept_name || "Unknown Department",
+          class: cls?.class_name || "Unknown Class",
+          session: enrollment.session,
+          time: enrollment.session_time,
+          index: index + 1,
+        };
+      });
+    }
+
+    // Handle old single department structure
+    if (academic.dept_id) {
+      const dept = departments?.find((d) => d._id === academic.dept_id);
+      const cls = classes?.find((c) => c._id === academic.class_id);
+
+      return [
+        {
+          department:
+            dept?.dept_name || academic.department || "Unknown Department",
+          class: cls?.class_name || academic.class || "Unknown Class",
+          session: academic.session,
+          time: academic.time,
+          index: 1,
+        },
+      ];
+    }
+
+    return [];
+  };
+
+  const academicInfo = getAcademicInfo(student?.academic);
 
   if (isLoading) {
     return <LoadingSpinnerDash />;
@@ -80,18 +127,37 @@ export default function EducationalInfoCard({ studentId }) {
           </div>
 
           <div className="d-flex flex-column gap-2">
-            <span
-              className="px-3 py-1 rounded-pill text-uppercase fw-bold"
-              style={{
-                background: "rgba(255, 255, 255, 0.2)",
-                backdropFilter: "blur(10px)",
-                border: "1px solid rgba(255, 255, 255, 0.3)",
-                fontSize: "0.8rem",
-                letterSpacing: "0.5px",
-              }}
-            >
-              {student.academic?.department}
-            </span>
+            <div className="d-flex flex-wrap gap-1">
+              {academicInfo.slice(0, 2).map((item, index) => (
+                <span
+                  key={index}
+                  className="px-3 py-1 rounded-pill text-uppercase fw-bold"
+                  style={{
+                    background: "rgba(255, 255, 255, 0.2)",
+                    backdropFilter: "blur(10px)",
+                    border: "1px solid rgba(255, 255, 255, 0.3)",
+                    fontSize: "0.8rem",
+                    letterSpacing: "0.5px",
+                  }}
+                >
+                  {item.department}
+                </span>
+              ))}
+              {academicInfo.length > 2 && (
+                <span
+                  className="px-3 py-1 rounded-pill text-uppercase fw-bold"
+                  style={{
+                    background: "rgba(255, 255, 255, 0.3)",
+                    backdropFilter: "blur(10px)",
+                    border: "1px solid rgba(255, 255, 255, 0.4)",
+                    fontSize: "0.8rem",
+                    letterSpacing: "0.5px",
+                  }}
+                >
+                  +{academicInfo.length - 2} more
+                </span>
+              )}
+            </div>
             <span
               className="px-3 py-1 rounded-pill text-uppercase fw-bold text-white"
               style={{
@@ -108,8 +174,9 @@ export default function EducationalInfoCard({ studentId }) {
 
       {/* Card Body */}
       <div className="p-4">
-        {/* Academic Grid */}
+        {/* Academic Grid - UPDATED FOR MULTI-DEPARTMENT */}
         <div className="row g-3 mb-4">
+          {/* Department Card */}
           <div className="col-md-6 col-xl-3">
             <div
               className="d-flex align-items-center p-4 rounded-4 text-white h-100"
@@ -121,18 +188,25 @@ export default function EducationalInfoCard({ studentId }) {
                   className="text-uppercase opacity-90"
                   style={{ fontSize: "0.8rem", letterSpacing: "0.5px" }}
                 >
-                  Department
+                  {academicInfo.length > 1 ? "Departments" : "Department"}
                 </div>
                 <div className="fw-bold fs-5 my-1">
-                  {student.academic?.department || "Not Assigned"}
+                  {academicInfo.length > 0
+                    ? academicInfo.length === 1
+                      ? academicInfo[0].department
+                      : `${academicInfo.length} Departments`
+                    : "Not Assigned"}
                 </div>
                 <div style={{ fontSize: "0.8rem", opacity: 0.8 }}>
-                  Primary Department
+                  {academicInfo.length === 1
+                    ? "Primary Department"
+                    : "Multiple Departments"}
                 </div>
               </div>
             </div>
           </div>
 
+          {/* Class Card */}
           <div className="col-md-6 col-xl-3">
             <div
               className="d-flex align-items-center p-4 rounded-4 text-white h-100"
@@ -144,18 +218,25 @@ export default function EducationalInfoCard({ studentId }) {
                   className="text-uppercase opacity-90"
                   style={{ fontSize: "0.8rem", letterSpacing: "0.5px" }}
                 >
-                  Class
+                  {academicInfo.length > 1 ? "Classes" : "Class"}
                 </div>
                 <div className="fw-bold fs-5 my-1">
-                  {student.academic?.class || "Not Assigned"}
+                  {academicInfo.length > 0
+                    ? academicInfo.length === 1
+                      ? academicInfo[0].class
+                      : `${academicInfo.length} Classes`
+                    : "Not Assigned"}
                 </div>
                 <div style={{ fontSize: "0.8rem", opacity: 0.8 }}>
-                  Current Class
+                  {academicInfo.length === 1
+                    ? "Current Class"
+                    : "Multiple Classes"}
                 </div>
               </div>
             </div>
           </div>
 
+          {/* Session Time Card */}
           <div className="col-md-6 col-xl-3">
             <div
               className="d-flex align-items-center p-4 rounded-4 text-white h-100"
@@ -167,20 +248,27 @@ export default function EducationalInfoCard({ studentId }) {
                   className="text-uppercase opacity-90"
                   style={{ fontSize: "0.8rem", letterSpacing: "0.5px" }}
                 >
-                  Session Time
+                  Session Times
                 </div>
                 <div className="fw-bold fs-5 my-1">
-                  {sessionMap[student.academic?.time] ||
-                    student.academic?.time ||
-                    "Not Set"}
+                  {academicInfo.length > 0
+                    ? academicInfo.length === 1
+                      ? sessionMap[academicInfo[0].time] ||
+                        academicInfo[0].time ||
+                        "Not Set"
+                      : `${academicInfo.length} Sessions`
+                    : "Not Set"}
                 </div>
                 <div style={{ fontSize: "0.8rem", opacity: 0.8 }}>
-                  {student.academic?.session || "No session"}
+                  {academicInfo.length === 1
+                    ? academicInfo[0].session || "No session"
+                    : "Multiple Sessions"}
                 </div>
               </div>
             </div>
           </div>
 
+          {/* School Year Card */}
           <div className="col-md-6 col-xl-3">
             <div
               className="d-flex align-items-center p-4 rounded-4 text-white h-100"
@@ -204,6 +292,50 @@ export default function EducationalInfoCard({ studentId }) {
             </div>
           </div>
         </div>
+
+        {/* Department Details Section - NEW */}
+        {academicInfo.length > 1 && (
+          <div className="rounded-4 p-4 mb-4" style={{ background: "#f8f9fa" }}>
+            <h6 className="fw-bold mb-3 text-dark">
+              📋 Enrollment Details{" "}
+              {academicInfo.length > 1 &&
+                `(${academicInfo.length} Departments)`}
+            </h6>
+            <div className="row g-3">
+              {academicInfo.map((item, index) => (
+                <div key={index} className="col-12 col-md-6 ">
+                  <div className="p-3 rounded-3 border bg-white">
+                    {academicInfo.length > 1 && (
+                      <div className="fw-bold text-primary mb-2 small">
+                        Department {item.index}
+                      </div>
+                    )}
+                    <div className="mb-2">
+                      <span className="text-muted small">Department:</span>
+                      <div className="fw-semibold">{item.department}</div>
+                    </div>
+                    <div className="mb-2">
+                      <span className="text-muted small">Class:</span>
+                      <div className="fw-semibold">{item.class}</div>
+                    </div>
+                    <div className="mb-2">
+                      <span className="text-muted small">Session:</span>
+                      <div className="fw-semibold text-capitalize">
+                        {item.session}
+                      </div>
+                    </div>
+                    <div>
+                      <span className="text-muted small">Time:</span>
+                      <div className="fw-semibold">
+                        {sessionMap[item.time] || item.time || "Not Set"}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Details Section */}
         <div className="rounded-4 p-4 mb-4" style={{ background: "#f8f9fa" }}>

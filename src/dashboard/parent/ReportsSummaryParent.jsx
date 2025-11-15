@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useGetEnrolledFullFamilyQuery } from "../../redux/features/families/familiesApi";
+import { useGetDepartmentsQuery } from "../../redux/features/departments/departmentsApi";
+import { useGetClassesQuery } from "../../redux/features/classes/classesApi";
 import useAuth from "../../hooks/useAuth";
 import {
   useGetStudentLessonsCoveredMonthlySummaryQuery,
@@ -44,6 +46,9 @@ export default function ReportsSummaryParent() {
       skip: loading || !user?.email,
     });
 
+  const { data: departments } = useGetDepartmentsQuery();
+  const { data: classes } = useGetClassesQuery();
+
   const studentIds = enrolledFamily?.childrenDocs?.map((s) => s._id);
 
   const {
@@ -66,6 +71,50 @@ export default function ReportsSummaryParent() {
     { student_ids: studentIds, year },
     { skip: !studentIds?.length || !showOverallSummary }
   );
+
+  // Helper function to get academic information for display
+  const getAcademicDisplay = (academic) => {
+    if (!academic) return { departments: [], classes: [], sessions: [] };
+
+    // Handle new multi-department structure
+    if (academic.enrollments && Array.isArray(academic.enrollments)) {
+      const deptNames = academic.enrollments.map((enrollment) => {
+        const dept = departments?.find((d) => d._id === enrollment.dept_id);
+        return dept ? dept.dept_name : "Unknown Department";
+      });
+
+      const classNames = academic.enrollments.map((enrollment) => {
+        const cls = classes?.find((c) => c._id === enrollment.class_id);
+        return cls ? cls.class_name : "Unknown Class";
+      });
+
+      return {
+        departments: [...new Set(deptNames)],
+        classes: [...new Set(classNames)],
+        count: academic.enrollments.length,
+      };
+    }
+
+    // Handle old single department structure
+    if (academic.dept_id) {
+      const dept = departments?.find((d) => d._id === academic.dept_id);
+      const cls = classes?.find((c) => c._id === academic.class_id);
+
+      return {
+        departments: [
+          dept?.dept_name || academic.department || "Unknown Department",
+        ],
+        classes: [cls?.class_name || academic.class || "Unknown Class"],
+        count: 1,
+      };
+    }
+
+    return {
+      departments: [academic.department || "Not assigned"],
+      classes: [academic.class || "Not assigned"],
+      count: 1,
+    };
+  };
 
   // Gradient styles matching EducationalInfoCard
   const gradientStyle = {
@@ -297,11 +346,12 @@ export default function ReportsSummaryParent() {
         <div className="row g-4">
           {enrolledFamily?.childrenDocs?.map((student) => {
             const studentData = getStudentData(student);
+            const academicInfo = getAcademicDisplay(student.academic);
 
             return (
               <div key={student._id} className="col-12">
                 <div className="card shadow-sm border-0 rounded-4 overflow-hidden">
-                  {/* Student Header */}
+                  {/* Student Header - UPDATED WITH MULTI-DEPARTMENT SUPPORT */}
                   <div className="card-header bg-light border-0 py-3">
                     <div className="d-flex align-items-center justify-content-between">
                       <div className="d-flex align-items-center gap-3">
@@ -320,11 +370,54 @@ export default function ReportsSummaryParent() {
                           <h3 className="h5 mb-1 fw-bold text-dark">
                             {student.name}
                           </h3>
-                          <p className="mb-0 text-muted small">
-                            {student.academic?.class || "Class not assigned"} •{" "}
-                            {student.academic?.department ||
-                              "Department not assigned"}
-                          </p>
+                          <div className="d-flex flex-wrap gap-2 align-items-center">
+                            {/* Department Badges */}
+                            <div className="d-flex flex-wrap gap-1">
+                              {academicInfo.departments
+                                .slice(0, 2)
+                                .map((dept, idx) => (
+                                  <span
+                                    key={idx}
+                                    className="badge bg-primary text-wrap"
+                                    style={{ fontSize: "0.7rem" }}
+                                  >
+                                    {dept}
+                                    {academicInfo.count > 1 && ` ${idx + 1}`}
+                                  </span>
+                                ))}
+                              {academicInfo.departments.length > 2 && (
+                                <span
+                                  className="badge bg-secondary"
+                                  style={{ fontSize: "0.65rem" }}
+                                >
+                                  +{academicInfo.departments.length - 2} more
+                                </span>
+                              )}
+                            </div>
+
+                            {/* Class Information */}
+                            <div className="d-flex flex-wrap gap-1">
+                              {academicInfo.classes
+                                .slice(0, 2)
+                                .map((cls, idx) => (
+                                  <span
+                                    key={idx}
+                                    className="badge bg-success text-wrap"
+                                    style={{ fontSize: "0.7rem" }}
+                                  >
+                                    {cls}
+                                  </span>
+                                ))}
+                              {academicInfo.classes.length > 2 && (
+                                <span
+                                  className="badge bg-secondary"
+                                  style={{ fontSize: "0.65rem" }}
+                                >
+                                  +{academicInfo.classes.length - 2} more
+                                </span>
+                              )}
+                            </div>
+                          </div>
                         </div>
                       </div>
                       <div className="text-end">
@@ -333,6 +426,16 @@ export default function ReportsSummaryParent() {
                             ? `Year ${year}`
                             : `${month} ${year}`}
                         </span>
+                        {academicInfo.count > 1 && (
+                          <div className="mt-1">
+                            <span
+                              className="badge bg-info"
+                              style={{ fontSize: "0.65rem" }}
+                            >
+                              {academicInfo.count} Departments
+                            </span>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
