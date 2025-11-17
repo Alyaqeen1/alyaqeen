@@ -538,7 +538,7 @@ const ApplyNowComp = () => {
       <div className="container">
         <div className="d-flex justify-content-center align-content-center text-right mb-0">
           <a
-            href="/file/Arabic Quran Application Form.docx"
+            href="/file/updated2025/Arabic_Quran_Application_Form.docx"
             className="theme-btn px-2 d-flex text-nowrap justify-content-center align-items-center me-md-3 me-1 text-center text-wrap"
             // style={{
             //   marginRight: "10px",
@@ -547,7 +547,7 @@ const ApplyNowComp = () => {
             Download Form In Word File
           </a>
           <a
-            href="/file/Tuition Admission Form Updated.pdf"
+            href="/file/updated2025/Arabic_Quran_Application_Form.pdf"
             download
             className="theme-btn px-2 text-nowrap d-flex justify-content-center align-items-center me-md-3 me-1 text-center text-wrap"
           >
