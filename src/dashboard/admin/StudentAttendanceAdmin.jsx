@@ -25,6 +25,7 @@ import {
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 import { useGetHolidaysQuery } from "../../redux/features/holidays/holidaysApi";
+import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 
 const dayMap = {
   weekdays: ["Monday", "Tuesday", "Wednesday", "Thursday"],
@@ -63,9 +64,12 @@ export default function StudentAttendanceAdmin() {
   // );
 
   const groupId = group?._id;
-  const { data: students = [] } = useGetStudentsByGroupQuery(groupId, {
-    skip: !groupId,
-  });
+  const { data: students = [], isLoading } = useGetStudentsByGroupQuery(
+    groupId,
+    {
+      skip: !groupId,
+    }
+  );
 
   /* ─────────────────── helper: current week dates ─────────────────── */
   const baseMonday = useMemo(
@@ -153,7 +157,9 @@ export default function StudentAttendanceAdmin() {
       }
     });
   };
-
+  if (isLoading) {
+    return <LoadingSpinnerDash></LoadingSpinnerDash>;
+  }
   /* ─────────────────── render ─────────────────── */
   return (
     <div>
