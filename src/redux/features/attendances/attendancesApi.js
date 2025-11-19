@@ -29,11 +29,34 @@ export const attendancesApi = apiSlice.injectEndpoints({
       },
       providesTags: ["Attendance"],
     }),
+    getFilteredAttendances: builder.query({
+      query: ({ studentIds, startDate, endDate }) =>
+        `/attendances/filtered?studentIds=${studentIds}&startDate=${startDate}&endDate=${endDate}`,
+      providesTags: ["Attendance"],
+    }),
     addAttendance: builder.mutation({
       query: (attendanceData) => ({
         url: "/attendances",
         method: "POST",
         body: attendanceData,
+      }),
+      invalidatesTags: ["Attendance"],
+    }),
+    // New endpoints for bulk operations
+    presentAllStudents: builder.mutation({
+      query: (data) => ({
+        url: "/attendances/present-all",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["Attendance"],
+    }),
+
+    removeAllAttendance: builder.mutation({
+      query: (data) => ({
+        url: "/attendances/remove-all",
+        method: "DELETE",
+        body: data,
       }),
       invalidatesTags: ["Attendance"],
     }),
@@ -70,6 +93,9 @@ export const {
   useGetAttendanceQuery,
   useGetAttendancePresentCountQuery,
   useGetAttendanceByTeacherAndDateQuery,
+  useGetFilteredAttendancesQuery, // Add this export
+  usePresentAllStudentsMutation, // Add this
+  useRemoveAllAttendanceMutation, // Add this
   useGetAttendanceByStudentSummaryQuery,
   useAddAttendanceMutation,
   useUpdateAttendanceMutation,

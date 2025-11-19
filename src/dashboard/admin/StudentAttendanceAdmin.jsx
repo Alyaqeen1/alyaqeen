@@ -1,11 +1,18 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect, useRef } from "react";
 import {
   FaArrowLeft,
   FaArrowRight,
   FaCircle,
   FaTrashAlt,
 } from "react-icons/fa";
-import { format, addWeeks, startOfWeek, addDays, isSameWeek } from "date-fns";
+import {
+  format,
+  addWeeks,
+  startOfWeek,
+  addDays,
+  isSameWeek,
+  isValid,
+} from "date-fns";
 import { skipToken } from "@reduxjs/toolkit/query";
 
 import { useGetDepartmentsQuery } from "../../redux/features/departments/departmentsApi";
@@ -13,14 +20,15 @@ import {
   useGetClassByParamsQuery,
   useGetClassesQuery,
 } from "../../redux/features/classes/classesApi";
-import { useGetGroupByParamsQuery } from "../../redux/features/groups/groupsApi";
 import { useGetStudentsByGroupQuery } from "../../redux/features/students/studentsApi";
 
 import {
   useAddAttendanceMutation,
-  useGetAttendancesQuery,
+  useGetFilteredAttendancesQuery,
   useUpdateAttendanceMutation,
   useDeleteAttendanceMutation,
+  usePresentAllStudentsMutation,
+  useRemoveAllAttendanceMutation,
 } from "../../redux/features/attendances/attendancesApi";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
@@ -32,14 +40,38 @@ const dayMap = {
   weekend: ["Saturday", "Sunday"],
 };
 
+// Safe format function to prevent invalid date errors - moved to top
+const safeFormat = (date, formatStr) => {
+  if (!date || !isValid(date)) return "Invalid Date";
+  try {
+    return format(date, formatStr);
+  } catch (error) {
+    console.error("Date formatting error:", error);
+    return "Invalid Date";
+  }
+};
+
 export default function StudentAttendanceAdmin() {
   /* ─────────────────── state for filters ─────────────────── */
   const [department, setDepartment] = useState("");
-  const [session, setSession] = useState(""); // weekdays | weekend
-  const [time, setTime] = useState(""); // S1/S2/WM/WA
+  const [session, setSession] = useState("");
+  const [time, setTime] = useState("");
   const [classId, setClassId] = useState("");
-  const [weekOffset, setWeekOffset] = useState(0); // 0 = current week
-  const { data: attendances } = useGetAttendancesQuery();
+  const [weekOffset, setWeekOffset] = useState(0);
+
+  // Track initial load vs real-time updates
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const [loadingCells, setLoadingCells] = useState(new Set());
+  const [bulkLoadingDates, setBulkLoadingDates] = useState(new Set());
+
+  // Track filter changes
+  const prevFilters = useRef({
+    department,
+    session,
+    time,
+    classId,
+    weekOffset,
+  });
 
   const { data: holidays = [] } = useGetHolidaysQuery();
   const holidaySet = useMemo(
@@ -48,28 +80,29 @@ export default function StudentAttendanceAdmin() {
   );
 
   /* ───────────────────  RTK‑Query data  ─────────────────── */
-  const { data: departments = [] } = useGetDepartmentsQuery();
-  const { data: classes = [] } = useGetClassesQuery();
+  const { data: departments = [], isLoading: isLoadingDept } =
+    useGetDepartmentsQuery();
+  const { data: classes = [], isLoading: isLoadingClass } =
+    useGetClassesQuery();
 
-  const { data: group } = useGetClassByParamsQuery(
+  const {
+    data: group,
+    isLoading: isLoadingGroup,
+    isFetching: isFetchingGroup,
+  } = useGetClassByParamsQuery(
     department && classId && session && time
       ? { dept_id: department, class_id: classId, session, time }
       : skipToken
   );
 
-  // const { data: group } = useGetGroupByParamsQuery(
-  //   department && classId && session && time
-  //     ? { dept_id: department, class_id: classId, session, time }
-  //     : skipToken
-  // );
-
   const groupId = group?._id;
-  const { data: students = [], isLoading } = useGetStudentsByGroupQuery(
-    groupId,
-    {
-      skip: !groupId,
-    }
-  );
+  const {
+    data: students = [],
+    isLoading: isLoadingStudents,
+    isFetching: isFetchingStudents,
+  } = useGetStudentsByGroupQuery(groupId, {
+    skip: !groupId,
+  });
 
   /* ─────────────────── helper: current week dates ─────────────────── */
   const baseMonday = useMemo(
@@ -87,28 +120,130 @@ export default function StudentAttendanceAdmin() {
   const weekDates = useMemo(
     () =>
       allWeekDates.filter((date) => {
-        const dayName = format(date, "EEEE");
-        return session ? dayMap[session].includes(dayName) : false;
+        const dayName = safeFormat(date, "EEEE");
+        return session ? dayMap[session]?.includes(dayName) : false;
       }),
     [allWeekDates, session]
   );
 
+  // Get date range for the current week view
+  const dateRange = useMemo(() => {
+    if (weekDates.length === 0) return { startDate: "", endDate: "" };
+
+    const dates = weekDates.map((date) => safeFormat(date, "yyyy-MM-dd"));
+    return {
+      startDate: dates[0],
+      endDate: dates[dates.length - 1],
+    };
+  }, [weekDates]);
+
+  // Get student IDs for filtered query
+  const studentIds = useMemo(() => {
+    return students.map((student) => student._id);
+  }, [students]);
+
+  // Check if all filters are selected
+  const areAllFiltersSelected = department && session && time && classId;
+
+  // Fetch only the necessary attendance data
+  const {
+    data: attendances = [],
+    isLoading: isLoadingAttendance,
+    isFetching: isFetchingAttendance,
+  } = useGetFilteredAttendancesQuery(
+    areAllFiltersSelected && studentIds.length > 0 && dateRange.startDate
+      ? {
+          studentIds: studentIds.join(","),
+          startDate: dateRange.startDate,
+          endDate: dateRange.endDate,
+        }
+      : skipToken,
+    {
+      // Skip refetching on focus to prevent unnecessary loading states
+      refetchOnFocus: false,
+    }
+  );
+
+  // Bulk attendance mutations
+  const [presentAllStudents] = usePresentAllStudentsMutation();
+  const [removeAllAttendance] = useRemoveAllAttendanceMutation();
+
+  // Individual attendance mutations
+  const [addAttendance] = useAddAttendanceMutation();
+  const [updateAttendance] = useUpdateAttendanceMutation();
+  const [deleteAttendance] = useDeleteAttendanceMutation();
+
+  // Effect to track initial loading state only when filters change
+  useEffect(() => {
+    const currentFilters = { department, session, time, classId, weekOffset };
+    const filtersChanged =
+      prevFilters.current.department !== department ||
+      prevFilters.current.session !== session ||
+      prevFilters.current.time !== time ||
+      prevFilters.current.classId !== classId ||
+      prevFilters.current.weekOffset !== weekOffset;
+
+    if (filtersChanged && areAllFiltersSelected) {
+      setIsInitialLoading(true);
+      prevFilters.current = currentFilters;
+    }
+
+    // Only set loading to false when we have all the data and no ongoing operations
+    if (
+      areAllFiltersSelected &&
+      !isFetchingGroup &&
+      !isFetchingStudents &&
+      !isFetchingAttendance &&
+      !isLoadingGroup &&
+      !isLoadingStudents &&
+      !isLoadingAttendance
+    ) {
+      setIsInitialLoading(false);
+    }
+  }, [
+    department,
+    session,
+    time,
+    classId,
+    weekOffset,
+    areAllFiltersSelected,
+    isFetchingGroup,
+    isFetchingStudents,
+    isFetchingAttendance,
+    isLoadingGroup,
+    isLoadingStudents,
+    isLoadingAttendance,
+  ]);
+
   // Check if current view is the current week
   const isCurrentWeek = isSameWeek(baseMonday, new Date(), { weekStartsOn: 1 });
 
-  /* ─────────────────── attendance mutations ─────────────────── */
-  const [addAttendance] = useAddAttendanceMutation(); // POST
-  const [updateAttendance] = useUpdateAttendanceMutation(); // PATCH
-  const [deleteAttendance] = useDeleteAttendanceMutation(); // DELETE
+  // Get week display text safely
+  const weekDisplayText = useMemo(() => {
+    if (weekDates.length === 0) return "No dates to display";
+
+    const firstDate = weekDates[0];
+    const lastDate = weekDates[weekDates.length - 1];
+
+    if (!firstDate || !lastDate) return "Invalid dates";
+
+    return `${safeFormat(firstDate, "MMM dd")} - ${safeFormat(
+      lastDate,
+      "MMM dd, yyyy"
+    )}`;
+  }, [weekDates]);
 
   /* ─────────────────── local UI state for hover ─────────────────── */
-  const [hoverKey, setHoverKey] = useState(null); // `${studentId}-${dateISO}`
+  const [hoverKey, setHoverKey] = useState(null);
 
   /* ─────────────────── CRUD helpers ─────────────────── */
   const saveStatus = async (studentId, dateISO, status) => {
+    const cellKey = `${studentId}-${dateISO}`;
+    setLoadingCells((prev) => new Set(prev).add(cellKey));
+
     try {
       const data = await addAttendance({
-        group_id: groupId,
+        class_id: groupId,
         student_id: studentId,
         date: dateISO,
         status,
@@ -118,25 +253,43 @@ export default function StudentAttendanceAdmin() {
         toast.success(`${status} attendance given`);
       }
     } catch (e) {
-      console.error(e);
+      console.error("Error saving attendance:", e);
+      toast.error("Failed to save attendance");
+    } finally {
+      setLoadingCells((prev) => {
+        const newSet = new Set(prev);
+        newSet.delete(cellKey);
+        return newSet;
+      });
     }
   };
 
-  const changeStatus = async (recordId, status) => {
+  const changeStatus = async (recordId, status, studentId, dateISO) => {
+    const cellKey = `${studentId}-${dateISO}`;
+    setLoadingCells((prev) => new Set(prev).add(cellKey));
+
     try {
       const data = await updateAttendance({ id: recordId, status }).unwrap();
       if (data?.modifiedCount) {
         toast.success(`updated to ${status}`);
       }
     } catch (e) {
-      console.error(e);
+      console.error("Error updating attendance:", e);
+      toast.error("Failed to update attendance");
+    } finally {
+      setLoadingCells((prev) => {
+        const newSet = new Set(prev);
+        newSet.delete(cellKey);
+        return newSet;
+      });
     }
   };
 
-  const removeStatus = async (recordId) => {
+  const removeStatus = async (recordId, studentId, dateISO) => {
+    const cellKey = `${studentId}-${dateISO}`;
+
     Swal.fire({
       title: "Are you sure?",
-      // text: "You won't be able to revert this!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
@@ -144,6 +297,7 @@ export default function StudentAttendanceAdmin() {
       confirmButtonText: "Yes, delete it!",
     }).then(async (result) => {
       if (result.isConfirmed) {
+        setLoadingCells((prev) => new Set(prev).add(cellKey));
         try {
           await deleteAttendance(recordId).unwrap();
           Swal.fire({
@@ -152,21 +306,125 @@ export default function StudentAttendanceAdmin() {
             icon: "success",
           });
         } catch (e) {
-          console.error(e);
+          console.error("Error deleting attendance:", e);
+          toast.error("Failed to delete attendance");
+        } finally {
+          setLoadingCells((prev) => {
+            const newSet = new Set(prev);
+            newSet.delete(cellKey);
+            return newSet;
+          });
         }
       }
     });
   };
-  if (isLoading) {
-    return <LoadingSpinnerDash></LoadingSpinnerDash>;
+
+  /* ─────────────────── BULK OPERATIONS ─────────────────── */
+  const handlePresentAll = async (dateISO) => {
+    if (!studentIds.length || !classId) {
+      toast.error("No students found or class not selected");
+      return;
+    }
+
+    Swal.fire({
+      title: "Mark All as Present?",
+      html: `Are you sure you want to mark all <strong>${
+        students.length
+      }</strong> students as present for <strong>${safeFormat(
+        new Date(dateISO),
+        "EEEE, MMMM dd, yyyy"
+      )}</strong>?`,
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, mark all present!",
+      cancelButtonText: "Cancel",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        setBulkLoadingDates((prev) => new Set(prev).add(dateISO));
+        try {
+          const result = await presentAllStudents({
+            studentIds: studentIds,
+            classId: classId,
+            date: dateISO,
+          }).unwrap();
+
+          toast.success(
+            result.message ||
+              `Marked ${result.insertedCount} students as present`
+          );
+        } catch (e) {
+          console.error("Error marking all present:", e);
+          toast.error("Failed to mark all students as present");
+        } finally {
+          setBulkLoadingDates((prev) => {
+            const newSet = new Set(prev);
+            newSet.delete(dateISO);
+            return newSet;
+          });
+        }
+      }
+    });
+  };
+
+  const handleRemoveAll = async (dateISO) => {
+    if (!classId) {
+      toast.error("Class not selected");
+      return;
+    }
+
+    Swal.fire({
+      title: "Remove All Attendance?",
+      html: `Are you sure you want to remove all attendance records for <strong>${safeFormat(
+        new Date(dateISO),
+        "EEEE, MMMM dd, yyyy"
+      )}</strong>?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, remove all!",
+      cancelButtonText: "Cancel",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        setBulkLoadingDates((prev) => new Set(prev).add(dateISO));
+        try {
+          const result = await removeAllAttendance({
+            classId: classId,
+            date: dateISO,
+          }).unwrap();
+
+          toast.success(
+            result.message ||
+              `Removed ${result.deletedCount} attendance records`
+          );
+        } catch (e) {
+          console.error("Error removing all attendance:", e);
+          toast.error("Failed to remove all attendance");
+        } finally {
+          setBulkLoadingDates((prev) => {
+            const newSet = new Set(prev);
+            newSet.delete(dateISO);
+            return newSet;
+          });
+        }
+      }
+    });
+  };
+
+  if (isLoadingDept || isLoadingClass) {
+    return <LoadingSpinnerDash />;
   }
+
   /* ─────────────────── render ─────────────────── */
   return (
     <div>
       {/* ── TOP BAR ─────────────────────────────────── */}
       <div className="d-flex justify-content-between align-items-center my-2">
         <h3>Student Attendance</h3>
-        <div>
+        <div className="d-flex align-items-center gap-2">
+          <span className="text-muted">Week: {weekDisplayText}</span>
           <button
             style={{ backgroundColor: "var(--border2)" }}
             className="btn text-white"
@@ -300,231 +558,340 @@ export default function StudentAttendanceAdmin() {
             <span className="bg-primary px-2 rounded-1 mx-2" /> Late
             <span className="bg-danger  px-2 rounded-1 mx-2" /> Absent
           </div>
-          {/* <div className="d-flex gap-2">
-            <button className="btn btn-success btn-sm">Present All</button>
-            <button className="btn btn-danger  btn-sm">Remove All</button>
-          </div> */}
+          <div className="text-muted">
+            Students: {students.length} | Dates: {weekDates.length}
+          </div>
         </div>
 
-        <div className="table-responsive mb-3">
-          <table
-            className="table mb-0"
-            style={{
-              minWidth: 700,
-            }}
-          >
-            <thead>
-              <tr>
-                <th
-                  style={{ backgroundColor: "var(--border2)" }}
-                  className="text-white text-center border"
-                >
-                  #
-                </th>
-                <th
-                  style={{ backgroundColor: "var(--border2)" }}
-                  className="text-white text-center border"
-                >
-                  Student Name
-                </th>
-                {weekDates.map((d) => (
+        {/* Show loading spinner only during initial filter loading */}
+        {!areAllFiltersSelected ? (
+          <div className="text-center py-4">
+            <p className="text-muted">
+              Please select all filters to view attendance
+            </p>
+          </div>
+        ) : isInitialLoading ? (
+          <div className="text-center py-4">
+            <LoadingSpinnerDash />
+            <p className="mt-2">Loading attendance data...</p>
+          </div>
+        ) : (
+          <div className="table-responsive mb-3">
+            <table
+              className="table mb-0"
+              style={{
+                minWidth: 700,
+              }}
+            >
+              <thead>
+                <tr>
                   <th
-                    key={format(d, "yyyy-MM-dd")}
                     style={{ backgroundColor: "var(--border2)" }}
                     className="text-white text-center border"
                   >
-                    {format(d, "EEEE")} <br /> {format(d, "dd-MM-yyyy")}
+                    #
                   </th>
-                ))}
-              </tr>
-            </thead>
+                  <th
+                    style={{ backgroundColor: "var(--border2)" }}
+                    className="text-white text-center border"
+                  >
+                    Student Name
+                  </th>
+                  {weekDates.map((d) => {
+                    const dateISO = safeFormat(d, "yyyy-MM-dd");
+                    const isBulkLoading = bulkLoadingDates.has(dateISO);
 
-            <tbody>
-              {students?.length ? (
-                students?.map((stu, idx) => (
-                  <tr key={stu._id}>
-                    <td className="text-center border align-middle">
-                      {idx + 1}
-                    </td>
-                    <td className="text-center border align-middle">
-                      {stu.name}
-                    </td>
+                    return (
+                      <th
+                        key={dateISO}
+                        style={{ backgroundColor: "var(--border2)" }}
+                        className="text-white text-center border"
+                      >
+                        <div>{safeFormat(d, "EEEE")}</div>
+                        <div>{safeFormat(d, "dd-MM-yyyy")}</div>
+                        <div className="mt-1">
+                          <button
+                            className="btn btn-success btn-xs me-1"
+                            style={{
+                              fontSize: "0.7rem",
+                              padding: "2px 5px",
+                              opacity: isBulkLoading ? 0.6 : 1,
+                            }}
+                            onClick={() => handlePresentAll(dateISO)}
+                            disabled={isBulkLoading}
+                            title={`Mark all present for ${safeFormat(
+                              d,
+                              "MMM dd"
+                            )}`}
+                          >
+                            {isBulkLoading ? (
+                              <div
+                                className="spinner-border spinner-border-sm"
+                                role="status"
+                              >
+                                <span className="visually-hidden">
+                                  Loading...
+                                </span>
+                              </div>
+                            ) : (
+                              "All"
+                            )}
+                          </button>
+                          <button
+                            className="btn btn-danger btn-xs"
+                            style={{
+                              fontSize: "0.7rem",
+                              padding: "2px 5px",
+                              opacity: isBulkLoading ? 0.6 : 1,
+                            }}
+                            onClick={() => handleRemoveAll(dateISO)}
+                            disabled={isBulkLoading}
+                            title={`Remove all for ${safeFormat(d, "MMM dd")}`}
+                          >
+                            {isBulkLoading ? (
+                              <div
+                                className="spinner-border spinner-border-sm"
+                                role="status"
+                              >
+                                <span className="visually-hidden">
+                                  Loading...
+                                </span>
+                              </div>
+                            ) : (
+                              "×"
+                            )}
+                          </button>
+                        </div>
+                      </th>
+                    );
+                  })}
+                </tr>
+              </thead>
 
-                    {weekDates.map((date) => {
-                      const dateISO = format(date, "yyyy-MM-dd");
-                      const cellKey = `${stu._id}-${dateISO}`;
-                      const isHoliday = holidaySet.has(dateISO);
+              <tbody>
+                {students?.length ? (
+                  students?.map((stu, idx) => (
+                    <tr key={stu._id}>
+                      <td className="text-center border align-middle">
+                        {idx + 1}
+                      </td>
+                      <td className="text-center border align-middle">
+                        {stu.name}
+                      </td>
 
-                      // Find attendance record from global attendance list
-                      const record = attendances?.find(
-                        (a) => a.student_id === stu._id && a.date === dateISO
-                      );
-                      const status = record?.status;
+                      {weekDates.map((date) => {
+                        const dateISO = safeFormat(date, "yyyy-MM-dd");
+                        const cellKey = `${stu._id}-${dateISO}`;
+                        const isHoliday = holidaySet.has(dateISO);
+                        const isLoading = loadingCells.has(cellKey);
 
-                      const statusColor =
-                        status === "present"
-                          ? "bg-success"
-                          : status === "late"
-                          ? "bg-primary"
-                          : status === "absent"
-                          ? "bg-danger"
-                          : "";
+                        // Find attendance record from filtered attendance data
+                        const record = attendances?.find(
+                          (a) => a.student_id === stu._id && a.date === dateISO
+                        );
+                        const status = record?.status;
 
-                      return (
-                        <td
-                          key={dateISO}
-                          className={`text-center border align-middle position-relative ${
-                            status ? statusColor : ""
-                          }`}
-                          style={{
-                            minWidth: 90,
-                            backgroundColor: isHoliday ? "#eee" : undefined,
-                            color: isHoliday ? "#999" : undefined,
-                            cursor: isHoliday ? "not-allowed" : "pointer",
-                            opacity: isHoliday ? 0.6 : 1,
-                          }}
-                          onMouseEnter={() => setHoverKey(cellKey)}
-                          onMouseLeave={() => setHoverKey(null)}
-                        >
-                          {isHoliday ? (
-                            <span title="Holiday">—</span>
-                          ) : (
-                            <>
-                              {/* Content for non-hover state */}
-                              {!status && hoverKey !== cellKey && (
-                                <span>&nbsp;</span>
-                              )}
+                        const statusColor =
+                          status === "present"
+                            ? "bg-success"
+                            : status === "late"
+                            ? "bg-primary"
+                            : status === "absent"
+                            ? "bg-danger"
+                            : "";
 
-                              {/* Hover elements - only show for this specific cell */}
-                              {hoverKey === cellKey && (
-                                <>
-                                  {/* Show status buttons in center when no status is set */}
-                                  {!status && (
-                                    <div className="d-flex justify-content-center gap-1">
-                                      <button
-                                        style={{
-                                          width: 25,
-                                          height: 25,
-                                        }}
-                                        className="btn btn-sm btn-success"
-                                        onClick={() =>
-                                          saveStatus(
-                                            stu._id,
-                                            dateISO,
-                                            "present"
-                                          )
-                                        }
-                                      />
-                                      <button
-                                        style={{
-                                          width: 25,
-                                          height: 25,
-                                        }}
-                                        className="btn btn-sm btn-primary border border-white"
-                                        onClick={() =>
-                                          saveStatus(stu._id, dateISO, "late")
-                                        }
-                                      />
-                                      <button
-                                        style={{
-                                          width: 25,
-                                          height: 25,
-                                          // borderRadius: "50%",
-                                        }}
-                                        className="btn btn-sm btn-danger border border-white"
-                                        onClick={() =>
-                                          saveStatus(stu._id, dateISO, "absent")
-                                        }
-                                      />
-                                    </div>
-                                  )}
+                        return (
+                          <td
+                            key={dateISO}
+                            className={`text-center border align-middle position-relative ${
+                              status ? statusColor : ""
+                            }`}
+                            style={{
+                              minWidth: 90,
+                              backgroundColor: isHoliday ? "#eee" : undefined,
+                              color: isHoliday ? "#999" : undefined,
+                              cursor:
+                                isHoliday || isLoading
+                                  ? "not-allowed"
+                                  : "pointer",
+                              opacity: isHoliday || isLoading ? 0.6 : 1,
+                            }}
+                            onMouseEnter={() =>
+                              !isLoading && setHoverKey(cellKey)
+                            }
+                            onMouseLeave={() => !isLoading && setHoverKey(null)}
+                          >
+                            {isLoading ? (
+                              <div className="d-flex justify-content-center">
+                                <div
+                                  className="spinner-border spinner-border-sm text-white"
+                                  role="status"
+                                >
+                                  <span className="visually-hidden">
+                                    Loading...
+                                  </span>
+                                </div>
+                              </div>
+                            ) : isHoliday ? (
+                              <span title="Holiday">—</span>
+                            ) : (
+                              <>
+                                {/* Content for non-hover state */}
+                                {!status && hoverKey !== cellKey && (
+                                  <span>&nbsp;</span>
+                                )}
 
-                                  {/* Show trash and update buttons when status exists */}
-                                  {status && (
-                                    <>
-                                      <FaTrashAlt
-                                        className="position-absolute end-0 me-1 text-white"
-                                        style={{
-                                          cursor: "pointer",
-                                          top: "50%",
-                                          transform: "translateY(-50%)",
-                                        }}
-                                        onClick={() =>
-                                          record?._id &&
-                                          removeStatus(record._id)
-                                        }
-                                      />
-
-                                      <div className="position-absolute start-0 ms-1 d-flex gap-1">
+                                {/* Hover elements - only show for this specific cell */}
+                                {hoverKey === cellKey && (
+                                  <>
+                                    {/* Show status buttons in center when no status is set */}
+                                    {!status && (
+                                      <div className="d-flex justify-content-center gap-1">
                                         <button
                                           style={{
-                                            width: 15,
-                                            height: 15,
-                                            borderRadius: 50,
+                                            width: 25,
+                                            height: 25,
                                           }}
-                                          className={`btn btn-xs p-1 border border-white ${
-                                            status === "present"
-                                              ? "btn-light"
-                                              : "btn-success"
-                                          }`}
+                                          className="btn btn-sm btn-success"
                                           onClick={() =>
-                                            changeStatus(record._id, "present")
+                                            saveStatus(
+                                              stu._id,
+                                              dateISO,
+                                              "present"
+                                            )
                                           }
                                         />
                                         <button
                                           style={{
-                                            width: 15,
-                                            height: 15,
-                                            borderRadius: 50,
+                                            width: 25,
+                                            height: 25,
                                           }}
-                                          className={`btn btn-xs p-1 border border-white ${
-                                            status === "late"
-                                              ? "btn-light"
-                                              : "btn-primary"
-                                          }`}
+                                          className="btn btn-sm btn-primary border border-white"
                                           onClick={() =>
-                                            changeStatus(record._id, "late")
+                                            saveStatus(stu._id, dateISO, "late")
                                           }
                                         />
                                         <button
                                           style={{
-                                            width: 15,
-                                            height: 15,
-                                            borderRadius: 50,
+                                            width: 25,
+                                            height: 25,
                                           }}
-                                          className={`btn btn-xs p-1 border border-white ${
-                                            status === "absent"
-                                              ? "btn-light"
-                                              : "btn-danger"
-                                          }`}
+                                          className="btn btn-sm btn-danger border border-white"
                                           onClick={() =>
-                                            changeStatus(record._id, "absent")
+                                            saveStatus(
+                                              stu._id,
+                                              dateISO,
+                                              "absent"
+                                            )
                                           }
                                         />
                                       </div>
-                                    </>
-                                  )}
-                                </>
-                              )}
-                            </>
-                          )}
-                        </td>
-                      );
-                    })}
+                                    )}
+
+                                    {/* Show trash and update buttons when status exists */}
+                                    {status && (
+                                      <>
+                                        <FaTrashAlt
+                                          className="position-absolute end-0 me-1 text-white"
+                                          style={{
+                                            cursor: "pointer",
+                                            top: "50%",
+                                            transform: "translateY(-50%)",
+                                          }}
+                                          onClick={() =>
+                                            record?._id &&
+                                            removeStatus(
+                                              record._id,
+                                              stu._id,
+                                              dateISO
+                                            )
+                                          }
+                                        />
+
+                                        <div className="position-absolute start-0 ms-1 d-flex gap-1">
+                                          <button
+                                            style={{
+                                              width: 15,
+                                              height: 15,
+                                              borderRadius: 50,
+                                            }}
+                                            className={`btn btn-xs p-1 border border-white ${
+                                              status === "present"
+                                                ? "btn-light"
+                                                : "btn-success"
+                                            }`}
+                                            onClick={() =>
+                                              changeStatus(
+                                                record._id,
+                                                "present",
+                                                stu._id,
+                                                dateISO
+                                              )
+                                            }
+                                          />
+                                          <button
+                                            style={{
+                                              width: 15,
+                                              height: 15,
+                                              borderRadius: 50,
+                                            }}
+                                            className={`btn btn-xs p-1 border border-white ${
+                                              status === "late"
+                                                ? "btn-light"
+                                                : "btn-primary"
+                                            }`}
+                                            onClick={() =>
+                                              changeStatus(
+                                                record._id,
+                                                "late",
+                                                stu._id,
+                                                dateISO
+                                              )
+                                            }
+                                          />
+                                          <button
+                                            style={{
+                                              width: 15,
+                                              height: 15,
+                                              borderRadius: 50,
+                                            }}
+                                            className={`btn btn-xs p-1 border border-white ${
+                                              status === "absent"
+                                                ? "btn-light"
+                                                : "btn-danger"
+                                            }`}
+                                            onClick={() =>
+                                              changeStatus(
+                                                record._id,
+                                                "absent",
+                                                stu._id,
+                                                dateISO
+                                              )
+                                            }
+                                          />
+                                        </div>
+                                      </>
+                                    )}
+                                  </>
+                                )}
+                              </>
+                            )}
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={weekDates.length + 2} className="text-center">
+                      No students found for the selected class.
+                    </td>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan={weekDates.length + 2} className="text-center">
-                    {groupId
-                      ? "No students found."
-                      : "Select filters to view attendance."}
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+                )}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </div>
   );
