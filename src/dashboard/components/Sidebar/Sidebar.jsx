@@ -6,7 +6,7 @@ import logo from "../../../site/assets/img/logo/logo.png";
 import MenuItem from "../../shared/MenuItem";
 import { GiTeacher } from "react-icons/gi";
 import { IoTimer } from "react-icons/io5";
-import { PiStudentBold } from "react-icons/pi";
+import { PiSpeakerHighFill, PiStudentBold } from "react-icons/pi";
 import {
   FaUserGraduate,
   FaBookOpen,
@@ -182,6 +182,29 @@ export default function Sidebar() {
                           to: "prayer/time-update",
                         },
                         { label: "Holiday Update", to: "holiday/time-update" },
+                      ]}
+                      openSubMenu={openSubMenu}
+                      handleSubmenu={handleSubmenu}
+                      isSubMenuOpen={isSubMenuOpen}
+                      handleToggleMenu={handleToggleMenu}
+                    />
+                    <MenuItem
+                      icon={<PiSpeakerHighFill className="mx-2 fs-5" />}
+                      label="Announcements"
+                      identifier="announcements"
+                      submenuItems={[
+                        {
+                          label: "Public Announcement",
+                          to: "announcement/public",
+                        },
+                        {
+                          label: "Teacher Announcement",
+                          to: "announcement/teacher",
+                        },
+                        {
+                          label: "Parent Announcement",
+                          to: "announcement/parent",
+                        },
                       ]}
                       openSubMenu={openSubMenu}
                       handleSubmenu={handleSubmenu}

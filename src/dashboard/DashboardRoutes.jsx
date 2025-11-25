@@ -13,13 +13,16 @@ import HolidayUpdate from "./admin/HolidayUpdate";
 import InactiveStudents from "./admin/InactiveStudents";
 import InactiveTeachers from "./admin/InactiveTeachers";
 import MeritStudents from "./admin/MeritStudents";
+import ParentAnnouncement from "./admin/ParentAnnouncement";
 import PendingPayments from "./admin/PendingPayments";
 import PendingTeacher from "./admin/PendingTeacher";
 import PrayerTimeUpdate from "./admin/PrayerTimeUpdate";
+import PublicAnnouncement from "./admin/PublicAnnouncement";
 import ReportsSummaryAdmin from "./admin/ReportsSummaryAdmin";
 import StaffAttendance from "./admin/StaffAttendance";
 import StudentAttendanceAdmin from "./admin/StudentAttendanceAdmin";
 import Subjects from "./admin/Subjects";
+import TeacherAnnouncement from "./admin/TeacherAnnouncement";
 import TeacherDetails from "./admin/TeacherDetails";
 import UnpaidList from "./admin/UnpaidList";
 import UpdateFees from "./admin/UpdateFees";
@@ -252,6 +255,36 @@ const dashboardRoutes = [
           <PrivateRoute>
             <AdminRoute>
               <PrayerTimeUpdate></PrayerTimeUpdate>
+            </AdminRoute>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "announcement/public",
+        element: (
+          <PrivateRoute>
+            <AdminRoute>
+              <PublicAnnouncement></PublicAnnouncement>
+            </AdminRoute>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "announcement/teacher",
+        element: (
+          <PrivateRoute>
+            <AdminRoute>
+              <TeacherAnnouncement></TeacherAnnouncement>
+            </AdminRoute>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "announcement/parent",
+        element: (
+          <PrivateRoute>
+            <AdminRoute>
+              <ParentAnnouncement></ParentAnnouncement>
             </AdminRoute>
           </PrivateRoute>
         ),

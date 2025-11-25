@@ -18,6 +18,10 @@ const CmnBanner = ({ title }) => {
       className="breadcrumb-wrapper bg-cover"
       style={{
         backgroundImage: `url(${seven})`,
+        backgroundPosition: "center bottom", // Show bottom part of image
+        backgroundSize: "cover", // Or 'contain' if needed
+        minHeight: "200px", // Ensure enough height
+        position: "relative",
       }}
     >
       <div className="line-shape">

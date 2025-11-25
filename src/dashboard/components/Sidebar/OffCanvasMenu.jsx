@@ -32,7 +32,7 @@ import {
   FaRegCircle,
   FaRegWindowClose,
 } from "react-icons/fa";
-import { PiStudentBold } from "react-icons/pi";
+import { PiSpeakerHighFill, PiStudentBold } from "react-icons/pi";
 
 export default function OffCanvasMenu() {
   const [openSubMenu, setOpenSubMenu] = useState("pages");
@@ -260,6 +260,29 @@ export default function OffCanvasMenu() {
                         isSubMenuOpen={isSubMenuOpen}
                         handleToggleMenu={handleToggleMenu}
                         onNavigate={() => setShowSidebar(false)}
+                      />
+                      <MenuItem
+                        icon={<PiSpeakerHighFill className="mx-2 fs-5" />}
+                        label="Announcements"
+                        identifier="announcements"
+                        submenuItems={[
+                          {
+                            label: "Public Announcement",
+                            to: "announcement/parent",
+                          },
+                          {
+                            label: "Teacher Announcement",
+                            to: "announcement/teacher",
+                          },
+                          {
+                            label: "Parent Announcement",
+                            to: "announcement/parent",
+                          },
+                        ]}
+                        openSubMenu={openSubMenu}
+                        handleSubmenu={handleSubmenu}
+                        isSubMenuOpen={isSubMenuOpen}
+                        handleToggleMenu={handleToggleMenu}
                       />
                       <MenuItem
                         icon={<PiStudentBold className="mx-2 fs-5" />}
