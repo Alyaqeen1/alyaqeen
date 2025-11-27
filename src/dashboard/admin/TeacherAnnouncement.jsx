@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import JoditEditor from "jodit-react";
 import {
   useGetAnnouncementByTypeQuery,
@@ -9,8 +9,8 @@ import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 const TeacherAnnouncement = () => {
   const editor = useRef(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [content, setContent] = useState("");
-  const [localContent, setLocalContent] = useState("");
+  const [editorContent, setEditorContent] = useState("");
+  const [displayContent, setDisplayContent] = useState("");
 
   // Fetch teacher announcement
   const {
@@ -27,60 +27,67 @@ const TeacherAnnouncement = () => {
   // Initialize content when data loads
   useEffect(() => {
     if (announcement?.content) {
-      setContent(announcement.content);
-      setLocalContent(announcement.content);
+      setDisplayContent(announcement.content);
+      setEditorContent(announcement.content);
     }
   }, [announcement]);
 
   // Mock admin check - replace with your actual auth logic
   const isAdmin = true;
 
-  const config = {
-    readonly: !isEditing,
-    toolbar: isEditing,
-    buttons: [
-      "bold",
-      "italic",
-      "underline",
-      "strikethrough",
-      "|",
-      "ul",
-      "ol",
-      "|",
-      "font",
-      "fontsize",
-      "brush",
-      "|",
-      "align",
-      "|",
-      "link",
-      "|",
-      "undo",
-      "redo",
-    ],
-    height: 400,
-    theme: "default",
-    enter: "p",
-    enterBlock: "p",
-    defaultMode: "1",
-    useSearch: false,
-    spellcheck: false,
-    cleanHTML: {
-      fillEmptyParagraph: false,
-      removeEmptyElements: false,
-      replaceOldTags: false,
-    },
-    allowResizeX: false,
-    allowResizeY: false,
-    showXPathInStatusbar: false,
-    showCharsCounter: false,
-    showWordsCounter: false,
-    toolbarAdaptive: false,
-  };
+  // Memoize config to prevent unnecessary re-renders
+  const config = useMemo(
+    () => ({
+      readonly: !isEditing,
+      toolbar: isEditing,
+      buttons: [
+        "bold",
+        "italic",
+        "underline",
+        "strikethrough",
+        "|",
+        "ul",
+        "ol",
+        "|",
+        "font",
+        "fontsize",
+        "brush",
+        "|",
+        "align",
+        "|",
+        "link",
+        "|",
+        "undo",
+        "redo",
+      ],
+      height: 400,
+      theme: "default",
+      enter: "p",
+      enterBlock: "p",
+      defaultMode: "1",
+      useSearch: false,
+      spellcheck: false,
+      cleanHTML: {
+        fillEmptyParagraph: false,
+        removeEmptyElements: false,
+        replaceOldTags: false,
+      },
+      allowResizeX: false,
+      allowResizeY: false,
+      showXPathInStatusbar: false,
+      showCharsCounter: false,
+      showWordsCounter: false,
+      toolbarAdaptive: false,
+      // Add these for better stability
+      disablePlugins: ["paste", "stat"],
+      askBeforePasteHTML: false,
+      askBeforePasteFromWord: false,
+    }),
+    [isEditing]
+  );
 
-  const handleEditorChange = useCallback((newContent) => {
-    setLocalContent(newContent);
-  }, []);
+  // Use a ref to track editor content changes without causing re-renders
+  const contentRef = useRef("");
 
   const handleSave = async () => {
     try {
@@ -90,13 +97,16 @@ const TeacherAnnouncement = () => {
         year: "numeric",
       });
 
+      // Use the ref value to ensure we get the latest content
+      const contentToSave = contentRef.current || editorContent;
+
       await addAnnouncement({
         type: "teacher",
-        content: localContent,
+        content: contentToSave,
         lastUpdated: currentDate,
       }).unwrap();
 
-      setContent(localContent);
+      setDisplayContent(contentToSave);
       setIsEditing(false);
       refetch();
     } catch (error) {
@@ -106,16 +116,20 @@ const TeacherAnnouncement = () => {
 
   const handleCancel = () => {
     setIsEditing(false);
-    setLocalContent(content);
+    // Reset editor content to current display content
+    setEditorContent(displayContent);
+    contentRef.current = displayContent;
   };
 
   const handleEdit = () => {
     setIsEditing(true);
-    setLocalContent(content);
+    // Ensure editor has current content
+    setEditorContent(displayContent);
+    contentRef.current = displayContent;
   };
 
   if (isLoading) {
-    return <LoadingSpinnerDash></LoadingSpinnerDash>;
+    return <LoadingSpinnerDash />;
   }
 
   if (isError) {
@@ -190,7 +204,8 @@ const TeacherAnnouncement = () => {
     </div>
   `;
 
-  const displayContent = content || announcement?.content || defaultContent;
+  const finalDisplayContent =
+    displayContent || announcement?.content || defaultContent;
   const lastUpdated = announcement?.lastUpdated || "21 November 2025";
 
   return (
@@ -281,10 +296,15 @@ const TeacherAnnouncement = () => {
               {isEditing ? (
                 <div className="border rounded-4 shadow-sm p-3 bg-white">
                   <JoditEditor
+                    key={isEditing ? "editing" : "viewing"} // Force re-render when mode changes
                     ref={editor}
-                    value={localContent}
+                    value={editorContent}
                     config={config}
-                    onChange={handleEditorChange}
+                    onBlur={(newContent) => {
+                      // Only update on blur, not on every change
+                      setEditorContent(newContent);
+                      contentRef.current = newContent;
+                    }}
                   />
                 </div>
               ) : (
@@ -294,7 +314,7 @@ const TeacherAnnouncement = () => {
                     fontSize: "1.1rem",
                     lineHeight: "1.7",
                   }}
-                  dangerouslySetInnerHTML={{ __html: displayContent }}
+                  dangerouslySetInnerHTML={{ __html: finalDisplayContent }}
                 />
               )}
             </div>
