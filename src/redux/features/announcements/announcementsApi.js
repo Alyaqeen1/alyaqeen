@@ -6,8 +6,16 @@ export const announcementsApi = apiSlice.injectEndpoints({
       query: () => "/announcements",
       providesTags: ["Announcements"],
     }),
+    getAnnouncement: builder.query({
+      query: (id) => `/announcements/${id}`,
+      providesTags: ["Announcements"],
+    }),
     getAnnouncementByType: builder.query({
       query: (type) => `/announcements/by-type/${type}`,
+      providesTags: ["Announcements"],
+    }),
+    getAnnouncementPublicLatest: builder.query({
+      query: (type) => `/announcements/public/latest`,
       providesTags: ["Announcements"],
     }),
     // Get all public announcements (filter by type)
@@ -45,7 +53,9 @@ export const announcementsApi = apiSlice.injectEndpoints({
 
 export const {
   useGetAnnouncementsQuery,
+  useGetAnnouncementQuery,
   useGetAnnouncementByTypeQuery,
+  useGetAnnouncementPublicLatestQuery,
   useGetPublicAnnouncementsQuery,
   useAddAnnouncementMutation,
   useUpdateAnnouncementMutation,

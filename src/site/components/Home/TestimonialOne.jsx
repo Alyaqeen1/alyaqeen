@@ -113,8 +113,8 @@ const TestimonialOne = () => {
                     className="swiper-wrapper"
                   >
                     {reviews?.length > 0 ? (
-                      reviews?.map((review) => (
-                        <SwiperSlide key={review?.id}>
+                      reviews?.map((review, idx) => (
+                        <SwiperSlide key={idx}>
                           <div className="swiper-slide">
                             <div className="testimonial-content mt-4 mt-md-0">
                               <AwesomeStarsRating

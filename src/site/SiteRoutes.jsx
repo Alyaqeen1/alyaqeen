@@ -39,6 +39,7 @@ import VacancyDetails from "./sharedComponents/VacancyDetails";
 import Complaint from "./pages/AdditionalPages/Complaint";
 import Register from "./pages/Authentication/Register";
 import ForgotPassword from "./pages/Authentication/ForgotPassword";
+import AnnouncementDetails from "./sharedComponents/AnnouncementDetails";
 
 const siteRoutes = [
   {
@@ -177,6 +178,10 @@ const siteRoutes = [
       {
         path: "/news-details/:categoryId/:newsId",
         element: <NewsDetails></NewsDetails>,
+      },
+      {
+        path: "/announcement-details/:announcementId",
+        element: <AnnouncementDetails></AnnouncementDetails>,
       },
       {
         path: "/vacancy-details/:id",

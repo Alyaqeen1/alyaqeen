@@ -21,6 +21,7 @@ import ChildSection from "./ChildSection";
 import { Link, useNavigate } from "react-router";
 import { useGetDepartmentsQuery } from "../../redux/features/departments/departmentsApi";
 import { useGetClassesQuery } from "../../redux/features/classes/classesApi";
+import { useGetAnnouncementByTypeQuery } from "../../redux/features/announcements/announcementsApi";
 
 export default function ParentDashboard({ family, refetch }) {
   const [showModal, setShowModal] = useState(false);
@@ -34,6 +35,21 @@ export default function ParentDashboard({ family, refetch }) {
   const { data: departments } = useGetDepartmentsQuery();
   const { data: classes } = useGetClassesQuery();
 
+  const gradientStyle = {
+    background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+  };
+
+  const cardGradients = {
+    primary: { background: "linear-gradient(135deg, #667eea, #764ba2)" },
+    success: { background: "linear-gradient(135deg, #43e97b, #38f9d7)" },
+    info: { background: "linear-gradient(135deg, #4facfe, #00f2fe)" },
+  };
+
+  const {
+    data: announcement,
+    isLoading: isAnnouncementLoading,
+    isError: isAnnouncementError,
+  } = useGetAnnouncementByTypeQuery("parent");
   const {
     data: approvedFamily,
     isLoading,
@@ -442,9 +458,101 @@ export default function ParentDashboard({ family, refetch }) {
       }
     }
   };
+  // Default content if no announcement exists
+  const defaultContent = `
+    <div class="alert alert-light border-0 mb-0">
+      <h5 class="mb-2">🕌 Assalamualaikum Dear Parents & Guardians</h5>
+      <p class="mb-0">Welcome to your parent dashboard. Here you can manage your children's information and payments.</p>
+    </div>
+  `;
+
+  const displayContent = announcement?.content || defaultContent;
+  const lastUpdated = announcement?.lastUpdated || "Recently";
+
+  if (isLoading || loading || isRoleLoading || isAnnouncementLoading) {
+    return <LoadingSpinnerDash />;
+  }
 
   return (
     <div>
+      {!isAnnouncementError && (
+        <div
+          className="rounded-4 border-0 shadow overflow-hidden mb-4"
+          style={{ background: "white" }}
+        >
+          {/* Header with Gradient */}
+          <div style={gradientStyle} className="text-white p-4">
+            <div className="d-flex align-items-center flex-wrap gap-4">
+              <div
+                className="d-flex align-items-center justify-content-center rounded-circle border"
+                style={{
+                  width: "70px",
+                  height: "70px",
+                  background: "rgba(255, 255, 255, 0.2)",
+                  backdropFilter: "blur(10px)",
+                  border: "2px solid rgba(255, 255, 255, 0.3) !important",
+                }}
+              >
+                <span style={{ fontSize: "1.8rem" }}>📢</span>
+              </div>
+
+              <div className="flex-grow-1">
+                <h1
+                  className="mb-1 fw-bold text-white"
+                  style={{ fontSize: "1.6rem" }}
+                >
+                  Parent Announcement Center
+                </h1>
+                <p className="mb-0 opacity-90">
+                  Important updates and information for parents
+                </p>
+              </div>
+
+              <div className="d-flex flex-column gap-2">
+                <div className="d-flex flex-wrap gap-1">
+                  <span
+                    className="px-3 py-1 rounded-pill text-uppercase fw-bold"
+                    style={{
+                      background: "rgba(255, 255, 255, 0.2)",
+                      backdropFilter: "blur(10px)",
+                      border: "1px solid rgba(255, 255, 255, 0.3)",
+                      fontSize: "0.8rem",
+                      letterSpacing: "0.5px",
+                    }}
+                  >
+                    <i className="fas fa-family me-1"></i>
+                    Parents & Guardians
+                  </span>
+                </div>
+                <span
+                  className="px-3 py-1 rounded-pill text-uppercase fw-bold text-white text-center"
+                  style={{
+                    background: "#43e97b",
+                    fontSize: "0.8rem",
+                    letterSpacing: "0.5px",
+                  }}
+                >
+                  <i className="far fa-calendar me-1"></i>
+                  {lastUpdated}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Announcement Content */}
+          <div className="p-4">
+            <div
+              className="announcement-content"
+              style={{
+                fontSize: "1.05rem",
+                lineHeight: "1.7",
+                fontFamily: "inherit",
+              }}
+              dangerouslySetInnerHTML={{ __html: displayContent }}
+            />
+          </div>
+        </div>
+      )}
       {/* Tab Navigation */}
       <div className="d-flex justify-content-center my-5">
         <div className="d-flex flex-wrap gap-3 justify-content-center">

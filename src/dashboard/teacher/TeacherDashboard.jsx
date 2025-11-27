@@ -9,12 +9,20 @@ import useAuth from "../../hooks/useAuth";
 import { useGetTeacherByEmailQuery } from "../../redux/features/teachers/teachersApi";
 import { FaThumbsUp } from "react-icons/fa";
 import toast from "react-hot-toast";
+import { useGetAnnouncementByTypeQuery } from "../../redux/features/announcements/announcementsApi";
+import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 
 export default function TeacherDashboard() {
   const { user } = useAuth();
   const { data: teacher } = useGetTeacherByEmailQuery(user?.email, {
     skip: !user?.email,
   });
+
+  const {
+    data: announcement,
+    isLoading,
+    isError,
+  } = useGetAnnouncementByTypeQuery("teacher");
 
   // Get today's date
   const today = format(new Date(), "yyyy-MM-dd");
@@ -76,8 +84,42 @@ export default function TeacherDashboard() {
     return `${h}h ${m}m ${s}s`;
   };
 
+  // Default content if no announcement exists
+  const defaultContent = `
+    <p><strong>Islamic Studies extra work sheets</strong></p>
+    <p>Assalamoalykum,</p>
+    <p>1- Please all teachers should update your profile information if anything incorrect there please correct it. if you will update there then you dont need to brig your latest proof of address or any other documents,</p>
+    <p>2- There will be a folder next to the printer in downstair hall for all islamic studies books in the next few days, you can take an extra work sheet form the folder relevant to the lessons and make copies of any lesson according to the number of the students in the class for your class students, if they have completed their class work or the 2nd teacher is not arrived yet or the students have time to do something more than this activity will not only keep them busy but they will get more knowledge of the lesson and when they take this work to their homes the parents will see what activities their children have been done in the class on that day, inshallah it will be very helpful for the children and Academy. Please everyone should make sure to start it from tomorrow, if you have any question please text me or see me in the office you have chance to discuss.</p>
+    <p>Jazakallah khiaran</p>
+  `;
+
+  const displayContent = announcement?.content || defaultContent;
+  const lastUpdated =
+    announcement?.lastUpdated ||
+    new Date().toLocaleDateString("en-GB", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+
+  if (isLoading) {
+    return <LoadingSpinnerDash />;
+  }
+
+  if (isError) {
+    return (
+      <div className="container-fluid p-4">
+        <div className="alert alert-danger">
+          <h4>Failed to Load Announcement</h4>
+          <p>Please try refreshing the page</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div>
+      {/* Time In/Out Section */}
       <div className="border border-black shadow-md rounded-3 p-4 col-lg-4">
         {!todayAttendance?.total_hours && (
           <p>
@@ -101,7 +143,6 @@ export default function TeacherDashboard() {
             <button
               onClick={handleTimeOut}
               disabled={isTimeOutLoading}
-              // style={{ backgroundColor: "var(--border2)" }}
               className="btn text-white w-100 bg-success"
             >
               {isTimeOutLoading ? "Processing..." : "Time Out"}
@@ -134,38 +175,18 @@ export default function TeacherDashboard() {
           <h3 className="fs-1 fw-bold text-center">Notice Board</h3>
         </div>
         <div className="bg-body-secondary p-3">
-          <p className="text-end">
-            {new Date().toLocaleDateString("en-GB", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
-          </p>
-          <p className="fs-5">Islamic Studies extra work sheets</p>
-          <p className="fs-5">Assalamoalykum,</p>
+          <p className="text-end fw-bold">Last Updated: {lastUpdated}</p>
 
-          <p className="fs-5 py-4">
-            1- Please all teachers should update your profile information if
-            anything incorrect there please correct it. if you will update there
-            then you dont need to brig your latest proof of address or any other
-            documents,
-          </p>
-          <p className="fs-5 pb-4">
-            2- There will be a folder next to the printer in downstair hall for
-            all islamic studies books in the next few days, you can take an
-            extra work sheet form the folder relevant to the lessons and make
-            copies of any lesson according to the number of the students in the
-            class for your class students, if they have completed their class
-            work or the 2nd teacher is not arrived yet or the students have time
-            to do something more than this activity will not only keep them busy
-            but they will get more knowledge of the lesson and when they take
-            this work to their homes the parents will see what activities their
-            children have been done in the class on that day, inshallah it will
-            be very helpful for the children and Academy. Please everyone should
-            make sure to start it from tomorrow, if you have any question please
-            text me or see me in the office you have chance to discuss.
-          </p>
-          <p className="fs-5">Jazakallah khiaran</p>
+          {/* Display the announcement content */}
+          <div
+            className="announcement-content"
+            style={{
+              fontSize: "1.1rem",
+              lineHeight: "1.6",
+              fontFamily: "inherit",
+            }}
+            dangerouslySetInnerHTML={{ __html: displayContent }}
+          />
         </div>
       </div>
     </div>
