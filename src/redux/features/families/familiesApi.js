@@ -126,6 +126,15 @@ export const familiesApi = apiSlice.injectEndpoints({
         "Family",
       ],
     }),
+    // ✅ FIXED: Check ALL pending payments (no parameters needed)
+    checkPayment: builder.mutation({
+      query: () => ({
+        url: "/families/refresh-all-pending-payments",
+        method: "POST",
+        // No body needed since it checks ALL pending payments
+      }),
+      invalidatesTags: ["Family", "Fee"], // Invalidate both families and fees
+    }),
     cancelFamilyDebit: builder.mutation({
       query: (familyId) => ({
         url: `/families/cancel-direct-debit`,
@@ -158,5 +167,6 @@ export const {
   useDeleteFamilyDataMutation,
   useGetAdminDirectDebitFamiliesQuery,
   useGetAdminDirectDebitFamilyQuery,
+  useCheckPaymentMutation,
   useCollectAdminPaymentMutation,
 } = apiSlice;

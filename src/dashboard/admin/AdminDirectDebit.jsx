@@ -1,11 +1,13 @@
 import React, { useState, useMemo } from "react";
 import {
+  useCheckPaymentMutation,
   useCollectAdminPaymentMutation,
   useGetAdminDirectDebitFamiliesQuery,
 } from "../../redux/features/families/familiesApi";
 import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 import Select from "react-select";
 import DirectDebitPayModal from "../shared/DirectDebitPayModal";
+import Swal from "sweetalert2";
 
 // Academic months
 const academicMonths = [
@@ -46,6 +48,8 @@ export default function AdminDirectDebit() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedAdminFamilyId2, setSelectedAdminFamilyId2] = useState(null);
   const [adminManualShowModal, setAdminManualShowModal] = useState(false);
+  const [checkPayment, { isLoading: isCheckLoading }] =
+    useCheckPaymentMutation();
   const handleAdminManualShow = (id) => {
     setSelectedAdminFamilyId2(id);
     setAdminManualShowModal(true);
@@ -203,7 +207,98 @@ export default function AdminDirectDebit() {
     return "unpaid";
   };
 
-  if (isLoading) return <LoadingSpinnerDash />;
+  const handleRefreshAll = async () => {
+    // Confirm dialog with SweetAlert
+    const { isConfirmed } = await Swal.fire({
+      title: "Refresh All Payments?",
+      text: "This will check ALL pending payments across ALL families. This action cannot be undone.",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, refresh all!",
+      cancelButtonText: "Cancel",
+      reverseButtons: true,
+    });
+
+    if (!isConfirmed) return;
+
+    try {
+      // Show loading alert
+      Swal.fire({
+        title: "Refreshing Payments...",
+        text: "Please wait while we check all pending payments.",
+        icon: "info",
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+
+      const result = await checkPayment().unwrap();
+
+      const updatedCount = result.summary?.successfullyUpdated || 0;
+
+      if (updatedCount > 0) {
+        // Success with updates
+        await Swal.fire({
+          title: "✅ Success!",
+          html: `
+          <div style="text-align: left;">
+            <p><strong>Bulk refresh completed!</strong></p>
+            <p>✅ Updated: <strong>${updatedCount}</strong> payments</p>
+            <p>❌ Errors: <strong>${result.summary?.errors || 0}</strong></p>
+            <p>⏳ No change: <strong>${
+              result.summary?.noChange || 0
+            }</strong> payments</p>
+            <p>Total processed: <strong>${
+              result.summary?.totalProcessed || 0
+            }</strong></p>
+          </div>
+        `,
+          icon: "success",
+          confirmButtonText: "Great!",
+          confirmButtonColor: "#28a745",
+        });
+      } else {
+        // Success but no updates
+        await Swal.fire({
+          title: "No Changes Needed",
+          html: `
+          <div style="text-align: left;">
+            <p>All payments are already up to date!</p>
+            <p>✅ No pending payments needed updating.</p>
+            <p>Total checked: <strong>${
+              result.summary?.totalProcessed || 0
+            }</strong></p>
+          </div>
+        `,
+          icon: "info",
+          confirmButtonText: "OK",
+          confirmButtonColor: "#17a2b8",
+        });
+      }
+
+      // Data will automatically refresh due to invalidated tags
+    } catch (error) {
+      // Error handling with SweetAlert
+      await Swal.fire({
+        title: "❌ Refresh Failed",
+        html: `
+        <div style="text-align: left;">
+          <p><strong>Error refreshing payments:</strong></p>
+          <p style="color: #dc3545; font-family: monospace; background: #f8f9fa; padding: 10px; border-radius: 5px;">
+            ${error.data?.error || error.message || "Unknown error occurred"}
+          </p>
+        </div>
+      `,
+        icon: "error",
+        confirmButtonText: "Try Again",
+        confirmButtonColor: "#dc3545",
+      });
+    }
+  };
+  if (isLoading || isCheckLoading) return <LoadingSpinnerDash />;
 
   return (
     <div className="pt-4">
@@ -313,10 +408,17 @@ export default function AdminDirectDebit() {
 
           {/* Direct Debit Families Table */}
           <div className="card shadow-sm">
-            <div className="card-header bg-light">
-              <h4 className="card-title mb-0 fw-bold">
+            <div className="card-header bg-light d-flex justify-content-between">
+              <h4 className="card-title mb-0 fw-bold ">
                 Direct Debit Families - Monthly Payment Status
               </h4>
+              <button
+                onClick={handleRefreshAll}
+                disabled={isCheckLoading}
+                className="btn btn-warning"
+              >
+                {isCheckLoading ? "🔄 Checking..." : "🔄 Refresh All Payments"}
+              </button>
             </div>
             <div className="card-body p-0">
               <div className="table-responsive">
