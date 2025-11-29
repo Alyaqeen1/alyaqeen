@@ -45,7 +45,6 @@ export const feesApi = apiSlice.injectEndpoints({
           url += `?${queryParams.toString()}`;
         }
 
-        console.log("RTK Query URL:", url); // For debugging
         return url;
       },
       providesTags: ["Fee"],

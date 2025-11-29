@@ -219,7 +219,6 @@ export default function MonthlyFeePayment({ enrolledFamily }) {
     subtotal: parseFloat(stu.subtotal.toFixed(2)),
   }));
 
-  console.log(feeStudents);
   const grandTotal = unpaidRows.reduce((acc, row) => acc + row.totalAmount, 0);
 
   const handleOtherPayment = async (method) => {

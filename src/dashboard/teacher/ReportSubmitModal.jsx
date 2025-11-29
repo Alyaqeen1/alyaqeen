@@ -64,7 +64,6 @@ export default function ReportSubmitModal({
       // Set Quran/Qaidah option and data
       if (previousData.lessons?.qaidah_quran) {
         setQuranOption(previousData.lessons.qaidah_quran.selected);
-        console.log("Previous data available for pre-fill:", previousData);
         toast.success("Previous month data loaded for pre-fill!");
       }
     } else {
@@ -92,7 +91,6 @@ export default function ReportSubmitModal({
   // Refetch previous data when month/year/time_of_month changes
   useEffect(() => {
     if (time_of_month === "beginning" && studentId && month && year) {
-      console.log("Refetching previous data for:", month, year);
       refetchPreviousData();
     }
   }, [month, year, time_of_month, studentId, refetchPreviousData]);
@@ -360,7 +358,6 @@ export default function ReportSubmitModal({
       console.log(error);
       toast.error(error?.data?.message || "Failed to save lessons covered.");
     }
-    console.log("Final Structured Report:", reportData);
   };
   return (
     <>

@@ -29,9 +29,17 @@ export const attendancesApi = apiSlice.injectEndpoints({
       },
       providesTags: ["Attendance"],
     }),
+    // UPDATED: Added classId parameter
     getFilteredAttendances: builder.query({
-      query: ({ studentIds, startDate, endDate }) =>
-        `/attendances/filtered?studentIds=${studentIds}&startDate=${startDate}&endDate=${endDate}`,
+      query: ({ studentIds, startDate, endDate, classId }) => {
+        const params = new URLSearchParams();
+        params.append("studentIds", studentIds);
+        params.append("startDate", startDate);
+        params.append("endDate", endDate);
+        params.append("classId", classId); // Add classId to query params
+
+        return `/attendances/filtered?${params.toString()}`;
+      },
       providesTags: ["Attendance"],
     }),
     addAttendance: builder.mutation({

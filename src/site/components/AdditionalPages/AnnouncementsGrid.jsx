@@ -10,8 +10,6 @@ const AnnouncementsGrid = () => {
     error,
   } = useGetAnnouncementByTypeQuery("public");
 
-  console.log("Announcements data:", announcements);
-
   // Strip HTML tags and truncate text for preview
   const stripHtmlAndTruncate = (html, maxLength = 150) => {
     if (!html) return "";

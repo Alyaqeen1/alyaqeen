@@ -11,7 +11,6 @@ import { useGetAnnouncementPublicLatestQuery } from "../../../redux/features/ann
 const News = () => {
   const { data: announcement, isLoading: latestUpdateLoading } =
     useGetAnnouncementPublicLatestQuery();
-  console.log(announcement);
 
   const [formattedTime, setFormattedTime] = useState("");
   const { data: times, isLoading } = useGetPrayerTimesQuery();

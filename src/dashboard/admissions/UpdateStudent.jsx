@@ -658,7 +658,6 @@ export default function UpdateStudent() {
 
     try {
       const data = await updateAllStudentData({ id, studentData }).unwrap();
-      console.log(data);
       if (data?.modifiedCount) {
         Swal.fire({
           position: "center",

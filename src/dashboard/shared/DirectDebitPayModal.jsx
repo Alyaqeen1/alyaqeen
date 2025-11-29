@@ -266,10 +266,6 @@ export default function DirectDebitPayModal({
       );
 
       if (studentsWithExistingAdmission.length > 0) {
-        console.log(
-          "Students with existing admission:",
-          studentsWithExistingAdmission.map((s) => s.name)
-        );
         return true;
       }
 
@@ -319,10 +315,6 @@ export default function DirectDebitPayModal({
       );
 
       if (hasOverlap) {
-        console.log(
-          "Duplicate admission detected for students in existing fee:",
-          existingFee._id
-        );
         return false;
       }
     }
@@ -484,9 +476,6 @@ export default function DirectDebitPayModal({
         feeType: feeType,
       }).unwrap();
 
-      console.log("💰 Stripe payment result:", stripeResult);
-      console.log("🆔 Payment Intent ID:", stripeResult.paymentIntentId);
-
       // Then when creating feeData:
       const paymentData = {
         amount: toTwo(parsedPayNow),
@@ -495,7 +484,6 @@ export default function DirectDebitPayModal({
         stripePaymentIntentId: stripeResult.paymentIntentId,
       };
 
-      console.log("💳 Payment data being saved:", paymentData);
       // Apply family discount
       const discountPercent = family?.discount
         ? toTwo(Number(family.discount))
@@ -679,8 +667,6 @@ export default function DirectDebitPayModal({
               `${s.name}: £${s.paidAdmission} (admission) + £${s.paidMonthly} (monthly)`
           )
           .join("; ");
-
-        console.log("Direct Debit Admission Allocation:", allocationSummary);
 
         // Update student statuses to enrolled only if full admission is paid
         if (totalPayNow >= totalAdmissionNeeded) {

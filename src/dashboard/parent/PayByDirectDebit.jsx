@@ -42,7 +42,6 @@ export default function PayByDirectDebit() {
   const [isManaging, setIsManaging] = useState(false);
   const [preferredDate, setPreferredDate] = useState(""); // Default to 1st
 
-  console.log(preferredDate);
   // ✅ Use data from RTK Query instead of local state
   const hasExistingSetup = directDebitData?.hasDirectDebit || false;
   const paymentMethod = directDebitData?.directDebit || null;

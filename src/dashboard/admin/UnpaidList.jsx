@@ -132,20 +132,15 @@ export default function UnpaidList() {
     }
   };
 
-  const handlePay = (familyId, studentId, studentName, feeId) => {
-    console.log(`Pay for ${studentName}`, { familyId, studentId, feeId });
-  };
+  const handlePay = (familyId, studentId, studentName, feeId) => {};
 
-  const handleManualPay = (familyId, studentId, studentName) => {
-    console.log(`Manual pay for ${studentName}`, { familyId, studentId });
-  };
+  const handleManualPay = (familyId, studentId, studentName) => {};
 
   const handleEditFee = (feeId, studentName) => {
     if (!feeId) {
       alert(`No fee record to edit for ${studentName}`);
       return;
     }
-    console.log(`Edit fee for ${studentName}`, { feeId });
   };
 
   if (isLoading || localLoading) {

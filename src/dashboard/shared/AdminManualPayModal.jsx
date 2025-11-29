@@ -233,10 +233,6 @@ export default function AdminManualPayModal({
       );
 
       if (hasOverlap) {
-        console.log(
-          "Duplicate admission detected for students in existing fee:",
-          existingFee._id
-        );
         return false;
       }
     }
@@ -261,10 +257,6 @@ export default function AdminManualPayModal({
       );
 
       if (studentsWithExistingAdmission.length > 0) {
-        console.log(
-          "Students with existing admission:",
-          studentsWithExistingAdmission.map((s) => s.name)
-        );
         return true;
       }
 
@@ -284,14 +276,6 @@ export default function AdminManualPayModal({
       );
 
       if (hasExistingPayment) {
-        console.log(
-          "🚫 Payment blocked: Some students already paid for this month"
-        );
-        console.log(
-          "Selected students:",
-          selectedStudentObjects.map((s) => s.name)
-        );
-        console.log("Fee Month/Year:", feeMonth, feeYear);
       }
 
       return hasExistingPayment;

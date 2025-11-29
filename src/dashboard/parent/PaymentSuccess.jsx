@@ -15,7 +15,6 @@ export default function PaymentSuccess() {
   useEffect(() => {
     // You can verify the setup intent status here if needed
     if (sessionId) {
-      console.log("Setup completed for session:", sessionId);
       // Optionally: Update your backend that setup was successful
     }
   }, [sessionId]);
