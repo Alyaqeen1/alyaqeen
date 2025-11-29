@@ -156,6 +156,7 @@ export default function StudentAttendanceAdmin() {
           studentIds: studentIds.join(","),
           startDate: dateRange.startDate,
           endDate: dateRange.endDate,
+          classId: classId, // Add classId to query
         }
       : skipToken,
     {
