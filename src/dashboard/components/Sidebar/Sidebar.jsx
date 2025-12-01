@@ -7,6 +7,8 @@ import MenuItem from "../../shared/MenuItem";
 import { GiTeacher } from "react-icons/gi";
 import { IoTimer } from "react-icons/io5";
 import { PiSpeakerHighFill, PiStudentBold } from "react-icons/pi";
+import { MdOutlineSettings } from "react-icons/md";
+import { HiOutlineAcademicCap, HiCurrencyPound } from "react-icons/hi";
 import {
   FaUserGraduate,
   FaBookOpen,
@@ -97,7 +99,7 @@ export default function Sidebar() {
                 {data?.role === "admin" && (
                   <>
                     <MenuItem
-                      icon={<FaUsers className="mx-2 fs-5" />}
+                      icon={<HiOutlineAcademicCap className="mx-2 fs-5" />}
                       label="Academics"
                       identifier="academics"
                       submenuItems={[
@@ -157,7 +159,7 @@ export default function Sidebar() {
                       handleToggleMenu={handleToggleMenu}
                     />
                     <MenuItem
-                      icon={<FaUsers className="mx-2 fs-5" />}
+                      icon={<HiCurrencyPound className="mx-2 fs-5" />}
                       label="Fee Management"
                       identifier="fees"
                       submenuItems={[
@@ -204,6 +206,21 @@ export default function Sidebar() {
                         {
                           label: "Parent Announcement",
                           to: "announcement/parent",
+                        },
+                      ]}
+                      openSubMenu={openSubMenu}
+                      handleSubmenu={handleSubmenu}
+                      isSubMenuOpen={isSubMenuOpen}
+                      handleToggleMenu={handleToggleMenu}
+                    />
+                    <MenuItem
+                      icon={<MdOutlineSettings className="mx-2 fs-5" />}
+                      label="Website Settings"
+                      identifier="website-settings"
+                      submenuItems={[
+                        {
+                          label: "Best Teacher / Student",
+                          to: "website-settings/best-teacher-student",
                         },
                       ]}
                       openSubMenu={openSubMenu}

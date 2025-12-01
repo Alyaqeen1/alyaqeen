@@ -241,8 +241,8 @@ export default function StudentModal({ studentId, handleClose, showModal }) {
                   {status}
                 </button>
               </div>
-              <div className="d-flex justify-content-center gap-2">
-                <div className="flex-grow-1">
+              <div className="row">
+                <div className="col-12 col-md-6">
                   <p>
                     <strong>Email:</strong> {email}
                   </p>
@@ -310,7 +310,7 @@ export default function StudentModal({ studentId, handleClose, showModal }) {
                     {monthly_fee ? `£${monthly_fee}` : "Not Assigned"}
                   </p>
                 </div>
-                <div className="border-start border-2 ps-2 flex-grow-1">
+                <div className="col-12 col-md-6 mt-3 mt-md-0 border-start border-md-2 ps-md-2">
                   <p>
                     <strong>Father's Name:</strong> {fatherName}
                   </p>
