@@ -31,6 +31,21 @@ export const announcementsApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Announcements"],
     }),
+    sendEmailToTeachers: builder.mutation({
+      query: (id) => ({
+        url: `/announcements/send-to-parents/${id}`,
+        method: "POST",
+        // body: announcement,
+      }),
+      invalidatesTags: ["Announcements"],
+    }),
+    sendEmailToParents: builder.mutation({
+      query: (id) => ({
+        url: `/announcements/send-to-parents/${id}`,
+        method: "POST",
+      }),
+      invalidatesTags: ["Announcements"],
+    }),
     // Update announcement by ID (for public announcements)
     updateAnnouncement: builder.mutation({
       query: ({ id, ...announcement }) => ({
@@ -58,6 +73,8 @@ export const {
   useGetAnnouncementPublicLatestQuery,
   useGetPublicAnnouncementsQuery,
   useAddAnnouncementMutation,
+  useSendEmailToTeachersMutation,
+  useSendEmailToParentsMutation,
   useUpdateAnnouncementMutation,
   useDeleteAnnouncementMutation,
 } = announcementsApi;

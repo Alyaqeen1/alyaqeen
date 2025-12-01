@@ -4,6 +4,8 @@ import {
   useGetPublicAnnouncementsQuery,
   useAddAnnouncementMutation,
   useDeleteAnnouncementMutation,
+  useSendEmailToParentsMutation,
+  useSendEmailToTeachersMutation,
 } from "../../redux/features/announcements/announcementsApi";
 import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 import CreatePublicAnnouncementModal from "../shared/CreatePublickAnnouncementModal";
@@ -11,6 +13,10 @@ import CreatePublicAnnouncementModal from "../shared/CreatePublickAnnouncementMo
 const PublicAnnouncement = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
+  const [sendEmailToParents, { isLoading: isLoadingParentEmail }] =
+    useSendEmailToParentsMutation();
+  const [sendEmailToTeachers, { isLoading: isLoadingTeacherEmail }] =
+    useSendEmailToTeachersMutation();
 
   // Fetch all public announcements
   const {
@@ -97,6 +103,80 @@ const PublicAnnouncement = () => {
   if (isLoading) {
     return <LoadingSpinnerDash />;
   }
+
+  // Inside your component
+
+  const handleSendEmailToParents = async (announcementId) => {
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to send this announcement to parents?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, send it!",
+      cancelButtonText: "Cancel",
+      reverseButtons: true,
+      focusCancel: true,
+      customClass: {
+        confirmButton: "btn btn-success",
+        cancelButton: "btn btn-secondary",
+      },
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await sendEmailToParents(announcementId).unwrap();
+        Swal.fire({
+          icon: "success",
+          title: "Sent!",
+          text: "Announcement sent to parents successfully.",
+          timer: 2000,
+          showConfirmButton: false,
+        });
+      } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: "Error!",
+          text: "Failed to send email to parents.",
+        });
+      }
+    }
+  };
+
+  const handleSendEmailToTeachers = async (announcementId) => {
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to send this announcement to teachers?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, send it!",
+      cancelButtonText: "Cancel",
+      reverseButtons: true,
+      focusCancel: true,
+      customClass: {
+        confirmButton: "btn btn-warning",
+        cancelButton: "btn btn-secondary",
+      },
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await sendEmailToTeachers(announcementId).unwrap();
+        Swal.fire({
+          icon: "success",
+          title: "Sent!",
+          text: "Announcement sent to teachers successfully.",
+          timer: 2000,
+          showConfirmButton: false,
+        });
+      } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: "Error!",
+          text: "Failed to send email to teachers.",
+        });
+      }
+    }
+  };
 
   if (isError) {
     return (
@@ -245,6 +325,36 @@ const PublicAnnouncement = () => {
                               >
                                 <i className="fas fa-trash me-1"></i>
                                 Delete
+                              </button>
+                              {/* NEW: Send Email Buttons */}
+                              <button
+                                className="btn btn-outline-success btn-sm"
+                                onClick={() =>
+                                  handleSendEmailToParents(announcement._id)
+                                }
+                                disabled={isLoadingParentEmail}
+                              >
+                                {isLoadingParentEmail ? (
+                                  <i className="fas fa-spinner fa-spin me-1"></i>
+                                ) : (
+                                  <i className="fas fa-envelope me-1"></i>
+                                )}
+                                Send to Parents
+                              </button>
+
+                              <button
+                                className="btn btn-outline-secondary btn-sm"
+                                onClick={() =>
+                                  handleSendEmailToTeachers(announcement._id)
+                                }
+                                disabled={isLoadingTeacherEmail}
+                              >
+                                {isLoadingTeacherEmail ? (
+                                  <i className="fas fa-spinner fa-spin me-1"></i>
+                                ) : (
+                                  <i className="fas fa-envelope me-1"></i>
+                                )}
+                                Send to Teachers
                               </button>
                             </div>
                           )}
