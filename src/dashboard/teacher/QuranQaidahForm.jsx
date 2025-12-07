@@ -15,13 +15,13 @@ export default function QuranQaidahForm({
     qaidah_tajweed_line: "",
   });
 
-  const [hasPrefilled, setHasPrefilled] = useState(false);
+  const [hasUserEdited, setHasUserEdited] = useState(false);
 
-  // Update form values when previousData changes
+  // Replace this entire useEffect with:
   useEffect(() => {
     const quranData = previousData?.lessons?.qaidah_quran;
 
-    if (quranData && quranData.selected) {
+    if (quranData && quranData.selected && !hasUserEdited) {
       setQuranOption(quranData.selected);
 
       if (["quran", "hifz"].includes(quranData.selected)) {
@@ -40,37 +40,37 @@ export default function QuranQaidahForm({
           qaidah_tajweed_line: quranData.data?.line || "",
         }));
       }
-
-      setHasPrefilled(true);
-    } else {
-      // Reset only if we had previously pre-filled and now no data
-      if (hasPrefilled) {
-        setFields({
-          quran_hifz_para: "",
-          quran_hifz_page: "",
-          quran_hifz_line: "",
-          qaidah_tajweed_level: "",
-          qaidah_tajweed_lesson_name: "",
-          qaidah_tajweed_page: "",
-          qaidah_tajweed_line: "",
-        });
-        setHasPrefilled(false);
-      }
     }
-  }, [previousData, setQuranOption, hasPrefilled]);
+  }, [previousData, setQuranOption, hasUserEdited]);
 
+  // Add this effect if you need reset
+  useEffect(() => {
+    if (!previousData) {
+      setFields({
+        quran_hifz_para: "",
+        quran_hifz_page: "",
+        quran_hifz_line: "",
+        qaidah_tajweed_level: "",
+        qaidah_tajweed_lesson_name: "",
+        qaidah_tajweed_page: "",
+        qaidah_tajweed_line: "",
+      });
+      setHasUserEdited(false);
+      setQuranOption("");
+    }
+  }, [previousData, setQuranOption]);
   const handleFieldChange = (e) => {
     const { name, value } = e.target;
     setFields((prev) => ({ ...prev, [name]: value }));
 
-    // Clear pre-fill status when user starts typing
-    if (hasPrefilled) {
-      setHasPrefilled(false);
+    // Mark as user edited
+    if (!hasUserEdited) {
+      setHasUserEdited(true);
     }
   };
-
   // Show alert only when we actually pre-filled from previous data
-  const showPreFillAlert = hasPrefilled;
+  const showPreFillAlert =
+    !hasUserEdited && previousData?.lessons?.qaidah_quran;
 
   return (
     <div className="border rounded p-3 mb-4">

@@ -8,7 +8,7 @@ export default function GiftForMuslimForm({ previousData, reset }) {
     gift_for_muslim_lesson_name: "",
   });
 
-  const [hasPrefilled, setHasPrefilled] = useState(false);
+  const [hasUserEdited, setHasUserEdited] = useState(false);
 
   // Update form values whenever previousData or reset changes
   useEffect(() => {
@@ -20,13 +20,13 @@ export default function GiftForMuslimForm({ previousData, reset }) {
         gift_for_muslim_target: "",
         gift_for_muslim_lesson_name: "",
       });
-      setHasPrefilled(false);
+      setHasUserEdited(false);
       return;
     }
 
     const giftData = previousData?.lessons?.gift_for_muslim;
 
-    if (giftData) {
+    if (giftData && !hasUserEdited) {
       // Check if any field has meaningful data
       const hasData =
         giftData.level?.trim() ||
@@ -41,34 +41,23 @@ export default function GiftForMuslimForm({ previousData, reset }) {
           gift_for_muslim_target: giftData.target || "",
           gift_for_muslim_lesson_name: giftData.lesson_name || "",
         });
-        setHasPrefilled(true);
-      }
-    } else {
-      // Only reset if we had previously pre-filled and now no data
-      if (hasPrefilled) {
-        setFields({
-          gift_for_muslim_level: "",
-          gift_for_muslim_page: "",
-          gift_for_muslim_target: "",
-          gift_for_muslim_lesson_name: "",
-        });
-        setHasPrefilled(false);
       }
     }
-  }, [previousData, reset, hasPrefilled]);
+  }, [previousData, reset, hasUserEdited]);
 
   const handleFieldChange = (e) => {
     const { name, value } = e.target;
     setFields((prev) => ({ ...prev, [name]: value }));
 
-    // Clear pre-fill status when user starts typing
-    if (hasPrefilled) {
-      setHasPrefilled(false);
+    // Mark as user edited
+    if (!hasUserEdited) {
+      setHasUserEdited(true);
     }
   };
 
   // Show alert only when we actually pre-filled from previous data
-  const showPreFillAlert = hasPrefilled;
+  const showPreFillAlert =
+    !hasUserEdited && previousData?.lessons?.gift_for_muslim;
 
   return (
     <div className="border rounded p-3 mb-4">

@@ -537,7 +537,7 @@ export default function ReportSubmitModal({
                   previousData={
                     time_of_month === "beginning" ? previousData : null
                   }
-                  reset={!hasValidPreviousData || !previousData}
+                  reset={false}
                 />
 
                 {/* Type-specific sections */}
@@ -548,14 +548,14 @@ export default function ReportSubmitModal({
                       previousData={
                         time_of_month === "beginning" ? previousData : null
                       }
-                      reset={!hasValidPreviousData || !previousData}
+                      reset={false} // Always false, let child handle its own state
                     />
 
                     <DuaSurahForm
                       previousData={
                         time_of_month === "beginning" ? previousData : null
                       }
-                      reset={!hasValidPreviousData || !previousData}
+                      reset={false}
                     />
                   </>
                 ) : type === "gift_muslim" ? (
@@ -563,7 +563,7 @@ export default function ReportSubmitModal({
                     previousData={
                       time_of_month === "beginning" ? previousData : null
                     }
-                    reset={!hasValidPreviousData || !previousData}
+                    reset={false}
                   />
                 ) : (
                   <h5>Please Choose a type</h5>

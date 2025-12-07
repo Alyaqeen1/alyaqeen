@@ -7,7 +7,8 @@ export default function IslamicStudiesForm({ previousData, reset }) {
     islamic_studies_lesson_name: "",
   });
 
-  const [hasPrefilled, setHasPrefilled] = useState(false);
+  // Track if user has manually edited the form
+  const [hasUserEdited, setHasUserEdited] = useState(false);
 
   useEffect(() => {
     // Handle reset - only clear if reset is explicitly true
@@ -17,14 +18,14 @@ export default function IslamicStudiesForm({ previousData, reset }) {
         islamic_studies_page: "",
         islamic_studies_lesson_name: "",
       });
-      setHasPrefilled(false);
+      setHasUserEdited(false);
       return;
     }
 
-    // Handle previous data
-    const islamic = previousData?.lessons?.islamic_studies;
+    // If we have previous data and user hasn't edited yet, pre-fill
+    if (previousData?.lessons?.islamic_studies && !hasUserEdited) {
+      const islamic = previousData.lessons.islamic_studies;
 
-    if (islamic) {
       // Check if any field has meaningful data
       const hasData =
         islamic.book?.trim() ||
@@ -37,33 +38,27 @@ export default function IslamicStudiesForm({ previousData, reset }) {
           islamic_studies_page: islamic.page || "",
           islamic_studies_lesson_name: islamic.lesson_name || "",
         });
-        setHasPrefilled(true);
-      }
-    } else {
-      // Only reset if we had previously pre-filled and now no data
-      if (hasPrefilled) {
-        setFormValues({
-          islamic_studies_book: "",
-          islamic_studies_page: "",
-          islamic_studies_lesson_name: "",
-        });
-        setHasPrefilled(false);
       }
     }
-  }, [previousData, reset, hasPrefilled]);
+  }, [previousData, reset, hasUserEdited]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormValues((prev) => ({ ...prev, [name]: value }));
 
-    // Clear pre-fill status when user starts typing
-    if (hasPrefilled) {
-      setHasPrefilled(false);
+    // Mark as user edited
+    if (!hasUserEdited) {
+      setHasUserEdited(true);
     }
   };
 
   // Show alert only when we actually pre-filled from previous data
-  const showPreFillAlert = hasPrefilled;
+  const showPreFillAlert =
+    !hasUserEdited &&
+    previousData?.lessons?.islamic_studies &&
+    (previousData.lessons.islamic_studies.book?.trim() ||
+      previousData.lessons.islamic_studies.page?.toString().trim() ||
+      previousData.lessons.islamic_studies.lesson_name?.trim());
 
   return (
     <div className="border rounded p-3 mb-4">

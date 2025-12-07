@@ -10,7 +10,7 @@ export default function DuaSurahForm({ previousData, reset }) {
     dua_surah_lesson_name: "",
   });
 
-  const [hasPrefilled, setHasPrefilled] = useState(false);
+  const [hasUserEdited, setHasUserEdited] = useState(false);
 
   // Update form values whenever previousData or reset changes
   useEffect(() => {
@@ -24,13 +24,13 @@ export default function DuaSurahForm({ previousData, reset }) {
         dua_surah_page: "",
         dua_surah_lesson_name: "",
       });
-      setHasPrefilled(false);
+      setHasUserEdited(false);
       return;
     }
 
     const duaSurahData = previousData?.lessons?.dua_surah;
 
-    if (duaSurahData) {
+    if (duaSurahData && !hasUserEdited) {
       // Check if any field has meaningful data
       const hasData =
         duaSurahData.book?.trim() ||
@@ -49,36 +49,22 @@ export default function DuaSurahForm({ previousData, reset }) {
           dua_surah_page: duaSurahData.page || "",
           dua_surah_lesson_name: duaSurahData.lesson_name || "",
         });
-        setHasPrefilled(true);
-      }
-    } else {
-      // Only reset if we had previously pre-filled and now no data
-      if (hasPrefilled) {
-        setFields({
-          dua_surah_book: "",
-          dua_surah_level: "",
-          dua_surah_target: "",
-          dua_surah_dua_number: "",
-          dua_surah_page: "",
-          dua_surah_lesson_name: "",
-        });
-        setHasPrefilled(false);
+        // setHasPrefilled(true);
       }
     }
-  }, [previousData, reset, hasPrefilled]);
+  }, [previousData, reset, hasUserEdited]);
 
   const handleFieldChange = (e) => {
     const { name, value } = e.target;
     setFields((prev) => ({ ...prev, [name]: value }));
 
-    // Clear pre-fill status when user starts typing
-    if (hasPrefilled) {
-      setHasPrefilled(false);
+    // Mark as user edited
+    if (!hasUserEdited) {
+      setHasUserEdited(true);
     }
   };
-
   // Show alert only when we actually pre-filled from previous data
-  const showPreFillAlert = hasPrefilled;
+  const showPreFillAlert = !hasUserEdited && previousData?.lessons?.dua_surah;
 
   return (
     <div className="border rounded p-3 mb-4">
