@@ -28,65 +28,96 @@ const News = () => {
     }).format(date);
   };
 
-  // Strip HTML tags and truncate text for preview with better length control
-  const stripHtmlAndTruncate = (html, maxLength = 200) => {
-    if (!html) return "";
-
-    // Strip HTML tags and clean up whitespace
-    const plainText = html
-      .replace(/<[^>]*>/g, "")
-      .replace(/\s+/g, " ")
-      .trim();
-
-    if (plainText.length <= maxLength) return plainText;
-    return plainText.substring(0, maxLength) + "...";
-  };
-
   // Function to create safe HTML content with length limit
-  // Function to create safe HTML content with length limit
+  // Function to create safe HTML content with length limit - PRESERVES FORMATTING
   const createLimitedHtmlContent = (html, maxLength = 450) => {
     if (!html) return { __html: "" };
 
-    // Strip HTML tags to check length but preserve line breaks
+    // Strip HTML tags only to check length (don't modify the HTML yet)
     const plainText = html
-      .replace(/<br\s*\/?>/gi, "\n") // Convert <br> to line breaks
-      .replace(/<\/p>|<p>/gi, "\n") // Convert paragraph tags to line breaks
-      .replace(/<[^>]*>/g, "") // Remove all other tags
-      .replace(/\n{3,}/g, "\n\n") // Limit multiple line breaks
+      .replace(/<br\s*\/?>/gi, "\n")
+      .replace(/<\/p>|<p>/gi, "\n")
+      .replace(/<[^>]*>/g, "")
+      .replace(/\n{3,}/g, "\n\n")
       .trim();
 
+    // If content is short enough, return the original HTML with formatting
     if (plainText.length <= maxLength) {
       return { __html: html };
     }
 
-    // If content is too long, truncate intelligently
-    // Try to cut at a sentence end or space
-    let truncatedText = plainText.substring(0, maxLength);
+    // If content is too long, we need to truncate intelligently while preserving HTML
+    // This is more complex - we'll create a DOM parser to handle it properly
 
-    // Try to cut at the last sentence end
-    const lastPeriod = truncatedText.lastIndexOf(".");
-    const lastNewline = truncatedText.lastIndexOf("\n");
-    const lastSpace = truncatedText.lastIndexOf(" ");
+    // Create a temporary div to parse HTML
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = html;
 
-    // Find the best place to cut
-    let cutIndex = maxLength;
-    if (lastPeriod > maxLength * 0.8) {
-      cutIndex = lastPeriod + 1;
-    } else if (lastNewline > maxLength * 0.8) {
-      cutIndex = lastNewline;
-    } else if (lastSpace > maxLength * 0.9) {
-      cutIndex = lastSpace;
-    }
+    // Function to extract text up to maxLength while preserving HTML structure
+    const truncateHtml = (element, remainingChars) => {
+      if (remainingChars <= 0) return { html: "", remaining: 0 };
 
-    truncatedText = plainText.substring(0, cutIndex).trim() + "...";
+      let result = "";
 
-    // Convert back to HTML with proper line breaks
-    const htmlText = truncatedText
-      .replace(/\n/g, "<br>")
-      .replace(/<br><br>/g, "</p><p>");
+      for (const child of element.childNodes) {
+        if (remainingChars <= 0) break;
 
-    return { __html: `<p>${htmlText}</p>` };
+        if (child.nodeType === Node.TEXT_NODE) {
+          const text = child.textContent || "";
+          if (text.length <= remainingChars) {
+            result += text;
+            remainingChars -= text.length;
+          } else {
+            result += text.substring(0, remainingChars) + "...";
+            remainingChars = 0;
+          }
+        } else if (child.nodeType === Node.ELEMENT_NODE) {
+          const tagName = child.tagName.toLowerCase();
+          const attributes = Array.from(child.attributes)
+            .map((attr) => `${attr.name}="${attr.value}"`)
+            .join(" ");
+
+          const startTag = attributes
+            ? `<${tagName} ${attributes}>`
+            : `<${tagName}>`;
+          const { html: childHtml, remaining: childRemaining } = truncateHtml(
+            child,
+            remainingChars
+          );
+
+          result += startTag + childHtml;
+          if (childRemaining > 0) {
+            result += `</${tagName}>`;
+          }
+          remainingChars = childRemaining;
+        }
+      }
+
+      return { html: result, remaining: remainingChars };
+    };
+
+    const { html: truncatedHtml } = truncateHtml(tempDiv, maxLength);
+
+    return { __html: truncatedHtml };
   };
+
+  // Function to check if content needs truncation
+  const needsTruncation = (html, maxLength = 450) => {
+    if (!html) return false;
+
+    const plainText = html
+      .replace(/<br\s*\/?>/gi, "\n")
+      .replace(/<\/p>|<p>/gi, "\n")
+      .replace(/<[^>]*>/g, "")
+      .replace(/\n{3,}/g, "\n\n")
+      .trim();
+
+    return plainText.length > maxLength;
+  };
+
+  // Check if announcement has content AND needs truncation (shows "Read More" only when there's more to read)
+  const showReadMore =
+    announcement?.content && needsTruncation(announcement.content, 450);
 
   useEffect(() => {
     setFormattedTime(getFormattedTime()); // initial set
@@ -180,7 +211,7 @@ const News = () => {
                   )}
                 ></div>
 
-                {hasContent && (
+                {showReadMore && (
                   <div
                     className="read-more-wrapper-div mt-5"
                     data-aos-duration="800"
@@ -195,15 +226,6 @@ const News = () => {
                     </Link>
                   </div>
                 )}
-
-                <p
-                  className="mt-3 px-2 px-md-2 px-lg-2"
-                  data-aos-duration="800"
-                  data-aos="fade-up"
-                  data-aos-delay="500"
-                >
-                  Jazakum Allahu khayran
-                </p>
 
                 {announcement?.lastUpdated && (
                   <span className="text-end d-block mt-5">
