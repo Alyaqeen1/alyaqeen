@@ -43,19 +43,49 @@ const News = () => {
   };
 
   // Function to create safe HTML content with length limit
-  const createLimitedHtmlContent = (html, maxLength = 400) => {
+  // Function to create safe HTML content with length limit
+  const createLimitedHtmlContent = (html, maxLength = 450) => {
     if (!html) return { __html: "" };
 
-    // Strip HTML tags to check length
-    const plainText = html.replace(/<[^>]*>/g, "");
+    // Strip HTML tags to check length but preserve line breaks
+    const plainText = html
+      .replace(/<br\s*\/?>/gi, "\n") // Convert <br> to line breaks
+      .replace(/<\/p>|<p>/gi, "\n") // Convert paragraph tags to line breaks
+      .replace(/<[^>]*>/g, "") // Remove all other tags
+      .replace(/\n{3,}/g, "\n\n") // Limit multiple line breaks
+      .trim();
 
     if (plainText.length <= maxLength) {
       return { __html: html };
     }
 
-    // If content is too long, truncate and add ellipsis
-    const truncatedText = plainText.substring(0, maxLength) + "...";
-    return { __html: `<p>${truncatedText}</p>` };
+    // If content is too long, truncate intelligently
+    // Try to cut at a sentence end or space
+    let truncatedText = plainText.substring(0, maxLength);
+
+    // Try to cut at the last sentence end
+    const lastPeriod = truncatedText.lastIndexOf(".");
+    const lastNewline = truncatedText.lastIndexOf("\n");
+    const lastSpace = truncatedText.lastIndexOf(" ");
+
+    // Find the best place to cut
+    let cutIndex = maxLength;
+    if (lastPeriod > maxLength * 0.8) {
+      cutIndex = lastPeriod + 1;
+    } else if (lastNewline > maxLength * 0.8) {
+      cutIndex = lastNewline;
+    } else if (lastSpace > maxLength * 0.9) {
+      cutIndex = lastSpace;
+    }
+
+    truncatedText = plainText.substring(0, cutIndex).trim() + "...";
+
+    // Convert back to HTML with proper line breaks
+    const htmlText = truncatedText
+      .replace(/\n/g, "<br>")
+      .replace(/<br><br>/g, "</p><p>");
+
+    return { __html: `<p>${htmlText}</p>` };
   };
 
   useEffect(() => {
@@ -141,17 +171,18 @@ const News = () => {
                     lineHeight: "1.6",
                     fontSize: "16px",
                     color: "#333",
-                    maxHeight: "200px",
+                    // maxHeight: "200px",
                     overflow: "hidden",
                   }}
                   dangerouslySetInnerHTML={createLimitedHtmlContent(
-                    announcement?.content
+                    announcement?.content,
+                    450
                   )}
                 ></div>
 
                 {hasContent && (
                   <div
-                    className="read-more-wrapper-div mt-4"
+                    className="read-more-wrapper-div mt-5"
                     data-aos-duration="800"
                     data-aos="fade-up"
                     data-aos-delay="300"
@@ -175,7 +206,7 @@ const News = () => {
                 </p>
 
                 {announcement?.lastUpdated && (
-                  <span className="text-end d-block mt-3">
+                  <span className="text-end d-block mt-5">
                     <ul className="pe-2 pe-md-2 pe-lg-2">
                       <li>Last Updated: {announcement?.lastUpdated}</li>
                     </ul>
