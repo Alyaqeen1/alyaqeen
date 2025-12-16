@@ -29,11 +29,22 @@ const CreatePublicAnnouncementModal = ({ show, onClose, announcement }) => {
       setIsEditing(false);
     }
   }, [announcement, show]);
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   // Jodit Config
   const config = useMemo(
     () => ({
       readonly: false,
+      minHeight: screenWidth < 768 ? 700 : 400,
       toolbar: true,
       buttons: [
         "bold",

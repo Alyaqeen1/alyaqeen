@@ -180,23 +180,23 @@ const PublicAnnouncement = () => {
 
   if (isError) {
     return (
-      <div className="container-fluid p-4">
+      <div className="container-fluid px-2 px-md-3 py-2 py-md-3">
         <div className="row">
           <div className="col-12">
             <div className="card border-danger shadow-lg">
-              <div className="card-body text-center py-5">
-                <i className="fas fa-exclamation-triangle text-danger fa-3x mb-3"></i>
-                <h4 className="text-danger mb-3">
+              <div className="card-body text-center py-3 py-md-4">
+                <i className="fas fa-exclamation-triangle text-danger fa-2x fa-lg-md mb-2 mb-md-3"></i>
+                <h4 className="text-danger mb-2 mb-md-3 fs-5 fs-md-4">
                   Failed to Load Announcements
                 </h4>
-                <p className="text-muted mb-4">
+                <p className="text-muted mb-3 mb-md-4">
                   Please try refreshing the page
                 </p>
                 <button
-                  className="btn btn-danger btn-lg"
+                  className="btn btn-danger btn-sm btn-md-md"
                   onClick={() => refetch()}
                 >
-                  <i className="fas fa-redo me-2"></i>
+                  <i className="fas fa-redo me-1 me-md-2"></i>
                   Try Again
                 </button>
               </div>
@@ -208,28 +208,30 @@ const PublicAnnouncement = () => {
   }
 
   return (
-    <div className="container-fluid p-4">
+    <div className="container-fluid px-1 px-sm-2 px-md-3 px-lg-4 py-1 py-sm-2 py-md-3 py-lg-4">
       <div className="row">
         <div className="col-12">
           {/* Header Card */}
-          <div className="card border-0 shadow-lg rounded-4 overflow-hidden mb-4">
-            <div className="card-header bg-gradient py-4">
+          <div className="card border-0 shadow-lg rounded-3 rounded-md-4 overflow-hidden mb-3 mb-sm-4">
+            <div className="card-header bg-gradient py-2 py-sm-3 py-md-4 px-2 px-sm-3 px-md-4">
               <div className="row align-items-center">
-                <div className="col-md-8">
+                <div className="col-md-8 mb-2 mb-sm-3 mb-md-0">
                   <div className="d-flex align-items-center">
-                    <div className="bg-white bg-opacity-20 p-3 rounded-3 me-4">
-                      <i className="fas fa-globe fa-2x "></i>
+                    <div className="bg-white bg-opacity-20 p-1 p-sm-2 p-md-3 rounded-2 rounded-md-3 me-2 me-sm-3 me-md-4">
+                      <i className="fas fa-globe fa-sm fa-lg-md fa-xl-lg"></i>
                     </div>
-                    <div>
-                      <h2 className="mb-1 fw-bold">Public Announcements</h2>
-                      <div className="d-flex flex-wrap align-items-center gap-3">
-                        <span className="badge bg-white bg-opacity-20 text-black fs-6">
-                          <i className="fas fa-bullhorn me-2"></i>
+                    <div className="w-100">
+                      <h2 className="mb-0 mb-sm-1 fw-bold fs-5 fs-sm-4 fs-md-3">
+                        Public Announcements
+                      </h2>
+                      <div className="d-flex flex-wrap align-items-center gap-1 gap-sm-2 gap-md-3 mt-1 mt-sm-2">
+                        <span className="badge bg-white bg-opacity-20 text-black fs-7 fs-sm-6 fs-md-6">
+                          <i className="fas fa-bullhorn me-1 me-md-2"></i>
                           {sortedAnnouncements.length} Announcement
                           {sortedAnnouncements.length !== 1 ? "s" : ""}
                         </span>
-                        <span className="badge bg-success bg-opacity-20 text-white fs-6">
-                          <i className="fas fa-eye me-2"></i>
+                        <span className="badge bg-success bg-opacity-20 text-white fs-7 fs-sm-6 fs-md-6">
+                          <i className="fas fa-eye me-1 me-md-2"></i>
                           Visible to Everyone
                         </span>
                       </div>
@@ -237,15 +239,21 @@ const PublicAnnouncement = () => {
                   </div>
                 </div>
 
-                <div className="col-md-4 text-md-end">
+                <div className="col-md-4">
                   {isAdmin && (
-                    <button
-                      className="btn btn-primary btn-lg rounded-pill px-4 shadow-sm fw-bold"
-                      onClick={handleCreateAnnouncement}
-                    >
-                      <i className="fas fa-plus me-2"></i>
-                      Create New
-                    </button>
+                    <div className="d-flex justify-content-start justify-content-md-end mt-2 mt-sm-0">
+                      <button
+                        className="btn btn-primary btn-xs btn-sm-sm btn-md-lg rounded-pill px-2 px-sm-3 px-md-4 shadow-sm fw-bold w-100 w-sm-auto"
+                        onClick={handleCreateAnnouncement}
+                      >
+                        <i className="fas fa-plus me-1 me-md-2"></i>
+                        <span className="d-none d-sm-inline d-md-none">
+                          New
+                        </span>
+                        <span className="d-none d-md-inline">Create New</span>
+                        <span className="d-sm-none">New</span>
+                      </button>
+                    </div>
                   )}
                 </div>
               </div>
@@ -255,48 +263,50 @@ const PublicAnnouncement = () => {
           {/* Announcements List */}
           {sortedAnnouncements.length === 0 ? (
             <div className="card border-0 shadow-lg">
-              <div className="card-body text-center py-5">
-                <i className="fas fa-bullhorn text-muted fa-4x mb-3"></i>
-                <h4 className="text-muted mb-3">No Public Announcements</h4>
-                <p className="text-muted mb-4">
+              <div className="card-body text-center py-3 py-md-4">
+                <i className="fas fa-bullhorn text-muted fa-3x fa-lg-md mb-2 mb-md-3"></i>
+                <h4 className="text-muted mb-2 mb-md-3 fs-5 fs-md-4">
+                  No Public Announcements
+                </h4>
+                <p className="text-muted mb-3 mb-md-4">
                   Create your first public announcement to get started
                 </p>
                 {isAdmin && (
                   <button
-                    className="btn btn-primary btn-lg"
+                    className="btn btn-primary btn-sm btn-md-md"
                     onClick={handleCreateAnnouncement}
                   >
-                    <i className="fas fa-plus me-2"></i>
+                    <i className="fas fa-plus me-1 me-md-2"></i>
                     Create First Announcement
                   </button>
                 )}
               </div>
             </div>
           ) : (
-            <div className="row g-4">
+            <div className="row g-2 g-sm-3 g-md-4">
               {sortedAnnouncements.map((announcement, index) => (
                 <div key={announcement._id} className="col-12">
                   <div className="card border-0 shadow-sm h-100">
-                    <div className="card-header bg-light py-3">
+                    <div className="card-header bg-light py-2 py-sm-3 px-2 px-sm-3">
                       <div className="row align-items-center">
-                        <div className="col-md-8">
+                        <div className="col-md-8 mb-2 mb-sm-0">
                           <div className="d-flex align-items-center">
-                            <span className="badge bg-primary me-3 fs-6">
+                            <span className="badge bg-primary me-2 me-sm-3 fs-7 fs-sm-6">
                               #{sortedAnnouncements.length - index}
                             </span>
-                            <div>
-                              <h5 className="mb-1 fw-bold text-dark">
+                            <div className="w-100">
+                              <h5 className="mb-0 mb-sm-1 fw-bold text-dark fs-6 fs-sm-5">
                                 {announcement.title || "Public Announcement"}
                               </h5>
-                              <div className="d-flex flex-wrap gap-2">
-                                <small className="text-muted">
+                              <div className="d-flex flex-column flex-sm-row gap-1 gap-sm-2">
+                                <small className="text-muted fs-7">
                                   <i className="far fa-calendar me-1"></i>
                                   Created:{" "}
                                   {new Date(
                                     announcement.createdAt
                                   ).toLocaleDateString()}
                                 </small>
-                                <small className="text-muted">
+                                <small className="text-muted fs-7">
                                   <i className="fas fa-sync-alt me-1"></i>
                                   Updated: {announcement.lastUpdated}
                                 </small>
@@ -304,57 +314,64 @@ const PublicAnnouncement = () => {
                             </div>
                           </div>
                         </div>
-                        <div className="col-md-4 text-md-end">
+                        <div className="col-md-4">
                           {isAdmin && (
-                            <div className="btn-group">
+                            <div className="d-flex flex-wrap justify-content-start justify-content-md-end gap-1 gap-sm-2 mt-2 mt-sm-0">
                               <button
-                                className="btn btn-outline-primary btn-sm"
+                                className="btn btn-outline-primary btn-xxs btn-xs-sm btn-sm-md"
                                 onClick={() =>
                                   handleEditAnnouncement(announcement)
                                 }
                               >
-                                <i className="fas fa-edit me-1"></i>
-                                Edit
+                                <i className="fas fa-edit"></i>
+                                <span className="d-none d-sm-inline ms-1">
+                                  Edit
+                                </span>
                               </button>
                               <button
-                                className="btn btn-outline-danger btn-sm"
+                                className="btn btn-outline-danger btn-xxs btn-xs-sm btn-sm-md"
                                 onClick={() =>
                                   handleDeleteAnnouncement(announcement._id)
                                 }
                                 disabled={isDeleting}
                               >
-                                <i className="fas fa-trash me-1"></i>
-                                Delete
+                                <i className="fas fa-trash"></i>
+                                <span className="d-none d-sm-inline ms-1">
+                                  Delete
+                                </span>
                               </button>
-                              {/* NEW: Send Email Buttons */}
                               <button
-                                className="btn btn-outline-success btn-sm"
+                                className="btn btn-outline-success btn-xxs btn-xs-sm btn-sm-md"
                                 onClick={() =>
                                   handleSendEmailToParents(announcement._id)
                                 }
                                 disabled={isLoadingParentEmail}
                               >
                                 {isLoadingParentEmail ? (
-                                  <i className="fas fa-spinner fa-spin me-1"></i>
+                                  <i className="fas fa-spinner fa-spin"></i>
                                 ) : (
-                                  <i className="fas fa-envelope me-1"></i>
+                                  <i className="fas fa-envelope"></i>
                                 )}
-                                Send to Parents
+                                <span className="d-none d-sm-inline ms-1">
+                                  Parents
+                                </span>
                               </button>
 
                               <button
-                                className="btn btn-outline-secondary btn-sm"
+                                className="btn btn-outline-secondary btn-xxs btn-xs-sm btn-sm-md"
                                 onClick={() =>
                                   handleSendEmailToTeachers(announcement._id)
                                 }
                                 disabled={isLoadingTeacherEmail}
                               >
                                 {isLoadingTeacherEmail ? (
-                                  <i className="fas fa-spinner fa-spin me-1"></i>
+                                  <i className="fas fa-spinner fa-spin"></i>
                                 ) : (
-                                  <i className="fas fa-envelope me-1"></i>
+                                  <i className="fas fa-envelope"></i>
                                 )}
-                                Send to Teachers
+                                <span className="d-none d-sm-inline ms-1">
+                                  Teachers
+                                </span>
                               </button>
                             </div>
                           )}
@@ -362,20 +379,20 @@ const PublicAnnouncement = () => {
                       </div>
                     </div>
 
-                    <div className="card-body">
+                    <div className="card-body p-2 p-sm-3 p-md-4">
                       <div
                         className="announcement-content"
-                        style={{ fontSize: "1rem", lineHeight: "1.6" }}
+                        style={{ fontSize: "0.9rem", lineHeight: "1.5" }}
                         dangerouslySetInnerHTML={{
                           __html: announcement.content,
                         }}
                       />
                     </div>
 
-                    <div className="card-footer bg-white border-0 pt-0">
+                    <div className="card-footer bg-white border-0 pt-0 px-2 px-sm-3">
                       <div className="row">
                         <div className="col-12">
-                          <small className="text-muted">
+                          <small className="text-muted fs-7">
                             <i className="fas fa-info-circle me-1"></i>
                             This announcement is visible to all website visitors
                           </small>

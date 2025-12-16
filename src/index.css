@@ -782,3 +782,70 @@ button:focus {
   color: #92400e !important;
   border: 1px solid #fcd34d !important;
 }
+
+/* Modal wrapper */
+.custom-video-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Overlay */
+.video-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+}
+
+/* Modal content */
+.video-content {
+  position: relative;
+  background: #000;
+  border-radius: 16px;
+  padding: 0;
+  z-index: 2;
+}
+
+/* Reel / vertical video */
+.reel-video {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 9 / 16;
+  object-fit: cover;
+  border-radius: 16px;
+}
+
+/* Close button */
+.close-btn {
+  position: absolute;
+  top: -45px;
+  right: 0;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 26px;
+  cursor: pointer;
+}
+
+/* =========================
+   Mobile view (MOST IMPORTANT)
+========================= */
+@media (max-width: 768px) {
+  .video-content {
+    width: 90vw;
+    height: 80vh; /* taller for reels */
+  }
+}
+
+/* =========================
+   Desktop view
+========================= */
+@media (min-width: 769px) {
+  .video-content {
+    width: 360px; /* reel width */
+    height: 640px; /* reel height */
+  }
+}

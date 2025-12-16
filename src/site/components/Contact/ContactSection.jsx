@@ -5,9 +5,12 @@ import { Link } from "react-router";
 import { useAddContactMutation } from "../../../redux/features/contact/contactApi";
 import toast from "react-hot-toast";
 import one from "../../assets/img/about/new-pic.jpeg";
+import aboutVideo from "../../assets/videos/WhatsApp_Video_2025-12-10_at_10.31.53_PM.mp4";
 
 const ContactSection = () => {
   const [isOpen, setOpen] = useState(false);
+  const [showVideo, setShowVideo] = useState(false);
+
   const [addContact, { data, isLoading, isError, isSuccess }] =
     useAddContactMutation();
   const handleSubmit = (e) => {
@@ -138,8 +141,8 @@ const ContactSection = () => {
                     />
                     <div className="video-box">
                       <a
-                        onClick={() => setOpen(true)}
-                        className="video-btn ripple video-popup"
+                        onClick={() => setShowVideo(true)}
+                        className="video-btn ripple"
                       >
                         <i className="fa-solid fa-play"></i>
                       </a>
@@ -282,14 +285,36 @@ const ContactSection = () => {
           </div>
         </div>
       </div>
-      <ModalVideo
+      {showVideo && (
+        <div className="custom-video-modal">
+          <div
+            className="video-overlay"
+            onClick={() => setShowVideo(false)}
+          ></div>
+
+          <div className="video-content">
+            <button className="close-btn" onClick={() => setShowVideo(false)}>
+              ✕
+            </button>
+
+            <video
+              src={aboutVideo}
+              controls
+              autoPlay
+              playsInline
+              className="reel-video"
+            />
+          </div>
+        </div>
+      )}
+
+      {/* <ModalVideo
         channel="youtube"
         youtube={{ mute: 0, autoplay: 0 }}
         isOpen={isOpen}
         videoId="bEnHsAApltc"
-        // videoId="Cn4G2lZ_g2I"
         onClose={() => setOpen(false)}
-      />
+      /> */}
     </>
   );
 };

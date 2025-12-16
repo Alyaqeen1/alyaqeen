@@ -113,14 +113,13 @@ const Banner = () => {
                 <div className="hero-button-feb3 mt-4 text-start">
                   <Link
                     className="theme-btn-feb-4"
-                    data-aos-duration="800"
                     data-aos="fade-up"
+                    data-aos-duration="800"
                     data-aos-delay="600"
                     to="/prayer-timetable"
-                    // className="theme-btn"
                   >
+                    {new Date().toLocaleString("en-US", { month: "long" })}{" "}
                     {timetable}
-                    {/*<i className="fa-solid fa-arrow-right-long"></i>*/}
                   </Link>
                 </div>
               </div>

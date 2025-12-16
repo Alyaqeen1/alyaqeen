@@ -124,12 +124,12 @@ const ProgramSection = () => {
                         {weeklyLabel}
                       </span>{" "}
                       <br />
-                      {daysPerWeek}
+                      {programList[0]?.daysPerWeek}
                     </li>
                     <li style={{ color: "var(--white)" }}>
                       <span style={{ color: "var(--white)" }}>{timeLabel}</span>{" "}
                       <br />
-                      {hoursPerWeek}
+                      {programList[0]?.hoursPerWeek}
                     </li>
                   </ul>
                 </div>
@@ -189,12 +189,12 @@ const ProgramSection = () => {
                         {weeklyLabel}
                       </span>{" "}
                       <br />
-                      {daysPerWeek}
+                      {programList[1]?.daysPerWeek}
                     </li>
                     <li style={{ color: "var(--white)" }}>
                       <span style={{ color: "var(--white)" }}>{timeLabel}</span>{" "}
                       <br />
-                      {hoursPerWeek}
+                      {programList[1]?.hoursPerWeek}
                     </li>
                   </ul>
                 </div>
@@ -239,11 +239,11 @@ const ProgramSection = () => {
                     </li>
                     <li>
                       <span>{weeklyLabel}</span> <br />
-                      {daysPerWeek}
+                      {programList[2]?.daysPerWeek}
                     </li>
                     <li>
                       <span>{timeLabel}</span> <br />
-                      {hoursPerWeek}
+                      {programList[2]?.hoursPerWeek}
                     </li>
                   </ul>
                 </div>

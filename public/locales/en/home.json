@@ -9,7 +9,7 @@
     "description": "Arabic Qaidah & Quran, Islamic Studies, Essential Duas and Surah Memorization.",
     "buttons": {
       "apply": "Apply Today",
-      "timetable": "January Prayer Timetable",
+      "timetable": "Prayer Timetable",
       "playVideo": "Play Video"
     }
   },
@@ -27,15 +27,21 @@
     "programList": [
       {
         "title": "Arabic Qaidah, Quran & Hifdh",
-        "description": "Allah swt the most says in the Quran : “and recite the Quran (aloud) in a s..."
+        "description": "Allah swt the most says in the Quran : “and recite the Quran (aloud) in a s...",
+        "daysPerWeek": "2-4 Days",
+        "hoursPerWeek": "4-6 hrs"
       },
       {
         "title": "Maths, English & Science",
-        "description": "At Alyaqeen academy we have a set of dedicated tutors. Our tutors try to en..."
+        "description": "At Alyaqeen academy we have a set of dedicated tutors. Our tutors try to en...",
+        "daysPerWeek": "2 Days",
+        "hoursPerWeek": "2-3 hrs"
       },
       {
         "title": "Arabic Language",
-        "description": "Islam is just not religion that Muslims follow, but it is a way of life. When a person is born..."
+        "description": "Islam is just not religion that Muslims follow, but it is a way of life. When a person is born...",
+        "daysPerWeek": "2 Days",
+        "hoursPerWeek": "2-3 hrs"
       }
     ]
   },
