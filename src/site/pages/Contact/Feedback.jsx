@@ -1,10 +1,12 @@
 import React from "react";
 import CmnBanner from "../../sharedComponents/CmnBanner";
 import AboutMain from "../../sharedComponents/AboutMain";
+import SEO from "../../utils/SEO";
 
 export default function Feedback() {
   return (
     <div>
+      <SEO page="feedback" />
       <CmnBanner title="Feedback" />
       <AboutMain
         title="Feedback"
