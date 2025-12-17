@@ -3,6 +3,7 @@ import ApplyNowComp from "../../components/AdditionalPages/ApplyNowComp";
 import CmnBanner from "../../sharedComponents/CmnBanner";
 import TeacherComp from "../../components/AdditionalPages/TeacherComp";
 import ParentComp from "../../components/AdditionalPages/ParentComp";
+import SEO from "../../utils/SEO";
 
 export default function Register() {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
@@ -11,6 +12,7 @@ export default function Register() {
   };
   return (
     <div className="pricing-wrapper">
+      <SEO page="register" />
       <CmnBanner title="Apply Now"></CmnBanner>
       <ul
         className="nav gap-2 my-md-5 my-0 flex justify-content-center align-items-center"

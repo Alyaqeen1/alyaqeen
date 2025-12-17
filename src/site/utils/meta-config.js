@@ -114,6 +114,16 @@ const metaConfig = {
       description:
         "We value your feedback! Learn how to provide feedback about your experience at Alyaqeen Academy.",
     },
+    login: {
+      title: "Login | Alyaqeen Academy",
+      description:
+        "Access your account to manage your profile and view your progress at Alyaqeen Academy.",
+    },
+    register: {
+      title: "Apply Now | Alyaqeen Academy",
+      description:
+        "Create a new account to start your journey at Alyaqeen Academy.",
+    },
     dashboard: {
       title: "Dashboard | Alyaqeen Academy",
       description:
