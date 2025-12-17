@@ -74,7 +74,7 @@ const WorkProcess = () => {
               data-aos="fade-up"
               data-aos-delay="700"
             >
-              <Link to="holidays">
+              <Link to="/weekdays">
                 <div className="work-process-items text-center">
                   <div
                     className="icon bg-cover flex justify-center items-center"
