@@ -114,6 +114,11 @@ const metaConfig = {
       description:
         "We value your feedback! Learn how to provide feedback about your experience at Alyaqeen Academy.",
     },
+    dashboard: {
+      title: "Dashboard | Alyaqeen Academy",
+      description:
+        "Access your dashboard to manage your account and view your progress at Alyaqeen Academy.",
+    },
   },
 };
 

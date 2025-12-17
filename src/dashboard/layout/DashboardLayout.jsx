@@ -3,6 +3,7 @@ import { Outlet, ScrollRestoration } from "react-router";
 import Sidebar from "../components/Sidebar/Sidebar";
 import Navbar from "../components/Navbar/Navbar";
 import Footer from "../components/Footer/Footer";
+import SEO from "../../site/utils/SEO";
 
 export default function DashboardLayout() {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -23,6 +24,7 @@ export default function DashboardLayout() {
 
   return (
     <div className="row" style={{ minHeight: "100vh" }}>
+      <SEO page="dashboard" />
       <ScrollRestoration />
       {/* Sidebar */}
       <Sidebar></Sidebar>
