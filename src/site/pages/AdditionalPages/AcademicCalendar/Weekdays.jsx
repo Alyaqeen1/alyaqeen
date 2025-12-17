@@ -3,10 +3,12 @@ import CmnBanner from "../../../sharedComponents/CmnBanner";
 import AboutMain from "../../../sharedComponents/AboutMain";
 import weekdaysImage from "../../../assets/img/Weekdays_Classes_Academic_Calendar.jpg";
 import weekdaysPDF from "/file/Weekdays_Classes_Academic_Calendar_2024-25_Sheet1.pdf";
+import SEO from "../../../utils/SEO";
 
 export default function Weekdays() {
   return (
     <div>
+      <SEO page="weekdays" />
       <CmnBanner title="Weekdays Calendar" />
       <AboutMain
         pdf={weekdaysPDF}

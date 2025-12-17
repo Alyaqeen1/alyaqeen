@@ -2,10 +2,12 @@ import React from "react";
 import CmnBanner from "../../sharedComponents/CmnBanner";
 import CourseDetails from "../../components/Course/CourseDetails";
 import one from "../../assets/img/program/image4.jpg";
+import SEO from "../../utils/SEO";
 
 export default function ArabicLanguage() {
   return (
     <div>
+      <SEO page="arabicLanguageCourse" />
       <CmnBanner title="Arabic Language"></CmnBanner>
       <CourseDetails
         image={one}

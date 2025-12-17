@@ -7,6 +7,7 @@ import AboutTeam from "../../components/About/AboutTeam";
 import AboutTestimonial from "../../components/About/AboutTestimonial";
 import Instagram from "../../components/Home/Instagram";
 import { Trans, useTranslation } from "react-i18next";
+import SEO from "../../utils/SEO";
 
 export default function AboutFounder() {
   const { t } = useTranslation(["about", "common"]);
@@ -16,6 +17,8 @@ export default function AboutFounder() {
 
   return (
     <div>
+      <SEO page="aboutTheFounder" />
+
       <CmnBanner title={cmnBannerTitle}></CmnBanner>
       <AboutMain
         title={<Trans i18nKey={title} components={{ break: <br /> }} />}

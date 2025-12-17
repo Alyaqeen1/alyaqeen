@@ -17,10 +17,13 @@ import Blogs from "../../components/Home/Blogs";
 import FeeStructure from "../../components/Home/FeeStructure";
 import AdditionalServices from "../../components/Home/AdditionalServices";
 import LanguageModal from "../../components/AdditionalPages/LanguageModal";
+import SEO from "../../utils/SEO";
 
 export default function Home() {
   return (
     <div>
+      <SEO page="home" />
+
       <Banner></Banner>
       {/* <LanguageModal></LanguageModal> */}
 

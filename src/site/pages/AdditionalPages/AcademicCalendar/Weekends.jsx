@@ -3,10 +3,13 @@ import CmnBanner from "../../../sharedComponents/CmnBanner";
 import AboutMain from "../../../sharedComponents/AboutMain";
 import weekendImage from "../../../assets/img/Weekdend_Academic_Calendar.jpg";
 import weekendPDF from "/file/Weekdend_Academic_Calendar_2025-26_Sheet1.pdf";
+import SEO from "../../../utils/SEO";
 
 export default function Weekends() {
   return (
     <div>
+      <SEO page="weekends" />
+
       <CmnBanner title="Weekend Calendar" />
       <AboutMain
         pdf={weekendPDF}

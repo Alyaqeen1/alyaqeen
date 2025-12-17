@@ -2,10 +2,12 @@ import React from "react";
 import CmnBanner from "../../sharedComponents/CmnBanner";
 import CourseDetails from "../../components/Course/CourseDetails";
 import one from "../../assets/img/program/image22.jpg";
+import SEO from "../../utils/SEO";
 
 export default function ModernForeignLanguages() {
   return (
     <div>
+      <SEO page="urduBanglaCourse" />
       <CmnBanner title="Urdu / Bangla Language"></CmnBanner>
       <CourseDetails
         image={one}

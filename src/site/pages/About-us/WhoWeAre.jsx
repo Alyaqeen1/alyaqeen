@@ -6,10 +6,13 @@ import CounterMain from "../../components/About/CounterMain";
 import AboutTeam from "../../components/About/AboutTeam";
 import AboutTestimonial from "../../components/About/AboutTestimonial";
 import Instagram from "../../components/Home/Instagram";
+import SEO from "../../utils/SEO";
 
 export default function WhoWeAre() {
   return (
     <div>
+      <SEO page="whoWeAre" />
+
       <CmnBanner title="About Us"></CmnBanner>
       <AboutMain
         subtitle="About Us"

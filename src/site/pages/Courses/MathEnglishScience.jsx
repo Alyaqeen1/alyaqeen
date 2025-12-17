@@ -2,10 +2,12 @@ import React from "react";
 import CmnBanner from "../../sharedComponents/CmnBanner";
 import CourseDetails from "../../components/Course/CourseDetails";
 import one from "../../assets/img/program/course4.png";
+import SEO from "../../utils/SEO";
 
 export default function MathEnglishScience() {
   return (
     <div>
+      <SEO page="mathEnglishCourse" />
       <CmnBanner title="Maths, English & Science"></CmnBanner>
       <CourseDetails
         image={one}

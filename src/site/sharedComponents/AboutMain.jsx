@@ -188,7 +188,7 @@ const AboutMain = ({
                         <div className="col-md-6">
                           <div className="card border-success mb-2">
                             <div className="card-body p-3">
-                              <h6 className="text-success mb-1">20th July</h6>
+                              <h6 className="text-success mb-1">24th August</h6>
                               <p className="mb-0">Summer Holidays Begin</p>
                             </div>
                           </div>

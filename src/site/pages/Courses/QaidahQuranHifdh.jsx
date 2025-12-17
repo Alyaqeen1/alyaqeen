@@ -2,9 +2,11 @@ import React from "react";
 import CmnBanner from "../../sharedComponents/CmnBanner";
 import CourseDetails from "../../components/Course/CourseDetails";
 import one from "../../assets/img/program/course2.jpeg";
+import SEO from "../../utils/SEO";
 export default function QaidahQuranHifdh() {
   return (
     <div>
+      <SEO page="quranQaidahCourse" />
       <CmnBanner title="Arabic Qaidah, Quran & Hifdh"></CmnBanner>
       <CourseDetails
         image={one}

@@ -13,9 +13,12 @@ import eight from "../../assets/img/hero/star.png";
 import nine from "../../assets/img/home/image8.png";
 import ten from "../../assets/img/hero/hero-shape.png";
 import eleven from "../../assets/img/home/bannerImg3.png";
+import aboutVideo from "../../assets/videos/WhatsApp_Video_2025-12-10_at_10.31.53_PM.mp4";
 
 const Banner = () => {
   const [isOpen, setOpen] = useState(false);
+  const [showVideo, setShowVideo] = useState(false);
+
   const { t, i18n } = useTranslation(["home"]);
   // const { i18n } = useTranslation();
   const {
@@ -103,7 +106,7 @@ const Banner = () => {
                   >
                     <a
                       className="video-btn ripple video-popup"
-                      onClick={() => setOpen(true)}
+                      onClick={() => setShowVideo(true)}
                     >
                       <i className="fa-solid fa-play"></i>
                     </a>
@@ -147,14 +150,37 @@ const Banner = () => {
           </div>
         </div>
       </section>
-      <ModalVideo
+      {showVideo && (
+        <div className="custom-video-modal">
+          <div
+            className="video-overlay"
+            onClick={() => setShowVideo(false)}
+          ></div>
+
+          <div className="video-content">
+            <button className="close-btn" onClick={() => setShowVideo(false)}>
+              ✕
+            </button>
+
+            <video
+              src={aboutVideo}
+              controls
+              autoPlay
+              playsInline
+              className="reel-video"
+            />
+          </div>
+        </div>
+      )}
+
+      {/* <ModalVideo
         channel="youtube"
         youtube={{ mute: 0, autoplay: 0 }}
         isOpen={isOpen}
         videoId="bEnHsAApltc"
         // videoId="Cn4G2lZ_g2I"
         onClose={() => setOpen(false)}
-      />
+      /> */}
     </>
   );
 };
