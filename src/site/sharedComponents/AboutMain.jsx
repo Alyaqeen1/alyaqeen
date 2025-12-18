@@ -21,7 +21,19 @@ const AboutMain = ({
   para3,
   para4,
   para5,
-  isCalendar = false, // Add this prop to identify calendar pages
+  isCalendar = false,
+  // Add these new props for calendar data
+  calendarData = {
+    totalWeeks: 52,
+    lessonWeeks: 48,
+    holidayWeeks: 4,
+    importantDates: [
+      { date: "18th February", title: "Ramadan Begins" },
+      { date: "19th March", title: "Eid al-Fitr" },
+      { date: "27th May", title: "Eid al-Adha" },
+      { date: "24th August", title: "Summer Holidays Begin" },
+    ],
+  },
 }) => {
   const [read_more_btn, setRead_more_btn] = useState(false);
   const { t } = useTranslation(["common"]);
@@ -112,9 +124,27 @@ const AboutMain = ({
             <div className="col-lg-6">
               <div className="activities-content">
                 <div className="section-title">
-                  <span data-aos-duration="800" data-aos="fade-up">
-                    {subtitle}
-                  </span>
+                  <div className="d-flex justify-content-between align-items-center mb-3">
+                    <span data-aos-duration="800" data-aos="fade-up">
+                      {subtitle}
+                    </span>
+                    {isCalendar ? (
+                      <span>
+                        <Link
+                          to={
+                            title === "Weekdays Academic Calendar 2025-2026"
+                              ? "/weekends"
+                              : "/weekdays"
+                          }
+                          className="theme-btn"
+                        >
+                          {title === "Weekdays Academic Calendar 2025-2026"
+                            ? "Go to Weekends"
+                            : "Go to Weekdays"}
+                        </Link>
+                      </span>
+                    ) : null}
+                  </div>
                   <h2
                     data-aos-duration="800"
                     data-aos="fade-up"
@@ -136,63 +166,41 @@ const AboutMain = ({
                       {mainPara}
                     </p>
 
-                    {/* Calendar Highlights */}
+                    {/* Calendar Highlights - USE PROPS */}
                     <div className="calendar-highlights mt-4">
                       <h5 className="mb-3">Key Information:</h5>
                       <ul className="list-group list-group-flush">
                         <li className="list-group-item d-flex justify-content-between">
                           <span>Total Weeks</span>
-                          <strong>52</strong>
+                          <strong>{calendarData.totalWeeks}</strong>
                         </li>
                         <li className="list-group-item d-flex justify-content-between">
                           <span>Lesson Weeks</span>
-                          <strong>48</strong>
+                          <strong>{calendarData.lessonWeeks}</strong>
                         </li>
                         <li className="list-group-item d-flex justify-content-between">
                           <span>Holiday Weeks</span>
-                          <strong>4</strong>
+                          <strong>{calendarData.holidayWeeks}</strong>
                         </li>
                       </ul>
                     </div>
 
-                    {/* Important Dates */}
+                    {/* Important Dates - USE PROPS */}
                     <div className="important-dates mt-4">
                       <h5 className="mb-3">Important Dates:</h5>
                       <div className="row">
-                        <div className="col-md-6">
-                          <div className="card border-success mb-2">
-                            <div className="card-body p-3">
-                              <h6 className="text-success mb-1">
-                                18th February
-                              </h6>
-                              <p className="mb-0">Ramadan Begins</p>
+                        {calendarData.importantDates.map((item, index) => (
+                          <div className="col-md-6" key={index}>
+                            <div className="card border-success mb-2">
+                              <div className="card-body p-3">
+                                <h6 className="text-success mb-1">
+                                  {item.date}
+                                </h6>
+                                <p className="mb-0">{item.title}</p>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                        <div className="col-md-6">
-                          <div className="card border-success mb-2">
-                            <div className="card-body p-3">
-                              <h6 className="text-success mb-1">19th March</h6>
-                              <p className="mb-0">Eid al-Fitr</p>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="col-md-6">
-                          <div className="card border-success mb-2">
-                            <div className="card-body p-3">
-                              <h6 className="text-success mb-1">27th May</h6>
-                              <p className="mb-0">Eid al-Adha</p>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="col-md-6">
-                          <div className="card border-success mb-2">
-                            <div className="card-body p-3">
-                              <h6 className="text-success mb-1">24th August</h6>
-                              <p className="mb-0">Summer Holidays Begin</p>
-                            </div>
-                          </div>
-                        </div>
+                        ))}
                       </div>
                     </div>
                   </div>

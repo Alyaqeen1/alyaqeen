@@ -32,39 +32,99 @@ export default function Session() {
       hifzNote:
         "For Hifdh Students: Attendance is required from 4:30 PM to 7:15 PM, Monday to Thursday",
     },
-    weekends: {
-      title: "Weekends Sessions",
-      days: "Saturday and Sunday",
-      sessions: [
-        {
-          label: "Morning Session",
-          duration: "2.5 hours each day",
-          totalHours: "5 hours per week",
-          time: "10:00 AM – 12:30 PM",
-        },
-        {
-          label: "Afternoon Session",
-          duration: "2 hours each day",
-          totalHours: "4 hours per week",
-          time: "12:30 PM – 2:30 PM",
-        },
-      ],
-      details: [
-        {
-          duration: "45/40 minutes",
-          subject: "Arabic Qaida/Quran",
-        },
-        {
-          duration: "45/40 minutes",
-          subject: "Islamic Studies",
-        },
-        {
-          duration: "45/40 minutes",
-          subject: "Duas & Surahs",
-        },
-      ],
-      note: "This structure ensures a balanced focus on Quranic recitation, Islamic education, and memorization of Duas and Surahs.",
-    },
+    weekends: [
+      {
+        title: "Weekends Sessions (Qaidah, Quran & Islamic Studies)",
+        days: "Saturday and Sunday",
+        sessions: [
+          {
+            label: "Morning Session",
+            duration: "2.5 hours each day",
+            totalHours: "5 hours per week",
+            time: "10:00 AM – 12:30 PM",
+          },
+          {
+            label: "Afternoon Session",
+            duration: "2 hours each day",
+            totalHours: "4 hours per week",
+            time: "12:30 PM – 2:30 PM",
+          },
+        ],
+        details: [
+          {
+            duration: "45/40 minutes",
+            subject: "Arabic Qaida/Quran",
+          },
+          {
+            duration: "45/40 minutes",
+            subject: "Islamic Studies",
+          },
+          {
+            duration: "45/40 minutes",
+            subject: "Duas & Surahs",
+          },
+        ],
+        note: "This structure ensures a balanced focus on Quranic recitation, Islamic education, and memorization of Duas and Surahs.",
+      },
+      {
+        title: "Weekends Sessions (Arabic Language)",
+        days: "Saturday and Sunday",
+        sessions: [
+          {
+            label: "Morning Session",
+            duration: "1.5 hours each day",
+            totalHours: "3 hours per week",
+            time: "9:00 AM – 10:30 AM",
+          },
+          {
+            label: "Afternoon Session",
+            duration: "1 hour each day",
+            totalHours: "2 hours per week",
+            time: "10:30 AM – 11:30 AM",
+          },
+        ],
+        details: [
+          {
+            duration: "90/60 minutes",
+            subject: "Arabic Language",
+          },
+        ],
+        note: "Focus on Arabic language learning for better understanding of Quranic texts.",
+      },
+      {
+        title: "Weekends Sessions (GCSE Maths, English & Science Tuition)",
+        days: "Saturday and Sunday",
+        sessions: [
+          {
+            label: "Morning Session",
+            duration: "2 hours each day",
+            totalHours: "4 hours per week",
+            time: "10:00 AM – 12:00 PM",
+          },
+          {
+            label: "Afternoon Session",
+            duration: "1 hours each day",
+            totalHours: "2 hours per week",
+            time: "12:00 PM – 1:00 PM",
+          },
+        ],
+        details: [
+          {
+            duration: "60 minutes",
+            subject: "Maths",
+          },
+          {
+            duration: "60 minutes",
+            subject: "English",
+          },
+          {
+            duration: "60 minutes",
+            subject: "Science",
+          },
+        ],
+        note: "Comprehensive GCSE preparation covering all core subjects.",
+      },
+    ],
   };
 
   return (
@@ -359,265 +419,279 @@ export default function Session() {
           </div>
         </div>
 
-        {/* Weekends Sessions */}
-        <div
-          className="card mb-5 border-0 shadow-lg rounded-3 overflow-hidden"
-          style={{
-            backgroundColor: "var(--white)",
-            borderLeft: "4px solid var(--theme2)",
-          }}
-        >
+        {/* Weekend Sessions - Loop through each subject */}
+        {sessionsData.weekends.map((weekendData, subjectIndex) => (
           <div
-            className="card-header border-0 py-4 px-4"
+            key={subjectIndex}
+            className="card mb-5 border-0 shadow-lg rounded-3 overflow-hidden"
             style={{
-              backgroundColor: "rgba(112, 166, 177, 0.08)",
+              backgroundColor: "var(--white)",
+              borderLeft: "4px solid var(--theme2)",
             }}
           >
-            <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center">
-              <div>
-                <h2 className="mb-2 fw-bold" style={{ color: "var(--theme3)" }}>
-                  {sessionsData.weekends.title}
-                </h2>
-                <p className="mb-0" style={{ color: "var(--text)" }}>
-                  <i className="bi bi-calendar2-weekend me-2"></i>
-                  {sessionsData.weekends.days}
-                </p>
-              </div>
-              <div className="mt-3 mt-md-0">
-                <span
-                  className="badge px-4 py-2 fw-normal"
-                  style={{
-                    backgroundColor: "var(--theme2)",
-                    color: "var(--white)",
-                    fontSize: "1rem",
-                  }}
-                >
-                  <i className="bi bi-calendar2-heart me-2"></i>
-                  Weekend Classes
-                </span>
+            <div
+              className="card-header border-0 py-4 px-4"
+              style={{
+                backgroundColor: "rgba(112, 166, 177, 0.08)",
+              }}
+            >
+              <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center">
+                <div>
+                  <h2
+                    className="mb-2 fw-bold"
+                    style={{ color: "var(--theme3)" }}
+                  >
+                    {weekendData.title}
+                  </h2>
+                  <p className="mb-0" style={{ color: "var(--text)" }}>
+                    <i className="bi bi-calendar2-weekend me-2"></i>
+                    {weekendData.days}
+                  </p>
+                </div>
+                <div className="mt-3 mt-md-0">
+                  <span
+                    className="badge px-4 py-2 fw-normal"
+                    style={{
+                      backgroundColor: "var(--theme2)",
+                      color: "var(--white)",
+                      fontSize: "1rem",
+                    }}
+                  >
+                    <i className="bi bi-calendar2-heart me-2"></i>
+                    Weekend Classes
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="card-body p-4">
-            {/* Session Options */}
-            <div className="row g-4">
-              {sessionsData.weekends.sessions.map((session, index) => (
-                <div key={index} className="col-lg-6">
-                  <div
-                    className="p-4 h-100 rounded-3 position-relative"
-                    style={{
-                      border: "2px solid var(--theme2)",
-                      backgroundColor: "rgba(112, 166, 177, 0.03)",
-                      transition: "transform 0.3s ease",
-                    }}
-                    onMouseEnter={(e) =>
-                      (e.currentTarget.style.transform = "translateY(-5px)")
-                    }
-                    onMouseLeave={(e) =>
-                      (e.currentTarget.style.transform = "translateY(0)")
-                    }
-                  >
-                    <div className="position-absolute top-0 start-50 translate-middle">
-                      <span
-                        className="badge px-3 py-2 fw-semibold"
-                        style={{
-                          backgroundColor:
-                            index === 0 ? "var(--theme)" : "var(--theme3)",
-                          color: "var(--white)",
-                          fontSize: "0.875rem",
-                        }}
-                      >
-                        {session.label}
-                      </span>
-                    </div>
-                    <div className="text-center pt-4">
-                      <div className="mb-3">
-                        <i
-                          className={`bi ${
-                            index === 0 ? "bi-sunrise" : "bi-sun"
-                          } fs-1`}
-                          style={{ color: "var(--theme2)" }}
-                        ></i>
+            <div className="card-body p-4">
+              {/* Session Options */}
+              <div className="row g-4">
+                {weekendData.sessions.map((session, index) => (
+                  <div key={index} className="col-lg-6">
+                    <div
+                      className="p-4 h-100 rounded-3 position-relative"
+                      style={{
+                        border: "2px solid var(--theme2)",
+                        backgroundColor: "rgba(112, 166, 177, 0.03)",
+                        transition: "transform 0.3s ease",
+                      }}
+                      onMouseEnter={(e) =>
+                        (e.currentTarget.style.transform = "translateY(-5px)")
+                      }
+                      onMouseLeave={(e) =>
+                        (e.currentTarget.style.transform = "translateY(0)")
+                      }
+                    >
+                      <div className="position-absolute top-0 start-50 translate-middle">
+                        <span
+                          className="badge px-3 py-2 fw-semibold"
+                          style={{
+                            backgroundColor:
+                              index === 0 ? "var(--theme)" : "var(--theme3)",
+                            color: "var(--white)",
+                            fontSize: "0.875rem",
+                          }}
+                        >
+                          {session.label}
+                        </span>
                       </div>
-                      <h4
-                        className="fw-bold mb-3"
-                        style={{ color: "var(--theme3)" }}
-                      >
-                        {session.time}
-                      </h4>
-
-                      <div className="mb-4">
-                        <p className="mb-1" style={{ color: "var(--text)" }}>
-                          <i className="bi bi-calendar-check me-2"></i>
-                          {sessionsData.weekends.days}
-                        </p>
-                        <p className="mb-1" style={{ color: "var(--text)" }}>
-                          <i className="bi bi-clock me-2"></i>
-                          {session.duration}
-                        </p>
-                        <p className="mb-0">
-                          <strong style={{ color: "var(--theme2)" }}>
-                            Total: {session.totalHours} per week
-                          </strong>
-                        </p>
-                      </div>
-
-                      <div className="d-flex justify-content-center">
-                        <div className="me-4">
-                          <small
-                            className="d-block"
-                            style={{ color: "var(--text)" }}
-                          >
-                            Start
-                          </small>
-                          <strong style={{ color: "var(--theme2)" }}>
-                            {session.time.split("–")[0].trim()}
-                          </strong>
+                      <div className="text-center pt-4">
+                        <div className="mb-3">
+                          <i
+                            className={`bi ${
+                              index === 0 ? "bi-sunrise" : "bi-sun"
+                            } fs-1`}
+                            style={{ color: "var(--theme2)" }}
+                          ></i>
                         </div>
-                        <div>
-                          <small
-                            className="d-block"
-                            style={{ color: "var(--text)" }}
-                          >
-                            End
-                          </small>
-                          <strong style={{ color: "var(--theme2)" }}>
-                            {session.time.split("–")[1].trim()}
-                          </strong>
+                        <h4
+                          className="fw-bold mb-3"
+                          style={{ color: "var(--theme3)" }}
+                        >
+                          {session.time}
+                        </h4>
+
+                        <div className="mb-4">
+                          <p className="mb-1" style={{ color: "var(--text)" }}>
+                            <i className="bi bi-calendar-check me-2"></i>
+                            {weekendData.days}
+                          </p>
+                          <p className="mb-1" style={{ color: "var(--text)" }}>
+                            <i className="bi bi-clock me-2"></i>
+                            {session.duration}
+                          </p>
+                          <p className="mb-0">
+                            <strong style={{ color: "var(--theme2)" }}>
+                              Total: {session.totalHours} per week
+                            </strong>
+                          </p>
+                        </div>
+
+                        <div className="d-flex justify-content-center">
+                          <div className="me-4">
+                            <small
+                              className="d-block"
+                              style={{ color: "var(--text)" }}
+                            >
+                              Start
+                            </small>
+                            <strong style={{ color: "var(--theme2)" }}>
+                              {session.time.split("–")[0].trim()}
+                            </strong>
+                          </div>
+                          <div>
+                            <small
+                              className="d-block"
+                              style={{ color: "var(--text)" }}
+                            >
+                              End
+                            </small>
+                            <strong style={{ color: "var(--theme2)" }}>
+                              {session.time.split("–")[1].trim()}
+                            </strong>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Or Separator */}
-            <div className="text-center my-4">
-              <div className="d-flex align-items-center justify-content-center">
-                <div
-                  style={{
-                    flex: 1,
-                    height: "1px",
-                    backgroundColor: "var(--border)",
-                  }}
-                ></div>
-                <span
-                  className="mx-3 fw-bold"
-                  style={{ color: "var(--theme)" }}
-                >
-                  OR
-                </span>
-                <div
-                  style={{
-                    flex: 1,
-                    height: "1px",
-                    backgroundColor: "var(--border)",
-                  }}
-                ></div>
+                ))}
               </div>
-            </div>
 
-            {/* Session Details */}
-            <div className="mt-4 pt-4 border-top">
-              <h5 className="fw-bold mb-4" style={{ color: "var(--theme3)" }}>
-                <i
-                  className="bi bi-list-task me-2"
-                  style={{ color: "var(--theme2)" }}
-                ></i>
-                Each session includes:
-              </h5>
-              <div className="row g-4">
-                {sessionsData.weekends.details.map((detail, index) => (
-                  <div key={index} className="col-md-4">
+              {/* Or Separator */}
+              <div className="text-center my-4">
+                <div className="d-flex align-items-center justify-content-center">
+                  <div
+                    style={{
+                      flex: 1,
+                      height: "1px",
+                      backgroundColor: "var(--border)",
+                    }}
+                  ></div>
+                  <span
+                    className="mx-3 fw-bold"
+                    style={{ color: "var(--theme)" }}
+                  >
+                    OR
+                  </span>
+                  <div
+                    style={{
+                      flex: 1,
+                      height: "1px",
+                      backgroundColor: "var(--border)",
+                    }}
+                  ></div>
+                </div>
+              </div>
+
+              {/* Session Details */}
+              <div className="mt-4 pt-4 border-top">
+                <h5 className="fw-bold mb-4" style={{ color: "var(--theme3)" }}>
+                  <i
+                    className="bi bi-list-task me-2"
+                    style={{ color: "var(--theme2)" }}
+                  ></i>
+                  Each session includes:
+                </h5>
+                <div className="row g-4">
+                  {weekendData.details.map((detail, index) => (
                     <div
-                      className="d-flex flex-column align-items-center text-center p-3 rounded-3 h-100"
-                      style={{
-                        backgroundColor: "var(--bg)",
-                        border: "1px solid var(--border)",
-                      }}
+                      key={index}
+                      className={
+                        weekendData.details.length === 1 ? "col-12" : "col-md-4"
+                      }
                     >
                       <div
-                        className="rounded-circle d-flex align-items-center justify-content-center mb-3"
+                        className="d-flex flex-column align-items-center text-center p-3 rounded-3 h-100"
                         style={{
-                          width: "60px",
-                          height: "60px",
-                          backgroundColor:
-                            index === 0
-                              ? "rgba(243, 159, 95, 0.1)"
-                              : index === 1
-                              ? "rgba(112, 166, 177, 0.1)"
-                              : "rgba(16, 28, 66, 0.1)",
-                          border: `2px solid ${
-                            index === 0
-                              ? "var(--theme)"
-                              : index === 1
-                              ? "var(--theme2)"
-                              : "var(--theme3)"
-                          }`,
+                          backgroundColor: "var(--bg)",
+                          border: "1px solid var(--border)",
                         }}
                       >
-                        <span
-                          className="fw-bold"
+                        <div
+                          className="rounded-circle d-flex align-items-center justify-content-center mb-3"
                           style={{
-                            color:
+                            width: "60px",
+                            height: "60px",
+                            backgroundColor:
+                              index === 0
+                                ? "rgba(243, 159, 95, 0.1)"
+                                : index === 1
+                                ? "rgba(112, 166, 177, 0.1)"
+                                : "rgba(16, 28, 66, 0.1)",
+                            border: `2px solid ${
+                              index === 0
+                                ? "var(--theme)"
+                                : index === 1
+                                ? "var(--theme2)"
+                                : "var(--theme3)"
+                            }`,
+                          }}
+                        >
+                          <span
+                            className="fw-bold"
+                            style={{
+                              color:
+                                index === 0
+                                  ? "var(--theme)"
+                                  : index === 1
+                                  ? "var(--theme2)"
+                                  : "var(--theme3)",
+                            }}
+                          >
+                            {detail.duration.split(" ")[0]}
+                          </span>
+                        </div>
+                        <div
+                          className="badge mb-2 px-2 py-1"
+                          style={{
+                            backgroundColor:
                               index === 0
                                 ? "var(--theme)"
                                 : index === 1
                                 ? "var(--theme2)"
                                 : "var(--theme3)",
+                            color: "var(--white)",
                           }}
                         >
-                          {detail.duration.split("/")[0]}
-                        </span>
+                          {detail.duration}
+                        </div>
+                        <h6
+                          className="mb-0 fw-semibold"
+                          style={{ color: "var(--theme3)" }}
+                        >
+                          {detail.subject}
+                        </h6>
                       </div>
-                      <div
-                        className="badge mb-2 px-2 py-1"
-                        style={{
-                          backgroundColor:
-                            index === 0
-                              ? "var(--theme)"
-                              : index === 1
-                              ? "var(--theme2)"
-                              : "var(--theme3)",
-                          color: "var(--white)",
-                        }}
-                      >
-                        {detail.duration}
-                      </div>
-                      <h6
-                        className="mb-0 fw-semibold"
-                        style={{ color: "var(--theme3)" }}
-                      >
-                        {detail.subject}
-                      </h6>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
 
-            {/* Weekend Note */}
-            <div className="mt-5 pt-4">
-              <div
-                className="p-4 rounded-3 text-center"
-                style={{
-                  backgroundColor: "rgba(243, 159, 95, 0.05)",
-                  border: "1px solid var(--border)",
-                }}
-              >
-                <i
-                  className="bi bi-stars fs-4 mb-3"
-                  style={{ color: "var(--theme)" }}
-                ></i>
-                <p className="mb-0 fst-italic" style={{ color: "var(--text)" }}>
-                  "{sessionsData.weekends.note}"
-                </p>
+              {/* Weekend Note */}
+              <div className="mt-5 pt-4">
+                <div
+                  className="p-4 rounded-3 text-center"
+                  style={{
+                    backgroundColor: "rgba(243, 159, 95, 0.05)",
+                    border: "1px solid var(--border)",
+                  }}
+                >
+                  <i
+                    className="bi bi-stars fs-4 mb-3"
+                    style={{ color: "var(--theme)" }}
+                  ></i>
+                  <p
+                    className="mb-0 fst-italic"
+                    style={{ color: "var(--text)" }}
+                  >
+                    "{weekendData.note}"
+                  </p>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        ))}
 
         {/* Important Note */}
         <div

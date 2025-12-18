@@ -6,6 +6,19 @@ import weekdaysPDF from "/file/Weekdays_Classes_Academic_Calendar_2024-25_Sheet1
 import SEO from "../../../utils/SEO";
 
 export default function Weekdays() {
+  // Define weekdays-specific calendar data
+  const weekdaysCalendarData = {
+    totalWeeks: 52,
+    lessonWeeks: 47,
+    holidayWeeks: 5,
+    importantDates: [
+      { date: "18th February", title: "Ramadan Begins" },
+      { date: "19th March", title: "Eid al-Fitr" },
+      { date: "27th May", title: "Eid al-Adha" },
+      { date: "24th August", title: "Summer Holidays Begin" },
+    ],
+  };
+
   return (
     <div>
       <SEO page="weekdays" />
@@ -16,12 +29,13 @@ export default function Weekdays() {
         title="Weekdays Academic Calendar 2025-2026"
         subtitle="Academic Schedule"
         mainPara="View the complete academic calendar for weekdays classes for the academic year 2025-2026. This calendar includes all important dates, holidays, and special events."
-        isCalendar={true} // This enables the calendar view
+        isCalendar={true}
+        calendarData={weekdaysCalendarData} // Pass the data here
         para2=""
         para3=""
         para4=""
         para5=""
-      ></AboutMain>
+      />
     </div>
   );
 }

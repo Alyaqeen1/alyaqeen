@@ -119,7 +119,7 @@ const Banner = () => {
                     data-aos="fade-up"
                     data-aos-duration="800"
                     data-aos-delay="600"
-                    to="/prayer-timetable"
+                    to="/prayer-timetable?tab=calendar"
                   >
                     {new Date().toLocaleString("en-US", { month: "long" })}{" "}
                     {timetable}

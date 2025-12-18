@@ -124,14 +124,14 @@
           "perHour": "£5<sm>/hour</sm>",
           "perMonth": "£100<sm>/month</sm>",
           "days": "Sat - Sun",
-          "duration": "10am - 12pm / 10am - 1pm"
+          "duration": "10am - 12pm / 12pm - 1pm"
         }
       },
       {
         "title": "Hifz Memorisation",
         "weekdays": {
           "perHour": "£1.85<sm>/hour</sm>",
-          "perMonth": "£90<sm>/month</sm>",
+          "perMonth": "£75<sm>/month</sm>",
           "days": "Mon - Thu",
           "duration": "4:30 - 7:00pm / 5 - 7pm"
         },
@@ -151,10 +151,10 @@
           "duration": "6 - 7pm"
         },
         "weekends": {
-          "perHour": "£10<sm>/hour</sm>",
+          "perHour": "£3.33<sm>/hour</sm>",
           "perMonth": "£50<sm>/month</sm>",
           "days": "Sat - Sun",
-          "duration": "9 - 10am"
+          "duration": "9 - 10:30am / 10:30 - 11:30am"
         }
       }
     ]

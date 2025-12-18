@@ -180,7 +180,7 @@ const News = () => {
 
                 <div className="section-title text-center">
                   <span data-aos-duration="800" data-aos="fade-up">
-                    News & Updates
+                    Announcements
                   </span>
 
                   <h2
@@ -242,7 +242,10 @@ const News = () => {
               <div>
                 <div className="d-flex justify-content-between align-items-center">
                   <h3 className="fs-2">Prayer Times</h3>
-                  <Link to="/prayer-timetable" className="theme-btn">
+                  <Link
+                    to="/prayer-timetable?tab=monthly"
+                    className="theme-btn"
+                  >
                     Prayer Timetable
                   </Link>
                 </div>

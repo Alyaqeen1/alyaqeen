@@ -10,20 +10,7 @@ export default function Fees() {
       perHour: "£1.85",
       monthly: "£40",
     },
-    {
-      subject: "Primary Maths & English Tuition",
-      days: "Monday & Tuesday",
-      time: "5:00 - 7:00pm",
-      perHour: "£5.00",
-      monthly: "£100",
-    },
-    {
-      subject: "GCSE Maths, English & Science Tuition",
-      days: "Wednesday & Thursday",
-      time: "5:00 - 7:00pm",
-      perHour: "£6.25",
-      monthly: "£120",
-    },
+
     {
       subject: "In Centre one-to-one Qaidah/Quran Tuition",
       days: "Monday & Tuesday or Wednesday & Thursday",
@@ -37,20 +24,6 @@ export default function Fees() {
       time: "4:30 - 7:15pm",
       perHour: "£1.85",
       monthly: "£90",
-    },
-    {
-      subject: "Arabic Language",
-      days: "Monday - Thursday",
-      time: "6:00 - 7:00pm",
-      perHour: "£1.66",
-      monthly: "£60",
-    },
-    {
-      subject: "Urdu/Bangla Language",
-      days: "Monday to Thursday",
-      time: "6:00 - 7:00pm",
-      perHour: "£3.66",
-      monthly: "£40",
     },
   ];
 
@@ -93,9 +66,9 @@ export default function Fees() {
     {
       subject: "Arabic Language",
       days: "Saturday",
-      time: "9:00 - 10:00am",
-      perHour: "£10.00",
-      monthly: "£40",
+      time: "9 - 10:30am / 10:30 - 11:30am",
+      perHour: "£3.33",
+      monthly: "£50",
     },
     {
       subject: "Urdu/Bangla Language",
@@ -109,56 +82,56 @@ export default function Fees() {
   const timetableData = {
     weekdays: [
       {
-        subject: "Onsite Homeschooling",
-        days: "Monday - Thursday",
-        time: "10:00am - 02:00pm",
+        subject: "Arabic Qaidah & Quran",
+        days: "Monday to Thursday",
+        time: "4:30 - 5:45pm or 5:45 - 7:15pm",
       },
       {
-        subject: "Sisters Islamic Studies",
-        days: "Tuesday - Thursday",
-        time: "10:00am - 12:00pm",
-      },
-      {
-        subject: "Arabic Language",
-        days: "Wednesday & Thursday",
-        time: "10:30am - 11:30am",
-      },
-      {
-        subject: "Qaidah/Quran",
-        days: "Monday - Thursday",
-        time: "05:00pm - 06:30pm",
+        subject: "In Centre one-to-one Qaidah/Quran Tuition",
+        days: "Monday & Tuesday or Wednesday & Thursday",
+        time: "7:00 - 8:00pm",
       },
       {
         subject: "Hifz (Memorisation)",
-        days: "Monday - Thursday",
-        time: "04:45pm - 06:45pm",
-      },
-      {
-        subject: "Maths & English Tuition",
-        days: "Tuesday & Wednesday",
-        time: "05:00pm - 07:00pm",
+        days: "Monday to Thursday",
+        time: "4:30 - 7:15pm",
       },
     ],
     weekends: [
       {
-        subject: "Maths & English Tuition",
+        subject: "Arabic Qaidah & Quran",
         days: "Saturday & Sunday",
-        time: "10:30am - 12:30pm",
+        time: "10:00am - 12:30pm or 12:30 - 2:00pm",
       },
       {
-        subject: "Qaidah/Quran",
+        subject: "Primary Maths & English Tuition",
         days: "Saturday & Sunday",
-        time: "10:00am - 01:00pm",
+        time: "10:00am - 12:00pm",
+      },
+      {
+        subject: "GCSE Maths, English & Science Tuition",
+        days: "Saturday & Sunday",
+        time: "	10:00am - 12:00pm / 10:00am - 1:00pm",
+      },
+      {
+        subject: "In Centre one-to-one Qaidah/Quran Tuition",
+        days: "Saturday & Sunday",
+        time: "8:00 - 9:00pm or 9:00 - 10:00am",
       },
       {
         subject: "Hifz (Memorisation)",
         days: "Saturday & Sunday",
-        time: "10:00am - 01:00pm",
+        time: "10:00am - 1:00pm or 12:00 - 2:30pm",
       },
       {
         subject: "Arabic Language",
+        days: "Saturday",
+        time: "	9 - 10:30am / 10:30 - 11:30am",
+      },
+      {
+        subject: "Urdu/Bangla Language",
         days: "Saturday & Sunday",
-        time: "12:00pm - 01:00pm",
+        time: "11:00am - 1:00pm",
       },
     ],
   };

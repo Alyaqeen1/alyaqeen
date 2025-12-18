@@ -7,9 +7,20 @@ import five from "../../assets/img/program/mask-2.png";
 import six from "../../assets/img/program/compass.png";
 import { useGetPrayerTimesQuery } from "../../../redux/features/prayer_times/prayer_timesApi";
 import LoadingSpinner from "../LoadingSpinner";
+import { useNavigate, useSearchParams } from "react-router";
+import timetableImage from "../../assets/img/December_2025_img_page-0001.jpg"; // Add this image import
+import timetablePDF from "/file/December_2025_img.pdf"; // Add this image import
 
 const PrayerComp = () => {
-  // const [times, setTimes] = useState([]);
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const tabFromURL = searchParams.get("tab"); // Get tab from URL
+
+  // Initialize activeTab based on URL or default to 0
+  const [activeTabIndex, setActiveTabIndex] = useState(
+    tabFromURL === "calendar" ? 1 : 0
+  );
+
   const date = new Date();
   const { data: times, isLoading, isError } = useGetPrayerTimesQuery();
 
@@ -23,7 +34,8 @@ const PrayerComp = () => {
     month: "long",
   }).format(date);
 
-  const [selectedMonth, setSelectedMonth] = useState(currentMonthName); // Default view
+  const [selectedMonth, setSelectedMonth] = useState(currentMonthName);
+
   const months = [
     "January",
     "February",
@@ -38,13 +50,25 @@ const PrayerComp = () => {
     "November",
     "December",
   ];
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const { data } = await axios.get("/prayerTimes.json");
-  //     setTimes(data);
-  //   };
-  //   fetchData();
-  // }, []);
+
+  // Update URL when tab changes
+  const handleTabClick = (index) => {
+    setActiveTabIndex(index);
+    // Update URL query parameter
+    const tabValue = index === 0 ? "monthly" : "calendar";
+    navigate(`?tab=${tabValue}`);
+  };
+
+  // Sync with URL changes
+  useEffect(() => {
+    const tabParam = searchParams.get("tab");
+    if (tabParam === "calendar") {
+      setActiveTabIndex(1);
+    } else if (tabParam === "monthly" || !tabParam) {
+      setActiveTabIndex(0);
+    }
+  }, [searchParams]);
+
   if (isLoading) {
     return <LoadingSpinner></LoadingSpinner>;
   }
@@ -85,275 +109,351 @@ const PrayerComp = () => {
             Time Table
           </h2>
         </div>
-        <div className="row">
-          <div className="col-lg-2 d-flex flex-wrap flex-lg-column gap-2 month-button-group pb-3 pb-lg-0">
-            {months.map((month) => (
-              <button
-                key={month}
-                onClick={() => setSelectedMonth(month)}
-                className={`month-btn theme-btn border ${
-                  selectedMonth === month ? "" : "bg-white"
-                }`}
-              >
-                {month}
-              </button>
-            ))}
-          </div>
-          <div className="col-lg-10">
-            <h3 className="mb-3">{selectedMonth} 2025</h3>
-            <div className="table-responsive mb-3">
-              <table
-                className="table mb-0"
-                style={{
-                  minWidth: 700,
-                }}
-              >
-                <thead>
-                  <tr>
-                    <th
-                      rowSpan={2}
-                      className="font-danger bg-white fw-bolder border h6 text-center align-middle"
-                    >
-                      Date
-                    </th>
-                    <th
-                      colSpan={2}
-                      className="font-danger text-white fw-bolder border h6 text-center align-middle"
-                      style={{ backgroundColor: "var(--theme)" }}
-                    >
-                      FAJR
-                    </th>
-                    <th
-                      rowSpan={2}
-                      className="font-danger bg-white fw-bolder border h6 text-center align-middle"
-                    >
-                      Sunrise
-                    </th>
-                    <th
-                      colSpan={2}
-                      className="font-danger text-white fw-bolder border h6 text-center align-middle"
-                      style={{ backgroundColor: "var(--theme)" }}
-                    >
-                      ZUHR
-                    </th>
-                    <th
-                      colSpan={2}
-                      className="font-danger text-white fw-bolder border h6 text-center align-middle"
-                      style={{ backgroundColor: "var(--theme)" }}
-                    >
-                      ASR
-                    </th>
-                    <th
-                      colSpan={2}
-                      className="font-danger text-white fw-bolder border h6 text-center align-middle"
-                      style={{ backgroundColor: "var(--theme)" }}
-                    >
-                      MAGHRIB
-                    </th>
-                    <th
-                      colSpan={2}
-                      className="font-danger text-white fw-bolder border h6 text-center align-middle"
-                      style={{ backgroundColor: "var(--theme)" }}
-                    >
-                      ISHA
-                    </th>
-                  </tr>
-                  <tr>
-                    <th className="font-danger bg-white fw-bolder border h6 text-center align-middle">
-                      Start
-                    </th>
-                    <th className="font-danger bg-white fw-bolder border h6 text-center align-middle">
-                      Jamat
-                    </th>
-                    <th className="font-danger bg-white fw-bolder border h6 text-center align-middle">
-                      Start
-                    </th>
-                    <th className="font-danger bg-white fw-bolder border h6 text-center align-middle">
-                      Jamat
-                    </th>
-                    <th className="font-danger bg-white fw-bolder border h6 text-center align-middle">
-                      Start
-                    </th>
-                    <th className="font-danger bg-white fw-bolder border h6 text-center align-middle">
-                      Jamat
-                    </th>
-                    <th className="font-danger bg-white fw-bolder border h6 text-center align-middle">
-                      Start
-                    </th>
-                    <th className="font-danger bg-white fw-bolder border h6 text-center align-middle">
-                      Jamat
-                    </th>
-                    <th className="font-danger bg-white fw-bolder border h6 text-center align-middle">
-                      Start
-                    </th>
-                    <th className="font-danger bg-white fw-bolder border h6 text-center align-middle">
-                      Jamat
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {times?.[0]?.[selectedMonth]?.length > 0 ? (
-                    times[0][selectedMonth].map((day) => (
-                      <tr key={day?.date}>
-                        <td
-                          className={`${
-                            currentDate == day?.date &&
-                            currentMonthName === selectedMonth
-                              ? "bg-body-secondary"
-                              : "bg-white"
-                          } border h6 text-center align-middle text-nowrap`}
-                        >
-                          {day?.date}
-                        </td>
-                        <td
-                          className={`${
-                            currentDate == day?.date &&
-                            currentMonthName === selectedMonth
-                              ? "bg-body-secondary"
-                              : "bg-white"
-                          } border h6 text-center align-middle text-nowrap`}
-                        >
-                          {day?.fajr?.start}
-                        </td>
-                        <td
-                          className={`${
-                            currentDate == day?.date &&
-                            currentMonthName === selectedMonth
-                              ? "bg-body-secondary"
-                              : "bg-white"
-                          } border h6 text-center align-middle text-nowrap`}
-                        >
-                          {day?.fajr?.jamat}
-                        </td>
-                        <td
-                          className={`${
-                            currentDate == day?.date &&
-                            currentMonthName === selectedMonth
-                              ? "bg-body-secondary"
-                              : "bg-white"
-                          } border h6 text-center align-middle text-nowrap`}
-                        >
-                          {day?.sunrise}
-                        </td>
-                        <td
-                          className={`${
-                            currentDate == day?.date &&
-                            currentMonthName === selectedMonth
-                              ? "bg-body-secondary"
-                              : "bg-white"
-                          } border h6 text-center align-middle text-nowrap`}
-                        >
-                          {day?.zuhr?.start}
-                        </td>
-                        <td
-                          className={`${
-                            currentDate == day?.date &&
-                            currentMonthName === selectedMonth
-                              ? "bg-body-secondary"
-                              : "bg-white"
-                          } border h6 text-center align-middle text-nowrap`}
-                        >
-                          {day?.zuhr?.jamat}
-                        </td>
-                        <td
-                          className={`${
-                            currentDate == day?.date &&
-                            currentMonthName === selectedMonth
-                              ? "bg-body-secondary"
-                              : "bg-white"
-                          } border h6 text-center align-middle text-nowrap`}
-                        >
-                          {day?.asr?.start}
-                        </td>
-                        <td
-                          className={`${
-                            currentDate == day?.date &&
-                            currentMonthName === selectedMonth
-                              ? "bg-body-secondary"
-                              : "bg-white"
-                          } border h6 text-center align-middle text-nowrap`}
-                        >
-                          {day?.asr?.jamat}
-                        </td>
-                        <td
-                          className={`${
-                            currentDate == day?.date &&
-                            currentMonthName === selectedMonth
-                              ? "bg-body-secondary"
-                              : "bg-white"
-                          } border h6 text-center align-middle text-nowrap`}
-                        >
-                          {day?.maghrib?.start}
-                        </td>
-                        <td
-                          className={`${
-                            currentDate == day?.date &&
-                            currentMonthName === selectedMonth
-                              ? "bg-body-secondary"
-                              : "bg-white"
-                          } border h6 text-center align-middle text-nowrap`}
-                        >
-                          {day?.maghrib?.jamat}
-                        </td>
-                        <td
-                          className={`${
-                            currentDate == day?.date &&
-                            currentMonthName === selectedMonth
-                              ? "bg-body-secondary"
-                              : "bg-white"
-                          } border h6 text-center align-middle text-nowrap`}
-                        >
-                          {day?.isha?.start}
-                        </td>
-                        <td
-                          className={`${
-                            currentDate == day?.date &&
-                            currentMonthName === selectedMonth
-                              ? "bg-body-secondary"
-                              : "bg-white"
-                          } border h6 text-center align-middle text-nowrap`}
-                        >
-                          {day?.isha?.jamat}
-                        </td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td colSpan={12}>
-                        <h5>No prayer times available for this month.</h5>
-                      </td>
-                    </tr>
-                  )}
-                  {}
-                </tbody>
-              </table>
-            </div>
-            <hr />
-            <div
-              style={{ backgroundColor: "var(--theme)" }}
-              className="p-4 text-white rounded-4"
+
+        <div className="pricing-wrapper">
+          <ul
+            className="nav gap-2 my-md-5 my-0 flex justify-content-center align-items-center"
+            role="tablist"
+          >
+            <li
+              className="nav-item "
+              data-aos-duration="800"
+              data-aos="fade-up"
+              data-aos-delay="300"
+              role="presentation"
             >
-              <div className="d-flex justify-content-between">
-                <div className="mt-5">
-                  <h5>Summer Jumu'ah Timetable:</h5>
-                  <p>1st Jama'ah at 1:30 PM</p>
-                  <p>2nd Jama'ah at 2:00 PM</p>
-                  <p>3rd Jama'ah at 2:30 PM</p>
+              <button
+                className={`nav-link text-uppercase box-shadow px-3 ${
+                  activeTabIndex === 0 ? " active" : ""
+                }`}
+                onClick={() => handleTabClick(0)}
+              >
+                Monthly Timetable
+              </button>
+            </li>
+            <li
+              className="nav-item "
+              data-aos-duration="800"
+              data-aos="fade-up"
+              data-aos-delay="500"
+              role="presentation"
+            >
+              <button
+                className={`nav-link text-uppercase box-shadow px-3 ${
+                  activeTabIndex === 1 ? " active" : ""
+                }`}
+                onClick={() => handleTabClick(1)}
+              >
+                Timetable Calendar
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        {/* Tab Content */}
+        <div className="tab-content mt-4">
+          {activeTabIndex === 0 ? (
+            // TAB 1: Monthly Timetable (Original Content)
+            <div className="row">
+              <div className="col-lg-2 d-flex flex-wrap flex-lg-column gap-2 month-button-group pb-3 pb-lg-0">
+                {months.map((month) => (
+                  <button
+                    key={month}
+                    onClick={() => setSelectedMonth(month)}
+                    className={`month-btn theme-btn border ${
+                      selectedMonth === month ? "" : "bg-white"
+                    }`}
+                  >
+                    {month}
+                  </button>
+                ))}
+              </div>
+              <div className="col-lg-10">
+                <h3 className="mb-3">{selectedMonth} 2025</h3>
+                <div className="table-responsive mb-3">
+                  <table
+                    className="table mb-0"
+                    style={{
+                      minWidth: 700,
+                    }}
+                  >
+                    <thead>
+                      <tr>
+                        <th
+                          rowSpan={2}
+                          className="font-danger bg-white fw-bolder border h6 text-center align-middle"
+                        >
+                          Date
+                        </th>
+                        <th
+                          colSpan={2}
+                          className="font-danger text-white fw-bolder border h6 text-center align-middle"
+                          style={{ backgroundColor: "var(--theme)" }}
+                        >
+                          FAJR
+                        </th>
+                        <th
+                          rowSpan={2}
+                          className="font-danger bg-white fw-bolder border h6 text-center align-middle"
+                        >
+                          Sunrise
+                        </th>
+                        <th
+                          colSpan={2}
+                          className="font-danger text-white fw-bolder border h6 text-center align-middle"
+                          style={{ backgroundColor: "var(--theme)" }}
+                        >
+                          ZUHR
+                        </th>
+                        <th
+                          colSpan={2}
+                          className="font-danger text-white fw-bolder border h6 text-center align-middle"
+                          style={{ backgroundColor: "var(--theme)" }}
+                        >
+                          ASR
+                        </th>
+                        <th
+                          colSpan={2}
+                          className="font-danger text-white fw-bolder border h6 text-center align-middle"
+                          style={{ backgroundColor: "var(--theme)" }}
+                        >
+                          MAGHRIB
+                        </th>
+                        <th
+                          colSpan={2}
+                          className="font-danger text-white fw-bolder border h6 text-center align-middle"
+                          style={{ backgroundColor: "var(--theme)" }}
+                        >
+                          ISHA
+                        </th>
+                      </tr>
+                      <tr>
+                        <th className="font-danger bg-white fw-bolder border h6 text-center align-middle">
+                          Start
+                        </th>
+                        <th className="font-danger bg-white fw-bolder border h6 text-center align-middle">
+                          Jamat
+                        </th>
+                        <th className="font-danger bg-white fw-bolder border h6 text-center align-middle">
+                          Start
+                        </th>
+                        <th className="font-danger bg-white fw-bolder border h6 text-center align-middle">
+                          Jamat
+                        </th>
+                        <th className="font-danger bg-white fw-bolder border h6 text-center align-middle">
+                          Start
+                        </th>
+                        <th className="font-danger bg-white fw-bolder border h6 text-center align-middle">
+                          Jamat
+                        </th>
+                        <th className="font-danger bg-white fw-bolder border h6 text-center align-middle">
+                          Start
+                        </th>
+                        <th className="font-danger bg-white fw-bolder border h6 text-center align-middle">
+                          Jamat
+                        </th>
+                        <th className="font-danger bg-white fw-bolder border h6 text-center align-middle">
+                          Start
+                        </th>
+                        <th className="font-danger bg-white fw-bolder border h6 text-center align-middle">
+                          Jamat
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {times?.[0]?.[selectedMonth]?.length > 0 ? (
+                        times[0][selectedMonth].map((day) => (
+                          <tr key={day?.date}>
+                            <td
+                              className={`${
+                                currentDate == day?.date &&
+                                currentMonthName === selectedMonth
+                                  ? "bg-body-secondary"
+                                  : "bg-white"
+                              } border h6 text-center align-middle text-nowrap`}
+                            >
+                              {day?.date}
+                            </td>
+                            <td
+                              className={`${
+                                currentDate == day?.date &&
+                                currentMonthName === selectedMonth
+                                  ? "bg-body-secondary"
+                                  : "bg-white"
+                              } border h6 text-center align-middle text-nowrap`}
+                            >
+                              {day?.fajr?.start}
+                            </td>
+                            <td
+                              className={`${
+                                currentDate == day?.date &&
+                                currentMonthName === selectedMonth
+                                  ? "bg-body-secondary"
+                                  : "bg-white"
+                              } border h6 text-center align-middle text-nowrap`}
+                            >
+                              {day?.fajr?.jamat}
+                            </td>
+                            <td
+                              className={`${
+                                currentDate == day?.date &&
+                                currentMonthName === selectedMonth
+                                  ? "bg-body-secondary"
+                                  : "bg-white"
+                              } border h6 text-center align-middle text-nowrap`}
+                            >
+                              {day?.sunrise}
+                            </td>
+                            <td
+                              className={`${
+                                currentDate == day?.date &&
+                                currentMonthName === selectedMonth
+                                  ? "bg-body-secondary"
+                                  : "bg-white"
+                              } border h6 text-center align-middle text-nowrap`}
+                            >
+                              {day?.zuhr?.start}
+                            </td>
+                            <td
+                              className={`${
+                                currentDate == day?.date &&
+                                currentMonthName === selectedMonth
+                                  ? "bg-body-secondary"
+                                  : "bg-white"
+                              } border h6 text-center align-middle text-nowrap`}
+                            >
+                              {day?.zuhr?.jamat}
+                            </td>
+                            <td
+                              className={`${
+                                currentDate == day?.date &&
+                                currentMonthName === selectedMonth
+                                  ? "bg-body-secondary"
+                                  : "bg-white"
+                              } border h6 text-center align-middle text-nowrap`}
+                            >
+                              {day?.asr?.start}
+                            </td>
+                            <td
+                              className={`${
+                                currentDate == day?.date &&
+                                currentMonthName === selectedMonth
+                                  ? "bg-body-secondary"
+                                  : "bg-white"
+                              } border h6 text-center align-middle text-nowrap`}
+                            >
+                              {day?.asr?.jamat}
+                            </td>
+                            <td
+                              className={`${
+                                currentDate == day?.date &&
+                                currentMonthName === selectedMonth
+                                  ? "bg-body-secondary"
+                                  : "bg-white"
+                              } border h6 text-center align-middle text-nowrap`}
+                            >
+                              {day?.maghrib?.start}
+                            </td>
+                            <td
+                              className={`${
+                                currentDate == day?.date &&
+                                currentMonthName === selectedMonth
+                                  ? "bg-body-secondary"
+                                  : "bg-white"
+                              } border h6 text-center align-middle text-nowrap`}
+                            >
+                              {day?.maghrib?.jamat}
+                            </td>
+                            <td
+                              className={`${
+                                currentDate == day?.date &&
+                                currentMonthName === selectedMonth
+                                  ? "bg-body-secondary"
+                                  : "bg-white"
+                              } border h6 text-center align-middle text-nowrap`}
+                            >
+                              {day?.isha?.start}
+                            </td>
+                            <td
+                              className={`${
+                                currentDate == day?.date &&
+                                currentMonthName === selectedMonth
+                                  ? "bg-body-secondary"
+                                  : "bg-white"
+                              } border h6 text-center align-middle text-nowrap`}
+                            >
+                              {day?.isha?.jamat}
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan={12}>
+                            <h5>No prayer times available for this month.</h5>
+                          </td>
+                        </tr>
+                      )}
+                      {}
+                    </tbody>
+                  </table>
                 </div>
-                <h3>Jumuah Information</h3>
-                <div className="mt-5">
-                  <h5>Winter Jumu'ah Timetable:</h5>
-                  <p>1st Jama'ah at 12:45 PM</p>
-                  <p>2nd Jama'ah at 1:15 PM</p>
-                  <p>2nd Jama'ah at 1:45 PM</p>
+                <hr />
+                <div
+                  style={{ backgroundColor: "var(--theme)" }}
+                  className="p-4 text-white rounded-4"
+                >
+                  <div className="d-flex justify-content-between">
+                    <div className="mt-5">
+                      <h5>Summer Jumu'ah Timetable:</h5>
+                      <p>1st Jama'ah at 1:30 PM</p>
+                      <p>2nd Jama'ah at 2:00 PM</p>
+                      <p>3rd Jama'ah at 2:30 PM</p>
+                    </div>
+                    <h3>Jumuah Information</h3>
+                    <div className="mt-5">
+                      <h5>Winter Jumu'ah Timetable:</h5>
+                      <p>1st Jama'ah at 12:45 PM</p>
+                      <p>2nd Jama'ah at 1:15 PM</p>
+                      <p>2nd Jama'ah at 1:45 PM</p>
+                    </div>
+                  </div>
+                  <h5 className="mt-4 text-center">
+                    Please note: Friday Khutbah starts 5 minutes before
+                    congregation.
+                  </h5>
                 </div>
               </div>
-              <h5 className="mt-4 text-center">
-                Please note: Friday Khutbah starts 5 minutes before
-                congregation.
-              </h5>
             </div>
-          </div>
+          ) : (
+            // TAB 2: Timetable Calendar (Image with Download)
+            <div className="timetable-calendar-section">
+              <div className="row justify-content-center">
+                <div className="col-12">
+                  {/* Download Button - Top */}
+                  <div className="text-center mb-4">
+                    <a href={timetablePDF} download className="theme-btn">
+                      <i className="fas fa-download me-2"></i>
+                      Download Timetable Calendar
+                    </a>
+                  </div>
+
+                  {/* Full Width Image */}
+                  <div className="calendar-image-container">
+                    <img
+                      src={timetableImage}
+                      alt="Timetable Calendar 2025-2026"
+                      className="img-fluid w-100"
+                      style={{
+                        borderRadius: "8px",
+                        boxShadow: "0 5px 15px rgba(0,0,0,0.1)",
+                        cursor: "pointer",
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </section>
