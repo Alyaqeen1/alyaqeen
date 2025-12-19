@@ -20,7 +20,6 @@ export default function Admissions() {
   const [showModal, setShowModal] = useState(false);
   const [selectedStudentId, setSelectedStudentId] = useState(null);
   const [deleteStudentData] = useDeleteStudentDataMutation();
-
   // Toggle modal visibility
   const handleShow = (id) => {
     setSelectedStudentId(id);
@@ -123,19 +122,19 @@ export default function Admissions() {
                 className="font-danger text-white fw-bolder border h6 text-center align-middle"
                 style={{ backgroundColor: "var(--border2)" }}
               >
-                Email
+                Department
               </th>
               <th
                 className="font-danger text-white fw-bolder border h6 text-center align-middle"
                 style={{ backgroundColor: "var(--border2)" }}
               >
-                Date of Birth
+                Starting Date
               </th>
               <th
                 className="font-danger text-white fw-bolder border h6 text-center align-middle"
                 style={{ backgroundColor: "var(--border2)" }}
               >
-                Gender
+                Session
               </th>
               <th
                 className="font-danger text-white fw-bolder border h6 text-center align-middle"
@@ -165,20 +164,22 @@ export default function Admissions() {
                   >
                     {student?.name}
                   </td>
-                  <td
-                    className={`fw-medium border text-center align-middle text-nowrap`}
-                  >
-                    {student?.email}
+                  <td className="fw-medium border text-center align-middle text-nowrap">
+                    {student?.academic?.enrollments
+                      .map((enrollment) => `${enrollment.department}`)
+                      .join(", ")}
                   </td>
-                  <td
-                    className={`border h6 text-center align-middle text-nowrap`}
-                  >
-                    {student?.dob}
+                  <td className="border h6 text-center align-middle text-nowrap">
+                    {student?.startingDate
+                      ? new Date(student.startingDate).toLocaleDateString(
+                          "en-GB"
+                        )
+                      : "N/A"}
                   </td>
-                  <td
-                    className={`border h6 text-center align-middle text-nowrap`}
-                  >
-                    {student?.gender}
+                  <td className="fw-medium border text-center align-middle text-nowrap">
+                    {student?.academic?.enrollments
+                      .map((enrollment) => `${enrollment.session}`)
+                      .join(", ")}
                   </td>
                   <td
                     className={`border h6 text-center align-middle text-nowrap`}
