@@ -33,6 +33,7 @@ import {
   FaRegWindowClose,
 } from "react-icons/fa";
 import { PiSpeakerHighFill, PiStudentBold } from "react-icons/pi";
+import { MdOutlineSettings } from "react-icons/md";
 
 export default function OffCanvasMenu() {
   const [openSubMenu, setOpenSubMenu] = useState("pages");
@@ -277,6 +278,21 @@ export default function OffCanvasMenu() {
                           {
                             label: "Parent Announcement",
                             to: "announcement/parent",
+                          },
+                        ]}
+                        openSubMenu={openSubMenu}
+                        handleSubmenu={handleSubmenu}
+                        isSubMenuOpen={isSubMenuOpen}
+                        handleToggleMenu={handleToggleMenu}
+                      />
+                      <MenuItem
+                        icon={<MdOutlineSettings className="mx-2 fs-5" />}
+                        label="Website Settings"
+                        identifier="website-settings"
+                        submenuItems={[
+                          {
+                            label: "Best Teacher / Student",
+                            to: "admin/best-teacher-student",
                           },
                         ]}
                         openSubMenu={openSubMenu}

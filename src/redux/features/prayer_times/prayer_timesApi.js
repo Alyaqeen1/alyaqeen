@@ -1,4 +1,3 @@
-// prayer_timesApi.js
 import { apiSlice } from "../api/apiSlice";
 
 export const prayer_timesApi = apiSlice.injectEndpoints({

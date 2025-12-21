@@ -220,7 +220,7 @@ export default function Sidebar() {
                       submenuItems={[
                         {
                           label: "Best Teacher / Student",
-                          to: "website-settings/best-teacher-student",
+                          to: "admin/best-teacher-student",
                         },
                       ]}
                       openSubMenu={openSubMenu}

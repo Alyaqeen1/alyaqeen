@@ -6,6 +6,7 @@ import ActiveStudents from "./admin/ActiveStudents";
 import ActiveTeachers from "./admin/ActiveTeachers";
 import AddTeacher from "./admin/AddTeacher";
 import AdminDirectDebit from "./admin/AdminDirectDebit";
+import BestTeacherStudent from "./admin/BestTeacherStudent";
 import Classes from "./admin/Classes";
 import Departments from "./admin/Departments";
 import FeeSettings from "./admin/FeeSettings";
@@ -435,6 +436,16 @@ const dashboardRoutes = [
           <PrivateRoute>
             <AdminRoute>
               <ViewStudent></ViewStudent>
+            </AdminRoute>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "admin/best-teacher-student",
+        element: (
+          <PrivateRoute>
+            <AdminRoute>
+              <BestTeacherStudent></BestTeacherStudent>
             </AdminRoute>
           </PrivateRoute>
         ),
