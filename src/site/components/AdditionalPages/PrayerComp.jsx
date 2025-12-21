@@ -89,16 +89,11 @@ const PrayerComp = () => {
       <div className="mask-shape float-bob-x">
         <img src={three} className="w-50" alt="shape-img" />
       </div>
-      <div className="pencil-shape">
-        <img src={four} className="w-50" alt="shape-img" />
-      </div>
+
       <div className="mask-shape-2 text-end">
         <img src={five} className="w-50" alt="shape-img" />
       </div>
 
-      <div className="compass-shape text-end">
-        <img src={six} className="w-50" alt="shape-img" />
-      </div>
       <div className="container">
         <div className="section-title text-center mt-60">
           <span data-aos-duration="800" data-aos="fade-up">
@@ -405,16 +400,16 @@ const PrayerComp = () => {
                   <div className="d-flex justify-content-between">
                     <div className="mt-5">
                       <h5>Summer Jumu'ah Timetable:</h5>
-                      <p>1st Jama'ah at 1:30 PM</p>
-                      <p>2nd Jama'ah at 2:00 PM</p>
-                      <p>3rd Jama'ah at 2:30 PM</p>
+                      <p>1st Jama'ah at {times?.[0]?.jumuah?.summer?.first}</p>
+                      <p>2nd Jama'ah at {times?.[0]?.jumuah?.summer?.second}</p>
+                      <p>3rd Jama'ah at {times?.[0]?.jumuah?.summer?.third}</p>
                     </div>
                     <h3>Jumuah Information</h3>
                     <div className="mt-5">
                       <h5>Winter Jumu'ah Timetable:</h5>
-                      <p>1st Jama'ah at 12:45 PM</p>
-                      <p>2nd Jama'ah at 1:15 PM</p>
-                      <p>2nd Jama'ah at 1:45 PM</p>
+                      <p>1st Jama'ah at {times?.[0]?.jumuah?.winter?.first}</p>
+                      <p>2nd Jama'ah at {times?.[0]?.jumuah?.winter?.second}</p>
+                      <p>3rd Jama'ah at {times?.[0]?.jumuah?.winter?.third}</p>
                     </div>
                   </div>
                   <h5 className="mt-4 text-center">

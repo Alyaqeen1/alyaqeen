@@ -12,6 +12,7 @@ export default function PrayerTimeUpdate() {
   const [date, setDate] = useState("");
 
   const { data: times, isLoading } = useGetPrayerTimesQuery();
+  console.log(times?.[0]?.jumuah);
   const [updatePrayerTimes, { isLoading: localLoading }] =
     useUpdatePrayerTimesMutation();
 
@@ -26,6 +27,14 @@ export default function PrayerTimeUpdate() {
   const [maghribJamat, setMaghribJamat] = useState("");
   const [ishaStart, setIshaStart] = useState("");
   const [ishaJamat, setIshaJamat] = useState("");
+
+  // New Jumu'ah timing states
+  const [jumuah1Summer, setJumuah1Summer] = useState("");
+  const [jumuah2Summer, setJumuah2Summer] = useState("");
+  const [jumuah3Summer, setJumuah3Summer] = useState("");
+  const [jumuah1Winter, setJumuah1Winter] = useState("");
+  const [jumuah2Winter, setJumuah2Winter] = useState("");
+  const [jumuah3Winter, setJumuah3Winter] = useState("");
 
   // Autofill fields when month & date selected
   useEffect(() => {
@@ -45,6 +54,13 @@ export default function PrayerTimeUpdate() {
         setMaghribJamat(day.maghrib?.jamat || "");
         setIshaStart(day.isha?.start || "");
         setIshaJamat(day.isha?.jamat || "");
+        // Autofill Jumu'ah timings
+        setJumuah2Summer(times?.[0]?.jumuah?.summer?.second || "");
+        setJumuah3Summer(times?.[0]?.jumuah?.summer?.third || "");
+        setJumuah1Winter(times?.[0]?.jumuah?.winter?.first || "");
+        setJumuah1Summer(times?.[0]?.jumuah?.summer?.first || "");
+        setJumuah2Winter(times?.[0]?.jumuah?.winter?.second || "");
+        setJumuah3Winter(times?.[0]?.jumuah?.winter?.third || "");
       }
     }
   }, [month, date, times]);
@@ -52,9 +68,10 @@ export default function PrayerTimeUpdate() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Daily prayer update - make sure date is a number
     const updatedData = {
       month,
-      date: Number(date),
+      date: Number(date), // Convert to number
       updates: {
         sunrise,
         "fajr.start": fajrStart,
@@ -67,12 +84,21 @@ export default function PrayerTimeUpdate() {
         "maghrib.jamat": maghribJamat,
         "isha.start": ishaStart,
         "isha.jamat": ishaJamat,
+        // ALWAYS include Jumu'ah times in the update
+        jumuahSummer1: jumuah1Summer,
+        jumuahSummer2: jumuah2Summer,
+        jumuahSummer3: jumuah3Summer,
+        jumuahWinter1: jumuah1Winter,
+        jumuahWinter2: jumuah2Winter,
+        jumuahWinter3: jumuah3Winter,
       },
     };
 
+    console.log("Sending update:", updatedData);
+
     try {
       await updatePrayerTimes(updatedData).unwrap();
-      toast.success("Prayer time updated successfully!");
+      toast.success("Prayer times updated successfully!");
     } catch (err) {
       console.error(err);
       toast.error("Failed to update prayer time.");
@@ -325,6 +351,93 @@ export default function PrayerTimeUpdate() {
             value={ishaJamat}
             onChange={(e) => setIshaJamat(e.target.value)}
             required
+          />
+        </div>
+        {/* Jumu'ah Summer Timetable Section */}
+        <div
+          style={{ backgroundColor: "var(--border2)" }}
+          className="text-white rounded-3 p-2 fs-5"
+        >
+          Summer Jumu'ah Timetable
+        </div>
+        <div className="col-md-4">
+          <label className="form-label">1st Jama'ah (Summer)</label>
+          <input
+            type="text"
+            name="jumuah1_summer"
+            style={{ borderColor: "var(--border2)" }}
+            className="form-control bg-light"
+            placeholder="e.g. 1:30 PM"
+            value={jumuah1Summer}
+            onChange={(e) => setJumuah1Summer(e.target.value)}
+          />
+        </div>
+        <div className="col-md-4">
+          <label className="form-label">2nd Jama'ah (Summer)</label>
+          <input
+            type="text"
+            name="jumuah2_summer"
+            style={{ borderColor: "var(--border2)" }}
+            className="form-control bg-light"
+            placeholder="e.g. 2:00 PM"
+            value={jumuah2Summer}
+            onChange={(e) => setJumuah2Summer(e.target.value)}
+          />
+        </div>
+        <div className="col-md-4">
+          <label className="form-label">3rd Jama'ah (Summer)</label>
+          <input
+            type="text"
+            name="jumuah3_summer"
+            style={{ borderColor: "var(--border2)" }}
+            className="form-control bg-light"
+            placeholder="e.g. 2:30 PM"
+            value={jumuah3Summer}
+            onChange={(e) => setJumuah3Summer(e.target.value)}
+          />
+        </div>
+
+        {/* Jumu'ah Winter Timetable Section */}
+        <div
+          style={{ backgroundColor: "var(--border2)" }}
+          className="text-white rounded-3 p-2 fs-5"
+        >
+          Winter Jumu'ah Timetable
+        </div>
+        <div className="col-md-4">
+          <label className="form-label">1st Jama'ah (Winter)</label>
+          <input
+            type="text"
+            name="jumuah1_winter"
+            style={{ borderColor: "var(--border2)" }}
+            className="form-control bg-light"
+            placeholder="e.g. 12:45 PM"
+            value={jumuah1Winter}
+            onChange={(e) => setJumuah1Winter(e.target.value)}
+          />
+        </div>
+        <div className="col-md-4">
+          <label className="form-label">2nd Jama'ah (Winter)</label>
+          <input
+            type="text"
+            name="jumuah2_winter"
+            style={{ borderColor: "var(--border2)" }}
+            className="form-control bg-light"
+            placeholder="e.g. 1:15 PM"
+            value={jumuah2Winter}
+            onChange={(e) => setJumuah2Winter(e.target.value)}
+          />
+        </div>
+        <div className="col-md-4">
+          <label className="form-label">3rd Jama'ah (Winter)</label>
+          <input
+            type="text"
+            name="jumuah3_winter"
+            style={{ borderColor: "var(--border2)" }}
+            className="form-control bg-light"
+            placeholder="e.g. 1:45 PM"
+            value={jumuah3Winter}
+            onChange={(e) => setJumuah3Winter(e.target.value)}
           />
         </div>
 
