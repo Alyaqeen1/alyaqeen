@@ -291,6 +291,10 @@ export default function OffCanvasMenu() {
                         identifier="website-settings"
                         submenuItems={[
                           {
+                            label: "Website Settings",
+                            to: "admin/website-settings",
+                          },
+                          {
                             label: "Best Teacher / Student",
                             to: "admin/best-teacher-student",
                           },

@@ -29,6 +29,7 @@ import UnpaidList from "./admin/UnpaidList";
 import UpdateFees from "./admin/UpdateFees";
 import UpdateTeacher from "./admin/UpdateTeacher";
 import ViewStudent from "./admin/ViewStudent";
+import WebsiteSettings from "./admin/WebsiteSettings";
 import AddStudent from "./admissions/AddStudent";
 import Admissions from "./admissions/Admissions";
 import UpdateStudent from "./admissions/UpdateStudent";
@@ -446,6 +447,16 @@ const dashboardRoutes = [
           <PrivateRoute>
             <AdminRoute>
               <BestTeacherStudent></BestTeacherStudent>
+            </AdminRoute>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "admin/website-settings",
+        element: (
+          <PrivateRoute>
+            <AdminRoute>
+              <WebsiteSettings></WebsiteSettings>
             </AdminRoute>
           </PrivateRoute>
         ),

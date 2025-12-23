@@ -14,10 +14,17 @@ import nine from "../../assets/img/home/image8.png";
 import ten from "../../assets/img/hero/hero-shape.png";
 import eleven from "../../assets/img/home/bannerImg3.png";
 import aboutVideo from "../../assets/videos/WhatsApp_Video_2025-12-10_at_10.31.53_PM.mp4";
+import { useGetWebsiteSectionQuery } from "../../../redux/features/website_settings/website_settingsApi";
 
 const Banner = () => {
   const [isOpen, setOpen] = useState(false);
   const [showVideo, setShowVideo] = useState(false);
+  const {
+    data: homeVideo,
+    isLoading,
+    isError,
+    refetch,
+  } = useGetWebsiteSectionQuery("homeVideo");
 
   const { t, i18n } = useTranslation(["home"]);
   // const { i18n } = useTranslation();
@@ -163,7 +170,7 @@ const Banner = () => {
             </button>
 
             <video
-              src={aboutVideo}
+              src={homeVideo?.url || aboutVideo}
               controls
               autoPlay
               playsInline

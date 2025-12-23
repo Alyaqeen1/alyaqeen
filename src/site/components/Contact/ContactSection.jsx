@@ -6,8 +6,10 @@ import { useAddContactMutation } from "../../../redux/features/contact/contactAp
 import toast from "react-hot-toast";
 import one from "../../assets/img/about/new-pic.jpeg";
 import aboutVideo from "../../assets/videos/WhatsApp_Video_2025-12-10_at_10.31.53_PM.mp4";
+import { useGetWebsiteSectionQuery } from "../../../redux/features/website_settings/website_settingsApi";
 
 const ContactSection = () => {
+  const { data: homeVideo, refetch } = useGetWebsiteSectionQuery("homeVideo");
   const [isOpen, setOpen] = useState(false);
   const [showVideo, setShowVideo] = useState(false);
 
@@ -298,7 +300,7 @@ const ContactSection = () => {
             </button>
 
             <video
-              src={aboutVideo}
+              src={homeVideo?.url || aboutVideo}
               controls
               autoPlay
               playsInline

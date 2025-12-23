@@ -10,8 +10,11 @@ import LoadingSpinner from "../LoadingSpinner";
 import { useNavigate, useSearchParams } from "react-router";
 import timetableImage from "../../assets/img/December_2025_img_page-0001.jpg"; // Add this image import
 import timetablePDF from "/file/December_2025_img.pdf"; // Add this image import
+import { useGetWebsiteSectionQuery } from "../../../redux/features/website_settings/website_settingsApi";
 
 const PrayerComp = () => {
+  const { data: prayerCalendar, refetch } =
+    useGetWebsiteSectionQuery("prayerCalendar");
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const tabFromURL = searchParams.get("tab"); // Get tab from URL
@@ -68,7 +71,94 @@ const PrayerComp = () => {
       setActiveTabIndex(0);
     }
   }, [searchParams]);
+  // Check if the file is a PDF
+  const isPDFFile = () => {
+    if (!prayerCalendar?.calendarFile) return false;
+    const url = prayerCalendar.calendarFile.toLowerCase();
+    return (
+      url.endsWith(".pdf") || url.includes(".pdf") || url.includes("/pdf/")
+    );
+  };
 
+  // Get file extension for download
+  const getFileExtension = () => {
+    if (!prayerCalendar?.calendarFile) return "";
+    const url = prayerCalendar.calendarFile.toLowerCase();
+    if (url.endsWith(".pdf") || url.includes(".pdf") || url.includes("/pdf/")) {
+      return "pdf";
+    }
+    // Check for image extensions
+    if (url.endsWith(".jpg") || url.includes(".jpg")) return "jpg";
+    if (url.endsWith(".jpeg") || url.includes(".jpeg")) return "jpeg";
+    if (url.endsWith(".png") || url.includes(".png")) return "png";
+    if (url.endsWith(".gif") || url.includes(".gif")) return "gif";
+    if (url.endsWith(".webp") || url.includes(".webp")) return "webp";
+    return "file";
+  };
+  const handleDownload = async (url, extension) => {
+    try {
+      // For Cloudinary URLs, we need to modify them to force download
+      let downloadUrl = url;
+
+      // Check if it's a Cloudinary URL
+      if (url.includes("cloudinary.com")) {
+        // Add Cloudinary's force download parameter
+        // Method 1: Add fl_attachment parameter
+        const hasQuery = url.includes("?");
+        downloadUrl = hasQuery
+          ? `${url}&fl_attachment`
+          : `${url}?fl_attachment`;
+
+        // Method 2: Alternatively, use fetch API to download
+        try {
+          const response = await fetch(downloadUrl);
+          const blob = await response.blob();
+
+          // Create a blob URL and download it
+          const blobUrl = window.URL.createObjectURL(blob);
+          const link = document.createElement("a");
+          link.href = blobUrl;
+          link.download = `prayer-calendar-${new Date()
+            .toISOString()
+            .slice(0, 10)}.${extension}`;
+          document.body.appendChild(link);
+          link.click();
+
+          // Cleanup
+          setTimeout(() => {
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(blobUrl);
+          }, 100);
+
+          return; // Exit early if successful
+        } catch (fetchError) {
+          console.log("Fetch method failed, trying direct download");
+        }
+      }
+
+      // Fallback method for direct download
+      const link = document.createElement("a");
+      link.href = downloadUrl;
+      link.download = `prayer-calendar-${new Date()
+        .toISOString()
+        .slice(0, 10)}.${extension}`;
+      link.target = "_blank"; // Open in new tab as fallback
+
+      // Append, click, and remove
+      document.body.appendChild(link);
+      link.click();
+
+      // Cleanup
+      setTimeout(() => {
+        document.body.removeChild(link);
+      }, 10);
+    } catch (error) {
+      console.error("Download failed:", error);
+
+      // Ultimate fallback: open in new tab
+      window.open(url, "_blank");
+    }
+  };
   if (isLoading) {
     return <LoadingSpinner></LoadingSpinner>;
   }
@@ -424,27 +514,79 @@ const PrayerComp = () => {
             <div className="timetable-calendar-section">
               <div className="row justify-content-center">
                 <div className="col-12">
-                  {/* Download Button - Top */}
-                  <div className="text-center mb-4">
-                    <a href={timetablePDF} download className="theme-btn">
-                      <i className="fas fa-download me-2"></i>
-                      Download Timetable Calendar
-                    </a>
-                  </div>
+                  {/* Download Button - Only show if there's a calendar file */}
+                  {prayerCalendar?.calendarFile && (
+                    <div className="text-center mb-4">
+                      <button
+                        onClick={() =>
+                          handleDownload(
+                            prayerCalendar.calendarFile,
+                            getFileExtension()
+                          )
+                        }
+                        className="theme-btn"
+                      >
+                        <i className="fas fa-download me-2"></i>
+                        Download Timetable Calendar (
+                        {getFileExtension().toUpperCase()})
+                      </button>
+                    </div>
+                  )}
 
-                  {/* Full Width Image */}
-                  <div className="calendar-image-container">
-                    <img
-                      src={timetableImage}
-                      alt="Timetable Calendar 2025-2026"
-                      className="img-fluid w-100"
-                      style={{
-                        borderRadius: "8px",
-                        boxShadow: "0 5px 15px rgba(0,0,0,0.1)",
-                        cursor: "pointer",
-                      }}
-                    />
-                  </div>
+                  {/* Dynamic Content Display */}
+                  {prayerCalendar?.calendarFile ? (
+                    <div className="calendar-content-wrapper">
+                      {isPDFFile() ? (
+                        // PDF Display using iframe - FULL WIDTH
+                        <div
+                          className="pdf-preview-container"
+                          style={{
+                            width: "100%",
+                            height: "80vh", // Use viewport height for responsive sizing
+                            boxShadow: "0 5px 15px rgba(0,0,0,0.1)",
+                            overflow: "hidden",
+                            borderRadius: "8px",
+                          }}
+                        >
+                          <iframe
+                            src={prayerCalendar.calendarFile}
+                            title="Timetable Calendar PDF"
+                            className="w-100 h-100"
+                            style={{ border: "none" }}
+                          />
+                        </div>
+                      ) : (
+                        // Image Display - FULL WIDTH
+                        <div className="image-preview-container w-100">
+                          <img
+                            src={prayerCalendar.calendarFile}
+                            alt="Timetable Calendar"
+                            className="img-fluid w-100"
+                            style={{
+                              borderRadius: "8px",
+                              boxShadow: "0 5px 15px rgba(0,0,0,0.1)",
+                              display: "block", // Ensure it's a block element
+                            }}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    // No calendar file uploaded
+                    <div className="text-center py-5">
+                      <div className="alert alert-info">
+                        <i className="fas fa-calendar-alt fa-3x mb-3 text-muted"></i>
+                        <h4>No Timetable Calendar Available</h4>
+                        <p className="mb-0">
+                          The prayer timetable calendar has not been uploaded
+                          yet.
+                        </p>
+                        <p>
+                          Please check back later or contact the administration.
+                        </p>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
