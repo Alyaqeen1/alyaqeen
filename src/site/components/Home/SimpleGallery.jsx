@@ -27,8 +27,6 @@ const SimpleGallery = ({ gallery = [] }) => {
 
   return (
     <div className="simple-gallery">
-      <h2 className="text-center mb-4">Our Gallery</h2>
-
       {/* Simple grid - adjusts based on item count */}
       <div className={`gallery-grid grid-${Math.min(gallery.length, 4)}`}>
         {gallery.map((item, index) => (
