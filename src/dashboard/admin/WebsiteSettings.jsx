@@ -14,6 +14,7 @@ import {
   FaFilePdf,
   FaImage,
 } from "react-icons/fa";
+import GalleryUploader from "./GalleryUploader";
 
 export default function WebsiteSettings() {
   const {
@@ -28,7 +29,7 @@ export default function WebsiteSettings() {
   const [homeVideoPreview, setHomeVideoPreview] = useState("");
   const [homeVideoUploading, setHomeVideoUploading] = useState(false);
   const [videoLocalLoading, setVideoLocalLoading] = useState(false);
-
+  const [gallery, setGallery] = useState([]);
   // Prayer Calendar (PDF/Image) states
   const [prayerCalendarFile, setPrayerCalendarFile] = useState(null);
   const [prayerCalendarPreview, setPrayerCalendarPreview] = useState("");
@@ -259,6 +260,55 @@ export default function WebsiteSettings() {
   const isCloudinaryCalendar =
     prayerCalendarPreview && prayerCalendarPreview.startsWith("http");
 
+  // In your WebsiteSettings component, update these parts:
+
+  // Load existing gallery data - FIX THIS
+  useEffect(() => {
+    if (websiteData?.homeVideo?.url) {
+      setHomeVideoPreview(websiteData.homeVideo.url);
+    }
+
+    if (websiteData?.prayerCalendar?.calendarFile) {
+      setPrayerCalendarPreview(websiteData.prayerCalendar.calendarFile);
+    }
+
+    // CORRECT: Load gallery as direct array
+    if (websiteData?.gallery) {
+      // websiteData.gallery IS the array directly
+      setGallery(websiteData.gallery || []);
+    }
+  }, [websiteData]);
+
+  // Handle gallery update - FIX THIS
+  const handleGalleryUpdate = async (mediaArray) => {
+    try {
+      // Send gallery as direct array, not nested
+      await updateSection({
+        section: "gallery",
+        data: mediaArray, // Direct array, not {media: mediaArray}
+      }).unwrap();
+
+      setGallery(mediaArray);
+
+      // Show success message
+      Swal.fire({
+        title: "Success!",
+        text: "Gallery updated successfully",
+        icon: "success",
+        timer: 1500,
+      });
+
+      // Optional: Refresh data
+      refetch();
+    } catch (error) {
+      Swal.fire({
+        title: "Error!",
+        text: "Failed to update gallery",
+        icon: "error",
+      });
+      throw error;
+    }
+  };
   if (isLoading) {
     return (
       <div className="d-flex justify-content-center align-items-center py-5">
@@ -525,6 +575,24 @@ export default function WebsiteSettings() {
                   )}
                 </button>
               </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Gallery Section */}
+        <div className="col-12 mb-4">
+          <div className="card shadow-sm border-0">
+            <div className="card-header bg-info text-white">
+              <h4 className="mb-0">
+                <FaImage className="me-2" />
+                Media Gallery
+              </h4>
+            </div>
+            <div className="card-body">
+              <GalleryUploader
+                onGalleryUpdate={handleGalleryUpdate}
+                // No need to pass existingGallery - component fetches it
+              />
             </div>
           </div>
         </div>

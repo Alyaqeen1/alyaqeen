@@ -849,3 +849,25 @@ button:focus {
     height: 640px; /* reel height */
   }
 }
+
+.border-dashed {
+  border-style: dashed !important;
+}
+
+.bg-primary-light {
+  background-color: rgba(13, 110, 253, 0.05);
+}
+
+.drag-drop-area:hover {
+  border-color: #0d6efd !important;
+  background-color: rgba(13, 110, 253, 0.1);
+}
+
+.gallery-uploader .card {
+  transition: transform 0.2s;
+}
+
+.gallery-uploader .card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
