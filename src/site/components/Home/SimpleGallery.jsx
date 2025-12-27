@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FaPlay, FaExpand, FaTimes, FaVideo, FaImage } from "react-icons/fa";
-import "../../../SimpleGallery.css"; // We'll create this CSS file
+import "../../../simpleGallery.css"; // We'll create this CSS file
 const SimpleGallery = ({ gallery = [] }) => {
   const [selectedMedia, setSelectedMedia] = useState(null);
 
