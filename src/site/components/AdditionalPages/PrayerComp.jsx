@@ -166,6 +166,17 @@ const PrayerComp = () => {
   if (isError || !times || times.length === 0) {
     return <p>Prayer times data could not be loaded.</p>;
   }
+  const getUKYear = () => {
+    const now = new Date();
+    // Convert to UK time string
+    const ukTimeString = now.toLocaleString("en-US", {
+      timeZone: "Europe/London",
+    });
+
+    // Create a new date from UK time string
+    const ukDate = new Date(ukTimeString);
+    return ukDate.getFullYear();
+  };
 
   return (
     <section
@@ -254,7 +265,9 @@ const PrayerComp = () => {
                 ))}
               </div>
               <div className="col-lg-10">
-                <h3 className="mb-3">{selectedMonth} 2025</h3>
+                <h3 className="mb-3">
+                  {selectedMonth} {getUKYear()}
+                </h3>
                 <div className="table-responsive mb-3">
                   <table
                     className="table mb-0"
