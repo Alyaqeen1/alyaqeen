@@ -1,19 +1,49 @@
 import { Link } from "react-router";
-import axios from "axios";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaUssunnah } from "react-icons/fa";
 import { IoMoonOutline, IoSunny, IoSunnyOutline } from "react-icons/io5";
 import { MdSunnySnowing } from "react-icons/md";
+import FlipClockCountdown from "@leenguyen/react-flip-clock-countdown";
+import "@leenguyen/react-flip-clock-countdown/dist/index.css";
 import { useGetPrayerTimesQuery } from "../../../redux/features/prayer_times/prayer_timesApi";
 import LoadingSpinner from "../LoadingSpinner";
 import { useGetAnnouncementPublicLatestQuery } from "../../../redux/features/announcements/announcementsApi";
 
+// Utility function for parsing time strings
+// Utility function for parsing time strings - CORRECTED VERSION
+const parseTimeString = (timeStr, baseDate = new Date()) => {
+  if (!timeStr) return null;
+
+  try {
+    const [time, period] = timeStr.split(" ");
+    const [hours, minutes] = time.split(":");
+
+    let hour = parseInt(hours);
+    if (period === "PM" && hour !== 12) hour += 12;
+    if (period === "AM" && hour === 12) hour = 0;
+
+    // Create a new date with the same date as baseDate
+    const date = new Date(baseDate);
+    date.setHours(hour, parseInt(minutes), 0, 0);
+
+    return date; // Return the local time directly
+  } catch (error) {
+    return null;
+  }
+};
 const News = () => {
   const { data: announcement, isLoading: latestUpdateLoading } =
     useGetAnnouncementPublicLatestQuery();
 
   const [formattedTime, setFormattedTime] = useState("");
   const { data: times, isLoading } = useGetPrayerTimesQuery();
+
+  // Countdown state
+  const [targetTime, setTargetTime] = useState(null);
+  const [nextPrayer, setNextPrayer] = useState({
+    name: "",
+    time: "",
+  });
 
   const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
@@ -29,11 +59,9 @@ const News = () => {
   };
 
   // Function to create safe HTML content with length limit
-  // Function to create safe HTML content with length limit - PRESERVES FORMATTING
   const createLimitedHtmlContent = (html, maxLength = 450) => {
     if (!html) return { __html: "" };
 
-    // Strip HTML tags only to check length (don't modify the HTML yet)
     const plainText = html
       .replace(/<br\s*\/?>/gi, "\n")
       .replace(/<\/p>|<p>/gi, "\n")
@@ -41,19 +69,13 @@ const News = () => {
       .replace(/\n{3,}/g, "\n\n")
       .trim();
 
-    // If content is short enough, return the original HTML with formatting
     if (plainText.length <= maxLength) {
       return { __html: html };
     }
 
-    // If content is too long, we need to truncate intelligently while preserving HTML
-    // This is more complex - we'll create a DOM parser to handle it properly
-
-    // Create a temporary div to parse HTML
     const tempDiv = document.createElement("div");
     tempDiv.innerHTML = html;
 
-    // Function to extract text up to maxLength while preserving HTML structure
     const truncateHtml = (element, remainingChars) => {
       if (remainingChars <= 0) return { html: "", remaining: 0 };
 
@@ -115,7 +137,7 @@ const News = () => {
     return plainText.length > maxLength;
   };
 
-  // Check if announcement has content AND needs truncation (shows "Read More" only when there's more to read)
+  // Check if announcement has content AND needs truncation
   const showReadMore =
     announcement?.content && needsTruncation(announcement.content, 450);
 
@@ -145,6 +167,23 @@ const News = () => {
     (day) => day?.date == currentDate
   );
 
+  // Get tomorrow's times
+  const tomorrowDate = new Date();
+  tomorrowDate.setDate(tomorrowDate.getDate() + 1);
+  const tomorrowDateStr = new Intl.DateTimeFormat("en-US", {
+    timeZone: userTimeZone,
+    day: "2-digit",
+  }).format(tomorrowDate);
+
+  const tomorrowMonthName = new Intl.DateTimeFormat("en-US", {
+    timeZone: userTimeZone,
+    month: "long",
+  }).format(tomorrowDate);
+
+  const tomorrowTimes = times?.[0]?.[tomorrowMonthName]?.find(
+    (day) => day?.date == tomorrowDateStr
+  );
+
   const getDateSuffix = (date) => {
     if (date > 3 && date < 21) return "th";
     switch (date % 10) {
@@ -159,14 +198,136 @@ const News = () => {
     }
   };
 
+  // Add these debug logs in your calculateNextPrayer function
+  useEffect(() => {
+    const calculateNextPrayer = () => {
+      const now = new Date();
+      // const now = new Date();
+      // now.setHours(13, 0, 0, 0); // This modifies the Date object
+
+      // If no times available at all
+      if (!times || !times[0]) {
+        setNextPrayer({
+          name: "No prayer times",
+          time: "",
+        });
+        setTargetTime(null);
+        return;
+      }
+
+      // Define prayers in order for today (using JAMAT times if available)
+      const prayersToday = todayTimes
+        ? [
+            {
+              name: "Fajr",
+              time: todayTimes.fajr?.jamat || todayTimes.fajr?.start,
+              isToday: true,
+              prayerDate: new Date(),
+            },
+            {
+              name: "Zuhr",
+              time: todayTimes.zuhr?.jamat || todayTimes.zuhr?.start,
+              isToday: true,
+              prayerDate: new Date(),
+            },
+            {
+              name: "Asr",
+              time: todayTimes.asr?.jamat || todayTimes.asr?.start,
+              isToday: true,
+              prayerDate: new Date(),
+            },
+            {
+              name: "Maghrib",
+              time: todayTimes.maghrib?.jamat || todayTimes.maghrib?.start,
+              isToday: true,
+              prayerDate: new Date(),
+            },
+            {
+              name: "Isha",
+              time: todayTimes.isha?.jamat || todayTimes.isha?.start,
+              isToday: true,
+              prayerDate: new Date(),
+            },
+          ]
+        : [];
+
+      // Find the next prayer from all available times
+      let nextPrayerObj = null;
+      let smallestDiff = Infinity;
+
+      prayersToday.forEach((prayer) => {
+        if (!prayer.time) return;
+
+        const prayerTime = parseTimeString(prayer.time, prayer.prayerDate);
+
+        if (prayerTime) {
+          const diff = prayerTime.getTime() - now.getTime();
+
+          if (diff > 0 && diff < smallestDiff) {
+            smallestDiff = diff;
+            nextPrayerObj = prayer;
+          }
+        }
+      });
+
+      // Check if we found a prayer for today
+      if (nextPrayerObj) {
+        const prayerTime = parseTimeString(
+          nextPrayerObj.time,
+          nextPrayerObj.prayerDate
+        );
+        if (prayerTime) {
+          setTargetTime(prayerTime);
+          setNextPrayer({
+            name: nextPrayerObj.name,
+            time: nextPrayerObj.time,
+          });
+        }
+      } else {
+        // No prayer found for today, check for tomorrow's Fajr
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+
+        const prayersTomorrow = tomorrowTimes
+          ? [
+              {
+                name: "Fajr (Tomorrow)",
+                time: tomorrowTimes.fajr?.jamat || tomorrowTimes.fajr?.start,
+                isToday: false,
+                prayerDate: tomorrow,
+              },
+            ]
+          : [];
+
+        if (prayersTomorrow[0]?.time) {
+          const prayerTime = parseTimeString(
+            prayersTomorrow[0].time,
+            prayersTomorrow[0].prayerDate
+          );
+          setTargetTime(prayerTime.toISOString());
+          setNextPrayer({
+            name: prayersTomorrow[0].name,
+            time: prayersTomorrow[0].time,
+          });
+        } else {
+          setNextPrayer({
+            name: "No prayer times available",
+            time: "",
+          });
+          setTargetTime(null);
+        }
+      }
+    };
+
+    // Run calculation initially and every 30 seconds
+    calculateNextPrayer();
+    const interval = setInterval(calculateNextPrayer, 30000);
+    return () => clearInterval(interval);
+  }, [todayTimes, tomorrowTimes, times]);
+
   if (isLoading || latestUpdateLoading) {
     return <LoadingSpinner></LoadingSpinner>;
   }
-
-  // Check if announcement has content to show "Read More"
-  const hasContent =
-    announcement?.content &&
-    announcement.content.replace(/<[^>]*>/g, "").trim().length > 0;
 
   return (
     <section className="news-section section-padding fix" id="blog">
@@ -202,7 +363,6 @@ const News = () => {
                     lineHeight: "1.6",
                     fontSize: "16px",
                     color: "#333",
-                    // maxHeight: "200px",
                     overflow: "hidden",
                   }}
                   dangerouslySetInnerHTML={createLimitedHtmlContent(
@@ -255,22 +415,104 @@ const News = () => {
                     Prayer Timetable
                   </Link>
                 </div>
-                <div className="d-flex justify-content-between align-items-center my-3">
-                  <div className="mt-2">
+
+                {/* CURRENT DATE, COUNTDOWN, AND CURRENT TIME IN ONE ROW */}
+                <div className="d-flex flex-column flex-md-row justify-content-between align-items-center my-3 gap-3">
+                  {/* Current Date */}
+                  <div className="mt-2 text-center">
                     <p className="fw-bolder text-black">Current Date</p>
-                    <p style={{ color: "var(--theme)" }} className="fs-5">
-                      {currentMonthName} {currentDate}
-                      {getDateSuffix(currentDate)}
-                    </p>
+                    <div
+                      style={{
+                        backgroundColor: "var(--theme)",
+                        color: "white",
+                        padding: "10px 15px",
+                        borderRadius: "8px",
+                        minWidth: "120px",
+                      }}
+                    >
+                      <p className="fs-5 mb-0">
+                        {currentMonthName} {currentDate}
+                        {getDateSuffix(currentDate)}
+                      </p>
+                    </div>
                   </div>
-                  <div className="mt-2">
-                    <p className="fw-bolder text-black">Current Time</p>
-                    <p style={{ color: "var(--theme)" }} className="fs-5">
-                      {formattedTime}
+
+                  {/* Countdown Timer with Flip Clock */}
+                  <div className="text-center">
+                    <p className="fw-bolder text-black">
+                      Time Until: {nextPrayer.name}
                     </p>
+                    <div
+                      style={
+                        {
+                          // color: "white",
+                          // padding: "10px",
+                          // borderRadius: "8px",
+                          // minWidth: "200px",
+                        }
+                      }
+                    >
+                      {targetTime ? (
+                        <div>
+                          <FlipClockCountdown
+                            to={targetTime}
+                            // now={() => new Date().setHours(13, 0, 0, 0)} // Set to 1:00 PM for testing
+                            renderMap={[false, true, true, true]} // ✅ THIS IS THE FIX
+                            labels={["HOURS", "MINUTES", "SECONDS"]}
+                            showSeparators={true}
+                            labelStyle={{
+                              fontSize: "10px",
+                              fontWeight: 600,
+                              textTransform: "uppercase",
+                              marginTop: "6px",
+                            }}
+                            digitBlockStyle={{
+                              width: 42,
+                              height: 60,
+                              fontSize: 30,
+                              backgroundColor: "var(--theme)",
+                              color: "#fff",
+                              borderRadius: "8px",
+                              boxShadow: "0 4px 10px rgba(0,0,0,0.25)",
+                            }}
+                            dividerStyle={{
+                              height: 1,
+                              backgroundColor: "rgba(255,255,255,0.4)",
+                            }}
+                            separatorStyle={{
+                              size: 6,
+                              color: "#fff",
+                            }}
+                          />
+                        </div>
+                      ) : (
+                        <div className="fs-5 py-2">
+                          {nextPrayer.name === "No prayer times available"
+                            ? "No prayer times available"
+                            : "Calculating prayer times..."}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Current Time */}
+                  <div className="mt-2 text-center">
+                    <p className="fw-bolder text-black">Current Time</p>
+                    <div
+                      style={{
+                        backgroundColor: "var(--theme)",
+                        color: "white",
+                        padding: "10px 15px",
+                        borderRadius: "8px",
+                        minWidth: "120px",
+                      }}
+                    >
+                      <p className="fs-5 mb-0">{formattedTime}</p>
+                    </div>
                   </div>
                 </div>
 
+                {/* Prayer Times Table - TODAY'S TIMES */}
                 <div className="table-responsive mb-3 border-0">
                   <table className="table mb-0 border-0">
                     <thead>
@@ -302,7 +544,16 @@ const News = () => {
                     <tbody>
                       <tr className="border border-white">
                         <td
-                          style={{ backgroundColor: "var(--theme)" }}
+                          style={{
+                            backgroundColor:
+                              nextPrayer.name === "Fajr"
+                                ? "white"
+                                : "var(--theme)",
+                            color:
+                              nextPrayer.name === "Fajr"
+                                ? "var(--theme)"
+                                : "white",
+                          }}
                           className="h6 text-center align-middle text-uppercase py-3 fw-bolder"
                         >
                           Fajr
@@ -326,7 +577,16 @@ const News = () => {
 
                       <tr className="border border-white">
                         <td
-                          style={{ backgroundColor: "var(--theme)" }}
+                          style={{
+                            backgroundColor:
+                              nextPrayer.name === "Zuhr"
+                                ? "white"
+                                : "var(--theme)",
+                            color:
+                              nextPrayer.name === "Zuhr"
+                                ? "var(--theme)"
+                                : "white",
+                          }}
                           className="h6 text-center align-middle text-uppercase py-3 fw-bolder"
                         >
                           zuhr
@@ -349,7 +609,16 @@ const News = () => {
                       </tr>
                       <tr className="border border-white">
                         <td
-                          style={{ backgroundColor: "var(--theme)" }}
+                          style={{
+                            backgroundColor:
+                              nextPrayer.name === "Asr"
+                                ? "white"
+                                : "var(--theme)",
+                            color:
+                              nextPrayer.name === "Asr"
+                                ? "var(--theme)"
+                                : "white",
+                          }}
                           className="h6 text-center align-middle text-uppercase py-3 fw-bolder"
                         >
                           asr
@@ -372,7 +641,16 @@ const News = () => {
                       </tr>
                       <tr className="border border-white">
                         <td
-                          style={{ backgroundColor: "var(--theme)" }}
+                          style={{
+                            backgroundColor:
+                              nextPrayer.name === "Maghrib"
+                                ? "white"
+                                : "var(--theme)",
+                            color:
+                              nextPrayer.name === "Maghrib"
+                                ? "var(--theme)"
+                                : "white",
+                          }}
                           className="h6 text-center align-middle text-uppercase py-3 fw-bolder"
                         >
                           maghrib
@@ -395,7 +673,16 @@ const News = () => {
                       </tr>
                       <tr className="border border-white">
                         <td
-                          style={{ backgroundColor: "var(--theme)" }}
+                          style={{
+                            backgroundColor:
+                              nextPrayer.name === "Isha"
+                                ? "white"
+                                : "var(--theme)",
+                            color:
+                              nextPrayer.name === "Isha"
+                                ? "var(--theme)"
+                                : "white",
+                          }}
                           className="h6 text-center align-middle text-uppercase py-3 fw-bolder"
                         >
                           isha
