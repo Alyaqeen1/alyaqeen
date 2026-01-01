@@ -8,9 +8,9 @@ import "@leenguyen/react-flip-clock-countdown/dist/index.css";
 import { useGetPrayerTimesQuery } from "../../../redux/features/prayer_times/prayer_timesApi";
 import LoadingSpinner from "../LoadingSpinner";
 import { useGetAnnouncementPublicLatestQuery } from "../../../redux/features/announcements/announcementsApi";
+import { toHijri } from "hijri-converter"; // Add this import
 
 // Utility function for parsing time strings
-// Utility function for parsing time strings - CORRECTED VERSION
 const parseTimeString = (timeStr, baseDate = new Date()) => {
   if (!timeStr) return null;
 
@@ -45,8 +45,98 @@ const News = () => {
     time: "",
   });
 
+  // Islamic date state
+  const [islamicDate, setIslamicDate] = useState({
+    day: "",
+    month: "",
+    year: "",
+    monthName: "",
+    formatted: "",
+  });
   const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  // Function to get Islamic month name
+  const getIslamicMonthName = (monthNumber) => {
+    const islamicMonths = [
+      "Muharram",
+      "Safar",
+      "Rabi' al-Awwal",
+      "Rabi' al-Thani",
+      "Jumada al-Awwal",
+      "Jumada al-Thani",
+      "Rajab",
+      "Sha'ban",
+      "Ramadan",
+      "Shawwal",
+      "Dhu al-Qi'dah",
+      "Dhu al-Hijjah",
+    ];
+    return islamicMonths[monthNumber - 1] || "";
+  };
 
+  // Update Islamic date function
+  const updateIslamicDate = () => {
+    try {
+      const now = new Date();
+      const hijri = toHijri(
+        now.getFullYear(),
+        now.getMonth() + 1,
+        now.getDate()
+      );
+
+      const monthName = getIslamicMonthName(hijri.hm);
+
+      setIslamicDate({
+        day: hijri.hd,
+        month: hijri.hm,
+        year: hijri.hy,
+        monthName: monthName,
+        formatted: `${hijri.hd} ${monthName} ${hijri.hy}`,
+      });
+    } catch (error) {
+      console.error("Error converting to Hijri date:", error);
+      // Fallback date
+      setIslamicDate({
+        day: "13",
+        month: "7",
+        year: "1447",
+        monthName: "Rajab",
+        formatted: "13 Rajab 1447",
+      });
+    }
+  };
+
+  useEffect(() => {
+    setFormattedTime(getFormattedTime()); // initial set
+    updateIslamicDate(); // Update Islamic date
+
+    const interval = setInterval(() => {
+      setFormattedTime(getFormattedTime()); // update every second
+    }, 1000);
+
+    // Update Islamic date at midnight
+    const now = new Date();
+    const midnight = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate() + 1,
+      0,
+      0,
+      0
+    );
+    const timeToMidnight = midnight.getTime() - now.getTime();
+
+    const midnightTimer = setTimeout(() => {
+      updateIslamicDate();
+      // Set daily update
+      const dailyInterval = setInterval(updateIslamicDate, 24 * 60 * 60 * 1000);
+      return () => clearInterval(dailyInterval);
+    }, timeToMidnight);
+
+    return () => {
+      clearInterval(interval);
+      clearTimeout(midnightTimer);
+    };
+  }, []);
   const getFormattedTime = () => {
     const date = new Date();
     return new Intl.DateTimeFormat("en-US", {
@@ -415,99 +505,222 @@ const News = () => {
                     Prayer Timetable
                   </Link>
                 </div>
-
-                {/* CURRENT DATE, COUNTDOWN, AND CURRENT TIME IN ONE ROW */}
-                <div className="d-flex flex-column flex-md-row justify-content-between align-items-center my-3 gap-3">
-                  {/* Current Date */}
-                  <div className="mt-2 text-center">
-                    <p className="fw-bolder text-black">Current Date</p>
-                    <div
-                      style={{
-                        backgroundColor: "var(--theme)",
-                        color: "white",
-                        padding: "10px 15px",
-                        borderRadius: "8px",
-                        minWidth: "120px",
-                      }}
-                    >
-                      <p className="fs-5 mb-0">
-                        {currentMonthName} {currentDate}
-                        {getDateSuffix(currentDate)}
-                      </p>
+                {/* CURRENT DATE, COUNTDOWN, AND CURRENT TIME - RESPONSIVE LAYOUT */}
+                <div className="my-3">
+                  <div className="row align-items-center justify-content-center g-1">
+                    {/* Mobile: Date and Time side by side */}
+                    <div className="col-12 d-block d-md-none">
+                      <div className="row g-2 mb-3">
+                        <div className="col-6">
+                          <div className="text-center h-100">
+                            <p className="fw-bolder text-black mb-1 small">
+                              Current Date
+                            </p>
+                            <div
+                              className="d-flex flex-column justify-content-center"
+                              style={{
+                                backgroundColor: "var(--theme)",
+                                color: "white",
+                                padding: "12px 8px",
+                                borderRadius: "8px",
+                                minHeight: "100px",
+                              }}
+                            >
+                              <p className="mb-0 fs-6">
+                                {currentMonthName} {currentDate}
+                                {getDateSuffix(currentDate)}
+                              </p>
+                              {/* Islamic Date for Mobile */}
+                              <p
+                                className="mb-0 fs-7 mt-1"
+                                style={{ opacity: 0.9 }}
+                              >
+                                {islamicDate.formatted}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="col-6">
+                          <div className="text-center h-100">
+                            <p className="fw-bolder text-black mb-1 small">
+                              Current Time
+                            </p>
+                            <div
+                              className="d-flex align-items-center justify-content-center"
+                              style={{
+                                backgroundColor: "var(--theme)",
+                                color: "white",
+                                padding: "12px 8px",
+                                borderRadius: "8px",
+                                minHeight: "100px",
+                              }}
+                            >
+                              <p className="mb-0 fs-6">{formattedTime}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-
-                  {/* Countdown Timer with Flip Clock */}
-                  <div className="text-center">
-                    <p className="fw-bolder text-black">
-                      Time Until: {nextPrayer.name}
-                    </p>
-                    <div
-                      style={
-                        {
-                          // color: "white",
-                          // padding: "10px",
-                          // borderRadius: "8px",
-                          // minWidth: "200px",
-                        }
-                      }
-                    >
-                      {targetTime ? (
+                    {/* Desktop: Date (Left), Counter (Middle), Time (Right) - ALL SAME HEIGHT */}
+                    {/* Desktop: Date (Left), Counter (Middle), Time (Right) */}{" "}
+                    <div className="col-12 d-none d-md-flex justify-content-between align-items-center">
+                      {" "}
+                      {/* Current Date - Left with Islamic Date */}{" "}
+                      <div className="text-center">
+                        {" "}
+                        <p className="fw-bolder text-black">
+                          Current Date
+                        </p>{" "}
+                        <div
+                          style={{
+                            backgroundColor: "var(--theme)",
+                            color: "white",
+                            padding: "10px 15px",
+                            borderRadius: "8px",
+                            minWidth: "160px",
+                          }}
+                        >
+                          {" "}
+                          {/* Gregorian Date */}{" "}
+                          <p className="fs-5 mb-1">
+                            {" "}
+                            {currentMonthName} {currentDate}{" "}
+                            {getDateSuffix(currentDate)}{" "}
+                          </p>{" "}
+                          {/* Islamic Date with separator */}{" "}
+                          <div
+                            className="border-top pt-1"
+                            style={{ borderColor: "rgba(255,255,255,0.3)" }}
+                          >
+                            {" "}
+                            <p className="mb-0 fs-6" style={{ opacity: 0.9 }}>
+                              {" "}
+                              {islamicDate.formatted}{" "}
+                            </p>{" "}
+                            {/* Optional: Show Arabic version */}{" "}
+                            {/* <p className="mb-0 fs-7" style={{ opacity: 0.7, fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" }}> {islamicDate.formattedArabic} </p> */}{" "}
+                          </div>{" "}
+                        </div>{" "}
+                      </div>{" "}
+                      {/* Countdown Timer with Flip Clock - Center */}{" "}
+                      <div className="text-center mx-4">
+                        {" "}
+                        <p className="fw-bolder text-black mb-2">
+                          {" "}
+                          Time Until: {nextPrayer.name}{" "}
+                        </p>{" "}
                         <div>
-                          <FlipClockCountdown
-                            to={targetTime}
-                            // now={() => new Date().setHours(13, 0, 0, 0)} // Set to 1:00 PM for testing
-                            renderMap={[false, true, true, true]} // ✅ THIS IS THE FIX
-                            labels={["HOURS", "MINUTES", "SECONDS"]}
-                            showSeparators={true}
-                            labelStyle={{
-                              fontSize: "10px",
-                              fontWeight: 600,
-                              textTransform: "uppercase",
-                              marginTop: "6px",
-                            }}
-                            digitBlockStyle={{
-                              width: 42,
-                              height: 60,
-                              fontSize: 30,
-                              backgroundColor: "var(--theme)",
-                              color: "#fff",
-                              borderRadius: "8px",
-                              boxShadow: "0 4px 10px rgba(0,0,0,0.25)",
-                            }}
-                            dividerStyle={{
-                              height: 1,
-                              backgroundColor: "rgba(255,255,255,0.4)",
-                            }}
-                            separatorStyle={{
-                              size: 6,
-                              color: "#fff",
-                            }}
-                          />
-                        </div>
-                      ) : (
-                        <div className="fs-5 py-2">
-                          {nextPrayer.name === "No prayer times available"
-                            ? "No prayer times available"
-                            : "Calculating prayer times..."}
-                        </div>
-                      )}
+                          {" "}
+                          {targetTime ? (
+                            <div>
+                              {" "}
+                              <FlipClockCountdown
+                                to={targetTime}
+                                renderMap={[false, true, true, true]}
+                                labels={["HOURS", "MINUTES", "SECONDS"]}
+                                showSeparators={true}
+                                labelStyle={{
+                                  fontSize: "10px",
+                                  fontWeight: 600,
+                                  textTransform: "uppercase",
+                                  marginTop: "6px",
+                                }}
+                                digitBlockStyle={{
+                                  width: 42,
+                                  height: 60,
+                                  fontSize: 30,
+                                  backgroundColor: "var(--theme)",
+                                  color: "#fff",
+                                  borderRadius: "8px",
+                                  boxShadow: "0 4px 10px rgba(0,0,0,0.25)",
+                                }}
+                                dividerStyle={{
+                                  height: 1,
+                                  backgroundColor: "rgba(255,255,255,0.4)",
+                                }}
+                                separatorStyle={{ size: 6, color: "#fff" }}
+                              />{" "}
+                            </div>
+                          ) : (
+                            <div className="fs-5 py-2">
+                              {" "}
+                              {nextPrayer.name === "No prayer times available"
+                                ? "No prayer times available"
+                                : "Calculating prayer times..."}{" "}
+                            </div>
+                          )}{" "}
+                        </div>{" "}
+                      </div>{" "}
+                      {/* Current Time - Right */}{" "}
+                      <div className="text-center">
+                        {" "}
+                        <p className="fw-bolder text-black">
+                          Current Time
+                        </p>{" "}
+                        <div
+                          style={{
+                            backgroundColor: "var(--theme)",
+                            color: "white",
+                            padding: "10px 15px",
+                            borderRadius: "8px",
+                            minWidth: "140px",
+                          }}
+                        >
+                          {" "}
+                          <p className="fs-5 mb-0">{formattedTime}</p>{" "}
+                        </div>{" "}
+                      </div>{" "}
                     </div>
-                  </div>
-
-                  {/* Current Time */}
-                  <div className="mt-2 text-center">
-                    <p className="fw-bolder text-black">Current Time</p>
-                    <div
-                      style={{
-                        backgroundColor: "var(--theme)",
-                        color: "white",
-                        padding: "10px 15px",
-                        borderRadius: "8px",
-                        minWidth: "120px",
-                      }}
-                    >
-                      <p className="fs-5 mb-0">{formattedTime}</p>
+                    {/* Mobile: Counter below Date/Time */}
+                    <div className="col-12 d-block d-md-none">
+                      {" "}
+                      <div className="text-center">
+                        {" "}
+                        <p className="fw-bolder text-black mb-2">
+                          {" "}
+                          Time Until: {nextPrayer.name}{" "}
+                        </p>{" "}
+                        <div>
+                          {targetTime ? (
+                            <div className="d-flex justify-content-center">
+                              {" "}
+                              <FlipClockCountdown
+                                to={targetTime}
+                                renderMap={[false, true, true, true]}
+                                labels={["HOURS", "MINUTES", "SECONDS"]}
+                                showSeparators={true}
+                                labelStyle={{
+                                  fontSize: "8px",
+                                  fontWeight: 600,
+                                  textTransform: "uppercase",
+                                  marginTop: "4px",
+                                }}
+                                digitBlockStyle={{
+                                  width: 36,
+                                  height: 50,
+                                  fontSize: 24,
+                                  backgroundColor: "var(--theme)",
+                                  color: "#fff",
+                                  borderRadius: "6px",
+                                  boxShadow: "0 4px 10px rgba(0,0,0,0.25)",
+                                }}
+                                dividerStyle={{
+                                  height: 1,
+                                  backgroundColor: "rgba(255,255,255,0.4)",
+                                }}
+                                separatorStyle={{ size: 4, color: "#fff" }}
+                              />{" "}
+                            </div>
+                          ) : (
+                            <div className="fs-6 py-2">
+                              {" "}
+                              {nextPrayer.name === "No prayer times available"
+                                ? "No prayer times available"
+                                : "Calculating prayer times..."}{" "}
+                            </div>
+                          )}
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
