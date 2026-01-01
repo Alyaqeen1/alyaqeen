@@ -452,7 +452,7 @@ const dashboardRoutes = [
         ),
       },
       {
-        path: "admin/website-settings",
+        path: "admin/website-media-settings",
         element: (
           <PrivateRoute>
             <AdminRoute>

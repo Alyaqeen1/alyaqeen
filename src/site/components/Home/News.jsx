@@ -275,8 +275,16 @@ const News = () => {
                   <table className="table mb-0 border-0">
                     <thead>
                       <tr>
-                        <th className="font-danger text-white fw-bolder h6 text-center align-middle"></th>
-                        <th className="font-danger text-white fw-bolder h6 text-center align-middle"></th>
+                        <th
+                          className="font-danger text-white fw-bolder h6 text-center align-middle"
+                          style={{ backgroundColor: "var(--theme)" }}
+                        >
+                          Salah
+                        </th>
+                        <th
+                          className="font-danger text-white fw-bolder h6 text-center align-middle"
+                          style={{ backgroundColor: "var(--theme)" }}
+                        ></th>
                         <th
                           className="font-danger text-white fw-bolder text-center align-middle"
                           style={{ backgroundColor: "var(--theme)" }}

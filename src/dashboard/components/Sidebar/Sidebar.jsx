@@ -219,8 +219,8 @@ export default function Sidebar() {
                       identifier="website-settings"
                       submenuItems={[
                         {
-                          label: "Website Settings",
-                          to: "admin/website-settings",
+                          label: "Website Media Settings",
+                          to: "admin/website-media-settings",
                         },
                         {
                           label: "Best Teacher / Student",
