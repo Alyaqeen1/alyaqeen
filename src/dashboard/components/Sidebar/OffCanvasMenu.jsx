@@ -284,6 +284,7 @@ export default function OffCanvasMenu() {
                         handleSubmenu={handleSubmenu}
                         isSubMenuOpen={isSubMenuOpen}
                         handleToggleMenu={handleToggleMenu}
+                        onNavigate={() => setShowSidebar(false)}
                       />
                       <MenuItem
                         icon={<MdOutlineSettings className="mx-2 fs-5" />}
@@ -303,6 +304,7 @@ export default function OffCanvasMenu() {
                         handleSubmenu={handleSubmenu}
                         isSubMenuOpen={isSubMenuOpen}
                         handleToggleMenu={handleToggleMenu}
+                        onNavigate={() => setShowSidebar(false)}
                       />
                       <MenuItem
                         icon={<PiStudentBold className="mx-2 fs-5" />}

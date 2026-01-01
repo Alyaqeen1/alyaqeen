@@ -13,6 +13,7 @@ import {
 import Swal from "sweetalert2";
 import uploadToCloudinary from "../../utils/uploadToCloudinary";
 import toast from "react-hot-toast";
+import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 
 export default function BestTeacherStudent() {
   const {
@@ -238,7 +239,7 @@ export default function BestTeacherStudent() {
   };
 
   if (isLoading) {
-    return <div className="text-center py-5">Loading...</div>;
+    <LoadingSpinnerDash></LoadingSpinnerDash>;
   }
 
   return (

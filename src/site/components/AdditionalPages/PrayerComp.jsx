@@ -197,10 +197,9 @@ const PrayerComp = () => {
 
       <div className="container">
         <div className="section-title text-center mt-60">
-          <span data-aos-duration="800" data-aos="fade-up">
-            {/*Our Programs*/}
-            {/*Classes &amp; Fee Structure*/} Time Table
-          </span>
+          {/* <span data-aos-duration="800" data-aos="fade-up">
+           Time Table
+          </span> */}
           <h2 data-aos-duration="800" data-aos="fade-up" data-aos-delay="300">
             Time Table
           </h2>

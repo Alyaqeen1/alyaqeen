@@ -1,6 +1,7 @@
 import React from "react";
 import three from "../../assets/img/home/s.png";
 import { useGetWebsiteSectionQuery } from "../../../redux/features/website_settings/website_settingsApi";
+import LoadingSpinner from "../LoadingSpinner";
 
 export default function BestStudent() {
   const {
@@ -12,19 +13,7 @@ export default function BestStudent() {
 
   // Handle loading state
   if (isLoading) {
-    return (
-      <div
-        className="news-right-items-feb22 mb-0"
-        style={{ minHeight: "300px" }}
-      >
-        <div className="text-center py-5">
-          <div className="spinner-border text-success" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </div>
-          <p className="mt-3">Loading best student...</p>
-        </div>
-      </div>
-    );
+    return <LoadingSpinner></LoadingSpinner>;
   }
 
   // Handle error state
