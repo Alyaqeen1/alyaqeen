@@ -252,6 +252,12 @@ const News = () => {
     timeZone: userTimeZone,
     month: "long",
   }).format(date);
+  const currentFullDate = new Intl.DateTimeFormat("en-US", {
+    timeZone: userTimeZone,
+    day: "2-digit",
+    month: "long",
+    year: "numeric", // <-- add this
+  }).format(date);
 
   const todayTimes = times?.[0]?.[currentMonthName]?.find(
     (day) => day?.date == currentDate
@@ -530,8 +536,8 @@ const News = () => {
                               }}
                             >
                               <p className="mb-0 fs-6">
-                                {currentMonthName} {currentDate}
-                                {getDateSuffix(currentDate)}
+                                {currentFullDate}
+                                {/* {getDateSuffix(currentDate)} */}
                               </p>
                               {/* Islamic Date for Mobile */}
                               <p
@@ -585,11 +591,7 @@ const News = () => {
                         >
                           {" "}
                           {/* Gregorian Date */}{" "}
-                          <p className="fs-5 mb-1">
-                            {" "}
-                            {currentMonthName} {currentDate}{" "}
-                            {getDateSuffix(currentDate)}{" "}
-                          </p>{" "}
+                          <p className="fs-5 mb-1"> {currentFullDate}</p>{" "}
                           {/* Islamic Date with separator */}{" "}
                           <div
                             className="border-top pt-1"
