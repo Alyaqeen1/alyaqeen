@@ -511,7 +511,7 @@ const News = () => {
                     to="/prayer-timetable?tab=monthly"
                     className="theme-btn"
                   >
-                    Prayer Timetable
+                    Full Prayer Times
                   </Link>
                 </div>
                 {/* CURRENT DATE, COUNTDOWN, AND CURRENT TIME - RESPONSIVE LAYOUT */}
