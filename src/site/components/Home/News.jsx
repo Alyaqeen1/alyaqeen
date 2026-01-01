@@ -510,7 +510,7 @@ const News = () => {
                   <div className="row align-items-center justify-content-center g-1">
                     {/* Mobile: Date and Time side by side */}
                     <div className="col-12 d-block d-md-none">
-                      <div className="row g-2 mb-3">
+                      <div className="row g-1 mb-3">
                         <div className="col-6">
                           <div className="text-center h-100">
                             <p className="fw-bolder text-black mb-1 small">
@@ -521,9 +521,9 @@ const News = () => {
                               style={{
                                 backgroundColor: "var(--theme)",
                                 color: "white",
-                                padding: "12px 8px",
+                                padding: "4px 2px",
                                 borderRadius: "8px",
-                                minHeight: "100px",
+                                minHeight: "50px",
                               }}
                             >
                               <p className="mb-0 fs-6">
@@ -550,9 +550,9 @@ const News = () => {
                               style={{
                                 backgroundColor: "var(--theme)",
                                 color: "white",
-                                padding: "12px 8px",
+                                padding: "4px 2px",
                                 borderRadius: "8px",
-                                minHeight: "100px",
+                                minHeight: "70px",
                               }}
                             >
                               <p className="mb-0 fs-6">{formattedTime}</p>
