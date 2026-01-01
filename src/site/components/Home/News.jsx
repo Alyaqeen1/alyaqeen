@@ -240,8 +240,14 @@ const News = () => {
             {/* best teacher and best student of the month section */}
             <div className="col-xl-6 col-lg-8 order-1 order-lg-2 mt-5 mt-xl-0">
               <div>
+                <h3 className="fs-2 text-center mb-1">Prayer Times</h3>
                 <div className="d-flex justify-content-between align-items-center">
-                  <h3 className="fs-2">Prayer Times</h3>
+                  <Link
+                    to="/prayer-timetable?tab=calendar"
+                    className="theme-btn"
+                  >
+                    Prayer Calendar
+                  </Link>
                   <Link
                     to="/prayer-timetable?tab=monthly"
                     className="theme-btn"
@@ -249,7 +255,7 @@ const News = () => {
                     Prayer Timetable
                   </Link>
                 </div>
-                <div className="d-flex justify-content-between align-items-center my-4">
+                <div className="d-flex justify-content-between align-items-center my-3">
                   <div className="mt-2">
                     <p className="fw-bolder text-black">Current Date</p>
                     <p style={{ color: "var(--theme)" }} className="fs-5">
