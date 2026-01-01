@@ -420,7 +420,10 @@ const News = () => {
   }
 
   return (
-    <section className="news-section section-padding fix" id="blog">
+    <section
+      className="news-section section-padding fix pt-4 pt-lg-5"
+      id="blog"
+    >
       <div className="container">
         <div className="news-wrapper">
           <div className="row align-items-center">
@@ -490,7 +493,7 @@ const News = () => {
             {/* best teacher and best student of the month section */}
             <div className="col-xl-6 col-lg-8 order-1 order-lg-2 mt-5 mt-xl-0">
               <div>
-                <h3 className="fs-2 text-center mb-1">Prayer Times</h3>
+                <h3 className="fs-2 text-center mb-4">Prayer Times</h3>
                 <div className="d-flex justify-content-between align-items-center">
                   <Link
                     to="/prayer-timetable?tab=calendar"
@@ -603,7 +606,7 @@ const News = () => {
                         </div>{" "}
                       </div>{" "}
                       {/* Countdown Timer with Flip Clock - Center */}{" "}
-                      <div className="text-center mx-4">
+                      <div className="text-center mx-2">
                         {" "}
                         <p className="fw-bolder text-black mb-2">
                           {" "}
