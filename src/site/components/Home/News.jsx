@@ -31,6 +31,17 @@ const parseTimeString = (timeStr, baseDate = new Date()) => {
     return null;
   }
 };
+// Add this function near your other utility functions
+const getCurrentSeason = () => {
+  const currentMonth = new Date().getMonth() + 1; // 1-12
+
+  // April to October: Summer
+  if (currentMonth >= 4 && currentMonth <= 10) {
+    return "summer";
+  }
+  // November to March: Winter
+  return "winter";
+};
 const News = () => {
   const { data: announcement, isLoading: latestUpdateLoading } =
     useGetAnnouncementPublicLatestQuery();
@@ -44,7 +55,9 @@ const News = () => {
     name: "",
     time: "",
   });
-
+  // Get Jumuah times based on season
+  const currentSeason = getCurrentSeason();
+  const jumuahTimes = times?.[0]?.jumuah?.[currentSeason];
   // Islamic date state
   const [islamicDate, setIslamicDate] = useState({
     day: "",
@@ -923,6 +936,55 @@ const News = () => {
                       </tr>
                     </tbody>
                   </table>
+                  {/* Jumuah Prayer Times Notice */}
+                  {jumuahTimes && (
+                    <div className="mt-3 text-center">
+                      <p
+                        className="mb-1"
+                        style={{
+                          fontSize: "14px",
+                          color: "var(--theme)",
+                          fontWeight: 600,
+                        }}
+                      >
+                        <strong>
+                          Jumuah Prayer Times (
+                          {currentSeason.charAt(0).toUpperCase() +
+                            currentSeason.slice(1)}{" "}
+                          Schedule):
+                        </strong>
+                      </p>
+                      <div className="d-flex justify-content-center align-items-center flex-wrap gap-3">
+                        <div className="d-flex align-items-center gap-1">
+                          <span
+                            className="badge "
+                            style={{ backgroundColor: "var(--theme)" }}
+                          >
+                            1st:
+                          </span>
+                          <span>{jumuahTimes.first}</span>
+                        </div>
+                        <div className="d-flex align-items-center gap-1">
+                          <span
+                            className="badge "
+                            style={{ backgroundColor: "var(--theme)" }}
+                          >
+                            2nd:
+                          </span>
+                          <span>{jumuahTimes.second}</span>
+                        </div>
+                        <div className="d-flex align-items-center gap-1">
+                          <span
+                            className="badge "
+                            style={{ backgroundColor: "var(--theme)" }}
+                          >
+                            3rd:
+                          </span>
+                          <span>{jumuahTimes.third}</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
