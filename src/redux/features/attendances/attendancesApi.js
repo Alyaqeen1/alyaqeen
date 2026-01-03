@@ -6,6 +6,10 @@ export const attendancesApi = apiSlice.injectEndpoints({
       query: () => "/attendances",
       providesTags: ["Attendance"],
     }),
+    getStudentAttendance: builder.query({
+      query: (studentId) => `/attendances/student/${studentId}`,
+      providesTags: ["Attendance"],
+    }),
     getAttendance: builder.query({
       query: (id) => `/attendances/${id}`,
       providesTags: ["Attendance"],
@@ -109,4 +113,5 @@ export const {
   useUpdateAttendanceMutation,
   useTimeoutAttendanceMutation,
   useDeleteAttendanceMutation,
+  useGetStudentAttendanceQuery,
 } = attendancesApi;

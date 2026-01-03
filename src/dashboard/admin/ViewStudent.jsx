@@ -8,6 +8,8 @@ import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 import { useGetFeesSummaryQuery } from "../../redux/features/fees/feesApi";
 import { FaPen } from "react-icons/fa6";
 import { FaTrashAlt } from "react-icons/fa";
+import StudentTimetable from "./StudentTimetable";
+import AttendanceCalendar from "./AttendanceCalendar";
 
 const formatDate = (dateString) => {
   if (dateString === "N/A") return "N/A";
@@ -106,7 +108,7 @@ export default function ViewStudent() {
     Number(summary?.consecutiveUnpaidMonths) * Number(monthly_fee);
 
   return (
-    <div className="container my-4">
+    <div className="my-4">
       <h3 className="mb-4">Student Profile</h3>
       <div className="row">
         {/* Left Card */}
@@ -304,12 +306,11 @@ export default function ViewStudent() {
                 ))}
               </>
             )}
-
             {activeTab === "timetable" && (
-              <div>Time Table content goes here...</div>
+              <StudentTimetable student={student} />
             )}
             {activeTab === "attendance" && (
-              <div>Attendance content goes here...</div>
+              <AttendanceCalendar studentId={id} />
             )}
             {activeTab === "documents" && (
               <div>Documents content goes here...</div>
@@ -317,12 +318,7 @@ export default function ViewStudent() {
             {activeTab === "fee" && (
               <>
                 <div className="table-responsive mb-3">
-                  <table
-                    className="table mb-0"
-                    style={{
-                      minWidth: 700,
-                    }}
-                  >
+                  <table className="table mb-0">
                     <thead>
                       <tr>
                         <th

@@ -33,13 +33,16 @@ const PaymentStatusCell = ({ status }) => {
   );
 };
 
-const formatDateToDmy = (dateStr) => {
-  if (!dateStr) return "N/A";
+const formatDateToDmy = (input) => {
+  if (!input) return "N/A";
 
-  const [part1, part2, part3] = dateStr.split("-");
-  const year = part1;
-  const day = part3?.length === 2 ? part3 : part2;
-  const month = part3?.length === 2 ? part2 : part3;
+  const date = input instanceof Date ? input : new Date(input);
+
+  if (isNaN(date.getTime())) return "Invalid date";
+
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const year = date.getFullYear();
 
   return `${day}-${month}-${year}`;
 };
@@ -104,6 +107,20 @@ export default function FeeSettings() {
   const filteredFamily = families?.filter(
     (family) => family?.childrenDocs?.length > 0
   );
+  const getLastPaymentDate = (feePayments = []) => {
+    if (!feePayments.length) return "N/A";
+
+    const dates = feePayments
+      .map((f) => f.lastPaymentDate)
+      .filter(Boolean)
+      .map((d) => new Date(d))
+      .filter((d) => !isNaN(d.getTime()));
+
+    if (!dates.length) return "N/A";
+
+    const latest = new Date(Math.max(...dates));
+    return formatDateToDmy(latest); // ✅ now works
+  };
 
   const filteredFamilies = useMemo(() => {
     if (!familiesByStatus) return [];
@@ -372,8 +389,15 @@ export default function FeeSettings() {
                 style={{ backgroundColor: "var(--border2)" }}
                 className="font-danger text-white fw-bolder border h6 text-center align-middle"
               >
+                Last Payment Date
+              </th>
+              <th
+                style={{ backgroundColor: "var(--border2)" }}
+                className="font-danger text-white fw-bolder border h6 text-center align-middle"
+              >
                 Fee
               </th>
+
               <th
                 style={{ backgroundColor: "var(--border2)" }}
                 className="font-danger text-white fw-bolder border h6 text-center align-middle"
@@ -435,6 +459,13 @@ export default function FeeSettings() {
                     {studentIdx === 0 && (
                       <>
                         <td
+                          className="border h6 text-center align-middle"
+                          rowSpan={family.childrenDocs?.length}
+                        >
+                          {getLastPaymentDate(family.feePayments)}
+                        </td>
+
+                        <td
                           rowSpan={family.childrenDocs?.length}
                           className="border h6 text-center align-middle"
                         >
@@ -480,13 +511,6 @@ export default function FeeSettings() {
                             </div>
                             <div className="d-flex flex-column gap-2 justify-content-center align-items-center h-100">
                               <div className="d-flex gap-1 justify-content-center align-items-center">
-                                <button
-                                  className="text-white py-1 px-2 rounded-2"
-                                  style={{ backgroundColor: "var(--border2)" }}
-                                  onClick={() => handleAdminShow(family._id)}
-                                >
-                                  Pay
-                                </button>
                                 <button
                                   className="text-white py-1 px-2 rounded-2"
                                   style={{ backgroundColor: "var(--border2)" }}

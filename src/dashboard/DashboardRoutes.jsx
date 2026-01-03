@@ -5,6 +5,7 @@ import TeacherRoute from "../routes/TeacherRoute";
 import ActiveStudents from "./admin/ActiveStudents";
 import ActiveTeachers from "./admin/ActiveTeachers";
 import AddTeacher from "./admin/AddTeacher";
+import AdminBlogs from "./admin/AdminBlogs";
 import AdminDirectDebit from "./admin/AdminDirectDebit";
 import BestTeacherStudent from "./admin/BestTeacherStudent";
 import Classes from "./admin/Classes";
@@ -457,6 +458,16 @@ const dashboardRoutes = [
           <PrivateRoute>
             <AdminRoute>
               <WebsiteSettings></WebsiteSettings>
+            </AdminRoute>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "admin/blogs",
+        element: (
+          <PrivateRoute>
+            <AdminRoute>
+              <AdminBlogs></AdminBlogs>
             </AdminRoute>
           </PrivateRoute>
         ),

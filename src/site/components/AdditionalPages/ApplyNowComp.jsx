@@ -1621,7 +1621,7 @@ const ApplyNowComp = () => {
                       <div className="d-flex gap-4 align-items-center flex-wrap text-white mt-3">
                         <Link
                           className="text-white d-flex gap-2 align-items-center"
-                          to={"https://alyaqeen.vercel.app/"}
+                          to={"https://www.alyaqeen.co.uk/"}
                         >
                           <FaEarthAfrica />
                           www.alyaqeen.co.uk
