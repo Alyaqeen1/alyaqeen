@@ -54,40 +54,18 @@ export default function AdminFeeUpdateModal({
       const unpaid = fee.students
         .map((student) => {
           if (isAdmission) {
-            // Admission fee logic
-            const admissionFee = student.admissionFee || 20;
-            const monthlyFee =
-              student.discountedFee || student.monthlyFee || 50;
-            const totalExpected = admissionFee + monthlyFee;
-            const paidAmount = student.subtotal || 0;
-            const dueAmount = Math.max(0, totalExpected - paidAmount);
-
-            totalDue += dueAmount;
-
-            return {
-              studentId: student.studentId,
-              name: student.name,
-              paidAmount,
-              dueAmount,
-              admissionFee,
-              monthlyFee,
-              totalExpected,
-              paymentType: "admission",
-            };
+            // Admission logic remains
           } else {
-            // Monthly fee logic - FIXED: Use the provided month/year
             const monthRecord = student.monthsPaid?.find(
               (m) =>
-                String(m.month) === String(targetMonth).padStart(2, "0") &&
-                m.year === targetYear
+                String(m.month).padStart(2, "0") ===
+                  String(targetMonth).padStart(2, "0") && m.year === targetYear
             );
-
             const monthlyFee = student.monthlyFee || 50;
-            const discountedFee = student.discountedFee || monthlyFee;
+            const discountedFee =
+              student.discountedFee || monthRecord?.discountedFee || monthlyFee;
             const paidAmount = monthRecord?.paid || 0;
             const dueAmount = Math.max(0, discountedFee - paidAmount);
-
-            totalDue += dueAmount;
 
             return {
               studentId: student.studentId,
