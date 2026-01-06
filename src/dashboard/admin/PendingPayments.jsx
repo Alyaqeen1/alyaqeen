@@ -343,52 +343,54 @@ export default function PendingPayments() {
                     {fee?.status}
                   </td>
                   <td className="border h6 text-center text-nowrap align-middle">
-                    <div className="d-flex flex-row gap-2 justify-content-center align-items-center h-100">
-                      <button
-                        className="text-white py-1 px-2 rounded-2"
-                        style={{ backgroundColor: "var(--border2)" }}
-                        onClick={() => handleShow(fee?._id)}
+                    {fee?.payments?.[0]?.method !== "direct_debit" && (
+                      <div className="d-flex flex-row gap-2 justify-content-center align-items-center h-100">
+                        <button
+                          className="text-white py-1 px-2 rounded-2"
+                          style={{ backgroundColor: "var(--border2)" }}
+                          onClick={() => handleShow(fee?._id)}
 
-                        // onClick={() =>
-                        //   handleStatus(
-                        //     fee?.students,
-                        //     "enrolled",
-                        //     fee?._id,
-                        //     fee?.paymentType
-                        //   )
-                        // }
-                      >
-                        <FaEye></FaEye>
-                      </button>
-                      <button
-                        className="text-white py-1 px-2 rounded-2"
-                        style={{ backgroundColor: "var(--border2)" }}
-                        onClick={() =>
-                          handleStatus(
-                            fee?.students,
-                            "enrolled",
-                            fee?._id,
-                            fee?.paymentType
-                          )
-                        }
-                      >
-                        <FaCheck></FaCheck>
-                      </button>
-                      <button
-                        className="text-white py-1 px-2 rounded-2"
-                        style={{ backgroundColor: "var(--border2)" }}
-                        onClick={() =>
-                          handleStatus(
-                            fee?.students,
-                            "approved",
-                            fee?._id,
-                            fee?.paymentType
-                          )
-                        }
-                      >
-                        <ImCross />
-                      </button>
-                    </div>
+                          // onClick={() =>
+                          //   handleStatus(
+                          //     fee?.students,
+                          //     "enrolled",
+                          //     fee?._id,
+                          //     fee?.paymentType
+                          //   )
+                          // }
+                        >
+                          <FaEye></FaEye>
+                        </button>
+                        <button
+                          className="text-white py-1 px-2 rounded-2"
+                          style={{ backgroundColor: "var(--border2)" }}
+                          onClick={() =>
+                            handleStatus(
+                              fee?.students,
+                              "enrolled",
+                              fee?._id,
+                              fee?.paymentType
+                            )
+                          }
+                        >
+                          <FaCheck></FaCheck>
+                        </button>
+                        <button
+                          className="text-white py-1 px-2 rounded-2"
+                          style={{ backgroundColor: "var(--border2)" }}
+                          onClick={() =>
+                            handleStatus(
+                              fee?.students,
+                              "approved",
+                              fee?._id,
+                              fee?.paymentType
+                            )
+                          }
+                        >
+                          <ImCross />
+                        </button>
+                      </div>
+                    )}
                   </td>
                   {/* <td
                     className={`border d-flex gap-2 justify-content-center h6 text-center align-middle text-nowrap`}

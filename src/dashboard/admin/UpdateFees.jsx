@@ -9,6 +9,7 @@ import {
   FaFilter,
   FaSortAlphaDown,
   FaSync,
+  FaSearch,
 } from "react-icons/fa";
 import {
   useDeleteFeeMutation,
@@ -27,7 +28,7 @@ export default function UpdateFees() {
   const [sortOrder, setSortOrder] = useState("alphabetical");
   const [showModal, setShowModal] = useState(false);
   const [selectedFeeId, setSelectedFeeId] = useState(null);
-
+  const [searchQuery, setSearchQuery] = useState("");
   // Build query params - useMemo to prevent unnecessary re-renders
   const queryParams = useMemo(
     () => ({
@@ -59,19 +60,32 @@ export default function UpdateFees() {
   const sortedFees = useMemo(() => {
     if (!fees) return [];
 
-    let sorted = [...fees];
+    let filtered = [...fees];
 
-    if (sortOrder === "alphabetical") {
-      sorted.sort((a, b) => a.name?.localeCompare(b.name));
-    } else if (sortOrder === "recent") {
-      sorted.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-    } else if (sortOrder === "amount") {
-      sorted.sort((a, b) => (b.expectedTotal || 0) - (a.expectedTotal || 0));
+    // Apply search filter if query exists
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase().trim();
+      filtered = filtered.filter(
+        (fee) =>
+          fee.name?.toLowerCase().includes(query) ||
+          fee.email?.toLowerCase().includes(query) ||
+          fee.students?.some((student) =>
+            student.name?.toLowerCase().includes(query)
+          ) ||
+          fee.paymentType?.toLowerCase().includes(query)
+      );
     }
 
-    return sorted;
-  }, [fees, sortOrder]);
+    if (sortOrder === "alphabetical") {
+      filtered.sort((a, b) => a.name?.localeCompare(b.name));
+    } else if (sortOrder === "recent") {
+      filtered.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+    } else if (sortOrder === "amount") {
+      filtered.sort((a, b) => (b.expectedTotal || 0) - (a.expectedTotal || 0));
+    }
 
+    return filtered;
+  }, [fees, sortOrder, searchQuery]); // Add searchQuery to dependencies
   // Handle filter changes with loading state
   const handlePaymentTypeChange = (value) => {
     setPaymentTypeFilter(value);
@@ -170,7 +184,7 @@ export default function UpdateFees() {
           (sum, student) => sum + (student.monthsPaid?.length || 0),
           0
         ) || 0;
-      return `${totalStudents} student(s), ${totalMonths} month(s)`;
+      return `${totalStudents} student(s)`;
     } else if (
       fee.paymentType === "admission" ||
       fee.paymentType === "admissionOnHold"
@@ -231,16 +245,18 @@ export default function UpdateFees() {
 
   return (
     <div>
-      <h4 className="text-center mb-4">💰 Fee Records</h4>
+      <h3 className={`fs-1 fw-bold text-center`}>💰 Fee Records</h3>
 
       {/* Filters Section */}
-      <div className="card mb-4">
+      <div className="card my-4">
         <div className="card-body">
           <div className="row g-3 align-items-center">
             {/* Payment Type Filter */}
             <div
               className={`${
-                paymentTypeFilter === "monthly" ? "col-md-3" : "col-md-6"
+                paymentTypeFilter === "monthly"
+                  ? "col-md-3 col-lg-2"
+                  : "col-md-4 col-lg-3"
               }`}
             >
               <label className="form-label fw-semibold">
@@ -260,7 +276,7 @@ export default function UpdateFees() {
 
             {/* Month Filter - Only show for monthly */}
             {paymentTypeFilter === "monthly" && (
-              <div className="col-md-3">
+              <div className="col-md-3 col-lg-2">
                 <label className="form-label fw-semibold">
                   <FaCalendar className="me-2" />
                   Filter by Month
@@ -289,7 +305,7 @@ export default function UpdateFees() {
 
             {/* Year Filter - Only show for monthly */}
             {paymentTypeFilter === "monthly" && (
-              <div className="col-md-3">
+              <div className="col-md-3 col-lg-2">
                 <label className="form-label fw-semibold">Filter by Year</label>
                 <select
                   className="form-select"
@@ -309,7 +325,9 @@ export default function UpdateFees() {
             {/* Sort By - Always show */}
             <div
               className={`${
-                paymentTypeFilter === "monthly" ? "col-md-3" : "col-md-6"
+                paymentTypeFilter === "monthly"
+                  ? "col-md-3 col-lg-2"
+                  : "col-md-4 col-lg-3"
               }`}
             >
               <label className="form-label fw-semibold">
@@ -326,6 +344,37 @@ export default function UpdateFees() {
                 <option value="recent">Most Recent</option>
                 <option value="amount">Amount (High to Low)</option>
               </select>
+            </div>
+            {/* Search Bar - Takes remaining space */}
+            <div
+              className={`${
+                paymentTypeFilter === "monthly"
+                  ? "col-md-12 col-lg-4"
+                  : "col-md-12 col-lg-6"
+              } mt-3 mt-md-0`}
+            >
+              <label className="form-label fw-semibold">
+                <FaSearch className="me-2" /> {/* Add FaSearch import */}
+                Search
+              </label>
+              <div className="input-group">
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Search by family, student, email or type..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  disabled={isFetching}
+                />
+                <button
+                  className="btn btn-outline-secondary"
+                  type="button"
+                  onClick={() => setSearchQuery("")}
+                  disabled={isFetching}
+                >
+                  Clear
+                </button>
+              </div>
             </div>
           </div>
 

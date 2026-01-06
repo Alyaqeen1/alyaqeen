@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useGetUnpaidFamilyQuery } from "../../redux/features/families/familiesApi";
-import { FaPen, FaTrashAlt, FaMoneyBillWave } from "react-icons/fa";
+import { FaPen } from "react-icons/fa";
 import { Link, useNavigate, useLocation } from "react-router";
 import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 import { useDeleteFeeMutation } from "../../redux/features/fees/feesApi";
-import toast from "react-hot-toast";
-import Swal from "sweetalert2";
+
 import AdminFeeUpdateModal from "../shared/AdminFeeUpdateModal";
 
 export default function UnpaidList() {
@@ -17,7 +16,7 @@ export default function UnpaidList() {
     familyId: null,
     feeId: null,
   });
-
+  const [searchQuery, setSearchQuery] = useState("");
   const [adminShowModal, setAdminShowModal] = useState(false);
 
   const handleAdminShow = (familyId, feeId) => {
@@ -79,69 +78,41 @@ export default function UnpaidList() {
     isFetching, // important: RTK Query provides this when refetching
     refetch,
   } = useGetUnpaidFamilyQuery({ month: parseInt(month), year: parseInt(year) });
+  // Filter families based on search query
+  const filteredFamilies = useMemo(() => {
+    if (!searchQuery.trim()) return families;
 
+    const query = searchQuery.toLowerCase().trim();
+
+    return families
+      .map((family) => {
+        // Filter unpaid students within this family
+        const filteredStudents = family.unpaidStudents.filter(
+          (student) =>
+            student.studentName.toLowerCase().includes(query) ||
+            family.familyName.toLowerCase().includes(query)
+        );
+
+        if (filteredStudents.length === 0) return null;
+
+        // Return family with filtered students and recalculated totals
+        return {
+          ...family,
+          unpaidStudents: filteredStudents,
+          totalUnpaidAmount: filteredStudents.reduce(
+            (sum, student) => sum + student.remainingAmount,
+            0
+          ),
+        };
+      })
+      .filter((family) => family !== null); // Remove families with no matching students
+  }, [families, searchQuery]);
   // Turn off local loading once fetching is done
   useEffect(() => {
     if (!isFetching) {
       setLocalLoading(false);
     }
   }, [isFetching]);
-
-  // Handle fee deletion
-  const handleDeleteFee = async (feeId, studentName) => {
-    if (!feeId) {
-      toast?.error(`No fee record to delete for ${studentName}`);
-      return;
-    }
-
-    try {
-      Swal.fire({
-        title: "Are you sure?",
-        text: "You won't be able to revert this!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!",
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          try {
-            await deleteFee(feeId).unwrap();
-
-            // Force refetch with cache busting
-            setTimeout(() => {
-              refetch();
-            }, 100);
-
-            Swal.fire({
-              title: "Deleted!",
-              text: "Fee has been deleted successfully.",
-              icon: "success",
-            });
-          } catch (error) {
-            Swal.fire({
-              title: "Error",
-              text: error?.data?.message || "Failed to delete fee.",
-              icon: "error",
-            });
-          }
-        }
-      });
-    } catch (error) {
-      toast.error(`Failed to delete fee record: ${error?.message}`);
-    }
-  };
-
-  const handlePay = (familyId, studentId, studentName, feeId) => {};
-
-  const handleManualPay = (familyId, studentId, studentName) => {};
-
-  const handleEditFee = (feeId, studentName) => {
-    if (!feeId) {
-      alert(`No fee record to edit for ${studentName}`);
-      return;
-    }
-  };
 
   if (isLoading || localLoading) {
     return <LoadingSpinnerDash />;
@@ -157,48 +128,64 @@ export default function UnpaidList() {
 
   return (
     <div>
-      {/* Header + Filters */}
-      <div className="row align-items-center mb-4">
-        <div className="col-lg-6">
-          <h4 className="mb-0">
-            Partially/Unpaid List of {monthNames[parseInt(month) - 1]} {year}
-          </h4>
-        </div>
-        <div className="col-lg-6">
-          <div className="row g-3">
-            <div className="col-md-6">
-              <label className="form-label mb-1 fw-semibold">Month</label>
-              <select
-                style={{ borderColor: "var(--border2)" }}
-                value={month}
-                onChange={(e) => setMonth(e.target.value)}
-                className="form-control form-select"
-                required
-              >
-                {monthNames.map((name, index) => (
-                  <option key={index + 1} value={index + 1}>
-                    {name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="col-md-6">
-              <label className="form-label mb-1 fw-semibold">Year</label>
-              <select
-                style={{ borderColor: "var(--border2)" }}
-                value={year}
-                onChange={(e) => setYear(e.target.value)}
-                className="form-control form-select"
-                required
-              >
-                {yearOptions.map((yearOption) => (
-                  <option key={yearOption} value={yearOption}>
-                    {yearOption}
-                  </option>
-                ))}
-              </select>
-            </div>
+      <h3 className={`fs-1 fw-bold text-center`}>
+        Partially/Unpaid List of {monthNames[parseInt(month) - 1]} {year}
+      </h3>
+      {/* Filters and Search - Full width row */}
+      <div className="row align-items-end mb-4 g-3">
+        {/* 🔍 Search Bar */}
+        <div className="col-12 col-lg-6">
+          <label className="form-label mb-1 fw-semibold">Search</label>
+          <div className="input-group">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Search by family or student name"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <button
+              className="btn btn-outline-secondary"
+              type="button"
+              onClick={() => setSearchQuery("")}
+            >
+              Clear
+            </button>
           </div>
+        </div>
+
+        {/* 📅 Month */}
+        <div className="col-6 col-lg-3">
+          <label className="form-label mb-1 fw-semibold">Month</label>
+          <select
+            className="form-control form-select"
+            value={month}
+            onChange={(e) => setMonth(e.target.value)}
+            style={{ borderColor: "var(--border2)" }}
+          >
+            {monthNames.map((name, index) => (
+              <option key={index + 1} value={index + 1}>
+                {name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* 📆 Year */}
+        <div className="col-6 col-lg-3">
+          <label className="form-label mb-1 fw-semibold">Year</label>
+          <select
+            className="form-control form-select"
+            value={year}
+            onChange={(e) => setYear(e.target.value)}
+            style={{ borderColor: "var(--border2)" }}
+          >
+            {yearOptions.map((yearOption) => (
+              <option key={yearOption} value={yearOption}>
+                {yearOption}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
 
@@ -258,8 +245,8 @@ export default function UnpaidList() {
             </tr>
           </thead>
           <tbody>
-            {families.length > 0 ? (
-              families.map((family, familyIdx) => (
+            {filteredFamilies.length > 0 ? (
+              filteredFamilies.map((family, familyIdx) => (
                 <React.Fragment key={family.familyId}>
                   {family.unpaidStudents.map((student, studentIdx) => (
                     <tr key={studentIdx}>
@@ -345,20 +332,6 @@ export default function UnpaidList() {
                               >
                                 <FaPen />
                               </button>
-
-                              <button
-                                className="btn btn-danger btn-sm"
-                                onClick={() =>
-                                  handleDeleteFee(
-                                    student.feeId,
-                                    student.studentName
-                                  )
-                                }
-                                title="Delete Fee"
-                                disabled={!student.feeId}
-                              >
-                                <FaTrashAlt />
-                              </button>
                             </div>
                           </div>
                         </td>
@@ -371,8 +344,11 @@ export default function UnpaidList() {
               <tr>
                 <td colSpan={8} className="text-center py-4">
                   <h5>
-                    No unpaid families found for{" "}
-                    {monthNames[parseInt(month) - 1]} {year}
+                    {searchQuery
+                      ? `No results found for "${searchQuery}"`
+                      : `No unpaid families found for ${
+                          monthNames[parseInt(month) - 1]
+                        } ${year}`}
                   </h5>
                 </td>
               </tr>
@@ -384,6 +360,10 @@ export default function UnpaidList() {
       {/* Summary Section */}
       {families.length > 0 && (
         <div className="row mt-4">
+          <p>
+            Total Families with Unpaid Fees:{" "}
+            <strong>{filteredFamilies.length}</strong>
+          </p>
           <div className="col-md-6">
             <div className="card">
               <div className="card-body">
