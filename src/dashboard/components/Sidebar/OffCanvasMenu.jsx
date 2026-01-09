@@ -269,7 +269,7 @@ export default function OffCanvasMenu() {
                         submenuItems={[
                           {
                             label: "Public Announcement",
-                            to: "announcement/parent",
+                            to: "announcement/public",
                           },
                           {
                             label: "Teacher Announcement",
