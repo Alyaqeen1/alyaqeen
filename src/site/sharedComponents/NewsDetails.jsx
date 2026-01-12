@@ -128,7 +128,7 @@ const NewsDetails = () => {
 
                     {/* Back to Blog List Button */}
                     <div className="mt-5 pt-4 border-top">
-                      <Link to="/news" className="theme-btn">
+                      <Link to="/blogs" className="theme-btn">
                         <i className="fa-solid fa-arrow-left-long me-2"></i>
                         Back to Blogs
                       </Link>
