@@ -186,6 +186,14 @@ const OffCanvasMenu = ({ toggleMenu, handleToggleMenu }) => {
                           <li>
                             <Link
                               onClick={() => handleToggleMenu(false)}
+                              to="/blogs"
+                            >
+                              Blogs
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              onClick={() => handleToggleMenu(false)}
                               to="/our-syllabus"
                             >
                               Our Syllabus

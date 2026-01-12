@@ -100,7 +100,7 @@ const Header = () => {
     arabicLanguage,
     modernForeign,
     pages,
-
+    blogs,
     announcements,
     ourSyllabus,
     academicCalendar,
@@ -221,6 +221,9 @@ const Header = () => {
                           <ul className="submenu">
                             <li>
                               <Link to="/announcements">{announcements}</Link>
+                            </li>
+                            <li>
+                              <Link to="/blogs">{blogs}</Link>
                             </li>
                             <li>
                               <Link to="/our-syllabus">{ourSyllabus}</Link>

@@ -299,6 +299,10 @@ export default function OffCanvasMenu() {
                             label: "Best Teacher / Student",
                             to: "admin/best-teacher-student",
                           },
+                          {
+                            label: "Blogs",
+                            to: "admin/blogs",
+                          },
                         ]}
                         openSubMenu={openSubMenu}
                         handleSubmenu={handleSubmenu}

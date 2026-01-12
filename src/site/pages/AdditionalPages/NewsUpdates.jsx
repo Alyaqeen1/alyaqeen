@@ -8,7 +8,7 @@ export default function NewsUpdates() {
     <div>
       <SEO page="newsUpdates" />
 
-      <CmnBanner title="News & Updates"></CmnBanner>
+      <CmnBanner title="Blogs"></CmnBanner>
       <NewsList></NewsList>
     </div>
   );

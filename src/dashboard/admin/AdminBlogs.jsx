@@ -33,7 +33,6 @@ export default function AdminBlogs() {
     category: "",
     date: new Date().toISOString().split("T")[0],
     content: "",
-    excerpt: "",
     image: null,
     imageUrl: "",
   });
@@ -45,7 +44,6 @@ export default function AdminBlogs() {
       category: "",
       date: new Date().toISOString().split("T")[0],
       content: "",
-      excerpt: "",
       image: null,
       imageUrl: "",
     });
@@ -106,7 +104,6 @@ export default function AdminBlogs() {
         category: blogForm.category,
         date: blogForm.date,
         content: blogForm.content,
-        excerpt: blogForm.excerpt || blogForm.content.substring(0, 150) + "...",
         image: blogForm.imageUrl,
         slug: blogForm.title
           .toLowerCase()
@@ -166,7 +163,6 @@ export default function AdminBlogs() {
         category: blogForm.category,
         date: blogForm.date,
         content: blogForm.content,
-        excerpt: blogForm.excerpt,
         image: blogForm.imageUrl,
         updatedAt: new Date().toISOString(),
       };
@@ -227,7 +223,6 @@ export default function AdminBlogs() {
       category: blog.category || "",
       date: blog.date || new Date().toISOString().split("T")[0],
       content: blog.content || "",
-      excerpt: blog.excerpt || "",
       image: null,
       imageUrl: blog.image || "",
     });
@@ -252,7 +247,8 @@ export default function AdminBlogs() {
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2 className="mb-0">Blog Management</h2>
         <button
-          className="btn btn-primary"
+          className="text-white py-1 px-2 rounded-2"
+          style={{ backgroundColor: "var(--border2)" }}
           onClick={() => setShowCreateModal(true)}
         >
           <FaPlus className="me-2" />
@@ -304,13 +300,12 @@ export default function AdminBlogs() {
                       </td>
                       <td>
                         <strong>{blog.title}</strong>
-                        <br />
-                        <small className="text-muted">
-                          {blog.excerpt?.substring(0, 60)}...
-                        </small>
                       </td>
                       <td>
-                        <span className="badge bg-primary">
+                        <span
+                          style={{ backgroundColor: "var(--border2)" }}
+                          className="badge"
+                        >
                           {blog.category}
                         </span>
                       </td>
@@ -481,24 +476,6 @@ export default function AdminBlogs() {
                         </div>
                       </div>
 
-                      {/* Excerpt */}
-                      <div className="mb-3">
-                        <label className="form-label">Excerpt (Optional)</label>
-                        <textarea
-                          className="form-control"
-                          rows="2"
-                          value={blogForm.excerpt}
-                          onChange={(e) =>
-                            setBlogForm({
-                              ...blogForm,
-                              excerpt: e.target.value,
-                            })
-                          }
-                          disabled={localLoading}
-                          placeholder="Brief summary of the blog"
-                        ></textarea>
-                      </div>
-
                       {/* Content */}
                       <div className="mb-3">
                         <label className="form-label">Blog Content *</label>
@@ -532,7 +509,8 @@ export default function AdminBlogs() {
                   </button>
                   <button
                     type="submit"
-                    className="btn btn-primary"
+                    className="text-white py-1 px-2 rounded-2"
+                    style={{ backgroundColor: "var(--border2)" }}
                     disabled={uploadingImage || localLoading}
                   >
                     {localLoading ? (
@@ -681,23 +659,6 @@ export default function AdminBlogs() {
                         </div>
                       </div>
 
-                      {/* Excerpt */}
-                      <div className="mb-3">
-                        <label className="form-label">Excerpt</label>
-                        <textarea
-                          className="form-control"
-                          rows="2"
-                          value={blogForm.excerpt}
-                          onChange={(e) =>
-                            setBlogForm({
-                              ...blogForm,
-                              excerpt: e.target.value,
-                            })
-                          }
-                          disabled={localLoading}
-                        ></textarea>
-                      </div>
-
                       {/* Content */}
                       <div className="mb-3">
                         <label className="form-label">Blog Content *</label>
@@ -730,7 +691,8 @@ export default function AdminBlogs() {
                   </button>
                   <button
                     type="submit"
-                    className="btn btn-primary"
+                    className="text-white py-1 px-2 rounded-2"
+                    style={{ backgroundColor: "var(--border2)" }}
                     disabled={uploadingImage || localLoading}
                   >
                     {localLoading ? (

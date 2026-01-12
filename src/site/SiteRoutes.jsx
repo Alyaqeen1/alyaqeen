@@ -87,7 +87,7 @@ const siteRoutes = [
       },
       // additional pages
       {
-        path: "/news",
+        path: "/blogs",
         element: <NewsUpdates></NewsUpdates>,
       },
       {
@@ -176,7 +176,7 @@ const siteRoutes = [
         element: <AllServices></AllServices>,
       },
       {
-        path: "/news-details/:categoryId/:newsId",
+        path: "/blog/:newsId",
         element: <NewsDetails></NewsDetails>,
       },
       {
