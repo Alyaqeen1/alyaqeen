@@ -1520,8 +1520,15 @@ const ApplyNowComp = () => {
                         1. Admission Fee: A one-time fee of £20 per course is
                         required before the start of classes.
                       </p>
+                      <p>
+                        2. Fees are made on a monthly basis and are paid upfront
+                        for every month in our facility and centre. This means
+                        the total sum of: (£50) for each child should be paid
+                        from 1st to 7th of the month.
+                      </p>
+
                       <div>
-                        2. Monthly Fees Policy
+                        3. Monthly Fees Policy
                         <div className="ms-4">
                           <ul
                             className="list-inside ml-5 space-y-2"
@@ -1573,21 +1580,71 @@ const ApplyNowComp = () => {
                         </div>
                       </div>
                       <p>
-                        3. Student Supervision: The Academy is only responsible
+                        4. Once the fee has been paid and after submitting the
+                        application form, the fee (Admission & Monthly Fee) will
+                        not be refunded in any case either by the student
+                        leaving or by the academy by withdrawing the student.
+                      </p>
+                      <p>
+                        5. Please note this agreement is for the duration of 6
+                        months including any absences or holidays taken. Fees
+                        must be paid on a monthly basis.
+                      </p>
+                      <p>
+                        6. A month's notice to end this contract is required
+                        otherwise fees will be payable for the month. It should
+                        be noted that until a months' notice is not provided
+                        that fees will continue to be payable.
+                      </p>
+                      <p>
+                        7. Required course books and materials will be paid for
+                        by parent(s) and will not be covered by the fees.
+                      </p>
+                      <p>
+                        8. In the case of any intentionally damaged furniture or
+                        equipment (etc) at the centre The Academy is entitled to
+                        require parents to pay for the cost of damage caused by
+                        their child.
+                      </p>
+                      <p>
+                        9. Alyaqeen Academy can at any time terminate the
+                        contract for a legitimate reason.
+                      </p>
+                      <p>
+                        10. Supporting documents including a copy of the
+                        student's birth certificate and passport must be
+                        provided with this application; otherwise, the enrolment
+                        and contract might not be accepted.
+                      </p>
+                      <p>
+                        11. Student Supervision: The Academy is only responsible
                         for supervising students up to 10 minutes before and
                         after their class time. Please ensure timely drop-off
                         and pick-up.
                       </p>
                       <p>
-                        4. Dress Code: While there is no strict uniform, we
+                        12. Dress Code: While there is no strict uniform, we
                         kindly encourage modest and simple attire. Branded or
                         fashion-label clothing is discouraged to help maintain a
                         focused Islamic learning environment.
                       </p>
                       <p>
-                        5. Progress Reports: Parents will receive a performance
-                        report at the end of each term, highlighting their
-                        child’s academic progress and personal development.
+                        13. Progress Reports: Parents may discuss their child’s
+                        progress with the Head Teacher by arranging an
+                        appointment or contacting the Academy at any time.
+                        Progress updates will be shared upon request.
+                      </p>
+                      <p className="mt-3 fw-bold fs-5">
+                        We may occasionally take photos or shoot videos during
+                        events and award ceremonies for marketing, social media
+                        and other advertisement purposes, including publishing
+                        pictures on leaflets. We kindly encourage parents to
+                        give us permission to allow their child's/children's
+                        pictures/videos to be taken/published as this will be a
+                        source of engagement for all students to participate in
+                        different events. Please note that no names or personal
+                        data will be published We also do not take any picture
+                        of the female child if she is above then 11 years old.
                       </p>
                       <p className="mt-3 fw-bold fs-5">
                         We are honored to be part of your child’s educational
