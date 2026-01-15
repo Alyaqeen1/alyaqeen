@@ -136,6 +136,8 @@ export default function StudentModal({ studentId, handleClose, showModal }) {
     startingDate,
     signature,
     monthly_fee,
+
+    applicationPdfUrl,
   } = student || {};
   const { doctorName, surgeryAddress, surgeryNumber, allergies, condition } =
     medical || {};
@@ -356,6 +358,17 @@ export default function StudentModal({ studentId, handleClose, showModal }) {
                         rel="noopener noreferrer"
                       >
                         Parent's Signature
+                      </a>
+                    </strong>
+                  </p>
+                  <p>
+                    <strong>
+                      <a
+                        href={applicationPdfUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Application From PDF
                       </a>
                     </strong>
                   </p>

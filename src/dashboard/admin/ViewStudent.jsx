@@ -54,6 +54,7 @@ export default function ViewStudent() {
     monthly_fee,
     student_id,
     signature,
+    applicationPdfUrl,
   } = student || {};
 
   const { summary, paidMonths } = feeSummary || {};
@@ -313,7 +314,85 @@ export default function ViewStudent() {
               <AttendanceCalendar studentId={id} />
             )}
             {activeTab === "documents" && (
-              <div>Documents content goes here...</div>
+              <div>
+                {/* Application PDF Section */}
+                <h6 className="fw-bold border-bottom pb-1 mb-3">
+                  Application Documents
+                </h6>
+
+                {applicationPdfUrl ? (
+                  <div className="card p-3 mb-4">
+                    <div className="row align-items-center">
+                      <div className="col-md-8">
+                        <h6 className="fw-bold mb-1">Application Form PDF</h6>
+                        <p className="text-muted mb-2">
+                          This PDF contains the complete application form
+                          submitted during registration.
+                        </p>
+                        <div className="d-flex gap-2">
+                          <a
+                            href={applicationPdfUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn btn-primary btn-sm"
+                          >
+                            <i className="fa-solid fa-eye me-1"></i> View PDF
+                          </a>
+                        </div>
+                      </div>
+                      <div className="col-md-4 text-end">
+                        <div className="bg-light p-3 rounded">
+                          <i className="fa-solid fa-file-pdf text-danger fs-1"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="alert alert-warning">
+                    <i className="fa-solid fa-exclamation-triangle me-2"></i>
+                    No application PDF found for this student. The document may
+                    not have been generated during registration.
+                  </div>
+                )}
+
+                {/* Signature Section */}
+                {signature && (
+                  <div className="card p-3">
+                    <h6 className="fw-bold border-bottom pb-1 mb-3">
+                      Digital Signature
+                    </h6>
+                    <div className="row align-items-center">
+                      <div className="col-md-8">
+                        <h6 className="fw-bold mb-1">
+                          Parent/Guardian Signature
+                        </h6>
+                        <p className="text-muted mb-2">
+                          Digital signature submitted during application.
+                        </p>
+                        <a
+                          href={signature}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="btn btn-primary btn-sm"
+                        >
+                          <i className="fa-solid fa-signature me-1"></i> View
+                          Signature
+                        </a>
+                      </div>
+                      <div className="col-md-4 text-end">
+                        <div className="bg-light p-2 border rounded d-inline-block">
+                          <img
+                            src={signature}
+                            alt="Signature"
+                            className="img-fluid"
+                            style={{ maxHeight: "80px" }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
             )}
             {activeTab === "fee" && (
               <>

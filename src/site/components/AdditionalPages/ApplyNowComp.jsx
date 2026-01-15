@@ -13,6 +13,9 @@ import { useGetDepartmentsQuery } from "../../../redux/features/departments/depa
 import LoadingSpinner from "../LoadingSpinner";
 import { useGetStudentsByEmailQuery } from "../../../redux/features/students/studentsApi";
 import Select from "react-select";
+import html2canvas from "html2canvas";
+import { jsPDF } from "jspdf";
+import uploadToCloudinary from "../../../utils/uploadToCloudinary";
 const image_hosting_key = import.meta.env.VITE_Image_Hosting_Key;
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
 // const customSelectStyles = {
@@ -82,7 +85,9 @@ const ApplyNowComp = () => {
   const [isFinding, setIsFinding] = useState(false);
   const [studentOptions, setStudentOptions] = useState([]);
   const [selectedOption, setSelectedOption] = useState(null);
-
+  const [submissionId, setSubmissionId] = useState("");
+  const [formSnapshot, setFormSnapshot] = useState(null);
+  const formRef = useRef(); // Add this with other useRef declarations
   const axiosPublic = useAxiosPublic();
 
   // Function to find students by email
@@ -178,7 +183,99 @@ const ApplyNowComp = () => {
   const sigRef = useRef();
 
   const clearSignature = () => sigRef.current.clear();
+  // Add this function near your other utility functions
+  // Better compression function - reduces PDF quality
+  const optimizePDF = async (pdfBlob) => {
+    return new Promise((resolve) => {
+      const originalSizeMB = (pdfBlob.size / 1024 / 1024).toFixed(2);
+      console.log("📊 Optimizing PDF. Original size:", originalSizeMB, "MB");
 
+      // If already small, return as is
+      if (pdfBlob.size < 3 * 1024 * 1024) {
+        // Less than 3MB
+        console.log("✅ PDF is already optimized (< 3MB)");
+        resolve(pdfBlob);
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = async (event) => {
+        try {
+          const pdfDataUrl = event.target.result;
+
+          // Create image from first page only (for form snapshot)
+          const img = new Image();
+          img.crossOrigin = "anonymous";
+          img.src = pdfDataUrl;
+
+          img.onload = () => {
+            // Calculate new dimensions (max 800px width)
+            const maxWidth = 800;
+            const scale = Math.min(maxWidth / img.width, 1);
+            const newWidth = img.width * scale;
+            const newHeight = img.height * scale;
+
+            const canvas = document.createElement("canvas");
+            canvas.width = newWidth;
+            canvas.height = newHeight;
+
+            const ctx = canvas.getContext("2d");
+            ctx.fillStyle = "white";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw with quality settings
+            ctx.drawImage(img, 0, 0, newWidth, newHeight);
+
+            // Convert to blob with compression
+            canvas.toBlob(
+              (compressedBlob) => {
+                const compressedSizeMB = (
+                  compressedBlob.size /
+                  1024 /
+                  1024
+                ).toFixed(2);
+                const reduction = (
+                  (1 - compressedBlob.size / pdfBlob.size) *
+                  100
+                ).toFixed(1);
+
+                console.log(
+                  `✅ PDF Optimized: ${originalSizeMB}MB → ${compressedSizeMB}MB (${reduction}% reduction)`
+                );
+
+                if (compressedBlob.size > 10 * 1024 * 1024) {
+                  console.warn(
+                    "⚠️ Still too large after compression:",
+                    compressedSizeMB,
+                    "MB"
+                  );
+                }
+
+                resolve(compressedBlob);
+              },
+              "image/jpeg", // Better compression than PNG
+              0.7 // Quality: 0.7 (70%)
+            );
+          };
+
+          img.onerror = () => {
+            console.warn("⚠️ Image load failed, using original PDF");
+            resolve(pdfBlob);
+          };
+        } catch (error) {
+          console.error("Optimization error:", error);
+          resolve(pdfBlob);
+        }
+      };
+
+      reader.onerror = () => {
+        console.error("FileReader error");
+        resolve(pdfBlob);
+      };
+
+      reader.readAsDataURL(pdfBlob);
+    });
+  };
   const compressImage = async (dataUrl) => {
     return new Promise((resolve) => {
       const img = new Image();
@@ -232,15 +329,468 @@ const ApplyNowComp = () => {
     setSession("");
     setSessionTime("");
   }, [department]);
+
+  // Generate a unique submission ID
+  const generateSubmissionId = () => {
+    const timestamp = Date.now();
+    const random = Math.random().toString(36).substring(2, 9);
+    return `SUB-${timestamp}-${random}`;
+  };
+
+  // Capture form as image/PDF - SIMPLIFIED AND RELIABLE VERSION
+  // Enhanced PDF creation with beautiful formatting
+  const captureFormSnapshot = async () => {
+    try {
+      const sid = generateSubmissionId();
+      setSubmissionId(sid);
+
+      const formElement = formRef.current;
+      if (!formElement) return null;
+
+      // Get form data
+      const formData = new FormData(formElement);
+      const data = {};
+      for (let [key, value] of formData.entries()) {
+        if (key !== "password" && key !== "confirmPassword") {
+          data[key] = value;
+        }
+      }
+
+      // Calculate monthly fee
+      let monthlyFeeValue = "0";
+      if (selectedDepartment) {
+        monthlyFeeValue =
+          session === "weekend"
+            ? selectedDepartment?.weekend_fee || "0"
+            : selectedDepartment?.weekdays_fee || "0";
+      }
+
+      // Create PDF
+      const pdf = new jsPDF("p", "mm", "a4");
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      const maxWidth = pageWidth - 40; // Account for margins
+      let currentY = 15;
+      let pageNumber = 1;
+
+      // Add new page function
+      const addNewPage = () => {
+        pdf.addPage();
+        pageNumber++;
+        currentY = 15;
+
+        // Add header to new page
+        pdf.setFillColor(41, 128, 185); // Blue color
+        pdf.rect(0, 0, pageWidth, 10, "F");
+
+        pdf.setFontSize(10);
+        pdf.setTextColor(255, 255, 255);
+        pdf.text(`Page ${pageNumber} - Alyaqeen Academy Application`, 105, 7, {
+          align: "center",
+        });
+        pdf.setTextColor(100);
+
+        currentY += 10;
+      };
+
+      // Function to draw a box with content
+      const drawBox = (title, contentLines, boxColor = [41, 128, 185]) => {
+        if (currentY > pageHeight - 40) {
+          addNewPage();
+        }
+
+        // Box header
+        pdf.setFillColor(...boxColor);
+        pdf.rect(15, currentY, pageWidth - 30, 8, "F");
+
+        pdf.setFontSize(12);
+        pdf.setTextColor(255, 255, 255);
+        pdf.text(title, 20, currentY + 6);
+
+        currentY += 10;
+
+        // Box content background
+        pdf.setFillColor(245, 245, 245);
+        pdf.rect(
+          15,
+          currentY,
+          pageWidth - 30,
+          contentLines.length * 7 + 10,
+          "F"
+        );
+
+        // Box border
+        pdf.setDrawColor(...boxColor);
+        pdf.setLineWidth(0.5);
+        pdf.rect(
+          15,
+          currentY - 10,
+          pageWidth - 30,
+          contentLines.length * 7 + 20
+        );
+
+        // Content
+        pdf.setFontSize(11);
+        pdf.setTextColor(50, 50, 50);
+
+        let contentY = currentY + 8;
+        contentLines.forEach((line) => {
+          pdf.text(line, 20, contentY);
+          contentY += 7;
+        });
+
+        currentY += contentLines.length * 7 + 15;
+      };
+
+      // Function to add signature image
+      const addSignature = async () => {
+        if (!signature) return;
+
+        if (currentY > pageHeight - 50) {
+          addNewPage();
+        }
+
+        try {
+          // Create image element
+          const img = new Image();
+          img.crossOrigin = "anonymous";
+          img.src = signature;
+
+          await new Promise((resolve, reject) => {
+            img.onload = () => {
+              // Draw signature box
+              pdf.setFillColor(245, 245, 245);
+              pdf.rect(15, currentY, pageWidth - 30, 40, "F");
+
+              pdf.setFontSize(12);
+              pdf.setTextColor(41, 128, 185);
+              pdf.text("Parent/Guardian Signature", 20, currentY + 8);
+
+              // Add signature image
+              const imgWidth = 80;
+              const imgHeight = 30;
+              pdf.addImage(img, "PNG", 20, currentY + 12, imgWidth, imgHeight);
+
+              // Add signature date
+              pdf.setFontSize(10);
+              pdf.setTextColor(100);
+              pdf.text(
+                `Signed on: ${new Date().toLocaleDateString()}`,
+                20,
+                currentY + 48
+              );
+
+              currentY += 50;
+              resolve();
+            };
+
+            img.onerror = () => {
+              // Fallback text if image fails
+              pdf.text(
+                "Signature: [Digitally Signed and Stored]",
+                20,
+                currentY + 8
+              );
+              currentY += 20;
+              resolve();
+            };
+
+            setTimeout(resolve, 1000); // Timeout after 1 second
+          });
+        } catch (error) {
+          console.log("Signature image error:", error);
+          pdf.text("Signature: [Digitally Signed]", 20, currentY + 8);
+          currentY += 20;
+        }
+      };
+
+      // ========== PAGE 1: HEADER & STUDENT INFO ==========
+
+      // Header with logo/background
+      pdf.setFillColor(41, 128, 185); // Blue
+      pdf.rect(0, 0, pageWidth, 40, "F");
+
+      // Title
+      pdf.setFontSize(24);
+      pdf.setTextColor(255, 255, 255);
+      pdf.text("ALYAQEEN ACADEMY", 105, 20, { align: "center" });
+
+      pdf.setFontSize(16);
+      pdf.text("Application Form", 105, 30, { align: "center" });
+
+      // Submission info
+      pdf.setFontSize(10);
+      pdf.text(`Submission ID: ${sid}`, 20, 45);
+      pdf.text(`Date: ${new Date().toLocaleDateString()}`, pageWidth - 20, 45, {
+        align: "right",
+      });
+
+      currentY = 55;
+
+      // 1. STUDENT INFORMATION (Box 1)
+      const studentInfoLines = [
+        `Full Name: ${data.student_name || ""}`,
+        `Date of Birth: ${data.std_dob || ""}`,
+        `Gender: ${data.std_gender || ""}`,
+        `School Year: ${data.school_year || ""}`,
+        `Mother Language: ${data.language || ""}`,
+        `Family Name: ${data.family_name || ""}`,
+      ];
+      drawBox("STUDENT INFORMATION", studentInfoLines, [41, 128, 185]); // Blue
+
+      // 2. CONTACT INFORMATION (Box 2)
+      const contactInfoLines = [
+        `Emergency Contact: ${data.emergency_number || ""}`,
+        `Email: ${data.student_email || ""}`,
+        `Address: ${data.address || ""}`,
+        `Post Code: ${data.post_code || ""}`,
+      ];
+      drawBox("CONTACT INFORMATION", contactInfoLines, [39, 174, 96]); // Green
+
+      // 3. PARENT/GUARDIAN INFORMATION (Box 3)
+      const parentInfoLines = [
+        `Father Name: ${data.father_name || ""}`,
+        `Father Occupation: ${data.father_occupation || ""}`,
+        `Father Contact: ${data.father_number || ""}`,
+        `Mother Name: ${data.mother_name || ""}`,
+        `Mother Occupation: ${data.mother_occupation || ""}`,
+        `Mother Contact: ${data.mother_number || ""}`,
+      ];
+      drawBox("PARENT/GUARDIAN INFORMATION", parentInfoLines, [142, 68, 173]); // Purple
+
+      // ========== PAGE 2: COURSE, MEDICAL & SIGNATURE ==========
+      if (currentY > pageHeight - 100) {
+        addNewPage();
+      } else {
+        // Add page break line
+        pdf.setDrawColor(200, 200, 200);
+        pdf.line(15, currentY, pageWidth - 15, currentY);
+        currentY += 15;
+      }
+
+      // 4. COURSE INFORMATION (Box 4)
+      const courseInfoLines = [
+        `Department: ${selectedDepartment?.dept_name || ""}`,
+        `Session: ${data.std_session || ""}`,
+        `Session Time: ${data.std_time || ""}`,
+        `Starting Date: ${data.starting_date || ""}`,
+        `Monthly Fee: £${monthlyFeeValue}`,
+      ];
+      drawBox("COURSE INFORMATION", courseInfoLines, [230, 126, 34]); // Orange
+
+      // 5. MEDICAL INFORMATION (Box 5)
+      const medicalInfoLines = [
+        `Doctor/Surgery: ${data.doctor_name || ""}`,
+        `Surgery Address: ${data.surgery_address || ""}`,
+        `Surgery Contact: ${data.surgery_number || ""}`,
+        `Allergies: ${data.allergies || "None"}`,
+        `Medical Conditions: ${data.medical_condition || "None"}`,
+      ];
+      drawBox("MEDICAL INFORMATION", medicalInfoLines, [231, 76, 60]); // Red
+
+      // ========== PAGE 3: GUIDELINES ==========
+      if (currentY > pageHeight - 150) {
+        addNewPage();
+      }
+
+      // ========== DETAILED GUIDELINES (Optional - If you want the full guidelines) ==========
+      // If you want to include the actual guidelines text from your form, add this:
+      if (currentY > pageHeight - 150) {
+        addNewPage();
+      }
+
+      // Detailed guidelines header
+      pdf.setFillColor(41, 128, 185);
+      pdf.rect(15, currentY, pageWidth - 30, 8, "F");
+      pdf.setFontSize(12);
+      pdf.setTextColor(255, 255, 255);
+      pdf.text("DETAILED GUIDELINES", 20, currentY + 6);
+      currentY += 12;
+
+      // Detailed guidelines content
+      const detailedGuidelines = [
+        "1. Admission Fee: A one-time fee of £20 per course is required before the start of classes.",
+        "2. Fees are made on a monthly basis and are paid upfront for every month in our facility and centre. This means the total sum of: (£50) for each child should be paid from 1st to 7th of the month.",
+        "3. Monthly Fees Policy:",
+        "   a. Admission before the 10th: Full monthly fee is due, payable within the first 7 days of each month.",
+        "   b. Admission after the 10th: You have two options:",
+        "      i. Pay only for the remaining days of that month, then continue with regular monthly payments in the first week of each month.",
+        "      ii. Fix the fee date according to the admission date (e.g., if admitted on the 15th, then every month the fee is due on the 15th).",
+        "4. Once the fee has been paid and after submitting the application form, the fee (Admission & Monthly Fee) will not be refunded in any case either by the student leaving or by the academy by withdrawing the student.",
+        "5. Please note this agreement is for the duration of 6 months including any absences or holidays taken. Fees must be paid on a monthly basis.",
+        "6. A month's notice to end this contract is required otherwise fees will be payable for the month. It should be noted that until a months' notice is not provided that fees will continue to be payable.",
+        "7. Required course books and materials will be paid for by parent(s) and will not be covered by the fees.",
+        "8. In the case of any intentionally damaged furniture or equipment (etc) at the centre The Academy is entitled to require parents to pay for the cost of damage caused by their child.",
+        "9. Alyaqeen Academy can at any time terminate the contract for a legitimate reason.",
+        "10. Supporting documents including a copy of the student's birth certificate and passport must be  provided with this application; otherwise, the enrolment and contract might not be accepted.",
+        "11. Student Supervision: The Academy is only responsible for supervising students up to 10 minutes before and after their class time. Please ensure timely drop-off and pick-up.",
+        "12. Dress Code: While there is no strict uniform, we kindly encourage modest and simple attire. Branded or fashion-label clothing is discouraged to help maintain a focused Islamic learning environment.",
+        "13. Progress Reports: Parents may discuss their child’s progress with the Head Teacher by arranging an appointment or contacting the Academy at any time. Progress updates will be shared upon request.",
+      ];
+
+      pdf.setFontSize(9);
+      pdf.setTextColor(80, 80, 80);
+
+      let detailY = currentY;
+      detailedGuidelines.forEach((guideline, index) => {
+        // Check for page break
+        if (detailY > pageHeight - 30) {
+          addNewPage();
+          detailY = currentY;
+        }
+
+        const lines = pdf.splitTextToSize(guideline, maxWidth - 10);
+        lines.forEach((line) => {
+          pdf.text(line, 20, detailY);
+          detailY += 6;
+        });
+        detailY += 2; // Extra spacing between guidelines
+      });
+
+      currentY = detailY + 10;
+
+      // Add some spacing before signature
+      if (currentY > pageHeight - 100) {
+        addNewPage();
+      }
+
+      // 6. SIGNATURE
+      await addSignature();
+      // ========== FOOTER ON LAST PAGE ==========
+
+      // Add footer
+      pdf.setFontSize(9);
+      pdf.setTextColor(150, 150, 150);
+
+      // Contact info footer
+      const contactFooter = [
+        "Alyaqeen Academy | 116-118 Church Road, Yardley Birmingham B25 8UX",
+        "Phone: 07869636849 | Email: contact@alyaqeen.co.uk | Website: www.alyaqeen.co.uk",
+      ];
+
+      contactFooter.forEach((line, index) => {
+        pdf.text(line, 105, pageHeight - 20 + index * 5, { align: "center" });
+      });
+
+      // Page number and ID
+      pdf.text(`Page ${pageNumber} of ${pageNumber} `, 105, pageHeight - 8, {
+        align: "center",
+      });
+
+      // ========== FINALIZE PDF ==========
+
+      const pdfBlob = pdf.output("blob");
+
+      console.log(
+        `📄 Beautiful PDF created: ${(pdfBlob.size / 1024 / 1024).toFixed(
+          2
+        )} MB, ${pageNumber} pages`
+      );
+
+      return {
+        pdfBlob: pdfBlob,
+        metadata: {
+          submissionId: sid,
+          timestamp: new Date().toISOString(),
+          pageCount: pageNumber,
+          fileSizeMB: (pdfBlob.size / 1024 / 1024).toFixed(2),
+          type: "formatted_pdf",
+          includesSignature: !!signature,
+        },
+      };
+    } catch (error) {
+      console.error("❌ Error creating formatted PDF:", error);
+      // Remove the toast.error() call here since it's handled in handleRegister
+      throw new Error("Failed to create PDF snapshot");
+    }
+  };
   const handleRegister = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
-    if (localLoading) return; // Extra guard
+    if (localLoading) return;
 
-    setLocalLoading(true); // ⬅️ Block double click
+    setLocalLoading(true);
     const form = e.target;
 
+    let snapshotUrl = null;
+    let loadingToastId; // This variable is declared but not properly used
+
+    // In handleRegister, update the upload section:
+    try {
+      // Dismiss any existing toasts first
+      toast.dismiss();
+
+      // Store the toast ID when creating loading toast
+      loadingToastId = toast.loading("Creating form snapshot...");
+
+      // 1. Capture snapshot
+      const snapshotData = await captureFormSnapshot();
+
+      if (!snapshotData) {
+        throw new Error("Snapshot generation failed");
+      }
+
+      console.log(
+        "📊 PDF size before compression:",
+        (snapshotData.pdfBlob.size / 1024 / 1024).toFixed(2),
+        "MB"
+      );
+
+      // 2. Compress the PDF if it's too large
+      let pdfBlobToUpload = snapshotData.pdfBlob;
+
+      if (snapshotData.pdfBlob.size > 3 * 1024 * 1024) {
+        // If > 3MB
+        // Dismiss previous toast and show new one
+        toast.dismiss(loadingToastId);
+        loadingToastId = toast.loading("Compressing PDF for upload...");
+        pdfBlobToUpload = await optimizePDF(snapshotData.pdfBlob);
+
+        console.log(
+          "📦 PDF size after compression:",
+          (pdfBlobToUpload.size / 1024 / 1024).toFixed(2),
+          "MB"
+        );
+      }
+
+      // 3. Check size limit again
+      // if (pdfBlobToUpload.size > 10 * 1024 * 1024) {
+      //   toast.error(
+      //     "PDF is still too large after compression. Please try with less form data."
+      //   );
+      //   setLocalLoading(false);
+      //   setLoading(false);
+      //   return;
+      // }
+
+      // Dismiss previous toast and show new one
+      toast.dismiss(loadingToastId);
+      loadingToastId = toast.loading("Uploading compressed PDF...");
+
+      // 4. Create PDF file
+      const pdfFile = new File(
+        [snapshotData.pdfBlob],
+        `application_${snapshotData.metadata.submissionId}.pdf`,
+        { type: "application/pdf" }
+      );
+
+      // 5. Upload to Cloudinary
+      snapshotUrl = await uploadToCloudinary(pdfFile, "application-snapshots");
+
+      console.log("✅ Upload successful:", snapshotUrl);
+
+      // Dismiss loading toast and show success
+      toast.dismiss(loadingToastId);
+    } catch (error) {
+      console.error("❌ Error:", error);
+      // Dismiss any loading toast on error
+      toast.dismiss(loadingToastId);
+      toast.error(error.message || "Failed to process form snapshot");
+      setLocalLoading(false);
+      setLoading(false);
+      return;
+    }
     // Extract form values
     const student_name = form.student_name.value;
     const student_email = form.student_email.value.toLowerCase().trim();
@@ -461,6 +1011,7 @@ const ApplyNowComp = () => {
           signature,
           monthly_fee,
           createdAt: new Date(),
+          applicationPdfUrl: snapshotUrl, // Cloudinary URL instead of data URL
         };
 
         const notification = {
@@ -688,7 +1239,14 @@ const ApplyNowComp = () => {
         </div>
         <div
           className="contact-wrapper mt-0 pt-0"
-          style={{ position: "relative", zIndex: 0 }}
+          style={{
+            position: "relative",
+            zIndex: 0,
+            // Ensure proper colors for html2canvas if you still want to use it
+            background: "var(--theme2)",
+            color: "white",
+          }}
+          data-capture="true"
         >
           <div className="row">
             <div className="col-lg-12">
@@ -723,6 +1281,7 @@ const ApplyNowComp = () => {
                   method="POST"
                   className="contact-form-items"
                   noValidate
+                  ref={formRef} // <-- Add this line
                 >
                   <div className="row g-4">
                     {/* basic info */}
