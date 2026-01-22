@@ -15,7 +15,7 @@ import toast from "react-hot-toast";
 const ComplaintComp = () => {
   const [addComplaint, { data, isSuccess, isLoading }] =
     useAddComplaintMutation();
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.target;
     const name = form.name.value;
@@ -24,7 +24,6 @@ const ComplaintComp = () => {
     const incident_date = form.incident_date.value;
     const title = form.title.value;
     const description = form.description.value;
-    const madrasha_id = 2;
     const complaintData = {
       name,
       email,
@@ -32,11 +31,12 @@ const ComplaintComp = () => {
       incident_date,
       title,
       description,
-      madrasha_id,
     };
 
-    addComplaint(complaintData);
-    toast.success("Complaint submitted successfully");
+    const data = await addComplaint(complaintData).unwrap();
+    if (data?.insertedId) {
+      toast.success("Complaint submitted successfully");
+    }
     form.reset();
   };
 

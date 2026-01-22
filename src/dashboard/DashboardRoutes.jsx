@@ -6,6 +6,7 @@ import ActiveStudents from "./admin/ActiveStudents";
 import ActiveTeachers from "./admin/ActiveTeachers";
 import AddTeacher from "./admin/AddTeacher";
 import AdminBlogs from "./admin/AdminBlogs";
+import AdminComplaints from "./admin/AdminComplaints";
 import AdminDirectDebit from "./admin/AdminDirectDebit";
 import BestTeacherStudent from "./admin/BestTeacherStudent";
 import Classes from "./admin/Classes";
@@ -468,6 +469,16 @@ const dashboardRoutes = [
           <PrivateRoute>
             <AdminRoute>
               <AdminBlogs></AdminBlogs>
+            </AdminRoute>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "admin/complaints",
+        element: (
+          <PrivateRoute>
+            <AdminRoute>
+              <AdminComplaints></AdminComplaints>
             </AdminRoute>
           </PrivateRoute>
         ),

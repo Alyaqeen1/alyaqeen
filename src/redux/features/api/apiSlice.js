@@ -20,7 +20,8 @@ export const apiSlice = createApi({
     "PrayerTime",
     "Merit",
     "WebsiteSettings",
-    "Blogs",
+    "Blog",
+    "Complaint",
   ], // Add both Student & Family tags here
   endpoints: (builder) => ({}),
 });

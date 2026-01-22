@@ -230,6 +230,10 @@ export default function Sidebar() {
                           label: "Blogs",
                           to: "admin/blogs",
                         },
+                        {
+                          label: "Complaints",
+                          to: "admin/complaints",
+                        },
                       ]}
                       openSubMenu={openSubMenu}
                       handleSubmenu={handleSubmenu}
