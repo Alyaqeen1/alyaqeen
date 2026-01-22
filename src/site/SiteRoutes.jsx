@@ -176,7 +176,7 @@ const siteRoutes = [
         element: <AllServices></AllServices>,
       },
       {
-        path: "/blog/:newsId",
+        path: "/blog/:slug",
         element: <NewsDetails></NewsDetails>,
       },
       {

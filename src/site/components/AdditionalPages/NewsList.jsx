@@ -60,7 +60,7 @@ const NewsList = () => {
     ? [...blogs]
         .sort(
           (a, b) =>
-            new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt)
+            new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt),
         )
         .slice(0, 3)
     : [];
@@ -107,7 +107,7 @@ const NewsList = () => {
                         <span className="d-flex align-items-center">
                           <i className="fas fa-calendar-alt me-2"></i>
                           {new Date(
-                            blog.date || blog.createdAt
+                            blog.date || blog.createdAt,
                           ).toLocaleDateString("en-US", {
                             year: "numeric",
                             month: "long",
@@ -123,7 +123,7 @@ const NewsList = () => {
 
                       <h3 className="mb-3">
                         <Link
-                          to={`/blog/${blog._id}`}
+                          to={`/blog/${blog.slug}`}
                           className="text-decoration-none text-dark"
                         >
                           {blog.title}
@@ -148,7 +148,7 @@ const NewsList = () => {
                       </div>
 
                       <Link
-                        to={`/blog/${blog._id}`}
+                        to={`/blog/${blog.slug}`}
                         className="theme-btn  px-4 py-2"
                       >
                         Read More
@@ -211,7 +211,7 @@ const NewsList = () => {
                           className="page-link"
                           onClick={() =>
                             setCurrentPage((prev) =>
-                              Math.min(prev + 1, totalPages)
+                              Math.min(prev + 1, totalPages),
                             )
                           }
                           disabled={currentPage === totalPages}
@@ -337,7 +337,7 @@ const NewsList = () => {
                             <small className="text-muted d-block mb-1">
                               <i className="fa-solid fa-calendar-days me-1"></i>
                               {new Date(
-                                blog.date || blog.createdAt
+                                blog.date || blog.createdAt,
                               ).toLocaleDateString("en-US", {
                                 month: "short",
                                 day: "numeric",
@@ -345,7 +345,7 @@ const NewsList = () => {
                             </small>
                             <h6 className="mb-0">
                               <Link
-                                to={`/blog/${blog._id}`}
+                                to={`/blog/${blog.slug}`}
                                 className="text-decoration-none text-dark"
                               >
                                 {blog.title?.substring(0, 50)}
@@ -388,13 +388,13 @@ const NewsList = () => {
                                 [...blogs].sort(
                                   (a, b) =>
                                     new Date(b.date || b.createdAt) -
-                                    new Date(a.date || a.createdAt)
+                                    new Date(a.date || a.createdAt),
                                 )[0].date ||
                                   [...blogs].sort(
                                     (a, b) =>
                                       new Date(b.date || b.createdAt) -
-                                      new Date(a.date || a.createdAt)
-                                  )[0].createdAt
+                                      new Date(a.date || a.createdAt),
+                                  )[0].createdAt,
                               ).toLocaleDateString("en-US", {
                                 month: "short",
                                 day: "numeric",

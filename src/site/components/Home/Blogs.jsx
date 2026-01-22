@@ -139,7 +139,7 @@ const Blogs = () => {
                       </li>
                     </ul>
                     <h3>
-                      <Link to={`/blog/${latestBlog._id}`}>
+                      <Link to={`/blog/${latestBlog.slug}`}>
                         {latestBlog.title}
                       </Link>
                     </h3>
@@ -165,7 +165,7 @@ const Blogs = () => {
                         </div>
                       </div>
                       <Link
-                        to={`/blog/${latestBlog._id}`}
+                        to={`/blog/${latestBlog.slug}`}
                         className="theme-btn"
                       >
                         Read More{" "}

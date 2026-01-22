@@ -1,11 +1,11 @@
 import { Link, useParams } from "react-router";
 import { useEffect } from "react";
 import LoadingSpinner from "../components/LoadingSpinner";
-import { useGetBlogQuery } from "../../redux/features/blogs/blogsApi";
 import one from "../assets/img/news/post-5.jpg"; // Fallback image
+import { useGetBlogBySlugQuery } from "../../redux/features/blogs/blogsApi";
 
 const NewsDetails = () => {
-  const { newsId } = useParams();
+  const { slug } = useParams();
 
   const {
     data: blog,
@@ -13,7 +13,7 @@ const NewsDetails = () => {
     isError,
     isSuccess,
     refetch,
-  } = useGetBlogQuery(newsId);
+  } = useGetBlogBySlugQuery(slug);
 
   useEffect(() => {
     refetch();
@@ -65,7 +65,7 @@ const NewsDetails = () => {
                     />
                   </div>
 
-                  <div className="post-content">
+                  <div className="post-content mt-5">
                     {/* Post Meta Information */}
                     <ul className="post-list d-flex align-items-center mb-4">
                       <li>
@@ -85,7 +85,7 @@ const NewsDetails = () => {
                     </ul>
 
                     {/* Blog Title */}
-                    <h1 className="mb-4">{blog.title}</h1>
+                    <h2 className={`fw-bold mb-4`}>{blog.title}</h2>
 
                     {/* Blog Content - with proper text wrapping */}
                     {blog.content && (

@@ -11,6 +11,10 @@ export const blogsApi = apiSlice.injectEndpoints({
       query: (id) => `/blogs/${id}`,
       providesTags: ["Blog"],
     }),
+    getBlogBySlug: builder.query({
+      query: (slug) => `/blogs/slug/${slug}`,
+      providesTags: ["Blog"],
+    }),
     getLatestBlog: builder.query({
       query: () => "/blogs/latest",
       providesTags: ["Blog"],
@@ -45,6 +49,7 @@ export const blogsApi = apiSlice.injectEndpoints({
 export const {
   useGetBlogsQuery,
   useGetBlogQuery,
+  useGetBlogBySlugQuery,
   useCreateBlogMutation,
   useGetLatestBlogQuery,
   useUpdateBlogMutation,

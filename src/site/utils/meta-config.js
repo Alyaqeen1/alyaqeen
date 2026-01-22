@@ -54,10 +54,10 @@ const metaConfig = {
       description:
         "Learn about Alyaqeen Academy's Urdu & Bangla course and its objectives.",
     },
-    newsUpdates: {
-      title: "News & Updates | Alyaqeen Academy",
+    Blogs: {
+      title: "Blogs | Alyaqeen Academy",
       description:
-        "Stay updated with the latest news and announcements from Alyaqeen Academy.",
+        "Stay updated with the latest blogs and articles from Alyaqeen Academy.",
     },
     announcements: {
       title: "Announcements | Alyaqeen Academy",

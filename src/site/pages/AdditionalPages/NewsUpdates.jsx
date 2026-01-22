@@ -6,7 +6,7 @@ import SEO from "../../utils/SEO";
 export default function NewsUpdates() {
   return (
     <div>
-      <SEO page="newsUpdates" />
+      <SEO page="Blogs" />
 
       <CmnBanner title="Blogs"></CmnBanner>
       <NewsList></NewsList>

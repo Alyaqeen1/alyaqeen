@@ -105,11 +105,11 @@ export default function AdminBlogs() {
         date: blogForm.date,
         content: blogForm.content,
         image: blogForm.imageUrl,
-        slug: blogForm.title
-          .toLowerCase()
-          .replace(/[^a-z0-9]+/g, "-")
-          .replace(/(^-|-$)/g, ""),
-        createdAt: new Date().toISOString(),
+        // slug: blogForm.title
+        //   .toLowerCase()
+        //   .replace(/[^a-z0-9]+/g, "-")
+        //   .replace(/(^-|-$)/g, ""),
+        // createdAt: new Date().toISOString(),
       };
 
       await createBlog(blogData).unwrap();
@@ -164,7 +164,7 @@ export default function AdminBlogs() {
         date: blogForm.date,
         content: blogForm.content,
         image: blogForm.imageUrl,
-        updatedAt: new Date().toISOString(),
+        // updatedAt: new Date().toISOString(),
       };
 
       await updateBlog(blogData).unwrap();

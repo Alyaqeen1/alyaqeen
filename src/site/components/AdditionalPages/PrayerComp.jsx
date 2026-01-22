@@ -21,7 +21,7 @@ const PrayerComp = () => {
 
   // Initialize activeTab based on URL or default to 0
   const [activeTabIndex, setActiveTabIndex] = useState(
-    tabFromURL === "calendar" ? 1 : 0
+    tabFromURL === "calendar" ? 1 : 0,
   );
 
   const date = new Date();
@@ -359,130 +359,245 @@ const PrayerComp = () => {
                     </thead>
                     <tbody>
                       {times?.[0]?.[selectedMonth]?.length > 0 ? (
-                        times[0][selectedMonth].map((day) => (
-                          <tr key={day?.date}>
-                            <td
-                              className={`${
-                                currentDate == day?.date &&
-                                currentMonthName === selectedMonth
-                                  ? "bg-body-secondary"
-                                  : "bg-white"
-                              } border h6 text-center align-middle text-nowrap`}
-                            >
-                              {day?.date}
-                            </td>
-                            <td
-                              className={`${
-                                currentDate == day?.date &&
-                                currentMonthName === selectedMonth
-                                  ? "bg-body-secondary"
-                                  : "bg-white"
-                              } border h6 text-center align-middle text-nowrap`}
-                            >
-                              {day?.fajr?.start}
-                            </td>
-                            <td
-                              className={`${
-                                currentDate == day?.date &&
-                                currentMonthName === selectedMonth
-                                  ? "bg-body-secondary"
-                                  : "bg-white"
-                              } border h6 text-center align-middle text-nowrap`}
-                            >
-                              {day?.fajr?.jamat}
-                            </td>
-                            <td
-                              className={`${
-                                currentDate == day?.date &&
-                                currentMonthName === selectedMonth
-                                  ? "bg-body-secondary"
-                                  : "bg-white"
-                              } border h6 text-center align-middle text-nowrap`}
-                            >
-                              {day?.sunrise}
-                            </td>
-                            <td
-                              className={`${
-                                currentDate == day?.date &&
-                                currentMonthName === selectedMonth
-                                  ? "bg-body-secondary"
-                                  : "bg-white"
-                              } border h6 text-center align-middle text-nowrap`}
-                            >
-                              {day?.zuhr?.start}
-                            </td>
-                            <td
-                              className={`${
-                                currentDate == day?.date &&
-                                currentMonthName === selectedMonth
-                                  ? "bg-body-secondary"
-                                  : "bg-white"
-                              } border h6 text-center align-middle text-nowrap`}
-                            >
-                              {day?.zuhr?.jamat}
-                            </td>
-                            <td
-                              className={`${
-                                currentDate == day?.date &&
-                                currentMonthName === selectedMonth
-                                  ? "bg-body-secondary"
-                                  : "bg-white"
-                              } border h6 text-center align-middle text-nowrap`}
-                            >
-                              {day?.asr?.start}
-                            </td>
-                            <td
-                              className={`${
-                                currentDate == day?.date &&
-                                currentMonthName === selectedMonth
-                                  ? "bg-body-secondary"
-                                  : "bg-white"
-                              } border h6 text-center align-middle text-nowrap`}
-                            >
-                              {day?.asr?.jamat}
-                            </td>
-                            <td
-                              className={`${
-                                currentDate == day?.date &&
-                                currentMonthName === selectedMonth
-                                  ? "bg-body-secondary"
-                                  : "bg-white"
-                              } border h6 text-center align-middle text-nowrap`}
-                            >
-                              {day?.maghrib?.start}
-                            </td>
-                            <td
-                              className={`${
-                                currentDate == day?.date &&
-                                currentMonthName === selectedMonth
-                                  ? "bg-body-secondary"
-                                  : "bg-white"
-                              } border h6 text-center align-middle text-nowrap`}
-                            >
-                              {day?.maghrib?.jamat}
-                            </td>
-                            <td
-                              className={`${
-                                currentDate == day?.date &&
-                                currentMonthName === selectedMonth
-                                  ? "bg-body-secondary"
-                                  : "bg-white"
-                              } border h6 text-center align-middle text-nowrap`}
-                            >
-                              {day?.isha?.start}
-                            </td>
-                            <td
-                              className={`${
-                                currentDate == day?.date &&
-                                currentMonthName === selectedMonth
-                                  ? "bg-body-secondary"
-                                  : "bg-white"
-                              } border h6 text-center align-middle text-nowrap`}
-                            >
-                              {day?.isha?.jamat}
-                            </td>
-                          </tr>
-                        ))
+                        times[0][selectedMonth].map((day) => {
+                          // Create a Date object to check if it's Friday
+                          // We need to construct a proper date to check the day of week
+                          const dayNumber = parseInt(day?.date);
+                          const currentYear = getUKYear();
+                          const monthIndex = months.findIndex(
+                            (m) => m === selectedMonth,
+                          );
+
+                          // Create date object (months are 0-indexed in JavaScript)
+                          const dateObj = new Date(
+                            currentYear,
+                            monthIndex,
+                            dayNumber,
+                          );
+                          const isFriday = dateObj.getDay() === 5; // 0 = Sunday, 5 = Friday
+
+                          return (
+                            <tr key={day?.date}>
+                              <td
+                                className={`${
+                                  currentDate == day?.date &&
+                                  currentMonthName === selectedMonth
+                                    ? "bg-body-secondary"
+                                    : "bg-white"
+                                } border h6 text-center align-middle text-nowrap`}
+                              >
+                                {/* Add theme color for Friday dates */}
+                                <span
+                                  className={isFriday ? "fw-bold" : ""}
+                                  style={
+                                    isFriday ? { color: "var(--theme)" } : {}
+                                  }
+                                >
+                                  {day?.date}
+                                </span>
+                                {/* Optionally add (Fri) text */}
+                                {isFriday && (
+                                  <span
+                                    className="ms-1 fw-bold"
+                                    style={{
+                                      color: "var(--theme)",
+                                      fontSize: "0.8em",
+                                    }}
+                                  >
+                                    (Fri)
+                                  </span>
+                                )}
+                              </td>
+                              <td
+                                className={`${
+                                  currentDate == day?.date &&
+                                  currentMonthName === selectedMonth
+                                    ? "bg-body-secondary"
+                                    : "bg-white"
+                                } border h6 text-center align-middle text-nowrap`}
+                              >
+                                <span
+                                  style={
+                                    isFriday ? { color: "var(--theme)" } : {}
+                                  }
+                                  className={isFriday ? "fw-bold" : ""}
+                                >
+                                  {day?.fajr?.start}
+                                </span>
+                              </td>
+                              <td
+                                className={`${
+                                  currentDate == day?.date &&
+                                  currentMonthName === selectedMonth
+                                    ? "bg-body-secondary"
+                                    : "bg-white"
+                                } border h6 text-center align-middle text-nowrap`}
+                              >
+                                <span
+                                  style={
+                                    isFriday ? { color: "var(--theme)" } : {}
+                                  }
+                                  className={isFriday ? "fw-bold" : ""}
+                                >
+                                  {day?.fajr?.jamat}
+                                </span>
+                              </td>
+                              <td
+                                className={`${
+                                  currentDate == day?.date &&
+                                  currentMonthName === selectedMonth
+                                    ? "bg-body-secondary"
+                                    : "bg-white"
+                                } border h6 text-center align-middle text-nowrap`}
+                              >
+                                <span
+                                  style={
+                                    isFriday ? { color: "var(--theme)" } : {}
+                                  }
+                                  className={isFriday ? "fw-bold" : ""}
+                                >
+                                  {day?.sunrise}
+                                </span>
+                              </td>
+                              <td
+                                className={`${
+                                  currentDate == day?.date &&
+                                  currentMonthName === selectedMonth
+                                    ? "bg-body-secondary"
+                                    : "bg-white"
+                                } border h6 text-center align-middle text-nowrap`}
+                              >
+                                <span
+                                  style={
+                                    isFriday ? { color: "var(--theme)" } : {}
+                                  }
+                                  className={isFriday ? "fw-bold" : ""}
+                                >
+                                  {day?.zuhr?.start}
+                                </span>
+                              </td>
+                              <td
+                                className={`${
+                                  currentDate == day?.date &&
+                                  currentMonthName === selectedMonth
+                                    ? "bg-body-secondary"
+                                    : "bg-white"
+                                } border h6 text-center align-middle text-nowrap`}
+                              >
+                                <span
+                                  style={
+                                    isFriday ? { color: "var(--theme)" } : {}
+                                  }
+                                  className={isFriday ? "fw-bold" : ""}
+                                >
+                                  {day?.zuhr?.jamat}
+                                </span>
+                              </td>
+                              <td
+                                className={`${
+                                  currentDate == day?.date &&
+                                  currentMonthName === selectedMonth
+                                    ? "bg-body-secondary"
+                                    : "bg-white"
+                                } border h6 text-center align-middle text-nowrap`}
+                              >
+                                <span
+                                  style={
+                                    isFriday ? { color: "var(--theme)" } : {}
+                                  }
+                                  className={isFriday ? "fw-bold" : ""}
+                                >
+                                  {day?.asr?.start}
+                                </span>
+                              </td>
+                              <td
+                                className={`${
+                                  currentDate == day?.date &&
+                                  currentMonthName === selectedMonth
+                                    ? "bg-body-secondary"
+                                    : "bg-white"
+                                } border h6 text-center align-middle text-nowrap`}
+                              >
+                                <span
+                                  style={
+                                    isFriday ? { color: "var(--theme)" } : {}
+                                  }
+                                  className={isFriday ? "fw-bold" : ""}
+                                >
+                                  {day?.asr?.jamat}
+                                </span>
+                              </td>
+                              <td
+                                className={`${
+                                  currentDate == day?.date &&
+                                  currentMonthName === selectedMonth
+                                    ? "bg-body-secondary"
+                                    : "bg-white"
+                                } border h6 text-center align-middle text-nowrap`}
+                              >
+                                <span
+                                  style={
+                                    isFriday ? { color: "var(--theme)" } : {}
+                                  }
+                                  className={isFriday ? "fw-bold" : ""}
+                                >
+                                  {day?.maghrib?.start}
+                                </span>
+                              </td>
+                              <td
+                                className={`${
+                                  currentDate == day?.date &&
+                                  currentMonthName === selectedMonth
+                                    ? "bg-body-secondary"
+                                    : "bg-white"
+                                } border h6 text-center align-middle text-nowrap`}
+                              >
+                                <span
+                                  style={
+                                    isFriday ? { color: "var(--theme)" } : {}
+                                  }
+                                  className={isFriday ? "fw-bold" : ""}
+                                >
+                                  {day?.maghrib?.jamat}
+                                </span>
+                              </td>
+                              <td
+                                className={`${
+                                  currentDate == day?.date &&
+                                  currentMonthName === selectedMonth
+                                    ? "bg-body-secondary"
+                                    : "bg-white"
+                                } border h6 text-center align-middle text-nowrap`}
+                              >
+                                <span
+                                  style={
+                                    isFriday ? { color: "var(--theme)" } : {}
+                                  }
+                                  className={isFriday ? "fw-bold" : ""}
+                                >
+                                  {day?.isha?.start}
+                                </span>
+                              </td>
+                              <td
+                                className={`${
+                                  currentDate == day?.date &&
+                                  currentMonthName === selectedMonth
+                                    ? "bg-body-secondary"
+                                    : "bg-white"
+                                } border h6 text-center align-middle text-nowrap`}
+                              >
+                                <span
+                                  style={
+                                    isFriday ? { color: "var(--theme)" } : {}
+                                  }
+                                  className={isFriday ? "fw-bold" : ""}
+                                >
+                                  {day?.isha?.jamat}
+                                </span>
+                              </td>
+                            </tr>
+                          );
+                        })
                       ) : (
                         <tr>
                           <td colSpan={12}>
@@ -490,7 +605,6 @@ const PrayerComp = () => {
                           </td>
                         </tr>
                       )}
-                      {}
                     </tbody>
                   </table>
                 </div>
@@ -533,7 +647,7 @@ const PrayerComp = () => {
                         onClick={() =>
                           handleDownload(
                             prayerCalendar.calendarFile,
-                            getFileExtension()
+                            getFileExtension(),
                           )
                         }
                         className="theme-btn"
