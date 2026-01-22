@@ -6,7 +6,7 @@ import SEO from "../../utils/SEO";
 export default function PrayerTimetable() {
   return (
     <div>
-      <SEO page="prayerTimetable" />
+      <SEO page="prayer-timetable" />
       <CmnBanner title="Prayer Timetable"></CmnBanner>
       <PrayerComp></PrayerComp>
     </div>

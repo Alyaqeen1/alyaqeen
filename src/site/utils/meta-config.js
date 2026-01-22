@@ -1,6 +1,7 @@
 const metaConfig = {
   site: {
     name: "Alyaqeen Academy",
+    url: "https://www.alyaqeen.co.uk", // ✅ ADD THIS
     description: "Alyaqeen academy was established in September 2020...",
   },
   pages: {
@@ -69,7 +70,7 @@ const metaConfig = {
       description:
         "Learn about Alyaqeen Academy's syllabus and the subjects we offer.",
     },
-    prayerTimetable: {
+    "prayer-timetable": {
       title: "Prayer Timetable | Alyaqeen Academy",
       description:
         "Learn about Alyaqeen Academy's prayer timetable and schedule.",
