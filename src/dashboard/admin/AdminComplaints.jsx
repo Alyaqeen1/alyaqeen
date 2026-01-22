@@ -1,5 +1,8 @@
 import React, { useState } from "react";
-import { useGetComplaintsQuery } from "../../redux/features/complaint/complaintApi";
+import {
+  useGetComplaintsQuery,
+  useRemoveComplaintMutation,
+} from "../../redux/features/complaint/complaintApi";
 import {
   FaEye,
   FaCheck,
@@ -12,12 +15,14 @@ import {
   FaSort,
   FaSortUp,
   FaSortDown,
+  FaTrashAlt,
 } from "react-icons/fa";
 import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 import Swal from "sweetalert2";
 
 export default function AdminComplaints() {
   const { data: complaints, isLoading, refetch } = useGetComplaintsQuery();
+  const [removeComplaint] = useRemoveComplaintMutation();
   const [sortBy, setSortBy] = useState("newest");
   const [statusFilter, setStatusFilter] = useState("all"); // 'all', 'new', 'pending', 'resolved'
 
@@ -103,6 +108,32 @@ export default function AdminComplaints() {
       showCloseButton: true,
       showConfirmButton: false,
       width: "600px",
+    });
+  };
+
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "This will permanently delete the subject.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        removeComplaint(id)
+          .unwrap()
+          .then((res) => {
+            if (res?.deletedCount) {
+              Swal.fire("Deleted!", "Subject deleted.", "success");
+              //   refetchSubjects();
+            }
+          })
+          .catch(() => {
+            Swal.fire("Error!", "Failed to delete subject.", "error");
+          });
+      }
     });
   };
 
@@ -228,6 +259,12 @@ export default function AdminComplaints() {
                               onClick={() => handleViewDetails(complaint)}
                             >
                               <FaEye className="me-1" /> View Details
+                            </button>
+                            <button
+                              className="btn btn-sm btn-danger me-2"
+                              onClick={() => handleDelete(complaint._id)}
+                            >
+                              <FaTrashAlt />
                             </button>
                           </div>
                         </div>

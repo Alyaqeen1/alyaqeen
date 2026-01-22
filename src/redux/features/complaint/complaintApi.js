@@ -14,7 +14,18 @@ export const complaintApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Complaint"],
     }),
+    removeComplaint: builder.mutation({
+      query: (id) => ({
+        url: `/complaints/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Complaint"],
+    }),
   }),
 });
 
-export const { useAddComplaintMutation, useGetComplaintsQuery } = apiSlice;
+export const {
+  useAddComplaintMutation,
+  useGetComplaintsQuery,
+  useRemoveComplaintMutation,
+} = apiSlice;
