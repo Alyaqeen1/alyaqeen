@@ -572,7 +572,7 @@ const CrmDashboard = ({
         <div>
           <h2
             style={{
-              fontWeight: 600,
+              fontWeight: 900,
               fontSize: "18px",
               margin: 0,
               color: themeColors.textPrimary,

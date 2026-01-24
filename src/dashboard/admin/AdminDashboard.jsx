@@ -24,7 +24,7 @@ export default function AdminDashboard() {
     return <LoadingSpinnerDash></LoadingSpinnerDash>;
 
   return (
-    <div className="mt-3">
+    <div className="">
       {/* <div className="container mt-3">
         <h3 className="mb-4">Admin Dashboard</h3>
         <div className="row">
