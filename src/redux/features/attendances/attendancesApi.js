@@ -10,6 +10,14 @@ export const attendancesApi = apiSlice.injectEndpoints({
       query: (studentId) => `/attendances/student/${studentId}`,
       providesTags: ["Attendance"],
     }),
+    getTodayBasicSummary: builder.query({
+      query: () => `/attendances/today-basic-summary`,
+      providesTags: ["Attendance"],
+    }),
+    getDashboardStats: builder.query({
+      query: () => `/attendances/dashboard-stats`,
+      providesTags: ["Attendance"],
+    }),
     getAttendance: builder.query({
       query: (id) => `/attendances/${id}`,
       providesTags: ["Attendance"],
@@ -107,6 +115,8 @@ export const attendancesApi = apiSlice.injectEndpoints({
 export const {
   useGetAttendancesQuery,
   useGetAttendanceQuery,
+  useGetDashboardStatsQuery,
+  useGetTodayBasicSummaryQuery,
   useGetAttendancePresentCountQuery,
   useGetDashboardAttendanceSummaryQuery,
   useGetAttendanceByTeacherAndDateQuery,

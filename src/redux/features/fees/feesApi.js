@@ -10,6 +10,10 @@ export const feesApi = apiSlice.injectEndpoints({
       query: (id) => `/fees/${id}`,
       providesTags: ["Fee"],
     }),
+    getRevenueSummary: builder.query({
+      query: (year) => `/fees/revenue-summary/${year}`,
+      providesTags: ["Fee"],
+    }),
     getFeesByStatus: builder.query({
       query: (status) => `/fees/by-status/${status}`,
       providesTags: ["Fee"],
@@ -103,6 +107,7 @@ export const feesApi = apiSlice.injectEndpoints({
 export const {
   useGetFeesQuery,
   useGetFeeQuery,
+  useGetRevenueSummaryQuery,
   useGetFeesByStatusQuery,
   useGetFeesSummaryQuery,
   useGetFeesByDateQuery,

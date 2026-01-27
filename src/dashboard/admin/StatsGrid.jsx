@@ -1,42 +1,46 @@
 import React, { useState, useEffect } from "react";
 import ApexCharts from "react-apexcharts";
+import { useGetDashboardStatsQuery } from "../../redux/features/attendances/attendancesApi";
 
 const StatCard = ({
   title,
   value,
   color,
-  icon,
+  emoji,
   chartData,
   change,
   changeLabel,
   themeColors,
   getBgColor,
+  isLoading,
 }) => {
   const [chart, setChart] = useState(null);
 
   useEffect(() => {
-    setChart({
-      series: [{ data: chartData }],
-      options: {
-        chart: {
-          type: "area",
-          sparkline: { enabled: true },
-          height: 50,
-        },
-        colors: [color],
-        stroke: { curve: "smooth", width: 2 },
-        fill: {
-          type: "gradient",
-          gradient: {
-            shadeIntensity: 1,
-            opacityFrom: 0.7,
-            opacityTo: 0.1,
-            stops: [0, 90, 100],
+    if (chartData && chartData.length > 0) {
+      setChart({
+        series: [{ data: chartData }],
+        options: {
+          chart: {
+            type: "area",
+            sparkline: { enabled: true },
+            height: 50,
           },
+          colors: [color],
+          stroke: { curve: "smooth", width: 2 },
+          fill: {
+            type: "gradient",
+            gradient: {
+              shadeIntensity: 1,
+              opacityFrom: 0.7,
+              opacityTo: 0.1,
+              stops: [0, 90, 100],
+            },
+          },
+          tooltip: { enabled: false },
         },
-        tooltip: { enabled: false },
-      },
-    });
+      });
+    }
   }, [chartData, color]);
 
   return (
@@ -46,6 +50,7 @@ const StatCard = ({
         borderRadius: "8px",
         padding: "20px",
         border: `1px solid ${themeColors.border}`,
+        height: "100%",
       }}
     >
       <div
@@ -66,9 +71,10 @@ const StatCard = ({
               alignItems: "center",
               justifyContent: "center",
               marginBottom: "16px",
+              fontSize: "20px",
             }}
           >
-            <i className={icon} style={{ color, fontSize: "20px" }}></i>
+            {emoji}
           </div>
         </div>
         <div style={{ flex: 1, marginLeft: "16px" }}>
@@ -98,17 +104,31 @@ const StatCard = ({
                   color: themeColors.textPrimary,
                 }}
               >
-                {value}
+                {isLoading ? "..." : value}
               </h3>
             </div>
             <div style={{ width: "80px", height: "40px" }}>
-              {chart && (
+              {chart && !isLoading ? (
                 <ApexCharts
                   options={chart.options}
                   series={chart.series}
                   type="area"
                   height={40}
                 />
+              ) : (
+                <div
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: themeColors.textMuted,
+                    fontSize: "10px",
+                  }}
+                >
+                  {isLoading ? "..." : "No trend"}
+                </div>
               )}
             </div>
           </div>
@@ -119,42 +139,36 @@ const StatCard = ({
               alignItems: "center",
             }}
           >
-            <a
-              href="#!"
-              style={{
-                color: color,
-                fontSize: "13px",
-                textDecoration: "none",
-                display: "flex",
-                alignItems: "center",
-                gap: "4px",
-              }}
-            >
-              View All
-              <i className="bi bi-arrow-right" style={{ fontSize: "12px" }}></i>
-            </a>
+            <div style={{ fontSize: "12px", color: themeColors.textMuted }}>
+              {changeLabel}
+            </div>
             <div style={{ textAlign: "right" }}>
-              <p
-                style={{
-                  color: change >= 0 ? themeColors.success : themeColors.danger,
-                  fontSize: "13px",
-                  fontWeight: 600,
-                  margin: 0,
-                }}
-              >
-                {change >= 0 ? "+" : ""}
-                {change}%
-              </p>
-              <p
-                style={{
-                  color: themeColors.textMuted,
-                  fontSize: "11px",
-                  margin: "2px 0 0 0",
-                  opacity: 0.7,
-                }}
-              >
-                {changeLabel}
-              </p>
+              {change !== undefined && (
+                <>
+                  <p
+                    style={{
+                      color:
+                        change >= 0 ? themeColors.success : themeColors.danger,
+                      fontSize: "13px",
+                      fontWeight: 600,
+                      margin: 0,
+                    }}
+                  >
+                    {change >= 0 ? "+" : ""}
+                    {typeof change === "number" ? change.toFixed(1) : change}%
+                  </p>
+                  <p
+                    style={{
+                      color: themeColors.textMuted,
+                      fontSize: "11px",
+                      margin: "2px 0 0 0",
+                      opacity: 0.7,
+                    }}
+                  >
+                    {change >= 0 ? "Increase" : "Decrease"}
+                  </p>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -164,44 +178,111 @@ const StatCard = ({
 };
 
 const StatsGrid = ({ themeColors, getBgColor, screenSize, gridStyles }) => {
+  const { data: dashboardStats, isLoading } = useGetDashboardStatsQuery();
+
+  // Prepare stats data from API response
   const statsData = [
     {
-      title: "Total Customers",
-      value: "1,02,890",
+      title: "Active Students",
+      value: dashboardStats?.stats?.totalActiveStudents?.value || "0",
       color: themeColors.primary,
-      icon: "bi bi-people-fill",
-      chartData: [30, 40, 35, 50, 49, 60, 70],
-      change: 40,
+      emoji: "👨‍🎓",
+      chartData: [290, 300, 310, 315, 319],
+      change: 10,
       changeLabel: "this month",
+      isLoading,
     },
     {
-      title: "Total Revenue",
-      value: "$56,562",
+      title: "Monthly Revenue",
+      value: dashboardStats?.stats?.currentMonthRevenue?.value || "£0",
       color: themeColors.secondary,
-      icon: "bi bi-wallet-fill",
-      chartData: [30, 25, 35, 40, 45, 50, 55],
+      emoji: "💰",
+      chartData: [500, 1000, 1500, 2000, 2500],
       change: 25,
       changeLabel: "this month",
+      isLoading,
     },
     {
-      title: "Conversion Ratio",
-      value: "12.08%",
+      title: "Weekly Attendance",
+      value: dashboardStats?.stats?.attendanceRate?.value || "0%",
       color: themeColors.success,
-      icon: "bi bi-graph-up-arrow",
-      chartData: [30, 40, 35, 30, 25, 20, 15],
-      change: -12,
-      changeLabel: "this month",
+      emoji: "📊",
+      chartData: [70, 72, 75, 76, 78.5],
+      change: dashboardStats?.stats?.attendanceRate?.change || 0,
+      changeLabel: `Week ${dashboardStats?.metadata?.weekRange || ""}`,
+      isLoading,
     },
     {
-      title: "Total Deals",
-      value: "2,543",
+      title: "Outstanding Payments",
+      value: dashboardStats?.stats?.outstandingPayments?.value || "£0",
       color: themeColors.warning,
-      icon: "bi bi-briefcase-fill",
-      chartData: [30, 40, 35, 50, 49, 60, 70],
-      change: 19,
-      changeLabel: "this month",
+      emoji: "⚠️",
+      chartData: [2000, 1900, 1850, 1750, 1640],
+      change: -18,
+      changeLabel: `${dashboardStats?.stats?.outstandingPayments?.count || 0} pending`,
+      isLoading,
     },
   ];
+
+  // Show loading skeleton if still loading
+  if (isLoading) {
+    return (
+      <div style={gridStyles}>
+        {[1, 2, 3, 4].map((index) => (
+          <div
+            key={index}
+            style={{
+              backgroundColor: "white",
+              borderRadius: "8px",
+              padding: "20px",
+              border: `1px solid ${themeColors.border}`,
+              height: "140px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <div style={{ width: "60%" }}>
+                <div
+                  style={{
+                    height: "16px",
+                    backgroundColor: themeColors.border,
+                    borderRadius: "4px",
+                    marginBottom: "8px",
+                    width: "60%",
+                  }}
+                ></div>
+                <div
+                  style={{
+                    height: "28px",
+                    backgroundColor: themeColors.border,
+                    borderRadius: "4px",
+                    marginBottom: "12px",
+                    width: "80%",
+                  }}
+                ></div>
+              </div>
+              <div
+                style={{
+                  width: "80px",
+                  height: "40px",
+                  backgroundColor: themeColors.border,
+                  borderRadius: "4px",
+                }}
+              ></div>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
 
   return (
     <div style={gridStyles}>

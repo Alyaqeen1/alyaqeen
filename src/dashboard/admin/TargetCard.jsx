@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
 import ApexCharts from "react-apexcharts";
 import img from "../../assets/image.png";
+import { useGetTodayBasicSummaryQuery } from "../../redux/features/attendances/attendancesApi";
 
 const TargetCard = ({ themeColors }) => {
   const [targetChart, setTargetChart] = useState(null);
+  const { data: todayBasicSummary, isLoading: isTodayBasicSummaryLoading } =
+    useGetTodayBasicSummaryQuery();
 
   useEffect(() => {
     setTargetChart({
@@ -70,7 +73,7 @@ const TargetCard = ({ themeColors }) => {
               margin: "0 0 8px 0",
             }}
           >
-            Your target is incomplete
+            Assalamu Alaikum 🌙
           </h3>
           <p
             style={{
@@ -79,33 +82,17 @@ const TargetCard = ({ themeColors }) => {
               margin: "0 0 8px 0",
             }}
           >
-            You have completed{" "}
-            <span style={{ color: themeColors.warning, fontWeight: 600 }}>
-              48%
-            </span>{" "}
-            of the given target, you can also check your status.
+            May Allah put barakah in today’s work.
           </p>
-          <a
-            href="#!"
+          <p
             style={{
-              color: "white",
-              fontSize: "13px",
-              textDecoration: "underline",
+              fontSize: "12px",
+              opacity: 0.8,
+              margin: "0 0 8px 0",
             }}
           >
-            Click here
-          </a>
-        </div>
-        <div style={{ width: "50px", height: "50px", flexShrink: 0 }}>
-          {targetChart && (
-            <ApexCharts
-              options={targetChart.options}
-              series={targetChart.series}
-              type="donut"
-              height={50}
-              width={50}
-            />
-          )}
+            {todayBasicSummary?.message || ""}
+          </p>
         </div>
       </div>
     </div>
