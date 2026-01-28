@@ -3,8 +3,18 @@ import CmnBanner from "../../sharedComponents/CmnBanner";
 import CourseDetails from "../../components/Course/CourseDetails";
 import one from "../../assets/img/program/course4.png";
 import SEO from "../../utils/SEO";
+import { useGetDepartmentsQuery } from "../../../redux/features/departments/departmentsApi";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 export default function MathEnglishScience() {
+  const { data: departments, isLoading } = useGetDepartmentsQuery();
+  const mathDept = departments?.find(
+    (dept) => dept.dept_name === "Maths and English or Science",
+  );
+  console.log(mathDept?.weekdays_fee);
+  if (isLoading) {
+    return <LoadingSpinner></LoadingSpinner>;
+  }
   return (
     <div>
       <SEO page="mathEnglishCourse" />
@@ -40,6 +50,8 @@ export default function MathEnglishScience() {
           weekendsDuration: "2.5",
           weeklyHours: "6",
           weekendHours: "5",
+          weekdaysFee: mathDept?.weekdays_fee,
+          weekendFee: mathDept?.weekend_fee,
         }}
       ></CourseDetails>
     </div>

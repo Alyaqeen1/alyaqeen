@@ -3,7 +3,17 @@ import CmnBanner from "../../sharedComponents/CmnBanner";
 import CourseDetails from "../../components/Course/CourseDetails";
 import one from "../../assets/img/program/course2.jpeg";
 import SEO from "../../utils/SEO";
+import { useGetDepartmentsQuery } from "../../../redux/features/departments/departmentsApi";
+import LoadingSpinner from "../../components/LoadingSpinner";
 export default function QaidahQuranHifdh() {
+  const { data: departments, isLoading } = useGetDepartmentsQuery();
+  const quranDept = departments?.find(
+    (dept) => dept.dept_name === "Qur’an & Islamic Studies",
+  );
+  console.log(quranDept?.weekdays_fee);
+  if (isLoading) {
+    return <LoadingSpinner></LoadingSpinner>;
+  }
   return (
     <div>
       <SEO page="quranQaidahCourse" />
@@ -39,6 +49,8 @@ export default function QaidahQuranHifdh() {
           weekendsDuration: "2.5",
           weeklyHours: "6",
           weekendHours: "5",
+          weekdaysFee: quranDept?.weekdays_fee,
+          weekendFee: quranDept?.weekend_fee,
         }}
       ></CourseDetails>
     </div>

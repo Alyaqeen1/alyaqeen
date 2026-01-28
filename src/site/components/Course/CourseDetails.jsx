@@ -3,16 +3,10 @@ import { useState } from "react";
 import { FaRegHourglass } from "react-icons/fa";
 import { IoTodayOutline } from "react-icons/io5";
 import { MdOutlineTimelapse } from "react-icons/md";
-import one from "../../assets/img/program/details-1.jpg";
-import two from "../../assets/img/program/author.png";
 import three from "../../assets/img/program/icon/08.svg";
 import four from "../../assets/img/program/icon/09.svg";
 import five from "../../assets/img/program/icon/10.svg";
 import six from "../../assets/img/program/icon/11.svg";
-import seven from "../../assets/img/program/icon/14.svg";
-import eight from "../../assets/img/program/icon/13.svg";
-import nine from "../../assets/img/program/p-author.jpg";
-import img from "../../assets/img/home/photo-5.jpg";
 
 const CourseDetails = ({
   classNum,
@@ -38,6 +32,7 @@ const CourseDetails = ({
   const [read_more_btn_description, setRead_more_btn_description] =
     useState(false);
   const [read_more_btn_structure, setRead_more_btn_structure] = useState(false);
+
   const [activeTabIndex, setActiveTabIndex] = useState(0);
   const handleTabClick = (index) => {
     setActiveTabIndex(index);
@@ -102,7 +97,7 @@ const CourseDetails = ({
                         // href="/about"
                         onClick={() => {
                           setRead_more_btn_description(
-                            !read_more_btn_description
+                            !read_more_btn_description,
                           );
                         }}
                         className="read-more-btn-feb-4"
@@ -140,7 +135,7 @@ const CourseDetails = ({
                           // href="/about"
                           onClick={() => {
                             setRead_more_btn_structure(
-                              !read_more_btn_structure
+                              !read_more_btn_structure,
                             );
                           }}
                           className="read-more-btn-feb-4"
@@ -152,51 +147,7 @@ const CourseDetails = ({
                     ) : (
                       <></>
                     )}
-                    {/* <div
-                      className="mb-3"
-                      data-aos-duration="800"
-                      data-aos="fade-up"
-                      data-aos-delay="20"
-                    >
-                      <button
-                        // href="/about"
-                        onClick={() => {
-                          setRead_more_btn_structure(!read_more_btn_structure);
-                        }}
-                        className="read-more-btn-feb-4"
-                      >
-                        Read {read_more_btn_structure ? "Less" : "More"}{" "}
-                        <i className="fa-solid fa-arrow-right-long"></i>
-                      </button>
-                    </div> */}
                   </div>
-
-                  {/* <h2>Requirements for The Classes</h2>
-                  <p>
-                    Nulla facilisi. Vestibulum tristique sem in eros eleifend
-                    imperdiet. Donec quis convallis neque. In id lacus pulvinar
-                    lacus, eget vulputate lectus. Ut viverra bibendum lorem, at
-                    tempus nibh mattis in. Sed a massa eget lacus consequat
-                    auctor.
-                  </p>
-                  <ul className="list-items">
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Ut viverra bibendum lorem, at tempus nibh mattis
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      quis nostrud exercitation ullamco laboris nisi
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      Duis aute irure and dolor in reprehenderit.
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-check"></i>
-                      ante rutrum sed the is sodales augue consequat.
-                    </li>
-                  </ul> */}
                 </div>
               </div>
             </div>
@@ -359,13 +310,13 @@ const CourseDetails = ({
                   </ul>
                 </div>
 
-                <Link
-                  to="program-details"
-                  className="theme-btn w-100 border-style mb-3"
-                >
-                  This course Free $49.00
-                </Link>
-                <Link to="program-details" className="theme-btn w-100">
+                <button className="theme-btn w-100 border-style mb-3">
+                  This course Free £
+                  {activeTabIndex === 0
+                    ? detailsObj?.weekdaysFee
+                    : detailsObj?.weekendFee}
+                </button>
+                <Link to="/register" className="theme-btn w-100">
                   Enroll Your Kid{" "}
                   <i className="fa-solid fa-arrow-right-long"></i>
                 </Link>
@@ -386,48 +337,6 @@ const CourseDetails = ({
                 </div>
               </div>
             </div>
-            {/* <div className="col-lg-12">
-              <div className="program-author-items">
-                <div className="thumb">
-                  <img src={nine} alt="img" />
-                </div>
-                <div className="content">
-                  <h2>Savannah Nguyen</h2>
-                  <span>Children Diet</span>
-                  <p>
-                    Adipiscing elit. Mauris viverra nisl quis mollis laoreet. Ut
-                    eget lacus a felis accumsan pharetra in dignissim enim. In
-                    amet odio mollis urna aliquet volutpat. Sed bibendum nisl
-                    vehicula imperdiet imperdiet, augue massa fringilla.
-                  </p>
-                  <ul>
-                    <li>Experience: 10 Years</li>
-                    <li>
-                      <i className="fas fa-user"></i>
-                      188 Students
-                    </li>
-                    <li>
-                      <i className="fa-solid fa-star color-star"></i>
-                      454 (36 Review)
-                    </li>
-                  </ul>
-                  <div className="social-icon d-flex align-items-center">
-                    <Link to="/">
-                      <i className="fab fa-facebook-f"></i>
-                    </Link>
-                    <Link to="/">
-                      <i className="fab fa-twitter"></i>
-                    </Link>
-                    <Link to="/">
-                      <i className="fa-brands fa-linkedin-in"></i>
-                    </Link>
-                    <Link to="/">
-                      <i className="fa-brands fa-youtube"></i>
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </div> */}
           </div>
         </div>
       </div>

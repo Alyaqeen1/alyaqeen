@@ -3,8 +3,18 @@ import CmnBanner from "../../sharedComponents/CmnBanner";
 import CourseDetails from "../../components/Course/CourseDetails";
 import one from "../../assets/img/program/image4.jpg";
 import SEO from "../../utils/SEO";
+import LoadingSpinner from "../../components/LoadingSpinner";
+import { useGetDepartmentsQuery } from "../../../redux/features/departments/departmentsApi";
 
 export default function ArabicLanguage() {
+  const { data: departments, isLoading } = useGetDepartmentsQuery();
+  const arabicDept = departments?.find(
+    (dept) => dept.dept_name === "Arabic Language",
+  );
+  console.log(arabicDept?.weekdays_fee);
+  if (isLoading) {
+    return <LoadingSpinner></LoadingSpinner>;
+  }
   return (
     <div>
       <SEO page="arabicLanguageCourse" />
@@ -40,6 +50,8 @@ export default function ArabicLanguage() {
           weekendsDuration: "2.5",
           weeklyHours: "6",
           weekendHours: "5",
+          weekdaysFee: arabicDept?.weekdays_fee,
+          weekendFee: arabicDept?.weekend_fee,
         }}
       ></CourseDetails>
     </div>

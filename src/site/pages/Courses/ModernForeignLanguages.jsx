@@ -3,8 +3,18 @@ import CmnBanner from "../../sharedComponents/CmnBanner";
 import CourseDetails from "../../components/Course/CourseDetails";
 import one from "../../assets/img/program/image22.jpg";
 import SEO from "../../utils/SEO";
+import { useGetDepartmentsQuery } from "../../../redux/features/departments/departmentsApi";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 export default function ModernForeignLanguages() {
+  const { data: departments, isLoading } = useGetDepartmentsQuery();
+  const urduBanglaDept = departments?.find(
+    (dept) => dept.dept_name === "Urdu/Banla Language",
+  );
+  console.log(urduBanglaDept?.weekdays_fee);
+  if (isLoading) {
+    return <LoadingSpinner></LoadingSpinner>;
+  }
   return (
     <div>
       <SEO page="urduBanglaCourse" />
@@ -38,6 +48,8 @@ export default function ModernForeignLanguages() {
           weekendsDuration: "2.5",
           weeklyHours: "6",
           weekendHours: "5",
+          weekdaysFee: urduBanglaDept?.weekdays_fee,
+          weekendFee: urduBanglaDept?.weekend_fee,
         }}
       ></CourseDetails>
     </div>
