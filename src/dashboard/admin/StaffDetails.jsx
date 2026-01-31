@@ -13,9 +13,9 @@ const StaffDetails = ({
     setSourceDataChart({
       series: [
         teachersCount?.activity?.active,
-        teachersCount?.activity?.inactive,
         teachersCount?.gender?.male,
         teachersCount?.gender?.female,
+        teachersCount?.activity?.inactive,
       ],
       options: {
         chart: {
@@ -28,7 +28,7 @@ const StaffDetails = ({
           themeColors.warning,
           themeColors.danger,
         ],
-        labels: ["Active", "Inactive", "Male", "Female"],
+        labels: ["Active", "Male", "Female", "Inactive"],
         dataLabels: {
           enabled: false,
         },
@@ -126,7 +126,7 @@ const StaffDetails = ({
                 margin: 0,
               }}
             >
-              Total Staff
+              Total Active Staff
             </p>
             <p
               style={{
@@ -166,29 +166,23 @@ const StaffDetails = ({
         style={{
           display: "grid",
           gridTemplateColumns:
-            screenSize === "lg" ? "repeat(2, 1fr)" : "repeat(4, 1fr)",
+            screenSize === "lg" ? "repeat(3, 1fr)" : "repeat(3, 1fr)",
           borderTop: `1px dashed ${themeColors.border}`,
         }}
       >
         {[
-          {
-            label: "Active",
-            value: teachersCount?.activity?.active,
-            borderRight: true,
-            borderBottom: screenSize === "lg",
-          },
-          {
-            label: "Inactive",
-            value: teachersCount?.activity?.inactive,
-            borderRight: screenSize === "lg",
-            borderBottom: screenSize === "lg",
-          },
           {
             label: "Male",
             value: teachersCount?.gender?.male,
             borderRight: true,
           },
           { label: "Female", value: teachersCount?.gender?.female },
+          {
+            label: "Inactive",
+            value: teachersCount?.activity?.inactive,
+            borderRight: screenSize === "lg",
+            borderBottom: screenSize === "lg",
+          },
         ].map((item, index) => (
           <div
             key={index}

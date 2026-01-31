@@ -18,6 +18,13 @@ export const attendancesApi = apiSlice.injectEndpoints({
       query: () => `/attendances/dashboard-stats`,
       providesTags: ["Attendance"],
     }),
+    getAttendanceStats: builder.query({
+      query: (params = {}) => ({
+        url: "/attendances/attendance-stats",
+        params,
+      }),
+      providesTags: ["Attendance"],
+    }),
     getAttendance: builder.query({
       query: (id) => `/attendances/${id}`,
       providesTags: ["Attendance"],
@@ -116,6 +123,7 @@ export const {
   useGetAttendancesQuery,
   useGetAttendanceQuery,
   useGetDashboardStatsQuery,
+  useGetAttendanceStatsQuery,
   useGetTodayBasicSummaryQuery,
   useGetAttendancePresentCountQuery,
   useGetDashboardAttendanceSummaryQuery,

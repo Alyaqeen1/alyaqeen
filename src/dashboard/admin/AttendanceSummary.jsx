@@ -1,5 +1,13 @@
 import React, { useState } from "react";
 import AbsentStudentsModal from "./AbsentStudentsModal";
+const formatDate = (dateString) => {
+  if (!dateString) return "";
+  return new Intl.DateTimeFormat("en-GB", {
+    day: "2-digit",
+    month: "long", // use "short" for Jan, Feb
+    year: "numeric",
+  }).format(new Date(dateString));
+};
 
 const AttendanceSummary = ({ data, screenSize, themeColors, getBgColor }) => {
   const [showTeachersWithAttendance, setShowTeachersWithAttendance] =
@@ -68,7 +76,7 @@ const AttendanceSummary = ({ data, screenSize, themeColors, getBgColor }) => {
             color: themeColors.textPrimary,
           }}
         >
-          Today's Attendance ({data?.date})
+          Today's Attendance <br />({formatDate(data?.date)})
         </h4>
 
         <button

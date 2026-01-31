@@ -14,13 +14,12 @@ const StudentDetails = ({
       series: [
         studentsCount?.session?.weekdays,
         studentsCount?.session?.weekend,
-        studentsCount?.activity?.active,
-        studentsCount?.activity?.inactive,
         studentsCount?.gender?.male,
         studentsCount?.gender?.female,
+        studentsCount?.activity?.inactive,
       ],
       options: {
-        labels: ["Weekdays", "Weekend", "Active", "Inactive", "Male", "Female"],
+        labels: ["Weekdays", "Weekend", "Male", "Female", "Inactive"],
         chart: {
           type: "donut",
           height: 240,
@@ -65,7 +64,7 @@ const StudentDetails = ({
                 total: {
                   show: true,
                   showAlways: true,
-                  label: "Total",
+                  label: "Total Active",
                   fontSize: "22px",
                   fontWeight: 600,
                   color: themeColors.textPrimary,
@@ -81,9 +80,9 @@ const StudentDetails = ({
           themeColors.primary,
           themeColors.success,
           themeColors.warning,
-          themeColors.danger,
-          themeColors.border2,
+
           themeColors.secondary,
+          themeColors.danger,
         ],
       },
     });
@@ -100,25 +99,21 @@ const StudentDetails = ({
       value: studentsCount?.session?.weekend,
       color: themeColors.success,
     },
-    {
-      label: "Active",
-      value: studentsCount?.activity?.active,
-      color: themeColors.warning,
-    },
-    {
-      label: "Inactive",
-      value: studentsCount?.activity?.inactive,
-      color: themeColors.danger,
-    },
+
     {
       label: "Male",
       value: studentsCount?.gender?.male,
-      color: themeColors.border2,
+      color: themeColors.warning,
     },
     {
       label: "Female",
       value: studentsCount?.gender?.female,
       color: themeColors.secondary,
+    },
+    {
+      label: "Inactive",
+      value: studentsCount?.activity?.inactive,
+      color: themeColors.danger,
     },
   ];
 
@@ -190,7 +185,7 @@ const StudentDetails = ({
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(6, 1fr)",
+          gridTemplateColumns: "repeat(5, 1fr)",
           gap: "8px",
           borderTop: `1px dashed ${themeColors.border}`,
           paddingTop: "16px",
