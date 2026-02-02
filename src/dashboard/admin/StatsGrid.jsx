@@ -87,7 +87,8 @@ const StatCard = ({
               style={{
                 position: "absolute",
                 top: "100%",
-                right: 0,
+                left: "50%",
+                transform: "translateX(-50%)",
                 backgroundColor: "white",
                 color: "black",
                 border: `1px solid ${themeColors.border}`,
