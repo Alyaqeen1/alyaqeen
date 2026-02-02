@@ -18,50 +18,7 @@ import { jsPDF } from "jspdf";
 import uploadToCloudinary from "../../../utils/uploadToCloudinary";
 const image_hosting_key = import.meta.env.VITE_Image_Hosting_Key;
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
-// const customSelectStyles = {
-//   container: (provided) => ({
-//     ...provided,
-//     zIndex: 9999,
-//     position: "relative",
-//   }),
-//   control: (provided) => ({
-//     ...provided,
-//     backgroundColor: "var(--theme2)",
-//     borderColor: "#ccc",
-//     minHeight: "44px",
-//     borderRadius: "4px",
-//   }),
-//   menu: (provided) => ({
-//     ...provided,
-//     zIndex: 9999,
-//     position: "absolute",
-//   }),
-//   menuList: (provided) => ({
-//     ...provided,
-//     zIndex: 9999,
-//   }),
-//   option: (provided, state) => ({
-//     ...provided,
-//     backgroundColor: state.isSelected ? "var(--theme)" : "white",
-//     color: state.isSelected ? "white" : "black",
-//     "&:hover": {
-//       backgroundColor: "var(--theme2)",
-//       color: "white",
-//     },
-//   }),
-//   singleValue: (provided) => ({
-//     ...provided,
-//     color: "white",
-//   }),
-//   input: (provided) => ({
-//     ...provided,
-//     color: "white",
-//   }),
-//   placeholder: (provided) => ({
-//     ...provided,
-//     color: "#ccc",
-//   }),
-// };
+
 const ApplyNowComp = () => {
   const [department, setDepartment] = useState("");
   const [session, setSession] = useState("");
@@ -77,7 +34,7 @@ const ApplyNowComp = () => {
   console.log(data);
   const departments = data || [];
   const selectedDepartment = departments?.find(
-    (dept) => dept?._id === department
+    (dept) => dept?._id === department,
   );
   const [email, setEmail] = useState("");
   const [students, setStudents] = useState([]);
@@ -240,21 +197,21 @@ const ApplyNowComp = () => {
                 ).toFixed(1);
 
                 console.log(
-                  `✅ PDF Optimized: ${originalSizeMB}MB → ${compressedSizeMB}MB (${reduction}% reduction)`
+                  `✅ PDF Optimized: ${originalSizeMB}MB → ${compressedSizeMB}MB (${reduction}% reduction)`,
                 );
 
                 if (compressedBlob.size > 10 * 1024 * 1024) {
                   console.warn(
                     "⚠️ Still too large after compression:",
                     compressedSizeMB,
-                    "MB"
+                    "MB",
                   );
                 }
 
                 resolve(compressedBlob);
               },
               "image/jpeg", // Better compression than PNG
-              0.7 // Quality: 0.7 (70%)
+              0.7, // Quality: 0.7 (70%)
             );
           };
 
@@ -416,7 +373,7 @@ const ApplyNowComp = () => {
           currentY,
           pageWidth - 30,
           contentLines.length * 7 + 10,
-          "F"
+          "F",
         );
 
         // Box border
@@ -426,7 +383,7 @@ const ApplyNowComp = () => {
           15,
           currentY - 10,
           pageWidth - 30,
-          contentLines.length * 7 + 20
+          contentLines.length * 7 + 20,
         );
 
         // Content
@@ -477,7 +434,7 @@ const ApplyNowComp = () => {
               pdf.text(
                 `Signed on: ${new Date().toLocaleDateString()}`,
                 20,
-                currentY + 48
+                currentY + 48,
               );
 
               currentY += 50;
@@ -489,7 +446,7 @@ const ApplyNowComp = () => {
               pdf.text(
                 "Signature: [Digitally Signed and Stored]",
                 20,
-                currentY + 8
+                currentY + 8,
               );
               currentY += 20;
               resolve();
@@ -683,8 +640,8 @@ const ApplyNowComp = () => {
 
       console.log(
         `📄 Beautiful PDF created: ${(pdfBlob.size / 1024 / 1024).toFixed(
-          2
-        )} MB, ${pageNumber} pages`
+          2,
+        )} MB, ${pageNumber} pages`,
       );
 
       return {
@@ -734,7 +691,7 @@ const ApplyNowComp = () => {
       console.log(
         "📊 PDF size before compression:",
         (snapshotData.pdfBlob.size / 1024 / 1024).toFixed(2),
-        "MB"
+        "MB",
       );
 
       // 2. Compress the PDF if it's too large
@@ -750,19 +707,9 @@ const ApplyNowComp = () => {
         console.log(
           "📦 PDF size after compression:",
           (pdfBlobToUpload.size / 1024 / 1024).toFixed(2),
-          "MB"
+          "MB",
         );
       }
-
-      // 3. Check size limit again
-      // if (pdfBlobToUpload.size > 10 * 1024 * 1024) {
-      //   toast.error(
-      //     "PDF is still too large after compression. Please try with less form data."
-      //   );
-      //   setLocalLoading(false);
-      //   setLoading(false);
-      //   return;
-      // }
 
       // Dismiss previous toast and show new one
       toast.dismiss(loadingToastId);
@@ -772,7 +719,7 @@ const ApplyNowComp = () => {
       const pdfFile = new File(
         [snapshotData.pdfBlob],
         `application_${snapshotData.metadata.submissionId}.pdf`,
-        { type: "application/pdf" }
+        { type: "application/pdf" },
       );
 
       // 5. Upload to Cloudinary
@@ -910,7 +857,7 @@ const ApplyNowComp = () => {
 
       // 🔁 1. Check if parent already exists
       const { data: existingParent } = await axiosPublic.get(
-        `/families/by-email/${student_email}`
+        `/families/by-email/${student_email}`,
       );
       const studentUid = crypto.randomUUID(); // ✅ Generate student UID early
       let parentUid;
@@ -925,7 +872,7 @@ const ApplyNowComp = () => {
           setLoading(false);
           setLocalLoading(false);
           return toast.error(
-            "Incorrect email/password for existing family account"
+            "Incorrect email/password for existing family account",
           );
         }
       } else {
@@ -1038,7 +985,7 @@ const ApplyNowComp = () => {
         form.reset();
       } else {
         return toast.error(
-          "Monthly fee not found for this department and session"
+          "Monthly fee not found for this department and session",
         );
       }
     } catch (error) {
