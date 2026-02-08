@@ -33,7 +33,7 @@ const AddDepartmentModal = ({
     (cls) =>
       cls.dept_id === deptId &&
       cls.session === session &&
-      cls.session_time === sessionTime
+      cls.session_time === sessionTime,
   );
 
   const resetForm = () => {
@@ -53,12 +53,12 @@ const AddDepartmentModal = ({
     // Check for duplicate enrollment
     const isDuplicate = existingEnrollments.some(
       (enrollment) =>
-        enrollment.dept_id === deptId && enrollment.class_id === classId
+        enrollment.dept_id === deptId && enrollment.class_id === classId,
     );
 
     if (isDuplicate) {
       return toast.error(
-        "This department and class combination already exists"
+        "This department and class combination already exists",
       );
     }
 
@@ -245,7 +245,7 @@ const EditDepartmentModal = ({
     (cls) =>
       cls.dept_id === deptId &&
       cls.session === session &&
-      cls.session_time === sessionTime
+      cls.session_time === sessionTime,
   );
 
   const handleSubmit = (e) => {
@@ -260,12 +260,12 @@ const EditDepartmentModal = ({
       (enrollment, index) =>
         index !== enrollmentIndex &&
         enrollment.dept_id === deptId &&
-        enrollment.class_id === classId
+        enrollment.class_id === classId,
     );
 
     if (isDuplicate) {
       return toast.error(
-        "This department and class combination already exists"
+        "This department and class combination already exists",
       );
     }
 
@@ -514,7 +514,7 @@ export default function UpdateStudent() {
                   session_time: student.academic.time,
                 },
               ]
-            : [])
+            : []),
       );
       setIsFeeOverridden(student.monthly_fee !== calculatedFee);
     }
@@ -617,10 +617,19 @@ export default function UpdateStudent() {
     const allergies = form.allergies.value;
     const medical_condition = form.medical_condition.value;
     const starting_date = form.starting_date.value;
-
+    const cleanedEnrollments = enrollments.map((enrollment) => {
+      const {
+        deptObjectId,
+        classObjectId,
+        department,
+        class: className,
+        ...cleanEnrollment
+      } = enrollment;
+      return cleanEnrollment;
+    });
     // Prepare academic structure with enrollments array
     const academicStructure = {
-      enrollments: enrollments,
+      enrollments: cleanedEnrollments,
     };
 
     const studentData = {
@@ -683,7 +692,7 @@ export default function UpdateStudent() {
       // Check if there are any enrollments with valid class_id in the database
       const hasValidEnrollmentsInDB = dbEnrollments.some(
         (enrollment) =>
-          enrollment.class_id !== null && enrollment.class_id !== ""
+          enrollment.class_id !== null && enrollment.class_id !== "",
       );
 
       if (!hasValidEnrollmentsInDB) {
@@ -1101,10 +1110,10 @@ export default function UpdateStudent() {
                 <tbody>
                   {enrollments.map((enrollment, index) => {
                     const dept = departments?.find(
-                      (d) => d._id === enrollment.dept_id
+                      (d) => d._id === enrollment.dept_id,
                     );
                     const cls = classes?.find(
-                      (c) => c._id === enrollment.class_id
+                      (c) => c._id === enrollment.class_id,
                     );
                     const fee =
                       enrollment.session === "weekend"

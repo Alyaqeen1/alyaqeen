@@ -67,6 +67,16 @@ export const studentsApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Family", "Student"],
     }),
+    generateReport: builder.mutation({
+      query: ({ id }) => ({
+        url: `/students/generate-student-report/${id}`,
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+      invalidatesTags: ["Family", "Student"],
+    }),
     updateStudentActivity: builder.mutation({
       query: ({ id, ...patch }) => ({
         url: `/students/update-activity/${id}`,
@@ -89,8 +99,8 @@ export const studentsApi = apiSlice.injectEndpoints({
 });
 
 export const {
-  useGetStudentsQuery,
   useGetStudentQuery,
+  useGetStudentsQuery,
   useGetStudentCountQuery,
   useGetStudentsByStatusQuery,
   useGetStudentsByEmailQuery,
@@ -100,6 +110,7 @@ export const {
   useGetWithoutEnrolledStudentsQuery,
   useUpdateStudentStatusMutation,
   useUpdateAllStudentDataMutation,
+  useGenerateReportMutation,
   useUpdateStudentActivityMutation,
   useDeleteStudentDataMutation,
 } = apiSlice;

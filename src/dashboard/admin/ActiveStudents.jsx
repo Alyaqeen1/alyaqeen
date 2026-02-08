@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { usePopper } from "react-popper";
 import {
   useDeleteStudentDataMutation,
+  useGenerateReportMutation,
   useGetStudentByActivityQuery,
   useUpdateStudentActivityMutation,
 } from "../../redux/features/students/studentsApi";
@@ -83,6 +84,8 @@ export default function ActiveStudents() {
   const { data: families } = useGetFamiliesQuery();
   const { data: departments } = useGetDepartmentsQuery();
   const { data: classes } = useGetClassesQuery();
+  const [generateReport, { isLoading: reportLoading }] =
+    useGenerateReportMutation();
 
   useEffect(() => {
     const timerId = setTimeout(() => {
@@ -426,7 +429,46 @@ export default function ActiveStudents() {
 
     return "Not assigned";
   };
+  // Add this function in your component
+  const handleGenerateReport = async (studentId) => {
+    setActiveRow(null); // Close dropdown
 
+    // Show loading Swal
+    Swal.fire({
+      title: "Generating Report",
+      html: "Please wait while we generate the PDF report...",
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+
+    try {
+      const result = await generateReport({ id: studentId }).unwrap();
+
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Report Generated Successfully!",
+        html: `
+        <p>PDF has been created and saved to the student record.</p>
+        <a href="${
+          result.reportUrl
+        }" target="_blank" class="btn btn-success mt-2">
+          View PDF
+        </a>
+      `,
+        showConfirmButton: false,
+        timer: 3000,
+      });
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Failed to Generate Report",
+        text: error?.data?.error || "Something went wrong",
+      });
+    }
+  };
   if (isLoading) {
     return <LoadingSpinnerDash />;
   }
@@ -572,6 +614,13 @@ export default function ActiveStudents() {
               onClick={() => handleShow(activeRow)}
             >
               View Student Details
+            </button>
+            <button
+              className="btn btn-sm btn-info text-nowrap"
+              disabled={reportLoading}
+              onClick={() => handleGenerateReport(activeRow)}
+            >
+              Generate Report
             </button>
             <Link
               to={`/dashboard/online-admissions/update/${activeRow}`}
