@@ -251,36 +251,105 @@ const ApplyNowComp = () => {
       };
     });
   };
-
   const saveSignature = async () => {
-    let dataUrl = sigRef.current.toDataURL("image/png");
-
-    // Compress it
-    dataUrl = await compressImage(dataUrl);
-
-    const blob = await (await fetch(dataUrl)).blob();
-    const file = new File([blob], "signature.png", { type: "image/png" });
-
-    const formData = new FormData();
-    formData.append("image", file);
+    console.log("Saving signature...");
 
     try {
-      const res = await axiosPublic.post(image_hosting_api, formData);
-      const url = res.data?.data?.display_url;
-      setSignature(url);
-      toast.success("Signature uploaded!");
+      // 1. Check if signature canvas exists and has content
+      if (!sigRef.current) {
+        toast.error("Signature canvas not found");
+        return;
+      }
 
-      // Scroll to submit button after saving signature
+      if (sigRef.current.isEmpty()) {
+        toast.error("Please draw your signature first");
+        return;
+      }
+
+      // 2. Get signature as data URL
+      let dataUrl = sigRef.current.toDataURL("image/png");
+      console.log("Signature data URL created, length:", dataUrl.length);
+
+      // 3. Compress it (optional)
+      dataUrl = await compressImage(dataUrl);
+
+      // 4. Convert data URL to blob
+      const response = await fetch(dataUrl);
+      const blob = await response.blob();
+
+      // 5. Create a file from blob
+      const file = new File([blob], "signature.png", { type: "image/png" });
+      console.log("File created:", file.name, file.size, "bytes");
+
+      // 6. Show loading toast
+      const loadingToast = toast.loading(
+        "Uploading signature to Cloudinary...",
+      );
+
+      // 7. Upload to Cloudinary using your existing function
+      const signatureUrl = await uploadToCloudinary(file, "signatures");
+
+      // 8. Update state
+      setSignature(signatureUrl);
+
+      // 9. Show success
+      toast.dismiss(loadingToast);
+      toast.success("Signature uploaded successfully!");
+
+      console.log("Signature URL saved:", signatureUrl);
+
+      // 10. Scroll to submit button
       if (submitButtonRef.current) {
         submitButtonRef.current.scrollIntoView({
           behavior: "smooth",
           block: "center",
         });
       }
-    } catch (err) {
-      toast.error("Upload failed");
+    } catch (error) {
+      console.error("❌ Signature save error:", error);
+
+      // Handle specific errors
+      let errorMessage = "Failed to save signature";
+
+      if (error.message.includes("Cloudinary upload failed")) {
+        errorMessage = "Cloudinary upload failed. Please try again.";
+      } else if (error.message.includes("Network")) {
+        errorMessage = "Network error. Check your connection.";
+      }
+
+      toast.error(errorMessage);
     }
   };
+
+  // const saveSignature = async () => {
+  //   let dataUrl = sigRef.current.toDataURL("image/png");
+
+  //   // Compress it
+  //   dataUrl = await compressImage(dataUrl);
+
+  //   const blob = await (await fetch(dataUrl)).blob();
+  //   const file = new File([blob], "signature.png", { type: "image/png" });
+
+  //   const formData = new FormData();
+  //   formData.append("image", file);
+
+  //   try {
+  //     const res = await axiosPublic.post(image_hosting_api, formData);
+  //     const url = res.data?.data?.display_url;
+  //     setSignature(url);
+  //     toast.success("Signature uploaded!");
+
+  //     // Scroll to submit button after saving signature
+  //     if (submitButtonRef.current) {
+  //       submitButtonRef.current.scrollIntoView({
+  //         behavior: "smooth",
+  //         block: "center",
+  //       });
+  //     }
+  //   } catch (err) {
+  //     toast.error("Upload failed");
+  //   }
+  // };
 
   useEffect(() => {
     setSession("");
