@@ -103,9 +103,10 @@ export default function FeeSettings() {
   } = useGetFullFamilyQuery(user?.email, {
     skip: loading || !user?.email,
   });
-
+  console.log("family by status", familiesByStatus);
+  console.log("family", families);
   const filteredFamily = families?.filter(
-    (family) => family?.childrenDocs?.length > 0
+    (family) => family?.childrenDocs?.length > 0,
   );
   const getLastPaymentDate = (feePayments = []) => {
     if (!feePayments.length) return "N/A";
@@ -128,12 +129,41 @@ export default function FeeSettings() {
 
     const term = searchTerm.toLowerCase();
     return familiesByStatus.filter((family) => {
-      if (family.name.toLowerCase().includes(term)) return true;
-      return family.childrenDocs?.some((student) =>
-        student.name.toLowerCase().includes(term)
-      );
+      // Search by family name
+      if (family.name?.toLowerCase().includes(term)) return true;
+
+      // Search through each student's details
+      return family.childrenDocs?.some((student) => {
+        // Search by student name
+        if (student.name?.toLowerCase().includes(term)) return true;
+
+        // Search by father's name within student
+        if (student.father?.name?.toLowerCase().includes(term)) return true;
+
+        // Search by father's occupation within student
+        if (student.father?.occupation?.toLowerCase().includes(term))
+          return true;
+
+        // Search by mother's name within student
+        if (student.mother?.name?.toLowerCase().includes(term)) return true;
+
+        // Search by mother's occupation within student
+        return student.mother?.occupation?.toLowerCase().includes(term);
+      });
     });
   }, [familiesByStatus, searchTerm]);
+  // const filteredFamilies = useMemo(() => {
+  //   if (!familiesByStatus) return [];
+  //   if (!searchTerm.trim()) return familiesByStatus;
+
+  //   const term = searchTerm.toLowerCase();
+  //   return familiesByStatus.filter((family) => {
+  //     if (family.name.toLowerCase().includes(term)) return true;
+  //     return family.childrenDocs?.some((student) =>
+  //       student.name.toLowerCase().includes(term),
+  //     );
+  //   });
+  // }, [familiesByStatus, searchTerm]);
 
   const handleShow = (id) => {
     setSelectedFamilyId(id);
@@ -212,7 +242,7 @@ export default function FeeSettings() {
 
     for (const payment of feePayments || []) {
       const studentPayment = payment.students?.find(
-        (s) => String(s.studentId) === String(student._id)
+        (s) => String(s.studentId) === String(student._id),
       );
 
       if (!studentPayment) continue;
@@ -245,7 +275,7 @@ export default function FeeSettings() {
         const monthPaidEntry = studentPayment.monthsPaid.find(
           (m) =>
             String(m.month).padStart(2, "0") === targetMonth &&
-            String(m.year) === targetYear
+            String(m.year) === targetYear,
         );
 
         if (monthPaidEntry) {
@@ -343,7 +373,7 @@ export default function FeeSettings() {
             isMulti
             options={monthOptions}
             value={monthOptions.filter((option) =>
-              selectedMonths.includes(option.value)
+              selectedMonths.includes(option.value),
             )}
             onChange={(selectedOptions) => {
               setSelectedMonths(selectedOptions.map((opt) => opt.value));
@@ -443,7 +473,7 @@ export default function FeeSettings() {
                       const status = getPaymentStatus(
                         student,
                         month.num,
-                        family.feePayments
+                        family.feePayments,
                       );
                       return status ? (
                         <PaymentStatusCell key={month.num} status={status} />
@@ -477,7 +507,7 @@ export default function FeeSettings() {
                                 .reduce(
                                   (total, student) =>
                                     total + (student.monthly_fee || 0),
-                                  0
+                                  0,
                                 ) || 0;
 
                             const discount = family.discount || 0;
@@ -527,7 +557,7 @@ export default function FeeSettings() {
                       </>
                     )}
                   </tr>
-                ))
+                )),
               )
             ) : (
               <tr>
