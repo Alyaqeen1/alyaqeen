@@ -31,7 +31,7 @@ export default function ViewStudent() {
     id,
     {
       skip: !id,
-    }
+    },
   );
 
   const [activeTab, setActiveTab] = useState("profile");
@@ -166,7 +166,7 @@ export default function ViewStudent() {
                     {tab.charAt(0).toUpperCase() + tab.slice(1)}
                   </span>
                 </li>
-              )
+              ),
             )}
           </ul>
 
@@ -352,6 +352,48 @@ export default function ViewStudent() {
                     <i className="fa-solid fa-exclamation-triangle me-2"></i>
                     No application PDF found for this student. The document may
                     not have been generated during registration.
+                  </div>
+                )}
+
+                {/* Report PDF Section - NEW */}
+                <h6 className="fw-bold border-bottom pb-1 mb-3 mt-4">
+                  Student Reports
+                </h6>
+
+                {student?.reportPdf ? (
+                  <div className="card p-3 mb-4">
+                    <div className="row align-items-center">
+                      <div className="col-md-8">
+                        <h6 className="fw-bold mb-1">Progress Report PDF</h6>
+                        <p className="text-muted mb-2">
+                          Comprehensive student progress report including
+                          attendance, merits, academic progress, and fee
+                          summary.
+                        </p>
+                        <div className="d-flex gap-2">
+                          <a
+                            href={student?.reportPdf}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn btn-success btn-sm"
+                          >
+                            <i className="fa-solid fa-file-lines me-1"></i> View
+                            Report
+                          </a>
+                        </div>
+                      </div>
+                      <div className="col-md-4 text-end">
+                        <div className="bg-light p-3 rounded">
+                          <i className="fa-solid fa-file-lines text-success fs-1"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="alert alert-info">
+                    <i className="fa-solid fa-info-circle me-2"></i>
+                    No progress report has been generated for this student yet.
+                    Reports are typically generated monthly or on request.
                   </div>
                 )}
 
