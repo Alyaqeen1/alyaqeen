@@ -36,7 +36,14 @@ import { useGetHolidaysQuery } from "../../redux/features/holidays/holidaysApi";
 import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 
 const dayMap = {
-  weekdays: ["Monday", "Tuesday", "Wednesday", "Thursday"],
+  weekdays: [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Saturday", //remove this after ramadan
+    "Sunday", //remove this after ramadan
+  ],
   weekend: ["Saturday", "Sunday"],
 };
 
@@ -76,7 +83,7 @@ export default function StudentAttendanceAdmin() {
   const { data: holidays = [] } = useGetHolidaysQuery();
   const holidaySet = useMemo(
     () => new Set(holidays.map((h) => h.date)),
-    [holidays]
+    [holidays],
   );
 
   /* ───────────────────  RTK‑Query data  ─────────────────── */
@@ -92,7 +99,7 @@ export default function StudentAttendanceAdmin() {
   } = useGetClassByParamsQuery(
     department && classId && session && time
       ? { dept_id: department, class_id: classId, session, time }
-      : skipToken
+      : skipToken,
   );
 
   const groupId = group?._id;
@@ -107,13 +114,13 @@ export default function StudentAttendanceAdmin() {
   /* ─────────────────── helper: current week dates ─────────────────── */
   const baseMonday = useMemo(
     () => addWeeks(startOfWeek(new Date(), { weekStartsOn: 1 }), weekOffset),
-    [weekOffset]
+    [weekOffset],
   );
 
   // Get all days of the week
   const allWeekDates = useMemo(
     () => Array.from({ length: 7 }).map((_, idx) => addDays(baseMonday, idx)),
-    [baseMonday]
+    [baseMonday],
   );
 
   // Filter to only show days for the selected session
@@ -123,7 +130,7 @@ export default function StudentAttendanceAdmin() {
         const dayName = safeFormat(date, "EEEE");
         return session ? dayMap[session]?.includes(dayName) : false;
       }),
-    [allWeekDates, session]
+    [allWeekDates, session],
   );
 
   // Get date range for the current week view
@@ -162,7 +169,7 @@ export default function StudentAttendanceAdmin() {
     {
       // Skip refetching on focus to prevent unnecessary loading states
       refetchOnFocus: false,
-    }
+    },
   );
 
   // Bulk attendance mutations
@@ -230,7 +237,7 @@ export default function StudentAttendanceAdmin() {
 
     return `${safeFormat(firstDate, "MMM dd")} - ${safeFormat(
       lastDate,
-      "MMM dd, yyyy"
+      "MMM dd, yyyy",
     )}`;
   }, [weekDates]);
 
@@ -333,7 +340,7 @@ export default function StudentAttendanceAdmin() {
         students.length
       }</strong> students as present for <strong>${safeFormat(
         new Date(dateISO),
-        "EEEE, MMMM dd, yyyy"
+        "EEEE, MMMM dd, yyyy",
       )}</strong>?`,
       icon: "question",
       showCancelButton: true,
@@ -353,7 +360,7 @@ export default function StudentAttendanceAdmin() {
 
           toast.success(
             result.message ||
-              `Marked ${result.insertedCount} students as present`
+              `Marked ${result.insertedCount} students as present`,
           );
         } catch (e) {
           console.error("Error marking all present:", e);
@@ -379,7 +386,7 @@ export default function StudentAttendanceAdmin() {
       title: "Remove All Attendance?",
       html: `Are you sure you want to remove all attendance records for <strong>${safeFormat(
         new Date(dateISO),
-        "EEEE, MMMM dd, yyyy"
+        "EEEE, MMMM dd, yyyy",
       )}</strong>?`,
       icon: "warning",
       showCancelButton: true,
@@ -398,7 +405,7 @@ export default function StudentAttendanceAdmin() {
 
           toast.success(
             result.message ||
-              `Removed ${result.deletedCount} attendance records`
+              `Removed ${result.deletedCount} attendance records`,
           );
         } catch (e) {
           console.error("Error removing all attendance:", e);
@@ -539,7 +546,7 @@ export default function StudentAttendanceAdmin() {
                   (c) =>
                     c.dept_id === department &&
                     c.session === session &&
-                    c.session_time === time
+                    c.session_time === time,
                 )
                 .map((c) => (
                   <option key={c._id} value={c._id}>
@@ -622,7 +629,7 @@ export default function StudentAttendanceAdmin() {
                             disabled={isBulkLoading}
                             title={`Mark all present for ${safeFormat(
                               d,
-                              "MMM dd"
+                              "MMM dd",
                             )}`}
                           >
                             {isBulkLoading ? (
@@ -688,7 +695,7 @@ export default function StudentAttendanceAdmin() {
 
                         // Find attendance record from filtered attendance data
                         const record = attendances?.find(
-                          (a) => a.student_id === stu._id && a.date === dateISO
+                          (a) => a.student_id === stu._id && a.date === dateISO,
                         );
                         const status = record?.status;
 
@@ -696,10 +703,10 @@ export default function StudentAttendanceAdmin() {
                           status === "present"
                             ? "bg-success"
                             : status === "late"
-                            ? "bg-primary"
-                            : status === "absent"
-                            ? "bg-danger"
-                            : "";
+                              ? "bg-primary"
+                              : status === "absent"
+                                ? "bg-danger"
+                                : "";
 
                         return (
                           <td
@@ -758,7 +765,7 @@ export default function StudentAttendanceAdmin() {
                                             saveStatus(
                                               stu._id,
                                               dateISO,
-                                              "present"
+                                              "present",
                                             )
                                           }
                                         />
@@ -782,7 +789,7 @@ export default function StudentAttendanceAdmin() {
                                             saveStatus(
                                               stu._id,
                                               dateISO,
-                                              "absent"
+                                              "absent",
                                             )
                                           }
                                         />
@@ -804,7 +811,7 @@ export default function StudentAttendanceAdmin() {
                                             removeStatus(
                                               record._id,
                                               stu._id,
-                                              dateISO
+                                              dateISO,
                                             )
                                           }
                                         />
@@ -826,7 +833,7 @@ export default function StudentAttendanceAdmin() {
                                                 record._id,
                                                 "present",
                                                 stu._id,
-                                                dateISO
+                                                dateISO,
                                               )
                                             }
                                           />
@@ -846,7 +853,7 @@ export default function StudentAttendanceAdmin() {
                                                 record._id,
                                                 "late",
                                                 stu._id,
-                                                dateISO
+                                                dateISO,
                                               )
                                             }
                                           />
@@ -866,7 +873,7 @@ export default function StudentAttendanceAdmin() {
                                                 record._id,
                                                 "absent",
                                                 stu._id,
-                                                dateISO
+                                                dateISO,
                                               )
                                             }
                                           />
