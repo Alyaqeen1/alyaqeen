@@ -1,13 +1,14 @@
 import React, { useState, useMemo, useEffect } from "react";
 import {
   useGetFamilyQuery,
+  useMigrateFamilyDataMutation,
   useUpdateFamilyDataMutation,
 } from "../../redux/features/families/familiesApi";
 import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 import { useGetStudentByActivityQuery } from "../../redux/features/students/studentsApi";
 import Select from "react-select";
 import toast from "react-hot-toast";
-
+import { FaEye, FaEyeSlash } from "react-icons/fa"; // Add with other imports
 export default function FamilyUpdateModal({
   familyId,
   handleClose,
@@ -16,8 +17,14 @@ export default function FamilyUpdateModal({
   refetchFee,
 }) {
   const [updateFamilyData] = useUpdateFamilyDataMutation();
+  const [migrateFamily, { isLoading: isMigrating }] =
+    useMigrateFamilyDataMutation(); // Add this
 
-  // Fetch family data
+  // Add these state variables
+  const [newEmail, setNewEmail] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  // Remove updatingEmail and updatingPassword states
   const {
     data: family,
     isLoading: familyLoading,
@@ -96,7 +103,65 @@ export default function FamilyUpdateModal({
       })
       ?.filter(Boolean);
   }, [selectedStudentUids, allStudents]);
+  // Set initial email when family data loads
+  useEffect(() => {
+    if (family?.email) {
+      setNewEmail(family.email);
+    }
+  }, [family]);
 
+  // Email validation function
+  const isValidEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  // Single handler for both email and password update
+  // Single handler for email and password update
+  const handleMigrateFamily = async () => {
+    // Validate email
+    if (!newEmail) {
+      toast.error("Email is required");
+      return;
+    }
+
+    if (!isValidEmail(newEmail)) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+
+    // Check if any changes
+    if (newEmail === family?.email && !newPassword) {
+      toast.error("No changes to update");
+      return;
+    }
+
+    // Validate password only if provided
+    if (newPassword && newPassword.length < 6) {
+      toast.error("Password must be at least 6 characters");
+      return;
+    }
+
+    try {
+      const result = await migrateFamily({
+        familyId: familyId,
+        email: newEmail,
+        password: newPassword || undefined, // Only send if provided
+      }).unwrap();
+
+      console.log("Migration result:", result);
+      toast.success("Family credentials updated successfully!");
+
+      // Clear password field
+      setNewPassword("");
+
+      // Refresh family data
+      refetch();
+    } catch (error) {
+      console.error("Migration error:", error);
+      toast.error(error.data?.error || "Failed to update credentials");
+    }
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.target;
@@ -120,11 +185,11 @@ export default function FamilyUpdateModal({
             `${firstConflict.name} is already in ${
               firstConflict.currentFamily || "another"
             } family. Please remove them first.`,
-            { duration: 5000 }
+            { duration: 5000 },
           );
         } else {
           toast.error(
-            errorData?.message || errorData?.error || "Failed to update family"
+            errorData?.message || errorData?.error || "Failed to update family",
           );
         }
         return;
@@ -198,7 +263,7 @@ export default function FamilyUpdateModal({
                       value={selectedValues}
                       onChange={(selectedOptions) =>
                         setSelectedStudentUids(
-                          selectedOptions.map((opt) => opt.value)
+                          selectedOptions.map((opt) => opt.value),
                         )
                       }
                       formatOptionLabel={formatOptionLabel}
@@ -249,6 +314,53 @@ export default function FamilyUpdateModal({
                   </div>
                 </form>
               )}
+
+              {/* DIVIDER - Email Section */}
+              <hr className="my-3" style={{ borderTop: "2px dashed #ccc" }} />
+
+              <label className="form-label">Email Address:</label>
+              <input
+                type="email"
+                className="form-control"
+                value={newEmail}
+                onChange={(e) => setNewEmail(e.target.value)}
+                placeholder="family@example.com"
+              />
+              <div className="form-text">Current email: {family?.email}</div>
+
+              <label className="form-label">New Password:</label>
+              <div className="input-group">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  className="form-control"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  placeholder="Enter new password"
+                  minLength="6"
+                />
+                <button
+                  type="button"
+                  className="btn btn-outline-secondary"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </button>
+              </div>
+
+              <div className="form-text mb-3">
+                Password must be at least 6 characters.
+              </div>
+              <div className="d-flex justify-content-end">
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  style={{ backgroundColor: "var(--border2)" }}
+                  onClick={handleMigrateFamily}
+                  disabled={isMigrating}
+                >
+                  {isMigrating ? "Updating..." : "Update Email & Password"}
+                </button>
+              </div>
             </div>
           </div>
         </div>

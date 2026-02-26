@@ -146,6 +146,15 @@ export const familiesApi = apiSlice.injectEndpoints({
         "Family", // ✅ Invalidate all family queries
       ],
     }),
+    // In your familiesApi.js - fix the migrateFamilyData mutation
+    migrateFamilyData: builder.mutation({
+      query: ({ familyId, email, password }) => ({
+        url: `/families/admin/migrate-family/${familyId}`,
+        method: "POST",
+        body: { email, password }, // Send email and password in body
+      }),
+      invalidatesTags: ["Family", "Fee"],
+    }),
   }),
 });
 
@@ -169,4 +178,5 @@ export const {
   useGetAdminDirectDebitFamilyQuery,
   useCheckPaymentMutation,
   useCollectAdminPaymentMutation,
+  useMigrateFamilyDataMutation,
 } = apiSlice;
