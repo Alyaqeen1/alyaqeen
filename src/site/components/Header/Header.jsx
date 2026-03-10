@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import OffCanvasMenu from "./OffCanvasMenu";
 import { Link, useLocation } from "react-router";
 import { useTranslation } from "react-i18next";
@@ -7,7 +7,8 @@ import grid from "../../assets/img/grid.svg";
 import useAuth from "../../../hooks/useAuth";
 import toast from "react-hot-toast";
 import LoadingSpinner from "../LoadingSpinner";
-
+import { useNavigate } from "react-router"; // Add this
+import { usePublicSearchQuery } from "../../../redux/features/searches/searchesApi"; // Add this
 const languages = [
   { code: "en", lang: "English" },
   { code: "ar", lang: "Arabic" },
@@ -20,6 +21,47 @@ const Header = () => {
   //   JSON.parse(localStorage.getItem("isLoggedIn"))
   // );
   const { user, signOutUser, loading } = useAuth();
+  const navigate = useNavigate(); // Add this
+
+  // Search state
+  const [searchQuery, setSearchQuery] = useState("");
+  const [showResults, setShowResults] = useState(false);
+  const searchRef = useRef(null);
+
+  // Use the RTK Query hook
+  const {
+    data: results = [],
+    isLoading,
+    error,
+  } = usePublicSearchQuery(searchQuery, {
+    skip: searchQuery.length < 2,
+  });
+
+  // Handle input change
+  const handleSearchInput = (e) => {
+    setSearchQuery(e.target.value);
+    if (e.target.value.length >= 2) {
+      setShowResults(true);
+    } else {
+      setShowResults(false);
+    }
+  };
+
+  // Handle result click
+  const handleResultClick = (url) => {
+    navigate(url);
+    setSearchQuery("");
+    setShowResults(false);
+  };
+
+  // Close search
+  // Close search - update this function
+  const closeSearch = () => {
+    setSearchToggle(false); // Close the modal
+    setShowResults(false); // Hide results
+    setSearchQuery(""); // Clear search
+  };
+
   const { pathname } = useLocation();
   const { i18n } = useTranslation();
 
@@ -64,16 +106,16 @@ const Header = () => {
     };
   }, []);
 
-  // search toggle
+  // // search toggle
   const [searchToggle, setSearchToggle] = useState(false);
 
   const handleSearch = () => {
     setSearchToggle(!searchToggle);
   };
 
-  const closeSearch = () => {
-    setSearchToggle(false);
-  };
+  // const closeSearch = () => {
+  //   setSearchToggle(false);
+  // };
 
   const handleClick = (e) => {
     e.stopPropagation();
@@ -362,16 +404,123 @@ const Header = () => {
             onClick={closeSearch}
           ></i>
           <div className="search-cell">
-            <form method="get">
+            <form method="get" onSubmit={(e) => e.preventDefault()}>
               <div className="search-field-holder">
                 <input
                   type="search"
+                  value={searchQuery}
+                  onChange={handleSearchInput}
                   className="main-search-input"
                   placeholder="Search..."
-                  onClick={handleClick}
+                  onClick={(e) => e.stopPropagation()}
+                  autoFocus
                 />
               </div>
             </form>
+
+            {/* Fixed Search Results */}
+            {showResults && (
+              <div
+                className="search-results-container"
+                style={{
+                  marginTop: "20px",
+                  maxHeight: "400px",
+                  overflowY: "auto",
+                  padding: "0 10px",
+                }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                {isLoading ? (
+                  <div
+                    style={{
+                      textAlign: "center",
+                      padding: "30px",
+                      color: "#666",
+                    }}
+                  >
+                    Searching...
+                  </div>
+                ) : error ? (
+                  <div
+                    style={{
+                      textAlign: "center",
+                      padding: "30px",
+                      color: "#ef4444",
+                    }}
+                  >
+                    Error loading results
+                  </div>
+                ) : results.length === 0 && searchQuery.length >= 2 ? (
+                  <div
+                    style={{
+                      textAlign: "center",
+                      padding: "30px",
+                      color: "#666",
+                    }}
+                  >
+                    No results found for "{searchQuery}"
+                  </div>
+                ) : results.length > 0 ? (
+                  <div>
+                    {results.map((item, index) => (
+                      <div
+                        key={index}
+                        className="ps-lg-5"
+                        onClick={() => {
+                          handleResultClick(item.url);
+                          setSearchToggle(false); // Close modal
+                        }}
+                        style={{
+                          padding: "15px",
+                          // paddingLeft: "150px",
+                          borderBottom: "1px solid #e5e7eb",
+                          cursor: "pointer",
+                          transition: "background-color 0.2s",
+                          textAlign: "left",
+                        }}
+                        onMouseEnter={(e) =>
+                          (e.currentTarget.style.backgroundColor = "#f3f4f6")
+                        }
+                        onMouseLeave={(e) =>
+                          (e.currentTarget.style.backgroundColor =
+                            "transparent")
+                        }
+                      >
+                        <div
+                          style={{
+                            fontWeight: "500",
+                            color: "#111827",
+                            marginBottom: "4px",
+                          }}
+                        >
+                          {item.title}
+                        </div>
+                        {item.excerpt && (
+                          <div
+                            style={{
+                              fontSize: "14px",
+                              color: "#6b7280",
+                            }}
+                          >
+                            {item.excerpt}
+                          </div>
+                        )}
+                        <div
+                          style={{
+                            fontSize: "12px",
+                            color: "#9ca3af",
+                            marginTop: "4px",
+                            textTransform: "capitalize",
+                          }}
+                        >
+                          {item.type}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : null}
+              </div>
+            )}
           </div>
         </div>
       </div>

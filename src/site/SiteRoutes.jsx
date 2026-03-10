@@ -168,10 +168,6 @@ const siteRoutes = [
         element: <Session></Session>,
       },
       {
-        path: "/apply-now",
-        element: <ApplyNow></ApplyNow>,
-      },
-      {
         path: "/all-services",
         element: <AllServices></AllServices>,
       },
