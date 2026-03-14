@@ -30,23 +30,23 @@ export const searchesApi = apiSlice.injectEndpoints({
         result ? [{ type: "Search", id: searchTerm }] : ["Search"],
     }),
 
-    // You can add these later when you implement them on backend
-    // addSearch: builder.mutation({
-    //   query: (searchData) => ({
-    //     url: "/searches",
-    //     method: "POST",
-    //     body: searchData,
-    //   }),
-    //   invalidatesTags: ["Search"],
-    // }),
-
-    // rebuildSearch: builder.mutation({
-    //   query: () => ({
-    //     url: "/searches/rebuild",
-    //     method: "POST",
-    //   }),
-    //   invalidatesTags: ["Search"],
-    // }),
+    // ===== NEW: DASHBOARD SEARCH WITH ROLE =====
+    dashboardSearch: builder.query({
+      query: ({ searchTerm, role }) => {
+        if (!searchTerm || searchTerm.length < 2 || !role) {
+          return { url: "/searches/dashboard?q=empty", skip: true };
+        }
+        return `/searches/dashboard?q=${encodeURIComponent(searchTerm)}&role=${role}`;
+      },
+      transformResponse: (response) => {
+        return Array.isArray(response) ? response : [];
+      },
+      keepUnusedDataFor: 300,
+      providesTags: (result, error, { searchTerm, role }) =>
+        result
+          ? [{ type: "DashboardSearch", id: `${role}-${searchTerm}` }]
+          : ["DashboardSearch"],
+    }),
   }),
 });
 
@@ -54,6 +54,7 @@ export const searchesApi = apiSlice.injectEndpoints({
 export const {
   useGetAllSearchesQuery,
   usePublicSearchQuery,
+  useDashboardSearchQuery,
   // useAddSearchMutation,  // Uncomment when needed
   // useRebuildSearchMutation,  // Uncomment when needed
 } = searchesApi;

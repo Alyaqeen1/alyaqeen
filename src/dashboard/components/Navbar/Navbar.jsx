@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import OffCanvasMenu from "../Sidebar/OffCanvasMenu";
-import { FaSearch } from "react-icons/fa";
+import { FaSearch, FaTimes } from "react-icons/fa";
 import {
   IoLogOutOutline,
   IoMoonOutline,
@@ -9,7 +9,7 @@ import {
 } from "react-icons/io5";
 import { FaRegBell } from "react-icons/fa";
 import { Link, useNavigate } from "react-router";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import img from "../../../site/assets/img/team/team01.jpeg";
 import logo from "../../dashboard-assets/favicon.png";
 import useAuth from "../../../hooks/useAuth";
@@ -18,25 +18,122 @@ import {
   useGetRoleQuery,
   useGetUserQuery,
 } from "../../../redux/features/role/roleApi";
-import { useGetStudentsQuery } from "../../../redux/features/students/studentsApi";
 import { useGetUnreadNotificationsQuery } from "../../../redux/features/notifications/notificationsApi";
 import useAxiosPublic from "../../../hooks/useAxiosPublic";
 import LoadingSpinnerDash from "../LoadingSpinnerDash";
+import { useDashboardSearchQuery } from "../../../redux/features/searches/searchesApi";
 
 export default function Navbar() {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [showSearchOverlay, setShowSearchOverlay] = useState(false);
   const navigate = useNavigate();
   const { user, signOutUser } = useAuth();
   const { data, isLoading } = useGetRoleQuery(user?.email, {
-    skip: !user?.email, // avoid fetching if no ID
+    skip: !user?.email,
   });
+
+  // ===== SEARCH STATE =====
+  const [searchQuery, setSearchQuery] = useState("");
+  const [showResults, setShowResults] = useState(false);
+  const searchRef = useRef(null);
+  const searchInputRef = useRef(null);
+  const userRole = data?.role || "admin";
+
+  // Use dashboard search query
+  const {
+    data: results = [],
+    isLoading: isSearchLoading,
+    error: searchError,
+  } = useDashboardSearchQuery(
+    {
+      searchTerm: searchQuery,
+      role: userRole,
+    },
+    {
+      skip: searchQuery.length < 2,
+    },
+  );
+
+  // Handle input change
+  const handleSearchInput = (e) => {
+    setSearchQuery(e.target.value);
+    if (e.target.value.length >= 2) {
+      setShowResults(true);
+    } else {
+      setShowResults(false);
+    }
+  };
+
+  // Handle result click
+  const handleResultClick = (url) => {
+    navigate(url);
+    setSearchQuery("");
+    setShowResults(false);
+    setShowSearchOverlay(false);
+  };
+
+  // Clear search
+  const clearSearch = () => {
+    setSearchQuery("");
+    setShowResults(false);
+  };
+
+  // Toggle search overlay (open/close)
+  const toggleSearchOverlay = () => {
+    const newState = !showSearchOverlay;
+    setShowSearchOverlay(newState);
+
+    // Focus input when opening
+    if (newState) {
+      setTimeout(() => {
+        if (searchInputRef.current) {
+          searchInputRef.current.focus();
+        }
+      }, 100);
+    } else {
+      // Clear search when closing
+      setSearchQuery("");
+      setShowResults(false);
+    }
+  };
+
+  // Close search overlay
+  const closeSearchOverlay = () => {
+    setShowSearchOverlay(false);
+    setSearchQuery("");
+    setShowResults(false);
+  };
+
+  // Handle click outside for results
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setShowResults(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Close overlay on escape key
+  useEffect(() => {
+    const handleEsc = (e) => {
+      if (e.key === "Escape" && showSearchOverlay) {
+        closeSearchOverlay();
+      }
+    };
+    document.addEventListener("keydown", handleEsc);
+    return () => document.removeEventListener("keydown", handleEsc);
+  }, [showSearchOverlay]);
+
   const { data: userDb, isLoading: isUserDbLoading } = useGetUserQuery(
     user?.email,
     {
-      skip: !user?.email, // avoid fetching if no ID
-    }
+      skip: !user?.email,
+    },
   );
+
   const axiosPublic = useAxiosPublic();
   const { data: unreadNotifications, refetch } =
     useGetUnreadNotificationsQuery();
@@ -69,9 +166,7 @@ export default function Navbar() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-  // if (isLoading || isUserDbLoading) {
-  //   return <LoadingSpinnerDash></LoadingSpinnerDash>;
-  // }
+
   return (
     <nav className="navbar bg-white sticky-top">
       <div className="container-fluid">
@@ -80,15 +175,18 @@ export default function Navbar() {
         </Link>
 
         <div className="d-flex align-items-center gap-3">
-          {/* Search */}
+          {/* Search Button - Toggles Overlay */}
           <motion.button
-            type="button" // <-- prevents form submission
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            type="button"
+            onClick={toggleSearchOverlay}
             whileHover={{ backgroundColor: "#F1F1F6" }}
             transition={{ duration: 0 }}
-            style={btnStyle}
+            style={{
+              ...btnStyle,
+              backgroundColor: showSearchOverlay ? "#F1F1F6" : "transparent",
+            }}
           >
-            <FaSearch className="fs-4" />
+            <FaSearch className="fs-4" style={{ color: "#333333" }} />
           </motion.button>
 
           {/* Dark Mode */}
@@ -97,18 +195,8 @@ export default function Navbar() {
             transition={{ duration: 0 }}
             style={btnStyle}
           >
-            <IoMoonOutline className="fs-4" />
+            <IoMoonOutline className="fs-4" style={{ color: "#333333" }} />
           </motion.button>
-
-          {/* Cart */}
-          {/* <motion.button
-            whileHover={{ backgroundColor: "#F1F1F6" }}
-            transition={{ duration: 0 }}
-            style={btnStyle}
-            className="d-none d-lg-block"
-          >
-            <IoCartOutline className="fs-4" />
-          </motion.button> */}
 
           {/* Notifications */}
           <div style={{ position: "relative" }}>
@@ -116,11 +204,10 @@ export default function Navbar() {
               whileHover={{ backgroundColor: "#F1F1F6" }}
               transition={{ duration: 0 }}
               style={btnStyle}
-              // className="d-none d-lg-block"
               title="Notifications"
               onClick={toggleDropdown}
             >
-              <FaRegBell className="fs-4" />
+              <FaRegBell className="fs-4" style={{ color: "#333333" }} />
               {unreadNotifications?.length > 0 && data?.role === "admin" && (
                 <motion.span
                   initial={{ scale: 0 }}
@@ -147,15 +234,22 @@ export default function Navbar() {
                       }
                       style={{
                         cursor: "pointer",
-                        padding: "5px 10px",
-                        border: "3px solid #eee",
+                        padding: "8px 12px",
+                        borderBottom:
+                          idx < unreadNotifications.length - 1
+                            ? "1px solid #eee"
+                            : "none",
+                        color: "#333333",
                       }}
                     >
                       {item.message}
                     </div>
                   ))
                 ) : (
-                  <p className="text-muted text-center mb-0">
+                  <p
+                    className="text-muted text-center mb-0"
+                    style={{ color: "#666666", padding: "8px" }}
+                  >
                     No notifications
                   </p>
                 )}
@@ -175,10 +269,16 @@ export default function Navbar() {
               alt="Profile"
             />
             <div className="d-none d-lg-block">
-              <h6 className="fw-bold" style={{ fontSize: "14px" }}>
+              <h6
+                className="fw-bold"
+                style={{ fontSize: "14px", color: "#333333", margin: 0 }}
+              >
                 {userDb?.name || "Anonymous User"}
               </h6>
-              <h6 className="text-lowercase" style={{ fontSize: "12px" }}>
+              <h6
+                className="text-lowercase"
+                style={{ fontSize: "12px", color: "#666666", margin: 0 }}
+              >
                 {userDb?.email}
               </h6>
             </div>
@@ -192,6 +292,8 @@ export default function Navbar() {
               border: "none",
               background: "transparent",
               cursor: "pointer",
+              padding: "7px 9px",
+              borderRadius: "70px",
             }}
           >
             <IoLogOutOutline className="fs-4 text-danger" />
@@ -201,6 +303,196 @@ export default function Navbar() {
           {isMobile && <OffCanvasMenu />}
         </div>
       </div>
+
+      {/* Minimal Search Overlay - Just the input field */}
+      <AnimatePresence>
+        {showSearchOverlay && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.15 }}
+            style={{
+              position: "absolute",
+              top: "100%",
+              left: 0,
+              right: 0,
+              padding: "12px 20px",
+              backgroundColor: "transparent",
+              zIndex: 999,
+              pointerEvents: "none", // Allow clicking through the container
+            }}
+          >
+            <div
+              ref={searchRef}
+              style={{
+                position: "relative",
+                maxWidth: "600px",
+                margin: "0 auto",
+                pointerEvents: "auto", // But catch clicks on the input
+              }}
+            >
+              <div style={{ position: "relative" }}>
+                <input
+                  ref={searchInputRef}
+                  type="search"
+                  value={searchQuery}
+                  onChange={handleSearchInput}
+                  placeholder={`Search ${userRole} dashboard...`}
+                  style={{
+                    width: "100%",
+                    padding: "12px 45px 12px 20px",
+                    borderRadius: "30px",
+                    border: "1px solid #e0e0e0",
+                    backgroundColor: "#ffffff",
+                    fontSize: "15px",
+                    outline: "none",
+                    color: "#333333",
+                    boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                  }}
+                  onFocus={() =>
+                    searchQuery.length >= 2 && setShowResults(true)
+                  }
+                />
+                {searchQuery ? (
+                  <></>
+                ) : (
+                  <FaSearch
+                    style={{
+                      position: "absolute",
+                      right: "15px",
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      color: "#999999",
+                      fontSize: "16px",
+                    }}
+                  />
+                )}
+              </div>
+
+              {/* Search Results Dropdown */}
+              {showResults && (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "100%",
+                    left: 0,
+                    right: 0,
+                    marginTop: "8px",
+                    backgroundColor: "#ffffff",
+                    borderRadius: "12px",
+                    boxShadow: "0 4px 20px rgba(0,0,0,0.15)",
+                    border: "1px solid #e5e7eb",
+                    zIndex: 1000,
+                    maxHeight: "400px",
+                    overflowY: "auto",
+                  }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  {isSearchLoading ? (
+                    <div
+                      style={{
+                        textAlign: "center",
+                        padding: "20px",
+                        color: "#666666",
+                      }}
+                    >
+                      Searching...
+                    </div>
+                  ) : searchError ? (
+                    <div
+                      style={{
+                        textAlign: "center",
+                        padding: "20px",
+                        color: "#ef4444",
+                      }}
+                    >
+                      Error loading results
+                    </div>
+                  ) : results.length === 0 && searchQuery.length >= 2 ? (
+                    <div
+                      style={{
+                        textAlign: "center",
+                        padding: "20px",
+                        color: "#666666",
+                      }}
+                    >
+                      No results found for "{searchQuery}"
+                    </div>
+                  ) : results.length > 0 ? (
+                    <div>
+                      {results.map((item, index) => (
+                        <div
+                          key={index}
+                          onClick={() => handleResultClick(item.url)}
+                          style={{
+                            padding: "12px 16px",
+                            borderBottom: "1px solid #e5e7eb",
+                            cursor: "pointer",
+                            transition: "background-color 0.2s",
+                            textAlign: "left",
+                            backgroundColor: "#ffffff",
+                          }}
+                          onMouseEnter={(e) =>
+                            (e.currentTarget.style.backgroundColor = "#f3f4f6")
+                          }
+                          onMouseLeave={(e) =>
+                            (e.currentTarget.style.backgroundColor = "#ffffff")
+                          }
+                        >
+                          <div
+                            style={{
+                              fontWeight: "500",
+                              color: "#111827",
+                              marginBottom: "4px",
+                              fontSize: "14px",
+                            }}
+                          >
+                            {item.title}
+                          </div>
+                          {item.excerpt && (
+                            <div
+                              style={{
+                                fontSize: "12px",
+                                color: "#6b7280",
+                                marginBottom: "4px",
+                              }}
+                            >
+                              {item.excerpt}
+                            </div>
+                          )}
+                          <div
+                            style={{
+                              fontSize: "11px",
+                              color: "#9ca3af",
+                              textTransform: "capitalize",
+                              display: "flex",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                            }}
+                          >
+                            <span>{item.type}</span>
+                            <span
+                              style={{
+                                backgroundColor: "#f3f4f6",
+                                padding: "2px 8px",
+                                borderRadius: "12px",
+                                color: "#4b5563",
+                              }}
+                            >
+                              {item.visibility}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 }
@@ -211,4 +503,8 @@ const btnStyle = {
   cursor: "pointer",
   padding: "7px 9px",
   borderRadius: "70px",
+  color: "#333333",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
 };
