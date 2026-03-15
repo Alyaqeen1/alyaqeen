@@ -128,11 +128,52 @@ export default function FeeSettings() {
     if (!searchTerm.trim()) return familiesByStatus;
 
     const term = searchTerm.toLowerCase();
+
+    // Check if the search term is a number
+    const isNumber = !isNaN(parseFloat(term)) && isFinite(term);
+    const searchNumber = isNumber ? parseFloat(term) : null;
+
     return familiesByStatus.filter((family) => {
       // Search by family name
       if (family.name?.toLowerCase().includes(term)) return true;
 
-      // Search through each student's details
+      // Calculate total monthly fee for active students in this family
+      const totalMonthlyFee =
+        family.childrenDocs
+          ?.filter((s) => s.activity === "active")
+          .reduce((total, student) => total + (student.monthly_fee || 0), 0) ||
+        0;
+
+      // Apply family discount if any
+      const discount = family.discount || 0;
+      const discountedTotal =
+        totalMonthlyFee - (totalMonthlyFee * discount) / 100;
+
+      // If searching for a number, check if any fee amount starts with or exactly matches the search number
+      if (isNumber) {
+        // Check individual student fees
+        const hasMatchingStudentFee = family.childrenDocs?.some((student) => {
+          const studentFee = student.monthly_fee || 0;
+          // Convert to string and check if it starts with the search term
+          // This ensures "40" matches "40" but not "140"
+          return studentFee.toString().startsWith(term);
+        });
+
+        // if (hasMatchingStudentFee) return true;
+
+        // Check total monthly fee
+        // if (totalMonthlyFee.toString().startsWith(term)) return true;
+
+        // Check discounted total - round to handle decimal places
+        const discountedStr = discountedTotal.toFixed(2);
+        if (
+          discountedStr.startsWith(term) ||
+          discountedStr.replace(".", "").startsWith(term)
+        )
+          return true;
+      }
+
+      // Search through each student's details (text search)
       return family.childrenDocs?.some((student) => {
         // Search by student name
         if (student.name?.toLowerCase().includes(term)) return true;
@@ -148,7 +189,10 @@ export default function FeeSettings() {
         if (student.mother?.name?.toLowerCase().includes(term)) return true;
 
         // Search by mother's occupation within student
-        return student.mother?.occupation?.toLowerCase().includes(term);
+        if (student.mother?.occupation?.toLowerCase().includes(term))
+          return true;
+
+        return false;
       });
     });
   }, [familiesByStatus, searchTerm]);
