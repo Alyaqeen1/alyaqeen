@@ -286,7 +286,7 @@ export default function UpdateFees() {
                 <input
                   type="text"
                   className="form-control"
-                  placeholder="Search by family, student, email or type..."
+                  placeholder="Search by family, student, email, type or Payment..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   disabled={isFetching}
