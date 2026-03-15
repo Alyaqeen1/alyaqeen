@@ -38,7 +38,7 @@ export default function UpdateFees() {
         year: yearFilter,
       }),
     }),
-    [paymentTypeFilter, monthFilter, yearFilter]
+    [paymentTypeFilter, monthFilter, yearFilter],
   );
 
   // Call hook unconditionally at the top level
@@ -65,15 +65,34 @@ export default function UpdateFees() {
     // Apply search filter if query exists
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase().trim();
-      filtered = filtered.filter(
-        (fee) =>
+
+      // Calculate paid amount for each fee
+      const getPaidAmount = (fee) => {
+        return fee.expectedTotal - (fee.remaining || 0);
+      };
+
+      filtered = filtered.filter((fee) => {
+        const paidAmount = getPaidAmount(fee);
+        const expectedTotal = fee.expectedTotal || 0;
+        const remaining = fee.remaining || 0;
+
+        // Check if the search query matches any amount field
+        const matchesAmount =
+          expectedTotal.toString().includes(query) ||
+          paidAmount.toString().includes(query) ||
+          remaining.toString().includes(query);
+
+        // Check if matches text fields
+        const matchesText =
           fee.name?.toLowerCase().includes(query) ||
           fee.email?.toLowerCase().includes(query) ||
           fee.students?.some((student) =>
-            student.name?.toLowerCase().includes(query)
+            student.name?.toLowerCase().includes(query),
           ) ||
-          fee.paymentType?.toLowerCase().includes(query)
-      );
+          fee.paymentType?.toLowerCase().includes(query);
+
+        return matchesAmount || matchesText;
+      });
     }
 
     if (sortOrder === "alphabetical") {
@@ -182,7 +201,7 @@ export default function UpdateFees() {
       const totalMonths =
         fee.students?.reduce(
           (sum, student) => sum + (student.monthsPaid?.length || 0),
-          0
+          0,
         ) || 0;
       return `${totalStudents} student(s)`;
     } else if (
@@ -236,7 +255,7 @@ export default function UpdateFees() {
   const getFilterDisplayText = () => {
     if (paymentTypeFilter === "monthly") {
       return `Showing ${paymentTypeFilter} fees for: ${getMonthName(
-        monthFilter
+        monthFilter,
       )} ${yearFilter}`;
     } else {
       return `Showing all ${paymentTypeFilter} fees`;
@@ -251,6 +270,37 @@ export default function UpdateFees() {
       <div className="card my-4">
         <div className="card-body">
           <div className="row g-3 align-items-center">
+            {/* Search Bar - Takes remaining space */}
+            <div
+              className={`${
+                paymentTypeFilter === "monthly"
+                  ? "col-md-12 col-lg-4"
+                  : "col-md-12 col-lg-6"
+              } mt-3 mt-md-0`}
+            >
+              <label className="form-label fw-semibold">
+                <FaSearch className="me-2" /> {/* Add FaSearch import */}
+                Search
+              </label>
+              <div className="input-group">
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Search by family, student, email or type..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  disabled={isFetching}
+                />
+                <button
+                  className="btn btn-outline-secondary"
+                  type="button"
+                  onClick={() => setSearchQuery("")}
+                  disabled={isFetching}
+                >
+                  Clear
+                </button>
+              </div>
+            </div>
             {/* Payment Type Filter */}
             <div
               className={`${
@@ -345,37 +395,6 @@ export default function UpdateFees() {
                 <option value="amount">Amount (High to Low)</option>
               </select>
             </div>
-            {/* Search Bar - Takes remaining space */}
-            <div
-              className={`${
-                paymentTypeFilter === "monthly"
-                  ? "col-md-12 col-lg-4"
-                  : "col-md-12 col-lg-6"
-              } mt-3 mt-md-0`}
-            >
-              <label className="form-label fw-semibold">
-                <FaSearch className="me-2" /> {/* Add FaSearch import */}
-                Search
-              </label>
-              <div className="input-group">
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Search by family, student, email or type..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  disabled={isFetching}
-                />
-                <button
-                  className="btn btn-outline-secondary"
-                  type="button"
-                  onClick={() => setSearchQuery("")}
-                  disabled={isFetching}
-                >
-                  Clear
-                </button>
-              </div>
-            </div>
           </div>
 
           <div className="row mt-3">
@@ -391,9 +410,9 @@ export default function UpdateFees() {
                     Loading data...
                   </>
                 ) : (
-                  <>
+                  <p className="text-wrap">
                     {getFilterDisplayText()} • {sortedFees.length} records
-                  </>
+                  </p>
                 )}
               </span>
             </div>
@@ -502,7 +521,7 @@ export default function UpdateFees() {
                             <small className="text-muted">
                               Paid:{" "}
                               {formatCurrency(
-                                fee.expectedTotal - (fee.remaining || 0)
+                                fee.expectedTotal - (fee.remaining || 0),
                               )}
                             </small>
                             {/* {fee.remaining > 0 && ( */}
@@ -516,7 +535,7 @@ export default function UpdateFees() {
                         <td className="text-center">
                           <span
                             className={`badge ${getStatusColor(
-                              fee.status
+                              fee.status,
                             )} bg-light`}
                           >
                             {fee.status?.toUpperCase()}
@@ -612,7 +631,7 @@ export default function UpdateFees() {
                   <strong>Admission Fees:</strong>{" "}
                   {
                     sortedFees.filter((f) =>
-                      f.paymentType?.includes("admission")
+                      f.paymentType?.includes("admission"),
                     ).length
                   }
                 </div>
@@ -621,8 +640,8 @@ export default function UpdateFees() {
                   {formatCurrency(
                     sortedFees.reduce(
                       (sum, fee) => sum + (fee.expectedTotal || 0),
-                      0
-                    )
+                      0,
+                    ),
                   )}
                 </div>
               </div>
