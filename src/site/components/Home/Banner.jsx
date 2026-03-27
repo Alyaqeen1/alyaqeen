@@ -97,7 +97,7 @@ const Banner = () => {
                 </p>
                 <div className="hero-button">
                   <Link
-                    to="/apply-now"
+                    to="/register"
                     className="theme-btn "
                     data-aos-duration={800}
                     data-aos="fade-up"
