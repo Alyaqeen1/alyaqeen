@@ -228,10 +228,11 @@ export default function FeeSettings() {
   const handleAdminClose = () => setAdminShowModal(false);
   const handleAdminManualClose = () => setAdminManualShowModal(false);
 
+  // Update the delete handler
   const handleDelete = (id) => {
     Swal.fire({
       title: "Are you sure?",
-      text: "You won't be able to revert this!",
+      text: "This family will be moved to trash. You can restore it later!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
@@ -239,13 +240,14 @@ export default function FeeSettings() {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
+        // Soft delete
         deleteFamilyData(id)
           .unwrap()
           .then((res) => {
-            if (res?.deletedCount > 0) {
+            if (res.modifiedCount > 0) {
               Swal.fire({
                 title: "Deleted!",
-                text: "Family has been deleted.",
+                text: "Family has been moved to trash.",
                 icon: "success",
               });
               refetch();
