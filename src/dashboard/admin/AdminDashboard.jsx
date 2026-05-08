@@ -1,11 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import { useGetTeacherCountQuery } from "../../redux/features/teachers/teachersApi";
 import { useGetAttendancePresentCountQuery } from "../../redux/features/attendances/attendancesApi";
 import { useGetStudentCountQuery } from "../../redux/features/students/studentsApi";
+import {
+  useGetMonthlyAdmissionsQuery,
+  useGetMonthlyDeparturesQuery,
+  useGetClassDepartureStatsQuery,
+} from "../../redux/features/students/studentsApi";
 import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 import CrmDashboard from "./CrmDashboard";
 
 export default function AdminDashboard() {
+  // Current date for default filter values
+  const currentYear = new Date().getFullYear();
+  const currentMonth = new Date().getMonth() + 1;
+
+  // State for monthly tracker filters
+  const [selectedYear, setSelectedYear] = useState(currentYear);
+  const [selectedMonth, setSelectedMonth] = useState(currentMonth);
+
+  // Existing data fetching
   const { data: teachersCount, isLoading: isLoadingTeachersCount } =
     useGetTeacherCountQuery();
   const { data: staffPresence, isLoading: isLoadingStaffPresence } =
@@ -15,142 +29,55 @@ export default function AdminDashboard() {
   const { data: studentsCount, isLoading: isLoadingStudentsCount } =
     useGetStudentCountQuery();
 
-  if (
+  // New: Monthly tracker data fetching
+  const { data: admissionsData, isLoading: isLoadingAdmissions } =
+    useGetMonthlyAdmissionsQuery({
+      year: selectedYear,
+      month: selectedMonth,
+    });
+
+  const { data: departuresData, isLoading: isLoadingDepartures } =
+    useGetMonthlyDeparturesQuery({
+      year: selectedYear,
+      month: selectedMonth,
+    });
+
+  const { data: classStatsData, isLoading: isLoadingClassStats } =
+    useGetClassDepartureStatsQuery({
+      year: selectedYear,
+      month: selectedMonth,
+    });
+
+  // Combine all loading states
+  const isLoading =
     isLoadingTeachersCount ||
     isLoadingStaffPresence ||
     isLoadingStudentsCount ||
-    isLoadingStudentPresence
-  )
-    return <LoadingSpinnerDash></LoadingSpinnerDash>;
+    isLoadingStudentPresence ||
+    isLoadingAdmissions ||
+    isLoadingDepartures ||
+    isLoadingClassStats;
+
+  if (isLoading) {
+    return <LoadingSpinnerDash />;
+  }
 
   return (
     <div className="">
-      {/* <div className="container mt-3">
-        <h3 className="mb-4">Admin Dashboard</h3>
-        <div className="row">
-          <div className="col-md-6 mb-3">
-            <div className="card shadow-sm h-100">
-              <div
-                className="text-white p-2 fw-bold rounded-top-2"
-                style={{ backgroundColor: "var(--border2)" }}
-              >
-                Staff Details
-              </div>
-              <div className="card-body d-flex flex-column justify-content-between">
-                <div>
-                  <p>
-                    Total:{" "}
-                    <span className="text-success fw-bold">
-                      {teachersCount?.total}
-                    </span>
-                  </p>
-                  <p>
-                    Active:{" "}
-                    <span className="text-success fw-bold">
-                      {teachersCount?.activity?.active}
-                    </span>
-                  </p>
-                  <p>
-                    Inactive:{" "}
-                    <span className="text-danger fw-bold">
-                      {teachersCount?.activity?.inactive}
-                    </span>
-                  </p>
-                  <p>
-                    Male:{" "}
-                    <span className="text-primary fw-bold">
-                      {teachersCount?.gender?.male}
-                    </span>
-                  </p>
-                  <p>
-                    Female:{" "}
-                    <span className="text-pink fw-bold">
-                      {teachersCount?.gender?.female}
-                    </span>
-                  </p>
-                </div>
-                <hr />
-                <p className="mt-auto">
-                  Today Present Staff:{" "}
-                  <strong>{staffPresence?.present_count}</strong>
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="col-md-6 mb-3">
-            <div className="card shadow-sm h-100">
-              <div
-                className="text-white p-2 fw-bold rounded-top-2"
-                style={{ backgroundColor: "var(--border2)" }}
-              >
-                Student Details
-              </div>
-              <div className="card-body d-flex flex-column justify-content-between">
-                <div className="row">
-                  <div className="col-lg-6">
-                    <p>
-                      Total:{" "}
-                      <span className="text-success fw-bold">
-                        {studentsCount?.total}
-                      </span>
-                    </p>
-                    <p>
-                      Active:{" "}
-                      <span className="text-success fw-bold">
-                        {studentsCount?.activity?.active}
-                      </span>
-                    </p>
-                    <p>
-                      Inactive:{" "}
-                      <span className="text-danger fw-bold">
-                        {studentsCount?.activity?.inactive}
-                      </span>
-                    </p>
-                    <p>
-                      Male:{" "}
-                      <span className="text-primary fw-bold">
-                        {studentsCount?.gender?.male}
-                      </span>
-                    </p>
-                    <p>
-                      Female:{" "}
-                      <span className="text-pink fw-bold">
-                        {studentsCount?.gender?.female}
-                      </span>
-                    </p>
-                  </div>
-                  <div className="col-lg-6">
-                    <p>
-                      Weekdays Students:{" "}
-                      <strong className="text-success">
-                        {studentsCount?.session?.weekdays}
-                      </strong>
-                    </p>
-                    <p>
-                      Weekend Students:{" "}
-                      <strong className="text-success">
-                        {studentsCount?.session?.weekend}
-                      </strong>
-                    </p>
-                  </div>
-                </div>
-                <hr />
-                <p className="mt-auto">
-                  Today Present Students:{" "}
-                  <strong>{studentPresence?.present_count}</strong>
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> */}
       <div className="container-fluid px-0">
         <CrmDashboard
           studentsCount={studentsCount}
           teachersCount={teachersCount}
           staffPresence={staffPresence}
           studentPresence={studentPresence}
+          // Pass monthly tracker data and filters
+          admissionsData={admissionsData}
+          departuresData={departuresData}
+          classStatsData={classStatsData}
+          selectedYear={selectedYear}
+          selectedMonth={selectedMonth}
+          setSelectedYear={setSelectedYear}
+          setSelectedMonth={setSelectedMonth}
         />
       </div>
     </div>

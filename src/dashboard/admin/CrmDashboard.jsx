@@ -7,15 +7,24 @@ import RevenueAnalytics from "./RevenueAnalytics";
 import StatsGrid from "./StatsGrid";
 import StaffDetails from "./StaffDetails";
 import StudentDetails from "./StudentDetails";
+import MonthlyStudentTracker from "./MonthlyStudentTracker";
 
 const CrmDashboard = ({
   teachersCount,
   studentsCount,
   staffPresence,
   studentPresence,
+  // New props from AdminDashboard
+  admissionsData,
+  departuresData,
+  classStatsData,
+  selectedYear,
+  selectedMonth,
+  setSelectedYear,
+  setSelectedMonth,
 }) => {
   const [screenSize, setScreenSize] = useState("xl");
-  const { data: dashboardAttendanceSummary, isLoading } =
+  const { data: dashboardAttendanceSummary, isLoading: attendanceLoading } =
     useGetDashboardAttendanceSummaryQuery();
 
   useEffect(() => {
@@ -31,7 +40,8 @@ const CrmDashboard = ({
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Theme colors (shared with components that need them)
+  const isLoading = attendanceLoading;
+
   const themeColors = {
     primary: "#3b82f6",
     secondary: "#8b5cf6",
@@ -48,13 +58,11 @@ const CrmDashboard = ({
     textMuted: "#94a3b8",
   };
 
-  // Helper function for color classes
   const getBgColor = (colorName, opacity = 0.1) => {
     const color = themeColors[colorName] || colorName;
     return `rgba(${parseInt(color.slice(1, 3), 16)}, ${parseInt(color.slice(3, 5), 16)}, ${parseInt(color.slice(5, 7), 16)}, ${opacity})`;
   };
 
-  // Responsive grid logic based on screen size
   const getGridStyles = () => {
     if (screenSize === "xxl") {
       return {
@@ -164,10 +172,10 @@ const CrmDashboard = ({
       </div>
 
       {/* Main Grid Container */}
+      {/* Main Grid Container */}
       <div style={gridStyles.mainContainer}>
         {/* LEFT: Main Content */}
         <div style={gridStyles.leftColumn}>
-          {/* First Row */}
           <div style={gridStyles.topDealsSection}>
             <TargetCard themeColors={themeColors} />
             <AttendanceSummary
@@ -178,7 +186,6 @@ const CrmDashboard = ({
             />
           </div>
 
-          {/* Second Row */}
           <div style={gridStyles.statsSection}>
             <StatsGrid
               themeColors={themeColors}
@@ -187,6 +194,21 @@ const CrmDashboard = ({
               gridStyles={gridStyles.statsGrid}
             />
             <RevenueAnalytics themeColors={themeColors} />
+
+            {/* ✅ MOVED: Monthly Student Tracker here - below RevenueAnalytics */}
+            <div style={{ marginTop: "16px" }}>
+              <MonthlyStudentTracker
+                themeColors={themeColors}
+                getBgColor={getBgColor}
+                admissionsData={admissionsData}
+                departuresData={departuresData}
+                classStatsData={classStatsData}
+                selectedYear={selectedYear}
+                selectedMonth={selectedMonth}
+                setSelectedYear={setSelectedYear}
+                setSelectedMonth={setSelectedMonth}
+              />
+            </div>
           </div>
         </div>
 

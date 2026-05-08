@@ -27,7 +27,6 @@ export const studentsApi = apiSlice.injectEndpoints({
       query: (id) => `/students/by-id/${id}`,
       providesTags: ["Student"],
     }),
-    // In your studentsApi.js (or wherever your endpoints are defined)
     getStudentByActivity: builder.query({
       query: ({ activity, search }) => {
         const params = new URLSearchParams();
@@ -45,6 +44,33 @@ export const studentsApi = apiSlice.injectEndpoints({
       providesTags: ["Student"],
     }),
 
+    // 📊 NEW: Monthly admissions (students who joined in a specific month)
+    getMonthlyAdmissions: builder.query({
+      query: ({ year, month }) =>
+        `/students/monthly-admissions?year=${year}&month=${month}`,
+      providesTags: ["Student"],
+    }),
+
+    // 📊 NEW: Monthly departures (students who became inactive in a specific month)
+    getMonthlyDepartures: builder.query({
+      query: ({ year, month }) =>
+        `/students/monthly-departures?year=${year}&month=${month}`,
+      providesTags: ["Student"],
+    }),
+
+    // 📊 NEW: Class departure statistics
+    getClassDepartureStats: builder.query({
+      query: ({ year, month }) =>
+        `/students/class-departure-stats?year=${year}&month=${month}`,
+      providesTags: ["Student"],
+    }),
+
+    // 📊 NEW: Current month stats (for dashboard overview)
+    getCurrentMonthStats: builder.query({
+      query: () => `/students/current-month-stats`,
+      providesTags: ["Student"],
+    }),
+
     updateStudentStatus: builder.mutation({
       query: ({ id, ...patch }) => ({
         url: `/students/${id}`,
@@ -54,7 +80,7 @@ export const studentsApi = apiSlice.injectEndpoints({
           "Content-Type": "application/json",
         },
       }),
-      invalidatesTags: ["Family", "Student", "Fee"], // 🔥 Important — invalidate Family when a student's status changes
+      invalidatesTags: ["Family", "Student", "Fee"],
     }),
     updateAllStudentData: builder.mutation({
       query: ({ id, studentData }) => ({
@@ -93,7 +119,7 @@ export const studentsApi = apiSlice.injectEndpoints({
         url: `/students/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["Family", "Student"], // 🔥 Important — invalidate Family when a student's status changes
+      invalidatesTags: ["Family", "Student"],
     }),
   }),
 });
@@ -108,6 +134,10 @@ export const {
   useGetStudentByActivityQuery,
   useGetStudentsByGroupQuery,
   useGetWithoutEnrolledStudentsQuery,
+  useGetMonthlyAdmissionsQuery,
+  useGetMonthlyDeparturesQuery,
+  useGetClassDepartureStatsQuery,
+  useGetCurrentMonthStatsQuery,
   useUpdateStudentStatusMutation,
   useUpdateAllStudentDataMutation,
   useGenerateReportMutation,
