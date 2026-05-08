@@ -111,7 +111,7 @@ export const familiesApi = apiSlice.injectEndpoints({
         url: `/families/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["Family"], // 🔥 Important — invalidate Family when a student's status changes
+      invalidatesTags: ["Family", "Student"], // 🔥 Important — invalidate Family when a student's status changes
     }),
     // ✅ ADMIN: Manual payment collection
     collectAdminPayment: builder.mutation({

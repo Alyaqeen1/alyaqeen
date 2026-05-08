@@ -54,7 +54,7 @@ export const studentsApi = apiSlice.injectEndpoints({
           "Content-Type": "application/json",
         },
       }),
-      invalidatesTags: ["Family", "Student"], // 🔥 Important — invalidate Family when a student's status changes
+      invalidatesTags: ["Family", "Student", "Fee"], // 🔥 Important — invalidate Family when a student's status changes
     }),
     updateAllStudentData: builder.mutation({
       query: ({ id, studentData }) => ({
@@ -65,7 +65,7 @@ export const studentsApi = apiSlice.injectEndpoints({
           "Content-Type": "application/json",
         },
       }),
-      invalidatesTags: ["Family", "Student"],
+      invalidatesTags: ["Family", "Student", "Fee"],
     }),
     generateReport: builder.mutation({
       query: ({ id }) => ({
@@ -75,7 +75,7 @@ export const studentsApi = apiSlice.injectEndpoints({
           "Content-Type": "application/json",
         },
       }),
-      invalidatesTags: ["Family", "Student"],
+      invalidatesTags: ["Family", "Student", "Fee"],
     }),
     updateStudentActivity: builder.mutation({
       query: ({ id, ...patch }) => ({
@@ -86,7 +86,7 @@ export const studentsApi = apiSlice.injectEndpoints({
           "Content-Type": "application/json",
         },
       }),
-      invalidatesTags: ["Student"],
+      invalidatesTags: ["Family", "Student", "Fee"],
     }),
     deleteStudentData: builder.mutation({
       query: (id) => ({

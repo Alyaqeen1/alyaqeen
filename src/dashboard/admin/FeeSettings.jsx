@@ -229,7 +229,60 @@ export default function FeeSettings() {
   const handleAdminManualClose = () => setAdminManualShowModal(false);
 
   // Update the delete handler
+  // Update the delete handler
   const handleDelete = (id) => {
+    // First, get the family data to check if it has active students
+    const family = familiesByStatus?.find((f) => f._id === id);
+
+    if (family && family.childrenDocs?.length > 0) {
+      const activeStudentCount = family.childrenDocs.filter(
+        (student) => student.activity === "active",
+      ).length;
+
+      if (activeStudentCount > 0) {
+        Swal.fire({
+          title: "Cannot Delete Family",
+          html: `
+          <div class="text-left">
+            <p>This family has <strong>${activeStudentCount} active student(s)</strong>.</p>
+            <p>Please make all students inactive before deleting this family.</p>
+            <hr>
+            <p class="text-muted small">Active students:</p>
+            <ul class="text-left">
+              ${family.childrenDocs
+                .filter((s) => s.activity === "active")
+                .map((s) => `<li>${s.name} (${s.status || "enrolled"})</li>`)
+                .join("")}
+            </ul>
+          </div>
+        `,
+          icon: "warning",
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "OK",
+          showCancelButton: true,
+          cancelButtonText: "Go to Family",
+          cancelButtonColor: "#d33",
+        }).then((result) => {
+          if (result.dismiss === Swal.DismissReason.cancel) {
+            // Navigate to family details or scroll to this family
+            const familyElement = document.getElementById(`family-${id}`);
+            if (familyElement) {
+              familyElement.scrollIntoView({
+                behavior: "smooth",
+                block: "center",
+              });
+              familyElement.style.backgroundColor = "#fff3cd";
+              setTimeout(() => {
+                familyElement.style.backgroundColor = "";
+              }, 3000);
+            }
+          }
+        });
+        return;
+      }
+    }
+
+    // If no active students, proceed with delete confirmation
     Swal.fire({
       title: "Are you sure?",
       text: "This family will be moved to trash. You can restore it later!",
@@ -240,18 +293,79 @@ export default function FeeSettings() {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
+        // Show loading state
+        Swal.fire({
+          title: "Deleting...",
+          text: "Please wait",
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
+
         // Soft delete
         deleteFamilyData(id)
           .unwrap()
           .then((res) => {
-            if (res.modifiedCount > 0) {
+            Swal.fire({
+              title: "Deleted!",
+              text: "Family has been moved to trash.",
+              icon: "success",
+            });
+            refetch();
+            refetchFee();
+          })
+          .catch((error) => {
+            console.error("Delete error:", error);
+
+            // Handle the specific error from backend
+            if (
+              error?.data?.error === "Cannot delete family with active students"
+            ) {
               Swal.fire({
-                title: "Deleted!",
-                text: "Family has been moved to trash.",
-                icon: "success",
+                title: "Cannot Delete Family",
+                html: `
+                <div class="text-left">
+                  <p><strong>${error.data.message || "Please make all students inactive before deleting this family"}</strong></p>
+                  ${
+                    error.data.activeStudents?.length > 0
+                      ? `
+                    <hr>
+                    <p class="text-muted small">Active students:</p>
+                    <ul class="text-left">
+                      ${error.data.activeStudents.map((s) => `<li>${s.name} (${s.status})</li>`).join("")}
+                    </ul>
+                  `
+                      : ""
+                  }
+                </div>
+              `,
+                icon: "error",
+                confirmButtonColor: "#3085d6",
+                confirmButtonText: "OK",
+                showCancelButton: true,
+                cancelButtonText: "View Family",
+                cancelButtonColor: "#d33",
+              }).then((result) => {
+                if (result.dismiss === Swal.DismissReason.cancel) {
+                  // Optionally navigate to family edit page or scroll to family
+                  const familyElement = document.getElementById(`family-${id}`);
+                  if (familyElement) {
+                    familyElement.scrollIntoView({
+                      behavior: "smooth",
+                      block: "center",
+                    });
+                  }
+                }
               });
-              refetch();
-              refetchFee();
+            } else {
+              Swal.fire({
+                title: "Error!",
+                text:
+                  error?.data?.message ||
+                  "Something went wrong while deleting the family.",
+                icon: "error",
+              });
             }
           });
       }
