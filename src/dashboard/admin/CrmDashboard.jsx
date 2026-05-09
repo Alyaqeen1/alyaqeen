@@ -8,13 +8,13 @@ import StatsGrid from "./StatsGrid";
 import StaffDetails from "./StaffDetails";
 import StudentDetails from "./StudentDetails";
 import MonthlyStudentTracker from "./MonthlyStudentTracker";
+import FeeSummary from "./FeeSummary"; // ✅ Import FeeSummary
 
 const CrmDashboard = ({
   teachersCount,
   studentsCount,
   staffPresence,
   studentPresence,
-  // New props from AdminDashboard
   admissionsData,
   departuresData,
   classStatsData,
@@ -22,6 +22,7 @@ const CrmDashboard = ({
   selectedMonth,
   setSelectedYear,
   setSelectedMonth,
+  feeSummaryData, // ✅ New prop
 }) => {
   const [screenSize, setScreenSize] = useState("xl");
   const { data: dashboardAttendanceSummary, isLoading: attendanceLoading } =
@@ -172,7 +173,6 @@ const CrmDashboard = ({
       </div>
 
       {/* Main Grid Container */}
-      {/* Main Grid Container */}
       <div style={gridStyles.mainContainer}>
         {/* LEFT: Main Content */}
         <div style={gridStyles.leftColumn}>
@@ -195,7 +195,20 @@ const CrmDashboard = ({
             />
             <RevenueAnalytics themeColors={themeColors} />
 
-            {/* ✅ MOVED: Monthly Student Tracker here - below RevenueAnalytics */}
+            {/* ✅ Fee Summary Component */}
+            <div style={{ marginTop: "16px" }}>
+              <FeeSummary
+                themeColors={themeColors}
+                getBgColor={getBgColor}
+                feeSummaryData={feeSummaryData}
+                selectedYear={selectedYear}
+                selectedMonth={selectedMonth}
+                setSelectedYear={setSelectedYear}
+                setSelectedMonth={setSelectedMonth}
+              />
+            </div>
+
+            {/* Monthly Student Tracker */}
             <div style={{ marginTop: "16px" }}>
               <MonthlyStudentTracker
                 themeColors={themeColors}

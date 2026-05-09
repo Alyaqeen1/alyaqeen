@@ -34,6 +34,11 @@ export const feesApi = apiSlice.injectEndpoints({
       query: (id) => `/fees/student-summary/${id}`,
       providesTags: ["Fee"],
     }),
+    // Add this endpoint to your feesApi.js
+    getDashboardFeeSummary: builder.query({
+      query: ({ month, year }) => `/fees/fee-summary/${month}/${year}`,
+      providesTags: ["Fee"],
+    }),
     getFeesByDate: builder.query({
       query: (params = {}) => {
         const { paymentType, month, year } = params;
@@ -57,6 +62,7 @@ export const feesApi = apiSlice.injectEndpoints({
       query: (id) => `/fees/unpaid-months/${id}`,
       providesTags: ["Fee"],
     }),
+
     updateFeeData: builder.mutation({
       query: ({ id, data }) => ({
         url: `/fees/update-status-mode/${id}`,
@@ -110,6 +116,7 @@ export const {
   useGetRevenueSummaryQuery,
   useGetFeesByStatusQuery,
   useGetFeesSummaryQuery,
+  useGetDashboardFeeSummaryQuery,
   useGetFeesByDateQuery,
   useGetFeesByIdQuery,
   useGetUnpaidFeesQuery,

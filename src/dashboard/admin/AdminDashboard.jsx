@@ -7,6 +7,7 @@ import {
   useGetMonthlyDeparturesQuery,
   useGetClassDepartureStatsQuery,
 } from "../../redux/features/students/studentsApi";
+import { useGetDashboardFeeSummaryQuery } from "../../redux/features/fees/feesApi"; // ✅ Add this
 import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 import CrmDashboard from "./CrmDashboard";
 
@@ -29,7 +30,7 @@ export default function AdminDashboard() {
   const { data: studentsCount, isLoading: isLoadingStudentsCount } =
     useGetStudentCountQuery();
 
-  // New: Monthly tracker data fetching
+  // Monthly tracker data fetching
   const { data: admissionsData, isLoading: isLoadingAdmissions } =
     useGetMonthlyAdmissionsQuery({
       year: selectedYear,
@@ -48,6 +49,13 @@ export default function AdminDashboard() {
       month: selectedMonth,
     });
 
+  // ✅ Fee summary data fetching
+  const { data: feeSummaryData, isLoading: isLoadingFeeSummary } =
+    useGetDashboardFeeSummaryQuery({
+      month: selectedMonth,
+      year: selectedYear,
+    });
+
   // Combine all loading states
   const isLoading =
     isLoadingTeachersCount ||
@@ -56,7 +64,8 @@ export default function AdminDashboard() {
     isLoadingStudentPresence ||
     isLoadingAdmissions ||
     isLoadingDepartures ||
-    isLoadingClassStats;
+    isLoadingClassStats ||
+    isLoadingFeeSummary; // ✅ Add this
 
   if (isLoading) {
     return <LoadingSpinnerDash />;
@@ -70,7 +79,7 @@ export default function AdminDashboard() {
           teachersCount={teachersCount}
           staffPresence={staffPresence}
           studentPresence={studentPresence}
-          // Pass monthly tracker data and filters
+          // Monthly tracker data
           admissionsData={admissionsData}
           departuresData={departuresData}
           classStatsData={classStatsData}
@@ -78,6 +87,8 @@ export default function AdminDashboard() {
           selectedMonth={selectedMonth}
           setSelectedYear={setSelectedYear}
           setSelectedMonth={setSelectedMonth}
+          // ✅ Fee summary data
+          feeSummaryData={feeSummaryData}
         />
       </div>
     </div>

@@ -598,127 +598,137 @@ export default function FeeSettings() {
           </thead>
           <tbody>
             {filteredFamilies?.length > 0 ? (
-              filteredFamilies.flatMap((family, familyIdx) =>
-                family.childrenDocs?.map((student, studentIdx) => (
-                  <tr key={`${family._id}-${student._id}`}>
-                    {studentIdx === 0 && (
-                      <>
-                        <td
-                          rowSpan={family.childrenDocs?.length}
-                          className="border h6 text-center align-middle"
-                        >
-                          {familyIdx + 1}
-                        </td>
-                        <td
-                          rowSpan={family.childrenDocs?.length}
-                          className="border h6 text-center align-middle"
-                        >
-                          {family.name}
-                        </td>
-                      </>
-                    )}
-                    <td className="border h6 text-center align-middle">
-                      <Link
-                        className="text-dark student-link"
-                        to={`/dashboard/admin/view-student/${student?._id}`}
-                      >
-                        {student?.activity === "active" ? student?.name : ""}
-                      </Link>
-                      <br />
-                      {student?.activity === "active"
-                        ? `(${formatDateToDmy(student?.startingDate)})`
-                        : ""}
-                    </td>
-                    {monthsToDisplay.map((month) => {
-                      const status = getPaymentStatus(
-                        student,
-                        month.num,
-                        family.feePayments,
-                      );
-                      return status ? (
-                        <PaymentStatusCell key={month.num} status={status} />
-                      ) : (
-                        <td
-                          key={month.num}
-                          className="text-center align-middle p-1 bg-secondary-subtle"
-                        >
-                          N/A
-                        </td>
-                      );
-                    })}
-                    {studentIdx === 0 && (
-                      <>
-                        <td
-                          className="border h6 text-center align-middle"
-                          rowSpan={family.childrenDocs?.length}
-                        >
-                          {getLastPaymentDate(family.feePayments)}
-                        </td>
+              (() => {
+                let displayCounter = 0;
+                return filteredFamilies.flatMap((family) => {
+                  // Check if this family has any students to display (active or inactive)
+                  const hasAnyStudent = family.childrenDocs?.length > 0;
+                  if (!hasAnyStudent) return [];
 
-                        <td
-                          rowSpan={family.childrenDocs?.length}
-                          className="border h6 text-center align-middle"
+                  // Increment counter for this family (only once per displayed family)
+                  displayCounter++;
+
+                  return family.childrenDocs?.map((student, studentIdx) => (
+                    <tr key={`${family._id}-${student._id}`}>
+                      {studentIdx === 0 && (
+                        <>
+                          <td
+                            rowSpan={family.childrenDocs?.length}
+                            className="border h6 text-center align-middle"
+                          >
+                            {displayCounter}
+                          </td>
+                          <td
+                            rowSpan={family.childrenDocs?.length}
+                            className="border h6 text-center align-middle"
+                          >
+                            {family.name}
+                          </td>
+                        </>
+                      )}
+                      <td className="border h6 text-center align-middle">
+                        <Link
+                          className="text-dark student-link"
+                          to={`/dashboard/admin/view-student/${student?._id}`}
                         >
-                          £
-                          {(() => {
-                            const activeTotal =
-                              family.childrenDocs
-                                ?.filter((s) => s.activity === "active")
-                                .reduce(
-                                  (total, student) =>
-                                    total + (student.monthly_fee || 0),
-                                  0,
-                                ) || 0;
+                          {student?.activity === "active" ? student?.name : ""}
+                        </Link>
+                        <br />
+                        {student?.activity === "active"
+                          ? `(${formatDateToDmy(student?.startingDate)})`
+                          : ""}
+                      </td>
+                      {monthsToDisplay.map((month) => {
+                        const status = getPaymentStatus(
+                          student,
+                          month.num,
+                          family.feePayments,
+                        );
+                        return status ? (
+                          <PaymentStatusCell key={month.num} status={status} />
+                        ) : (
+                          <td
+                            key={month.num}
+                            className="text-center align-middle p-1 bg-secondary-subtle"
+                          >
+                            N/A
+                          </td>
+                        );
+                      })}
+                      {studentIdx === 0 && (
+                        <>
+                          <td
+                            className="border h6 text-center align-middle"
+                            rowSpan={family.childrenDocs?.length}
+                          >
+                            {getLastPaymentDate(family.feePayments)}
+                          </td>
+                          <td
+                            rowSpan={family.childrenDocs?.length}
+                            className="border h6 text-center align-middle"
+                          >
+                            £
+                            {(() => {
+                              const activeTotal =
+                                family.childrenDocs
+                                  ?.filter((s) => s.activity === "active")
+                                  .reduce(
+                                    (total, student) =>
+                                      total + (student.monthly_fee || 0),
+                                    0,
+                                  ) || 0;
 
-                            const discount = family.discount || 0;
-                            const discountedTotal =
-                              activeTotal - (activeTotal * discount) / 100;
+                              const discount = family.discount || 0;
+                              const discountedTotal =
+                                activeTotal - (activeTotal * discount) / 100;
 
-                            return discountedTotal;
-                          })()}
-                        </td>
-
-                        <td
-                          rowSpan={family.childrenDocs?.length}
-                          className="border text-center align-middle"
-                        >
-                          <div className="d-flex flex-column gap-2 justify-content-center align-items-center h-100">
-                            <div className="d-flex gap-2 justify-content-center align-items-center">
-                              <button
-                                className="text-white py-1 px-2 rounded-2"
-                                style={{ backgroundColor: "var(--border2)" }}
-                                onClick={() => handleShow(family._id)}
-                              >
-                                <FaPen />
-                              </button>
-                              <button
-                                className="text-white py-1 px-2 rounded-2"
-                                style={{ backgroundColor: "var(--border2)" }}
-                                onClick={() => handleDelete(family._id)}
-                              >
-                                <FaTrashAlt />
-                              </button>
-                            </div>
+                              return discountedTotal;
+                            })()}
+                          </td>
+                          <td
+                            rowSpan={family.childrenDocs?.length}
+                            className="border text-center align-middle"
+                          >
                             <div className="d-flex flex-column gap-2 justify-content-center align-items-center h-100">
-                              <div className="d-flex gap-1 justify-content-center align-items-center">
+                              <div className="d-flex gap-2 justify-content-center align-items-center">
                                 <button
                                   className="text-white py-1 px-2 rounded-2"
                                   style={{ backgroundColor: "var(--border2)" }}
-                                  onClick={() =>
-                                    handleAdminManualShow(family._id)
-                                  }
+                                  onClick={() => handleShow(family._id)}
                                 >
-                                  Manual
+                                  <FaPen />
+                                </button>
+                                <button
+                                  className="text-white py-1 px-2 rounded-2"
+                                  style={{ backgroundColor: "var(--border2)" }}
+                                  onClick={() => handleDelete(family._id)}
+                                >
+                                  <FaTrashAlt />
                                 </button>
                               </div>
+                              <div className="d-flex flex-column gap-2 justify-content-center align-items-center h-100">
+                                <div className="d-flex gap-1 justify-content-center align-items-center">
+                                  <button
+                                    className="text-white py-1 px-2 rounded-2"
+                                    style={{
+                                      backgroundColor: "var(--border2)",
+                                    }}
+                                    onClick={() =>
+                                      handleAdminManualShow(family._id)
+                                    }
+                                  >
+                                    Manual
+                                  </button>
+                                </div>
+                              </div>
                             </div>
-                          </div>
-                        </td>
-                      </>
-                    )}
-                  </tr>
-                )),
-              )
+                          </td>
+                        </>
+                      )}
+                    </tr>
+                  ));
+                });
+              })()
             ) : (
               <tr>
                 <td
