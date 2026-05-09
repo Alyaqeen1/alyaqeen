@@ -78,35 +78,55 @@ export default function AdminManualPayModal({
 
   // derived list of enrolled student ids for select-all and comparisons
   // derived list of enrolled AND approved student ids for select-all and comparisons
-  const enrolledStudentIds = useMemo(() => {
-    return (
-      enrolledFamily?.childrenDocs
-        ?.filter((s) => s.status === "enrolled" || s.status === "approved")
-        .map((s) => s._id) || []
-    );
-  }, [enrolledFamily]);
+  const eligibleStudentIds = useMemo(() => {
+    if (!enrolledFamily?.childrenDocs) return [];
 
+    return enrolledFamily.childrenDocs
+      .filter((student) => {
+        if (feeType === "admission") {
+          return student.status === "approved";
+        } else if (feeType === "monthly") {
+          return student.status === "enrolled";
+        }
+        return false;
+      })
+      .map((s) => s._id);
+  }, [enrolledFamily, feeType]);
+
+  // Remove the old useEffect and replace with this:
   useEffect(() => {
-    if (enrolledStudentIds.length) {
-      setSelectedStudents(enrolledStudentIds);
+    if (enrolledFamily?.childrenDocs && feeType) {
+      // Select only eligible students based on current payment type
+      const eligibleStudentIds = enrolledFamily.childrenDocs
+        .filter((student) => {
+          if (feeType === "admission") {
+            return student.status === "approved";
+          } else if (feeType === "monthly") {
+            return student.status === "enrolled";
+          }
+          return false;
+        })
+        .map((s) => s._id);
+
+      setSelectedStudents(eligibleStudentIds);
     }
-  }, [enrolledStudentIds]);
+  }, [enrolledFamily, feeType]);
 
   // Handle student selection
   const handleStudentSelection = (studentId) => {
     setSelectedStudents((prev) =>
       prev.includes(studentId)
         ? prev.filter((id) => id !== studentId)
-        : [...prev, studentId]
+        : [...prev, studentId],
     );
   };
 
   // Select/deselect all students (only enrolled ones)
   const toggleAllStudents = () => {
-    if (selectedStudents.length === enrolledStudentIds.length) {
+    if (selectedStudents.length === eligibleStudentIds.length) {
       setSelectedStudents([]);
     } else {
-      setSelectedStudents(enrolledStudentIds.slice());
+      setSelectedStudents(eligibleStudentIds.slice());
     }
   };
 
@@ -114,7 +134,7 @@ export default function AdminManualPayModal({
   const selectedStudentObjects = useMemo(() => {
     return (
       enrolledFamily?.childrenDocs?.filter((student) =>
-        selectedStudents.includes(student._id)
+        selectedStudents.includes(student._id),
       ) || []
     );
   }, [enrolledFamily, selectedStudents]);
@@ -152,7 +172,7 @@ export default function AdminManualPayModal({
             0;
           return sum + Number(fee);
         },
-        0
+        0,
       );
 
       const discountPercent = enrolledFamily?.discount || 0;
@@ -174,13 +194,13 @@ export default function AdminManualPayModal({
   const hasStudentPaidMonth = (feeDoc, studentId, month, year) => {
     if (!feeDoc?.students) return false;
     const s = feeDoc.students.find(
-      (st) => String(st.studentId) === String(studentId)
+      (st) => String(st.studentId) === String(studentId),
     );
     if (!s) return false;
     const mp = (s.monthsPaid || []).find(
       (m) =>
         String(m.month).padStart(2, "0") === String(month).padStart(2, "0") &&
-        String(m.year) === String(year)
+        String(m.year) === String(year),
     );
     // ✅ FIX: Return true if ANY payment exists for this month (even partial)
     return !!(mp && (mp.paid ?? 0) > 0);
@@ -192,7 +212,7 @@ export default function AdminManualPayModal({
     if (!feeDoc?.students) return false;
 
     const studentFee = feeDoc.students.find(
-      (st) => String(st.studentId) === String(studentId)
+      (st) => String(st.studentId) === String(studentId),
     );
     if (!studentFee) return false;
 
@@ -200,7 +220,7 @@ export default function AdminManualPayModal({
     if (feeDoc.paymentType === "admission" && studentFee.payments) {
       const totalPaid = studentFee.payments.reduce(
         (sum, payment) => sum + (payment.amount || 0),
-        0
+        0,
       );
 
       // Consider admission paid if at least the admission fee amount is covered
@@ -219,7 +239,7 @@ export default function AdminManualPayModal({
     const existingAdmissionFees = fees.filter(
       (fee) =>
         String(fee.familyId) === String(familyId) &&
-        fee.paymentType === "admission"
+        fee.paymentType === "admission",
     );
 
     if (existingAdmissionFees.length === 0) return true;
@@ -228,8 +248,8 @@ export default function AdminManualPayModal({
     for (const existingFee of existingAdmissionFees) {
       const hasOverlap = selectedStudentObjects.some((student) =>
         existingFee.students?.some(
-          (s) => String(s.studentId) === String(student._id)
-        )
+          (s) => String(s.studentId) === String(student._id),
+        ),
       );
 
       if (hasOverlap) {
@@ -252,8 +272,8 @@ export default function AdminManualPayModal({
             (fee) =>
               String(fee.familyId) === String(familyId) &&
               fee.paymentType === "admission" &&
-              hasStudentPaidAdmission(fee, student._id)
-          )
+              hasStudentPaidAdmission(fee, student._id),
+          ),
       );
 
       if (studentsWithExistingAdmission.length > 0) {
@@ -271,8 +291,8 @@ export default function AdminManualPayModal({
             String(fee.familyId) === String(familyId) &&
             (String(fee.paymentType) === "monthly" ||
               String(fee.paymentType) === "monthlyOnHold") &&
-            hasStudentPaidMonth(fee, student._id, feeMonth, feeYear)
-        )
+            hasStudentPaidMonth(fee, student._id, feeMonth, feeYear),
+        ),
       );
 
       if (hasExistingPayment) {
@@ -344,7 +364,7 @@ export default function AdminManualPayModal({
 
       if (enteredAmount < totalAdmissionFee) {
         toast.error(
-          `Amount cannot be less than total admission fee (£${totalAdmissionFee}) for ${selectedStudents.length} student(s)`
+          `Amount cannot be less than total admission fee (£${totalAdmissionFee}) for ${selectedStudents.length} student(s)`,
         );
         setIsProcessing(false);
         return;
@@ -359,9 +379,9 @@ export default function AdminManualPayModal({
             String(fee.familyId) === String(familyId) &&
             fee.paymentType === "admission" &&
             fee.students?.some(
-              (s) => String(s.studentId) === String(student._id)
-            )
-        )
+              (s) => String(s.studentId) === String(student._id),
+            ),
+        ),
       );
 
       const studentNames = duplicateStudents.map((s) => s.name).join(", ");
@@ -377,8 +397,8 @@ export default function AdminManualPayModal({
             (fee) =>
               String(fee.familyId) === String(familyId) &&
               fee.paymentType === "admission" &&
-              hasStudentPaidAdmission(fee, student._id)
-          )
+              hasStudentPaidAdmission(fee, student._id),
+          ),
         );
 
         const studentNames = alreadyPaidStudents.map((s) => s.name).join(", ");
@@ -391,15 +411,15 @@ export default function AdminManualPayModal({
               String(fee.familyId) === String(familyId) &&
               (String(fee.paymentType) === "monthly" ||
                 String(fee.paymentType) === "monthlyOnHold") &&
-              hasStudentPaidMonth(fee, student._id, feeMonth, feeYear)
-          )
+              hasStudentPaidMonth(fee, student._id, feeMonth, feeYear),
+          ),
         );
 
         const studentNames = alreadyPaidStudents.map((s) => s.name).join(", ");
         toast.error(
           `Payment already recorded for ${studentNames} for ${
             months[parseInt(feeMonth) - 1]
-          } ${feeYear}`
+          } ${feeYear}`,
         );
       }
       setIsProcessing(false);
@@ -408,7 +428,7 @@ export default function AdminManualPayModal({
 
     if (feeType === "monthly" && isBeforeJoiningMonth) {
       toast.error(
-        "Cannot record payment for months before student's joining month"
+        "Cannot record payment for months before student's joining month",
       );
       setIsProcessing(false);
       return;
@@ -416,7 +436,7 @@ export default function AdminManualPayModal({
 
     if (feeType === "monthly" && isBeforeJoiningMonth) {
       toast.error(
-        "Cannot record payment for months before student's joining month"
+        "Cannot record payment for months before student's joining month",
       );
       setIsProcessing(false);
       return;
@@ -426,7 +446,7 @@ export default function AdminManualPayModal({
       if (feeType === "admission") {
         const admissionFeePerStudent = 20;
         const totalAdmissionNeeded = toTwo(
-          admissionFeePerStudent * selectedStudentObjects.length
+          admissionFeePerStudent * selectedStudentObjects.length,
         );
         const totalPayNow = toTwo(Number(payNow));
 
@@ -441,7 +461,7 @@ export default function AdminManualPayModal({
             student.monthly_fee ??
               student.monthlyFee ??
               student.monthlyFeeAmount ??
-              0
+              0,
           );
 
           const discountedFee = discountPercent
@@ -469,7 +489,7 @@ export default function AdminManualPayModal({
         // Expected total = sum of admission + discounted monthly for all students
         const expectedTotalRaw = studentsFees.reduce(
           (sum, s) => sum + s.admissionFee + s.discountedFee,
-          0
+          0,
         );
         const expectedTotal = toTwo(expectedTotalRaw);
 
@@ -489,10 +509,10 @@ export default function AdminManualPayModal({
           // First priority: Admission fees (fixed £20 per student)
           const totalAdmissionAllocated = Math.min(
             totalPayNow,
-            totalAdmissionNeeded
+            totalAdmissionNeeded,
           );
           const remainingAfterAdmission = toTwo(
-            totalPayNow - totalAdmissionAllocated
+            totalPayNow - totalAdmissionAllocated,
           );
 
           // Allocate admission fees equally (each student gets their £20 if possible)
@@ -504,7 +524,7 @@ export default function AdminManualPayModal({
           // Allocate remaining amount to monthly fees proportionally
           const totalMonthlyNeeded = studentsFees.reduce(
             (sum, s) => sum + s.discountedFee,
-            0
+            0,
           );
 
           allocations = studentsFees.map((student) => {
@@ -512,7 +532,7 @@ export default function AdminManualPayModal({
               totalMonthlyNeeded > 0
                 ? toTwo(
                     (student.discountedFee / totalMonthlyNeeded) *
-                      remainingAfterAdmission
+                      remainingAfterAdmission,
                   )
                 : 0;
 
@@ -525,10 +545,10 @@ export default function AdminManualPayModal({
 
           // Adjust for rounding errors
           let allocatedMonthlySum = toTwo(
-            allocations.reduce((sum, a) => sum + a.paidMonthly, 0)
+            allocations.reduce((sum, a) => sum + a.paidMonthly, 0),
           );
           let monthlyRemainder = toTwo(
-            remainingAfterAdmission - allocatedMonthlySum
+            remainingAfterAdmission - allocatedMonthlySum,
           );
 
           if (monthlyRemainder > 0) {
@@ -540,11 +560,11 @@ export default function AdminManualPayModal({
               i++
             ) {
               const maxCanAdd = toTwo(
-                allocations[i].discountedFee - allocations[i].paidMonthly
+                allocations[i].discountedFee - allocations[i].paidMonthly,
               );
               const toAdd = Math.min(monthlyRemainder, maxCanAdd, 0.01); // Add at most 1p at a time
               allocations[i].paidMonthly = toTwo(
-                allocations[i].paidMonthly + toAdd
+                allocations[i].paidMonthly + toAdd,
               );
               monthlyRemainder = toTwo(monthlyRemainder - toAdd);
             }
@@ -602,12 +622,12 @@ export default function AdminManualPayModal({
         const allocationSummary = allocations
           .map(
             (s) =>
-              `${s.name}: £${s.paidAdmission} (admission) + £${s.paidMonthly} (monthly)`
+              `${s.name}: £${s.paidAdmission} (admission) + £${s.paidMonthly} (monthly)`,
           )
           .join("; ");
 
         toast.success(
-          `Admission payment of £${totalPayNow} recorded successfully! Allocation: ${allocationSummary}`
+          `Admission payment of £${totalPayNow} recorded successfully! Allocation: ${allocationSummary}`,
         );
 
         // Update student statuses to enrolled only if full admission is paid
@@ -617,8 +637,8 @@ export default function AdminManualPayModal({
               updateStudentStatus({
                 id: student._id,
                 status: "enrolled",
-              }).unwrap()
-            )
+              }).unwrap(),
+            ),
           );
         }
       } else {
@@ -635,7 +655,7 @@ export default function AdminManualPayModal({
             student.monthly_fee ??
               student.monthlyFee ??
               student.monthlyFeeAmount ??
-              0
+              0,
           );
 
           const discountedFee = discountPercent
@@ -664,18 +684,18 @@ export default function AdminManualPayModal({
           allocations = studentsFees.map((s) => ({
             ...s,
             rawPaid: toTwo(
-              expectedTotal > 0 ? (s.fee / expectedTotal) * parsedPayNow : 0
+              expectedTotal > 0 ? (s.fee / expectedTotal) * parsedPayNow : 0,
             ),
           }));
 
           // round down to cents
           allocations.forEach(
-            (a) => (a.paid = Math.floor(a.rawPaid * 100) / 100)
+            (a) => (a.paid = Math.floor(a.rawPaid * 100) / 100),
           );
 
           // remainder cents
           let allocatedSum = toTwo(
-            allocations.reduce((sum, a) => sum + a.paid, 0)
+            allocations.reduce((sum, a) => sum + a.paid, 0),
           );
           let remainderCents = Math.round((parsedPayNow - allocatedSum) * 100);
 
@@ -684,7 +704,7 @@ export default function AdminManualPayModal({
               (a, b) =>
                 b.rawPaid -
                 Math.floor(b.rawPaid * 100) / 100 -
-                (a.rawPaid - Math.floor(a.rawPaid * 100) / 100)
+                (a.rawPaid - Math.floor(a.rawPaid * 100) / 100),
             );
             for (let i = 0; i < allocations.length && remainderCents > 0; i++) {
               allocations[i].paid = toTwo((allocations[i].paid || 0) + 0.01);
@@ -696,7 +716,7 @@ export default function AdminManualPayModal({
           allocations.sort(
             (a, b) =>
               studentsFees.findIndex((s) => s.studentId === a.studentId) -
-              studentsFees.findIndex((s) => s.studentId === b.studentId)
+              studentsFees.findIndex((s) => s.studentId === b.studentId),
           );
         }
 
@@ -738,10 +758,10 @@ export default function AdminManualPayModal({
         if (data?.insertedId) {
           toast.success(
             `Monthly payment of $${toTwo(
-              parsedPayNow
+              parsedPayNow,
             )} recorded successfully for ${
               selectedStudentObjects?.length
-            } student(s)`
+            } student(s)`,
           );
         }
       }
@@ -763,7 +783,7 @@ export default function AdminManualPayModal({
 
   const years = Array.from(
     { length: 5 },
-    (_, i) => new Date().getFullYear() - 2 + i
+    (_, i) => new Date().getFullYear() - 2 + i,
   );
   const months = [
     "January",
@@ -827,7 +847,7 @@ export default function AdminManualPayModal({
                             id="selectAllStudents"
                             checked={
                               selectedStudents.length ===
-                              enrolledStudentIds.length
+                              eligibleStudentIds.length
                             }
                             onChange={toggleAllStudents}
                           />
@@ -843,52 +863,78 @@ export default function AdminManualPayModal({
                           className="student-checkboxes"
                           style={{ maxHeight: "200px", overflowY: "auto" }}
                         >
-                          {enrolledFamily.childrenDocs.map((student) => (
-                            <div key={student._id} className="form-check">
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                id={`student-${student._id}`}
-                                checked={selectedStudents.includes(student._id)}
-                                onChange={() =>
-                                  handleStudentSelection(student._id)
-                                }
-                                disabled={
-                                  student.status !== "enrolled" &&
-                                  student.status !== "approved"
-                                } // Allow both enrolled and approved
-                              />
-                              <label
-                                className="form-check-label"
-                                htmlFor={`student-${student._id}`}
-                                style={{
-                                  color:
-                                    student.status !== "enrolled" &&
-                                    student.status !== "approved"
+                          {enrolledFamily.childrenDocs.map((student) => {
+                            // Determine if student should be disabled for certain payment types
+                            const isApproved = student.status === "approved";
+                            const isEnrolled = student.status === "enrolled";
+
+                            // For ADMISSION payment: only approved students can be selected
+                            // For MONTHLY payment: only enrolled students can be selected
+                            const isDisabledForCurrentPaymentType =
+                              (feeType === "admission" && !isApproved) ||
+                              (feeType === "monthly" && !isEnrolled);
+
+                            const showWarning =
+                              (feeType === "admission" && isEnrolled) ||
+                              (feeType === "monthly" && isApproved);
+
+                            return (
+                              <div key={student._id} className="form-check">
+                                <input
+                                  className="form-check-input"
+                                  type="checkbox"
+                                  id={`student-${student._id}`}
+                                  checked={selectedStudents.includes(
+                                    student._id,
+                                  )}
+                                  onChange={() =>
+                                    handleStudentSelection(student._id)
+                                  }
+                                  disabled={isDisabledForCurrentPaymentType}
+                                />
+                                <label
+                                  className="form-check-label"
+                                  htmlFor={`student-${student._id}`}
+                                  style={{
+                                    color: isDisabledForCurrentPaymentType
                                       ? "#6c757d"
                                       : "inherit",
-                                  cursor:
-                                    student.status !== "enrolled" &&
-                                    student.status !== "approved"
+                                    cursor: isDisabledForCurrentPaymentType
                                       ? "not-allowed"
                                       : "pointer",
-                                }}
-                              >
-                                {student.name}
-                                {student.status === "approved" &&
-                                  " (Approved - Not enrolled yet)"}
-                                {student.status !== "enrolled" &&
-                                  student.status !== "approved" &&
-                                  " (Not enrolled)"}
-                              </label>
-                            </div>
-                          ))}
+                                  }}
+                                >
+                                  {student.name}
+                                  {isApproved && (
+                                    <span className="badge bg-info text-dark ms-2">
+                                      Approved - Admission Only
+                                    </span>
+                                  )}
+                                  {isEnrolled && (
+                                    <span className="badge bg-success ms-2">
+                                      Enrolled - Monthly Only
+                                    </span>
+                                  )}
+                                </label>
+                                {showWarning && (
+                                  <small className="text-warning d-block">
+                                    {feeType === "admission" &&
+                                      isEnrolled &&
+                                      "⚠️ Enrolled students cannot take admission payment. Use Monthly payment type."}
+                                    {feeType === "monthly" &&
+                                      isApproved &&
+                                      "⚠️ Approved students must pay Admission first, then they become enrolled."}
+                                  </small>
+                                )}
+                              </div>
+                            );
+                          })}
                         </div>
                       </div>
                     )}
                     <small className="text-muted">
                       Selected: {selectedStudents.length} of{" "}
-                      {enrolledStudentIds.length} students
+                      {eligibleStudentIds.length} students
                     </small>
                   </div>
                 </div>
@@ -1055,15 +1101,15 @@ export default function AdminManualPayModal({
                           paymentStatus === "paid"
                             ? "text-success"
                             : paymentStatus === "partial"
-                            ? "text-warning"
-                            : "text-danger"
+                              ? "text-warning"
+                              : "text-danger"
                         }
                       >
                         {paymentStatus.toUpperCase()}
                       </span>
                       {paymentStatus === "partial" &&
                         ` (£${(expectedTotal - toTwo(Number(payNow))).toFixed(
-                          2
+                          2,
                         )} remaining)`}
                     </small>
                   </div>
