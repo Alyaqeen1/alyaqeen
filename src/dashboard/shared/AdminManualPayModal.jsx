@@ -78,39 +78,19 @@ export default function AdminManualPayModal({
 
   // derived list of enrolled student ids for select-all and comparisons
   // derived list of enrolled AND approved student ids for select-all and comparisons
-  const eligibleStudentIds = useMemo(() => {
-    if (!enrolledFamily?.childrenDocs) return [];
+  const enrolledStudentIds = useMemo(() => {
+    return (
+      enrolledFamily?.childrenDocs
+        ?.filter((s) => s.status === "enrolled" || s.status === "approved")
+        .map((s) => s._id) || []
+    );
+  }, [enrolledFamily]);
 
-    return enrolledFamily.childrenDocs
-      .filter((student) => {
-        if (feeType === "admission") {
-          return student.status === "approved";
-        } else if (feeType === "monthly") {
-          return student.status === "enrolled";
-        }
-        return false;
-      })
-      .map((s) => s._id);
-  }, [enrolledFamily, feeType]);
-
-  // Remove the old useEffect and replace with this:
   useEffect(() => {
-    if (enrolledFamily?.childrenDocs && feeType) {
-      // Select only eligible students based on current payment type
-      const eligibleStudentIds = enrolledFamily.childrenDocs
-        .filter((student) => {
-          if (feeType === "admission") {
-            return student.status === "approved";
-          } else if (feeType === "monthly") {
-            return student.status === "enrolled";
-          }
-          return false;
-        })
-        .map((s) => s._id);
-
-      setSelectedStudents(eligibleStudentIds);
+    if (enrolledStudentIds.length) {
+      setSelectedStudents(enrolledStudentIds);
     }
-  }, [enrolledFamily, feeType]);
+  }, [enrolledStudentIds]);
 
   // Handle student selection
   const handleStudentSelection = (studentId) => {
@@ -123,10 +103,10 @@ export default function AdminManualPayModal({
 
   // Select/deselect all students (only enrolled ones)
   const toggleAllStudents = () => {
-    if (selectedStudents.length === eligibleStudentIds.length) {
+    if (selectedStudents.length === enrolledStudentIds.length) {
       setSelectedStudents([]);
     } else {
-      setSelectedStudents(eligibleStudentIds.slice());
+      setSelectedStudents(enrolledStudentIds.slice());
     }
   };
 
@@ -847,7 +827,7 @@ export default function AdminManualPayModal({
                             id="selectAllStudents"
                             checked={
                               selectedStudents.length ===
-                              eligibleStudentIds.length
+                              enrolledStudentIds.length
                             }
                             onChange={toggleAllStudents}
                           />
@@ -863,78 +843,52 @@ export default function AdminManualPayModal({
                           className="student-checkboxes"
                           style={{ maxHeight: "200px", overflowY: "auto" }}
                         >
-                          {enrolledFamily.childrenDocs.map((student) => {
-                            // Determine if student should be disabled for certain payment types
-                            const isApproved = student.status === "approved";
-                            const isEnrolled = student.status === "enrolled";
-
-                            // For ADMISSION payment: only approved students can be selected
-                            // For MONTHLY payment: only enrolled students can be selected
-                            const isDisabledForCurrentPaymentType =
-                              (feeType === "admission" && !isApproved) ||
-                              (feeType === "monthly" && !isEnrolled);
-
-                            const showWarning =
-                              (feeType === "admission" && isEnrolled) ||
-                              (feeType === "monthly" && isApproved);
-
-                            return (
-                              <div key={student._id} className="form-check">
-                                <input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  id={`student-${student._id}`}
-                                  checked={selectedStudents.includes(
-                                    student._id,
-                                  )}
-                                  onChange={() =>
-                                    handleStudentSelection(student._id)
-                                  }
-                                  disabled={isDisabledForCurrentPaymentType}
-                                />
-                                <label
-                                  className="form-check-label"
-                                  htmlFor={`student-${student._id}`}
-                                  style={{
-                                    color: isDisabledForCurrentPaymentType
+                          {enrolledFamily.childrenDocs.map((student) => (
+                            <div key={student._id} className="form-check">
+                              <input
+                                className="form-check-input"
+                                type="checkbox"
+                                id={`student-${student._id}`}
+                                checked={selectedStudents.includes(student._id)}
+                                onChange={() =>
+                                  handleStudentSelection(student._id)
+                                }
+                                disabled={
+                                  student.status !== "enrolled" &&
+                                  student.status !== "approved"
+                                } // Allow both enrolled and approved
+                              />
+                              <label
+                                className="form-check-label"
+                                htmlFor={`student-${student._id}`}
+                                style={{
+                                  color:
+                                    student.status !== "enrolled" &&
+                                    student.status !== "approved"
                                       ? "#6c757d"
                                       : "inherit",
-                                    cursor: isDisabledForCurrentPaymentType
+                                  cursor:
+                                    student.status !== "enrolled" &&
+                                    student.status !== "approved"
                                       ? "not-allowed"
                                       : "pointer",
-                                  }}
-                                >
-                                  {student.name}
-                                  {isApproved && (
-                                    <span className="badge bg-info text-dark ms-2">
-                                      Approved - Admission Only
-                                    </span>
-                                  )}
-                                  {isEnrolled && (
-                                    <span className="badge bg-success ms-2">
-                                      Enrolled - Monthly Only
-                                    </span>
-                                  )}
-                                </label>
-                                {showWarning && (
-                                  <small className="text-warning d-block">
-                                    {feeType === "admission" &&
-                                      isEnrolled &&
-                                      "⚠️ Enrolled students cannot take admission payment. Use Monthly payment type."}
-                                    {feeType === "monthly" &&
-                                      isApproved &&
-                                      "⚠️ Approved students must pay Admission first, then they become enrolled."}
-                                  </small>
-                                )}
-                              </div>
-                            );
-                          })}
+                                }}
+                              >
+                                {student.name}
+                                {student.status === "approved" &&
+                                  " (Approved - Not enrolled yet)"}
+                                {student.status !== "enrolled" &&
+                                  student.status !== "approved" &&
+                                  " (Not enrolled)"}
+                              </label>
+                            </div>
+                          ))}
                         </div>
                       </div>
                     )}
                     <small className="text-muted">
                       Selected: {selectedStudents.length} of{" "}
-                      {eligibleStudentIds.length} students
+                      {enrolledStudentIds.length} students
                     </small>
                   </div>
                 </div>
