@@ -63,7 +63,7 @@ export const attendancesApi = apiSlice.injectEndpoints({
 
         return `/attendances/filtered?${params.toString()}`;
       },
-      providesTags: ["Attendance"],
+      providesTags: ["Attendance", "Merit"],
     }),
     addAttendance: builder.mutation({
       query: (attendanceData) => ({

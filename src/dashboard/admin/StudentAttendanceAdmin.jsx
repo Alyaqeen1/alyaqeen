@@ -4,6 +4,8 @@ import {
   FaArrowRight,
   FaCircle,
   FaTrashAlt,
+  FaStar,
+  FaExclamationTriangle,
 } from "react-icons/fa";
 import {
   format,
@@ -30,24 +32,422 @@ import {
   usePresentAllStudentsMutation,
   useRemoveAllAttendanceMutation,
 } from "../../redux/features/attendances/attendancesApi";
+import { useAddMeritMutation } from "../../redux/features/merits/meritsApi";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 import { useGetHolidaysQuery } from "../../redux/features/holidays/holidaysApi";
 import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 
-const dayMap = {
-  weekdays: [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Saturday", //remove this after ramadan
-    "Sunday", //remove this after ramadan
-  ],
-  weekend: ["Saturday", "Sunday"],
+// Merit/Demerit Modal Component (same as before)
+const MeritDemeritModal = ({
+  isOpen,
+  onClose,
+  student,
+  teacherId,
+  onSuccess,
+}) => {
+  const [selectedType, setSelectedType] = useState("merit");
+  const [selectedReason, setSelectedReason] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [addMerit] = useAddMeritMutation();
+
+  // Behavior options (Merits)
+  const behaviorOptions = [
+    { label: "Excellent Homework (1)", value: "Excellent Homework", points: 1 },
+    {
+      label: "Excellent Classwork (1)",
+      value: "Excellent Classwork",
+      points: 1,
+    },
+    { label: "Excellent Conduct (2)", value: "Excellent Conduct", points: 2 },
+    {
+      label: "Excellent Punctuality (2)",
+      value: "Excellent Punctuality",
+      points: 2,
+    },
+    { label: "Excellent Manners (2)", value: "Excellent Manners", points: 2 },
+    { label: "Correct Equipment (2)", value: "Correct Equipment", points: 2 },
+    {
+      label: "Helping students with sabaq (3)",
+      value: "Helping students with sabaq",
+      points: 3,
+    },
+    { label: "Helping Staff (3)", value: "Helping Staff", points: 3 },
+    {
+      label: "Perfect in all aspects (4)",
+      value: "Perfect in all aspects",
+      points: 4,
+    },
+    {
+      label: "Treating staff respectfully (2)",
+      value: "Treating staff respectfully",
+      points: 2,
+    },
+  ];
+
+  // Incident categories (Demerits)
+  const incidentCategories = {
+    lesson_class: [
+      {
+        label: "Not Reading loudly (-1)",
+        value: "Not Reading loudly",
+        points: -1,
+      },
+      {
+        label: "Not Reciting/Practicing when told to (-2)",
+        value: "Not Reciting/Practicing when told to",
+        points: -2,
+      },
+      {
+        label: "Not Memorizing Duas (-2)",
+        value: "Not Memorizing Duas",
+        points: -2,
+      },
+      {
+        label: "Not paying attention when the lesson explained (-2)",
+        value: "Not paying attention when the lesson explained",
+        points: -2,
+      },
+      {
+        label: "Of task not focussing (-1)",
+        value: "Of task not focussing",
+        points: -1,
+      },
+      {
+        label: "Quran/Book Disruption (-1)",
+        value: "Quran/Book Disruption",
+        points: -1,
+      },
+      { label: "No Book (-2)", value: "No Book", points: -2 },
+      {
+        label: "No Equipment/Stationary (-1)",
+        value: "No Equipment/Stationary",
+        points: -1,
+      },
+      { label: "No Homework (-1)", value: "No Homework", points: -1 },
+      { label: "Inadequate Work (-2)", value: "Inadequate Work", points: -2 },
+      {
+        label: "Poor / Inadequate Uniform (-2)",
+        value: "Poor / Inadequate Uniform",
+        points: -2,
+      },
+      {
+        label: "Moving seats without permission (-1)",
+        value: "Moving seats without permission",
+        points: -1,
+      },
+    ],
+    misbehavior: [
+      {
+        label: "Disrespecting to anyone (-1)",
+        value: "Disrespecting to anyone",
+        points: -1,
+      },
+      {
+        label: "Bad behavior (Disruption) (-1)",
+        value: "Bad behavior (Disruption)",
+        points: -1,
+      },
+      {
+        label: "Shouting in Corridor (-1)",
+        value: "Shouting in Corridor",
+        points: -1,
+      },
+      {
+        label: "Dishonesty/Cheating (-3)",
+        value: "Dishonesty/Cheating",
+        points: -3,
+      },
+      { label: "Rude to staff (-3)", value: "Rude to staff", points: -3 },
+      {
+        label: "Answering back to the teacher (-3)",
+        value: "Answering back to the teacher",
+        points: -3,
+      },
+      {
+        label: "Promoting bad behaviour (-4)",
+        value: "Promoting bad behaviour",
+        points: -4,
+      },
+    ],
+    safety: [
+      { label: "Shoe Safety (-2)", value: "Shoe Safety", points: -2 },
+      {
+        label: "Bag Safety (Bags stored in an unsafe place) (-1)",
+        value: "Bag Safety (Bags stored in an unsafe place)",
+        points: -1,
+      },
+      {
+        label: "Bringing fizzy drinks (-1)",
+        value: "Bringing fizzy drinks",
+        points: -1,
+      },
+      { label: "Out of Bounds (-2)", value: "Out of Bounds", points: -2 },
+      { label: "Play fighting (-2)", value: "Play fighting", points: -2 },
+      {
+        label: "Running in Corridor (-2)",
+        value: "Running in Corridor",
+        points: -2,
+      },
+      {
+        label: "Misbehaving in Corridor (Disruption) (-2)",
+        value: "Misbehaving in Corridor (Disruption)",
+        points: -2,
+      },
+      {
+        label: "Disruption Outside Academy (-2)",
+        value: "Disruption Outside Academy",
+        points: -2,
+      },
+      {
+        label: "Using a Mobile phone (-5)",
+        value: "Using a Mobile phone",
+        points: -5,
+      },
+    ],
+    punctuality: [
+      { label: "Late to Class (-2)", value: "Late to Class", points: -2 },
+      { label: "Late to Salaah (-2)", value: "Late to Salaah", points: -2 },
+      { label: "Late to Academy (-1)", value: "Late to Academy", points: -1 },
+      {
+        label: "Non Attendance to Detention (-2)",
+        value: "Non Attendance to Detention",
+        points: -2,
+      },
+    ],
+    bullying: [
+      { label: "Name Calling (-2)", value: "Name Calling", points: -2 },
+      {
+        label: "Verbal harassment or Swearing (-5)",
+        value: "Verbal harassment or Swearing",
+        points: -5,
+      },
+      {
+        label: "Emotional bullying (-5)",
+        value: "Emotional bullying",
+        points: -5,
+      },
+      { label: "Group bullying (-4)", value: "Group bullying", points: -4 },
+      {
+        label: "Fighting around in class (-5)",
+        value: "Fighting around in class",
+        points: -5,
+      },
+      {
+        label: "Physical violence or Fighting (-10)",
+        value: "Physical violence or Fighting",
+        points: -10,
+      },
+    ],
+    off_task: [
+      {
+        label: "Not Following Instruction (-2)",
+        value: "Not Following Instruction",
+        points: -2,
+      },
+      {
+        label: "Eating in lesson time (-1)",
+        value: "Eating in lesson time",
+        points: -1,
+      },
+      { label: "Chewing Gum (-1)", value: "Chewing Gum", points: -1 },
+      {
+        label: "Breaktime Disruption (-1)",
+        value: "Breaktime Disruption",
+        points: -1,
+      },
+      {
+        label: "Salaah Disruption (-1)",
+        value: "Salaah Disruption",
+        points: -1,
+      },
+      {
+        label: "Damage the Property/Desk or bench (-4)",
+        value: "Damage the Property/Desk or bench",
+        points: -4,
+      },
+    ],
+  };
+
+  const handleSubmit = async () => {
+    if (!selectedReason) {
+      toast.error("Please select a reason");
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    let payload;
+    if (selectedType === "merit") {
+      const merit = behaviorOptions.find((b) => b.value === selectedReason);
+      payload = {
+        student_id: student._id,
+        teacher_id: teacherId,
+        behavior: selectedReason,
+        incident: "",
+        merit_points: merit?.points || 0,
+        date: new Date().toISOString(),
+      };
+    } else {
+      let incidentPoints = 0;
+      for (const category in incidentCategories) {
+        const incident = incidentCategories[category].find(
+          (i) => i.value === selectedReason,
+        );
+        if (incident) {
+          incidentPoints = incident.points;
+          break;
+        }
+      }
+      payload = {
+        student_id: student._id,
+        teacher_id: teacherId,
+        behavior: "",
+        incident: selectedReason,
+        merit_points: incidentPoints,
+        date: new Date().toISOString(),
+      };
+    }
+
+    try {
+      const data = await addMerit(payload).unwrap();
+      if (data?.insertedId) {
+        toast.success(
+          `${selectedType === "merit" ? "Merit" : "Demerit"} given successfully!`,
+        );
+        onSuccess();
+        onClose();
+        setSelectedReason("");
+        setSelectedType("merit");
+      }
+    } catch (error) {
+      console.error("Error saving merit/demerit:", error);
+      toast.error("Failed to submit");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div
+      className="modal show d-block"
+      tabIndex="-1"
+      style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+    >
+      <div className="modal-dialog modal-dialog-centered modal-lg">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h5 className="modal-title">
+              {selectedType === "merit" ? "Give Merit to" : "Give Demerit to"}{" "}
+              {student?.name}
+            </h5>
+            <button
+              type="button"
+              className="btn-close"
+              onClick={onClose}
+            ></button>
+          </div>
+          <div className="modal-body">
+            <div className="mb-3">
+              <label className="form-label fw-bold">Type</label>
+              <div className="d-flex gap-3">
+                <button
+                  className={`btn ${selectedType === "merit" ? "btn-success" : "btn-outline-success"}`}
+                  onClick={() => {
+                    setSelectedType("merit");
+                    setSelectedReason("");
+                  }}
+                >
+                  <FaStar className="me-1" /> Merit (Positive)
+                </button>
+                <button
+                  className={`btn ${selectedType === "demerit" ? "btn-danger" : "btn-outline-danger"}`}
+                  onClick={() => {
+                    setSelectedType("demerit");
+                    setSelectedReason("");
+                  }}
+                >
+                  <FaExclamationTriangle className="me-1" /> Demerit (Negative)
+                </button>
+              </div>
+            </div>
+
+            <div className="mb-3">
+              <label className="form-label fw-bold">
+                {selectedType === "merit"
+                  ? "Select Behavior"
+                  : "Select Incident"}
+              </label>
+              {selectedType === "merit" ? (
+                <select
+                  className="form-select"
+                  value={selectedReason}
+                  onChange={(e) => setSelectedReason(e.target.value)}
+                >
+                  <option value="">Choose behavior...</option>
+                  {behaviorOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <div className="row">
+                  {Object.entries(incidentCategories).map(
+                    ([category, incidents]) => (
+                      <div key={category} className="col-md-6 mb-3">
+                        <label className="form-label text-capitalize fw-bold">
+                          {category.replace("_", " ")}
+                        </label>
+                        <select
+                          className="form-select"
+                          value={selectedReason}
+                          onChange={(e) => setSelectedReason(e.target.value)}
+                        >
+                          <option value="">
+                            Select from {category.replace("_", " ")}...
+                          </option>
+                          {incidents.map((incident) => (
+                            <option key={incident.value} value={incident.value}>
+                              {incident.label}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    ),
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="modal-footer">
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={onClose}
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              className={`btn ${selectedType === "merit" ? "btn-success" : "btn-danger"}`}
+              onClick={handleSubmit}
+              disabled={isSubmitting || !selectedReason}
+            >
+              {isSubmitting
+                ? "Submitting..."
+                : `Give ${selectedType === "merit" ? "Merit" : "Demerit"}`}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 };
 
-// Safe format function to prevent invalid date errors - moved to top
+// Safe format function
 const safeFormat = (date, formatStr) => {
   if (!date || !isValid(date)) return "Invalid Date";
   try {
@@ -58,6 +458,18 @@ const safeFormat = (date, formatStr) => {
   }
 };
 
+const dayMap = {
+  weekdays: [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Saturday",
+    "Sunday",
+  ],
+  weekend: ["Saturday", "Sunday"],
+};
+
 export default function StudentAttendanceAdmin() {
   /* ─────────────────── state for filters ─────────────────── */
   const [department, setDepartment] = useState("");
@@ -65,6 +477,12 @@ export default function StudentAttendanceAdmin() {
   const [time, setTime] = useState("");
   const [classId, setClassId] = useState("");
   const [weekOffset, setWeekOffset] = useState(0);
+
+  // Modal state
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedStudent, setSelectedStudent] = useState(null);
+  // For admin, use a default teacher ID or allow selection
+  const [selectedTeacherId, setSelectedTeacherId] = useState("");
 
   // Track initial load vs real-time updates
   const [isInitialLoading, setIsInitialLoading] = useState(true);
@@ -117,13 +535,11 @@ export default function StudentAttendanceAdmin() {
     [weekOffset],
   );
 
-  // Get all days of the week
   const allWeekDates = useMemo(
     () => Array.from({ length: 7 }).map((_, idx) => addDays(baseMonday, idx)),
     [baseMonday],
   );
 
-  // Filter to only show days for the selected session
   const weekDates = useMemo(
     () =>
       allWeekDates.filter((date) => {
@@ -133,10 +549,8 @@ export default function StudentAttendanceAdmin() {
     [allWeekDates, session],
   );
 
-  // Get date range for the current week view
   const dateRange = useMemo(() => {
     if (weekDates.length === 0) return { startDate: "", endDate: "" };
-
     const dates = weekDates.map((date) => safeFormat(date, "yyyy-MM-dd"));
     return {
       startDate: dates[0],
@@ -144,33 +558,34 @@ export default function StudentAttendanceAdmin() {
     };
   }, [weekDates]);
 
-  // Get student IDs for filtered query
-  const studentIds = useMemo(() => {
-    return students.map((student) => student._id);
-  }, [students]);
-
-  // Check if all filters are selected
+  const studentIds = useMemo(
+    () => students.map((student) => student._id),
+    [students],
+  );
   const areAllFiltersSelected = department && session && time && classId;
 
-  // Fetch only the necessary attendance data
+  // Fetch attendance with merit stats
   const {
-    data: attendances = [],
+    data: attendanceData = { attendance: [], meritStats: {} },
     isLoading: isLoadingAttendance,
     isFetching: isFetchingAttendance,
+    refetch: refetchAttendance,
   } = useGetFilteredAttendancesQuery(
     areAllFiltersSelected && studentIds.length > 0 && dateRange.startDate
       ? {
           studentIds: studentIds.join(","),
           startDate: dateRange.startDate,
           endDate: dateRange.endDate,
-          classId: classId, // Add classId to query
+          classId: classId,
         }
       : skipToken,
     {
-      // Skip refetching on focus to prevent unnecessary loading states
       refetchOnFocus: false,
     },
   );
+
+  const attendances = attendanceData.attendance || [];
+  const meritStats = attendanceData.meritStats || {};
 
   // Bulk attendance mutations
   const [presentAllStudents] = usePresentAllStudentsMutation();
@@ -181,7 +596,7 @@ export default function StudentAttendanceAdmin() {
   const [updateAttendance] = useUpdateAttendanceMutation();
   const [deleteAttendance] = useDeleteAttendanceMutation();
 
-  // Effect to track initial loading state only when filters change
+  // Effect to track initial loading state
   useEffect(() => {
     const currentFilters = { department, session, time, classId, weekOffset };
     const filtersChanged =
@@ -196,7 +611,6 @@ export default function StudentAttendanceAdmin() {
       prevFilters.current = currentFilters;
     }
 
-    // Only set loading to false when we have all the data and no ongoing operations
     if (
       areAllFiltersSelected &&
       !isFetchingGroup &&
@@ -223,28 +637,18 @@ export default function StudentAttendanceAdmin() {
     isLoadingAttendance,
   ]);
 
-  // Check if current view is the current week
   const isCurrentWeek = isSameWeek(baseMonday, new Date(), { weekStartsOn: 1 });
-
-  // Get week display text safely
   const weekDisplayText = useMemo(() => {
     if (weekDates.length === 0) return "No dates to display";
-
     const firstDate = weekDates[0];
     const lastDate = weekDates[weekDates.length - 1];
-
     if (!firstDate || !lastDate) return "Invalid dates";
-
-    return `${safeFormat(firstDate, "MMM dd")} - ${safeFormat(
-      lastDate,
-      "MMM dd, yyyy",
-    )}`;
+    return `${safeFormat(firstDate, "MMM dd")} - ${safeFormat(lastDate, "MMM dd, yyyy")}`;
   }, [weekDates]);
 
-  /* ─────────────────── local UI state for hover ─────────────────── */
   const [hoverKey, setHoverKey] = useState(null);
 
-  /* ─────────────────── CRUD helpers ─────────────────── */
+  /* ─────────────────── CRUD helpers for attendance ─────────────────── */
   const saveStatus = async (studentId, dateISO, status) => {
     const cellKey = `${studentId}-${dateISO}`;
     setLoadingCells((prev) => new Set(prev).add(cellKey));
@@ -259,6 +663,7 @@ export default function StudentAttendanceAdmin() {
       }).unwrap();
       if (data?.insertedId) {
         toast.success(`${status} attendance given`);
+        refetchAttendance(); // Refresh data after change
       }
     } catch (e) {
       console.error("Error saving attendance:", e);
@@ -280,6 +685,7 @@ export default function StudentAttendanceAdmin() {
       const data = await updateAttendance({ id: recordId, status }).unwrap();
       if (data?.modifiedCount) {
         toast.success(`updated to ${status}`);
+        refetchAttendance(); // Refresh data after change
       }
     } catch (e) {
       console.error("Error updating attendance:", e);
@@ -294,8 +700,6 @@ export default function StudentAttendanceAdmin() {
   };
 
   const removeStatus = async (recordId, studentId, dateISO) => {
-    const cellKey = `${studentId}-${dateISO}`;
-
     Swal.fire({
       title: "Are you sure?",
       icon: "warning",
@@ -305,6 +709,7 @@ export default function StudentAttendanceAdmin() {
       confirmButtonText: "Yes, delete it!",
     }).then(async (result) => {
       if (result.isConfirmed) {
+        const cellKey = `${studentId}-${dateISO}`;
         setLoadingCells((prev) => new Set(prev).add(cellKey));
         try {
           await deleteAttendance(recordId).unwrap();
@@ -313,6 +718,7 @@ export default function StudentAttendanceAdmin() {
             text: "Your Attendance has been deleted.",
             icon: "success",
           });
+          refetchAttendance(); // Refresh data after change
         } catch (e) {
           console.error("Error deleting attendance:", e);
           toast.error("Failed to delete attendance");
@@ -336,9 +742,7 @@ export default function StudentAttendanceAdmin() {
 
     Swal.fire({
       title: "Mark All as Present?",
-      html: `Are you sure you want to mark all <strong>${
-        students.length
-      }</strong> students as present for <strong>${safeFormat(
+      html: `Are you sure you want to mark all <strong>${students.length}</strong> students as present for <strong>${safeFormat(
         new Date(dateISO),
         "EEEE, MMMM dd, yyyy",
       )}</strong>?`,
@@ -362,6 +766,7 @@ export default function StudentAttendanceAdmin() {
             result.message ||
               `Marked ${result.insertedCount} students as present`,
           );
+          refetchAttendance(); // Refresh data after change
         } catch (e) {
           console.error("Error marking all present:", e);
           toast.error("Failed to mark all students as present");
@@ -407,6 +812,7 @@ export default function StudentAttendanceAdmin() {
             result.message ||
               `Removed ${result.deletedCount} attendance records`,
           );
+          refetchAttendance(); // Refresh data after change
         } catch (e) {
           console.error("Error removing all attendance:", e);
           toast.error("Failed to remove all attendance");
@@ -421,6 +827,16 @@ export default function StudentAttendanceAdmin() {
     });
   };
 
+  /* ─────────────────── Merit/Demerit Handlers ─────────────────── */
+  const handleOpenMeritModal = (student) => {
+    setSelectedStudent(student);
+    setModalOpen(true);
+  };
+
+  const handleMeritSuccess = () => {
+    refetchAttendance(); // Refresh data after merit/demerit is added
+  };
+
   if (isLoadingDept || isLoadingClass) {
     return <LoadingSpinnerDash />;
   }
@@ -428,9 +844,23 @@ export default function StudentAttendanceAdmin() {
   /* ─────────────────── render ─────────────────── */
   return (
     <div>
+      {/* Merit/Demerit Modal - Using a default admin teacher ID */}
+      {modalOpen && selectedStudent && (
+        <MeritDemeritModal
+          isOpen={modalOpen}
+          onClose={() => {
+            setModalOpen(false);
+            setSelectedStudent(null);
+          }}
+          student={selectedStudent}
+          teacherId="admin_teacher_id" // You might want to set this from props or state
+          onSuccess={handleMeritSuccess}
+        />
+      )}
+
       {/* ── TOP BAR ─────────────────────────────────── */}
       <div className="d-flex justify-content-between align-items-center my-2">
-        <h3>Student Attendance</h3>
+        <h3>Student Attendance & Behavior Management</h3>
         <div className="d-flex align-items-center gap-2">
           <span className="text-muted">Week: {weekDisplayText}</span>
           <button
@@ -442,9 +872,7 @@ export default function StudentAttendanceAdmin() {
           </button>
           <button
             style={{
-              backgroundColor: isCurrentWeek
-                ? "var(--border2)"
-                : "var(--border2)",
+              backgroundColor: "var(--border2)",
               cursor: isCurrentWeek ? "default" : "pointer",
             }}
             className="btn text-white mx-1"
@@ -466,7 +894,6 @@ export default function StudentAttendanceAdmin() {
       {/* ── FILTERS ─────────────────────────────────── */}
       <div className="border border-black p-3">
         <div className="row align-items-center">
-          {/* Dept */}
           <div className="col-md-3">
             <label className="form-label">Departments:</label>
             <select
@@ -486,7 +913,6 @@ export default function StudentAttendanceAdmin() {
               ))}
             </select>
           </div>
-          {/* Session */}
           <div className="col-md-3">
             <label className="form-label">Session</label>
             <select
@@ -503,7 +929,6 @@ export default function StudentAttendanceAdmin() {
               <option value="weekend">Weekend</option>
             </select>
           </div>
-          {/* Session time */}
           <div className="col-md-3">
             <label className="form-label">Session Time</label>
             <select
@@ -531,7 +956,6 @@ export default function StudentAttendanceAdmin() {
               )}
             </select>
           </div>
-          {/* Class */}
           <div className="col-md-3">
             <label className="form-label">Class</label>
             <select
@@ -564,14 +988,13 @@ export default function StudentAttendanceAdmin() {
           <div>
             <span className="bg-success px-2 rounded-1 mx-2" /> Present
             <span className="bg-primary px-2 rounded-1 mx-2" /> Late
-            <span className="bg-danger  px-2 rounded-1 mx-2" /> Absent
+            <span className="bg-danger px-2 rounded-1 mx-2" /> Absent
           </div>
           <div className="text-muted">
             Students: {students.length} | Dates: {weekDates.length}
           </div>
         </div>
 
-        {/* Show loading spinner only during initial filter loading */}
         {!areAllFiltersSelected ? (
           <div className="text-center py-4">
             <p className="text-muted">
@@ -585,12 +1008,7 @@ export default function StudentAttendanceAdmin() {
           </div>
         ) : (
           <div className="table-responsive mb-3">
-            <table
-              className="table mb-0"
-              style={{
-                minWidth: 700,
-              }}
-            >
+            <table className="table mb-0" style={{ minWidth: 800 }}>
               <thead>
                 <tr>
                   <th
@@ -604,6 +1022,12 @@ export default function StudentAttendanceAdmin() {
                     className="text-white text-center border"
                   >
                     Student Name
+                  </th>
+                  <th
+                    style={{ backgroundColor: "var(--border2)" }}
+                    className="text-white text-center border"
+                  >
+                    Actions
                   </th>
                   {weekDates.map((d) => {
                     const dateISO = safeFormat(d, "yyyy-MM-dd");
@@ -627,10 +1051,7 @@ export default function StudentAttendanceAdmin() {
                             }}
                             onClick={() => handlePresentAll(dateISO)}
                             disabled={isBulkLoading}
-                            title={`Mark all present for ${safeFormat(
-                              d,
-                              "MMM dd",
-                            )}`}
+                            title={`Mark all present for ${safeFormat(d, "MMM dd")}`}
                           >
                             {isBulkLoading ? (
                               <div
@@ -673,18 +1094,35 @@ export default function StudentAttendanceAdmin() {
                       </th>
                     );
                   })}
+                  <th
+                    style={{ backgroundColor: "var(--border2)" }}
+                    className="text-white text-center border"
+                  >
+                    Merit Summary
+                  </th>
                 </tr>
               </thead>
 
               <tbody>
-                {students?.length ? (
-                  students?.map((stu, idx) => (
+                {students.length ? (
+                  students.map((stu, idx) => (
                     <tr key={stu._id}>
                       <td className="text-center border align-middle">
                         {idx + 1}
                       </td>
                       <td className="text-center border align-middle">
                         {stu.name}
+                      </td>
+                      <td className="text-center border align-middle">
+                        <div className="d-flex gap-2 justify-content-center">
+                          <button
+                            className="btn btn-warning btn-sm"
+                            onClick={() => handleOpenMeritModal(stu)}
+                            title="Give Merit/Demerit"
+                          >
+                            <FaStar className="me-1" /> Give
+                          </button>
+                        </div>
                       </td>
 
                       {weekDates.map((date) => {
@@ -693,7 +1131,6 @@ export default function StudentAttendanceAdmin() {
                         const isHoliday = holidaySet.has(dateISO);
                         const isLoading = loadingCells.has(cellKey);
 
-                        // Find attendance record from filtered attendance data
                         const record = attendances?.find(
                           (a) => a.student_id === stu._id && a.date === dateISO,
                         );
@@ -744,22 +1181,15 @@ export default function StudentAttendanceAdmin() {
                               <span title="Holiday">—</span>
                             ) : (
                               <>
-                                {/* Content for non-hover state */}
                                 {!status && hoverKey !== cellKey && (
                                   <span>&nbsp;</span>
                                 )}
-
-                                {/* Hover elements - only show for this specific cell */}
                                 {hoverKey === cellKey && (
                                   <>
-                                    {/* Show status buttons in center when no status is set */}
                                     {!status && (
                                       <div className="d-flex justify-content-center gap-1">
                                         <button
-                                          style={{
-                                            width: 25,
-                                            height: 25,
-                                          }}
+                                          style={{ width: 25, height: 25 }}
                                           className="btn btn-sm btn-success"
                                           onClick={() =>
                                             saveStatus(
@@ -770,20 +1200,14 @@ export default function StudentAttendanceAdmin() {
                                           }
                                         />
                                         <button
-                                          style={{
-                                            width: 25,
-                                            height: 25,
-                                          }}
+                                          style={{ width: 25, height: 25 }}
                                           className="btn btn-sm btn-primary border border-white"
                                           onClick={() =>
                                             saveStatus(stu._id, dateISO, "late")
                                           }
                                         />
                                         <button
-                                          style={{
-                                            width: 25,
-                                            height: 25,
-                                          }}
+                                          style={{ width: 25, height: 25 }}
                                           className="btn btn-sm btn-danger border border-white"
                                           onClick={() =>
                                             saveStatus(
@@ -795,8 +1219,6 @@ export default function StudentAttendanceAdmin() {
                                         />
                                       </div>
                                     )}
-
-                                    {/* Show trash and update buttons when status exists */}
                                     {status && (
                                       <>
                                         <FaTrashAlt
@@ -815,7 +1237,6 @@ export default function StudentAttendanceAdmin() {
                                             )
                                           }
                                         />
-
                                         <div className="position-absolute start-0 ms-1 d-flex gap-1">
                                           <button
                                             style={{
@@ -887,11 +1308,40 @@ export default function StudentAttendanceAdmin() {
                           </td>
                         );
                       })}
+                      <td className="text-center border align-middle">
+                        {meritStats[stu._id] ? (
+                          <div className="d-flex flex-column gap-1">
+                            <div className="text-success">
+                              👍 +{meritStats[stu._id].totalPositiveMerits} pts
+                              <small>
+                                {" "}
+                                ({meritStats[stu._id].positiveCount})
+                              </small>
+                            </div>
+                            {meritStats[stu._id].totalDemerits > 0 && (
+                              <div className="text-danger">
+                                👎 -{meritStats[stu._id].totalDemerits} pts
+                                <small>
+                                  {" "}
+                                  ({meritStats[stu._id].demeritCount})
+                                </small>
+                              </div>
+                            )}
+                            <div
+                              className={`fw-bold ${meritStats[stu._id].netPoints >= 0 ? "text-success" : "text-danger"}`}
+                            >
+                              Net: {meritStats[stu._id].netPoints} pts
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="text-muted">No records</div>
+                        )}
+                      </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={weekDates.length + 2} className="text-center">
+                    <td colSpan={weekDates.length + 4} className="text-center">
                       No students found for the selected class.
                     </td>
                   </tr>
