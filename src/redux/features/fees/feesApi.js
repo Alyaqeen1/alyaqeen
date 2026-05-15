@@ -37,7 +37,7 @@ export const feesApi = apiSlice.injectEndpoints({
     // Add this endpoint to your feesApi.js
     getDashboardFeeSummary: builder.query({
       query: ({ month, year }) => `/fees/fee-summary/${month}/${year}`,
-      providesTags: ["Fee"],
+      providesTags: ["Fee", "Family"],
     }),
     getFeesByDate: builder.query({
       query: (params = {}) => {

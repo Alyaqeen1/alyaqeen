@@ -15,7 +15,7 @@ const StaffDetails = ({
         teachersCount?.activity?.active,
         teachersCount?.gender?.male,
         teachersCount?.gender?.female,
-        teachersCount?.activity?.inactive,
+        // teachersCount?.activity?.inactive,
       ],
       options: {
         chart: {
@@ -26,9 +26,9 @@ const StaffDetails = ({
           themeColors.primary,
           themeColors.success,
           themeColors.warning,
-          themeColors.danger,
+          // themeColors.danger,
         ],
-        labels: ["Active", "Male", "Female", "Inactive"],
+        labels: ["Active", "Male", "Female"],
         dataLabels: {
           enabled: false,
         },

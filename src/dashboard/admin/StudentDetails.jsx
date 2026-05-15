@@ -16,10 +16,10 @@ const StudentDetails = ({
         studentsCount?.session?.weekend,
         studentsCount?.gender?.male,
         studentsCount?.gender?.female,
-        studentsCount?.activity?.inactive,
+        // studentsCount?.activity?.inactive,
       ],
       options: {
-        labels: ["Weekdays", "Weekend", "Male", "Female", "Inactive"],
+        labels: ["Weekdays", "Weekend", "Male", "Female"],
         chart: {
           type: "donut",
           height: 240,
@@ -82,7 +82,7 @@ const StudentDetails = ({
           themeColors.warning,
 
           themeColors.secondary,
-          themeColors.danger,
+          // themeColors.danger,
         ],
       },
     });
