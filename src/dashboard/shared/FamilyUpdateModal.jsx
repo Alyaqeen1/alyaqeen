@@ -48,12 +48,15 @@ export default function FamilyUpdateModal({
   }, [activeStudents, inactiveStudents]);
 
   // Prepare student options (only active students for dropdown)
+  // Prepare student options (include both active and inactive students)
   const studentOptions = useMemo(() => {
-    return activeStudents?.map((student) => ({
+    const allStudentsForOptions = [...activeStudents, ...inactiveStudents];
+    return allStudentsForOptions?.map((student) => ({
       label: student.name,
       value: student.uid,
+      isInactive: student.activity === "inactive", // Add this flag for styling
     }));
-  }, [activeStudents]);
+  }, [activeStudents, inactiveStudents]);
 
   // Track selected student UIDs
   const [selectedStudentUids, setSelectedStudentUids] = useState([]);
