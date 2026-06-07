@@ -51,7 +51,7 @@ const PaymentMethodCell = ({ method }) => {
       color: "white",
     },
     instant: { bg: "bg-secondary", text: "Instant", color: "white" },
-    direct_debit: { bg: "bg-purple", text: "Direct Debit", color: "white" },
+    direct_debit: { bg: "bg-dark", text: "Direct Debit", color: "white" },
   };
 
   const config = methodConfig[method?.toLowerCase()] || {
