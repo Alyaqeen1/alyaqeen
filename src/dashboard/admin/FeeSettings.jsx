@@ -33,6 +33,57 @@ const PaymentStatusCell = ({ status }) => {
   );
 };
 
+const PaymentMethodCell = ({ method }) => {
+  const methodConfig = {
+    "bank transfer": {
+      bg: "bg-primary",
+      text: "Bank Transfer",
+      color: "white",
+    },
+    "cash payment at office": {
+      bg: "bg-success",
+      text: "Cash",
+      color: "white",
+    },
+    "card machine at office": {
+      bg: "bg-info",
+      text: "Card Machine",
+      color: "white",
+    },
+    instant: { bg: "bg-secondary", text: "Instant", color: "white" },
+    direct_debit: { bg: "bg-purple", text: "Direct Debit", color: "white" },
+  };
+
+  const config = methodConfig[method?.toLowerCase()] || {
+    bg: "bg-secondary",
+    text: method || "N/A",
+    color: "white",
+  };
+
+  return (
+    <td className="text-center align-middle p-1">
+      <div
+        className={`rounded p-1 ${config.bg} ${config.color === "dark" ? "text-dark" : "text-white"}`}
+      >
+        {config.text}
+      </div>
+    </td>
+  );
+};
+
+// Helper function to get row color based on payment method
+const getRowColor = (method) => {
+  const colorConfig = {
+    "bank transfer": "#e3f2fd", // Light blue
+    "cash payment at office": "#e8f5e9", // Light green
+    "card machine at office": "#e0f7fa", // Light cyan
+    instant: "#f3e5f5", // Light purple
+    direct_debit: "#fff3e0", // Light orange
+  };
+
+  return colorConfig[method?.toLowerCase()] || "#ffffff"; // White default
+};
+
 const formatDateToDmy = (input) => {
   if (!input) return "N/A";
 
@@ -63,6 +114,17 @@ const academicMonths = [
   { num: 12, name: "Dec" },
 ];
 
+// Payment method options for filter
+const paymentMethodOptions = [
+  { value: "all", label: "All Methods" },
+  { value: "bank transfer", label: "Bank Transfer" },
+  { value: "cash payment at office", label: "Cash Payment" },
+  { value: "card machine at office", label: "Card Machine" },
+  { value: "instant", label: "Instant" },
+  { value: "direct_debit", label: "Direct Debit" },
+  { value: "no_payment", label: "No Payment Yet" },
+];
+
 export default function FeeSettings() {
   const [showModal, setShowModal] = useState(false);
   const [adminShowModal, setAdminShowModal] = useState(false);
@@ -71,6 +133,7 @@ export default function FeeSettings() {
   const [selectedAdminFamilyId, setSelectedAdminFamilyId] = useState(null);
   const [selectedAdminFamilyId2, setSelectedAdminFamilyId2] = useState(null);
   const [selectedMonths, setSelectedMonths] = useState([]);
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("all");
 
   const { user, loading } = useAuth();
   const [deleteFamilyData] = useDeleteFamilyDataMutation();
@@ -103,11 +166,14 @@ export default function FeeSettings() {
   } = useGetFullFamilyQuery(user?.email, {
     skip: loading || !user?.email,
   });
+
   console.log("family by status", familiesByStatus);
   console.log("family", families);
+
   const filteredFamily = families?.filter(
     (family) => family?.childrenDocs?.length > 0,
   );
+
   const getLastPaymentDate = (feePayments = []) => {
     if (!feePayments.length) return "N/A";
 
@@ -120,94 +186,91 @@ export default function FeeSettings() {
     if (!dates.length) return "N/A";
 
     const latest = new Date(Math.max(...dates));
-    return formatDateToDmy(latest); // ✅ now works
+    return formatDateToDmy(latest);
+  };
+
+  const getLastPaymentMethod = (feePayments = []) => {
+    if (!feePayments?.length) return null;
+
+    // Sort payments by lastPaymentDate (most recent first)
+    const sortedPayments = [...feePayments]
+      .filter((p) => p.lastPaymentDate && p.payments?.[0]?.method)
+      .sort(
+        (a, b) => new Date(b.lastPaymentDate) - new Date(a.lastPaymentDate),
+      );
+
+    if (sortedPayments.length === 0) return null;
+
+    const latestPayment = sortedPayments[0];
+    const paymentMethod = latestPayment.payments?.[0]?.method;
+
+    return paymentMethod || null;
   };
 
   const filteredFamilies = useMemo(() => {
     if (!familiesByStatus) return [];
-    if (!searchTerm.trim()) return familiesByStatus;
 
-    const term = searchTerm.toLowerCase();
+    let filtered = familiesByStatus;
 
-    // Check if the search term is a number
-    const isNumber = !isNaN(parseFloat(term)) && isFinite(term);
-    const searchNumber = isNumber ? parseFloat(term) : null;
+    // Apply search filter
+    if (searchTerm.trim()) {
+      const term = searchTerm.toLowerCase();
+      const isNumber = !isNaN(parseFloat(term)) && isFinite(term);
 
-    return familiesByStatus.filter((family) => {
-      // Search by family name
-      if (family.name?.toLowerCase().includes(term)) return true;
+      filtered = filtered.filter((family) => {
+        if (family.name?.toLowerCase().includes(term)) return true;
 
-      // Calculate total monthly fee for active students in this family
-      const totalMonthlyFee =
-        family.childrenDocs
-          ?.filter((s) => s.activity === "active")
-          .reduce((total, student) => total + (student.monthly_fee || 0), 0) ||
-        0;
+        const totalMonthlyFee =
+          family.childrenDocs
+            ?.filter((s) => s.activity === "active")
+            .reduce(
+              (total, student) => total + (student.monthly_fee || 0),
+              0,
+            ) || 0;
 
-      // Apply family discount if any
-      const discount = family.discount || 0;
-      const discountedTotal =
-        totalMonthlyFee - (totalMonthlyFee * discount) / 100;
+        const discount = family.discount || 0;
+        const discountedTotal =
+          totalMonthlyFee - (totalMonthlyFee * discount) / 100;
 
-      // If searching for a number, check if any fee amount starts with or exactly matches the search number
-      if (isNumber) {
-        // Check individual student fees
-        const hasMatchingStudentFee = family.childrenDocs?.some((student) => {
-          const studentFee = student.monthly_fee || 0;
-          // Convert to string and check if it starts with the search term
-          // This ensures "40" matches "40" but not "140"
-          return studentFee.toString().startsWith(term);
+        if (isNumber) {
+          const discountedStr = discountedTotal.toFixed(2);
+          if (
+            discountedStr.startsWith(term) ||
+            discountedStr.replace(".", "").startsWith(term)
+          )
+            return true;
+        }
+
+        return family.childrenDocs?.some((student) => {
+          if (student.name?.toLowerCase().includes(term)) return true;
+          if (student.father?.name?.toLowerCase().includes(term)) return true;
+          if (student.father?.occupation?.toLowerCase().includes(term))
+            return true;
+          if (student.mother?.name?.toLowerCase().includes(term)) return true;
+          if (student.mother?.occupation?.toLowerCase().includes(term))
+            return true;
+          return false;
         });
-
-        // if (hasMatchingStudentFee) return true;
-
-        // Check total monthly fee
-        // if (totalMonthlyFee.toString().startsWith(term)) return true;
-
-        // Check discounted total - round to handle decimal places
-        const discountedStr = discountedTotal.toFixed(2);
-        if (
-          discountedStr.startsWith(term) ||
-          discountedStr.replace(".", "").startsWith(term)
-        )
-          return true;
-      }
-
-      // Search through each student's details (text search)
-      return family.childrenDocs?.some((student) => {
-        // Search by student name
-        if (student.name?.toLowerCase().includes(term)) return true;
-
-        // Search by father's name within student
-        if (student.father?.name?.toLowerCase().includes(term)) return true;
-
-        // Search by father's occupation within student
-        if (student.father?.occupation?.toLowerCase().includes(term))
-          return true;
-
-        // Search by mother's name within student
-        if (student.mother?.name?.toLowerCase().includes(term)) return true;
-
-        // Search by mother's occupation within student
-        if (student.mother?.occupation?.toLowerCase().includes(term))
-          return true;
-
-        return false;
       });
-    });
-  }, [familiesByStatus, searchTerm]);
-  // const filteredFamilies = useMemo(() => {
-  //   if (!familiesByStatus) return [];
-  //   if (!searchTerm.trim()) return familiesByStatus;
+    }
 
-  //   const term = searchTerm.toLowerCase();
-  //   return familiesByStatus.filter((family) => {
-  //     if (family.name.toLowerCase().includes(term)) return true;
-  //     return family.childrenDocs?.some((student) =>
-  //       student.name.toLowerCase().includes(term),
-  //     );
-  //   });
-  // }, [familiesByStatus, searchTerm]);
+    // Apply payment method filter
+    if (selectedPaymentMethod !== "all") {
+      filtered = filtered.filter((family) => {
+        const lastMethod = getLastPaymentMethod(family.feePayments);
+
+        if (selectedPaymentMethod === "no_payment") {
+          return !lastMethod;
+        }
+
+        return (
+          lastMethod?.toLowerCase() === selectedPaymentMethod.toLowerCase()
+        );
+      });
+    }
+
+    return filtered;
+  }, [familiesByStatus, searchTerm, selectedPaymentMethod]);
 
   const handleShow = (id) => {
     setSelectedFamilyId(id);
@@ -228,10 +291,7 @@ export default function FeeSettings() {
   const handleAdminClose = () => setAdminShowModal(false);
   const handleAdminManualClose = () => setAdminManualShowModal(false);
 
-  // Update the delete handler
-  // Update the delete handler
   const handleDelete = (id) => {
-    // First, get the family data to check if it has active students
     const family = familiesByStatus?.find((f) => f._id === id);
 
     if (family && family.childrenDocs?.length > 0) {
@@ -264,7 +324,6 @@ export default function FeeSettings() {
           cancelButtonColor: "#d33",
         }).then((result) => {
           if (result.dismiss === Swal.DismissReason.cancel) {
-            // Navigate to family details or scroll to this family
             const familyElement = document.getElementById(`family-${id}`);
             if (familyElement) {
               familyElement.scrollIntoView({
@@ -282,7 +341,6 @@ export default function FeeSettings() {
       }
     }
 
-    // If no active students, proceed with delete confirmation
     Swal.fire({
       title: "Are you sure?",
       text: "This family will be moved to trash. You can restore it later!",
@@ -293,7 +351,6 @@ export default function FeeSettings() {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        // Show loading state
         Swal.fire({
           title: "Deleting...",
           text: "Please wait",
@@ -303,7 +360,6 @@ export default function FeeSettings() {
           },
         });
 
-        // Soft delete
         deleteFamilyData(id)
           .unwrap()
           .then((res) => {
@@ -318,7 +374,6 @@ export default function FeeSettings() {
           .catch((error) => {
             console.error("Delete error:", error);
 
-            // Handle the specific error from backend
             if (
               error?.data?.error === "Cannot delete family with active students"
             ) {
@@ -348,7 +403,6 @@ export default function FeeSettings() {
                 cancelButtonColor: "#d33",
               }).then((result) => {
                 if (result.dismiss === Swal.DismissReason.cancel) {
-                  // Optionally navigate to family edit page or scroll to family
                   const familyElement = document.getElementById(`family-${id}`);
                   if (familyElement) {
                     familyElement.scrollIntoView({
@@ -394,7 +448,7 @@ export default function FeeSettings() {
       selectedYear < joiningYear ||
       (selectedYear === joiningYear && month < joiningMonth)
     ) {
-      return null; // before joining date
+      return null;
     }
 
     const targetMonth = month.toString().padStart(2, "0");
@@ -407,14 +461,12 @@ export default function FeeSettings() {
 
       if (!studentPayment) continue;
 
-      // ✅ FIXED: Handle ADMISSION payments - check joining month/year
       if (payment.paymentType === "admission") {
         const admissionJoiningMonth = studentPayment.joiningMonth
           ?.toString()
           .padStart(2, "0");
         const admissionJoiningYear = studentPayment.joiningYear?.toString();
 
-        // Check if this admission payment is for the target month/year
         if (
           admissionJoiningMonth === targetMonth &&
           admissionJoiningYear === targetYear
@@ -426,7 +478,6 @@ export default function FeeSettings() {
         }
       }
 
-      // ✅ FIXED: Handle BOTH monthly AND monthlyOnHold payments
       if (
         (payment.paymentType === "monthly" ||
           payment.paymentType === "monthlyOnHold") &&
@@ -439,12 +490,10 @@ export default function FeeSettings() {
         );
 
         if (monthPaidEntry) {
-          // ✅ FIRST: Check payment status for pending payments
           if (payment.status === "pending") {
             return "pending";
           }
 
-          // ✅ SECOND: For paid/rejected payments, check the actual payment amounts
           if (
             payment.status === "paid" ||
             payment.status === "rejected" ||
@@ -454,21 +503,17 @@ export default function FeeSettings() {
               monthPaidEntry.discountedFee ?? monthPaidEntry.monthlyFee;
             const paid = monthPaidEntry.paid ?? 0;
 
-            // ✅ Check if this is a partial payment (paid < fullFee)
             if (paid > 0 && paid < fullFee) {
               return "partial";
             }
 
-            // ✅ Check if this is a full payment
             if (paid >= fullFee) {
               return "paid";
             }
 
-            // ✅ No payment made
             return "unpaid";
           }
 
-          // ✅ Default for other statuses
           return payment.status === "paid" ? "paid" : "unpaid";
         }
       }
@@ -476,6 +521,7 @@ export default function FeeSettings() {
 
     return "unpaid";
   };
+
   const monthOptions = academicMonths.map((m) => ({
     value: m.num,
     label: m.name,
@@ -490,7 +536,7 @@ export default function FeeSettings() {
       {/* Filters */}
       <div className="row mb-3 g-2">
         {/* Search Field */}
-        <div className="col-lg-4">
+        <div className="col-lg-3">
           <div className="input-group">
             <input
               type="text"
@@ -510,7 +556,7 @@ export default function FeeSettings() {
         </div>
 
         {/* Academic Year Selector */}
-        <div className="col-lg-4">
+        <div className="col-lg-3">
           <div className="input-group">
             <label className="input-group-text">Year:</label>
             <select
@@ -527,8 +573,26 @@ export default function FeeSettings() {
           </div>
         </div>
 
+        {/* Payment Method Filter */}
+        <div className="col-lg-3">
+          <div className="input-group">
+            <label className="input-group-text">Payment Method:</label>
+            <select
+              className="form-select"
+              value={selectedPaymentMethod}
+              onChange={(e) => setSelectedPaymentMethod(e.target.value)}
+            >
+              {paymentMethodOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
         {/* Custom Months Multi-Select */}
-        <div className="col-lg-4">
+        <div className="col-lg-3">
           <Select
             isMulti
             options={monthOptions}
@@ -585,6 +649,12 @@ export default function FeeSettings() {
                 style={{ backgroundColor: "var(--border2)" }}
                 className="font-danger text-white fw-bolder border h6 text-center align-middle"
               >
+                Payment Method
+              </th>
+              <th
+                style={{ backgroundColor: "var(--border2)" }}
+                className="font-danger text-white fw-bolder border h6 text-center align-middle"
+              >
                 Fee
               </th>
 
@@ -601,26 +671,38 @@ export default function FeeSettings() {
               (() => {
                 let displayCounter = 0;
                 return filteredFamilies.flatMap((family) => {
-                  // Check if this family has any students to display (active or inactive)
                   const hasAnyStudent = family.childrenDocs?.length > 0;
                   if (!hasAnyStudent) return [];
 
-                  // Increment counter for this family (only once per displayed family)
                   displayCounter++;
 
+                  // Get the last payment method for row coloring
+                  const lastPaymentMethod = getLastPaymentMethod(
+                    family.feePayments,
+                  );
+                  const rowBgColor = getRowColor(lastPaymentMethod);
+
                   return family.childrenDocs?.map((student, studentIdx) => (
-                    <tr key={`${family._id}-${student._id}`}>
+                    <tr
+                      key={`${family._id}-${student._id}`}
+                      style={{
+                        backgroundColor:
+                          studentIdx === 0 ? rowBgColor : "inherit",
+                      }}
+                    >
                       {studentIdx === 0 && (
                         <>
                           <td
                             rowSpan={family.childrenDocs?.length}
                             className="border h6 text-center align-middle"
+                            style={{ backgroundColor: rowBgColor }}
                           >
                             {displayCounter}
                           </td>
                           <td
                             rowSpan={family.childrenDocs?.length}
                             className="border h6 text-center align-middle"
+                            style={{ backgroundColor: rowBgColor }}
                           >
                             {family.name}
                           </td>
@@ -660,12 +742,23 @@ export default function FeeSettings() {
                           <td
                             className="border h6 text-center align-middle"
                             rowSpan={family.childrenDocs?.length}
+                            style={{ backgroundColor: rowBgColor }}
                           >
                             {getLastPaymentDate(family.feePayments)}
                           </td>
                           <td
+                            className="border h6 text-center align-middle"
+                            rowSpan={family.childrenDocs?.length}
+                            style={{ backgroundColor: rowBgColor }}
+                          >
+                            <PaymentMethodCell
+                              method={getLastPaymentMethod(family.feePayments)}
+                            />
+                          </td>
+                          <td
                             rowSpan={family.childrenDocs?.length}
                             className="border h6 text-center align-middle"
+                            style={{ backgroundColor: rowBgColor }}
                           >
                             £
                             {(() => {
@@ -688,6 +781,7 @@ export default function FeeSettings() {
                           <td
                             rowSpan={family.childrenDocs?.length}
                             className="border text-center align-middle"
+                            style={{ backgroundColor: rowBgColor }}
                           >
                             <div className="d-flex flex-column gap-2 justify-content-center align-items-center h-100">
                               <div className="d-flex gap-2 justify-content-center align-items-center">
@@ -732,7 +826,7 @@ export default function FeeSettings() {
             ) : (
               <tr>
                 <td
-                  colSpan={monthsToDisplay.length + 5}
+                  colSpan={monthsToDisplay.length + 6}
                   className="text-center py-4"
                 >
                   <h5>No enrolled families found</h5>
