@@ -218,8 +218,13 @@ export default function FeeSettings() {
       const isNumber = !isNaN(parseFloat(term)) && isFinite(term);
 
       filtered = filtered.filter((family) => {
+        // Search by family name
         if (family.name?.toLowerCase().includes(term)) return true;
 
+        // Search by family email (added this)
+        if (family.email?.toLowerCase().includes(term)) return true;
+
+        // Search by total monthly fee (numeric)
         const totalMonthlyFee =
           family.childrenDocs
             ?.filter((s) => s.activity === "active")
@@ -241,6 +246,7 @@ export default function FeeSettings() {
             return true;
         }
 
+        // Search by student details
         return family.childrenDocs?.some((student) => {
           if (student.name?.toLowerCase().includes(term)) return true;
           if (student.father?.name?.toLowerCase().includes(term)) return true;
@@ -249,6 +255,8 @@ export default function FeeSettings() {
           if (student.mother?.name?.toLowerCase().includes(term)) return true;
           if (student.mother?.occupation?.toLowerCase().includes(term))
             return true;
+          // Search by student email if available
+          if (student.email?.toLowerCase().includes(term)) return true;
           return false;
         });
       });
@@ -271,7 +279,6 @@ export default function FeeSettings() {
 
     return filtered;
   }, [familiesByStatus, searchTerm, selectedPaymentMethod]);
-
   const handleShow = (id) => {
     setSelectedFamilyId(id);
     setShowModal(true);
