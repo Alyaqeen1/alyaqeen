@@ -717,10 +717,11 @@ export default function FeeSettings() {
                       )}
                       <td className="border h6 text-center align-middle">
                         <Link
-                          className="text-dark student-link"
+                          className={`student-link ${student?.activity === "active" ? "text-dark" : "text-danger"}`}
                           to={`/dashboard/admin/view-student/${student?._id}`}
                         >
-                          {student?.activity === "active" ? student?.name : ""}
+                          {student?.name}
+                          {student?.activity === "inactive" && " (Inactive)"}
                         </Link>
                         <br />
                         {student?.activity === "active"
