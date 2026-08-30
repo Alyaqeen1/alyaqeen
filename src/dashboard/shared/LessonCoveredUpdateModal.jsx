@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useUpdateLessonCoveredMutation } from "../../redux/features/lessons_covered/lessons_coveredApi";
+import {
+  useUpdateYearlyReportMutation,
+  useDeleteNoteFromYearlyReportMutation,
+} from "../../redux/features/yearly_reports/yearly_reportsApi";
 import Swal from "sweetalert2";
 
 export default function LessonCoveredUpdateModal({
@@ -7,9 +10,12 @@ export default function LessonCoveredUpdateModal({
   handleClose,
   showModal,
 }) {
-  const [updateLessonCovered, { isLoading }] = useUpdateLessonCoveredMutation();
+  const [updateYearlyReport, { isLoading }] = useUpdateYearlyReportMutation();
+  const [deleteNoteFromReport, { isLoading: isDeletingNote }] =
+    useDeleteNoteFromYearlyReportMutation();
 
   const [beginningData, setBeginningData] = useState({
+    _id: "",
     lessons: {
       qaidah_quran: {
         selected: "",
@@ -31,11 +37,12 @@ export default function LessonCoveredUpdateModal({
         target: "",
       },
     },
-    description: "",
     type: "normal",
+    notes: [],
   });
 
   const [endingData, setEndingData] = useState({
+    _id: "",
     lessons: {
       qaidah_quran: {
         selected: "",
@@ -57,30 +64,48 @@ export default function LessonCoveredUpdateModal({
         target: "",
       },
     },
-    description: "",
     type: "normal",
+    notes: [],
   });
+
+  // ===== FORMAT DATE HELPER =====
+  const formatDate = (dateString) => {
+    if (!dateString) return "N/A";
+    try {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) return "N/A";
+      return date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+    } catch (error) {
+      return "N/A";
+    }
+  };
 
   useEffect(() => {
     if (student) {
-      const beginningType = student?.beginning?.type || "normal";
-      const endingType = student?.ending?.type || "normal";
-
+      // Set beginning data
       if (student?.beginning) {
+        const beginningType = student.beginning.type || "normal";
         setBeginningData({
-          ...student?.beginning,
+          _id: student.beginning._id,
           type: beginningType,
+          notes: student.beginning.notes || [],
           lessons: {
-            qaidah_quran: student?.beginning.lessons?.qaidah_quran || {
+            qaidah_quran: student.beginning.lessons?.qaidah_quran || {
               selected: "",
               data: { level: "", lesson_name: "", page: "", line: "" },
             },
-            islamic_studies: student?.beginning.lessons?.islamic_studies || {
+            islamic_studies: student.beginning.lessons?.islamic_studies || {
               lesson_name: "",
               page: "",
               book: "",
             },
-            dua_surah: student?.beginning?.lessons?.dua_surah || {
+            dua_surah: student.beginning.lessons?.dua_surah || {
               lesson_name: "",
               book: "",
               level: "",
@@ -88,7 +113,7 @@ export default function LessonCoveredUpdateModal({
               target: "",
               dua_number: "",
             },
-            gift_for_muslim: student?.beginning.lessons?.gift_for_muslim || {
+            gift_for_muslim: student.beginning.lessons?.gift_for_muslim || {
               lesson_name: "",
               level: "",
               page: "",
@@ -98,21 +123,24 @@ export default function LessonCoveredUpdateModal({
         });
       }
 
-      if (student.ending) {
+      // Set ending data
+      if (student?.ending) {
+        const endingType = student.ending.type || "normal";
         setEndingData({
-          ...student.ending,
+          _id: student.ending._id,
           type: endingType,
+          notes: student.ending.notes || [],
           lessons: {
-            qaidah_quran: student?.ending.lessons?.qaidah_quran || {
+            qaidah_quran: student.ending.lessons?.qaidah_quran || {
               selected: "",
               data: { level: "", lesson_name: "", page: "", line: "" },
             },
-            islamic_studies: student?.ending.lessons?.islamic_studies || {
+            islamic_studies: student.ending.lessons?.islamic_studies || {
               lesson_name: "",
               page: "",
               book: "",
             },
-            dua_surah: student?.ending.lessons?.dua_surah || {
+            dua_surah: student.ending.lessons?.dua_surah || {
               lesson_name: "",
               book: "",
               level: "",
@@ -120,7 +148,7 @@ export default function LessonCoveredUpdateModal({
               target: "",
               dua_number: "",
             },
-            gift_for_muslim: student?.ending.lessons?.gift_for_muslim || {
+            gift_for_muslim: student.ending.lessons?.gift_for_muslim || {
               lesson_name: "",
               level: "",
               page: "",
@@ -132,39 +160,109 @@ export default function LessonCoveredUpdateModal({
     }
   }, [student]);
 
+  // ===== HANDLE DELETE NOTE =====
+  const handleDeleteNote = async (reportId, noteId) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "This note will be permanently deleted.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await deleteNoteFromReport({
+            id: reportId,
+            noteId: noteId,
+          }).unwrap();
+
+          // Update local state to remove the note
+          if (beginningData._id === reportId) {
+            setBeginningData({
+              ...beginningData,
+              notes: beginningData.notes.filter((note) => note.id !== noteId),
+            });
+          } else if (endingData._id === reportId) {
+            setEndingData({
+              ...endingData,
+              notes: endingData.notes.filter((note) => note.id !== noteId),
+            });
+          }
+
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Note deleted successfully!",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        } catch (error) {
+          Swal.fire({
+            position: "center",
+            icon: "error",
+            title: error?.data?.message || "Failed to delete note",
+            showConfirmButton: true,
+          });
+        }
+      }
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // Update Beginning of Year Report
       if (beginningData?._id) {
-        const data = await updateLessonCovered({
-          id: beginningData?._id,
-          data: beginningData,
+        const beginningPayload = {
+          ...beginningData,
+          academic_year: student?.academic_year,
+          report_type: "beginning_of_year",
+        };
+        delete beginningPayload._id;
+
+        const data = await updateYearlyReport({
+          id: beginningData._id,
+          data: beginningPayload,
         }).unwrap();
+
         if (data?.modifiedCount) {
           Swal.fire({
             position: "center",
             icon: "success",
-            title: "Beginning of Month data updated successfully!",
+            title: "Beginning of Year report updated successfully!",
             showConfirmButton: false,
             timer: 1500,
           });
         }
       }
+
+      // Update End of Year Report
       if (endingData?._id) {
-        const data = await updateLessonCovered({
-          id: endingData?._id,
-          data: endingData,
+        const endingPayload = {
+          ...endingData,
+          academic_year: student?.academic_year,
+          report_type: "end_of_year",
+        };
+        delete endingPayload._id;
+
+        const data = await updateYearlyReport({
+          id: endingData._id,
+          data: endingPayload,
         }).unwrap();
+
         if (data?.modifiedCount) {
           Swal.fire({
             position: "center",
             icon: "success",
-            title: "End of Month data updated successfully!",
+            title: "End of Year report updated successfully!",
             showConfirmButton: false,
             timer: 1500,
           });
         }
       }
+
       handleClose();
     } catch (err) {
       Swal.fire({
@@ -187,7 +285,7 @@ export default function LessonCoveredUpdateModal({
     subject,
     field,
     value,
-    subField = null
+    subField = null,
   ) => {
     const setter = period === "beginning" ? setBeginningData : setEndingData;
     const currentData = period === "beginning" ? beginningData : endingData;
@@ -211,9 +309,52 @@ export default function LessonCoveredUpdateModal({
     });
   };
 
-  const handleDescriptionChange = (period, value) => {
-    const setter = period === "beginning" ? setBeginningData : setEndingData;
-    setter((prev) => ({ ...prev, description: value }));
+  // ===== RENDER NOTES SECTION =====
+  const renderNotesSection = (period, data) => {
+    const notes = data?.notes || [];
+    const reportId = data?._id;
+
+    if (notes.length === 0) {
+      return (
+        <div className="text-center text-muted py-2">
+          <i className="fas fa-info-circle me-2"></i>
+          No notes available for this report.
+        </div>
+      );
+    }
+
+    return (
+      <div className="notes-list">
+        {notes.map((note, index) => (
+          <div
+            key={note.id || index}
+            className="card mb-2 border-start border-4 border-warning"
+          >
+            <div className="card-body py-2 px-3">
+              <div className="d-flex justify-content-between align-items-start">
+                <div className="flex-grow-1">
+                  <p className="mb-1">{note.text}</p>
+                  <small className="text-muted">
+                    <i className="far fa-calendar-alt me-1"></i>
+                    {formatDate(note.date)}
+                  </small>
+                </div>
+                <div className="ms-2">
+                  <button
+                    type="button"
+                    className="btn btn-sm btn-outline-danger"
+                    onClick={() => handleDeleteNote(reportId, note.id)}
+                    disabled={isDeletingNote}
+                  >
+                    <i className="fas fa-trash"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
   };
 
   const renderQuranQaidahFields = (period, data) => {
@@ -231,7 +372,6 @@ export default function LessonCoveredUpdateModal({
           <h6 className="mb-0">Quran/Qaidah</h6>
         </div>
         <div className="card-body">
-          {/* Display selected option (read-only) */}
           <div className="row mb-3">
             <div className="col-md-12">
               <label className="form-label">Selected Option</label>
@@ -246,7 +386,6 @@ export default function LessonCoveredUpdateModal({
             </div>
           </div>
 
-          {/* Quran/Hifz Fields */}
           {["quran", "hifz"]?.includes(selectedOption) && (
             <div className="row g-3">
               <div className="col-md-4">
@@ -261,7 +400,7 @@ export default function LessonCoveredUpdateModal({
                       "qaidah_quran",
                       "data",
                       e.target.value,
-                      "para"
+                      "para",
                     )
                   }
                 />
@@ -278,7 +417,7 @@ export default function LessonCoveredUpdateModal({
                       "qaidah_quran",
                       "data",
                       e.target.value,
-                      "page"
+                      "page",
                     )
                   }
                 />
@@ -295,7 +434,7 @@ export default function LessonCoveredUpdateModal({
                       "qaidah_quran",
                       "data",
                       e.target.value,
-                      "line"
+                      "line",
                     )
                   }
                 />
@@ -303,7 +442,6 @@ export default function LessonCoveredUpdateModal({
             </div>
           )}
 
-          {/* Qaidah/Tajweed Fields */}
           {["qaidah", "tajweed"].includes(selectedOption) && (
             <div className="row g-3">
               <div className="col-md-3">
@@ -317,7 +455,7 @@ export default function LessonCoveredUpdateModal({
                       "qaidah_quran",
                       "data",
                       e.target.value,
-                      "level"
+                      "level",
                     )
                   }
                 >
@@ -347,7 +485,7 @@ export default function LessonCoveredUpdateModal({
                       "qaidah_quran",
                       "data",
                       e.target.value,
-                      "lesson_name"
+                      "lesson_name",
                     )
                   }
                 />
@@ -364,7 +502,7 @@ export default function LessonCoveredUpdateModal({
                       "qaidah_quran",
                       "data",
                       e.target.value,
-                      "page"
+                      "page",
                     )
                   }
                 />
@@ -381,7 +519,7 @@ export default function LessonCoveredUpdateModal({
                       "qaidah_quran",
                       "data",
                       e.target.value,
-                      "line"
+                      "line",
                     )
                   }
                 />
@@ -411,7 +549,7 @@ export default function LessonCoveredUpdateModal({
                     period,
                     "gift_for_muslim",
                     "level",
-                    e.target.value
+                    e.target.value,
                   )
                 }
               >
@@ -434,7 +572,7 @@ export default function LessonCoveredUpdateModal({
                     period,
                     "gift_for_muslim",
                     "page",
-                    e.target.value
+                    e.target.value,
                   )
                 }
               />
@@ -450,7 +588,7 @@ export default function LessonCoveredUpdateModal({
                     period,
                     "gift_for_muslim",
                     "target",
-                    e.target.value
+                    e.target.value,
                   )
                 }
               />
@@ -466,7 +604,7 @@ export default function LessonCoveredUpdateModal({
                     period,
                     "gift_for_muslim",
                     "lesson_name",
-                    e.target.value
+                    e.target.value,
                   )
                 }
               />
@@ -480,7 +618,6 @@ export default function LessonCoveredUpdateModal({
   const renderNormalEducationFields = (period, data) => {
     return (
       <>
-        {/* Islamic Studies Section */}
         <div className="card mb-3">
           <div className="card-header bg-light">
             <h6 className="mb-0">Islamic Studies</h6>
@@ -497,7 +634,7 @@ export default function LessonCoveredUpdateModal({
                       period,
                       "islamic_studies",
                       "book",
-                      e.target.value
+                      e.target.value,
                     )
                   }
                 >
@@ -523,7 +660,7 @@ export default function LessonCoveredUpdateModal({
                       period,
                       "islamic_studies",
                       "page",
-                      e.target.value
+                      e.target.value,
                     )
                   }
                 />
@@ -539,7 +676,7 @@ export default function LessonCoveredUpdateModal({
                       period,
                       "islamic_studies",
                       "lesson_name",
-                      e.target.value
+                      e.target.value,
                     )
                   }
                 />
@@ -548,7 +685,6 @@ export default function LessonCoveredUpdateModal({
           </div>
         </div>
 
-        {/* Dua/Surah Section */}
         <div className="card mb-3">
           <div className="card-header bg-light">
             <h6 className="mb-0">Dua/Surah</h6>
@@ -565,7 +701,7 @@ export default function LessonCoveredUpdateModal({
                       period,
                       "dua_surah",
                       "book",
-                      e.target.value
+                      e.target.value,
                     )
                   }
                 >
@@ -584,7 +720,7 @@ export default function LessonCoveredUpdateModal({
                       period,
                       "dua_surah",
                       "level",
-                      e.target.value
+                      e.target.value,
                     )
                   }
                 >
@@ -607,7 +743,7 @@ export default function LessonCoveredUpdateModal({
                       period,
                       "dua_surah",
                       "target",
-                      e.target.value
+                      e.target.value,
                     )
                   }
                 />
@@ -623,7 +759,7 @@ export default function LessonCoveredUpdateModal({
                       period,
                       "dua_surah",
                       "dua_number",
-                      e.target.value
+                      e.target.value,
                     )
                   }
                 />
@@ -639,7 +775,7 @@ export default function LessonCoveredUpdateModal({
                       period,
                       "dua_surah",
                       "page",
-                      e.target.value
+                      e.target.value,
                     )
                   }
                 />
@@ -655,7 +791,7 @@ export default function LessonCoveredUpdateModal({
                       period,
                       "dua_surah",
                       "lesson_name",
-                      e.target.value
+                      e.target.value,
                     )
                   }
                 />
@@ -671,10 +807,8 @@ export default function LessonCoveredUpdateModal({
 
   return (
     <div>
-      {/* Backdrop */}
       <div className="modal-backdrop fade show"></div>
 
-      {/* Modal */}
       <div
         className={`modal fade ${showModal ? "show" : ""}`}
         style={{ display: showModal ? "block" : "none", zIndex: 1050 }}
@@ -685,8 +819,8 @@ export default function LessonCoveredUpdateModal({
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title">
-                Edit Lessons - {student?.student_name} ({student?.month}{" "}
-                {student?.year})
+                Edit Reports - {student?.student_name} ({student?.academic_year}
+                )
               </h5>
               <button
                 type="button"
@@ -701,10 +835,10 @@ export default function LessonCoveredUpdateModal({
                 className="modal-body"
                 style={{ maxHeight: "70vh", overflowY: "auto" }}
               >
-                {/* Beginning of Month */}
+                {/* Beginning of Year */}
                 {beginningData?._id && (
                   <>
-                    <h5 className="text-primary mb-3">Beginning of Month</h5>
+                    <h5 className="text-primary mb-3">📘 Beginning of Year</h5>
                     <div className="mb-3">
                       <span className="badge bg-info">
                         Type:{" "}
@@ -719,14 +853,23 @@ export default function LessonCoveredUpdateModal({
                     {beginningData?.type === "gift_muslim"
                       ? renderGiftForMuslimFields("beginning", beginningData)
                       : renderNormalEducationFields("beginning", beginningData)}
+
+                    {/* Notes Section for Beginning */}
+                    <div className="mt-3">
+                      <h6 className="text-warning">
+                        <i className="fas fa-sticky-note me-2"></i>
+                        Notes ({beginningData.notes?.length || 0})
+                      </h6>
+                      {renderNotesSection("beginning", beginningData)}
+                    </div>
                   </>
                 )}
 
-                {/* Ending of Month */}
+                {/* End of Year */}
                 {endingData?._id && (
                   <>
                     <hr className="my-4" />
-                    <h5 className="text-primary mb-3">End of Month</h5>
+                    <h5 className="text-primary mb-3">📗 End of Year</h5>
                     <div className="mb-3">
                       <span className="badge bg-info">
                         Type:{" "}
@@ -742,17 +885,13 @@ export default function LessonCoveredUpdateModal({
                       ? renderGiftForMuslimFields("ending", endingData)
                       : renderNormalEducationFields("ending", endingData)}
 
-                    {/* Description */}
-                    <div className="mb-3">
-                      <label className="form-label">Description</label>
-                      <textarea
-                        className="form-control"
-                        rows="2"
-                        value={endingData?.description || ""}
-                        onChange={(e) =>
-                          handleDescriptionChange("ending", e.target.value)
-                        }
-                      />
+                    {/* Notes Section for Ending */}
+                    <div className="mt-3">
+                      <h6 className="text-warning">
+                        <i className="fas fa-sticky-note me-2"></i>
+                        Notes ({endingData.notes?.length || 0})
+                      </h6>
+                      {renderNotesSection("ending", endingData)}
                     </div>
                   </>
                 )}
@@ -771,7 +910,7 @@ export default function LessonCoveredUpdateModal({
                   className="btn btn-primary"
                   disabled={isLoading}
                 >
-                  {isLoading ? "Updating..." : "Update"}
+                  {isLoading ? "Updating..." : "Update Reports"}
                 </button>
               </div>
             </form>

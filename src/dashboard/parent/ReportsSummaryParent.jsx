@@ -2,44 +2,21 @@ import React, { useState, useEffect } from "react";
 import { useGetEnrolledFullFamilyQuery } from "../../redux/features/families/familiesApi";
 import { useGetDepartmentsQuery } from "../../redux/features/departments/departmentsApi";
 import { useGetClassesQuery } from "../../redux/features/classes/classesApi";
+import { useGetYearlyReportsQuery } from "../../redux/features/yearly_reports/yearly_reportsApi";
 import useAuth from "../../hooks/useAuth";
-import {
-  useGetStudentLessonsCoveredMonthlySummaryQuery,
-  useGetStudentLessonsCoveredYearlySummaryQuery,
-} from "../../redux/features/lessons_covered/lessons_coveredApi";
 import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 
 const currentYear = new Date().getFullYear();
-const months = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
 
-// Helper function to get current month name
-const getCurrentMonthName = () => {
-  return months[new Date().getMonth()];
+// Helper function to get current academic year
+const getCurrentAcademicYear = () => {
+  const year = new Date().getFullYear();
+  return `${year}-${year + 1}`;
 };
 
 export default function ReportsSummaryParent() {
   const { user, loading } = useAuth();
-  const [month, setMonth] = useState("");
-  const [year, setYear] = useState(currentYear);
-  const [showOverallSummary, setShowOverallSummary] = useState(false);
-
-  // Set default month to current month on component mount
-  useEffect(() => {
-    setMonth(getCurrentMonthName());
-  }, []);
+  const [academicYear, setAcademicYear] = useState(getCurrentAcademicYear());
 
   const { data: enrolledFamily = {}, isFetching: loadingFamily } =
     useGetEnrolledFullFamilyQuery(user?.email, {
@@ -49,28 +26,62 @@ export default function ReportsSummaryParent() {
   const { data: departments } = useGetDepartmentsQuery();
   const { data: classes } = useGetClassesQuery();
 
-  const studentIds = enrolledFamily?.childrenDocs?.map((s) => s._id);
+  // Get student IDs from enrolled family
+  const studentIds = enrolledFamily?.childrenDocs?.map((s) => s._id) || [];
 
+  // ===== GET PUBLISHED YEARLY REPORTS =====
   const {
-    data: monthlySummary = [],
-    isFetching: loadingMonthly,
-    error: monthlyError,
-  } = useGetStudentLessonsCoveredMonthlySummaryQuery(
-    { student_ids: studentIds, month, year },
-    {
-      skip: !studentIds?.length || showOverallSummary || month === "",
-      refetchOnMountOrArgChange: true,
+    data: allReports = [],
+    isFetching: loadingReports,
+    error: reportsError,
+    refetch: refetchReports,
+  } = useGetYearlyReportsQuery(undefined, {
+    skip: !studentIds.length,
+    refetchOnMountOrArgChange: true,
+  });
+
+  // Filter ONLY published reports for parents
+  const publishedReports = allReports.filter(
+    (report) => report.is_published === true,
+  );
+
+  // Filter reports for the selected academic year
+  const filteredByYear = publishedReports.filter(
+    (report) => report.academic_year === academicYear,
+  );
+
+  // Filter reports for the student's children
+  const studentReports = filteredByYear.filter((report) =>
+    studentIds.includes(report.student_id),
+  );
+
+  // Group reports by student
+  const groupedReports = studentReports.reduce((acc, report) => {
+    const key = report.student_id;
+    if (!acc[key]) {
+      acc[key] = {
+        student_id: report.student_id,
+        reports: [],
+        beginning: null,
+        ending: null,
+        allNotes: [], // Collect all notes from both reports
+      };
     }
-  );
 
-  const {
-    data: yearlySummary = [],
-    isFetching: loadingYearly,
-    error: yearlyError,
-  } = useGetStudentLessonsCoveredYearlySummaryQuery(
-    { student_ids: studentIds, year },
-    { skip: !studentIds?.length || !showOverallSummary }
-  );
+    if (report.report_type === "beginning_of_year") {
+      acc[key].beginning = report;
+    } else if (report.report_type === "end_of_year") {
+      acc[key].ending = report;
+    }
+
+    // Collect notes
+    if (report.notes && report.notes.length > 0) {
+      acc[key].allNotes = [...acc[key].allNotes, ...report.notes];
+    }
+
+    acc[key].reports.push(report);
+    return acc;
+  }, {});
 
   // Helper function to get academic information for display
   const getAcademicDisplay = (academic) => {
@@ -116,7 +127,107 @@ export default function ReportsSummaryParent() {
     };
   };
 
-  // Gradient styles matching EducationalInfoCard
+  // Format date helper
+  const formatDate = (dateString) => {
+    if (!dateString) return "N/A";
+    try {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) return "N/A";
+      return date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+    } catch (error) {
+      return "N/A";
+    }
+  };
+
+  // Get progress fields with ALL details
+  const getProgressInfo = (lessons, type) => {
+    if (!lessons) return [];
+
+    const info = [];
+
+    // Qaidah/Quran - Show ALL details
+    if (lessons.qaidah_quran) {
+      const q = lessons.qaidah_quran;
+      if (q.selected === "quran" || q.selected === "hifz") {
+        const details = [];
+        if (q.data?.para) details.push(`Para: ${q.data.para}`);
+        if (q.data?.page) details.push(`Page: ${q.data.page}`);
+        if (q.data?.line) details.push(`Line: ${q.data.line}`);
+        info.push({
+          label: "Quran/Hifz",
+          value: details.join(", ") || "N/A",
+        });
+      } else {
+        const details = [];
+        if (q.data?.level) details.push(`Level: ${q.data.level}`);
+        if (q.data?.lesson_name) details.push(`Lesson: ${q.data.lesson_name}`);
+        if (q.data?.page) details.push(`Page: ${q.data.page}`);
+        if (q.data?.line) details.push(`Line: ${q.data.line}`);
+        info.push({
+          label: "Qaidah/Tajweed",
+          value: details.join(", ") || "N/A",
+        });
+      }
+    }
+
+    // Islamic Studies (only for normal type)
+    if (type === "normal" && lessons.islamic_studies) {
+      const is = lessons.islamic_studies;
+      const details = [];
+      if (is.book) details.push(`Book: ${is.book}`);
+      if (is.page) details.push(`Page: ${is.page}`);
+      if (is.lesson_name) details.push(`Lesson: ${is.lesson_name}`);
+      info.push({
+        label: "Islamic Studies",
+        value: details.join(", ") || "N/A",
+      });
+    }
+
+    // Dua/Surah (only for normal type)
+    if (type === "normal" && lessons.dua_surah) {
+      const ds = lessons.dua_surah;
+      const details = [];
+      if (ds.book) details.push(`Book: ${ds.book}`);
+      if (ds.level) details.push(`Level: ${ds.level}`);
+      if (ds.page) details.push(`Page: ${ds.page}`);
+      if (ds.target) details.push(`Target: ${ds.target}`);
+      if (ds.dua_number) details.push(`Dua #: ${ds.dua_number}`);
+      if (ds.lesson_name) details.push(`Lesson: ${ds.lesson_name}`);
+      info.push({
+        label: "Dua/Surah",
+        value: details.join(", ") || "N/A",
+      });
+    }
+
+    // Gift for Muslim - Show ALL details
+    if (type === "gift_muslim" && lessons.gift_for_muslim) {
+      const gm = lessons.gift_for_muslim;
+      const details = [];
+      if (gm.level) details.push(`Level: ${gm.level}`);
+      if (gm.lesson_name) details.push(`Lesson: ${gm.lesson_name}`);
+      if (gm.page) details.push(`Page: ${gm.page}`);
+      if (gm.target) details.push(`Target: ${gm.target}`);
+      info.push({
+        label: "Gift for Muslim",
+        value: details.join(", ") || "N/A",
+      });
+    }
+
+    return info;
+  };
+
+  // Get education type
+  const getEducationType = (report) => {
+    return report?.type || "normal";
+  };
+
+  // Gradient styles
   const gradientStyle = {
     background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
   };
@@ -125,16 +236,83 @@ export default function ReportsSummaryParent() {
     primary: { background: "linear-gradient(135deg, #667eea, #764ba2)" },
     secondary: { background: "linear-gradient(135deg, #f093fb, #f5576c)" },
     info: { background: "linear-gradient(135deg, #4facfe, #00f2fe)" },
-    success: { background: "linear-gradient(135deg, #43e97b, #38f9d7)" },
     warning: { background: "linear-gradient(135deg, #ffd89b, #19547b)" },
+    note: { background: "linear-gradient(135deg, #f6d365, #fda085)" },
   };
 
-  // Handle toggle between monthly and yearly summary
-  const handleToggleSummary = (isOverall) => {
-    setShowOverallSummary(isOverall);
-    if (!isOverall) {
-      setMonth(month || getCurrentMonthName());
+  // Get the correct progress sections based on type
+  const getProgressSections = (report) => {
+    if (!report || !report.lessons) return [];
+
+    const type = getEducationType(report);
+    const sections = [];
+
+    // Always show Quran/Qaidah
+    if (report.lessons.qaidah_quran) {
+      sections.push({
+        key: "qaidah_quran",
+        label: "Quran/Qaidah",
+        icon: "📖",
+        gradient: cardGradients.primary,
+      });
     }
+
+    if (type === "normal") {
+      if (report.lessons.islamic_studies) {
+        sections.push({
+          key: "islamic_studies",
+          label: "Islamic Studies",
+          icon: "🕌",
+          gradient: cardGradients.info,
+        });
+      }
+      if (report.lessons.dua_surah) {
+        sections.push({
+          key: "dua_surah",
+          label: "Dua/Surah",
+          icon: "✨",
+          gradient: cardGradients.secondary,
+        });
+      }
+    } else if (type === "gift_muslim") {
+      if (report.lessons.gift_for_muslim) {
+        sections.push({
+          key: "gift_for_muslim",
+          label: "Gift for Muslim",
+          icon: "🎁",
+          gradient: cardGradients.warning,
+        });
+      }
+    }
+
+    return sections;
+  };
+
+  // ===== RENDER NOTES SECTION =====
+  const renderNotes = (notes) => {
+    if (!notes || notes.length === 0) return null;
+
+    return (
+      <div className="mt-3">
+        <h6 className="small text-warning mb-2">
+          <i className="fas fa-sticky-note me-2"></i>
+          Notes ({notes.length})
+        </h6>
+        <div className="bg-warning bg-opacity-10 p-2 rounded">
+          {notes.map((note, idx) => (
+            <div
+              key={note.id || idx}
+              className="border-bottom py-1 last:border-0"
+            >
+              <small className="text-dark">
+                <span className="fw-bold">{formatDate(note.date)}:</span>{" "}
+                {note.text}
+              </small>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
   };
 
   if (loading || loadingFamily) {
@@ -151,76 +329,7 @@ export default function ReportsSummaryParent() {
     );
   }
 
-  const displayData = showOverallSummary ? yearlySummary : monthlySummary;
-
-  // Helper to get correct progress object
-  const getProgress = (item) => (showOverallSummary ? item.progress : item);
-
-  // Get student data with proper filtering (FIXED LOGIC)
-  const getStudentData = (student) => {
-    return displayData?.filter((d) => {
-      // For monthly data: check _id.student_id (from your console log)
-      if (!showOverallSummary && d._id?.student_id === student._id) return true;
-
-      // For yearly data: check student_id directly
-      if (showOverallSummary && d.student_id === student._id) return true;
-
-      return false;
-    });
-  };
-
-  // Get all progress fields that have values (similar to admin logic)
-  const getProgressInfo = (progress) => {
-    if (!progress) return [];
-
-    return [
-      progress.page_progress !== undefined &&
-        progress.page_progress !== null && {
-          label: "Pages Done",
-          value: progress.page_progress,
-        },
-      progress.line_progress !== undefined &&
-        progress.line_progress !== null &&
-        progress.line_progress !== "N/A" && {
-          label: "Lines Progress",
-          value: progress.line_progress,
-        },
-      progress.para_progress !== undefined &&
-        progress.para_progress !== null && {
-          label: "Paras Done",
-          value: progress.para_progress,
-        },
-      progress.target_display !== undefined &&
-        progress.target_display !== null &&
-        progress.target_display !== "N/A" && {
-          label: "Targets",
-          value: progress.target_display,
-        },
-      progress.dua_number_progress !== undefined &&
-        progress.dua_number_progress !== null && {
-          label: "Duas Done",
-          value: progress.dua_number_progress,
-        },
-      progress.level_display &&
-        progress.level_display !== "N/A" && {
-          label: "Level",
-          value: progress.level_display,
-        },
-      progress.book_display &&
-        progress.book_display !== "N/A" && {
-          label: "Book",
-          value: progress.book_display,
-        },
-      progress.lesson_name_display &&
-        progress.lesson_name_display !== "N/A" && {
-          label: "Lesson",
-          value: progress.lesson_name_display,
-        },
-    ].filter(Boolean);
-  };
-
-  // Show loading only when actually fetching data for the current view
-  const isLoadingData = showOverallSummary ? loadingYearly : loadingMonthly;
+  const isLoading = loadingReports;
 
   return (
     <div className="container-fluid p-3">
@@ -262,96 +371,55 @@ export default function ReportsSummaryParent() {
         <div className="p-4">
           <div className="row align-items-end g-3">
             <div className="col-md-8 d-flex flex-wrap gap-3 align-items-end">
-              {/* Toggle Buttons */}
-              <div className="d-flex flex-column">
-                <label className="form-label fw-semibold mb-2">
-                  Report Type
-                </label>
-                <div className="btn-group" role="group">
-                  <button
-                    className={`btn px-4 py-2 ${
-                      !showOverallSummary
-                        ? "btn-primary"
-                        : "btn-outline-primary"
-                    }`}
-                    onClick={() => handleToggleSummary(false)}
-                  >
-                    📅 Monthly Summary
-                  </button>
-                  <button
-                    className={`btn px-4 py-2 ${
-                      showOverallSummary ? "btn-primary" : "btn-outline-primary"
-                    }`}
-                    onClick={() => handleToggleSummary(true)}
-                  >
-                    📆 Yearly Summary
-                  </button>
-                </div>
-              </div>
-
-              {/* Month Selector */}
-              {!showOverallSummary && (
-                <div style={{ minWidth: "200px" }}>
-                  <label className="form-label fw-semibold">Month</label>
-                  <select
-                    className="form-select"
-                    value={month}
-                    onChange={(e) => setMonth(e.target.value)}
-                  >
-                    <option value="">Select month</option>
-                    {months.map((m) => (
-                      <option key={m} value={m}>
-                        {m}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              )}
-
-              {/* Year Selector */}
-              <div style={{ minWidth: "150px" }}>
-                <label className="form-label fw-semibold">Year</label>
+              <div style={{ minWidth: "200px" }}>
+                <label className="form-label fw-semibold">Academic Year</label>
                 <select
                   className="form-select"
-                  value={year}
-                  onChange={(e) => setYear(Number(e.target.value))}
+                  value={academicYear}
+                  onChange={(e) => setAcademicYear(e.target.value)}
                 >
                   {Array.from({ length: 5 }, (_, i) => currentYear - 2 + i).map(
-                    (y) => (
-                      <option key={y} value={y}>
-                        {y}
+                    (yr) => (
+                      <option key={yr} value={`${yr}-${yr + 1}`}>
+                        {yr}-{yr + 1}
                       </option>
-                    )
+                    ),
                   )}
                 </select>
               </div>
             </div>
 
             <div className="col-md-4 text-md-end">
-              <div className="text-muted small">
-                Showing progress for {enrolledFamily?.childrenDocs?.length}{" "}
-                student
-                {enrolledFamily?.childrenDocs?.length !== 1 ? "s" : ""}
-              </div>
+              <button
+                className="btn btn-outline-secondary btn-sm"
+                onClick={() => refetchReports()}
+                disabled={isLoading}
+              >
+                <i className="fas fa-sync-alt me-2"></i>
+                Refresh
+              </button>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Loading State for Data */}
-      {isLoadingData && <LoadingSpinnerDash />}
+      {/* Loading State */}
+      {isLoading && <LoadingSpinnerDash />}
 
       {/* Student Reports */}
-      {!isLoadingData && (
+      {!isLoading && (
         <div className="row g-4">
           {enrolledFamily?.childrenDocs?.map((student) => {
-            const studentData = getStudentData(student);
+            const studentReport = groupedReports[student._id];
             const academicInfo = getAcademicDisplay(student.academic);
+            const hasBeginning = !!studentReport?.beginning;
+            const hasEnding = !!studentReport?.ending;
+            const allNotes = studentReport?.allNotes || [];
 
             return (
               <div key={student._id} className="col-12">
                 <div className="card shadow-sm border-0 rounded-4 overflow-hidden">
-                  {/* Student Header - UPDATED WITH MULTI-DEPARTMENT SUPPORT */}
+                  {/* Student Header */}
                   <div className="card-header bg-light border-0 py-3">
                     <div className="d-flex align-items-center justify-content-between">
                       <div className="d-flex align-items-center gap-3">
@@ -371,7 +439,6 @@ export default function ReportsSummaryParent() {
                             {student.name}
                           </h3>
                           <div className="d-flex flex-wrap gap-2 align-items-center">
-                            {/* Department Badges */}
                             <div className="d-flex flex-wrap gap-1">
                               {academicInfo.departments
                                 .slice(0, 2)
@@ -382,7 +449,6 @@ export default function ReportsSummaryParent() {
                                     style={{ fontSize: "0.7rem" }}
                                   >
                                     {dept}
-                                    {academicInfo.count > 1 && ` ${idx + 1}`}
                                   </span>
                                 ))}
                               {academicInfo.departments.length > 2 && (
@@ -394,8 +460,6 @@ export default function ReportsSummaryParent() {
                                 </span>
                               )}
                             </div>
-
-                            {/* Class Information */}
                             <div className="d-flex flex-wrap gap-1">
                               {academicInfo.classes
                                 .slice(0, 2)
@@ -421,212 +485,261 @@ export default function ReportsSummaryParent() {
                         </div>
                       </div>
                       <div className="text-end">
-                        <span className="badge bg-primary">
-                          {showOverallSummary
-                            ? `Year ${year}`
-                            : `${month} ${year}`}
-                        </span>
-                        {academicInfo.count > 1 && (
-                          <div className="mt-1">
-                            <span
-                              className="badge bg-info"
-                              style={{ fontSize: "0.65rem" }}
-                            >
-                              {academicInfo.count} Departments
-                            </span>
-                          </div>
+                        <span className="badge bg-primary">{academicYear}</span>
+                        {allNotes.length > 0 && (
+                          <span className="badge bg-warning text-dark ms-1">
+                            📝 {allNotes.length} notes
+                          </span>
                         )}
                       </div>
                     </div>
                   </div>
 
                   <div className="card-body p-4">
-                    {studentData?.length > 0 ? (
-                      studentData.map((item, idx) => {
-                        const progress = getProgress(item);
+                    {/* No Reports Available */}
+                    {!studentReport && (
+                      <div className="text-center py-4">
+                        <div style={{ fontSize: "3rem", opacity: 0.3 }}>📊</div>
+                        <h5 className="text-muted mt-3">
+                          No published reports available
+                        </h5>
+                        <p className="text-muted small">
+                          Reports will appear here once published by the
+                          teacher.
+                        </p>
+                      </div>
+                    )}
 
-                        return (
-                          <div key={idx} className="mb-4">
-                            {!showOverallSummary && (
-                              <h5 className="fw-semibold mb-3 text-primary">
-                                {item.month}, {year}
-                              </h5>
-                            )}
-
-                            <div className="row g-3">
-                              {/* Qaidah Quran Progress */}
-                              {progress?.qaidah_quran_progress && (
-                                <div className="col-xl-4 col-lg-6">
-                                  <div
-                                    className="p-4 rounded-4 text-white h-100"
-                                    style={cardGradients.primary}
-                                  >
-                                    <div className="d-flex align-items-start">
-                                      <div
-                                        style={{
-                                          fontSize: "2rem",
-                                          opacity: 0.9,
-                                        }}
-                                      >
-                                        📖
-                                      </div>
-                                      <div className="ms-3 flex-grow-1">
-                                        <h6 className="fw-bold mb-3">
-                                          Quran Qaidah
-                                        </h6>
-                                        <div className="row g-2">
-                                          {getProgressInfo(
-                                            progress.qaidah_quran_progress
-                                          ).map((info, i) => (
-                                            <div key={i} className="col-12">
-                                              <div className="d-flex justify-content-between align-items-center">
-                                                <small className="opacity-90">
-                                                  {info.label}:
-                                                </small>
-                                                <small className="fw-bold">
-                                                  {info.value}
-                                                </small>
-                                              </div>
-                                            </div>
-                                          ))}
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
+                    {/* Reports Available */}
+                    {studentReport && (
+                      <div className="row g-4">
+                        {/* Beginning of Year */}
+                        {hasBeginning && (
+                          <div className="col-md-6">
+                            <div className="card h-100 border-0 shadow-sm">
+                              <div className="card-header bg-info text-white">
+                                <h6 className="mb-0">
+                                  📘 Beginning of Year Report
+                                </h6>
+                              </div>
+                              <div className="card-body">
+                                <div className="mb-2">
+                                  <small className="text-muted">
+                                    Date:{" "}
+                                    {formatDate(
+                                      studentReport.beginning.created_at,
+                                    )}
+                                  </small>
                                 </div>
-                              )}
+                                {getProgressSections(
+                                  studentReport.beginning,
+                                ).map((section, idx) => {
+                                  const lessons =
+                                    studentReport.beginning.lessons;
+                                  const progressInfo = getProgressInfo(
+                                    lessons,
+                                    getEducationType(studentReport.beginning),
+                                  );
+                                  const filteredInfo = progressInfo.filter(
+                                    (info) => {
+                                      if (section.key === "qaidah_quran") {
+                                        return (
+                                          info.label === "Quran/Hifz" ||
+                                          info.label === "Qaidah/Tajweed"
+                                        );
+                                      }
+                                      if (section.key === "islamic_studies") {
+                                        return info.label === "Islamic Studies";
+                                      }
+                                      if (section.key === "dua_surah") {
+                                        return info.label === "Dua/Surah";
+                                      }
+                                      if (section.key === "gift_for_muslim") {
+                                        return info.label === "Gift for Muslim";
+                                      }
+                                      return false;
+                                    },
+                                  );
 
-                              {/* Dua/Surah Progress */}
-                              {progress?.dua_surah_progress && (
-                                <div className="col-xl-4 col-lg-6">
-                                  <div
-                                    className="p-4 rounded-4 text-white h-100"
-                                    style={cardGradients.secondary}
-                                  >
-                                    <div className="d-flex align-items-start">
-                                      <div
-                                        style={{
-                                          fontSize: "2rem",
-                                          opacity: 0.9,
-                                        }}
-                                      >
-                                        ✨
-                                      </div>
-                                      <div className="ms-3 flex-grow-1">
-                                        <h6 className="fw-bold mb-3">
-                                          Duas & Surahs
+                                  return (
+                                    <div
+                                      key={idx}
+                                      className="p-3 rounded mb-2"
+                                      style={section.gradient}
+                                    >
+                                      <div className="text-white">
+                                        <h6 className="fw-bold mb-2">
+                                          {section.icon} {section.label}
                                         </h6>
-                                        <div className="row g-2">
-                                          {getProgressInfo(
-                                            progress.dua_surah_progress
-                                          ).map((info, i) => (
-                                            <div key={i} className="col-12">
-                                              <div className="d-flex justify-content-between align-items-center">
-                                                <small className="opacity-90">
-                                                  {info.label}:
-                                                </small>
-                                                <small className="fw-bold">
-                                                  {info.value}
-                                                </small>
-                                              </div>
+                                        {filteredInfo.length > 0 ? (
+                                          filteredInfo.map((info, i) => (
+                                            <div
+                                              key={i}
+                                              className="d-flex justify-content-between"
+                                            >
+                                              <small className="opacity-90">
+                                                {info.label}:
+                                              </small>
+                                              <small className="fw-bold">
+                                                {info.value}
+                                              </small>
                                             </div>
-                                          ))}
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              )}
-
-                              {/* Islamic Studies Progress */}
-                              {progress?.islamic_studies_progress && (
-                                <div className="col-xl-4 col-lg-6">
-                                  <div
-                                    className="p-4 rounded-4 text-white h-100"
-                                    style={cardGradients.info}
-                                  >
-                                    <div className="d-flex align-items-start">
-                                      <div
-                                        style={{
-                                          fontSize: "2rem",
-                                          opacity: 0.9,
-                                        }}
-                                      >
-                                        🕌
-                                      </div>
-                                      <div className="ms-3 flex-grow-1">
-                                        <h6 className="fw-bold mb-3">
-                                          Islamic Studies
-                                        </h6>
-                                        <div className="row g-2">
-                                          {getProgressInfo(
-                                            progress.islamic_studies_progress
-                                          ).map((info, i) => (
-                                            <div key={i} className="col-12">
-                                              <div className="d-flex justify-content-between align-items-center">
-                                                <small className="opacity-90">
-                                                  {info.label}:
-                                                </small>
-                                                <small className="fw-bold">
-                                                  {info.value}
-                                                </small>
-                                              </div>
-                                            </div>
-                                          ))}
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              )}
-
-                              {/* Gift for Muslim Progress */}
-                              {progress?.gift_for_muslim_progress && (
-                                <div className="col-xl-4 col-lg-6">
-                                  <div
-                                    className="p-4 rounded-4 text-white h-100"
-                                    style={cardGradients.warning}
-                                  >
-                                    <div className="d-flex align-items-start">
-                                      <div
-                                        style={{
-                                          fontSize: "2rem",
-                                          opacity: 0.9,
-                                        }}
-                                      >
-                                        🎁
-                                      </div>
-                                      <div className="ms-3 flex-grow-1">
-                                        <h6 className="fw-bold mb-3">
-                                          Gift for Muslim
-                                        </h6>
-                                        <div className="text-center">
-                                          <div className="fw-bold fs-4">
-                                            {progress.gift_for_muslim_progress}
-                                          </div>
-                                          <small className="opacity-90">
-                                            Progress
+                                          ))
+                                        ) : (
+                                          <small className="opacity-75">
+                                            No data available
                                           </small>
-                                        </div>
+                                        )}
                                       </div>
                                     </div>
-                                  </div>
-                                </div>
-                              )}
+                                  );
+                                })}
+
+                                {/* Beginning Notes */}
+                                {studentReport.beginning.notes &&
+                                  studentReport.beginning.notes.length > 0 && (
+                                    <div className="mt-3 p-2 bg-warning bg-opacity-10 rounded">
+                                      <h6 className="small text-warning mb-2">
+                                        <i className="fas fa-sticky-note me-2"></i>
+                                        Notes (
+                                        {studentReport.beginning.notes.length})
+                                      </h6>
+                                      {studentReport.beginning.notes.map(
+                                        (note, idx) => (
+                                          <div
+                                            key={note.id || idx}
+                                            className="border-bottom py-1 last:border-0"
+                                          >
+                                            <small className="text-dark">
+                                              <span className="fw-bold">
+                                                {formatDate(note.date)}:
+                                              </span>{" "}
+                                              {note.text}
+                                            </small>
+                                          </div>
+                                        ),
+                                      )}
+                                    </div>
+                                  )}
+                              </div>
                             </div>
                           </div>
-                        );
-                      })
-                    ) : (
-                      <div className="text-center py-5">
-                        <div style={{ fontSize: "4rem", opacity: 0.3 }}>📊</div>
-                        <h4 className="text-muted mt-3 mb-2">
-                          No Data Available
-                        </h4>
-                        <p className="text-muted mb-0">
-                          This {showOverallSummary ? "year" : "month"} data is
-                          not available for {student.name}.
-                        </p>
+                        )}
+
+                        {/* End of Year */}
+                        {hasEnding && (
+                          <div className="col-md-6">
+                            <div className="card h-100 border-0 shadow-sm">
+                              <div className="card-header bg-warning text-dark">
+                                <h6 className="mb-0">📗 End of Year Report</h6>
+                              </div>
+                              <div className="card-body">
+                                <div className="mb-2">
+                                  <small className="text-muted">
+                                    Date:{" "}
+                                    {formatDate(
+                                      studentReport.ending.created_at,
+                                    )}
+                                  </small>
+                                </div>
+                                {getProgressSections(studentReport.ending).map(
+                                  (section, idx) => {
+                                    const lessons =
+                                      studentReport.ending.lessons;
+                                    const progressInfo = getProgressInfo(
+                                      lessons,
+                                      getEducationType(studentReport.ending),
+                                    );
+                                    const filteredInfo = progressInfo.filter(
+                                      (info) => {
+                                        if (section.key === "qaidah_quran") {
+                                          return (
+                                            info.label === "Quran/Hifz" ||
+                                            info.label === "Qaidah/Tajweed"
+                                          );
+                                        }
+                                        if (section.key === "islamic_studies") {
+                                          return (
+                                            info.label === "Islamic Studies"
+                                          );
+                                        }
+                                        if (section.key === "dua_surah") {
+                                          return info.label === "Dua/Surah";
+                                        }
+                                        if (section.key === "gift_for_muslim") {
+                                          return (
+                                            info.label === "Gift for Muslim"
+                                          );
+                                        }
+                                        return false;
+                                      },
+                                    );
+
+                                    return (
+                                      <div
+                                        key={idx}
+                                        className="p-3 rounded mb-2"
+                                        style={section.gradient}
+                                      >
+                                        <div className="text-white">
+                                          <h6 className="fw-bold mb-2">
+                                            {section.icon} {section.label}
+                                          </h6>
+                                          {filteredInfo.length > 0 ? (
+                                            filteredInfo.map((info, i) => (
+                                              <div
+                                                key={i}
+                                                className="d-flex justify-content-between"
+                                              >
+                                                <small className="opacity-90">
+                                                  {info.label}:
+                                                </small>
+                                                <small className="fw-bold">
+                                                  {info.value}
+                                                </small>
+                                              </div>
+                                            ))
+                                          ) : (
+                                            <small className="opacity-75">
+                                              No data available
+                                            </small>
+                                          )}
+                                        </div>
+                                      </div>
+                                    );
+                                  },
+                                )}
+
+                                {/* Ending Notes */}
+                                {studentReport.ending.notes &&
+                                  studentReport.ending.notes.length > 0 && (
+                                    <div className="mt-3 p-2 bg-warning bg-opacity-10 rounded">
+                                      <h6 className="small text-warning mb-2">
+                                        <i className="fas fa-sticky-note me-2"></i>
+                                        Notes (
+                                        {studentReport.ending.notes.length})
+                                      </h6>
+                                      {studentReport.ending.notes.map(
+                                        (note, idx) => (
+                                          <div
+                                            key={note.id || idx}
+                                            className="border-bottom py-1 last:border-0"
+                                          >
+                                            <small className="text-dark">
+                                              <span className="fw-bold">
+                                                {formatDate(note.date)}:
+                                              </span>{" "}
+                                              {note.text}
+                                            </small>
+                                          </div>
+                                        ),
+                                      )}
+                                    </div>
+                                  )}
+                              </div>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>

@@ -2,50 +2,107 @@ import React, { useState } from "react";
 import { FaTrashAlt, FaPen } from "react-icons/fa";
 import Swal from "sweetalert2";
 import {
-  useDeleteManyLessonCoveredMutation,
-  useGetTeacherStudentsProgressQuery,
-} from "../../redux/features/lessons_covered/lessons_coveredApi";
-import LessonCoveredUpdateModal from "../shared/LessonCoveredUpdateModal";
+  useGetYearlyReportsQuery,
+  useDeleteYearlyReportMutation,
+} from "../../redux/features/yearly_reports/yearly_reportsApi";
 import { useGetTeacherByEmailQuery } from "../../redux/features/teachers/teachersApi";
 import useAuth from "../../hooks/useAuth";
+import LessonCoveredUpdateModal from "../shared/LessonCoveredUpdateModal";
 
-export default function LessonCoveredTable(
-  {
-    // lessonsCovered,
-    // filterMonth,
-    // setFilterMonth,
-    // filterName,
-    // setFilterName,
-    // filterYear,
-    // setFilterYear,
-  }
-) {
+export default function LessonCoveredTable() {
   const currentYear = new Date().getFullYear();
-  const [filterMonth, setFilterMonth] = useState("");
-  const [filterName, setFilterName] = useState("");
   const [filterYear, setFilterYear] = useState(currentYear.toString());
+  const [filterName, setFilterName] = useState("");
+  const [filterReportType, setFilterReportType] = useState("");
   const { user } = useAuth();
+
   const { data: teacher } = useGetTeacherByEmailQuery(user?.email, {
     skip: !user?.email,
   });
-  const { data: lessonsCovered = [], isLoading: LessonCoveredLoading } =
-    useGetTeacherStudentsProgressQuery(
-      {
-        teacher_id: teacher?._id,
-        student_name: filterName,
-        month: filterMonth,
-        year: filterYear,
-      },
-      {
-        skip: !teacher?._id,
-      }
-    );
 
-  const [selectedGroup, setSelectedGroup] = useState(null);
+  // ===== GET ALL REPORTS (already has student_name from backend) =====
+  const {
+    data: allReports = [],
+    isLoading: reportsLoading,
+    refetch: refetchReports,
+  } = useGetYearlyReportsQuery(undefined, {
+    skip: !teacher?._id,
+  });
+
+  const [selectedReport, setSelectedReport] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [expandedRows, setExpandedRows] = useState(new Set());
 
-  const [deleteManyLessonCovered] = useDeleteManyLessonCoveredMutation();
+  const [deleteYearlyReport] = useDeleteYearlyReportMutation();
+
+  // ===== FILTER REPORTS =====
+  const filteredReports = allReports.filter((report) => {
+    // Filter by teacher
+    if (report.teacher_id !== teacher?._id) return false;
+
+    // Filter by year
+    if (filterYear && !report.academic_year?.includes(filterYear)) {
+      return false;
+    }
+
+    // Filter by report type
+    if (filterReportType && report.report_type !== filterReportType) {
+      return false;
+    }
+
+    // Filter by student name (now available directly from report)
+    if (filterName) {
+      const studentName = report.student_name || "Unknown Student";
+      if (!studentName.toLowerCase().includes(filterName.toLowerCase())) {
+        return false;
+      }
+    }
+
+    return true;
+  });
+
+  // ===== GROUP REPORTS BY STUDENT AND ACADEMIC YEAR =====
+  const groupedReports = filteredReports.reduce((acc, report) => {
+    const key = `${report.student_id}-${report.academic_year}`;
+    if (!acc[key]) {
+      acc[key] = {
+        student_id: report.student_id,
+        student_name: report.student_name || "Unknown Student",
+        academic_year: report.academic_year,
+        beginning: null,
+        ending: null,
+        type: report.type,
+        notes: [],
+        report_ids: [],
+      };
+    }
+
+    // Add notes to the group
+    if (report.notes && report.notes.length > 0) {
+      acc[key].notes = [...acc[key].notes, ...report.notes];
+    }
+
+    // Add report ID
+    if (report._id) {
+      acc[key].report_ids.push(report._id);
+    }
+
+    // Assign beginning or ending
+    if (report.report_type === "beginning_of_year") {
+      acc[key].beginning = report;
+    } else if (report.report_type === "end_of_year") {
+      acc[key].ending = report;
+    }
+
+    // Set type from beginning if available, else from ending
+    if (!acc[key].type && report.type) {
+      acc[key].type = report.type;
+    }
+
+    return acc;
+  }, {});
+
+  const groupedReportsArray = Object.values(groupedReports);
 
   const toggleRowExpansion = (index) => {
     const newExpandedRows = new Set(expandedRows);
@@ -57,14 +114,17 @@ export default function LessonCoveredTable(
     setExpandedRows(newExpandedRows);
   };
 
-  const handleShow = (student) => {
-    setSelectedGroup(student);
+  const handleShow = (reportGroup) => {
+    setSelectedReport(reportGroup);
     setShowModal(true);
   };
 
-  const handleClose = () => setShowModal(false);
+  const handleClose = () => {
+    setShowModal(false);
+    refetchReports();
+  };
 
-  const handleDelete = async (ids) => {
+  const handleDelete = async (reportIds) => {
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -75,16 +135,43 @@ export default function LessonCoveredTable(
       confirmButtonText: "Yes, delete it!",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        const data = await deleteManyLessonCovered(ids).unwrap();
-        if (data?.deletedCount) {
+        try {
+          for (const id of reportIds) {
+            await deleteYearlyReport(id).unwrap();
+          }
           Swal.fire({
             title: "Deleted!",
-            text: "Your file has been deleted.",
+            text: "The report has been deleted.",
             icon: "success",
+          });
+          refetchReports();
+        } catch (error) {
+          Swal.fire({
+            title: "Error!",
+            text: error?.data?.message || "Failed to delete report",
+            icon: "error",
           });
         }
       }
     });
+  };
+
+  // ===== HELPER: Format Date =====
+  const formatDate = (dateString) => {
+    if (!dateString) return "N/A";
+    try {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) return "N/A";
+      return date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+    } catch (error) {
+      return "N/A";
+    }
   };
 
   const renderSubjectDetails = (lessons, subject, type) => {
@@ -95,45 +182,33 @@ export default function LessonCoveredTable(
     switch (subject) {
       case "qaidah_quran":
         return data.selected === "quran" || data.selected === "hifz"
-          ? `Para: ${data.data?.para || "N/A"}, Page: ${
-              data.data?.page || "N/A"
-            }, Line: ${data.data?.line || "N/A"}`
-          : `Level: ${data.data?.level || "N/A"}, Lesson: ${
-              data.data?.lesson_name || "N/A"
-            }, Page: ${data.data?.page || "N/A"}`;
+          ? `Para: ${data.data?.para || "N/A"}, Page: ${data.data?.page || "N/A"}, Line: ${data.data?.line || "N/A"}`
+          : `Level: ${data.data?.level || "N/A"}, Lesson: ${data.data?.lesson_name || "N/A"}, Page: ${data.data?.page || "N/A"}`;
 
       case "islamic_studies":
-        return `Book: ${data.book || "N/A"}, Page: ${
-          data.page || "N/A"
-        }, Lesson: ${data.lesson_name || "N/A"}`;
+        return `Book: ${data.book || "N/A"}, Page: ${data.page || "N/A"}, Lesson: ${data.lesson_name || "N/A"}`;
 
       case "dua_surah":
-        return `Book: ${data.book || "N/A"}, Level: ${
-          data.level || "N/A"
-        }, Page: ${data.page || "N/A"}, Target: ${
-          data.target || "N/A"
-        }, Dua Number: ${data.dua_number || "N/A"}, Lesson Name: ${
-          data.lesson_name || "N/A"
-        }`;
+        return `Book: ${data.book || "N/A"}, Level: ${data.level || "N/A"}, Page: ${data.page || "N/A"}, Target: ${data.target || "N/A"}, Dua Number: ${data.dua_number || "N/A"}, Lesson Name: ${data.lesson_name || "N/A"}`;
 
       case "gift_for_muslim":
-        return `Level: ${data.level || "N/A"}, Lesson: ${
-          data.lesson_name || "N/A"
-        }, Page: ${data.page || "N/A"}, Target: ${data.target || "N/A"}`;
+        return `Level: ${data.level || "N/A"}, Lesson: ${data.lesson_name || "N/A"}, Page: ${data.page || "N/A"}, Target: ${data.target || "N/A"}`;
 
       default:
         return "N/A";
     }
   };
 
-  const getEducationType = (student) => {
-    if (student?.beginning?.type) return student?.beginning?.type;
-    if (student?.ending?.type) return student?.ending?.type;
-    if (student?.type) return student?.type; // 👈 will now exist
+  const getEducationType = (reportGroup) => {
+    if (reportGroup?.beginning?.type) return reportGroup.beginning.type;
+    if (reportGroup?.ending?.type) return reportGroup.ending.type;
+    if (reportGroup?.type) return reportGroup.type;
     return "normal";
   };
 
   const renderSubjectsList = (lessons, type) => {
+    if (!lessons) return <p className="text-muted">No lessons data</p>;
+
     if (type === "gift_muslim") {
       return (
         <ul className="list-group">
@@ -150,7 +225,6 @@ export default function LessonCoveredTable(
         </ul>
       );
     } else {
-      // normal type
       return (
         <ul className="list-group">
           <li className="list-group-item">
@@ -175,7 +249,7 @@ export default function LessonCoveredTable(
 
   return (
     <div>
-      <h3 className="text-center mb-4">Previously Added Reports</h3>
+      <h3 className="text-center mb-4">Yearly Reports</h3>
 
       {/* Filters */}
       <div className="card mb-4">
@@ -185,42 +259,32 @@ export default function LessonCoveredTable(
         <div className="card-body">
           <div className="row">
             <div className="col-md-4 mb-3">
-              <label className="form-label">Month</label>
-              <select
-                className="form-control"
-                value={filterMonth}
-                onChange={(e) => setFilterMonth(e.target.value)}
-              >
-                <option value="">All Months</option>
-                <option value="January">January</option>
-                <option value="February">February</option>
-                <option value="March">March</option>
-                <option value="April">April</option>
-                <option value="May">May</option>
-                <option value="June">June</option>
-                <option value="July">July</option>
-                <option value="August">August</option>
-                <option value="September">September</option>
-                <option value="October">October</option>
-                <option value="November">November</option>
-                <option value="December">December</option>
-              </select>
-            </div>
-            <div className="col-md-4 mb-3">
-              <label className="form-label">Year</label>
+              <label className="form-label">Academic Year</label>
               <select
                 className="form-control"
                 value={filterYear}
                 onChange={(e) => setFilterYear(e.target.value)}
               >
                 <option value="">All Years</option>
-                {Array.from({ length: 5 }, (_, i) => currentYear - 2 + i)?.map(
+                {Array.from({ length: 5 }, (_, i) => currentYear - 2 + i).map(
                   (yr) => (
                     <option key={yr} value={yr}>
-                      {yr}
+                      {yr}-{yr + 1}
                     </option>
-                  )
+                  ),
                 )}
+              </select>
+            </div>
+            <div className="col-md-4 mb-3">
+              <label className="form-label">Report Type</label>
+              <select
+                className="form-control"
+                value={filterReportType}
+                onChange={(e) => setFilterReportType(e.target.value)}
+              >
+                <option value="">All Types</option>
+                <option value="beginning_of_year">Beginning of Year</option>
+                <option value="end_of_year">End of Year</option>
               </select>
             </div>
             <div className="col-md-4 mb-3">
@@ -233,75 +297,69 @@ export default function LessonCoveredTable(
                 onChange={(e) => setFilterName(e.target.value)}
               />
             </div>
-            {/* <div className="col-md-3 mb-3">
-              <label className="form-label">Type</label>
-              <select
-                className="form-control"
-                value={filterType}
-                onChange={(e) => setFilterType(e.target.value)}
-              >
-                <option value="">All Types</option>
-                <option value="normal">Normal Education</option>
-                <option value="gift_muslim">Gift For Muslim</option>
-              </select>
-            </div> */}
           </div>
         </div>
       </div>
 
-      {lessonsCovered?.length > 0 ? (
+      {reportsLoading ? (
+        <div className="text-center p-5">
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      ) : groupedReportsArray.length > 0 ? (
         <div className="table-responsive">
           <table className="table table-hover">
-            <thead className="">
+            <thead>
               <tr>
                 <th
-                  className="font-danger text-white fw-bolder border h6 text-center align-middle"
+                  className="text-white fw-bolder border h6 text-center align-middle"
                   style={{ backgroundColor: "var(--border2)", width: "40px" }}
                 ></th>
                 <th
-                  className="font-danger text-white fw-bolder border h6 text-center align-middle"
+                  className="text-white fw-bolder border h6 text-center align-middle"
                   style={{ backgroundColor: "var(--border2)" }}
                 >
                   #
                 </th>
                 <th
-                  className="font-danger text-white fw-bolder border h6 text-center align-middle"
+                  className="text-white fw-bolder border h6 text-center align-middle"
                   style={{ backgroundColor: "var(--border2)" }}
                 >
                   Student Name
                 </th>
                 <th
-                  className="font-danger text-white fw-bolder border h6 text-center align-middle"
+                  className="text-white fw-bolder border h6 text-center align-middle"
                   style={{ backgroundColor: "var(--border2)" }}
                 >
                   Type
                 </th>
                 <th
-                  className="font-danger text-white fw-bolder border h6 text-center align-middle"
+                  className="text-white fw-bolder border h6 text-center align-middle"
                   style={{ backgroundColor: "var(--border2)" }}
                 >
-                  Month
+                  Academic Year
                 </th>
                 <th
-                  className="font-danger text-white fw-bolder border h6 text-center align-middle"
-                  style={{ backgroundColor: "var(--border2)" }}
-                >
-                  Year
-                </th>
-                <th
-                  className="font-danger text-white fw-bolder border h6 text-center align-middle"
+                  className="text-white fw-bolder border h6 text-center align-middle"
                   style={{ backgroundColor: "var(--border2)" }}
                 >
                   Beginning Report
                 </th>
                 <th
-                  className="font-danger text-white fw-bolder border h6 text-center align-middle"
+                  className="text-white fw-bolder border h6 text-center align-middle"
                   style={{ backgroundColor: "var(--border2)" }}
                 >
-                  Ending Report
+                  End Report
                 </th>
                 <th
-                  className="font-danger text-white fw-bolder border h6 text-center align-middle"
+                  className="text-white fw-bolder border h6 text-center align-middle"
+                  style={{ backgroundColor: "var(--border2)" }}
+                >
+                  Notes
+                </th>
+                <th
+                  className="text-white fw-bolder border h6 text-center align-middle"
                   style={{ backgroundColor: "var(--border2)" }}
                 >
                   Actions
@@ -309,8 +367,11 @@ export default function LessonCoveredTable(
               </tr>
             </thead>
             <tbody>
-              {lessonsCovered?.map((student, idx) => {
-                const educationType = getEducationType(student);
+              {groupedReportsArray.map((reportGroup, idx) => {
+                const educationType = getEducationType(reportGroup);
+                const hasBeginning = !!reportGroup.beginning;
+                const hasEnding = !!reportGroup.ending;
+                const notesCount = reportGroup.notes?.length || 0;
 
                 return (
                   <React.Fragment key={idx}>
@@ -321,7 +382,7 @@ export default function LessonCoveredTable(
                     >
                       <td>{expandedRows.has(idx) ? "▼" : "►"}</td>
                       <td>{idx + 1}</td>
-                      <td className="fw-bold">{student?.student_name}</td>
+                      <td className="fw-bold">{reportGroup.student_name}</td>
                       <td>
                         <span
                           className={`badge ${
@@ -335,34 +396,50 @@ export default function LessonCoveredTable(
                             : "Normal Education"}
                         </span>
                       </td>
-                      <td>{student?.month}</td>
-                      <td>{student?.year}</td>
+                      <td>{reportGroup.academic_year}</td>
                       <td>
-                        {student?.beginning ? (
-                          <span className="badge bg-success">Available</span>
+                        {hasBeginning ? (
+                          <span className="badge bg-success">✅ Available</span>
                         ) : (
-                          <span className="badge bg-secondary">Not Added</span>
+                          <span className="badge bg-secondary">
+                            ❌ Not Added
+                          </span>
                         )}
                       </td>
                       <td>
-                        {student?.ending ? (
-                          <span className="badge bg-success">Available</span>
+                        {hasEnding ? (
+                          <span className="badge bg-success">✅ Available</span>
                         ) : (
-                          <span className="badge bg-secondary">Not Added</span>
+                          <span className="badge bg-secondary">
+                            ❌ Not Added
+                          </span>
                         )}
                       </td>
                       <td>
-                        <div className="d-flex gap-2">
+                        {notesCount > 0 ? (
+                          <span className="badge bg-info">
+                            📝 {notesCount} note{notesCount > 1 ? "s" : ""}
+                          </span>
+                        ) : (
+                          <span className="badge bg-secondary">No notes</span>
+                        )}
+                      </td>
+                      <td>
+                        <div className="d-flex gap-2 justify-content-center">
                           <button
                             className="btn btn-danger btn-sm"
                             onClick={(e) => {
                               e.stopPropagation();
-                              handleDelete(
-                                [
-                                  student?.beginning?._id,
-                                  student?.ending?._id,
-                                ].filter(Boolean)
-                              );
+                              const reportIds = reportGroup.report_ids || [];
+                              if (reportIds.length === 0) {
+                                Swal.fire({
+                                  title: "No Reports",
+                                  text: "There are no reports to delete.",
+                                  icon: "info",
+                                });
+                                return;
+                              }
+                              handleDelete(reportIds);
                             }}
                           >
                             <FaTrashAlt />
@@ -371,8 +448,9 @@ export default function LessonCoveredTable(
                             className="btn btn-primary btn-sm"
                             onClick={(e) => {
                               e.stopPropagation();
-                              handleShow(student);
+                              handleShow(reportGroup);
                             }}
+                            disabled={!hasBeginning && !hasEnding}
                           >
                             <FaPen />
                           </button>
@@ -380,90 +458,107 @@ export default function LessonCoveredTable(
                       </td>
                     </tr>
 
-                    {expandedRows?.has(idx) && (
+                    {expandedRows.has(idx) && (
                       <tr>
                         <td colSpan="9" className="p-0">
                           <div className="p-3 bg-light">
                             <h6 className="mb-3 text-primary">
-                              Progress Details for {student?.student_name} -{" "}
-                              {student?.month} {student?.year} (
+                              Progress Details for {reportGroup.student_name} -{" "}
+                              {reportGroup.academic_year} (
                               {educationType === "gift_muslim"
                                 ? "Gift For Muslim"
                                 : "Normal Education"}
                               )
                             </h6>
 
+                            {/* Notes Section */}
+                            {notesCount > 0 && (
+                              <div className="mb-3">
+                                <h6 className="text-info">
+                                  <i className="fas fa-sticky-note me-2"></i>
+                                  Notes ({notesCount})
+                                </h6>
+                                <div className="bg-white p-2 rounded">
+                                  {reportGroup.notes.map((note, noteIdx) => (
+                                    <div
+                                      key={note.id || noteIdx}
+                                      className="border-bottom py-1"
+                                    >
+                                      <small>
+                                        <strong>
+                                          {formatDate(note.date)}:
+                                        </strong>{" "}
+                                        {note.text}
+                                      </small>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
                             <div className="row">
-                              {/* Beginning of Month */}
+                              {/* Beginning of Year */}
                               <div className="col-md-6 mb-4">
-                                <div className="card">
+                                <div className="card h-100">
                                   <div className="card-header bg-info text-white">
-                                    <h6 className="mb-0">Beginning of Month</h6>
+                                    <h6 className="mb-0">
+                                      📘 Beginning of Year
+                                    </h6>
                                   </div>
                                   <div className="card-body">
-                                    {student?.beginning ? (
+                                    {hasBeginning ? (
                                       <>
                                         <p>
                                           <strong>Date:</strong>{" "}
-                                          {new Date(
-                                            student?.beginning?.date
-                                          ).toLocaleDateString()}
+                                          {formatDate(
+                                            reportGroup.beginning.created_at ||
+                                              reportGroup.beginning.date,
+                                          )}
                                         </p>
-                                        <p>
-                                          <strong>Description:</strong>{" "}
-                                          {student?.beginning?.description ||
-                                            "No description"}
-                                        </p>
-
                                         <div className="mt-3">
                                           <h6>Subjects:</h6>
                                           {renderSubjectsList(
-                                            student?.beginning?.lessons,
-                                            educationType
+                                            reportGroup.beginning.lessons,
+                                            educationType,
                                           )}
                                         </div>
                                       </>
                                     ) : (
                                       <p className="text-muted">
-                                        No beginning report available
+                                        No beginning of year report available
                                       </p>
                                     )}
                                   </div>
                                 </div>
                               </div>
 
-                              {/* End of Month */}
+                              {/* End of Year */}
                               <div className="col-md-6 mb-4">
-                                <div className="card">
+                                <div className="card h-100">
                                   <div className="card-header bg-warning text-dark">
-                                    <h6 className="mb-0">End of Month</h6>
+                                    <h6 className="mb-0">📗 End of Year</h6>
                                   </div>
                                   <div className="card-body">
-                                    {student?.ending ? (
+                                    {hasEnding ? (
                                       <>
                                         <p>
                                           <strong>Date:</strong>{" "}
-                                          {new Date(
-                                            student?.ending?.date
-                                          ).toLocaleDateString()}
+                                          {formatDate(
+                                            reportGroup.ending.created_at ||
+                                              reportGroup.ending.date,
+                                          )}
                                         </p>
-                                        <p>
-                                          <strong>Description:</strong>{" "}
-                                          {student?.ending?.description ||
-                                            "No description"}
-                                        </p>
-
                                         <div className="mt-3">
                                           <h6>Subjects:</h6>
                                           {renderSubjectsList(
-                                            student?.ending?.lessons,
-                                            educationType
+                                            reportGroup.ending.lessons,
+                                            educationType,
                                           )}
                                         </div>
                                       </>
                                     ) : (
                                       <p className="text-muted">
-                                        No end of month report available
+                                        No end of year report available
                                       </p>
                                     )}
                                   </div>
@@ -481,14 +576,14 @@ export default function LessonCoveredTable(
           </table>
 
           <LessonCoveredUpdateModal
-            student={selectedGroup}
+            student={selectedReport}
             showModal={showModal}
             handleClose={handleClose}
           />
         </div>
       ) : (
         <div className="text-center p-5 bg-light rounded">
-          <h5 className="text-muted">No lessons covered data found</h5>
+          <h5 className="text-muted">No yearly reports found</h5>
           <p className="text-muted">
             Try adjusting your filters or add new reports
           </p>
