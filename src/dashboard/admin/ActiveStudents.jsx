@@ -462,6 +462,7 @@ export default function ActiveStudents() {
         timer: 3000,
       });
     } catch (error) {
+      console.log(error);
       Swal.fire({
         icon: "error",
         title: "Failed to Generate Report",
