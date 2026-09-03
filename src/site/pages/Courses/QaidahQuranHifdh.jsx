@@ -7,8 +7,8 @@ import { useGetDepartmentsQuery } from "../../../redux/features/departments/depa
 import LoadingSpinner from "../../components/LoadingSpinner";
 export default function QaidahQuranHifdh() {
   const { data: departments, isLoading } = useGetDepartmentsQuery();
-  const quranDept = departments?.find(
-    (dept) => dept.dept_name === "Qur’an & Islamic Studies",
+  const quranDept = departments?.find((dept) =>
+    dept.dept_name.toLowerCase().includes("islam"),
   );
   console.log(quranDept?.weekdays_fee);
   if (isLoading) {

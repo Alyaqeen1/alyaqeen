@@ -8,8 +8,8 @@ import { useGetDepartmentsQuery } from "../../../redux/features/departments/depa
 
 export default function ArabicLanguage() {
   const { data: departments, isLoading } = useGetDepartmentsQuery();
-  const arabicDept = departments?.find(
-    (dept) => dept.dept_name === "Arabic Language",
+  const arabicDept = departments?.find((dept) =>
+    dept.dept_name.toLowerCase().includes("arabic"),
   );
   console.log(arabicDept?.weekdays_fee);
   if (isLoading) {

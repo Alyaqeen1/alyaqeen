@@ -8,8 +8,8 @@ import LoadingSpinner from "../../components/LoadingSpinner";
 
 export default function MathEnglishScience() {
   const { data: departments, isLoading } = useGetDepartmentsQuery();
-  const mathDept = departments?.find(
-    (dept) => dept.dept_name === "Maths and English or Science",
+  const mathDept = departments?.find((dept) =>
+    dept.dept_name.toLowerCase().includes("math"),
   );
   console.log(mathDept?.weekdays_fee);
   if (isLoading) {

@@ -8,8 +8,8 @@ import LoadingSpinner from "../../components/LoadingSpinner";
 
 export default function ModernForeignLanguages() {
   const { data: departments, isLoading } = useGetDepartmentsQuery();
-  const urduBanglaDept = departments?.find(
-    (dept) => dept.dept_name === "Urdu/Banla Language",
+  const urduBanglaDept = departments?.find((dept) =>
+    dept.dept_name.toLowerCase().includes("online"),
   );
   console.log(urduBanglaDept?.weekdays_fee);
   if (isLoading) {

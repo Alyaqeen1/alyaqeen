@@ -311,7 +311,7 @@ const CourseDetails = ({
                 </div>
 
                 <button className="theme-btn w-100 border-style mb-3">
-                  This course Free £
+                  This course Fee £
                   {activeTabIndex === 0
                     ? detailsObj?.weekdaysFee
                     : detailsObj?.weekendFee}
