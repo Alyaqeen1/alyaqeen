@@ -18,10 +18,10 @@ export default function ModernForeignLanguages() {
   return (
     <div>
       <SEO page="urduBanglaCourse" />
-      <CmnBanner title="Urdu / Bangla Language"></CmnBanner>
+      <CmnBanner title={urduBanglaDept?.dept_name}></CmnBanner>
       <CourseDetails
         image={one}
-        title="Urdu / Bangla Language"
+        title={urduBanglaDept?.dept_name}
         subtitle1="Descriptions"
         descriptionPara1="Allah the Master of the universe states in the Quran: “O mankind, We created you from one man and one woman, and then divided you into nations and tribes so that you may recognize one another”."
         descriptionPara2="We at Alyaqeen academy understand the importance of diversity and interaction with other cultures and backgrounds. We therefore provide an opportunity to learn the following languages at the academy:"

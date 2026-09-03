@@ -17,12 +17,12 @@ export default function QaidahQuranHifdh() {
   return (
     <div>
       <SEO page="quranQaidahCourse" />
-      <CmnBanner title="Arabic Qaidah, Quran & Hifdh"></CmnBanner>
+      <CmnBanner title={quranDept?.dept_name}></CmnBanner>
       <CourseDetails
         image={one}
         classNum={5}
         classTeacher={"Mrs Khetam"}
-        title="Arabic Qaidah, Quran & Hifdh"
+        title={quranDept?.dept_name}
         subtitle1="Descriptions"
         descriptionPara1="Allah swt the most says in the Quran : “and recite the Quran (aloud) in a slow , (Pleasent tone and) style - Sura Al Muzzamil - 73:1-4"
         descriptionPara2="It is a duty upon every Muslim : male or female to ensure that they recite the Quran correctly and in the manner prescribed by Allah swt the most merciful. We here at Alyaqeen academy have taken on the responsibility to try to ensure that Allah’s command in relation to the recitation of the Quran is fulfilled."

@@ -18,12 +18,12 @@ export default function ArabicLanguage() {
   return (
     <div>
       <SEO page="arabicLanguageCourse" />
-      <CmnBanner title="Arabic Language"></CmnBanner>
+      <CmnBanner title={arabicDept?.dept_name}></CmnBanner>
       <CourseDetails
         image={one}
         classNum={5}
         classTeacher={"Mrs Khetam"}
-        title="Arabic Language"
+        title={arabicDept?.dept_name}
         subtitle1="Descriptions"
         descriptionPara1="Islam is just not religion that Muslims follow, but it is a way of life."
         descriptionPara2="When a person is born the first words that are recited in his or her ear is Allahu Akbar and the last words when they are prayed upon is Allah."
