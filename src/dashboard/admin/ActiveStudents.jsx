@@ -34,6 +34,7 @@ export function getColorForName(name) {
   const index = firstChar.charCodeAt(0) % colors.length;
   return colors[index];
 }
+
 export function getInitials(name = "") {
   if (!name) return "";
   const parts = name.trim().split(" ").filter(Boolean);
@@ -48,13 +49,10 @@ export function getInitials(name = "") {
 const formatDateToDmy = (dateStr) => {
   if (!dateStr) return "N/A";
 
-  // Handle both YYYY-MM-DD and YYYY-DD-MM formats
   const [part1, part2, part3] = dateStr.split("-");
-
-  // Determine which part is day/month/year (assuming year is always first)
   const year = part1;
-  const day = part3?.length === 2 ? part3 : part2; // Fallback to part2 if needed
-  const month = part3?.length === 2 ? part2 : part3; // Fallback to part3 if needed
+  const day = part3?.length === 2 ? part3 : part2;
+  const month = part3?.length === 2 ? part2 : part3;
 
   return `${day}-${month}-${year}`;
 };
@@ -75,12 +73,71 @@ const formatSessionTime = (time) => {
   }
 };
 
+// Helper function to get session category
+const getSessionCategory = (time) => {
+  switch (time) {
+    case "S1":
+      return "weekday";
+    case "S2":
+      return "weekday";
+    case "WM":
+      return "weekend";
+    case "WA":
+      return "weekend";
+    default:
+      return "unassigned";
+  }
+};
+
+// Helper function to get session time slot
+const getSessionSlot = (time) => {
+  switch (time) {
+    case "S1":
+      return "early";
+    case "S2":
+      return "late";
+    case "WM":
+      return "morning";
+    case "WA":
+      return "afternoon";
+    default:
+      return "unassigned";
+  }
+};
+
+// Get available time slots based on session type
+const getAvailableTimeSlots = (sessionType) => {
+  if (sessionType === "weekday") {
+    return [
+      { value: "early", label: "Early (S1)" },
+      { value: "late", label: "Late (S2)" },
+    ];
+  } else if (sessionType === "weekend") {
+    return [
+      { value: "morning", label: "Morning (WM)" },
+      { value: "afternoon", label: "Afternoon (WA)" },
+    ];
+  } else {
+    return [
+      { value: "early", label: "Early (S1)" },
+      { value: "late", label: "Late (S2)" },
+      { value: "morning", label: "Morning (WM)" },
+      { value: "afternoon", label: "Afternoon (WA)" },
+    ];
+  }
+};
+
 export default function ActiveStudents() {
   const [activeRow, setActiveRow] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [selectedStudentId, setSelectedStudentId] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
+
+  // Filter states
+  const [sessionFilter, setSessionFilter] = useState("all"); // all, weekday, weekend
+  const [timeSlotFilter, setTimeSlotFilter] = useState("all"); // all, early, late, morning, afternoon
+
   const { data: families } = useGetFamiliesQuery();
   const { data: departments } = useGetDepartmentsQuery();
   const { data: classes } = useGetClassesQuery();
@@ -129,7 +186,7 @@ export default function ActiveStudents() {
       {
         name: "offset",
         options: {
-          offset: [0, 8], // [skid, distance]
+          offset: [0, 8],
         },
       },
     ],
@@ -142,7 +199,7 @@ export default function ActiveStudents() {
 
   // Toggle modal visibility
   const handleShow = (id) => {
-    setActiveRow(null); // Close dropdown first
+    setActiveRow(null);
     setSelectedStudentId(id);
     setShowModal(true);
   };
@@ -155,7 +212,7 @@ export default function ActiveStudents() {
 
   const handleMakeInactive = async (studentId) => {
     try {
-      setActiveRow(null); // Close dropdown
+      setActiveRow(null);
       const data = await updateStudentActivity({
         id: studentId,
         activity: "inactive",
@@ -194,7 +251,7 @@ export default function ActiveStudents() {
   }, [popperElement, referenceElement]);
 
   const handleDelete = (id) => {
-    setActiveRow(null); // Close dropdown first
+    setActiveRow(null);
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -260,24 +317,21 @@ export default function ActiveStudents() {
     if (student?.uid && studentColorMap[student.uid]) {
       return studentColorMap[student.uid];
     }
-    return "#ccc"; // fallback if not found
+    return "#ccc";
   };
 
   // Helper function to get department display
   const getDepartmentDisplay = (academic) => {
     if (!academic) return "Not assigned";
 
-    // Handle new multi-department structure
     if (academic.enrollments && Array.isArray(academic.enrollments)) {
       if (academic.enrollments.length === 0) return "Not assigned";
 
-      // Get unique department names
       const deptNames = academic.enrollments.map((enrollment) => {
         const dept = departments?.find((d) => d._id === enrollment.dept_id);
         return dept ? dept.dept_name : "Unknown Dept";
       });
 
-      // Remove duplicates and limit to 2 for display
       const uniqueDepts = [...new Set(deptNames)].slice(0, 2);
 
       if (uniqueDepts.length === 1) {
@@ -301,7 +355,6 @@ export default function ActiveStudents() {
       );
     }
 
-    // Handle old single department structure
     if (academic.dept_id) {
       const dept = departments?.find((d) => d._id === academic.dept_id);
       return (
@@ -326,16 +379,13 @@ export default function ActiveStudents() {
   const getTimeDisplay = (academic) => {
     if (!academic) return "Not assigned";
 
-    // Handle new multi-department structure
     if (academic.enrollments && Array.isArray(academic.enrollments)) {
       if (academic.enrollments.length === 0) return "Not assigned";
 
-      // Get session times
       const sessionTimes = academic.enrollments.map((enrollment) => {
         return formatSessionTime(enrollment.session_time);
       });
 
-      // Remove duplicates and limit to 2 for display
       const uniqueTimes = [...new Set(sessionTimes)].slice(0, 2);
 
       if (uniqueTimes.length === 1) {
@@ -359,7 +409,6 @@ export default function ActiveStudents() {
       );
     }
 
-    // Handle old single department structure
     if (academic.time) {
       return (
         <div className="text-center">
@@ -375,17 +424,14 @@ export default function ActiveStudents() {
   const getClassDisplay = (academic) => {
     if (!academic) return "Not assigned";
 
-    // Handle new multi-department structure
     if (academic.enrollments && Array.isArray(academic.enrollments)) {
       if (academic.enrollments.length === 0) return "Not assigned";
 
-      // Get class names
       const classNames = academic.enrollments.map((enrollment) => {
         const cls = classes?.find((c) => c._id === enrollment.class_id);
         return cls ? cls.class_name : "Unknown Class";
       });
 
-      // Remove duplicates and limit to 2 for display
       const uniqueClasses = [...new Set(classNames)].slice(0, 2);
 
       if (uniqueClasses.length === 1) {
@@ -409,7 +455,6 @@ export default function ActiveStudents() {
       );
     }
 
-    // Handle old single department structure
     if (academic.class_id) {
       const cls = classes?.find((c) => c._id === academic.class_id);
       return (
@@ -429,11 +474,10 @@ export default function ActiveStudents() {
 
     return "Not assigned";
   };
-  // Add this function in your component
-  const handleGenerateReport = async (studentId) => {
-    setActiveRow(null); // Close dropdown
 
-    // Show loading Swal
+  const handleGenerateReport = async (studentId) => {
+    setActiveRow(null);
+
     Swal.fire({
       title: "Generating Report",
       html: "Please wait while we generate the PDF report...",
@@ -451,13 +495,11 @@ export default function ActiveStudents() {
         icon: "success",
         title: "Report Generated Successfully!",
         html: `
-        <p>PDF has been created and saved to the student record.</p>
-        <a href="${
-          result.reportUrl
-        }" target="_blank" class="btn btn-success mt-2">
-          View PDF
-        </a>
-      `,
+          <p>PDF has been created and saved to the student record.</p>
+          <a href="${result.reportUrl}" target="_blank" class="btn btn-success mt-2">
+            View PDF
+          </a>
+        `,
         showConfirmButton: false,
         timer: 3000,
       });
@@ -470,6 +512,135 @@ export default function ActiveStudents() {
       });
     }
   };
+
+  // Apply filters to students
+  const getFilteredStudents = () => {
+    return students.filter((student) => {
+      if (!student?.academic) return false;
+
+      // Get session times from enrollments
+      let sessionTimes = [];
+      if (
+        student.academic.enrollments &&
+        Array.isArray(student.academic.enrollments)
+      ) {
+        sessionTimes = student.academic.enrollments.map((e) => e.session_time);
+      } else if (student.academic.time) {
+        sessionTimes = [student.academic.time];
+      }
+
+      if (sessionTimes.length === 0)
+        return sessionFilter === "all" && timeSlotFilter === "all";
+
+      // Check session category filter (weekday/weekend)
+      if (sessionFilter !== "all") {
+        const hasMatchingCategory = sessionTimes.some((time) => {
+          const category = getSessionCategory(time);
+          return category === sessionFilter;
+        });
+        if (!hasMatchingCategory) return false;
+      }
+
+      // Check time slot filter (early/late/morning/afternoon)
+      if (timeSlotFilter !== "all") {
+        const hasMatchingSlot = sessionTimes.some((time) => {
+          const slot = getSessionSlot(time);
+          return slot === timeSlotFilter;
+        });
+        if (!hasMatchingSlot) return false;
+      }
+
+      return true;
+    });
+  };
+
+  const filteredStudents = getFilteredStudents();
+
+  // Get counts for each category
+  const getCategoryCounts = () => {
+    const counts = {
+      weekday: 0,
+      weekend: 0,
+      unassigned: 0,
+    };
+
+    students.forEach((student) => {
+      if (!student?.academic) return;
+
+      let sessionTimes = [];
+      if (
+        student.academic.enrollments &&
+        Array.isArray(student.academic.enrollments)
+      ) {
+        sessionTimes = student.academic.enrollments.map((e) => e.session_time);
+      } else if (student.academic.time) {
+        sessionTimes = [student.academic.time];
+      }
+
+      if (sessionTimes.length === 0) {
+        counts.unassigned++;
+        return;
+      }
+
+      const hasWeekday = sessionTimes.some(
+        (time) => getSessionCategory(time) === "weekday",
+      );
+      const hasWeekend = sessionTimes.some(
+        (time) => getSessionCategory(time) === "weekend",
+      );
+
+      if (hasWeekday) counts.weekday++;
+      if (hasWeekend) counts.weekend++;
+    });
+
+    return counts;
+  };
+
+  // Get time slot counts
+  const getTimeSlotCounts = () => {
+    const counts = {
+      early: 0,
+      late: 0,
+      morning: 0,
+      afternoon: 0,
+    };
+
+    students.forEach((student) => {
+      if (!student?.academic) return;
+
+      let sessionTimes = [];
+      if (
+        student.academic.enrollments &&
+        Array.isArray(student.academic.enrollments)
+      ) {
+        sessionTimes = student.academic.enrollments.map((e) => e.session_time);
+      } else if (student.academic.time) {
+        sessionTimes = [student.academic.time];
+      }
+
+      sessionTimes.forEach((time) => {
+        const slot = getSessionSlot(time);
+        if (slot !== "unassigned" && counts[slot] !== undefined) {
+          counts[slot]++;
+        }
+      });
+    });
+
+    return counts;
+  };
+
+  const counts = getCategoryCounts();
+  const slotCounts = getTimeSlotCounts();
+
+  // Get available time slots based on selected session type
+  const availableTimeSlots = getAvailableTimeSlots(sessionFilter);
+
+  // Reset time slot filter when session type changes
+  const handleSessionFilterChange = (value) => {
+    setSessionFilter(value);
+    setTimeSlotFilter("all"); // Reset time slot when session type changes
+  };
+
   if (isLoading) {
     return <LoadingSpinnerDash />;
   }
@@ -494,6 +665,121 @@ export default function ActiveStudents() {
           />
         </div>
       </div>
+
+      {/* Filter Section */}
+      <div className="row mb-4">
+        <div className="col-md-3">
+          <label className="fw-bold mb-1">Session Type</label>
+          <select
+            className="form-select"
+            value={sessionFilter}
+            onChange={(e) => handleSessionFilterChange(e.target.value)}
+          >
+            <option value="all">All Sessions ({students.length})</option>
+            <option value="weekday">Weekday ({counts.weekday})</option>
+            <option value="weekend">Weekend ({counts.weekend})</option>
+          </select>
+        </div>
+        <div className="col-md-3">
+          <label className="fw-bold mb-1">Time Slot</label>
+          <select
+            className="form-select"
+            value={timeSlotFilter}
+            onChange={(e) => setTimeSlotFilter(e.target.value)}
+          >
+            <option value="all">All Slots</option>
+            {availableTimeSlots.map((slot) => (
+              <option key={slot.value} value={slot.value}>
+                {slot.label} ({slotCounts[slot.value] || 0})
+              </option>
+            ))}
+          </select>
+          {sessionFilter !== "all" && (
+            <small className="text-muted">
+              {sessionFilter === "weekday" ? "Weekday" : "Weekend"} options only
+            </small>
+          )}
+        </div>
+        <div className="col-md-3 d-flex align-items-end">
+          <button
+            className="btn btn-outline-secondary w-100"
+            onClick={() => {
+              setSessionFilter("all");
+              setTimeSlotFilter("all");
+            }}
+          >
+            Clear Filters
+          </button>
+        </div>
+        <div className="col-md-3 d-flex align-items-end">
+          <div className="w-100 text-end">
+            <span className="badge bg-primary me-1">
+              Weekday: {counts.weekday}
+            </span>
+            <span className="badge bg-success me-1">
+              Weekend: {counts.weekend}
+            </span>
+            <span className="badge bg-secondary">
+              Unassigned: {counts.unassigned}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Quick Filter Buttons */}
+      <div className="row mb-3">
+        <div className="col-12">
+          <div className="d-flex flex-wrap gap-2">
+            <span className="fw-bold me-2">Quick Filter:</span>
+            <button
+              className="btn btn-sm btn-outline-primary"
+              onClick={() => {
+                setSessionFilter("weekday");
+                setTimeSlotFilter("early");
+              }}
+            >
+              Weekday Early
+            </button>
+            <button
+              className="btn btn-sm btn-outline-primary"
+              onClick={() => {
+                setSessionFilter("weekday");
+                setTimeSlotFilter("late");
+              }}
+            >
+              Weekday Late
+            </button>
+            <button
+              className="btn btn-sm btn-outline-success"
+              onClick={() => {
+                setSessionFilter("weekend");
+                setTimeSlotFilter("morning");
+              }}
+            >
+              Weekend Morning
+            </button>
+            <button
+              className="btn btn-sm btn-outline-success"
+              onClick={() => {
+                setSessionFilter("weekend");
+                setTimeSlotFilter("afternoon");
+              }}
+            >
+              Weekend Afternoon
+            </button>
+            <button
+              className="btn btn-sm btn-outline-secondary"
+              onClick={() => {
+                setSessionFilter("all");
+                setTimeSlotFilter("all");
+              }}
+            >
+              Reset
+            </button>
+          </div>
+        </div>
+      </div>
+
       <div className="table-responsive mb-3">
         <table className="table mb-0" style={{ minWidth: 700 }}>
           <thead>
@@ -520,12 +806,12 @@ export default function ActiveStudents() {
             </tr>
           </thead>
           <tbody style={{ position: "relative", overflow: "visible" }}>
-            {students?.length > 0 ? (
-              students.map((student, idx) => (
+            {filteredStudents?.length > 0 ? (
+              filteredStudents.map((student, idx) => (
                 <React.Fragment key={student._id}>
                   <tr>
                     <td className="border h6 text-center align-middle">
-                      {students?.length - idx}
+                      {filteredStudents?.length - idx}
                     </td>
                     <td className="border h6 text-center align-middle">
                       <div className="d-flex align-items-center gap-2">
@@ -558,22 +844,15 @@ export default function ActiveStudents() {
                     <td className="border text-center align-middle">
                       {student?.student_id}
                     </td>
-
-                    {/* Updated Department Column */}
                     <td className="border text-center align-middle">
                       {getDepartmentDisplay(student?.academic)}
                     </td>
-
-                    {/* Updated Time Column */}
                     <td className="border text-center align-middle">
                       {getTimeDisplay(student?.academic)}
                     </td>
-
-                    {/* Updated Class Column */}
                     <td className="border text-center align-middle">
                       {getClassDisplay(student?.academic)}
                     </td>
-
                     <td className="border text-center align-middle">
                       £{student?.monthly_fee}
                     </td>
@@ -590,7 +869,11 @@ export default function ActiveStudents() {
             ) : (
               <tr>
                 <td colSpan={9}>
-                  <h5 className="text-center my-2">No students available.</h5>
+                  <h5 className="text-center my-2">
+                    {students.length === 0
+                      ? "No students available."
+                      : "No students match the selected filters."}
+                  </h5>
                 </td>
               </tr>
             )}
