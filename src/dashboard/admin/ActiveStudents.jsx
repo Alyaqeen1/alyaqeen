@@ -618,9 +618,18 @@ export default function ActiveStudents() {
         sessionTimes = [student.academic.time];
       }
 
+      // Get unique time slots for this student
+      const uniqueSlots = new Set();
       sessionTimes.forEach((time) => {
         const slot = getSessionSlot(time);
-        if (slot !== "unassigned" && counts[slot] !== undefined) {
+        if (slot !== "unassigned") {
+          uniqueSlots.add(slot);
+        }
+      });
+
+      // Count each unique slot once per student
+      uniqueSlots.forEach((slot) => {
+        if (counts[slot] !== undefined) {
           counts[slot]++;
         }
       });

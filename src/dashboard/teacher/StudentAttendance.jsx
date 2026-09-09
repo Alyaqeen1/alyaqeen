@@ -1109,7 +1109,11 @@ export default function StudentAttendance() {
                     );
                   })}
                   <th
-                    style={{ backgroundColor: "var(--border2)" }}
+                    style={{
+                      backgroundColor: "var(--border2)",
+                      minWidth: "200px", // Add this
+                      width: "200px", // Add this
+                    }}
                     className="text-white text-center border"
                   >
                     Merit Summary
@@ -1322,25 +1326,33 @@ export default function StudentAttendance() {
                           </td>
                         );
                       })}
-                      <td className="text-center border align-middle">
+                      <td
+                        className="text-center border align-middle"
+                        style={{ minWidth: "180px" }}
+                      >
                         {meritStats[stu._id] ? (
                           <div className="d-flex flex-column gap-1">
-                            <div className="text-success">
-                              👍 +{meritStats[stu._id].totalPositiveMerits} pts
-                              <small>
-                                {" "}
-                                ({meritStats[stu._id].positiveCount})
-                              </small>
-                            </div>
-                            {meritStats[stu._id].totalDemerits > 0 && (
-                              <div className="text-danger">
-                                👎 -{meritStats[stu._id].totalDemerits} pts
+                            {/* Row 1: Positive and Negative side by side */}
+                            <div className="d-flex justify-content-center align-items-center gap-3">
+                              <span className="text-success text-nowrap">
+                                👍 +{meritStats[stu._id].totalPositiveMerits}{" "}
+                                pts
                                 <small>
                                   {" "}
-                                  ({meritStats[stu._id].demeritCount})
+                                  ({meritStats[stu._id].positiveCount})
                                 </small>
-                              </div>
-                            )}
+                              </span>
+                              {meritStats[stu._id].totalDemerits > 0 && (
+                                <span className="text-danger text-nowrap">
+                                  👎 -{meritStats[stu._id].totalDemerits} pts
+                                  <small>
+                                    {" "}
+                                    ({meritStats[stu._id].demeritCount})
+                                  </small>
+                                </span>
+                              )}
+                            </div>
+                            {/* Row 2: Net Points */}
                             <div
                               className={`fw-bold ${meritStats[stu._id].netPoints >= 0 ? "text-success" : "text-danger"}`}
                             >
