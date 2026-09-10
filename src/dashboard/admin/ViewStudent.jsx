@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useParams } from "react-router";
+import { Link, useParams } from "react-router";
 import { useGetStudentsByIdQuery } from "../../redux/features/students/studentsApi";
 import { useGetDepartmentsQuery } from "../../redux/features/departments/departmentsApi";
 import { useGetClassesQuery } from "../../redux/features/classes/classesApi";
@@ -110,7 +110,16 @@ export default function ViewStudent() {
 
   return (
     <div className="my-4">
-      <h3 className="mb-4">Student Profile</h3>
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h3 className="mb-0">Student Profile</h3>
+        <Link
+          to={`/dashboard/online-admissions/update/${id}`}
+          className="btn text-white d-flex align-items-center gap-2"
+          style={{ backgroundColor: "var(--border2)" }}
+        >
+          <FaPen /> Edit Profile
+        </Link>
+      </div>
       <div className="row">
         {/* Left Card */}
         <div className="col-md-4">
