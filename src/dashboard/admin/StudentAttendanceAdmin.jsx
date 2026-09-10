@@ -37,6 +37,7 @@ import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 import { useGetHolidaysQuery } from "../../redux/features/holidays/holidaysApi";
 import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
+import { Link } from "react-router";
 
 // Merit/Demerit Modal Component (same as before)
 const MeritDemeritModal = ({
@@ -51,7 +52,6 @@ const MeritDemeritModal = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [addMerit] = useAddMeritMutation();
 
-  // Behavior options (Merits)
   const behaviorOptions = [
     { label: "Excellent Homework (1)", value: "Excellent Homework", points: 1 },
     {
@@ -85,7 +85,6 @@ const MeritDemeritModal = ({
     },
   ];
 
-  // Incident categories (Demerits)
   const incidentCategories = {
     lesson_class: [
       {
@@ -447,7 +446,6 @@ const MeritDemeritModal = ({
   );
 };
 
-// Safe format function
 const safeFormat = (date, formatStr) => {
   if (!date || !isValid(date)) return "Invalid Date";
   try {
@@ -477,19 +475,17 @@ export default function StudentAttendanceAdmin() {
   const [time, setTime] = useState("");
   const [classId, setClassId] = useState("");
   const [weekOffset, setWeekOffset] = useState(0);
+  const [searchTerm, setSearchTerm] = useState(""); // ✅ NEW
 
   // Modal state
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState(null);
-  // For admin, use a default teacher ID or allow selection
   const [selectedTeacherId, setSelectedTeacherId] = useState("");
 
-  // Track initial load vs real-time updates
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [loadingCells, setLoadingCells] = useState(new Set());
   const [bulkLoadingDates, setBulkLoadingDates] = useState(new Set());
 
-  // Track filter changes
   const prevFilters = useRef({
     department,
     session,
@@ -564,6 +560,18 @@ export default function StudentAttendanceAdmin() {
   );
   const areAllFiltersSelected = department && session && time && classId;
 
+  // ✅ Filter students by search term (safe for number IDs)
+  const filteredStudents = useMemo(() => {
+    if (!searchTerm.trim()) return students;
+
+    const search = searchTerm.toLowerCase().trim();
+    return students.filter((stu) => {
+      const name = String(stu.name || "").toLowerCase();
+      const studentId = String(stu.student_id || "").toLowerCase();
+      return name.includes(search) || studentId.includes(search);
+    });
+  }, [students, searchTerm]);
+
   // Fetch attendance with merit stats
   const {
     data: attendanceData = { attendance: [], meritStats: {} },
@@ -587,11 +595,9 @@ export default function StudentAttendanceAdmin() {
   const attendances = attendanceData.attendance || [];
   const meritStats = attendanceData.meritStats || {};
 
-  // Bulk attendance mutations
   const [presentAllStudents] = usePresentAllStudentsMutation();
   const [removeAllAttendance] = useRemoveAllAttendanceMutation();
 
-  // Individual attendance mutations
   const [addAttendance] = useAddAttendanceMutation();
   const [updateAttendance] = useUpdateAttendanceMutation();
   const [deleteAttendance] = useDeleteAttendanceMutation();
@@ -637,6 +643,11 @@ export default function StudentAttendanceAdmin() {
     isLoadingAttendance,
   ]);
 
+  // ✅ Reset search when filters change
+  useEffect(() => {
+    setSearchTerm("");
+  }, [department, session, time, classId]);
+
   const isCurrentWeek = isSameWeek(baseMonday, new Date(), { weekStartsOn: 1 });
   const weekDisplayText = useMemo(() => {
     if (weekDates.length === 0) return "No dates to display";
@@ -663,7 +674,7 @@ export default function StudentAttendanceAdmin() {
       }).unwrap();
       if (data?.insertedId) {
         toast.success(`${status} attendance given`);
-        refetchAttendance(); // Refresh data after change
+        refetchAttendance();
       }
     } catch (e) {
       console.error("Error saving attendance:", e);
@@ -685,7 +696,7 @@ export default function StudentAttendanceAdmin() {
       const data = await updateAttendance({ id: recordId, status }).unwrap();
       if (data?.modifiedCount) {
         toast.success(`updated to ${status}`);
-        refetchAttendance(); // Refresh data after change
+        refetchAttendance();
       }
     } catch (e) {
       console.error("Error updating attendance:", e);
@@ -718,7 +729,7 @@ export default function StudentAttendanceAdmin() {
             text: "Your Attendance has been deleted.",
             icon: "success",
           });
-          refetchAttendance(); // Refresh data after change
+          refetchAttendance();
         } catch (e) {
           console.error("Error deleting attendance:", e);
           toast.error("Failed to delete attendance");
@@ -766,7 +777,7 @@ export default function StudentAttendanceAdmin() {
             result.message ||
               `Marked ${result.insertedCount} students as present`,
           );
-          refetchAttendance(); // Refresh data after change
+          refetchAttendance();
         } catch (e) {
           console.error("Error marking all present:", e);
           toast.error("Failed to mark all students as present");
@@ -812,7 +823,7 @@ export default function StudentAttendanceAdmin() {
             result.message ||
               `Removed ${result.deletedCount} attendance records`,
           );
-          refetchAttendance(); // Refresh data after change
+          refetchAttendance();
         } catch (e) {
           console.error("Error removing all attendance:", e);
           toast.error("Failed to remove all attendance");
@@ -827,24 +838,21 @@ export default function StudentAttendanceAdmin() {
     });
   };
 
-  /* ─────────────────── Merit/Demerit Handlers ─────────────────── */
   const handleOpenMeritModal = (student) => {
     setSelectedStudent(student);
     setModalOpen(true);
   };
 
   const handleMeritSuccess = () => {
-    refetchAttendance(); // Refresh data after merit/demerit is added
+    refetchAttendance();
   };
 
   if (isLoadingDept || isLoadingClass) {
     return <LoadingSpinnerDash />;
   }
 
-  /* ─────────────────── render ─────────────────── */
   return (
     <div>
-      {/* Merit/Demerit Modal - Using a default admin teacher ID */}
       {modalOpen && selectedStudent && (
         <MeritDemeritModal
           isOpen={modalOpen}
@@ -853,7 +861,7 @@ export default function StudentAttendanceAdmin() {
             setSelectedStudent(null);
           }}
           student={selectedStudent}
-          teacherId="admin_teacher_id" // You might want to set this from props or state
+          teacherId="admin_teacher_id"
           onSuccess={handleMeritSuccess}
         />
       )}
@@ -984,16 +992,56 @@ export default function StudentAttendanceAdmin() {
 
       {/* ── ATTENDANCE TABLE ────────────────────────── */}
       <div className="border border-black mt-4 p-3">
-        <div className="d-flex justify-content-between align-items-center mb-2">
+        {/* ── LEGEND + COUNTER ─────────────── */}
+        <div className="d-flex justify-content-between align-items-center mb-3">
           <div>
             <span className="bg-success px-2 rounded-1 mx-2" /> Present
             <span className="bg-primary px-2 rounded-1 mx-2" /> Late
             <span className="bg-danger px-2 rounded-1 mx-2" /> Absent
           </div>
           <div className="text-muted">
-            Students: {students.length} | Dates: {weekDates.length}
+            Students: {filteredStudents.length}
+            {searchTerm && ` of ${students.length}`} | Dates: {weekDates.length}
           </div>
         </div>
+
+        {/* ✅ SEARCH BAR ROW */}
+        {areAllFiltersSelected && students.length > 0 && (
+          <div className="row mb-3">
+            <div className="col-md-6">
+              <div className="input-group">
+                <span
+                  className="input-group-text"
+                  style={{ backgroundColor: "var(--border2)", color: "white" }}
+                >
+                  🔍
+                </span>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Search student by name or ID..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                {searchTerm && (
+                  <button
+                    className="btn btn-outline-secondary"
+                    type="button"
+                    onClick={() => setSearchTerm("")}
+                  >
+                    ✕ Clear
+                  </button>
+                )}
+              </div>
+              {searchTerm && (
+                <small className="text-muted">
+                  Showing {filteredStudents.length} of {students.length}{" "}
+                  students
+                </small>
+              )}
+            </div>
+          </div>
+        )}
 
         {!areAllFiltersSelected ? (
           <div className="text-center py-4">
@@ -1097,25 +1145,31 @@ export default function StudentAttendanceAdmin() {
                   <th
                     style={{
                       backgroundColor: "var(--border2)",
-                      minWidth: "200px", // Add this
-                      width: "200px", // Add this
+                      minWidth: "200px",
+                      width: "200px",
                     }}
                     className="text-white text-center border"
                   >
-                    Merit Summary
+                    Merit Summary{" "}
                   </th>
                 </tr>
               </thead>
 
               <tbody>
-                {students.length ? (
-                  students.map((stu, idx) => (
+                {filteredStudents.length ? (
+                  filteredStudents.map((stu, idx) => (
                     <tr key={stu._id}>
                       <td className="text-center border align-middle">
                         {idx + 1}
                       </td>
                       <td className="text-center border align-middle">
-                        {stu.name}
+                        <Link
+                          className="text-dark student-link"
+                          to={`/dashboard/admin/view-student/${stu?._id}`}
+                        >
+                          {stu?.name}
+                        </Link>
+                        {/* {stu.name} */}
                       </td>
                       <td className="text-center border align-middle">
                         <div className="d-flex gap-2 justify-content-center">
@@ -1318,7 +1372,6 @@ export default function StudentAttendanceAdmin() {
                       >
                         {meritStats[stu._id] ? (
                           <div className="d-flex flex-column gap-1">
-                            {/* Row 1: Positive and Negative side by side */}
                             <div className="d-flex justify-content-center align-items-center gap-3">
                               <span className="text-success text-nowrap">
                                 👍 +{meritStats[stu._id].totalPositiveMerits}{" "}
@@ -1338,7 +1391,6 @@ export default function StudentAttendanceAdmin() {
                                 </span>
                               )}
                             </div>
-                            {/* Row 2: Net Points */}
                             <div
                               className={`fw-bold ${meritStats[stu._id].netPoints >= 0 ? "text-success" : "text-danger"}`}
                             >
@@ -1354,7 +1406,11 @@ export default function StudentAttendanceAdmin() {
                 ) : (
                   <tr>
                     <td colSpan={weekDates.length + 4} className="text-center">
-                      No students found for the selected class.
+                      {!areAllFiltersSelected
+                        ? "Select all filters to view attendance."
+                        : searchTerm
+                          ? `No students match "${searchTerm}"`
+                          : "No students found for the selected class."}
                     </td>
                   </tr>
                 )}

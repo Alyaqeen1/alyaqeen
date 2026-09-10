@@ -51,12 +51,11 @@ const MeritDemeritModal = ({
   teacherId,
   onSuccess,
 }) => {
-  const [selectedType, setSelectedType] = useState("merit"); // "merit" or "demerit"
+  const [selectedType, setSelectedType] = useState("merit");
   const [selectedReason, setSelectedReason] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [addMerit] = useAddMeritMutation();
 
-  // Behavior options (Merits)
   const behaviorOptions = [
     { label: "Excellent Homework (1)", value: "Excellent Homework", points: 1 },
     {
@@ -90,7 +89,6 @@ const MeritDemeritModal = ({
     },
   ];
 
-  // Incident categories (Demerits)
   const incidentCategories = {
     lesson_class: [
       {
@@ -294,7 +292,6 @@ const MeritDemeritModal = ({
         date: new Date().toISOString(),
       };
     } else {
-      // Find which category the incident belongs to
       let incidentPoints = 0;
       for (const category in incidentCategories) {
         const incident = incidentCategories[category].find(
@@ -356,7 +353,6 @@ const MeritDemeritModal = ({
             ></button>
           </div>
           <div className="modal-body">
-            {/* Type Selection */}
             <div className="mb-3">
               <label className="form-label fw-bold">Type</label>
               <div className="d-flex gap-3">
@@ -381,7 +377,6 @@ const MeritDemeritModal = ({
               </div>
             </div>
 
-            {/* Reason Selection */}
             <div className="mb-3">
               <label className="form-label fw-bold">
                 {selectedType === "merit"
@@ -455,7 +450,6 @@ const MeritDemeritModal = ({
   );
 };
 
-// Safe format function to prevent invalid date errors
 const safeFormat = (date, formatStr) => {
   if (!date || !isValid(date)) return "Invalid Date";
   try {
@@ -467,23 +461,20 @@ const safeFormat = (date, formatStr) => {
 };
 
 export default function StudentAttendance() {
-  /* ─────────────────── state for filters ─────────────────── */
   const [department, setDepartment] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
   const [session, setSession] = useState("");
   const [time, setTime] = useState("");
   const [classId, setClassId] = useState("");
   const [weekOffset, setWeekOffset] = useState(0);
 
-  // Modal state
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState(null);
 
-  // Track initial load vs real-time updates
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [loadingCells, setLoadingCells] = useState(new Set());
   const [bulkLoadingDates, setBulkLoadingDates] = useState(new Set());
 
-  // Track filter changes
   const prevFilters = useRef({
     department,
     session,
@@ -509,7 +500,6 @@ export default function StudentAttendance() {
     },
   );
 
-  /* ───────────────────  RTK‑Query data  ─────────────────── */
   const {
     data: group,
     isLoading: isLoadingGroup,
@@ -529,7 +519,6 @@ export default function StudentAttendance() {
     skip: !groupId,
   });
 
-  /* ─────────────────── helper: current week dates ─────────────────── */
   const baseMonday = useMemo(
     () => addWeeks(startOfWeek(new Date(), { weekStartsOn: 1 }), weekOffset),
     [weekOffset],
@@ -573,6 +562,18 @@ export default function StudentAttendance() {
   );
   const areAllFiltersSelected = department && session && time && classId;
 
+  // ✅ Filter students by search term
+  const filteredStudents = useMemo(() => {
+    if (!searchTerm.trim()) return students;
+
+    const search = searchTerm.toLowerCase().trim();
+    return students.filter((stu) => {
+      const name = String(stu.name || "").toLowerCase();
+      const studentId = String(stu.student_id || "").toLowerCase();
+      return name.includes(search) || studentId.includes(search);
+    });
+  }, [students, searchTerm]);
+
   const {
     data: attendanceData = { attendance: [], meritStats: {} },
     isLoading: isLoadingAttendance,
@@ -591,21 +592,16 @@ export default function StudentAttendance() {
     },
   );
 
-  // Then use the data:
   const attendances = attendanceData.attendance || [];
   const meritStats = attendanceData.meritStats || {};
 
-  console.log({ attendanceData, attendances, meritStats });
-  // Bulk attendance mutations
   const [presentAllStudents] = usePresentAllStudentsMutation();
   const [removeAllAttendance] = useRemoveAllAttendanceMutation();
 
-  // Individual attendance mutations
   const [addAttendance] = useAddAttendanceMutation();
   const [updateAttendance] = useUpdateAttendanceMutation();
   const [deleteAttendance] = useDeleteAttendanceMutation();
 
-  // Effect to track initial loading state
   useEffect(() => {
     const currentFilters = { department, session, time, classId, weekOffset };
     const filtersChanged =
@@ -657,7 +653,11 @@ export default function StudentAttendance() {
 
   const [hoverKey, setHoverKey] = useState(null);
 
-  /* ─────────────────── CRUD helpers for attendance ─────────────────── */
+  // ✅ Reset search when filters change
+  useEffect(() => {
+    setSearchTerm("");
+  }, [department, session, time, classId]);
+
   const saveStatus = async (studentId, dateISO, status) => {
     const cellKey = `${studentId}-${dateISO}`;
     setLoadingCells((prev) => new Set(prev).add(cellKey));
@@ -740,7 +740,6 @@ export default function StudentAttendance() {
     });
   };
 
-  /* ─────────────────── BULK OPERATIONS ─────────────────── */
   const handlePresentAll = async (dateISO) => {
     if (!studentIds.length || !classId) {
       toast.error("No students found or class not selected");
@@ -832,7 +831,6 @@ export default function StudentAttendance() {
     });
   };
 
-  /* ─────────────────── Merit/Demerit Handlers ─────────────────── */
   const handleOpenMeritModal = (student) => {
     setSelectedStudent(student);
     setModalOpen(true);
@@ -840,17 +838,14 @@ export default function StudentAttendance() {
 
   const handleMeritSuccess = () => {
     // Refresh any data if needed
-    // You could refetch student merits data here if you have a query for that
   };
 
   if (!teacherWithDetails) {
     return <LoadingSpinnerDash />;
   }
 
-  /* ─────────────────── render ─────────────────── */
   return (
     <div>
-      {/* Merit/Demerit Modal */}
       {modalOpen && selectedStudent && (
         <MeritDemeritModal
           isOpen={modalOpen}
@@ -990,24 +985,56 @@ export default function StudentAttendance() {
 
       {/* ── ATTENDANCE TABLE ────────────────────────── */}
       <div className="border border-black mt-4 p-3">
-        <div className="d-flex justify-content-between align-items-center mb-2">
+        {/* ── LEGEND + COUNTER ROW ─────────────── */}
+        <div className="d-flex justify-content-between align-items-center mb-3">
           <div>
             <span className="bg-success px-2 rounded-1 mx-2" /> Present
             <span className="bg-primary px-2 rounded-1 mx-2" /> Late
             <span className="bg-danger px-2 rounded-1 mx-2" /> Absent
-            {/* <span className="bg-warning px-2 rounded-1 mx-2" />
-            <FaStar className="text-white" /> Merit
-            <span
-              className="bg-danger px-2 rounded-1 mx-2"
-              style={{ backgroundColor: "#dc3545" }}
-            >
-              <FaExclamationTriangle className="text-white" /> Demerit
-            </span> */}
           </div>
           <div className="text-muted">
-            Students: {students.length} | Dates: {weekDates.length}
+            Students: {filteredStudents.length}
+            {searchTerm && ` of ${students.length}`} | Dates: {weekDates.length}
           </div>
         </div>
+
+        {/* ✅ ── SEARCH BAR ROW (on its own line, full width) ── */}
+        {areAllFiltersSelected && students.length > 0 && (
+          <div className="row mb-3">
+            <div className="col-md-6">
+              <div className="input-group">
+                <span
+                  className="input-group-text"
+                  style={{ backgroundColor: "var(--border2)", color: "white" }}
+                >
+                  🔍
+                </span>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Search student by name or ID..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                {searchTerm && (
+                  <button
+                    className="btn btn-outline-secondary"
+                    type="button"
+                    onClick={() => setSearchTerm("")}
+                  >
+                    ✕ Clear
+                  </button>
+                )}
+              </div>
+              {searchTerm && (
+                <small className="text-muted">
+                  Showing {filteredStudents.length} of {students.length}{" "}
+                  students
+                </small>
+              )}
+            </div>
+          </div>
+        )}
 
         {!areAllFiltersSelected ? (
           <div className="text-center py-4">
@@ -1111,8 +1138,8 @@ export default function StudentAttendance() {
                   <th
                     style={{
                       backgroundColor: "var(--border2)",
-                      minWidth: "200px", // Add this
-                      width: "200px", // Add this
+                      minWidth: "200px",
+                      width: "200px",
                     }}
                     className="text-white text-center border"
                   >
@@ -1122,8 +1149,8 @@ export default function StudentAttendance() {
               </thead>
 
               <tbody>
-                {students.length ? (
-                  students.map((stu, idx) => (
+                {filteredStudents.length ? (
+                  filteredStudents.map((stu, idx) => (
                     <tr key={stu._id}>
                       <td className="text-center border align-middle">
                         {idx + 1}
@@ -1332,7 +1359,6 @@ export default function StudentAttendance() {
                       >
                         {meritStats[stu._id] ? (
                           <div className="d-flex flex-column gap-1">
-                            {/* Row 1: Positive and Negative side by side */}
                             <div className="d-flex justify-content-center align-items-center gap-3">
                               <span className="text-success text-nowrap">
                                 👍 +{meritStats[stu._id].totalPositiveMerits}{" "}
@@ -1352,7 +1378,6 @@ export default function StudentAttendance() {
                                 </span>
                               )}
                             </div>
-                            {/* Row 2: Net Points */}
                             <div
                               className={`fw-bold ${meritStats[stu._id].netPoints >= 0 ? "text-success" : "text-danger"}`}
                             >
@@ -1368,9 +1393,11 @@ export default function StudentAttendance() {
                 ) : (
                   <tr>
                     <td colSpan={weekDates.length + 3} className="text-center">
-                      {areAllFiltersSelected
-                        ? "No students found for the selected class."
-                        : "Select all filters to view attendance."}
+                      {!areAllFiltersSelected
+                        ? "Select all filters to view attendance."
+                        : searchTerm
+                          ? `No students match "${searchTerm}"`
+                          : "No students found for the selected class."}
                     </td>
                   </tr>
                 )}
