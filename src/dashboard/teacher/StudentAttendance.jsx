@@ -536,8 +536,8 @@ export default function StudentAttendance() {
         "Tuesday",
         "Wednesday",
         "Thursday",
-        "Saturday",
-        "Sunday",
+        // "Saturday",
+        // "Sunday",
       ],
       weekend: ["Saturday", "Sunday"],
     };

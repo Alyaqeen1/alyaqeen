@@ -462,8 +462,8 @@ const dayMap = {
     "Tuesday",
     "Wednesday",
     "Thursday",
-    "Saturday",
-    "Sunday",
+    // "Saturday",
+    // "Sunday",
   ],
   weekend: ["Saturday", "Sunday"],
 };
