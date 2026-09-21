@@ -136,15 +136,16 @@ export default function LessonCoveredTable() {
     refetchReports();
   };
 
+  // ===== DELETE WHOLE GROUP =====
   const handleDelete = async (reportIds) => {
     Swal.fire({
-      title: "Are you sure?",
+      title: "Delete all reports in this group?",
       text: "You won't be able to revert this!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonText: "Yes, delete all!",
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
@@ -153,18 +154,63 @@ export default function LessonCoveredTable() {
           }
           Swal.fire({
             title: "Deleted!",
-            text: "The report has been deleted.",
+            text: "All reports have been deleted.",
             icon: "success",
           });
           refetchReports();
         } catch (error) {
           Swal.fire({
             title: "Error!",
-            text: error?.data?.error || "Failed to delete report",
+            text: error?.data?.error || "Failed to delete reports",
             icon: "error",
           });
         }
       }
+    });
+  };
+
+  // ===== DELETE SINGLE TERM =====
+  const handleDeleteSingleTerm = async (termReport, termLabel) => {
+    const confirm = await Swal.fire({
+      title: `Delete ${termLabel} Term?`,
+      html: `
+        <div class="text-start">
+          <div><b>Student:</b> ${termReport.student_name || "Unknown"}</div>
+          <div><b>Term:</b> ${termLabel} ${termReport.year}</div>
+          <div class="mt-2 text-danger">
+            This action cannot be undone.
+          </div>
+        </div>
+      `,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#6c757d",
+      confirmButtonText: "Yes, delete",
+    });
+
+    if (!confirm.isConfirmed) return;
+
+    try {
+      await deleteYearlyReport(termReport._id).unwrap();
+      Swal.fire({
+        title: "Deleted!",
+        text: `${termLabel} term has been deleted.`,
+        icon: "success",
+      });
+      refetchReports();
+    } catch (err) {
+      toast.error(err?.data?.error || "Failed to delete term.");
+    }
+  };
+
+  // ===== EDIT SINGLE TERM =====
+  const handleEditSingleTerm = (reportGroup, termKey, termData) => {
+    // Pass a group with only this term so the modal edits just one
+    handleShow({
+      ...reportGroup,
+      report_kind: "term",
+      terms: { [termKey]: termData },
     });
   };
 
@@ -178,7 +224,7 @@ export default function LessonCoveredTable() {
     const confirm = await Swal.fire({
       title: "Publish this term?",
       html: `
-        <div class="text-start small">
+        <div class="text-start">
           <div><b>Student:</b> ${termReport.student_name || "Unknown"}</div>
           <div><b>Term:</b> ${termLabel} ${termReport.year}</div>
           <div class="mt-2 text-muted">
@@ -510,39 +556,47 @@ export default function LessonCoveredTable() {
                       </td>
                       <td>
                         <div className="d-flex gap-2 justify-content-center">
-                          <button
-                            className="btn btn-danger btn-sm"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              const reportIds = reportGroup.report_ids || [];
-                              if (reportIds.length === 0) {
-                                Swal.fire({
-                                  title: "No Reports",
-                                  text: "There are no reports to delete.",
-                                  icon: "info",
-                                });
-                                return;
-                              }
-                              handleDelete(reportIds);
-                            }}
-                          >
-                            <FaTrashAlt />
-                          </button>
+                          {/* Group delete (only for yearly groups) */}
+                          {!isTermGroup && (
+                            <>
+                              <button
+                                className="btn btn-danger btn-sm"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  const reportIds =
+                                    reportGroup.report_ids || [];
+                                  if (reportIds.length === 0) {
+                                    Swal.fire({
+                                      title: "No Reports",
+                                      text: "There are no reports to delete.",
+                                      icon: "info",
+                                    });
+                                    return;
+                                  }
+                                  handleDelete(reportIds);
+                                }}
+                                title="Delete group"
+                              >
+                                <FaTrashAlt />
+                              </button>
 
-                          <button
-                            className="btn btn-primary btn-sm"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleShow(reportGroup);
-                            }}
-                            disabled={
-                              isTermGroup
-                                ? savedTermCount === 0
-                                : !hasBeginning && !hasEnding
-                            }
-                          >
-                            <FaPen />
-                          </button>
+                              <button
+                                className="btn btn-primary btn-sm"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleShow(reportGroup);
+                                }}
+                                disabled={!hasBeginning && !hasEnding}
+                              >
+                                <FaPen />
+                              </button>
+                            </>
+                          )}
+                          {isTermGroup && (
+                            <span className="text-muted small">
+                              Edit per term ↓
+                            </span>
+                          )}
                         </div>
                       </td>
                     </tr>
@@ -635,20 +689,56 @@ export default function LessonCoveredTable() {
                                   return (
                                     <div key={term} className="col-md-4 mb-4">
                                       <div className="card h-100">
-                                        <div className="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                                        {/* ===== CARD HEADER with per-term actions ===== */}
+                                        <div className="card-header bg-primary text-white d-flex justify-content-between align-items-center flex-wrap gap-1">
                                           <h6 className="mb-0">
                                             📅 {TERM_LABELS[term]} Term
                                           </h6>
-                                          {termData?.is_published ? (
-                                            <span className="badge bg-success">
-                                              ✅ Published
-                                            </span>
-                                          ) : termData ? (
-                                            <span className="badge bg-warning text-dark">
-                                              ⏳ Pending
-                                            </span>
-                                          ) : null}
+
+                                          {termData && (
+                                            <div className="d-flex align-items-center gap-1">
+                                              {termData.is_published ? (
+                                                <span className="badge bg-success">
+                                                  ✅ Published
+                                                </span>
+                                              ) : (
+                                                <span className="badge bg-warning text-dark">
+                                                  ⏳ Pending
+                                                </span>
+                                              )}
+
+                                              <button
+                                                className="btn btn-sm btn-light"
+                                                title="Edit this term"
+                                                onClick={(e) => {
+                                                  e.stopPropagation();
+                                                  handleEditSingleTerm(
+                                                    reportGroup,
+                                                    term,
+                                                    termData,
+                                                  );
+                                                }}
+                                              >
+                                                <FaPen size={12} />
+                                              </button>
+
+                                              <button
+                                                className="btn btn-sm btn-danger"
+                                                title="Delete this term"
+                                                onClick={(e) => {
+                                                  e.stopPropagation();
+                                                  handleDeleteSingleTerm(
+                                                    termData,
+                                                    TERM_LABELS[term],
+                                                  );
+                                                }}
+                                              >
+                                                <FaTrashAlt size={12} />
+                                              </button>
+                                            </div>
+                                          )}
                                         </div>
+
                                         <div className="card-body">
                                           {termData ? (
                                             <>
@@ -675,7 +765,7 @@ export default function LessonCoveredTable() {
                                           )}
                                         </div>
 
-                                        {/* Publish button per term */}
+                                        {/* ===== Publish button per term ===== */}
                                         {termData && (
                                           <div className="card-footer bg-white border-top d-flex justify-content-end">
                                             {termData.is_published ? (

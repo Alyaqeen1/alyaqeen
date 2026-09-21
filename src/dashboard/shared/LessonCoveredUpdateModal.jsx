@@ -32,13 +32,6 @@ const TERM_SUBJECTS = [
   },
 ];
 
-const emptyTermSubject = (hasTitleDropdown = false) => ({
-  title: hasTitleDropdown ? "Qaida" : "",
-  beginning: "",
-  end: "",
-  total_learning: "",
-});
-
 export default function LessonCoveredUpdateModal({
   student,
   handleClose,
@@ -51,7 +44,7 @@ export default function LessonCoveredUpdateModal({
   // ===== DETECT MODE =====
   const isTermMode = student?.report_kind === "term";
 
-  // ===== YEARLY STATE (unchanged) =====
+  // ===== YEARLY STATE =====
   const [beginningData, setBeginningData] = useState({
     _id: "",
     lessons: {
@@ -107,7 +100,6 @@ export default function LessonCoveredUpdateModal({
   });
 
   // ===== TERM STATE =====
-  // termEdits: { [reportId]: { ...subjects, is_gfm, year, term, _id } }
   const [termEdits, setTermEdits] = useState({});
 
   // ===== FORMAT DATE =====
@@ -172,7 +164,7 @@ export default function LessonCoveredUpdateModal({
       return;
     }
 
-    // ===== YEARLY MODE: existing behavior =====
+    // ===== YEARLY MODE =====
     if (student?.beginning) {
       const beginningType = student.beginning.type || "normal";
       setBeginningData({
@@ -296,9 +288,7 @@ export default function LessonCoveredUpdateModal({
     e.preventDefault();
 
     try {
-      // ==========================================
       // ===== TERM MODE SUBMIT =====
-      // ==========================================
       if (isTermMode) {
         const ids = Object.keys(termEdits);
         if (ids.length === 0) {
@@ -351,9 +341,7 @@ export default function LessonCoveredUpdateModal({
         return;
       }
 
-      // ==========================================
-      // ===== YEARLY MODE SUBMIT (existing) =====
-      // ==========================================
+      // ===== YEARLY MODE SUBMIT =====
       if (beginningData?._id) {
         const beginningPayload = {
           ...beginningData,
@@ -420,7 +408,7 @@ export default function LessonCoveredUpdateModal({
     }
   };
 
-  // ===== YEARLY HANDLERS (unchanged) =====
+  // ===== YEARLY HANDLERS =====
   const handleLessonChange = (
     period,
     subject,
@@ -474,7 +462,7 @@ export default function LessonCoveredUpdateModal({
     }));
   };
 
-  // ===== RENDER NOTES (yearly only) =====
+  // ===== RENDER NOTES =====
   const renderNotesSection = (period, data) => {
     const notes = data?.notes || [];
     const reportId = data?._id;
@@ -967,26 +955,11 @@ export default function LessonCoveredUpdateModal({
   };
 
   // ===== RENDER TERM CARD =====
-  const renderTermCard = (termKey, edit) => {
-    if (!edit) {
-      return (
-        <div className="col-md-4 mb-4" key={termKey}>
-          <div className="card h-100">
-            <div className="card-header bg-secondary text-white">
-              <h6 className="mb-0">
-                📅 {TERMS.find((t) => t.value === termKey)?.label}
-              </h6>
-            </div>
-            <div className="card-body">
-              <p className="text-muted mb-0">Not saved yet</p>
-            </div>
-          </div>
-        </div>
-      );
-    }
+  const renderTermCard = (termKey, edit, colClass = "col-md-4") => {
+    if (!edit) return null;
 
     return (
-      <div className="col-md-4 mb-4" key={termKey}>
+      <div className={`${colClass} mb-4`} key={termKey}>
         <div className="card h-100">
           <div className="card-header bg-primary text-white">
             <h6 className="mb-0">
@@ -1138,23 +1111,29 @@ export default function LessonCoveredUpdateModal({
                 className="modal-body"
                 style={{ maxHeight: "70vh", overflowY: "auto" }}
               >
-                {/* ==================================== */}
-                {/* ===== TERM MODE UI ===== */}
-                {/* ==================================== */}
+                {/* ===== TERM MODE UI: only terms being edited ===== */}
                 {isTermMode && (
                   <div className="row">
-                    {["autumn", "spring", "summer"].map((termKey) => {
-                      const edit = Object.values(termEdits).find(
-                        (t) => t.term === termKey,
-                      );
-                      return renderTermCard(termKey, edit);
-                    })}
+                    {(() => {
+                      const edits = Object.values(termEdits).sort((a, b) => {
+                        const order = { autumn: 1, spring: 2, summer: 3 };
+                        return order[a.term] - order[b.term];
+                      });
+
+                      // If editing 1 term only → full width
+                      // If editing multiple → 3-column grid
+                      const colClass =
+                        edits.length === 1 ? "col-12" : "col-md-4";
+
+                      return edits.map((edit) => {
+                        // Temporarily use full-width col for single term
+                        return renderTermCard(edit.term, edit, colClass);
+                      });
+                    })()}
                   </div>
                 )}
 
-                {/* ==================================== */}
-                {/* ===== YEARLY MODE UI (unchanged) ===== */}
-                {/* ==================================== */}
+                {/* ===== YEARLY MODE UI ===== */}
                 {!isTermMode && (
                   <>
                     {beginningData?._id && (
@@ -1241,7 +1220,7 @@ export default function LessonCoveredUpdateModal({
                   {isLoading
                     ? "Updating..."
                     : isTermMode
-                      ? "Update Terms"
+                      ? "Update Term"
                       : "Update Reports"}
                 </button>
               </div>
