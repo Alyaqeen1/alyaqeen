@@ -353,16 +353,16 @@ const dashboardRoutes = [
           </PrivateRoute>
         ),
       },
-      {
-        path: "teacher/reports-summary",
-        element: (
-          <PrivateRoute>
-            <TeacherRoute>
-              <ReportsSummary></ReportsSummary>
-            </TeacherRoute>
-          </PrivateRoute>
-        ),
-      },
+      // {
+      //   path: "teacher/reports-summary",
+      //   element: (
+      //     <PrivateRoute>
+      //       <TeacherRoute>
+      //         <ReportsSummary></ReportsSummary>
+      //       </TeacherRoute>
+      //     </PrivateRoute>
+      //   ),
+      // },
       {
         path: "reports-summary",
         element: (

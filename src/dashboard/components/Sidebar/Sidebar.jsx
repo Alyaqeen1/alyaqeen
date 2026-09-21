@@ -306,10 +306,10 @@ export default function Sidebar() {
                           label: "View Reports",
                           to: "teacher/view-reports",
                         },
-                        {
-                          label: "Reports Summary",
-                          to: "teacher/reports-summary",
-                        },
+                        // {
+                        //   label: "Reports Summary",
+                        //   to: "teacher/reports-summary",
+                        // },
                       ]}
                       openSubMenu={openSubMenu}
                       handleSubmenu={handleSubmenu}

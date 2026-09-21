@@ -5,6 +5,40 @@ import {
 } from "../../redux/features/yearly_reports/yearly_reportsApi";
 import Swal from "sweetalert2";
 
+// ===== TERMS =====
+const TERMS = [
+  { value: "autumn", label: "Autumn Term", period: "1 Sep – 31 Dec" },
+  { value: "spring", label: "Spring Term", period: "1 Jan – 30 Apr" },
+  { value: "summer", label: "Summer Term", period: "1 May – 31 Aug" },
+];
+
+// ===== TERM SUBJECTS =====
+const TERM_SUBJECTS = [
+  {
+    key: "qaida_quran_tajweed",
+    label: "Qaida / Qur'an / Tajweed",
+    hasTitleDropdown: true,
+    titleOptions: ["Qaida", "Qur'an", "Tajweed"],
+  },
+  {
+    key: "duas_surahs",
+    label: "Duas & Surahs",
+    hasTitleDropdown: false,
+  },
+  {
+    key: "islamic_studies",
+    label: "Islamic Studies",
+    hasTitleDropdown: false,
+  },
+];
+
+const emptyTermSubject = (hasTitleDropdown = false) => ({
+  title: hasTitleDropdown ? "Qaida" : "",
+  beginning: "",
+  end: "",
+  total_learning: "",
+});
+
 export default function LessonCoveredUpdateModal({
   student,
   handleClose,
@@ -14,6 +48,10 @@ export default function LessonCoveredUpdateModal({
   const [deleteNoteFromReport, { isLoading: isDeletingNote }] =
     useDeleteNoteFromYearlyReportMutation();
 
+  // ===== DETECT MODE =====
+  const isTermMode = student?.report_kind === "term";
+
+  // ===== YEARLY STATE (unchanged) =====
   const [beginningData, setBeginningData] = useState({
     _id: "",
     lessons: {
@@ -68,7 +106,11 @@ export default function LessonCoveredUpdateModal({
     notes: [],
   });
 
-  // ===== FORMAT DATE HELPER =====
+  // ===== TERM STATE =====
+  // termEdits: { [reportId]: { ...subjects, is_gfm, year, term, _id } }
+  const [termEdits, setTermEdits] = useState({});
+
+  // ===== FORMAT DATE =====
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
     try {
@@ -81,86 +123,126 @@ export default function LessonCoveredUpdateModal({
         hour: "2-digit",
         minute: "2-digit",
       });
-    } catch (error) {
+    } catch {
       return "N/A";
     }
   };
 
+  // ===== INITIAL LOAD =====
   useEffect(() => {
-    if (student) {
-      // Set beginning data
-      if (student?.beginning) {
-        const beginningType = student.beginning.type || "normal";
-        setBeginningData({
-          _id: student.beginning._id,
-          type: beginningType,
-          notes: student.beginning.notes || [],
-          lessons: {
-            qaidah_quran: student.beginning.lessons?.qaidah_quran || {
-              selected: "",
-              data: { level: "", lesson_name: "", page: "", line: "" },
-            },
-            islamic_studies: student.beginning.lessons?.islamic_studies || {
-              lesson_name: "",
-              page: "",
-              book: "",
-            },
-            dua_surah: student.beginning.lessons?.dua_surah || {
-              lesson_name: "",
-              book: "",
-              level: "",
-              page: "",
-              target: "",
-              dua_number: "",
-            },
-            gift_for_muslim: student.beginning.lessons?.gift_for_muslim || {
-              lesson_name: "",
-              level: "",
-              page: "",
-              target: "",
-            },
-          },
-        });
-      }
+    if (!student) return;
 
-      // Set ending data
-      if (student?.ending) {
-        const endingType = student.ending.type || "normal";
-        setEndingData({
-          _id: student.ending._id,
-          type: endingType,
-          notes: student.ending.notes || [],
-          lessons: {
-            qaidah_quran: student.ending.lessons?.qaidah_quran || {
-              selected: "",
-              data: { level: "", lesson_name: "", page: "", line: "" },
-            },
-            islamic_studies: student.ending.lessons?.islamic_studies || {
-              lesson_name: "",
-              page: "",
-              book: "",
-            },
-            dua_surah: student.ending.lessons?.dua_surah || {
-              lesson_name: "",
-              book: "",
-              level: "",
-              page: "",
-              target: "",
-              dua_number: "",
-            },
-            gift_for_muslim: student.ending.lessons?.gift_for_muslim || {
-              lesson_name: "",
-              level: "",
-              page: "",
-              target: "",
-            },
+    // ===== TERM MODE: hydrate termEdits from student.terms =====
+    if (isTermMode) {
+      const edits = {};
+      const terms = student.terms || {};
+
+      Object.keys(terms).forEach((termKey) => {
+        const t = terms[termKey];
+        if (!t) return;
+
+        edits[t._id] = {
+          _id: t._id,
+          year: t.year,
+          term: t.term,
+          is_gfm: t.is_gfm || false,
+          qaida_quran_tajweed: {
+            title: t.subjects?.qaida_quran_tajweed?.title || "Qaida",
+            beginning: t.subjects?.qaida_quran_tajweed?.beginning || "",
+            end: t.subjects?.qaida_quran_tajweed?.end || "",
+            total_learning:
+              t.subjects?.qaida_quran_tajweed?.total_learning || "",
           },
-        });
-      }
+          duas_surahs: {
+            title: "",
+            beginning: t.subjects?.duas_surahs?.beginning || "",
+            end: t.subjects?.duas_surahs?.end || "",
+            total_learning: t.subjects?.duas_surahs?.total_learning || "",
+          },
+          islamic_studies: {
+            title: "",
+            beginning: t.subjects?.islamic_studies?.beginning || "",
+            end: t.subjects?.islamic_studies?.end || "",
+            total_learning: t.subjects?.islamic_studies?.total_learning || "",
+          },
+        };
+      });
+
+      setTermEdits(edits);
+      return;
     }
-  }, [student]);
 
-  // ===== HANDLE DELETE NOTE =====
+    // ===== YEARLY MODE: existing behavior =====
+    if (student?.beginning) {
+      const beginningType = student.beginning.type || "normal";
+      setBeginningData({
+        _id: student.beginning._id,
+        type: beginningType,
+        notes: student.beginning.notes || [],
+        lessons: {
+          qaidah_quran: student.beginning.lessons?.qaidah_quran || {
+            selected: "",
+            data: { level: "", lesson_name: "", page: "", line: "" },
+          },
+          islamic_studies: student.beginning.lessons?.islamic_studies || {
+            lesson_name: "",
+            page: "",
+            book: "",
+          },
+          dua_surah: student.beginning.lessons?.dua_surah || {
+            lesson_name: "",
+            book: "",
+            level: "",
+            page: "",
+            target: "",
+            dua_number: "",
+          },
+          gift_for_muslim: student.beginning.lessons?.gift_for_muslim || {
+            lesson_name: "",
+            level: "",
+            page: "",
+            target: "",
+          },
+        },
+      });
+    }
+
+    if (student?.ending) {
+      const endingType = student.ending.type || "normal";
+      setEndingData({
+        _id: student.ending._id,
+        type: endingType,
+        notes: student.ending.notes || [],
+        lessons: {
+          qaidah_quran: student.ending.lessons?.qaidah_quran || {
+            selected: "",
+            data: { level: "", lesson_name: "", page: "", line: "" },
+          },
+          islamic_studies: student.ending.lessons?.islamic_studies || {
+            lesson_name: "",
+            page: "",
+            book: "",
+          },
+          dua_surah: student.ending.lessons?.dua_surah || {
+            lesson_name: "",
+            book: "",
+            level: "",
+            page: "",
+            target: "",
+            dua_number: "",
+          },
+          gift_for_muslim: student.ending.lessons?.gift_for_muslim || {
+            lesson_name: "",
+            level: "",
+            page: "",
+            target: "",
+          },
+        },
+      });
+    }
+  }, [student, isTermMode]);
+
+  // ===== DELETE NOTE =====
   const handleDeleteNote = async (reportId, noteId) => {
     Swal.fire({
       title: "Are you sure?",
@@ -178,7 +260,6 @@ export default function LessonCoveredUpdateModal({
             noteId: noteId,
           }).unwrap();
 
-          // Update local state to remove the note
           if (beginningData._id === reportId) {
             setBeginningData({
               ...beginningData,
@@ -210,10 +291,69 @@ export default function LessonCoveredUpdateModal({
     });
   };
 
+  // ===== SUBMIT =====
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
-      // Update Beginning of Year Report
+      // ==========================================
+      // ===== TERM MODE SUBMIT =====
+      // ==========================================
+      if (isTermMode) {
+        const ids = Object.keys(termEdits);
+        if (ids.length === 0) {
+          Swal.fire("Info", "No saved terms to update.", "info");
+          return;
+        }
+
+        let updatedCount = 0;
+
+        for (const id of ids) {
+          const edit = termEdits[id];
+
+          const payload = {
+            year: Number(edit.year),
+            term: edit.term,
+            is_gfm: edit.is_gfm,
+            subjects: {
+              qaida_quran_tajweed: {
+                title: edit.qaida_quran_tajweed.title,
+                beginning: edit.qaida_quran_tajweed.beginning,
+                end: edit.qaida_quran_tajweed.end,
+                total_learning: edit.qaida_quran_tajweed.total_learning,
+              },
+              duas_surahs: {
+                beginning: edit.duas_surahs.beginning,
+                end: edit.duas_surahs.end,
+                total_learning: edit.duas_surahs.total_learning,
+              },
+              islamic_studies: {
+                beginning: edit.islamic_studies.beginning,
+                end: edit.islamic_studies.end,
+                total_learning: edit.islamic_studies.total_learning,
+              },
+            },
+          };
+
+          const data = await updateYearlyReport({ id, data: payload }).unwrap();
+          if (data?.modifiedCount !== undefined) updatedCount++;
+        }
+
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: `${updatedCount} term report(s) updated successfully!`,
+          showConfirmButton: false,
+          timer: 1500,
+        });
+
+        handleClose();
+        return;
+      }
+
+      // ==========================================
+      // ===== YEARLY MODE SUBMIT (existing) =====
+      // ==========================================
       if (beginningData?._id) {
         const beginningPayload = {
           ...beginningData,
@@ -238,7 +378,6 @@ export default function LessonCoveredUpdateModal({
         }
       }
 
-      // Update End of Year Report
       if (endingData?._id) {
         const endingPayload = {
           ...endingData,
@@ -265,10 +404,11 @@ export default function LessonCoveredUpdateModal({
 
       handleClose();
     } catch (err) {
+      console.error("Update error:", err);
       Swal.fire({
         position: "center",
         icon: "error",
-        title: err?.data?.message || "Update Failed",
+        title: err?.data?.error || err?.data?.message || "Update Failed",
         showConfirmButton: true,
       });
     }
@@ -280,6 +420,7 @@ export default function LessonCoveredUpdateModal({
     }
   };
 
+  // ===== YEARLY HANDLERS (unchanged) =====
   const handleLessonChange = (
     period,
     subject,
@@ -309,7 +450,31 @@ export default function LessonCoveredUpdateModal({
     });
   };
 
-  // ===== RENDER NOTES SECTION =====
+  // ===== TERM HANDLERS =====
+  const handleTermFieldChange = (reportId, subjectKey, field, value) => {
+    setTermEdits((prev) => ({
+      ...prev,
+      [reportId]: {
+        ...prev[reportId],
+        [subjectKey]: {
+          ...prev[reportId][subjectKey],
+          [field]: value,
+        },
+      },
+    }));
+  };
+
+  const handleTermGFMChange = (reportId, value) => {
+    setTermEdits((prev) => ({
+      ...prev,
+      [reportId]: {
+        ...prev[reportId],
+        is_gfm: value,
+      },
+    }));
+  };
+
+  // ===== RENDER NOTES (yearly only) =====
   const renderNotesSection = (period, data) => {
     const notes = data?.notes || [];
     const reportId = data?._id;
@@ -357,6 +522,7 @@ export default function LessonCoveredUpdateModal({
     );
   };
 
+  // ===== RENDER YEARLY FIELDS =====
   const renderQuranQaidahFields = (period, data) => {
     const selectedOption = data?.lessons?.qaidah_quran?.selected;
     const optionLabels = {
@@ -639,14 +805,11 @@ export default function LessonCoveredUpdateModal({
                   }
                 >
                   <option value="">Select Book</option>
-                  <option value="book 1">Book 1</option>
-                  <option value="book 2">Book 2</option>
-                  <option value="book 3">Book 3</option>
-                  <option value="book 4">Book 4</option>
-                  <option value="book 5">Book 5</option>
-                  <option value="book 6">Book 6</option>
-                  <option value="book 7">Book 7</option>
-                  <option value="book 8">Book 8</option>
+                  {Array.from({ length: 8 }, (_, i) => (
+                    <option key={i} value={`book ${i + 1}`}>
+                      Book {i + 1}
+                    </option>
+                  ))}
                 </select>
               </div>
               <div className="col-md-4">
@@ -803,6 +966,145 @@ export default function LessonCoveredUpdateModal({
     );
   };
 
+  // ===== RENDER TERM CARD =====
+  const renderTermCard = (termKey, edit) => {
+    if (!edit) {
+      return (
+        <div className="col-md-4 mb-4" key={termKey}>
+          <div className="card h-100">
+            <div className="card-header bg-secondary text-white">
+              <h6 className="mb-0">
+                📅 {TERMS.find((t) => t.value === termKey)?.label}
+              </h6>
+            </div>
+            <div className="card-body">
+              <p className="text-muted mb-0">Not saved yet</p>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="col-md-4 mb-4" key={termKey}>
+        <div className="card h-100">
+          <div className="card-header bg-primary text-white">
+            <h6 className="mb-0">
+              📅 {TERMS.find((t) => t.value === termKey)?.label}
+            </h6>
+          </div>
+          <div className="card-body">
+            <div className="form-check mb-3">
+              <input
+                type="checkbox"
+                className="form-check-input"
+                id={`gfm-${edit._id}`}
+                checked={edit.is_gfm}
+                onChange={(e) =>
+                  handleTermGFMChange(edit._id, e.target.checked)
+                }
+              />
+              <label
+                className="form-check-label fw-bold"
+                htmlFor={`gfm-${edit._id}`}
+              >
+                Gift for Muslim (GFM)
+              </label>
+            </div>
+
+            {TERM_SUBJECTS.map((subject) => {
+              if (subject.key === "duas_surahs" && edit.is_gfm) return null;
+
+              const data = edit[subject.key];
+
+              return (
+                <div key={subject.key} className="mb-3">
+                  <div className="fw-bold small mb-1 text-primary">
+                    {subject.label}
+                  </div>
+
+                  {subject.hasTitleDropdown && (
+                    <div className="mb-1">
+                      <select
+                        className="form-control form-control-sm"
+                        value={data.title}
+                        onChange={(e) =>
+                          handleTermFieldChange(
+                            edit._id,
+                            subject.key,
+                            "title",
+                            e.target.value,
+                          )
+                        }
+                      >
+                        {subject.titleOptions.map((opt) => (
+                          <option key={opt} value={opt}>
+                            {opt}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+
+                  <div className="mb-1">
+                    <label className="form-label small mb-0">Beginning</label>
+                    <input
+                      type="text"
+                      className="form-control form-control-sm"
+                      value={data.beginning}
+                      onChange={(e) =>
+                        handleTermFieldChange(
+                          edit._id,
+                          subject.key,
+                          "beginning",
+                          e.target.value,
+                        )
+                      }
+                    />
+                  </div>
+
+                  <div className="mb-1">
+                    <label className="form-label small mb-0">End</label>
+                    <input
+                      type="text"
+                      className="form-control form-control-sm"
+                      value={data.end}
+                      onChange={(e) =>
+                        handleTermFieldChange(
+                          edit._id,
+                          subject.key,
+                          "end",
+                          e.target.value,
+                        )
+                      }
+                    />
+                  </div>
+
+                  <div>
+                    <label className="form-label small mb-0">Summary</label>
+                    <textarea
+                      className="form-control form-control-sm"
+                      rows="2"
+                      value={data.total_learning}
+                      onChange={(e) =>
+                        handleTermFieldChange(
+                          edit._id,
+                          subject.key,
+                          "total_learning",
+                          e.target.value,
+                        )
+                      }
+                    />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   if (!showModal) return null;
 
   return (
@@ -819,8 +1121,9 @@ export default function LessonCoveredUpdateModal({
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title">
-                Edit Reports - {student?.student_name} ({student?.academic_year}
-                )
+                {isTermMode
+                  ? `Edit Term Progress - ${student?.student_name} (${student?.academic_year})`
+                  : `Edit Reports - ${student?.student_name} (${student?.academic_year})`}
               </h5>
               <button
                 type="button"
@@ -835,64 +1138,89 @@ export default function LessonCoveredUpdateModal({
                 className="modal-body"
                 style={{ maxHeight: "70vh", overflowY: "auto" }}
               >
-                {/* Beginning of Year */}
-                {beginningData?._id && (
-                  <>
-                    <h5 className="text-primary mb-3">📘 Beginning of Year</h5>
-                    <div className="mb-3">
-                      <span className="badge bg-info">
-                        Type:{" "}
-                        {beginningData?.type === "gift_muslim"
-                          ? "Gift For Muslim"
-                          : "Normal Education"}
-                      </span>
-                    </div>
-
-                    {renderQuranQaidahFields("beginning", beginningData)}
-
-                    {beginningData?.type === "gift_muslim"
-                      ? renderGiftForMuslimFields("beginning", beginningData)
-                      : renderNormalEducationFields("beginning", beginningData)}
-
-                    {/* Notes Section for Beginning */}
-                    <div className="mt-3">
-                      <h6 className="text-warning">
-                        <i className="fas fa-sticky-note me-2"></i>
-                        Notes ({beginningData.notes?.length || 0})
-                      </h6>
-                      {renderNotesSection("beginning", beginningData)}
-                    </div>
-                  </>
+                {/* ==================================== */}
+                {/* ===== TERM MODE UI ===== */}
+                {/* ==================================== */}
+                {isTermMode && (
+                  <div className="row">
+                    {["autumn", "spring", "summer"].map((termKey) => {
+                      const edit = Object.values(termEdits).find(
+                        (t) => t.term === termKey,
+                      );
+                      return renderTermCard(termKey, edit);
+                    })}
+                  </div>
                 )}
 
-                {/* End of Year */}
-                {endingData?._id && (
+                {/* ==================================== */}
+                {/* ===== YEARLY MODE UI (unchanged) ===== */}
+                {/* ==================================== */}
+                {!isTermMode && (
                   <>
-                    <hr className="my-4" />
-                    <h5 className="text-primary mb-3">📗 End of Year</h5>
-                    <div className="mb-3">
-                      <span className="badge bg-info">
-                        Type:{" "}
+                    {beginningData?._id && (
+                      <>
+                        <h5 className="text-primary mb-3">
+                          📘 Beginning of Year
+                        </h5>
+                        <div className="mb-3">
+                          <span className="badge bg-info">
+                            Type:{" "}
+                            {beginningData?.type === "gift_muslim"
+                              ? "Gift For Muslim"
+                              : "Normal Education"}
+                          </span>
+                        </div>
+
+                        {renderQuranQaidahFields("beginning", beginningData)}
+
+                        {beginningData?.type === "gift_muslim"
+                          ? renderGiftForMuslimFields(
+                              "beginning",
+                              beginningData,
+                            )
+                          : renderNormalEducationFields(
+                              "beginning",
+                              beginningData,
+                            )}
+
+                        <div className="mt-3">
+                          <h6 className="text-warning">
+                            <i className="fas fa-sticky-note me-2"></i>
+                            Notes ({beginningData.notes?.length || 0})
+                          </h6>
+                          {renderNotesSection("beginning", beginningData)}
+                        </div>
+                      </>
+                    )}
+
+                    {endingData?._id && (
+                      <>
+                        <hr className="my-4" />
+                        <h5 className="text-primary mb-3">📗 End of Year</h5>
+                        <div className="mb-3">
+                          <span className="badge bg-info">
+                            Type:{" "}
+                            {endingData?.type === "gift_muslim"
+                              ? "Gift For Muslim"
+                              : "Normal Education"}
+                          </span>
+                        </div>
+
+                        {renderQuranQaidahFields("ending", endingData)}
+
                         {endingData?.type === "gift_muslim"
-                          ? "Gift For Muslim"
-                          : "Normal Education"}
-                      </span>
-                    </div>
+                          ? renderGiftForMuslimFields("ending", endingData)
+                          : renderNormalEducationFields("ending", endingData)}
 
-                    {renderQuranQaidahFields("ending", endingData)}
-
-                    {endingData?.type === "gift_muslim"
-                      ? renderGiftForMuslimFields("ending", endingData)
-                      : renderNormalEducationFields("ending", endingData)}
-
-                    {/* Notes Section for Ending */}
-                    <div className="mt-3">
-                      <h6 className="text-warning">
-                        <i className="fas fa-sticky-note me-2"></i>
-                        Notes ({endingData.notes?.length || 0})
-                      </h6>
-                      {renderNotesSection("ending", endingData)}
-                    </div>
+                        <div className="mt-3">
+                          <h6 className="text-warning">
+                            <i className="fas fa-sticky-note me-2"></i>
+                            Notes ({endingData.notes?.length || 0})
+                          </h6>
+                          {renderNotesSection("ending", endingData)}
+                        </div>
+                      </>
+                    )}
                   </>
                 )}
               </div>
@@ -910,7 +1238,11 @@ export default function LessonCoveredUpdateModal({
                   className="btn btn-primary"
                   disabled={isLoading}
                 >
-                  {isLoading ? "Updating..." : "Update Reports"}
+                  {isLoading
+                    ? "Updating..."
+                    : isTermMode
+                      ? "Update Terms"
+                      : "Update Reports"}
                 </button>
               </div>
             </form>
