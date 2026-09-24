@@ -122,7 +122,7 @@ const Banner = () => {
                 </div>
                 <div className="hero-button-feb3 mt-4 text-start">
                   <Link
-                    className="theme-btn-feb-4"
+                    className="theme-btn-feb-4 me-2"
                     data-aos="fade-up"
                     data-aos-duration="800"
                     data-aos-delay="600"
@@ -131,6 +131,15 @@ const Banner = () => {
                     {new Date().toLocaleString("en-US", { month: "long" })}{" "}
                     {timetable}
                   </Link>
+                  <a
+                    href="#hifz-programme"
+                    className="theme-btn"
+                    data-aos="fade-up"
+                    data-aos-duration="800"
+                    data-aos-delay="600"
+                  >
+                    Hifz Program
+                  </a>
                 </div>
               </div>
             </div>

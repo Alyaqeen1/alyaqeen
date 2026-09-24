@@ -117,11 +117,19 @@ const FeeStructure = () => {
                       />
                     </div>
                   </div>
-                  <strong>
-                    {subjectList[0]?.weekdays?.days}
-                    <br />
-                    {subjectList[0]?.weekdays?.duration}
-                  </strong>
+                  <div
+                    style={{
+                      marginTop: "4px",
+                      fontWeight: 700,
+                      lineHeight: "1.5",
+                      textAlign: "center",
+                    }}
+                  >
+                    <div>{subjectList[0]?.weekdays?.days}</div>
+                    <div style={{ whiteSpace: "nowrap" }}>
+                      {subjectList[0]?.weekdays?.duration}
+                    </div>
+                  </div>
                 </td>
 
                 <td className="text-center p-1 border mb-0">
@@ -140,11 +148,19 @@ const FeeStructure = () => {
                       />
                     </div>
                   </div>
-                  <strong>
-                    {subjectList[0]?.weekends?.days}
-                    <br />
-                    {subjectList[0]?.weekends?.duration}
-                  </strong>
+                  <div
+                    style={{
+                      marginTop: "4px",
+                      fontWeight: 700,
+                      lineHeight: "1.5",
+                      textAlign: "center",
+                    }}
+                  >
+                    <div>{subjectList[0]?.weekends?.days}</div>
+                    <div style={{ whiteSpace: "nowrap" }}>
+                      {subjectList[0]?.weekends?.duration}
+                    </div>
+                  </div>
                 </td>
               </tr>
 
@@ -177,11 +193,19 @@ const FeeStructure = () => {
                       />
                     </div>
                   </div>
-                  <strong>
-                    {subjectList[1]?.weekdays?.days}
-                    <br />
-                    {subjectList[1]?.weekdays?.duration}
-                  </strong>
+                  <div
+                    style={{
+                      marginTop: "4px",
+                      fontWeight: 700,
+                      lineHeight: "1.5",
+                      textAlign: "center",
+                    }}
+                  >
+                    <div>{subjectList[1]?.weekdays?.days}</div>
+                    <div style={{ whiteSpace: "nowrap" }}>
+                      {subjectList[1]?.weekdays?.duration}
+                    </div>
+                  </div>
                 </td>
                 <td className="text-center p-1 border mb-0">
                   <div className="d-flex justify-content-around">
@@ -198,11 +222,19 @@ const FeeStructure = () => {
                       />
                     </div>
                   </div>
-                  <strong>
-                    {subjectList[1]?.weekends?.days}
-                    <br />
-                    {subjectList[1]?.weekends?.duration}
-                  </strong>
+                  <div
+                    style={{
+                      marginTop: "4px",
+                      fontWeight: 700,
+                      lineHeight: "1.5",
+                      textAlign: "center",
+                    }}
+                  >
+                    <div>{subjectList[1]?.weekends?.days}</div>
+                    <div style={{ whiteSpace: "nowrap" }}>
+                      {subjectList[1]?.weekends?.duration}
+                    </div>
+                  </div>
                 </td>
               </tr>
 
@@ -237,11 +269,19 @@ const FeeStructure = () => {
                       />{" "}
                     </div>
                   </div>
-                  <strong>
-                    {subjectList[2]?.weekdays?.days}
-                    <br />
-                    {subjectList[2]?.weekdays?.duration}
-                  </strong>
+                  <div
+                    style={{
+                      marginTop: "4px",
+                      fontWeight: 700,
+                      lineHeight: "1.5",
+                      textAlign: "center",
+                    }}
+                  >
+                    <div>{subjectList[2]?.weekdays?.days}</div>
+                    <div style={{ whiteSpace: "nowrap" }}>
+                      {subjectList[2]?.weekdays?.duration}
+                    </div>
+                  </div>
                 </td>
                 <td className="text-center p-1 border mb-0">
                   <div className="d-flex justify-content-around">
@@ -258,11 +298,19 @@ const FeeStructure = () => {
                       />{" "}
                     </div>
                   </div>
-                  <strong>
-                    {subjectList[2]?.weekends?.days}
-                    <br />
-                    {subjectList[2]?.weekends?.duration}
-                  </strong>
+                  <div
+                    style={{
+                      marginTop: "4px",
+                      fontWeight: 700,
+                      lineHeight: "1.5",
+                      textAlign: "center",
+                    }}
+                  >
+                    <div>{subjectList[2]?.weekends?.days}</div>
+                    <div style={{ whiteSpace: "nowrap" }}>
+                      {subjectList[2]?.weekends?.duration}
+                    </div>
+                  </div>
                 </td>
               </tr>
 
@@ -297,11 +345,19 @@ const FeeStructure = () => {
                       />{" "}
                     </div>
                   </div>
-                  <strong>
-                    {subjectList[3]?.weekdays?.days}
-                    <br />
-                    {subjectList[3]?.weekdays?.duration}
-                  </strong>
+                  <div
+                    style={{
+                      marginTop: "4px",
+                      fontWeight: 700,
+                      lineHeight: "1.5",
+                      textAlign: "center",
+                    }}
+                  >
+                    <div>{subjectList[3]?.weekdays?.days}</div>
+                    <div style={{ whiteSpace: "nowrap" }}>
+                      {subjectList[3]?.weekdays?.duration}
+                    </div>
+                  </div>
                 </td>
                 <td className="text-center p-1 border mb-0">
                   <div className="d-flex justify-content-around">
@@ -318,11 +374,19 @@ const FeeStructure = () => {
                       />
                     </div>
                   </div>
-                  <strong>
-                    {subjectList[3]?.weekends?.days}
-                    <br />
-                    {subjectList[3]?.weekends?.duration}
-                  </strong>
+                  <div
+                    style={{
+                      marginTop: "4px",
+                      fontWeight: 700,
+                      lineHeight: "1.5",
+                      textAlign: "center",
+                    }}
+                  >
+                    <div>{subjectList[3]?.weekends?.days}</div>
+                    <div style={{ whiteSpace: "nowrap" }}>
+                      {subjectList[3]?.weekends?.duration}
+                    </div>
+                  </div>
                 </td>
               </tr>
 
@@ -356,11 +420,19 @@ const FeeStructure = () => {
                       />{" "}
                     </div>
                   </div>
-                  <strong>
-                    {subjectList[4]?.weekdays?.days}
-                    <br />
-                    {subjectList[4]?.weekdays?.duration}
-                  </strong>
+                  <div
+                    style={{
+                      marginTop: "4px",
+                      fontWeight: 700,
+                      lineHeight: "1.5",
+                      textAlign: "center",
+                    }}
+                  >
+                    <div>{subjectList[4]?.weekdays?.days}</div>
+                    <div style={{ whiteSpace: "nowrap" }}>
+                      {subjectList[4]?.weekdays?.duration}
+                    </div>
+                  </div>
                 </td>
                 <td className="text-center p-1 border mb-0">
                   <div className="d-flex justify-content-around">
@@ -377,11 +449,19 @@ const FeeStructure = () => {
                       />{" "}
                     </div>
                   </div>
-                  <strong>
-                    {subjectList[4]?.weekends?.days}
-                    <br />
-                    {subjectList[4]?.weekends?.duration}
-                  </strong>
+                  <div
+                    style={{
+                      marginTop: "4px",
+                      fontWeight: 700,
+                      lineHeight: "1.5",
+                      textAlign: "center",
+                    }}
+                  >
+                    <div>{subjectList[4]?.weekends?.days}</div>
+                    <div style={{ whiteSpace: "nowrap" }}>
+                      {subjectList[4]?.weekends?.duration}
+                    </div>
+                  </div>
                 </td>
               </tr>
             </tbody>

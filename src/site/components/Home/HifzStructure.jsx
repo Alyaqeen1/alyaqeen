@@ -15,59 +15,83 @@ const HifzStructure = () => {
 
   const { programme, weekdays, weekends } = tableHeaders || {};
 
-  /* Renders a cell with 2 side-by-side groups:
-       [price1  duration1]  │  [price2  duration2]
-     Single divider only between the two groups. */
+  /* Renders a cell with 2 groups side-by-side using CSS grid.
+     Grid guarantees fixed 2-column layout — no wrapping, no collapsing.
+     Padding is applied per-cell so it survives narrow screens. */
   const renderCell = (data) => {
     const hasTwoOptions = !!data?.perHour2;
 
+    const renderPrice = (hourKey, monthKey) => (
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          alignItems: "center",
+          width: "100%",
+        }}
+      >
+        <div
+          className="fw-light"
+          style={{
+            padding: "2px 4px",
+            fontSize: "inherit",
+            lineHeight: "1.4",
+          }}
+        >
+          <Trans i18nKey={hourKey} components={{ sm: <small /> }} />
+        </div>
+
+        <div
+          className="fw-light"
+          style={{
+            padding: "2px 4px",
+            fontSize: "inherit",
+            lineHeight: "1.4",
+          }}
+        >
+          <Trans i18nKey={monthKey} components={{ sm: <small /> }} />
+        </div>
+      </div>
+    );
+
     return (
       <>
-        <div className="d-flex justify-content-around">
-          {/* GROUP 1 */}
-          <div className="mb-0 w-50 fw-light px-1">
-            <div className="d-flex justify-content-around">
-              <div className="mb-0 w-50">
-                <Trans i18nKey={data?.perHour} components={{ sm: <small /> }} />
-              </div>
-              <div className="mb-0 w-50">
-                <Trans
-                  i18nKey={data?.perMonth}
-                  components={{ sm: <small /> }}
-                />
-              </div>
-            </div>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: hasTwoOptions ? "1fr 1fr" : "1fr",
+            width: "100%",
+            alignItems: "start",
+          }}
+        >
+          <div
+            style={{
+              padding: "4px 8px",
+              borderRight: hasTwoOptions ? "1px solid #dee2e6" : "none",
+            }}
+          >
+            {renderPrice(data?.perHour, data?.perMonth)}
           </div>
 
-          {/* DIVIDER + GROUP 2 */}
           {hasTwoOptions && (
-            <div
-              className="mb-0 w-50 fw-light px-1"
-              style={{ borderLeft: "1px solid #dee2e6" }}
-            >
-              <div className="d-flex justify-content-around">
-                <div className="mb-0 w-50">
-                  <Trans
-                    i18nKey={data?.perHour2}
-                    components={{ sm: <small /> }}
-                  />
-                </div>
-                <div className="mb-0 w-50">
-                  <Trans
-                    i18nKey={data?.perMonth2}
-                    components={{ sm: <small /> }}
-                  />
-                </div>
-              </div>
+            <div style={{ padding: "4px 8px" }}>
+              {renderPrice(data?.perHour2, data?.perMonth2)}
             </div>
           )}
         </div>
 
-        <strong className="d-block mt-2">
-          {data?.days}
-          <br />
-          {data?.duration}
-        </strong>
+        <div
+          className="mt-2"
+          style={{
+            fontWeight: 700,
+            lineHeight: "1.5",
+            whiteSpace: "nowrap",
+            textAlign: "center",
+          }}
+        >
+          <div>{data?.days}</div>
+          <div>{data?.duration}</div>
+        </div>
       </>
     );
   };
@@ -104,7 +128,10 @@ const HifzStructure = () => {
         </div>
 
         <div className="row table-responsive">
-          <table className="table mb-3" style={{ minWidth: 700 }}>
+          <table
+            className="table mb-3 hifz-structure-table"
+            style={{ minWidth: 700 }}
+          >
             <thead>
               <tr>
                 <td
@@ -154,19 +181,11 @@ const HifzStructure = () => {
                         )}
                       </td>
 
-                      {/* Weekdays column — 3-day Intensive (Fri–Sat–Sun) */}
-                      <td
-                        className="text-center p-1 border mb-0"
-                        // style={{ backgroundColor: "#fff8e1" }}
-                      >
+                      <td className="text-center p-1 border mb-0">
                         {renderCell(item?.weekdays)}
                       </td>
 
-                      {/* Weekends column — Sat + Sun intensive */}
-                      <td
-                        className="text-center p-1 border mb-0"
-                        // style={{ backgroundColor: "#fff8e1" }}
-                      >
+                      <td className="text-center p-1 border mb-0">
                         {renderCell(item?.weekends)}
                       </td>
                     </tr>
@@ -186,12 +205,10 @@ const HifzStructure = () => {
                       )}
                     </td>
 
-                    {/* Weekdays */}
                     <td className="text-center p-1 border mb-0">
                       {renderCell(item?.weekdays)}
                     </td>
 
-                    {/* Weekends */}
                     <td className="text-center p-1 border mb-0">
                       {renderCell(item?.weekends)}
                     </td>

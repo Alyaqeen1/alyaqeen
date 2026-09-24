@@ -140,7 +140,9 @@ button:focus {
   border-radius: 16px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
   overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
   border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
@@ -495,7 +497,9 @@ button:focus {
   border-radius: 16px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
   overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
   border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
@@ -870,4 +874,12 @@ button:focus {
 .gallery-uploader .card:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+html {
+  scroll-behavior: smooth;
+}
+
+/* Offset so the sticky header doesn't cover the section title */
+#hifz-programme {
+  scroll-margin-top: 100px;
 }
