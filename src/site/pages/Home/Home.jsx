@@ -18,6 +18,7 @@ import FeeStructure from "../../components/Home/FeeStructure";
 import AdditionalServices from "../../components/Home/AdditionalServices";
 import LanguageModal from "../../components/AdditionalPages/LanguageModal";
 import SEO from "../../utils/SEO";
+import HifzStructure from "../../components/Home/HifzStructure";
 
 export default function Home() {
   return (
@@ -32,6 +33,7 @@ export default function Home() {
       <WorkProcess></WorkProcess>
       <AboutActivities></AboutActivities>
       <FeeStructure></FeeStructure>
+      <HifzStructure></HifzStructure>
       <Marquee></Marquee>
       <Certificate></Certificate>
       <Team></Team>

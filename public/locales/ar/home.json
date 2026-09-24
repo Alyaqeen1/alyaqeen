@@ -129,21 +129,6 @@
         }
       },
       {
-        "title": "تحفيظ القرآن",
-        "weekdays": {
-          "perHour": "£1.85<sm>/في الساعة</sm>",
-          "perMonth": "£90<sm>/في الشهر</sm>",
-          "days": "الاثنين - الخميس",
-          "duration": "٤:٣٠ - ٧م / ٥ - ٧م"
-        },
-        "weekends": {
-          "perHour": "£2<sm>/في الساعة</sm>",
-          "perMonth": "£60<sm>/في الشهر</sm>",
-          "days": "السبت - الأحد",
-          "duration": "١٠ص - ١م / ١٢ - ٢:٣٠م"
-        }
-      },
-      {
         "title": "اللغة العربية",
         "weekdays": {
           "perHour": "£1.66<sm>/في الساعة</sm>",
@@ -152,10 +137,74 @@
           "duration": "٦ - ٧م"
         },
         "weekends": {
-          "perHour": "£10<sm>/في الساعة</sm>",
+          "perHour": "£3.33<sm>/في الساعة</sm>",
           "perMonth": "£50<sm>/في الشهر</sm>",
           "days": "السبت - الأحد",
           "duration": "٩:٠٠ – ١٠:٣٠ ص / ١٠:٣٠ – ١١:٣٠ ص"
+        }
+      },
+      {
+        "title": "اللغة الأردية",
+        "weekdays": {
+          "perHour": "£5<sm>/في الساعة</sm>",
+          "perMonth": "£40<sm>/في الشهر</sm>",
+          "days": "الأربعاء - الخميس",
+          "duration": "٧ - ٨م"
+        },
+        "weekends": {
+          "perHour": "£2.5<sm>/في الساعة</sm>",
+          "perMonth": "£25<sm>/في الشهر</sm>",
+          "days": "السبت",
+          "duration": "١٠:٣٠ ص - ١٢:٣٠ م"
+        }
+      }
+    ]
+  },
+
+  "hifzStructure": {
+    "mainHeading": "برنامج تحفيظ القرآن<break />القرآن الكريم",
+    "sectionTitle": "برنامج التحفيظ",
+    "tableHeaders": {
+      "programme": "البرنامج",
+      "weekdays": "صفوف أيام الأسبوع",
+      "weekends": "صفوف عطلة نهاية الأسبوع"
+    },
+    "programmes": [
+      {
+        "title": "تحفيظ القرآن",
+        "variant": "standard",
+        "weekdays": {
+          "perHour": "£1.66<sm>/في الساعة</sm>",
+          "perMonth": "£60<sm>/في الشهر</sm>",
+          "perHour2": "£1.85<sm>/في الساعة</sm>",
+          "perMonth2": "£75<sm>/في الشهر</sm>",
+          "days": "الاثنين - الخميس",
+          "duration": "٤:٣٠ - ٦:٣٠م / ٤:٣٠ - ٧:٠٠م"
+        },
+        "weekends": {
+          "perHour": "£2.00<sm>/في الساعة</sm>",
+          "perMonth": "£60<sm>/في الشهر</sm>",
+          "perHour2": "£2.33<sm>/في الساعة</sm>",
+          "perMonth2": "£70<sm>/في الشهر</sm>",
+          "days": "السبت - الأحد",
+          "duration": "١٠ص - ١٢:٣٠م / ١٢ - ٢:٣٠م"
+        }
+      },
+      {
+        "title": "التحفيظ المكثف",
+        "subtitle": "(٣ أيام)",
+        "variant": "intensive",
+        "weekdays": {
+          "perHour": "£6.67<sm>/في الساعة</sm>",
+          "perMonth": "£80<sm>/في الشهر</sm>",
+          "days": "الجمعة",
+          "duration": "٤:٣٠ - ٧:٣٠م"
+        },
+        "weekends": {
+          "perHour": "£2.33<sm>/في الساعة</sm>",
+          "perMonth": "£80<sm>/في الشهر</sm>",
+          "days": "السبت - الأحد",
+          "duration": "١ - ٤م"
         }
       }
     ]

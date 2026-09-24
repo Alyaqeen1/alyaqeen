@@ -128,21 +128,6 @@
         }
       },
       {
-        "title": "Hifz Memorisation",
-        "weekdays": {
-          "perHour": "£1.85<sm>/hour</sm>",
-          "perMonth": "£75<sm>/month</sm>",
-          "days": "Mon - Thu",
-          "duration": "4:30 - 7:00pm / 5 - 7pm"
-        },
-        "weekends": {
-          "perHour": "£2<sm>/hour</sm>",
-          "perMonth": "£60<sm>/month</sm>",
-          "days": "Sat - Sun",
-          "duration": "10am - 1pm / 12 - 2:30pm"
-        }
-      },
-      {
         "title": "Arabic Language",
         "weekdays": {
           "perHour": "£1.66<sm>/hour</sm>",
@@ -155,6 +140,69 @@
           "perMonth": "£50<sm>/month</sm>",
           "days": "Sat - Sun",
           "duration": "9 - 10:30am / 10:30 - 11:30am"
+        }
+      },
+      {
+        "title": "Urdu Language",
+        "weekdays": {
+          "perHour": "£5<sm>/hour</sm>",
+          "perMonth": "£40<sm>/month</sm>",
+          "days": "Wed - Thu",
+          "duration": "7 - 8pm"
+        },
+        "weekends": {
+          "perHour": "£2.5<sm>/hour</sm>",
+          "perMonth": "£25<sm>/month</sm>",
+          "days": "Sat",
+          "duration": "10:30am - 12:30pm"
+        }
+      }
+    ]
+  },
+  "hifzStructure": {
+    "mainHeading": "Hifz Memorisation<break />Programme",
+    "sectionTitle": "Hifz Programme",
+    "tableHeaders": {
+      "programme": "Programme",
+      "weekdays": "Weekdays Classes",
+      "weekends": "Weekends Classes"
+    },
+    "programmes": [
+      {
+        "title": "Hifz Memorisation",
+        "variant": "standard",
+        "weekdays": {
+          "perHour": "£1.66<sm>/hour</sm>",
+          "perMonth": "£60<sm>/month</sm>",
+          "perHour2": "£1.85<sm>/hour</sm>",
+          "perMonth2": "£75<sm>/month</sm>",
+          "days": "Mon - Thu",
+          "duration": "4:30 - 6:30pm / 4:30 - 7:00pm"
+        },
+        "weekends": {
+          "perHour": "£2.00<sm>/hour</sm>",
+          "perMonth": "£60<sm>/month</sm>",
+          "perHour2": "£2.33<sm>/hour</sm>",
+          "perMonth2": "£70<sm>/month</sm>",
+          "days": "Sat - Sun",
+          "duration": "10am - 12:30pm / 12 - 2:30pm"
+        }
+      },
+      {
+        "title": "Hifz Intensive",
+        "subtitle": "(3 days)",
+        "variant": "intensive",
+        "weekdays": {
+          "perHour": "£6.67<sm>/hour</sm>",
+          "perMonth": "£80<sm>/month</sm>",
+          "days": "Fri",
+          "duration": "4:30 - 7:30pm"
+        },
+        "weekends": {
+          "perHour": "£2.33<sm>/hour</sm>",
+          "perMonth": "£80<sm>/month</sm>",
+          "days": "Sat - Sun",
+          "duration": "1 - 4pm"
         }
       }
     ]
