@@ -60,6 +60,18 @@ const getDepartmentInfo = (academic, departments = []) => {
   return [];
 };
 
+const formatDate = (dateString) => {
+  if (!dateString || dateString === "N/A") return dateString || "-";
+
+  const date = new Date(dateString);
+  if (isNaN(date.getTime())) return dateString; // fall back if unparseable
+
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
+};
+
 // Helper function to get class information with vertical layout
 const getClassInfo = (academic, classes = []) => {
   if (!academic) return "Not assigned";
@@ -232,12 +244,12 @@ export default function StudentModal({ studentId, handleClose, showModal }) {
                     status === "under review"
                       ? "btn-primary"
                       : status === "approved" ||
-                        status === "enrolled" ||
-                        status === "hold"
-                      ? "btn-success"
-                      : status === "rejected"
-                      ? "btn-danger"
-                      : ""
+                          status === "enrolled" ||
+                          status === "hold"
+                        ? "btn-success"
+                        : status === "rejected"
+                          ? "btn-danger"
+                          : ""
                   }`}
                 >
                   {status}
@@ -249,7 +261,7 @@ export default function StudentModal({ studentId, handleClose, showModal }) {
                     <strong>Email:</strong> {email}
                   </p>
                   <p>
-                    <strong>DOB:</strong> {dob}
+                    <strong>DOB:</strong> {formatDate(dob)}
                   </p>
                   <p>
                     <strong>Home Address:</strong> {address}
@@ -348,7 +360,7 @@ export default function StudentModal({ studentId, handleClose, showModal }) {
                   </p>
 
                   <p>
-                    <strong>Starting Date:</strong> {startingDate}
+                    <strong>Starting Date:</strong> {formatDate(startingDate)}
                   </p>
                   <p>
                     <strong>

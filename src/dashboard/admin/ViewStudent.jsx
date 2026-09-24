@@ -19,7 +19,16 @@ const formatDate = (dateString) => {
   const year = date.getFullYear();
   return `${day}-${month}-${year}`;
 };
-
+// Converts a date string/Date into DD/MM/YYYY
+const formatDateDMY = (value) => {
+  if (!value) return "-";
+  const date = new Date(value);
+  if (isNaN(date.getTime())) return value; // fall back if unparseable
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
+};
 export default function ViewStudent() {
   const { id } = useParams();
   const { data: student, isLoading } = useGetStudentsByIdQuery(id, {
@@ -152,10 +161,10 @@ export default function ViewStudent() {
                 <strong>Language:</strong> {language || "-"}
               </p>
               <p className="mb-1">
-                <strong>Date of Birth:</strong> {dob || "-"}
+                <strong>Date of Birth:</strong> {formatDateDMY(dob)}
               </p>
               <p>
-                <strong>Admission Date:</strong> {startingDate || "-"}
+                <strong>Admission Date:</strong> {formatDateDMY(startingDate)}
               </p>
             </div>
           </div>
@@ -190,9 +199,9 @@ export default function ViewStudent() {
                   ["Name", name],
                   ["Gender", gender],
                   ["Language", language],
-                  ["Date of Birth", dob],
+                  ["Date of Birth", formatDateDMY(dob)],
                   ["School Year", school_year],
-                  ["Admission Date", startingDate],
+                  ["Admission Date", formatDateDMY(startingDate)],
                   ["Address", address],
                   ["Post Code", post_code],
                   ["Student ID", student_id],
