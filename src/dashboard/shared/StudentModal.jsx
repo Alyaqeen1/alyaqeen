@@ -13,17 +13,13 @@ import useAxiosPublic from "../../hooks/useAxiosPublic";
 import sessionMap from "../../utils/sessionMap";
 import Swal from "sweetalert2";
 
-// Helper function to get department information with vertical layout
 const getDepartmentInfo = (academic, departments = []) => {
   if (!academic) return "Not assigned";
 
-  // Handle new multi-department structure with enrollments array
   if (academic.enrollments && Array.isArray(academic.enrollments)) {
     if (academic.enrollments.length === 0) return "Not assigned";
 
-    // Return array of department info for vertical display
     const departmentList = academic.enrollments.map((enrollment, index) => {
-      // Find the actual department name
       const dept = departments.find((d) => d._id === enrollment.dept_id);
       const deptName = dept ? dept.dept_name : "Unknown Department";
 
@@ -40,7 +36,6 @@ const getDepartmentInfo = (academic, departments = []) => {
     return departmentList;
   }
 
-  // Handle old single department structure
   if (academic.dept_id) {
     const dept = departments.find((d) => d._id === academic.dept_id);
     const deptName = dept ? dept.dept_name : "Unknown Department";
@@ -48,13 +43,7 @@ const getDepartmentInfo = (academic, departments = []) => {
     const sessionInfo = academic.session
       ? `${academic.session} (${academic.time})`
       : "";
-    return [
-      {
-        name: deptName,
-        session: sessionInfo,
-        index: 1,
-      },
-    ];
+    return [{ name: deptName, session: sessionInfo, index: 1 }];
   }
 
   return [];
@@ -64,7 +53,7 @@ const formatDate = (dateString) => {
   if (!dateString || dateString === "N/A") return dateString || "-";
 
   const date = new Date(dateString);
-  if (isNaN(date.getTime())) return dateString; // fall back if unparseable
+  if (isNaN(date.getTime())) return dateString;
 
   const day = String(date.getDate()).padStart(2, "0");
   const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -72,39 +61,27 @@ const formatDate = (dateString) => {
   return `${day}/${month}/${year}`;
 };
 
-// Helper function to get class information with vertical layout
 const getClassInfo = (academic, classes = []) => {
   if (!academic) return "Not assigned";
 
-  // Handle new multi-department structure with enrollments array
   if (academic.enrollments && Array.isArray(academic.enrollments)) {
     if (academic.enrollments.length === 0) return "Not assigned";
 
-    // Return array of class info for vertical display
     const classList = academic.enrollments.map((enrollment, index) => {
       const cls = classes.find((c) => c._id === enrollment.class_id);
       const className = cls ? cls.class_name : "Unknown Class";
 
-      return {
-        name: className,
-        index: index + 1,
-      };
+      return { name: className, index: index + 1 };
     });
 
     return classList;
   }
 
-  // Handle old single department structure
   if (academic.class_id) {
     const cls = classes.find((c) => c._id === academic.class_id);
     const className = cls ? cls.class_name : "Unknown Class";
 
-    return [
-      {
-        name: className,
-        index: 1,
-      },
-    ];
+    return [{ name: className, index: 1 }];
   }
 
   return [];
@@ -113,7 +90,6 @@ const getClassInfo = (academic, classes = []) => {
 export default function StudentModal({ studentId, handleClose, showModal }) {
   const [updateStudentStatus] = useUpdateStudentStatusMutation();
 
-  // Use your existing queries
   const { data: departments } = useGetDepartmentsQuery();
   const { data: classes } = useGetClassesQuery();
 
@@ -122,9 +98,7 @@ export default function StudentModal({ studentId, handleClose, showModal }) {
     isLoading,
     isError,
     refetch,
-  } = useGetStudentQuery(studentId, {
-    skip: !studentId, // avoid fetching if no ID
-  });
+  } = useGetStudentQuery(studentId, { skip: !studentId });
 
   const axiosPublic = useAxiosPublic();
 
@@ -148,9 +122,9 @@ export default function StudentModal({ studentId, handleClose, showModal }) {
     startingDate,
     signature,
     monthly_fee,
-
     applicationPdfUrl,
   } = student || {};
+
   const { doctorName, surgeryAddress, surgeryNumber, allergies, condition } =
     medical || {};
   const {
@@ -163,21 +137,16 @@ export default function StudentModal({ studentId, handleClose, showModal }) {
 
   const { session, department, time, class: student_class } = academic || {};
 
-  // Get department information using our helper function with actual department names
   const departmentInfo = getDepartmentInfo(academic, departments || []);
-
-  // Get class information using our helper function with actual class names
   const classInfo = getClassInfo(academic, classes || []);
 
   const handleBackdropClick = (event) => {
-    // Close modal only if clicked on the backdrop (not modal content)
     if (event.target.classList.contains("modal")) {
       handleClose();
     }
   };
 
   const handleStatus = async (newStatus) => {
-    // Updated approval check for multi-department structure
     const hasClassAssigned =
       academic?.enrollments?.some((enrollment) => enrollment.class_id) ||
       academic?.class_id;
@@ -218,10 +187,8 @@ export default function StudentModal({ studentId, handleClose, showModal }) {
 
   return (
     <div>
-      {/* Dark Background (Backdrop) */}
       {showModal && <div className="modal-backdrop fade show"></div>}
 
-      {/* Modal */}
       <div
         className={`modal fade ${showModal ? "show" : ""}`}
         tabIndex="-1"
@@ -230,12 +197,42 @@ export default function StudentModal({ studentId, handleClose, showModal }) {
         style={{
           display: showModal ? "block" : "none",
           zIndex: 1050,
+          // Extra gutter on very small screens so modal never touches edges
+          padding: "0.75rem",
         }}
         onMouseDown={handleBackdropClick}
       >
-        <div className="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg">
-          <div className="modal-content">
-            <div className="modal-body">
+        <div
+          className="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg"
+          style={{
+            // Constrain height so it never overflows the viewport
+            maxHeight: "calc(100vh - 1.5rem)",
+            // Keep horizontal margin auto so it's centered but not full width
+            margin: "0.75rem auto",
+            // Cap width on mobile so it looks like a real modal
+            maxWidth: "min(90vw, 900px)",
+            width: "100%",
+          }}
+        >
+          <div
+            className="modal-content"
+            style={{
+              maxHeight: "calc(100vh - 1.5rem)",
+              overflow: "hidden",
+              display: "flex",
+              flexDirection: "column",
+              borderRadius: "12px",
+            }}
+          >
+            <div
+              className="modal-body"
+              style={{
+                overflowY: "auto",
+                WebkitOverflowScrolling: "touch",
+                maxHeight: "100%",
+                padding: "1rem",
+              }}
+            >
               <div className="d-flex justify-content-between align-items-center">
                 <h2 className="text-xl font-bold mb-2">{name && name}</h2>
                 <button
@@ -255,6 +252,7 @@ export default function StudentModal({ studentId, handleClose, showModal }) {
                   {status}
                 </button>
               </div>
+
               <div className="row">
                 <div className="col-12 col-md-6">
                   <p>
@@ -282,7 +280,6 @@ export default function StudentModal({ studentId, handleClose, showModal }) {
                     <strong>Language:</strong> {language}
                   </p>
 
-                  {/* Updated Department Information with vertical layout */}
                   <div>
                     <strong>Departments:</strong>
                     {Array.isArray(departmentInfo) &&
@@ -299,7 +296,6 @@ export default function StudentModal({ studentId, handleClose, showModal }) {
                     )}
                   </div>
 
-                  {/* Updated Class Information with vertical layout */}
                   <div className="mt-2">
                     <strong>Classes:</strong>
                     {Array.isArray(classInfo) && classInfo.length > 0 ? (
@@ -318,12 +314,12 @@ export default function StudentModal({ studentId, handleClose, showModal }) {
                   <p>
                     <strong>Emergency Number:</strong> {emergency_number}
                   </p>
-
                   <p>
                     <strong>Monthly Fee:</strong>{" "}
                     {monthly_fee ? `£${monthly_fee}` : "Not Assigned"}
                   </p>
                 </div>
+
                 <div className="col-12 col-md-6 mt-3 mt-md-0 border-start border-md-2 ps-md-2">
                   <p>
                     <strong>Father's Name:</strong> {fatherName}
@@ -358,7 +354,6 @@ export default function StudentModal({ studentId, handleClose, showModal }) {
                   <p>
                     <strong>Medical :</strong> {condition}
                   </p>
-
                   <p>
                     <strong>Starting Date:</strong> {formatDate(startingDate)}
                   </p>
@@ -386,14 +381,22 @@ export default function StudentModal({ studentId, handleClose, showModal }) {
                   </p>
                 </div>
               </div>
-              <div className="d-flex justify-content-center gap-2 mt-3">
+
+              {/* Sticky footer — always reachable */}
+              <div
+                className="d-flex justify-content-center gap-2 mt-3 position-sticky bottom-0 bg-white py-2"
+                style={{
+                  boxShadow: "0 -4px 8px rgba(0,0,0,0.05)",
+                  zIndex: 10,
+                }}
+              >
                 {!["enrolled", "hold"].includes(status) && (
                   <button
                     onClick={() => handleStatus("approved")}
                     className="text-success fs-5 py-1 px-2 rounded-2"
                     style={{ backgroundColor: "var(--border2)" }}
                   >
-                    <FaCheck></FaCheck>
+                    <FaCheck />
                   </button>
                 )}
                 {!["enrolled", "hold"].includes(status) && (
