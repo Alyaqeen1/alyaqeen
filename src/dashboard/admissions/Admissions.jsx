@@ -172,7 +172,7 @@ export default function Admissions() {
                   <td className="border h6 text-center align-middle text-nowrap">
                     {student?.startingDate
                       ? new Date(student.startingDate).toLocaleDateString(
-                          "en-GB"
+                          "en-GB",
                         )
                       : "N/A"}
                   </td>
@@ -223,12 +223,12 @@ export default function Admissions() {
             {}
           </tbody>
         </table>
-        <StudentModal
-          studentId={selectedStudentId}
-          showModal={showModal}
-          handleClose={handleClose}
-        ></StudentModal>
       </div>
+      <StudentModal
+        studentId={selectedStudentId}
+        showModal={showModal}
+        handleClose={handleClose}
+      ></StudentModal>
 
       {/* Pagination */}
       {/* <div className="flex justify-between items-center mt-4">
