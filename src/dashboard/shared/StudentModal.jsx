@@ -5,12 +5,10 @@ import {
 } from "../../redux/features/students/studentsApi";
 import { useGetDepartmentsQuery } from "../../redux/features/departments/departmentsApi";
 import { useGetClassesQuery } from "../../redux/features/classes/classesApi";
-import { FaCheck, FaCross, FaPen } from "react-icons/fa6";
-import { FaTrashAlt } from "react-icons/fa";
+import { FaCheck } from "react-icons/fa6";
 import { ImCross } from "react-icons/im";
 import LoadingSpinnerDash from "../components/LoadingSpinnerDash";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
-import sessionMap from "../../utils/sessionMap";
 import Swal from "sweetalert2";
 
 const getDepartmentInfo = (academic, departments = []) => {
@@ -19,27 +17,19 @@ const getDepartmentInfo = (academic, departments = []) => {
   if (academic.enrollments && Array.isArray(academic.enrollments)) {
     if (academic.enrollments.length === 0) return "Not assigned";
 
-    const departmentList = academic.enrollments.map((enrollment, index) => {
+    return academic.enrollments.map((enrollment, index) => {
       const dept = departments.find((d) => d._id === enrollment.dept_id);
       const deptName = dept ? dept.dept_name : "Unknown Department";
-
       const sessionInfo = enrollment.session
         ? `${enrollment.session} (${enrollment.session_time})`
         : "";
-      return {
-        name: deptName,
-        session: sessionInfo,
-        index: index + 1,
-      };
+      return { name: deptName, session: sessionInfo, index: index + 1 };
     });
-
-    return departmentList;
   }
 
   if (academic.dept_id) {
     const dept = departments.find((d) => d._id === academic.dept_id);
     const deptName = dept ? dept.dept_name : "Unknown Department";
-
     const sessionInfo = academic.session
       ? `${academic.session} (${academic.time})`
       : "";
@@ -51,10 +41,8 @@ const getDepartmentInfo = (academic, departments = []) => {
 
 const formatDate = (dateString) => {
   if (!dateString || dateString === "N/A") return dateString || "-";
-
   const date = new Date(dateString);
   if (isNaN(date.getTime())) return dateString;
-
   const day = String(date.getDate()).padStart(2, "0");
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const year = date.getFullYear();
@@ -67,20 +55,16 @@ const getClassInfo = (academic, classes = []) => {
   if (academic.enrollments && Array.isArray(academic.enrollments)) {
     if (academic.enrollments.length === 0) return "Not assigned";
 
-    const classList = academic.enrollments.map((enrollment, index) => {
+    return academic.enrollments.map((enrollment, index) => {
       const cls = classes.find((c) => c._id === enrollment.class_id);
       const className = cls ? cls.class_name : "Unknown Class";
-
       return { name: className, index: index + 1 };
     });
-
-    return classList;
   }
 
   if (academic.class_id) {
     const cls = classes.find((c) => c._id === academic.class_id);
     const className = cls ? cls.class_name : "Unknown Class";
-
     return [{ name: className, index: 1 }];
   }
 
@@ -89,7 +73,6 @@ const getClassInfo = (academic, classes = []) => {
 
 export default function StudentModal({ studentId, handleClose, showModal }) {
   const [updateStudentStatus] = useUpdateStudentStatusMutation();
-
   const { data: departments } = useGetDepartmentsQuery();
   const { data: classes } = useGetClassesQuery();
 
@@ -114,7 +97,6 @@ export default function StudentModal({ studentId, handleClose, showModal }) {
     address,
     post_code,
     family_name,
-    activity,
     mother,
     father,
     academic,
@@ -132,10 +114,7 @@ export default function StudentModal({ studentId, handleClose, showModal }) {
     occupation: fatherOcc,
     number: fatherNumber,
   } = father || {};
-
   const { name: motherName, occupation, number: motherNumber } = mother || {};
-
-  const { session, department, time, class: student_class } = academic || {};
 
   const departmentInfo = getDepartmentInfo(academic, departments || []);
   const classInfo = getClassInfo(academic, classes || []);
@@ -190,103 +169,97 @@ export default function StudentModal({ studentId, handleClose, showModal }) {
       {showModal && <div className="modal-backdrop fade show"></div>}
 
       <div
-        className={`modal fade ${showModal ? "show" : ""}`}
+        className={`modal student-modal fade ${showModal ? "show" : ""}`}
         tabIndex="-1"
         aria-labelledby="exampleModalLabel"
         aria-hidden={!showModal}
         style={{
           display: showModal ? "block" : "none",
           zIndex: 1050,
-          // Extra gutter on very small screens so modal never touches edges
-          padding: "0.75rem",
         }}
         onMouseDown={handleBackdropClick}
       >
-        <div
-          className="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg"
-          style={{
-            // Constrain height so it never overflows the viewport
-            maxHeight: "calc(100vh - 1.5rem)",
-            // Keep horizontal margin auto so it's centered but not full width
-            margin: "0.75rem auto",
-            // Cap width on mobile so it looks like a real modal
-            maxWidth: "min(90vw, 900px)",
-            width: "100%",
-          }}
-        >
-          <div
-            className="modal-content"
-            style={{
-              maxHeight: "calc(100vh - 1.5rem)",
-              overflow: "hidden",
-              display: "flex",
-              flexDirection: "column",
-              borderRadius: "12px",
-            }}
-          >
+        <div className="modal-dialog modal-dialog-centered modal-lg">
+          <div className="modal-content">
+            {/* ============ HEADER (own region) ============ */}
             <div
-              className="modal-body"
+              className="modal-header-custom d-flex justify-content-between align-items-center"
               style={{
-                overflowY: "auto",
-                WebkitOverflowScrolling: "touch",
-                maxHeight: "100%",
-                padding: "1rem",
+                borderBottom: "1px solid #dee2e6",
+                background: "#fff",
+                padding: "1rem 1rem",
+                flexShrink: 0,
               }}
             >
-              <div className="d-flex justify-content-between align-items-center">
-                <h2 className="text-xl font-bold mb-2">{name && name}</h2>
-                <button
-                  type="button"
-                  className={`btn ${
-                    status === "under review"
-                      ? "btn-primary"
-                      : status === "approved" ||
-                          status === "enrolled" ||
-                          status === "hold"
-                        ? "btn-success"
-                        : status === "rejected"
-                          ? "btn-danger"
-                          : ""
-                  }`}
-                >
-                  {status}
-                </button>
-              </div>
+              <h2 className="text-xl font-bold mb-0 pe-2">{name}</h2>
+              <button
+                type="button"
+                className={`btn btn-sm flex-shrink-0 ${
+                  status === "under review"
+                    ? "btn-primary"
+                    : status === "approved" ||
+                        status === "enrolled" ||
+                        status === "hold"
+                      ? "btn-success"
+                      : status === "rejected"
+                        ? "btn-danger"
+                        : ""
+                }`}
+              >
+                {status}
+              </button>
+            </div>
 
-              <div className="row">
-                <div className="col-12 col-md-6">
-                  <p>
+            {/* ============ BODY (scrollable) ============ */}
+            <div
+              className="modal-body-custom"
+              style={{
+                overflowY: "auto",
+                overflowX: "hidden",
+                WebkitOverflowScrolling: "touch",
+                padding: "1rem",
+                flex: "1 1 auto",
+                minHeight: 0,
+              }}
+            >
+              <div
+                className="row g-3"
+                style={{ marginLeft: 0, marginRight: 0, width: "100%" }}
+              >
+                {/* LEFT COLUMN */}
+                <div className="col-12 col-md-6" style={{ minWidth: 0 }}>
+                  <p className="mb-2">
                     <strong>Email:</strong> {email}
                   </p>
-                  <p>
+                  <p className="mb-2">
                     <strong>DOB:</strong> {formatDate(dob)}
                   </p>
-                  <p>
+                  <p className="mb-2">
                     <strong>Home Address:</strong> {address}
                   </p>
-                  <p>
+                  <p className="mb-2">
                     <strong>Post Code:</strong> {post_code}
                   </p>
-                  <p>
+                  <p className="mb-2">
                     <strong>Family Name:</strong> {family_name}
                   </p>
-                  <p>
+                  <p className="mb-2">
                     <strong>Gender:</strong> {gender}
                   </p>
-                  <p>
+                  <p className="mb-2">
                     <strong>School Year:</strong> {school_year}
                   </p>
-                  <p>
+                  <p className="mb-2">
                     <strong>Language:</strong> {language}
                   </p>
 
-                  <div>
+                  <div className="mb-2">
                     <strong>Departments:</strong>
                     {Array.isArray(departmentInfo) &&
                     departmentInfo.length > 0 ? (
                       <div className="mt-1">
                         {departmentInfo.map((dept, idx) => (
-                          <div key={idx} className="ms-3 text-sm">
+                          <div key={idx} className="ms-3 small">
                             • {dept.name} - {dept.session}
                           </div>
                         ))}
@@ -296,12 +269,12 @@ export default function StudentModal({ studentId, handleClose, showModal }) {
                     )}
                   </div>
 
-                  <div className="mt-2">
+                  <div className="mb-2">
                     <strong>Classes:</strong>
                     {Array.isArray(classInfo) && classInfo.length > 0 ? (
                       <div className="mt-1">
                         {classInfo.map((cls, idx) => (
-                          <div key={idx} className="ms-3 text-sm">
+                          <div key={idx} className="ms-3 small">
                             • {cls.name}
                           </div>
                         ))}
@@ -311,53 +284,57 @@ export default function StudentModal({ studentId, handleClose, showModal }) {
                     )}
                   </div>
 
-                  <p>
+                  <p className="mb-2">
                     <strong>Emergency Number:</strong> {emergency_number}
                   </p>
-                  <p>
+                  <p className="mb-2">
                     <strong>Monthly Fee:</strong>{" "}
                     {monthly_fee ? `£${monthly_fee}` : "Not Assigned"}
                   </p>
                 </div>
 
-                <div className="col-12 col-md-6 mt-3 mt-md-0 border-start border-md-2 ps-md-2">
-                  <p>
+                {/* RIGHT COLUMN */}
+                <div
+                  className="col-12 col-md-6 mt-3 mt-md-0"
+                  style={{ minWidth: 0 }}
+                >
+                  <p className="mb-2">
                     <strong>Father's Name:</strong> {fatherName}
                   </p>
-                  <p>
+                  <p className="mb-2">
                     <strong>Father's Occupation:</strong> {fatherOcc}
                   </p>
-                  <p>
+                  <p className="mb-2">
                     <strong>Father's Number:</strong> {fatherNumber}
                   </p>
-                  <p>
+                  <p className="mb-2">
                     <strong>Mother's Name:</strong> {motherName}
                   </p>
-                  <p>
+                  <p className="mb-2">
                     <strong>Mother's Occupation:</strong> {occupation}
                   </p>
-                  <p>
+                  <p className="mb-2">
                     <strong>Mother's Number:</strong> {motherNumber}
                   </p>
-                  <p>
+                  <p className="mb-2">
                     <strong>Doctor's Name:</strong> {doctorName}
                   </p>
-                  <p>
+                  <p className="mb-2">
                     <strong>Surgery Address:</strong> {surgeryAddress}
                   </p>
-                  <p>
+                  <p className="mb-2">
                     <strong>Surgeon's Number:</strong> {surgeryNumber}
                   </p>
-                  <p>
+                  <p className="mb-2">
                     <strong>Allergies:</strong> {allergies}
                   </p>
-                  <p>
-                    <strong>Medical :</strong> {condition}
+                  <p className="mb-2">
+                    <strong>Medical:</strong> {condition}
                   </p>
-                  <p>
+                  <p className="mb-2">
                     <strong>Starting Date:</strong> {formatDate(startingDate)}
                   </p>
-                  <p>
+                  <p className="mb-2">
                     <strong>
                       <a
                         href={signature}
@@ -368,47 +345,49 @@ export default function StudentModal({ studentId, handleClose, showModal }) {
                       </a>
                     </strong>
                   </p>
-                  <p>
+                  <p className="mb-2">
                     <strong>
                       <a
                         href={applicationPdfUrl}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        Application From PDF
+                        Application Form PDF
                       </a>
                     </strong>
                   </p>
                 </div>
               </div>
+            </div>
 
-              {/* Sticky footer — always reachable */}
-              <div
-                className="d-flex justify-content-center gap-2 mt-3 position-sticky bottom-0 bg-white py-2"
-                style={{
-                  boxShadow: "0 -4px 8px rgba(0,0,0,0.05)",
-                  zIndex: 10,
-                }}
-              >
-                {!["enrolled", "hold"].includes(status) && (
-                  <button
-                    onClick={() => handleStatus("approved")}
-                    className="text-success fs-5 py-1 px-2 rounded-2"
-                    style={{ backgroundColor: "var(--border2)" }}
-                  >
-                    <FaCheck />
-                  </button>
-                )}
-                {!["enrolled", "hold"].includes(status) && (
-                  <button
-                    onClick={() => handleStatus("rejected")}
-                    className="text-danger py-1 px-2 rounded-2"
-                    style={{ backgroundColor: "var(--border2)" }}
-                  >
-                    <ImCross />
-                  </button>
-                )}
-              </div>
+            {/* ============ FOOTER (own region) ============ */}
+            <div
+              className="modal-footer-custom d-flex justify-content-center gap-2"
+              style={{
+                borderTop: "1px solid #dee2e6",
+                background: "#fff",
+                padding: "0.75rem 1rem",
+                flexShrink: 0,
+              }}
+            >
+              {!["enrolled", "hold"].includes(status) && (
+                <button
+                  onClick={() => handleStatus("approved")}
+                  className="text-success fs-5 py-1 px-3 rounded-2 border"
+                  style={{ backgroundColor: "var(--border2)" }}
+                >
+                  <FaCheck />
+                </button>
+              )}
+              {!["enrolled", "hold"].includes(status) && (
+                <button
+                  onClick={() => handleStatus("rejected")}
+                  className="text-danger py-1 px-3 rounded-2 border"
+                  style={{ backgroundColor: "var(--border2)" }}
+                >
+                  <ImCross />
+                </button>
+              )}
             </div>
           </div>
         </div>
