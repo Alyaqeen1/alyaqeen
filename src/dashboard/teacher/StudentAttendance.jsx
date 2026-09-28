@@ -529,23 +529,26 @@ export default function StudentAttendance() {
     [baseMonday],
   );
 
+  // Hifz class — always show all 7 days (Mon–Sun) regardless of session
+  const HIFZ_CLASS_ID = "6aba38fc70c5f08291ed21e2";
+
   const weekDates = useMemo(() => {
+    // Hifz class → 7 days
+    if (classId === HIFZ_CLASS_ID) {
+      return allWeekDates;
+    }
+
+    // Otherwise → filter by session
     const dayMap = {
-      weekdays: [
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        // "Saturday",
-        // "Sunday",
-      ],
+      weekdays: ["Monday", "Tuesday", "Wednesday", "Thursday"],
       weekend: ["Saturday", "Sunday"],
     };
+
     return allWeekDates.filter((date) => {
       const dayName = safeFormat(date, "EEEE");
       return session ? dayMap[session]?.includes(dayName) : false;
     });
-  }, [allWeekDates, session]);
+  }, [allWeekDates, session, classId]);
 
   const dateRange = useMemo(() => {
     if (weekDates.length === 0) return { startDate: "", endDate: "" };

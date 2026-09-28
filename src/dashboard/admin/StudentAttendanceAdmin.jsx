@@ -536,14 +536,19 @@ export default function StudentAttendanceAdmin() {
     [baseMonday],
   );
 
-  const weekDates = useMemo(
-    () =>
-      allWeekDates.filter((date) => {
-        const dayName = safeFormat(date, "EEEE");
-        return session ? dayMap[session]?.includes(dayName) : false;
-      }),
-    [allWeekDates, session],
-  );
+  // Hifz class always shows all 7 days
+  const HIFZ_CLASS_ID = "6aba38fc70c5f08291ed21e2";
+
+  const weekDates = useMemo(() => {
+    if (classId === HIFZ_CLASS_ID) {
+      return allWeekDates;
+    }
+
+    return allWeekDates.filter((date) => {
+      const dayName = safeFormat(date, "EEEE");
+      return session ? dayMap[session]?.includes(dayName) : false;
+    });
+  }, [allWeekDates, session, classId]);
 
   const dateRange = useMemo(() => {
     if (weekDates.length === 0) return { startDate: "", endDate: "" };
