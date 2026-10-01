@@ -6,7 +6,9 @@ export default function MeritStudents() {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState("merit");
 
-  const queryArg = searchTerm ? searchTerm : { category: activeTab };
+  // ✅ FIX: Always fetch BOTH categories, not just the selected tab
+  const queryArg = searchTerm ? searchTerm : { category: "all" };
+
   const {
     data: merits = [],
     isLoading,
