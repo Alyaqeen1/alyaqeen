@@ -1,6 +1,5 @@
 import React from "react";
 import { Trans, useTranslation } from "react-i18next";
-import { Link } from "react-router";
 import one from "../../assets/img/section-top-shape.png";
 import three from "../../assets/img/program/mask.png";
 import four from "../../assets/img/program/pencil.png";
@@ -9,92 +8,12 @@ import six from "../../assets/img/program/compass.png";
 
 const HifzStructure = () => {
   const { t } = useTranslation(["home"]);
-  const { mainHeading, sectionTitle, tableHeaders } = t("hifzStructure") || {};
+  const { mainHeading, sectionTitle, tableHeaders, classTimings } =
+    t("hifzStructure") || {};
   const programmeList =
     t("hifzStructure.programmes", { returnObjects: true }) || [];
 
-  const { programme, weekdays, weekends } = tableHeaders || {};
-
-  /* Renders a cell with 2 groups side-by-side using CSS grid.
-     Grid guarantees fixed 2-column layout — no wrapping, no collapsing.
-     Padding is applied per-cell so it survives narrow screens. */
-  const renderCell = (data) => {
-    const hasTwoOptions = !!data?.perHour2;
-
-    const renderPrice = (hourKey, monthKey) => (
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          alignItems: "center",
-          width: "100%",
-        }}
-      >
-        <div
-          className="fw-light"
-          style={{
-            padding: "2px 4px",
-            fontSize: "inherit",
-            lineHeight: "1.4",
-          }}
-        >
-          <Trans i18nKey={hourKey} components={{ sm: <small /> }} />
-        </div>
-
-        <div
-          className="fw-light"
-          style={{
-            padding: "2px 4px",
-            fontSize: "inherit",
-            lineHeight: "1.4",
-          }}
-        >
-          <Trans i18nKey={monthKey} components={{ sm: <small /> }} />
-        </div>
-      </div>
-    );
-
-    return (
-      <>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: hasTwoOptions ? "1fr 1fr" : "1fr",
-            width: "100%",
-            alignItems: "start",
-          }}
-        >
-          <div
-            style={{
-              padding: "4px 8px",
-              borderRight: hasTwoOptions ? "1px solid #dee2e6" : "none",
-            }}
-          >
-            {renderPrice(data?.perHour, data?.perMonth)}
-          </div>
-
-          {hasTwoOptions && (
-            <div style={{ padding: "4px 8px" }}>
-              {renderPrice(data?.perHour2, data?.perMonth2)}
-            </div>
-          )}
-        </div>
-
-        <div
-          className="mt-2"
-          style={{
-            fontWeight: 700,
-            lineHeight: "1.5",
-            whiteSpace: "nowrap",
-            textAlign: "center",
-          }}
-        >
-          <div>{data?.days}</div>
-          <div>{data?.duration}</div>
-        </div>
-      </>
-    );
-  };
+  const { programme, daysPerWeek, monthlyFee } = tableHeaders || {};
 
   return (
     <section
@@ -127,96 +46,111 @@ const HifzStructure = () => {
           </h2>
         </div>
 
-        <div className="row table-responsive">
-          <table
-            className="table mb-3 hifz-structure-table"
-            style={{ minWidth: 700 }}
-          >
-            <thead>
-              <tr>
-                <td
-                  width="30%"
-                  className="text-white font-weight-bold border h6 text-center align-middle"
-                  style={{ backgroundColor: "var(--theme)" }}
+        {/* ─── TIMINGS INFO CARD ─────────────────────────── */}
+        <div className="row justify-content-center mb-4">
+          <div className="col-lg-10">
+            <div className="row g-3">
+              <div className="col-md-6">
+                <div
+                  className="h-100 p-3 rounded-3"
+                  style={{
+                    backgroundColor: "#fff",
+                    borderLeft: "4px solid var(--theme)",
+                  }}
                 >
-                  <h3>{programme}</h3>
-                </td>
-                <td
-                  width="35%"
-                  className="text-white font-weight-bold border h6 text-center align-middle"
-                  style={{ backgroundColor: "var(--theme)" }}
+                  <h5 className="mb-2" style={{ color: "var(--theme)" }}>
+                    📚 {classTimings?.weekdayLabel}
+                  </h5>
+                  <p className="mb-1 fw-bold">{classTimings?.weekdayDays}</p>
+                  <p className="mb-0 text-muted">
+                    🕓 {classTimings?.weekdayTime}
+                  </p>
+                </div>
+              </div>
+
+              <div className="col-md-6">
+                <div
+                  className="h-100 p-3 rounded-3"
+                  style={{
+                    backgroundColor: "#fff",
+                    borderLeft: "4px solid var(--theme)",
+                  }}
                 >
-                  <h3>{weekdays}</h3>
-                </td>
-                <td
-                  width="35%"
-                  className="text-white font-weight-bold border h6 text-center align-middle"
-                  style={{ backgroundColor: "var(--theme)" }}
-                >
-                  <h3>{weekends}</h3>
-                </td>
-              </tr>
-            </thead>
+                  <h5 className="mb-2" style={{ color: "var(--theme)" }}>
+                    📚 {classTimings?.weekendLabel}
+                  </h5>
+                  <p className="mb-1 fw-bold">{classTimings?.weekendDays}</p>
+                  <p className="mb-0 text-muted">
+                    🕐 {classTimings?.weekendTime}
+                  </p>
+                </div>
+              </div>
+            </div>
 
-            <tbody>
-              {programmeList.map((item, index) => {
-                const isIntensive = item?.variant === "intensive";
+            <p className="text-center mt-3 mb-0 small text-muted">
+              {classTimings?.note}
+            </p>
+          </div>
+        </div>
 
-                /* ---------- INTENSIVE ROW ---------- */
-                if (isIntensive) {
-                  return (
-                    <tr key={index}>
-                      <td
-                        className="text-white p-1 bg-brown font-weight-bold border h6 text-center align-middle"
-                        style={{ borderLeft: "4px solid #ffc107" }}
-                      >
-                        <h5>{item?.title}</h5>
-                        {item?.subtitle && (
-                          <small
-                            className="d-block"
-                            style={{ color: "var(--theme)" }}
-                          >
-                            {item.subtitle}
-                          </small>
-                        )}
-                      </td>
-
-                      <td className="text-center p-1 border mb-0">
-                        {renderCell(item?.weekdays)}
-                      </td>
-
-                      <td className="text-center p-1 border mb-0">
-                        {renderCell(item?.weekends)}
-                      </td>
-                    </tr>
-                  );
-                }
-
-                /* ---------- STANDARD ROW ---------- */
-                return (
-                  <tr key={index}>
-                    <td className="text-white p-1 bg-brown font-weight-bold border h6 text-center align-middle">
-                      {item?.link ? (
-                        <Link to={item.link} className="font-14">
-                          <h5>{item?.title}</h5>
-                        </Link>
-                      ) : (
-                        <h5>{item?.title}</h5>
-                      )}
+        {/* ─── FEE TABLE ─────────────────────────────────── */}
+        <div className="row justify-content-center">
+          <div className="col-lg-10">
+            <div className="table-responsive">
+              <table className="table mb-3" style={{ minWidth: 500 }}>
+                <thead>
+                  <tr>
+                    <td
+                      className="text-white font-weight-bold border h6 text-center align-middle"
+                      style={{ backgroundColor: "var(--theme)" }}
+                    >
+                      <h3>{programme}</h3>
                     </td>
-
-                    <td className="text-center p-1 border mb-0">
-                      {renderCell(item?.weekdays)}
+                    <td
+                      className="text-white font-weight-bold border h6 text-center align-middle"
+                      style={{ backgroundColor: "var(--theme)" }}
+                    >
+                      <h3>{daysPerWeek}</h3>
                     </td>
-
-                    <td className="text-center p-1 border mb-0">
-                      {renderCell(item?.weekends)}
+                    <td
+                      className="text-white font-weight-bold border h6 text-center align-middle"
+                      style={{ backgroundColor: "var(--theme)" }}
+                    >
+                      <h3>{monthlyFee}</h3>
                     </td>
                   </tr>
-                );
-              })}
-            </tbody>
-          </table>
+                </thead>
+
+                <tbody>
+                  {programmeList.map((item, index) => (
+                    <tr key={index}>
+                      <td className="text-white p-2 bg-brown font-weight-bold border h6 text-center align-middle">
+                        <h5 className="mb-0">{item?.title}</h5>
+                      </td>
+
+                      <td className="text-center p-2 border align-middle">
+                        <strong>{item?.days}</strong>
+                      </td>
+
+                      <td className="text-center p-2 border align-middle">
+                        <Trans
+                          i18nKey={item?.perMonth}
+                          components={{ sm: <small /> }}
+                        />
+                        <br />
+                        <small className="text-muted">
+                          <Trans
+                            i18nKey={item?.perHour}
+                            components={{ sm: <small /> }}
+                          />
+                        </small>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
     </section>

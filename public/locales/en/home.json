@@ -164,46 +164,42 @@
     "sectionTitle": "Hifz Programme",
     "tableHeaders": {
       "programme": "Programme",
-      "weekdays": "Weekdays Classes",
-      "weekends": "Weekends Classes"
+      "daysPerWeek": "Days per Week",
+      "monthlyFee": "Monthly Fee"
+    },
+    "classTimings": {
+      "weekdayLabel": "Weekday Classes",
+      "weekdayDays": "Monday, Wednesday & Friday",
+      "weekdayTime": "4:30pm – 7:30pm",
+      "weekendLabel": "Weekend Classes",
+      "weekendDays": "Saturday & Sunday",
+      "weekendTime": "1:00pm – 4:00pm",
+      "note": "Each session is 3 hours. Attending all 5 days provides 15 hours of Hifz learning per week (60 hours per month)."
     },
     "programmes": [
       {
-        "title": "Hifz Memorisation",
-        "variant": "standard",
-        "weekdays": {
-          "perHour": "£1.66<sm>/hour</sm>",
-          "perMonth": "£60<sm>/month</sm>",
-          "perHour2": "£1.85<sm>/hour</sm>",
-          "perMonth2": "£75<sm>/month</sm>",
-          "days": "Mon - Thu",
-          "duration": "4:30 - 6:30pm / 4:30 - 7:00pm"
-        },
-        "weekends": {
-          "perHour": "£2.00<sm>/hour</sm>",
-          "perMonth": "£60<sm>/month</sm>",
-          "perHour2": "£2.33<sm>/hour</sm>",
-          "perMonth2": "£70<sm>/month</sm>",
-          "days": "Sat - Sun",
-          "duration": "10am - 12:30pm / 12 - 2:30pm"
-        }
+        "title": "Hifz Regular",
+        "days": "2 Days",
+        "perMonth": "£60<sm>/month</sm>",
+        "perHour": "£2.00<sm>/hour</sm>"
       },
       {
         "title": "Hifz Intensive",
-        "subtitle": "(3 days)",
-        "variant": "intensive",
-        "weekdays": {
-          "perHour": "£6.67<sm>/hour</sm>",
-          "perMonth": "£80<sm>/month</sm>",
-          "days": "Fri",
-          "duration": "4:30 - 7:30pm"
-        },
-        "weekends": {
-          "perHour": "£2.33<sm>/hour</sm>",
-          "perMonth": "£80<sm>/month</sm>",
-          "days": "Sat - Sun",
-          "duration": "1 - 4pm"
-        }
+        "days": "3 Days",
+        "perMonth": "£80<sm>/month</sm>",
+        "perHour": "£2.22<sm>/hour</sm>"
+      },
+      {
+        "title": "Hifz Intensive Plus",
+        "days": "4 Days",
+        "perMonth": "£100<sm>/month</sm>",
+        "perHour": "£2.08<sm>/hour</sm>"
+      },
+      {
+        "title": "Hifz Advanced",
+        "days": "5 Days",
+        "perMonth": "£120<sm>/month</sm>",
+        "perHour": "£2.00<sm>/hour</sm>"
       }
     ]
   },
