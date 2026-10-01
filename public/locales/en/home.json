@@ -178,19 +178,19 @@
     },
     "programmes": [
       {
-        "title": "Hifz Regular",
+        "title": "Hifz Foundation",
         "days": "2 Days",
         "perMonth": "£60<sm>/month</sm>",
         "perHour": "£2.00<sm>/hour</sm>"
       },
       {
-        "title": "Hifz Intensive",
+        "title": "Hifz Regular",
         "days": "3 Days",
         "perMonth": "£80<sm>/month</sm>",
         "perHour": "£2.22<sm>/hour</sm>"
       },
       {
-        "title": "Hifz Intensive Plus",
+        "title": "Hifz Intensive",
         "days": "4 Days",
         "perMonth": "£100<sm>/month</sm>",
         "perHour": "£2.08<sm>/hour</sm>"

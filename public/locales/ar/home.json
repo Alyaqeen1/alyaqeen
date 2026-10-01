@@ -162,50 +162,46 @@
   },
 
   "hifzStructure": {
-    "mainHeading": "برنامج تحفيظ القرآن<break />القرآن الكريم",
+    "mainHeading": "برنامج تحفيظ القرآن<break />الكريم",
     "sectionTitle": "برنامج التحفيظ",
     "tableHeaders": {
       "programme": "البرنامج",
-      "weekdays": "صفوف أيام الأسبوع",
-      "weekends": "صفوف عطلة نهاية الأسبوع"
+      "daysPerWeek": "الأيام في الأسبوع",
+      "monthlyFee": "الرسوم الشهرية"
+    },
+    "classTimings": {
+      "weekdayLabel": "صفوف أيام الأسبوع",
+      "weekdayDays": "الاثنين والأربعاء والجمعة",
+      "weekdayTime": "٤:٣٠م – ٧:٣٠م",
+      "weekendLabel": "صفوف عطلة نهاية الأسبوع",
+      "weekendDays": "السبت والأحد",
+      "weekendTime": "١:٠٠م – ٤:٠٠م",
+      "note": "كل جلسة ٣ ساعات. الحضور ٥ أيام يوفر ١٥ ساعة من تعلم التحفيظ أسبوعياً (٦٠ ساعة شهرياً)."
     },
     "programmes": [
       {
-        "title": "تحفيظ القرآن",
-        "variant": "standard",
-        "weekdays": {
-          "perHour": "£1.66<sm>/في الساعة</sm>",
-          "perMonth": "£60<sm>/في الشهر</sm>",
-          "perHour2": "£1.85<sm>/في الساعة</sm>",
-          "perMonth2": "£75<sm>/في الشهر</sm>",
-          "days": "الاثنين - الخميس",
-          "duration": "٤:٣٠ - ٦:٣٠م / ٤:٣٠ - ٧:٠٠م"
-        },
-        "weekends": {
-          "perHour": "£2.00<sm>/في الساعة</sm>",
-          "perMonth": "£60<sm>/في الشهر</sm>",
-          "perHour2": "£2.33<sm>/في الساعة</sm>",
-          "perMonth2": "£70<sm>/في الشهر</sm>",
-          "days": "السبت - الأحد",
-          "duration": "١٠ص - ١٢:٣٠م / ١٢ - ٢:٣٠م"
-        }
+        "title": "تحفيظ التأسيس",
+        "days": "يومان",
+        "perMonth": "£60<sm>/شهرياً</sm>",
+        "perHour": "£2.00<sm>/في الساعة</sm>"
+      },
+      {
+        "title": "التحفيظ المنتظم",
+        "days": "٣ أيام",
+        "perMonth": "£80<sm>/شهرياً</sm>",
+        "perHour": "£2.22<sm>/في الساعة</sm>"
       },
       {
         "title": "التحفيظ المكثف",
-        "subtitle": "(٣ أيام)",
-        "variant": "intensive",
-        "weekdays": {
-          "perHour": "£6.67<sm>/في الساعة</sm>",
-          "perMonth": "£80<sm>/في الشهر</sm>",
-          "days": "الجمعة",
-          "duration": "٤:٣٠ - ٧:٣٠م"
-        },
-        "weekends": {
-          "perHour": "£2.33<sm>/في الساعة</sm>",
-          "perMonth": "£80<sm>/في الشهر</sm>",
-          "days": "السبت - الأحد",
-          "duration": "١ - ٤م"
-        }
+        "days": "٤ أيام",
+        "perMonth": "£100<sm>/شهرياً</sm>",
+        "perHour": "£2.08<sm>/في الساعة</sm>"
+      },
+      {
+        "title": "التحفيظ المتقدم",
+        "days": "٥ أيام",
+        "perMonth": "£120<sm>/شهرياً</sm>",
+        "perHour": "£2.00<sm>/في الساعة</sm>"
       }
     ]
   },
