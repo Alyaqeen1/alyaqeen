@@ -20,17 +20,36 @@ export const meritsApi = apiSlice.injectEndpoints({
         "Merit",
       ],
     }),
-
+    getAllMeritsOfStudent: builder.query({
+      query: (studentId) => `/merits/student/${studentId}/all`,
+      providesTags: (result, error, studentId) => [
+        { type: "Merit", id: studentId },
+      ],
+    }),
     getTopMerits: builder.query({
-      query: (searchTerm) =>
-        searchTerm
-          ? `/merits/top-merit-students?search=${encodeURIComponent(
-              searchTerm
-            )}`
-          : "/merits/top-merit-students",
+      query: (arg) => {
+        // Case 1: No argument — default (merit only)
+        if (!arg) {
+          return "/merits/top-merit-students";
+        }
+
+        // Case 2: String argument — search term
+        if (typeof arg === "string") {
+          return arg.trim()
+            ? `/merits/top-merit-students?search=${encodeURIComponent(arg.trim())}`
+            : "/merits/top-merit-students";
+        }
+
+        // Case 3: Object argument — category filter
+        if (typeof arg === "object" && arg.category) {
+          return `/merits/top-merit-students?category=${arg.category}`;
+        }
+
+        // Fallback
+        return "/merits/top-merit-students";
+      },
       providesTags: ["Merit"],
     }),
-
     addMerit: builder.mutation({
       query: (merit) => ({
         url: "/merits",
@@ -45,6 +64,7 @@ export const meritsApi = apiSlice.injectEndpoints({
 export const {
   useGetMeritsQuery,
   useGetMeritsOfStudentQuery,
+  useGetAllMeritsOfStudentQuery, // ← add
   useGetTopMeritsQuery,
   useAddMeritMutation,
 } = meritsApi;

@@ -35,7 +35,7 @@ const MeritChart = ({ studentId }) => {
       ...(month && { month }),
       ...(year && { year }),
     }),
-    [studentId, month, year]
+    [studentId, month, year],
   );
 
   // In your MeritChart component - make sure you're using it like this:
@@ -48,7 +48,7 @@ const MeritChart = ({ studentId }) => {
     {
       skip: !studentId,
       refetchOnMountOrArgChange: true,
-    }
+    },
   );
 
   // Clear filters
@@ -90,7 +90,7 @@ const MeritChart = ({ studentId }) => {
   const behaviorSeries = hasNoData
     ? []
     : Object.values(meritData.behaviorBreakdown)?.map(
-        (behavior) => behavior.totalPoints
+        (behavior) => behavior.totalPoints,
       );
   const behaviorLabels = hasNoData
     ? []
@@ -113,7 +113,7 @@ const MeritChart = ({ studentId }) => {
         ? meritData.weeklyTrend
         : meritData.trendData || meritData.monthlyTrend;
     trendCategories = trendData?.map((item) =>
-      timeframe === "weekly" ? item.week : item.period || item.month
+      timeframe === "weekly" ? item.week : item.period || item.month,
     );
   }
 
@@ -248,10 +248,10 @@ const MeritChart = ({ studentId }) => {
       text: hasNoData
         ? "No Data"
         : meritData.trendType === "daily"
-        ? "Daily Trend"
-        : timeframe === "weekly"
-        ? "Weekly Trend"
-        : "Monthly Trend",
+          ? "Daily Trend"
+          : timeframe === "weekly"
+            ? "Weekly Trend"
+            : "Monthly Trend",
       align: "center",
       style: {
         fontSize: "14px",
@@ -514,45 +514,69 @@ const MeritChart = ({ studentId }) => {
                 Recent Merit Awards
               </h6>
               <div className="row g-2">
-                {meritData.meritRecords?.slice(0, 6).map((record, index) => (
-                  <div key={index} className="col-sm-6 col-lg-4">
-                    <div className="card border-0 shadow-sm h-100">
-                      <div className="card-body p-2">
-                        <div className="d-flex justify-content-between align-items-start mb-1">
-                          <span className="badge bg-success fs-7 px-2">
-                            +{record.merit_points}
-                          </span>
-                          <small className="text-muted">
-                            {new Date(record.date).toLocaleDateString("en-US", {
-                              month: "short",
-                              day: "numeric",
-                            })}
-                          </small>
-                        </div>
-                        <h6
-                          className="card-title fw-bold text-dark mb-1 fs-7 text-truncate"
-                          title={record.behavior}
-                        >
-                          {record.behavior}
-                        </h6>
-                        <div className="d-flex justify-content-between align-items-center">
-                          <small className="text-muted">
-                            {record.merit_points} pt
-                            {record.merit_points !== 1 ? "s" : ""}
-                          </small>
-                          <small
-                            className={`badge text-uppercase fs-8 merit-category-${record.merit_points}`}
+                {meritData.meritRecords?.slice(0, 6).map((record, index) => {
+                  const isMerit = record.merit_points > 0;
+                  const isDemerit = record.merit_points < 0;
+                  const label = record.behavior || record.incident || "-";
+                  return (
+                    <div key={index} className="col-sm-6 col-lg-4">
+                      <div className="card border-0 shadow-sm h-100">
+                        <div className="card-body p-2">
+                          <div className="d-flex justify-content-between align-items-start mb-1">
+                            <span
+                              className={`badge fs-7 px-2 ${
+                                isMerit
+                                  ? "bg-success"
+                                  : isDemerit
+                                    ? "bg-danger"
+                                    : "bg-secondary"
+                              }`}
+                            >
+                              {isMerit ? "+" : ""}
+                              {record.merit_points}
+                            </span>
+                            <small className="text-muted">
+                              {new Date(record.date).toLocaleDateString(
+                                "en-US",
+                                {
+                                  month: "short",
+                                  day: "numeric",
+                                },
+                              )}
+                            </small>
+                          </div>
+                          <h6
+                            className="card-title fw-bold text-dark mb-1 fs-7 text-truncate"
+                            title={label}
                           >
-                            {record.merit_points === 1 && "Basic"}
-                            {record.merit_points === 2 && "Good"}
-                            {record.merit_points === 3 && "Leader"}
-                            {record.merit_points === 4 && "Top"}
-                          </small>
+                            {label}
+                          </h6>
+                          <div className="d-flex justify-content-between align-items-center">
+                            <small className="text-muted">
+                              {record.merit_points} pt
+                              {record.merit_points !== 1 ? "s" : ""}
+                            </small>
+                            <small
+                              className={`badge text-uppercase fs-8 ${
+                                isMerit
+                                  ? "bg-success bg-opacity-25 text-success"
+                                  : isDemerit
+                                    ? "bg-danger bg-opacity-25 text-danger"
+                                    : "bg-secondary bg-opacity-25 text-secondary"
+                              }`}
+                            >
+                              {isMerit && record.merit_points === 1 && "Basic"}
+                              {isMerit && record.merit_points === 2 && "Good"}
+                              {isMerit && record.merit_points === 3 && "Leader"}
+                              {isMerit && record.merit_points === 4 && "Top"}
+                              {isDemerit && "Demerit"}
+                            </small>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           </div>

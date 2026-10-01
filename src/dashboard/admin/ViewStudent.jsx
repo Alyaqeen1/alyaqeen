@@ -10,6 +10,10 @@ import { FaPen } from "react-icons/fa6";
 import { FaTrashAlt } from "react-icons/fa";
 import StudentTimetable from "./StudentTimetable";
 import AttendanceCalendar from "./AttendanceCalendar";
+import {
+  useGetMeritsOfStudentQuery,
+  useGetAllMeritsOfStudentQuery,
+} from "../../redux/features/merits/meritsApi";
 
 const formatDate = (dateString) => {
   if (dateString === "N/A") return "N/A";
@@ -34,6 +38,7 @@ export default function ViewStudent() {
   const { data: student, isLoading } = useGetStudentsByIdQuery(id, {
     skip: !id,
   });
+
   const { data: departments } = useGetDepartmentsQuery();
   const { data: classes } = useGetClassesQuery();
   const { data: feeSummary, isLoading: isFeeLoading } = useGetFeesSummaryQuery(
@@ -42,8 +47,14 @@ export default function ViewStudent() {
       skip: !id,
     },
   );
-
+  const { data: meritData, isLoading: isMeritLoading } =
+    useGetMeritsOfStudentQuery({ studentId: id }, { skip: !id });
   const [activeTab, setActiveTab] = useState("profile");
+  const [showAllMeritsModal, setShowAllMeritsModal] = useState(false);
+
+  // Only fetch all records when the modal is opened — saves bandwidth
+  const { data: allMeritsData, isLoading: isAllMeritsLoading } =
+    useGetAllMeritsOfStudentQuery(id, { skip: !id || !showAllMeritsModal });
 
   const {
     name,
@@ -173,19 +184,24 @@ export default function ViewStudent() {
         {/* Right Tabs */}
         <div className="col-md-8">
           <ul className="nav nav-tabs mb-3">
-            {["profile", "timetable", "attendance", "documents", "fee"].map(
-              (tab) => (
-                <li key={tab} className="nav-item">
-                  <span
-                    className={`nav-link ${activeTab === tab ? "active" : ""}`}
-                    onClick={() => setActiveTab(tab)}
-                    style={{ cursor: "pointer" }}
-                  >
-                    {tab.charAt(0).toUpperCase() + tab.slice(1)}
-                  </span>
-                </li>
-              ),
-            )}
+            {[
+              "profile",
+              "timetable",
+              "attendance",
+              "merit",
+              "documents",
+              "fee",
+            ].map((tab) => (
+              <li key={tab} className="nav-item">
+                <span
+                  className={`nav-link ${activeTab === tab ? "active" : ""}`}
+                  onClick={() => setActiveTab(tab)}
+                  style={{ cursor: "pointer" }}
+                >
+                  {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                </span>
+              </li>
+            ))}
           </ul>
 
           <div className="card p-3">
@@ -327,6 +343,348 @@ export default function ViewStudent() {
             )}
             {activeTab === "timetable" && (
               <StudentTimetable student={student} />
+            )}
+            {activeTab === "merit" && (
+              <div>
+                <h6 className="fw-bold border-bottom pb-1 mb-3">
+                  Merit & Demerit Summary
+                </h6>
+
+                {isMeritLoading ? (
+                  <div className="text-center py-3">
+                    <div className="spinner-border spinner-border-sm" />
+                    <span className="ms-2">Loading merit data...</span>
+                  </div>
+                ) : !meritData || meritData.totalRecords === 0 ? (
+                  <div className="alert alert-info">
+                    <i className="fa-solid fa-info-circle me-2"></i>
+                    No merit or demerit records available for this student.
+                  </div>
+                ) : (
+                  <>
+                    {/* Summary cards */}
+                    <div className="row g-3 mb-3">
+                      <div className="col-md-4">
+                        <div className="border rounded p-3 text-center bg-light">
+                          <div className="text-muted small">Total Points</div>
+                          <div
+                            className={`fs-4 fw-bold ${
+                              meritData.totalMerit > 0
+                                ? "text-success"
+                                : meritData.totalMerit < 0
+                                  ? "text-danger"
+                                  : "text-secondary"
+                            }`}
+                          >
+                            {meritData.totalMerit > 0 ? "+" : ""}
+                            {meritData.totalMerit}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="col-md-4">
+                        <div className="border rounded p-3 text-center bg-light">
+                          <div className="text-muted small">
+                            Recent (30 days)
+                          </div>
+                          <div
+                            className={`fs-4 fw-bold ${
+                              meritData.recentMerit > 0
+                                ? "text-success"
+                                : meritData.recentMerit < 0
+                                  ? "text-danger"
+                                  : "text-secondary"
+                            }`}
+                          >
+                            {meritData.recentMerit > 0 ? "+" : ""}
+                            {meritData.recentMerit}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="col-md-4">
+                        <div className="border rounded p-3 text-center bg-light">
+                          <div className="text-muted small">Total Records</div>
+                          <div className="fs-4 fw-bold text-primary">
+                            {meritData.totalRecords}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Category badge */}
+                    <div className="mb-3">
+                      {meritData.totalMerit >= 50 && (
+                        <span className="badge bg-success me-2">
+                          ⭐ Merit Student (50+)
+                        </span>
+                      )}
+                      {meritData.totalMerit <= -25 && (
+                        <span className="badge bg-danger me-2">
+                          ⚠️ Demerit Student (-25 or lower)
+                        </span>
+                      )}
+                      {meritData.totalMerit > -25 &&
+                        meritData.totalMerit < 50 && (
+                          <span className="badge bg-secondary me-2">
+                            Neutral (Between -24 and +49)
+                          </span>
+                        )}
+                    </div>
+
+                    {/* Records table */}
+                    <div className="d-flex justify-content-between align-items-center border-bottom pb-1 mb-2">
+                      <h6 className="fw-bold mb-0">Recent Records</h6>
+                      {meritData.totalRecords > 6 && (
+                        <button
+                          className="btn btn-sm btn-outline-primary"
+                          onClick={() => setShowAllMeritsModal(true)}
+                        >
+                          View All ({meritData.totalRecords})
+                        </button>
+                      )}
+                    </div>
+                    <div className="table-responsive mb-3">
+                      <table className="table table-sm mb-0">
+                        <thead>
+                          <tr>
+                            <th
+                              className="text-white fw-bolder border text-center"
+                              style={{ backgroundColor: "var(--border2)" }}
+                            >
+                              Date
+                            </th>
+                            <th
+                              className="text-white fw-bolder border text-center"
+                              style={{ backgroundColor: "var(--border2)" }}
+                            >
+                              Behavior
+                            </th>
+                            <th
+                              className="text-white fw-bolder border text-center"
+                              style={{ backgroundColor: "var(--border2)" }}
+                            >
+                              Points
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {meritData.meritRecords?.map((record) => (
+                            <tr key={record._id}>
+                              <td className="border text-center align-middle">
+                                {formatDateDMY(record.date)}
+                              </td>
+                              <td className="border text-center align-middle">
+                                {record.behavior || record.incident || "-"}
+                              </td>
+                              <td
+                                className={`border text-center align-middle fw-bold ${
+                                  record.merit_points > 0
+                                    ? "text-success"
+                                    : record.merit_points < 0
+                                      ? "text-danger"
+                                      : "text-secondary"
+                                }`}
+                              >
+                                {record.merit_points > 0 ? "+" : ""}
+                                {record.merit_points}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+
+                    {/* Behavior breakdown */}
+                    {meritData.topBehaviors?.length > 0 && (
+                      <>
+                        <h6 className="fw-bold border-bottom pb-1 mb-2 mt-3">
+                          Top Behaviors
+                        </h6>
+                        <div className="row g-2">
+                          {meritData.topBehaviors.map(([behavior, stats]) => (
+                            <div className="col-md-6" key={behavior}>
+                              <div className="border rounded p-2 d-flex justify-content-between">
+                                <span className="fw-medium">{behavior}</span>
+                                <span
+                                  className={`fw-bold ${
+                                    stats.totalPoints > 0
+                                      ? "text-success"
+                                      : stats.totalPoints < 0
+                                        ? "text-danger"
+                                        : "text-secondary"
+                                  }`}
+                                >
+                                  {stats.totalPoints > 0 ? "+" : ""}
+                                  {stats.totalPoints} ({stats.count}x)
+                                </span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </>
+                    )}
+
+                    {/* Stats footer */}
+                    <div className="mt-3 small text-muted">
+                      <div>
+                        <strong>Most Frequent:</strong>{" "}
+                        {meritData.behaviorStats?.mostFrequent || "None"}
+                      </div>
+                      <div>
+                        <strong>Highest Value:</strong>{" "}
+                        {meritData.behaviorStats?.highestValue || "None"}
+                      </div>
+                      <div>
+                        <strong>Period:</strong> {meritData.periodInfo}
+                      </div>
+                    </div>
+                  </>
+                )}
+                {/* Modal — All merit records */}
+                {showAllMeritsModal && (
+                  <div
+                    className="modal fade show d-block"
+                    tabIndex="-1"
+                    style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+                    onClick={() => setShowAllMeritsModal(false)}
+                  >
+                    <div
+                      className="modal-dialog modal-lg modal-dialog-scrollable"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <div className="modal-content">
+                        <div className="modal-header">
+                          <h5 className="modal-title">
+                            All Merit Records (
+                            {allMeritsData?.totalRecords || 0})
+                          </h5>
+                          <button
+                            type="button"
+                            className="btn-close"
+                            onClick={() => setShowAllMeritsModal(false)}
+                          />
+                        </div>
+                        <div className="modal-body">
+                          {isAllMeritsLoading ? (
+                            <div className="text-center py-3">
+                              <div className="spinner-border spinner-border-sm" />
+                              <span className="ms-2">
+                                Loading all records...
+                              </span>
+                            </div>
+                          ) : !allMeritsData ||
+                            allMeritsData.totalRecords === 0 ? (
+                            <div className="alert alert-info mb-0">
+                              No records available.
+                            </div>
+                          ) : (
+                            <>
+                              {/* Summary strip */}
+                              <div className="mb-3 d-flex gap-3">
+                                <span className="badge bg-secondary">
+                                  Total: {allMeritsData.totalRecords} records
+                                </span>
+                                <span
+                                  className={`badge ${
+                                    allMeritsData.totalMerit > 0
+                                      ? "bg-success"
+                                      : allMeritsData.totalMerit < 0
+                                        ? "bg-danger"
+                                        : "bg-secondary"
+                                  }`}
+                                >
+                                  Net Points:{" "}
+                                  {allMeritsData.totalMerit > 0 ? "+" : ""}
+                                  {allMeritsData.totalMerit}
+                                </span>
+                              </div>
+
+                              <div className="table-responsive">
+                                <table className="table table-sm mb-0">
+                                  <thead>
+                                    <tr>
+                                      <th
+                                        className="text-white fw-bolder border text-center"
+                                        style={{
+                                          backgroundColor: "var(--border2)",
+                                        }}
+                                      >
+                                        #
+                                      </th>
+                                      <th
+                                        className="text-white fw-bolder border text-center"
+                                        style={{
+                                          backgroundColor: "var(--border2)",
+                                        }}
+                                      >
+                                        Date
+                                      </th>
+                                      <th
+                                        className="text-white fw-bolder border text-center"
+                                        style={{
+                                          backgroundColor: "var(--border2)",
+                                        }}
+                                      >
+                                        Behavior
+                                      </th>
+                                      <th
+                                        className="text-white fw-bolder border text-center"
+                                        style={{
+                                          backgroundColor: "var(--border2)",
+                                        }}
+                                      >
+                                        Points
+                                      </th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {allMeritsData.meritRecords.map(
+                                      (record, idx) => (
+                                        <tr key={record._id || idx}>
+                                          <td className="border text-center align-middle">
+                                            {idx + 1}
+                                          </td>
+                                          <td className="border text-center align-middle text-nowrap">
+                                            {formatDateDMY(record.date)}
+                                          </td>
+                                          <td className="border text-center align-middle">
+                                            {record.behavior ||
+                                              record.incident ||
+                                              "-"}
+                                          </td>
+                                          <td
+                                            className={`border text-center align-middle fw-bold ${
+                                              record.merit_points > 0
+                                                ? "text-success"
+                                                : record.merit_points < 0
+                                                  ? "text-danger"
+                                                  : "text-secondary"
+                                            }`}
+                                          >
+                                            {record.merit_points > 0 ? "+" : ""}
+                                            {record.merit_points}
+                                          </td>
+                                        </tr>
+                                      ),
+                                    )}
+                                  </tbody>
+                                </table>
+                              </div>
+                            </>
+                          )}
+                        </div>
+                        <div className="modal-footer">
+                          <button
+                            className="btn btn-secondary"
+                            onClick={() => setShowAllMeritsModal(false)}
+                          >
+                            Close
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
             )}
             {activeTab === "attendance" && (
               <AttendanceCalendar studentId={id} />
