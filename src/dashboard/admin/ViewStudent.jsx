@@ -75,6 +75,9 @@ export default function ViewStudent() {
     student_id,
     signature,
     applicationPdfUrl,
+    reportPdf, // ✅ NEW
+    feeRefundReportPdf, // ✅ NEW
+    feeRefundReportGeneratedAt, // ✅ NEW
   } = student || {};
 
   const { summary, paidMonths } = feeSummary || {};
@@ -770,6 +773,57 @@ export default function ViewStudent() {
                     <i className="fa-solid fa-info-circle me-2"></i>
                     No progress report has been generated for this student yet.
                     Reports are typically generated monthly or on request.
+                  </div>
+                )}
+                {/* ===== Fee Refund / Dispute Report ===== */}
+                <h6 className="fw-bold border-bottom pb-1 mb-3 mt-4">
+                  Fee Refund / Dispute Documents
+                </h6>
+
+                {feeRefundReportPdf ? (
+                  <div className="card p-3 mb-4 border-danger">
+                    <div className="row align-items-center">
+                      <div className="col-md-8">
+                        <h6 className="fw-bold mb-1 text-danger">
+                          Fee Refund / Dispute Report PDF
+                        </h6>
+                        <p className="text-muted mb-2">
+                          Official report containing the Academy's{" "}
+                          <strong>non-refundable fee policy</strong>, attendance
+                          & behaviour policies, and the parent/guardian's signed
+                          agreement. Issued for refund or dispute enquiries.
+                        </p>
+                        <p className="text-muted small mb-2">
+                          <strong>Generated on:</strong>{" "}
+                          {feeRefundReportGeneratedAt
+                            ? formatDateDMY(feeRefundReportGeneratedAt)
+                            : "-"}
+                        </p>
+                        <div className="d-flex gap-2">
+                          <a
+                            href={feeRefundReportPdf}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn btn-danger btn-sm"
+                          >
+                            <i className="fa-solid fa-file-contract me-1"></i>{" "}
+                            View Fee Refund Report
+                          </a>
+                        </div>
+                      </div>
+                      <div className="col-md-4 text-end">
+                        <div className="bg-light p-3 rounded">
+                          <i className="fa-solid fa-file-contract text-danger fs-1"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="alert alert-info">
+                    <i className="fa-solid fa-info-circle me-2"></i>
+                    No fee refund / dispute report has been generated for this
+                    student yet. This report is only generated when a refund or
+                    fee dispute is raised.
                   </div>
                 )}
 
