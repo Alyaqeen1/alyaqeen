@@ -121,6 +121,16 @@ export const studentsApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Family", "Student"],
     }),
+    // ✅ NEW: Fee Refund / Dispute Report
+    generateFeeRefundReport: builder.mutation({
+      query: ({ id, ...body }) => ({
+        url: `/students/generate-fee-refund-report/${id}`,
+        method: "POST",
+        body,
+        headers: { "Content-Type": "application/json" },
+      }),
+      invalidatesTags: ["Family", "Student", "Fee"],
+    }),
   }),
 });
 
@@ -143,4 +153,5 @@ export const {
   useGenerateReportMutation,
   useUpdateStudentActivityMutation,
   useDeleteStudentDataMutation,
+  useGenerateFeeRefundReportMutation, // ✅ NEW
 } = apiSlice;

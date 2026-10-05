@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { usePopper } from "react-popper";
 import {
   useDeleteStudentDataMutation,
+  useGenerateFeeRefundReportMutation,
   useGenerateReportMutation,
   useGetStudentByActivityQuery,
   useUpdateStudentActivityMutation,
@@ -144,6 +145,10 @@ export default function ActiveStudents() {
   const [generateReport, { isLoading: reportLoading }] =
     useGenerateReportMutation();
 
+  // ✅ NEW: Fee Refund / Dispute Report
+  const [generateFeeRefundReport, { isLoading: refundReportLoading }] =
+    useGenerateFeeRefundReportMutation();
+
   useEffect(() => {
     const timerId = setTimeout(() => {
       setDebouncedSearchTerm(searchTerm);
@@ -230,6 +235,70 @@ export default function ActiveStudents() {
       }
     } catch (err) {
       toast.error(err?.message);
+    }
+  };
+  // ✅ NEW: Generate Fee Refund / Dispute Report
+  // ✅ NEW: Generate Fee Refund / Dispute Report
+  const handleGenerateFeeRefundReport = async (studentId) => {
+    setActiveRow(null);
+
+    // Confirm generation
+    const { isConfirmed } = await Swal.fire({
+      title: "Fee Refund / Dispute Report",
+      html: `
+      <p class="mb-2 text-start">
+        This report includes the Academy's <b>non-refundable fee policy</b>,
+        behaviour & attendance policies, and the parent's signed agreement.
+      </p>
+    `,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Generate Report",
+      confirmButtonColor: "#7b241c",
+      cancelButtonColor: "#6c757d",
+      reverseButtons: true,
+    });
+
+    if (!isConfirmed) return;
+
+    // Show loading
+    Swal.fire({
+      title: "Generating Fee Refund Report",
+      html: "Please wait while we generate the PDF report...",
+      allowOutsideClick: false,
+      didOpen: () => Swal.showLoading(),
+    });
+
+    try {
+      const result = await generateFeeRefundReport({
+        id: studentId,
+      }).unwrap();
+
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Fee Refund Report Generated!",
+        html: `
+        <p class="mb-2">
+          The report includes the Academy's policies and the parent's signed agreement.
+        </p>
+        <a href="${result.reportUrl}" target="_blank" class="btn btn-danger mt-2">
+          View Fee Refund Report
+        </a>
+      `,
+        showConfirmButton: false,
+        timer: 4000,
+      });
+    } catch (error) {
+      console.error(error);
+      Swal.fire({
+        icon: "error",
+        title: "Failed to Generate Report",
+        text:
+          error?.data?.error ||
+          error?.message ||
+          "Something went wrong while generating the fee refund report.",
+      });
     }
   };
 
@@ -893,11 +962,7 @@ export default function ActiveStudents() {
       {activeRow && (
         <div
           ref={setPopperElement}
-          style={{
-            ...styles.popper,
-            zIndex: 9999,
-            width: "180px",
-          }}
+          style={{ ...styles.popper, zIndex: 9999, width: "210px" }}
           {...attributes.popper}
           className="bg-light border rounded p-2 shadow"
         >
@@ -908,13 +973,26 @@ export default function ActiveStudents() {
             >
               View Student Details
             </button>
+
             <button
               className="btn btn-sm btn-info text-nowrap"
               disabled={reportLoading}
               onClick={() => handleGenerateReport(activeRow)}
             >
-              Generate Report
+              {reportLoading ? "Generating..." : "Generate Academic Report"}
             </button>
+
+            {/* ✅ NEW: Fee Refund / Dispute Report */}
+            <button
+              className="btn btn-sm btn-danger text-nowrap"
+              disabled={refundReportLoading}
+              onClick={() => handleGenerateFeeRefundReport(activeRow)}
+            >
+              {refundReportLoading
+                ? "Generating..."
+                : "Fee Refund / Dispute Report"}
+            </button>
+
             <Link
               to={`/dashboard/online-admissions/update/${activeRow}`}
               className="btn btn-sm btn-secondary text-nowrap"
@@ -922,12 +1000,14 @@ export default function ActiveStudents() {
             >
               Edit Student Details
             </Link>
+
             <button
               className="btn btn-sm btn-warning text-nowrap"
               onClick={() => handleMakeInactive(activeRow)}
             >
               Make Inactive
             </button>
+
             <button
               className="btn btn-sm btn-danger text-nowrap"
               disabled={localLoading}
