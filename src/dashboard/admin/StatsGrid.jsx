@@ -41,25 +41,35 @@ const SESSION_META = [
   { key: "WA", short: "WA", label: "Afternoon (WA)", color: "#f59e0b" },
 ];
 
-const SessionPill = ({ sessionKey, label, color, data }) => {
+const SessionPill = ({
+  sessionKey,
+  label,
+  color,
+  data,
+  isSelected,
+  onClick,
+}) => {
   if (!data) return null;
-
   const present = data.present ?? 0;
 
   return (
     <div
-      title={`${label}: ${present} present`}
+      onClick={onClick}
+      title={`${label}: ${present} present — click to see boys/girls`}
       style={{
         display: "flex",
         alignItems: "center",
         gap: "6px",
-        backgroundColor: color,
-        color: "#fff",
+        backgroundColor: isSelected ? color : `${color}22`,
+        color: isSelected ? "#fff" : color,
+        border: `1px solid ${color}`,
         borderRadius: "999px",
         padding: "2px 10px",
         fontSize: "11px",
         fontWeight: 600,
         whiteSpace: "nowrap",
+        cursor: "pointer",
+        transition: "background-color 0.15s ease, color 0.15s ease",
       }}
     >
       <span style={{ fontWeight: 700 }}>{sessionKey}</span>
@@ -88,7 +98,7 @@ const StatCard = ({
 }) => {
   const [chart, setChart] = useState(null);
   const [showFilterOptions, setShowFilterOptions] = useState(false);
-
+  const [selectedSession, setSelectedSession] = useState(null); // "S1" | "S2" | "WM" | "WA"
   useEffect(() => {
     if (chartData && chartData.length > 0) {
       setChart({
@@ -467,62 +477,110 @@ const StatCard = ({
               >
                 {isLoading ? "..." : value}
               </h3>
-              {/* ✅ NEW: Gender breakdown pills (only shown for Attendance card) */}
-              {genderBreakdown && (
-                <div
-                  style={{
-                    display: "flex",
-                    gap: "6px",
-                    marginTop: "8px",
-                    flexWrap: "wrap",
-                  }}
-                >
-                  <GenderPill
-                    label="Boys"
-                    symbol="♂"
-                    color="#3b82f6"
-                    data={genderBreakdown.Male}
-                  />
-                  <GenderPill
-                    label="Girls"
-                    symbol="♀"
-                    color="#ec4899"
-                    data={genderBreakdown.Female}
-                  />
-                  {genderBreakdown.Unknown?.total > 0 && (
-                    <GenderPill
-                      label="Other"
-                      symbol="•"
-                      color="#6b7280"
-                      data={genderBreakdown.Unknown}
-                    />
-                  )}
-                </div>
-              )}
+
               {/* ✅ NEW: Session-wise present count */}
+              {/* ============================================================ */}
+              {/* Session selector (always shown when we have session data)     */}
+              {/* ============================================================ */}
               {sessionBreakdown &&
                 SESSION_META.some(
                   (s) => (sessionBreakdown[s.key]?.total ?? 0) > 0,
                 ) && (
+                  <>
+                    <div
+                      style={{
+                        fontSize: "10px",
+                        color: themeColors.textMuted,
+                        marginTop: "8px",
+                        marginBottom: "4px",
+                        textTransform: "uppercase",
+                        letterSpacing: "0.4px",
+                      }}
+                    >
+                      Present by session
+                    </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        gap: "6px",
+                        flexWrap: "wrap",
+                      }}
+                    >
+                      {SESSION_META.map((s) => {
+                        const isSelected = selectedSession === s.key;
+                        return (
+                          <SessionPill
+                            key={s.key}
+                            sessionKey={s.short}
+                            label={s.label}
+                            color={s.color}
+                            data={sessionBreakdown[s.key]}
+                            isSelected={isSelected}
+                            onClick={() =>
+                              setSelectedSession(isSelected ? null : s.key)
+                            }
+                          />
+                        );
+                      })}
+                    </div>
+                  </>
+                )}
+
+              {/* ============================================================ */}
+              {/* Drill-down: gender breakdown for the selected session        */}
+              {/* ============================================================ */}
+              {selectedSession && sessionBreakdown?.[selectedSession] && (
+                <div
+                  style={{
+                    marginTop: "10px",
+                    padding: "8px 10px",
+                    backgroundColor: "#f8fafc",
+                    border: `1px solid ${themeColors.border}`,
+                    borderRadius: "6px",
+                  }}
+                >
+                  <div
+                    style={{
+                      fontSize: "10px",
+                      color: themeColors.textMuted,
+                      marginBottom: "4px",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.4px",
+                    }}
+                  >
+                    {SESSION_META.find((s) => s.key === selectedSession)?.label}{" "}
+                    — by gender
+                  </div>
                   <div
                     style={{
                       display: "flex",
                       gap: "6px",
-                      marginTop: "6px",
                       flexWrap: "wrap",
                     }}
                   >
-                    {SESSION_META.map((s) => (
-                      <SessionPill
-                        key={s.key}
-                        sessionKey={s.short}
-                        label={s.label}
-                        color={s.color}
-                        data={sessionBreakdown[s.key]}
+                    <GenderPill
+                      label="Boys"
+                      symbol="♂"
+                      color="#3b82f6"
+                      data={sessionBreakdown[selectedSession].male}
+                    />
+                    <GenderPill
+                      label="Girls"
+                      symbol="♀"
+                      color="#ec4899"
+                      data={sessionBreakdown[selectedSession].female}
+                    />
+                    {sessionBreakdown[selectedSession].unknown?.total > 0 && (
+                      <GenderPill
+                        label="Other"
+                        symbol="•"
+                        color="#6b7280"
+                        data={sessionBreakdown[selectedSession].unknown}
                       />
-                    ))}
+                    )}
                   </div>
-                )}
+                </div>
+              )}
             </div>
             <div style={{ width: "80px", height: "40px" }}>
               {chart && !isLoading ? (
