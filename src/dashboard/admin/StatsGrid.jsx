@@ -4,7 +4,36 @@ import {
   useGetDashboardStatsQuery,
   useGetAttendanceStatsQuery,
 } from "../../redux/features/attendances/attendancesApi";
+// Small pill showing e.g. "♂ 250 / 280 (85.7%)"
+const GenderPill = ({ label, symbol, color, data }) => {
+  if (!data) return null;
 
+  // "attended" = present + late + half_day (as computed on the backend)
+  const attended = data.attended ?? data.present ?? 0;
+  const total = data.total ?? 0;
+  const rate = data.rate ?? 0;
+
+  return (
+    <div
+      title={`${label}: ${attended} attended out of ${total} (${rate}%)`}
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: "6px",
+        backgroundColor: color,
+        color: "#fff",
+        borderRadius: "999px",
+        padding: "2px 10px",
+        fontSize: "11px",
+        fontWeight: 600,
+        whiteSpace: "nowrap",
+      }}
+    >
+      <span style={{ fontSize: "12px", lineHeight: 1 }}>{symbol}</span>
+      <span>{attended}</span>
+    </div>
+  );
+};
 const StatCard = ({
   title,
   value,
@@ -20,6 +49,8 @@ const StatCard = ({
   onFilterChange,
   dateRange,
   setDateRange,
+  refetchAttendanceStats, // ✅ ADD THIS
+  genderBreakdown, // ✅ kept
 }) => {
   const [chart, setChart] = useState(null);
   const [showFilterOptions, setShowFilterOptions] = useState(false);
@@ -402,6 +433,38 @@ const StatCard = ({
               >
                 {isLoading ? "..." : value}
               </h3>
+              {/* ✅ NEW: Gender breakdown pills (only shown for Attendance card) */}
+              {genderBreakdown && (
+                <div
+                  style={{
+                    display: "flex",
+                    gap: "6px",
+                    marginTop: "8px",
+                    flexWrap: "wrap",
+                  }}
+                >
+                  <GenderPill
+                    label="Boys"
+                    symbol="♂"
+                    color="#3b82f6"
+                    data={genderBreakdown.Male}
+                  />
+                  <GenderPill
+                    label="Girls"
+                    symbol="♀"
+                    color="#ec4899"
+                    data={genderBreakdown.Female}
+                  />
+                  {genderBreakdown.Unknown?.total > 0 && (
+                    <GenderPill
+                      label="Other"
+                      symbol="•"
+                      color="#6b7280"
+                      data={genderBreakdown.Unknown}
+                    />
+                  )}
+                </div>
+              )}
             </div>
             <div style={{ width: "80px", height: "40px" }}>
               {chart && !isLoading ? (
@@ -606,7 +669,7 @@ const StatsGrid = ({ themeColors, getBgColor, screenSize, gridStyles }) => {
       change: 10,
       changeLabel: "this month",
       isLoading,
-      showFilters: false, // No filters for this card
+      showFilters: false,
     },
     {
       title: "Monthly Revenue",
@@ -617,9 +680,9 @@ const StatsGrid = ({ themeColors, getBgColor, screenSize, gridStyles }) => {
       change: 25,
       changeLabel: "this month",
       isLoading,
-      showFilters: false, // No filters for this card
+      showFilters: false,
     },
-    // Find the attendance rate stat in statsData array and add refetch:
+    // ✅ ONLY ONE Attendance Rate card
     {
       title: "Attendance Rate",
       value:
@@ -629,13 +692,14 @@ const StatsGrid = ({ themeColors, getBgColor, screenSize, gridStyles }) => {
       color: themeColors.success,
       emoji: "📊",
       chartData: [70, 72, 75, 76, 78.5],
-      change: attendanceStats?.comparison?.change || 0, // ✅ Use attendanceStats.comparison.change
+      change: attendanceStats?.comparison?.change || 0,
       changeLabel: getAttendancePeriodLabel(),
       isLoading,
       showFilters: true,
       dateRange: attendanceDateRange,
       setDateRange: setAttendanceDateRange,
-      refetchAttendanceStats: refetchAttendanceStats,
+      refetchAttendanceStats: refetchAttendanceStats, // ✅ passed as prop
+      genderBreakdown: attendanceStats?.genderBreakdown, // ✅ gender pills
     },
     {
       title: "Outstanding Payments",
@@ -646,7 +710,7 @@ const StatsGrid = ({ themeColors, getBgColor, screenSize, gridStyles }) => {
       change: -18,
       changeLabel: `${dashboardStats?.stats?.outstandingPayments?.count || 0} pending`,
       isLoading,
-      showFilters: false, // No filters for this card
+      showFilters: false,
     },
   ];
 
