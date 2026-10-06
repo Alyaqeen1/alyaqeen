@@ -34,6 +34,39 @@ const GenderPill = ({ label, symbol, color, data }) => {
     </div>
   );
 };
+const SESSION_META = [
+  { key: "S1", short: "S1", label: "Early (S1)", color: "#3b82f6" },
+  { key: "S2", short: "S2", label: "Late (S2)", color: "#6366f1" },
+  { key: "WM", short: "WM", label: "Morning (WM)", color: "#10b981" },
+  { key: "WA", short: "WA", label: "Afternoon (WA)", color: "#f59e0b" },
+];
+
+const SessionPill = ({ sessionKey, label, color, data }) => {
+  if (!data) return null;
+
+  const present = data.present ?? 0;
+
+  return (
+    <div
+      title={`${label}: ${present} present`}
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: "6px",
+        backgroundColor: color,
+        color: "#fff",
+        borderRadius: "999px",
+        padding: "2px 10px",
+        fontSize: "11px",
+        fontWeight: 600,
+        whiteSpace: "nowrap",
+      }}
+    >
+      <span style={{ fontWeight: 700 }}>{sessionKey}</span>
+      <span>{present}</span>
+    </div>
+  );
+};
 const StatCard = ({
   title,
   value,
@@ -51,6 +84,7 @@ const StatCard = ({
   setDateRange,
   refetchAttendanceStats, // ✅ ADD THIS
   genderBreakdown, // ✅ kept
+  sessionBreakdown, // ✅ ADD THIS LINE
 }) => {
   const [chart, setChart] = useState(null);
   const [showFilterOptions, setShowFilterOptions] = useState(false);
@@ -465,6 +499,30 @@ const StatCard = ({
                   )}
                 </div>
               )}
+              {/* ✅ NEW: Session-wise present count */}
+              {sessionBreakdown &&
+                SESSION_META.some(
+                  (s) => (sessionBreakdown[s.key]?.total ?? 0) > 0,
+                ) && (
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: "6px",
+                      marginTop: "6px",
+                      flexWrap: "wrap",
+                    }}
+                  >
+                    {SESSION_META.map((s) => (
+                      <SessionPill
+                        key={s.key}
+                        sessionKey={s.short}
+                        label={s.label}
+                        color={s.color}
+                        data={sessionBreakdown[s.key]}
+                      />
+                    ))}
+                  </div>
+                )}
             </div>
             <div style={{ width: "80px", height: "40px" }}>
               {chart && !isLoading ? (
@@ -700,6 +758,7 @@ const StatsGrid = ({ themeColors, getBgColor, screenSize, gridStyles }) => {
       setDateRange: setAttendanceDateRange,
       refetchAttendanceStats: refetchAttendanceStats, // ✅ passed as prop
       genderBreakdown: attendanceStats?.genderBreakdown, // ✅ gender pills
+      sessionBreakdown: attendanceStats?.sessionBreakdown, // ✅ NEW
     },
     {
       title: "Outstanding Payments",
