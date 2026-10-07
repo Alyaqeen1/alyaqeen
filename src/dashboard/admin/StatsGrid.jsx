@@ -8,14 +8,18 @@ import {
 const GenderPill = ({ label, symbol, color, data }) => {
   if (!data) return null;
 
-  // "attended" = present + late + half_day (as computed on the backend)
-  const attended = data.attended ?? data.present ?? 0;
-  const total = data.total ?? 0;
-  const rate = data.rate ?? 0;
+  // ✅ Numerator: distinct students who were present at least once
+  const attended = data.presentStudents ?? data.attended ?? data.present ?? 0;
+
+  // ✅ Denominator: enrolled students in this session for this gender
+  const total = data.enrolledStudents ?? data.totalStudents ?? data.total ?? 0;
+
+  // ✅ Rate: present / enrolled
+  const rate = data.enrolledRate ?? data.studentRate ?? data.rate ?? 0;
 
   return (
     <div
-      title={`${label}: ${attended} attended out of ${total} (${rate}%)`}
+      title={`${label}: ${attended} of ${total} enrolled students attended (${rate}%)`}
       style={{
         display: "flex",
         alignItems: "center",
@@ -50,12 +54,20 @@ const SessionPill = ({
   onClick,
 }) => {
   if (!data) return null;
-  const present = data.present ?? 0;
+
+  // ✅ Numerator: distinct students who were present at least once
+  const present = data.presentStudents ?? data.present ?? 0;
+
+  // ✅ Denominator: total enrolled in this session (matches Active Students page)
+  const total = data.enrolledStudents ?? data.totalStudents ?? data.total ?? 0;
+
+  // ✅ Rate: present / enrolled (falls back to studentRate → rate)
+  const rate = data.enrolledRate ?? data.studentRate ?? data.rate ?? 0;
 
   return (
     <div
       onClick={onClick}
-      title={`${label}: ${present} present — click to see boys/girls`}
+      title={`${label}: ${present} of ${total} enrolled students attended (${rate}%) — click to see boys/girls`}
       style={{
         display: "flex",
         alignItems: "center",
@@ -79,26 +91,58 @@ const SessionPill = ({
 };
 const StatCard = ({
   title,
-  value,
+  value, // overall rate string e.g. "75.8%"
+  overallStats, // ✅ NEW: raw stats object from API
   color,
   emoji,
   chartData,
-  change,
-  changeLabel,
+  change, // overall change %
+  changeLabel, // overall period label
   themeColors,
   getBgColor,
   isLoading,
   showFilters,
-  onFilterChange,
   dateRange,
   setDateRange,
-  refetchAttendanceStats, // ✅ ADD THIS
-  genderBreakdown, // ✅ kept
-  sessionBreakdown, // ✅ ADD THIS LINE
+  refetchAttendanceStats,
+  sessionBreakdown,
+  hasComparisonData,
 }) => {
   const [chart, setChart] = useState(null);
   const [showFilterOptions, setShowFilterOptions] = useState(false);
   const [selectedSession, setSelectedSession] = useState(null); // "S1" | "S2" | "WM" | "WA"
+  // --- Derive what the big % should display ---
+  // If a session is selected → show that session's student rate.
+  // Otherwise → show the overall rate from `value`/`overallStats`.
+  const displayed = (() => {
+    // No session selected → overall
+    if (!selectedSession || !sessionBreakdown?.[selectedSession]) {
+      return {
+        rateText:
+          overallStats?.rate !== undefined ? `${overallStats.rate}%` : value,
+        label: changeLabel,
+        change: change,
+        hasComparisonData: hasComparisonData,
+        // Optional: subtitle to clarify what's shown
+        context: null,
+      };
+    }
+
+    // Session selected → session rate
+    const bucket = sessionBreakdown[selectedSession];
+    const sessionMeta = SESSION_META.find((s) => s.key === selectedSession);
+    const rate = bucket.enrolledRate ?? bucket.studentRate ?? bucket.rate ?? 0;
+
+    return {
+      rateText: `${rate}%`,
+      label: `${sessionMeta?.label ?? selectedSession} · ${changeLabel}`,
+      // Sessions don't have a "change vs previous period" number,
+      // so we hide the change badge when a session is selected.
+      change: undefined,
+      hasComparisonData: undefined,
+      context: "session", // handy marker
+    };
+  })();
   useEffect(() => {
     if (chartData && chartData.length > 0) {
       setChart({
@@ -475,8 +519,20 @@ const StatCard = ({
                   color: themeColors.textPrimary,
                 }}
               >
-                {isLoading ? "..." : value}
+                {isLoading ? "..." : displayed.rateText}
               </h3>
+              {!isLoading && displayed.context === "session" && (
+                <div
+                  style={{
+                    fontSize: "10px",
+                    color: themeColors.textMuted,
+                    marginTop: "-2px",
+                    fontStyle: "italic",
+                  }}
+                >
+                  Session rate — click the pill again for overall
+                </div>
+              )}
 
               {/* ✅ NEW: Session-wise present count */}
               {/* ============================================================ */}
@@ -615,34 +671,55 @@ const StatCard = ({
             }}
           >
             <div style={{ fontSize: "12px", color: themeColors.textMuted }}>
-              {changeLabel}
+              {displayed.label}
             </div>
             <div style={{ textAlign: "right" }}>
-              {change !== undefined && (
-                <>
-                  <p
-                    style={{
-                      color:
-                        change >= 0 ? themeColors.success : themeColors.danger,
-                      fontSize: "13px",
-                      fontWeight: 600,
-                      margin: 0,
-                    }}
-                  >
-                    {change >= 0 ? "+" : ""}
-                    {typeof change === "number" ? change.toFixed(1) : change}%
-                  </p>
-                  <p
-                    style={{
-                      color: themeColors.textMuted,
-                      fontSize: "11px",
-                      margin: "2px 0 0 0",
-                      opacity: 0.7,
-                    }}
-                  >
-                    {change >= 0 ? "Increase" : "Decrease"}
-                  </p>
-                </>
+              {/* Change badge — only shows for the overall view */}
+              {displayed.change !== undefined &&
+                displayed.hasComparisonData && (
+                  <>
+                    <p
+                      style={{
+                        color:
+                          displayed.change >= 0
+                            ? themeColors.success
+                            : themeColors.danger,
+                        fontSize: "13px",
+                        fontWeight: 600,
+                        margin: 0,
+                      }}
+                    >
+                      {displayed.change >= 0 ? "+" : ""}
+                      {typeof displayed.change === "number"
+                        ? displayed.change.toFixed(1)
+                        : displayed.change}
+                      %
+                    </p>
+                    <p
+                      style={{
+                        color: themeColors.textMuted,
+                        fontSize: "11px",
+                        margin: "2px 0 0 0",
+                        opacity: 0.7,
+                      }}
+                    >
+                      {displayed.change >= 0 ? "Increase" : "Decrease"}
+                    </p>
+                  </>
+                )}
+
+              {displayed.hasComparisonData === false && (
+                <p
+                  style={{
+                    color: themeColors.textMuted,
+                    fontSize: "11px",
+                    margin: 0,
+                    fontStyle: "italic",
+                    opacity: 0.7,
+                  }}
+                >
+                  No prior data
+                </p>
               )}
             </div>
           </div>
@@ -805,18 +882,19 @@ const StatsGrid = ({ themeColors, getBgColor, screenSize, gridStyles }) => {
         attendanceStats?.stats?.rate !== undefined
           ? `${attendanceStats.stats.rate}%`
           : "0%",
+      overallStats: attendanceStats?.stats, // ✅ NEW
       color: themeColors.success,
       emoji: "📊",
       chartData: [70, 72, 75, 76, 78.5],
       change: attendanceStats?.comparison?.change || 0,
+      hasComparisonData: attendanceStats?.comparison?.hasComparisonData ?? true,
       changeLabel: getAttendancePeriodLabel(),
       isLoading,
       showFilters: true,
       dateRange: attendanceDateRange,
       setDateRange: setAttendanceDateRange,
-      refetchAttendanceStats: refetchAttendanceStats, // ✅ passed as prop
-      genderBreakdown: attendanceStats?.genderBreakdown, // ✅ gender pills
-      sessionBreakdown: attendanceStats?.sessionBreakdown, // ✅ NEW
+      refetchAttendanceStats: refetchAttendanceStats,
+      sessionBreakdown: attendanceStats?.sessionBreakdown,
     },
     {
       title: "Outstanding Payments",
