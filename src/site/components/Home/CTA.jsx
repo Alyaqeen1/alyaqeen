@@ -48,7 +48,7 @@ const CTA = () => {
                 data-aos="fade-up"
                 data-aos-delay="500"
               >
-                <Link to="/apply-now" className="theme-btn bg-white">
+                <Link to="/register" className="theme-btn bg-white">
                   {applyBtn} <i className="fa-solid fa-arrow-right-long"></i>
                 </Link>
               </div>
