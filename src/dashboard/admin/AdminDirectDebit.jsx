@@ -62,7 +62,7 @@ export default function AdminDirectDebit() {
       pollingInterval: 30000, // This WILL work for status updates
       refetchOnFocus: true, // Refetch when window regains focus
       refetchOnReconnect: true, // Refetch when internet reconnects
-    }
+    },
   );
   const [collectPayment, { isLoading: isCollecting }] =
     useCollectAdminPaymentMutation();
@@ -73,7 +73,7 @@ export default function AdminDirectDebit() {
       data?.families?.filter(
         (f) =>
           f.directDebit?.status === "active" &&
-          f.directDebit?.mandateStatus === "active"
+          f.directDebit?.mandateStatus === "active",
       ) || []
     );
   }, [data]);
@@ -88,7 +88,7 @@ export default function AdminDirectDebit() {
       if (family.name.toLowerCase().includes(term)) return true;
       if (family.email.toLowerCase().includes(term)) return true;
       return family.childrenDocs?.some((student) =>
-        student.name.toLowerCase().includes(term)
+        student.name.toLowerCase().includes(term),
       );
     });
   }, [data, searchTerm]);
@@ -139,13 +139,16 @@ export default function AdminDirectDebit() {
 
     for (const payment of feePayments || []) {
       const studentPayment = payment.students?.find(
-        (s) => String(s.studentId) === String(student._id)
+        (s) => String(s.studentId) === String(student._id),
       );
 
       if (!studentPayment) continue;
 
       // Handle ADMISSION payments
-      if (payment.paymentType === "admission") {
+      if (
+        payment.paymentType === "admission" ||
+        payment.paymentType === "admissionOnHold"
+      ) {
         const admissionJoiningMonth = studentPayment.joiningMonth
           ?.toString()
           .padStart(2, "0");
@@ -155,13 +158,18 @@ export default function AdminDirectDebit() {
           admissionJoiningMonth === targetMonth &&
           admissionJoiningYear === targetYear
         ) {
-          if (payment.status === "paid") {
+          // ✅ Direct Debit semantics:
+          //   pending  = bank hasn't settled yet → show Pending
+          //   partial  = money arrived (partial) → show Paid
+          //   paid     = money arrived (full)    → show Paid
+          //   failed / cancelled / rejected      → Unpaid
+          if (payment.status === "pending") return "pending";
+          if (payment.status === "paid" || payment.status === "partial") {
             return "paid";
           }
-          return "paid";
+          return "unpaid";
         }
       }
-
       // Handle monthly payments
       if (
         (payment.paymentType === "monthly" ||
@@ -171,7 +179,7 @@ export default function AdminDirectDebit() {
         const monthPaidEntry = studentPayment.monthsPaid.find(
           (m) =>
             String(m.month).padStart(2, "0") === targetMonth &&
-            String(m.year) === targetYear
+            String(m.year) === targetYear,
         );
 
         if (monthPaidEntry) {
@@ -395,7 +403,7 @@ export default function AdminDirectDebit() {
                 isMulti
                 options={monthOptions}
                 value={monthOptions.filter((option) =>
-                  selectedMonths.includes(option.value)
+                  selectedMonths.includes(option.value),
                 )}
                 onChange={(selectedOptions) => {
                   setSelectedMonths(selectedOptions.map((opt) => opt.value));
@@ -496,7 +504,7 @@ export default function AdminDirectDebit() {
                               const status = getPaymentStatus(
                                 student,
                                 month.num,
-                                family.feePayments
+                                family.feePayments,
                               );
                               return status ? (
                                 <PaymentStatusCell
@@ -523,9 +531,9 @@ export default function AdminDirectDebit() {
                                       family.directDebit?.status === "active"
                                         ? "bg-success"
                                         : family.directDebit?.status ===
-                                          "pending"
-                                        ? "bg-warning"
-                                        : "bg-danger"
+                                            "pending"
+                                          ? "bg-warning"
+                                          : "bg-danger"
                                     } text-white px-2 py-1`}
                                   >
                                     {family.directDebit?.status?.toUpperCase()}
@@ -549,7 +557,7 @@ export default function AdminDirectDebit() {
                               </>
                             )}
                           </tr>
-                        ))
+                        )),
                       )
                     ) : (
                       <tr>
